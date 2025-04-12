@@ -1,4 +1,32 @@
 # 📦 DAG Mod - Changelog
+**Version:** `v1.0.1`  
+**Minecraft Version:** `1.21.4`  
+**Requirement:** Must be installed on both **server** and **client**
+
+### Added
+- 🧱 **Diamond Powder** – Finely ground diamond, used in advanced crafting recipes
+- 💎 **Emerald Powder** – Crushed emerald, useful for specialized alchemical crafting
+- ✨ **Essence of Thanos** – A powerful potion with dramatic effects
+- 💥 **Potion of the Supes** – Grants powerful temporary abilities
+- 🧠 **Potion of Clarity** – Enhances focus and perception
+
+### Changed
+- Updated descriptions for **Amethyst Powder** and **Quartz Powder**:
+  - Both are now described as crafting materials, not potion ingredients
+
+### Notes
+- All powders are intended for use in **crafting recipes**, not with brewing stands
+- More items, potions, and crafting recipes coming soon!
+
+---
+
+📦 **Requires Fabric API**  
+🔁 **Must be installed on both client and server**  
+🟩 **Compatible with Minecraft 1.21.4**
+
+-----
+
+# 📦 DAG Mod - Changelog
 **Version:** `v1.0.0`  
 **Minecraft Version:** `1.21.4`  
 **Requirement:** Must be installed on both **server** and **client**
