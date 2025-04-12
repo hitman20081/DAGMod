@@ -7,8 +7,8 @@ This mod allows server owners and modpack creators to integrate custom items int
 ### What it adds:
 - **Custom items:**
   - **Suspicious Substance** – A mysterious material with unknown potential
-  - **Amethyst Powder** – Used in potion brewing
-  - **Quartz Powder** – Used in potion brewing
+  - **Amethyst Powder** – Finely crushed crystal, used in advanced crafting recipes
+  - **Quartz Powder** – Refined Nether quartz, used in specialized crafting recipes
   - **Diamond Powder** – Finely ground diamond, intended for advanced recipes
   - **Emerald Powder** – Crushed emerald, used for special alchemical crafting
 
