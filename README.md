@@ -13,9 +13,9 @@ This mod allows server owners and modpack creators to integrate custom items int
   - **Emerald Powder** – Crushed emerald, used for special alchemical crafting
 
 - **Custom potions:**
-  - 🧪 **Potion of Clarity** – Brewed using Amethyst and Quartz Powder; enhances mental focus or perception (effect customizable)
-  - 🧪 **Potion of the Supes** – Grants powerful abilities for a limited time (effect customizable)
-  - 🧪 **Essence of Thanos** – A potent and rare potion with dramatic effects (intended for high-tier gameplay)
+  - 🧪 **Potion of Clarity** – Crafted using Amethyst and Quartz Powder; enhances mental focus or perception (about 5 min)
+  - 🧪 **Potion of the Supes** – Grants powerful abilities for a limited long time (30 Min)
+  - 🧪 **Essence of Thanos** – A potent and rare potion with dramatic effects (intended for high-tier gameplay) lasting 10 min.
 
 - Adds crafting recipe support for items introduced via datapacks
 - Provides a modular framework for expanding with more potions, items, and recipes in future updates
