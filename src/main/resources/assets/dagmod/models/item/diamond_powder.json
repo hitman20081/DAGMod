@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dagmod:item/suspicious_substance"
+    "layer0": "dagmod:item/diamond_powder"
   }
 }
