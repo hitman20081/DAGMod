@@ -1,7 +1,5 @@
 **DAG Mod** is a lightweight Fabric mod that extends the functionality of datapacks by adding support for crafting recipes and custom items that datapacks alone can’t handle.
 
-This mod allows server owners and modpack creators to integrate custom items into Minecraft using a simple and modular approach. It’s ideal for expanding vanilla-style gameplay while keeping things compatible with Fabric and datapack systems.
-
 ---
 
 ### What it adds:
