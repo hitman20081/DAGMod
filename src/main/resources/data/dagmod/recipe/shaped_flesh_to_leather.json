@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rrr",
+    "rlr",
+    "rrr"
+  ],
+  "key": {
+    "r": "minecraft:rotten_flesh",
+    "l": "minecraft:lava_bucket"
+  },
+  "result": {
+    "id": "minecraft:leather",
+    "count": 8
+  }
+}

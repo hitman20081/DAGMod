@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": "minecraft:diamond",
+    "result": {
+        "id": "dagmod:diamond_powder"
+    },
+    "experience": 0.3,
+    "cookingtime": 200
+}

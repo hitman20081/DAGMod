@@ -1,0 +1,52 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      "minecraft:sugar",
+      "minecraft:apple",
+      "minecraft:blaze_powder"
+    ],
+    "result": {
+      "id": "minecraft:apple",
+      "components": {
+        "minecraft:consumable": {
+          "has_consume_particles": true,
+          "on_consume_effects": [
+            {
+              "type": "minecraft:apply_effects",
+              "effects": [
+                {
+                  "id": "minecraft:speed",
+                  "amplifier": 0,
+                  "duration": 960,
+                  "show_particles": false,
+                  "show_icon": true
+                },
+                {
+                  "id": "minecraft:instant_health",
+                  "amplifier": 0,
+                  "duration": 960,
+                  "show_particles": false,
+                  "show_icon": true
+                },
+                {
+                  "id": "minecraft:fire_resistance",
+                  "amplifier": 0,
+                  "duration": 960,
+                  "show_particles": false,
+                  "show_icon": true
+                }
+              ]
+            }
+          ]
+        },
+        "minecraft:item_name": "{\"text\":\"Candied Apple\",\"color\":\"#f14a25\"}",
+        "minecraft:enchantment_glint_override": true,
+        "minecraft:food": {
+          "nutrition": 2,
+          "saturation": 4
+        },
+        "minecraft:max_stack_size": 16
+      },
+      "count": 1
+    }
+  }

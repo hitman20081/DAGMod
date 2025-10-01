@@ -1,0 +1,58 @@
+{
+  "effect.dagmod.xp": "XP Power",
+
+  "item.minecraft.potion.effect.xp": "XP Potion",
+  "item.minecraft.splash_potion.effect.xp": "XP Splash Potion",
+  "item.minecraft.lingering_potion.effect.xp": "XP Lingering Potion",
+
+
+  "item.dagmod.quest_block": "Quest Block",
+  "block.dagmod.quest_block": "Quest Block",
+  "block.dagmodmod.pedestal": "Quest Pedestal",
+
+  "item.dagmod.class_selection_altar": "Class Selection Altar",
+  "block.dagmod.class_selection_altar": "Class Selection Altar",
+
+
+  "item.dagmod.beef_stew": "Beef Stew",
+  "item.dagmod.candied_apple": "Candied Apple",
+  "item.dagmod.chicken_stew": "Chicken Stew",
+  "item.dagmod.crimson_soup": "Crimson Soup",
+  "item.dagmod.dragonfruit_tart": "Dragonfruit Tart",
+  "item.dagmod.elven_bread": "Elven Bread",
+  "item.dagmod.ethereal_cookies": "Ethereal Cookies",
+  "item.dagmod.frostberry_pie": "Frostberry Pie",
+  "item.dagmod.glowberry_jam": "Glowberry Jam",
+  "item.dagmod.golden_apple_strudel": "Golden Apple Strudel",
+  "item.dagmod.honey_bread": "Honey Bread",
+  "item.dagmod.molten_chili": "Molten Chili",
+  "item.dagmod.mystic_stew": "Mystic Stew",
+  "item.dagmod.nether_salad": "Nether Salad",
+  "item.dagmod.phoenix_roast": "Phoenix Roast",
+  "item.dagmod.pumpkin_parfait": "Pumpkin Parfait",
+  "item.dagmod.savory_beef_roast": "Savory Beef Roast",
+  "item.dagmod.shadow_cake": "Shadow Cake",
+  "item.dagmod.spiced_rabbit": "Spiced Rabbit",
+  "item.dagmod.starfruit_smoothie": "Starfruit Smoothie",
+  "item.dagmod.stormfish_fillet": "Stormfish Fillet",
+  "item.dagmod.void_truffles": "Void Truffles",
+
+  "item.dagmod.amethyst_powder": "Amethyst Powder",
+  "item.dagmod.diamond_powder": "Diamond Powder",
+  "item.dagmod.echo_dust": "Echo Dust",
+  "item.dagmod.emerald_powder": "Emerald Powder",
+  "item.dagmod.quartz_powder": "Quartz Powder",
+  "item.dagmod.slimeball_dust": "Slimeball Dust",
+  "item.dagmod.suspicious_substance": "Suspicious Substance",
+
+  "item.dagmod.novice_quest_book": "Novice Quest Book",
+  "item.dagmod.apprentice_quest_book": "Apprentice Quest Book",
+  "item.dagmod.expert_quest_book": "Expert Quest Book",
+  "item.dagmod.master_quest_tome": "Master Quest Tome",
+
+  "item.dagmod.class_selection_tome": "Class Selection Tome",
+  "item.dagmod.warrior_token": "Warrior Token",
+  "item.dagmod.mage_token": "Mage Token",
+  "item.dagmod.rogue_token": "Rogue Token",
+  "item.dagmod.class_reset_crystal": "Class Reset Crystal"
+}

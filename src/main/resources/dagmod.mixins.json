@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "com.github.hitman20081.dagmod.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"MageStatusEffectMixin",
+		"RogueDamageMixin"
+	],
+	"client": [],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

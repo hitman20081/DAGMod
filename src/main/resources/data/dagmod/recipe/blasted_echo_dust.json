@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": "minecraft:echo_shard",
+    "result": {
+        "id": "dagmod:echo_dust"
+    },
+    "experience": 0.5,
+    "cookingtime": 250
+}

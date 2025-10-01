@@ -1,0 +1,122 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#D#",
+    "BPB",
+    "GEG"
+  ],
+  "key": {
+    "E": "dagmod:emerald_powder",
+    "D": "dagmod:diamond_powder",
+    "#": "dagmod:amethyst_powder",
+    "B": "dagmod:quartz_powder",
+    "P": "minecraft:potion",
+    "G": "dagmod:suspicious_substance"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Essence of Thanos\",\"color\":\"dark_purple\"}",
+      "minecraft:potion_contents": {
+        "custom_effects": [
+          {
+            "id": "minecraft:absorption",
+            "amplifier": 10,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:dolphins_grace",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:fire_resistance",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:haste",
+            "amplifier": 5,
+            "duration": 12000
+          },
+          {
+            "id": "minecraft:health_boost",
+            "amplifier": 10,
+            "duration": 12000
+          },
+          {
+            "id": "minecraft:luck",
+            "amplifier": 10,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:night_vision",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:regeneration",
+            "amplifier": 10,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:saturation",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:slow_falling",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:speed",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          },
+          {
+            "id": "minecraft:strength",
+            "amplifier": 10,
+            "duration": 12000
+          },
+          {
+            "id": "minecraft:water_breathing",
+            "amplifier": 5,
+            "duration": 12000,
+            "ambient": true,
+            "show_particles": false,
+            "show_icon": false
+          }
+        ]
+      }
+    },
+    "count": 1
+  }
+}

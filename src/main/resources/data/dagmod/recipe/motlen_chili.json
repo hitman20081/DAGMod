@@ -1,0 +1,65 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:blaze_powder",
+    "minecraft:nether_wart",
+    "minecraft:rotten_flesh",
+    "minecraft:beetroot",
+    "minecraft:redstone",
+    "minecraft:lava_bucket"
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Molten Chili\",\"color\":\"#ff6800\"}",
+      "minecraft:lore": [
+        "{\"text\":\"Can your stomach handle the heat?\",\"color\":\"#ff6800\"}",
+        "{\"text\":\"It'll be worth it... I Promise!\",\"color\":\"#ff6800\"}"
+      ],
+      "minecraft:consumable": {
+        "consume_seconds": 1.6,
+        "animation": "eat",
+        "sound": "minecraft:entity.generic.eat",
+        "has_consume_particles": true,
+        "on_consume_effects": [
+          {
+            "type": "minecraft:apply_effects",
+            "effects": [
+              {
+                "id": "minecraft:fire_resistance",
+                "amplifier": 3,
+                "duration": 9600,
+                "ambient": true,
+                "show_particles": false,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:jump_boost",
+                "amplifier": 1,
+                "duration": 9600,
+                "ambient": true,
+                "show_particles": false,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:strength",
+                "amplifier": 1,
+                "duration": 9600
+              }
+            ],
+            "probability": 1
+          }
+        ]
+      },
+      "minecraft:food": {
+        "nutrition": 4,
+        "saturation": 15,
+        "can_always_eat": true
+      },
+      "minecraft:max_stack_size": 16
+    },
+    "count": 1,
+    "id": "minecraft:beetroot_soup"
+  }
+}

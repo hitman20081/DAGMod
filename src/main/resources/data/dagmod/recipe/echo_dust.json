@@ -1,0 +1,10 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        "minecraft:echo_shard"
+    ],
+    "result": {
+        "id": "dagmod:echo_dust",
+        "count": 1
+    }
+}

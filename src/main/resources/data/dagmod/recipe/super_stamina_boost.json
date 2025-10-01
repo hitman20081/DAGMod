@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "FPF",
+    " F "
+  ],
+  "key": {
+    "G": "dagmod:amethyst_powder",
+    "P": "minecraft:honey_bottle",
+    "F": "dagmod:suspicious_substance"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "count": 1,
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:swiftness",
+        "custom_color": 11183113,
+        "custom_name": "Stamina Boost",
+        "custom_effects": [
+          {
+            "id": "minecraft:haste",
+            "amplifier": 4,
+            "duration": 3600
+          }
+        ]
+      },
+      "minecraft:custom_name": "{\"text\":\"Stamina Boost\",\"color\":\"#33fff9\"}",
+      "minecraft:lore": [
+        "\"Who needs caffeine\""
+      ],
+      "minecraft:max_stack_size": 64
+    }
+  }
+}

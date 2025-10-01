@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dagmod:block/class_selection_altar"
+    }
+  }
+}

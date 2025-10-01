@@ -1,0 +1,60 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:milk_bucket",
+    "B": "minecraft:sugar",
+    "C": "minecraft:wheat",
+    "E": "minecraft:egg",
+    "D": "minecraft:chorus_fruit"
+  },
+  "pattern": [
+    "DAD",
+    "BEB",
+    "CCC"
+  ],
+  "result": {
+    "components": {
+      "minecraft:food": {
+        "nutrition": 2,
+        "saturation": 6
+      },
+      "minecraft:custom_name": "{\"text\":\"Dragonfruit Tart\",\"color\":\"#d800ff\"}",
+      "minecraft:consumable": {
+        "consume_seconds": 0.75,
+        "animation": "eat",
+        "sound": "minecraft:entity.generic.eat",
+        "on_consume_effects": [
+          {
+            "type": "minecraft:apply_effects",
+            "effects": [
+              {
+                "id": "minecraft:fire_resistance",
+                "amplifier": 0,
+                "duration": 160,
+                "ambient": false,
+                "show_particles": false,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:regeneration",
+                "amplifier": 2,
+                "duration": 160,
+                "ambient": false,
+                "show_particles": false,
+                "show_icon": true
+              }
+            ],
+            "probability": 1
+          }
+        ]
+      },
+      "minecraft:max_stack_size": 64,
+      "minecraft:lore": [
+        "{\"text\":\"Fire Res - Regen\",\"color\":\"#d800ff\"}"
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:pumpkin_pie"
+  }
+}

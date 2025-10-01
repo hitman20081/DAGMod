@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "dagmod",
+	"version": "${version}",
+	"name": "Dag Mod",
+	"description": "This is a mod to add datapack recipes items to the crafting table",
+	"authors": [
+		"Hitman20081"
+	],
+	"contact": {
+		"homepage": "https://deadactiongaming.xyz/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/dagmod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.github.hitman20081.dagmod.DagMod"
+		],
+		"fabric-datagen": [
+			"com.github.hitman20081.dagmod.DagModDataGenerator"
+		],
+		"client": [
+			"com.github.hitman20081.dagmod.DagModClient"
+		]
+	},
+	"mixins": [
+		"dagmod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.2",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
