@@ -30,7 +30,8 @@ public class QuestBlock extends Block {
 
     public enum MenuState {
         MAIN_MENU,
-        AVAILABLE_QUESTS,
+        BROWSE_QUESTS,      // NEW: Browse without accepting
+        CONFIRM_ACCEPT,     // NEW: Confirm before accepting
         ACTIVE_QUESTS,
         TURN_IN_QUESTS,
         UPGRADE_MENU
@@ -55,7 +56,8 @@ public class QuestBlock extends Block {
 
             switch (currentState) {
                 case MAIN_MENU -> showMainMenu(serverPlayer, questManager, playerData);
-                case AVAILABLE_QUESTS -> showAvailableQuests(serverPlayer, questManager, playerData);
+                case BROWSE_QUESTS -> showBrowseQuests(serverPlayer, questManager, playerData);
+                case CONFIRM_ACCEPT -> showConfirmAccept(serverPlayer, questManager, playerData);
                 case ACTIVE_QUESTS -> showActiveQuests(serverPlayer, questManager, playerData);
                 case TURN_IN_QUESTS -> showTurnInQuests(serverPlayer, questManager, playerData);
                 case UPGRADE_MENU -> showUpgradeMenu(serverPlayer, questManager, playerData);
@@ -103,7 +105,7 @@ public class QuestBlock extends Block {
 
         if (!availableQuests.isEmpty() && playerData.canAcceptMoreQuests()) {
             player.sendMessage(Text.literal("→ Browse Available Quests (" + availableQuests.size() + " available)"), false);
-            playerMenuState.put(playerId, MenuState.AVAILABLE_QUESTS);
+            playerMenuState.put(playerId, MenuState.BROWSE_QUESTS);
             playerAvailableQuests.put(playerId, availableQuests);
             playerSelectedIndex.put(playerId, 0);
         } else if (!playerData.canAcceptMoreQuests()) {
@@ -119,16 +121,14 @@ public class QuestBlock extends Block {
         // Quest book upgrade
         if (playerData.canUpgradeQuestBook()) {
             player.sendMessage(Text.literal("⭐ Upgrade Quest Book (AVAILABLE!)"), false);
-            // Add this line to set the next menu state:
-            playerMenuState.put(playerId, MenuState.UPGRADE_MENU);
         }
 
         player.sendMessage(Text.literal("==================="), false);
     }
 
-    private void showAvailableQuests(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
+    private void showBrowseQuests(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
         UUID playerId = player.getUuid();
-        List<Quest> availableQuests = questManager.getAvailableQuests(player);
+        List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
         if (availableQuests == null || availableQuests.isEmpty()) {
@@ -138,24 +138,27 @@ public class QuestBlock extends Block {
         }
 
         if (selectedIndex >= availableQuests.size()) {
-            // Cycle back to turning in completed quests or main menu
-            List<Quest> completedQuests = playerCompletedQuests.get(playerId);
-            if (completedQuests != null && !completedQuests.isEmpty()) {
-                playerMenuState.put(playerId, MenuState.TURN_IN_QUESTS);
-                playerSelectedIndex.put(playerId, 0);
-                showTurnInQuests(player, questManager, playerData);
-                return;
-            } else {
-                playerMenuState.put(playerId, MenuState.MAIN_MENU);
-                showMainMenu(player, questManager, playerData);
-                return;
-            }
+            // Finished browsing, return to main menu
+            player.sendMessage(Text.literal("=== End of Quest List ==="), false);
+            player.sendMessage(Text.literal("Returning to main menu..."), false);
+            playerMenuState.put(playerId, MenuState.MAIN_MENU);
+            playerSelectedIndex.put(playerId, 0);
+            return;
         }
 
         Quest currentQuest = availableQuests.get(selectedIndex);
 
-        player.sendMessage(Text.literal("=== Available Quest " + (selectedIndex + 1) + "/" + availableQuests.size() + " ==="), false);
-        player.sendMessage(Text.literal("📜 " + currentQuest.getName() + " (" + currentQuest.getDifficulty().getDisplayName() + ")"), false);
+        player.sendMessage(Text.literal("=== Quest " + (selectedIndex + 1) + "/" + availableQuests.size() + " ==="), false);
+
+        // Show class requirement if it exists
+        if (currentQuest.isClassRestricted()) {
+            player.sendMessage(Text.literal("[" + currentQuest.getRequiredClass() + " Only]"), false);
+        }
+
+        Text questTitle = Text.literal("📜 " + currentQuest.getName())
+                .append(Text.literal(" (" + currentQuest.getDifficulty().getDisplayName() + ")")
+                        .styled(style -> style.withColor(currentQuest.getDifficulty().getColor())));
+        player.sendMessage(questTitle, false);
         player.sendMessage(Text.literal(currentQuest.getDescription()), false);
         player.sendMessage(Text.literal(""), false);
 
@@ -173,15 +176,50 @@ public class QuestBlock extends Block {
         }
 
         player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click to ACCEPT this quest!"), false);
+        player.sendMessage(Text.literal("Right-click to VIEW NEXT quest"), false);
+        player.sendMessage(Text.literal("Sneak + Right-click to ACCEPT this quest"), false);
+        player.sendMessage(Text.literal("==================="), false);
 
-        // Accept the quest
-        if (questManager.startQuest(player, currentQuest.getId())) {
-            player.sendMessage(Text.literal("✓ Quest accepted: " + currentQuest.getName()), false);
+        // Check if player is sneaking (shift + right click)
+        if (player.isSneaking()) {
+            // Player wants to accept this quest - go to confirmation
+            playerMenuState.put(playerId, MenuState.CONFIRM_ACCEPT);
+            return;
         }
 
-        // Move to next quest
+        // Move to next quest for browsing
         playerSelectedIndex.put(playerId, selectedIndex + 1);
+    }
+
+    private void showConfirmAccept(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUuid();
+        List<Quest> availableQuests = playerAvailableQuests.get(playerId);
+        int selectedIndex = playerSelectedIndex.get(playerId) - 1; // Go back one since we incremented
+
+        if (selectedIndex < 0 || selectedIndex >= availableQuests.size()) {
+            playerMenuState.put(playerId, MenuState.MAIN_MENU);
+            return;
+        }
+
+        Quest questToAccept = availableQuests.get(selectedIndex);
+
+        player.sendMessage(Text.literal("=== CONFIRM QUEST ACCEPTANCE ==="), false);
+        player.sendMessage(Text.literal("Quest: " + questToAccept.getName()), false);
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(Text.literal("Right-click to CONFIRM and accept this quest"), false);
+        player.sendMessage(Text.literal("==================="), false);
+
+        // Accept the quest
+        if (questManager.startQuest(player, questToAccept.getId())) {
+            player.sendMessage(Text.literal("✓ Quest accepted: " + questToAccept.getName()), false);
+            player.sendMessage(Text.literal("Check your active quests to track progress!"), false);
+        } else {
+            player.sendMessage(Text.literal("✗ Failed to accept quest!"), false);
+        }
+
+        // Return to main menu
+        playerMenuState.put(playerId, MenuState.MAIN_MENU);
+        playerSelectedIndex.put(playerId, 0);
     }
 
     private void showActiveQuests(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
@@ -235,7 +273,7 @@ public class QuestBlock extends Block {
         if (selectedIndex >= completedQuests.size()) {
             player.sendMessage(Text.literal("All completed quests turned in!"), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
-            playerCompletedQuests.remove(playerId); // Clear the cached list
+            playerCompletedQuests.remove(playerId);
             return;
         }
 
@@ -252,10 +290,8 @@ public class QuestBlock extends Block {
         }
         player.sendMessage(Text.literal(""), false);
 
-        // Remove this quest from the completed list since it's been turned in
         if (!questToTurnIn.isCompleted()) {
-            player.sendMessage(Text.literal("❌ This quest is not yet completed!"), false);
-            // Remove from completed list and refresh
+            player.sendMessage(Text.literal("✗ This quest is not yet completed!"), false);
             List<Quest> mutableCompletedQuests = new ArrayList<>(completedQuests);
             mutableCompletedQuests.remove(selectedIndex);
             playerCompletedQuests.put(playerId, mutableCompletedQuests);
@@ -264,45 +300,20 @@ public class QuestBlock extends Block {
 
         player.sendMessage(Text.literal("Right-click to confirm turn-in..."), false);
 
-        // Add this line for debugging
-        debugQuestTurnIn(player, questToTurnIn);
-
         // Turn in the quest
         boolean success = questManager.turnInQuest(player, questToTurnIn.getId());
 
         if (success) {
-            player.sendMessage(Text.literal("✅ Quest completed successfully!"), false);
+            player.sendMessage(Text.literal("✓ Quest completed successfully!"), false);
             player.sendMessage(Text.literal("Check your inventory for rewards!"), false);
 
-            // Remove this quest from the completed list since it's been turned in
             List<Quest> mutableCompletedQuests = new ArrayList<>(completedQuests);
             mutableCompletedQuests.remove(selectedIndex);
             playerCompletedQuests.put(playerId, mutableCompletedQuests);
-
-            // Don't increment selectedIndex since we removed an item
         } else {
-            player.sendMessage(Text.literal("❌ Failed to turn in quest. Check your inventory space!"), false);
-            // Move to next quest
+            player.sendMessage(Text.literal("✗ Failed to turn in quest. Check your inventory space!"), false);
             playerSelectedIndex.put(playerId, selectedIndex + 1);
         }
-    }
-
-    private void debugQuestTurnIn(ServerPlayerEntity player, Quest quest) {
-        player.sendMessage(Text.literal("=== DEBUG INFO ==="), false);
-        player.sendMessage(Text.literal("Quest: " + quest.getName()), false);
-        player.sendMessage(Text.literal("Status: " + quest.getStatus()), false);
-        player.sendMessage(Text.literal("Is Completed: " + quest.isCompleted()), false);
-
-        for (int i = 0; i < quest.getObjectives().size(); i++) {
-            var obj = quest.getObjectives().get(i);
-            player.sendMessage(Text.literal("Objective " + (i+1) + ": " + obj.isCompleted() + " - " + obj.getDisplayText().getString()), false);
-        }
-
-        for (int i = 0; i < quest.getRewards().size(); i++) {
-            var reward = quest.getRewards().get(i);
-            player.sendMessage(Text.literal("Reward " + (i+1) + ": " + reward.getDisplayText().getString()), false);
-        }
-        player.sendMessage(Text.literal("=================="), false);
     }
 
     private void showUpgradeMenu(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {

@@ -1,4 +1,4 @@
-package com.github.hitman20081.dagmod;
+package com.github.hitman20081.dagmod.client;
 
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.quest.ClientQuestData;
@@ -6,6 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class DagModClient implements ClientModInitializer {
+
     @Override
     public void onInitializeClient() {
         // Register client-side packet receivers
@@ -14,7 +15,5 @@ public class DagModClient implements ClientModInitializer {
                 ClientQuestData.getInstance().updateFromPacket(payload);
             });
         });
-
-        System.out.println("DAGMod client networking initialized!");
     }
 }

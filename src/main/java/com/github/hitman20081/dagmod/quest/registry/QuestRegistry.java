@@ -33,6 +33,22 @@ public class QuestRegistry {
         manager.registerQuest(createMiningExpeditionQuest());
         manager.registerQuest(createBreadMakerQuest());
 
+        // ========== CLASS-SPECIFIC QUESTS ==========
+        // Warrior Quests
+        manager.registerQuest(createShieldBearerQuest());
+        manager.registerQuest(createWarriorTrainingQuest());
+        manager.registerQuest(createBattleMasterQuest());
+
+        // Mage Quests
+        manager.registerQuest(createArcanistApprenticeQuest());
+        manager.registerQuest(createPotionMasterQuest());
+        manager.registerQuest(createEnchantmentSageQuest());
+
+        // Rogue Quests
+        manager.registerQuest(createShadowStrikerQuest());
+        manager.registerQuest(createTreasureHunterQuest());
+        manager.registerQuest(createMasterAssassinQuest());
+
         // ========== CHAIN QUESTS ==========
         // Adventurer's Path Chain
         manager.registerQuest(createTheBeginningQuest());
@@ -175,6 +191,140 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.BREAD, 12))
                 .addReward(new ItemReward(Items.CAKE, 2))
                 .addReward(XpReward.apprentice());
+    }
+
+    // ========== WARRIOR CLASS QUESTS ==========
+
+    private static Quest createShieldBearerQuest() {
+        return new Quest("shield_bearer")
+                .setName("The Shield Bearer")
+                .setDescription("A warrior needs protection. Gather materials for defensive equipment.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setRequiredClass("Warrior")
+                .addObjective(new CollectObjective(Items.IRON_INGOT, 24))
+                .addObjective(new CollectObjective(Items.LEATHER, 8))
+                .addReward(new ItemReward(Items.SHIELD, 1))
+                .addReward(new ItemReward(Items.IRON_HELMET, 1))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createWarriorTrainingQuest() {
+        return new Quest("warrior_training")
+                .setName("Warrior's Training")
+                .setDescription("Prove your combat prowess by slaying enemies in honorable battle.")
+                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setRequiredClass("Warrior")
+                .addObjective(KillObjective.zombies(15))
+                .addObjective(KillObjective.skeletons(10))
+                .addReward(new ItemReward(Items.IRON_SWORD, 1))
+                .addReward(new ItemReward(Items.IRON_CHESTPLATE, 1))
+                .addReward(XpReward.apprentice());
+    }
+
+    private static Quest createBattleMasterQuest() {
+        return new Quest("battle_master")
+                .setName("Battle Master")
+                .setDescription("Face the most dangerous foes and emerge victorious.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setRequiredClass("Warrior")
+                .addObjective(new KillObjective(EntityType.CREEPER, 5))
+                .addObjective(new KillObjective(EntityType.SPIDER, 8))
+                .addObjective(KillObjective.zombies(12))
+                .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
+                .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
+                .addReward(XpReward.expert());
+    }
+
+    // ========== MAGE CLASS QUESTS ==========
+
+    private static Quest createArcanistApprenticeQuest() {
+        return new Quest("arcanist_apprentice")
+                .setName("Arcanist's Apprentice")
+                .setDescription("Gather magical reagents to begin your study of the arcane arts.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setRequiredClass("Mage")
+                .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 32))
+                .addObjective(new CollectObjective(Items.BOOK, 5))
+                .addObjective(new CollectObjective(Items.GLOWSTONE_DUST, 16))
+                .addReward(new ItemReward(Items.ENCHANTING_TABLE, 1))
+                .addReward(new ItemReward(Items.BOOKSHELF, 3))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createPotionMasterQuest() {
+        return new Quest("potion_master")
+                .setName("Potion Master")
+                .setDescription("Master the art of potion brewing by gathering rare ingredients.")
+                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setRequiredClass("Mage")
+                .addObjective(new CollectObjective(Items.NETHER_WART, 16))
+                .addObjective(new CollectObjective(Items.BLAZE_POWDER, 8))
+                .addObjective(new CollectObjective(Items.SPIDER_EYE, 4))
+                .addReward(new ItemReward(Items.BREWING_STAND, 1))
+                .addReward(new ItemReward(Items.POTION, 3))
+                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 5))
+                .addReward(XpReward.apprentice());
+    }
+
+    private static Quest createEnchantmentSageQuest() {
+        return new Quest("enchantment_sage")
+                .setName("Enchantment Sage")
+                .setDescription("Collect powerful enchantments to unlock the secrets of magic.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setRequiredClass("Mage")
+                .addObjective(new CollectObjective(Items.DIAMOND, 8))
+                .addObjective(new CollectObjective(Items.OBSIDIAN, 16))
+                .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 64))
+                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 3))
+                .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
+                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 10))
+                .addReward(XpReward.expert());
+    }
+
+    // ========== ROGUE CLASS QUESTS ==========
+
+    private static Quest createShadowStrikerQuest() {
+        return new Quest("shadow_striker")
+                .setName("Shadow Striker")
+                .setDescription("Use your agility to hunt down swift and dangerous prey.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setRequiredClass("Rogue")
+                .addObjective(new KillObjective(EntityType.SPIDER, 10))
+                .addObjective(new KillObjective(EntityType.CAVE_SPIDER, 5))
+                .addReward(new ItemReward(Items.BOW, 1))
+                .addReward(new ItemReward(Items.ARROW, 64))
+                .addReward(new ItemReward(Items.LEATHER_BOOTS, 1))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createTreasureHunterQuest() {
+        return new Quest("treasure_hunter")
+                .setName("Treasure Hunter")
+                .setDescription("Seek out valuable treasures hidden in dangerous places.")
+                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setRequiredClass("Rogue")
+                .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
+                .addObjective(new CollectObjective(Items.EMERALD, 5))
+                .addObjective(new CollectObjective(Items.DIAMOND, 3))
+                .addReward(new ItemReward(Items.ENDER_PEARL, 8))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
+                .addReward(XpReward.apprentice());
+    }
+
+    private static Quest createMasterAssassinQuest() {
+        return new Quest("master_assassin")
+                .setName("Master Assassin")
+                .setDescription("Execute precision strikes against formidable enemies.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setRequiredClass("Rogue")
+                .addObjective(KillObjective.skeletons(15))
+                .addObjective(new KillObjective(EntityType.ENDERMAN, 3))
+                .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
+                .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
+                .addReward(new ItemReward(Items.BOW, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(XpReward.expert());
     }
 
     // ========== ADVENTURER'S PATH CHAIN QUESTS ==========
@@ -378,7 +528,7 @@ public class QuestRegistry {
                 .addObjective(KillObjective.zombies(5))
                 .addObjective(new CollectObjective(Items.ROTTEN_FLESH, 10))
                 .addObjective(new CollectObjective(Items.BONE, 8))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 1))
+                .addReward(new ItemReward(Items.DIAMOND, 3))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 5))
                 .addReward(XpReward.expert())
                 .addPrerequisite("night_watch");

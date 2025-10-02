@@ -3,6 +3,7 @@ package com.github.hitman20081.dagmod;
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.effect.ModEffects;
 import com.github.hitman20081.dagmod.item.ModItems;
+import com.github.hitman20081.dagmod.networking.ModNetworking;
 import com.github.hitman20081.dagmod.potion.ModPotions;
 import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.block.ModBlocks;
@@ -49,6 +50,9 @@ public class DagMod implements ModInitializer {
         ModPotions.registerPotion();
 
         ModBlocks.initialize();
+
+        // Initialize Networking
+        ModNetworking.initialize();
 
         // Initialize Quest System
         LOGGER.info("Initializing Quest System for " + MOD_ID);

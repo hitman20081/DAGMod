@@ -340,7 +340,15 @@ public class QuestManager {
         QuestData playerData = getPlayerData(player);
         List<Quest> available = new ArrayList<>();
 
+        // Get player's class
+        String playerClass = com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+
         for (Quest quest : allQuests.values()) {
+            // Check class requirement first
+            if (quest.isClassRestricted() && !quest.getRequiredClass().equals(playerClass)) {
+                continue; // Skip quests for other classes
+            }
+
             // Check if player can start the quest AND if their quest book tier allows it
             if (canStartQuest(player, quest) && playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
                 available.add(quest);

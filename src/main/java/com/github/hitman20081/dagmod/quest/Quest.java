@@ -19,6 +19,7 @@ public class Quest {
     private boolean repeatable = false;
     private long cooldownTime = 0; // In milliseconds
     private String seasonRequirement = null; // "spring", "summer", etc.
+    private String requiredClass = null; // "Warrior", "Mage", "Rogue", or null for any class
 
     // Quest difficulty levels
     public enum QuestDifficulty {
@@ -109,6 +110,11 @@ public class Quest {
         return this;
     }
 
+    public Quest setRequiredClass(String className) {
+        this.requiredClass = className;
+        return this;
+    }
+
     // Getters
     public String getId() { return id; }
     public String getName() { return name; }
@@ -124,6 +130,10 @@ public class Quest {
     public boolean isRepeatable() { return repeatable; }
     public long getCooldownTime() { return cooldownTime; }
     public String getSeasonRequirement() { return seasonRequirement; }
+
+    public String getRequiredClass() {
+        return requiredClass;
+    }
 
     // Status management
     public void setStatus(QuestStatus status) {
@@ -147,5 +157,9 @@ public class Quest {
 
     public boolean hasPrerequisites() {
         return !prerequisites.isEmpty();
+    }
+
+    public boolean isClassRestricted() {
+        return requiredClass != null;
     }
 }
