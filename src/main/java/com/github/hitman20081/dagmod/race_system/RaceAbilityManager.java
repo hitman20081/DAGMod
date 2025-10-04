@@ -3,6 +3,8 @@ package com.github.hitman20081.dagmod.race_system;
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -90,6 +92,18 @@ public class RaceAbilityManager {
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );
+        }
+
+        // Hero of the Village - Elves are respected by villagers
+        if (!player.hasStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.HERO_OF_THE_VILLAGE,
+                    Integer.MAX_VALUE, // Permanent
+                    0,
+                    true,  // ambient
+                    false, // no particles
+                    true   // show icon
+            ));
         }
     }
 

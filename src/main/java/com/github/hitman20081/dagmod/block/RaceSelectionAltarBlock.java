@@ -189,22 +189,36 @@ public class RaceSelectionAltarBlock extends Block {
     }
 
     private void initializeHuman(PlayerEntity player) {
-        // Humans are balanced - give basic tools
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_PICKAXE));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_AXE));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.FISHING_ROD));
+        // Humans are balanced - give basic tools with standard mining capabilities
+        ItemStack pickaxe = new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
+        ItemStack axe = new ItemStack(net.minecraft.item.Items.IRON_AXE);
+        ItemStack fishingRod = new ItemStack(net.minecraft.item.Items.FISHING_ROD);
+
+        player.giveItemStack(pickaxe);
+        player.giveItemStack(axe);
+        player.giveItemStack(fishingRod);
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.BREAD, 8));
 
         player.sendMessage(Text.literal("⚖ Human abilities unlocked!")
                 .formatted(Formatting.WHITE), false);
         player.sendMessage(Text.literal("Jack of all trades, master of none.")
                 .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("+25% experience gain from all sources!")
+                .formatted(Formatting.GREEN), false);
     }
 
     private void initializeDwarf(PlayerEntity player) {
-        // Dwarves are master miners
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_PICKAXE));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_PICKAXE)); // Extra pickaxe
+        // Dwarves get enhanced pickaxes with access to rare ores
+        ItemStack dwarfPickaxe1 = new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
+        dwarfPickaxe1.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Dwarven Mining Pick").formatted(Formatting.GOLD));
+
+        ItemStack dwarfPickaxe2 = new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
+        dwarfPickaxe2.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Dwarven Mining Pick").formatted(Formatting.GOLD));
+
+        player.giveItemStack(dwarfPickaxe1);
+        player.giveItemStack(dwarfPickaxe2);
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.TORCH, 32));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_BEEF, 8));
 
@@ -212,13 +226,27 @@ public class RaceSelectionAltarBlock extends Block {
                 .formatted(Formatting.GOLD), false);
         player.sendMessage(Text.literal("Masters of stone and metal!")
                 .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Mining speed increased by 20%!")
+                .formatted(Formatting.GREEN), false);
     }
 
     private void initializeElf(PlayerEntity player) {
-        // Elves are nature experts
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_AXE));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_AXE)); // Extra axe
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.BOW));
+        // Elves get enhanced axes and nature tools
+        ItemStack elfAxe1 = new ItemStack(net.minecraft.item.Items.IRON_AXE);
+        elfAxe1.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Elven Woodland Axe").formatted(Formatting.GREEN));
+
+        ItemStack elfAxe2 = new ItemStack(net.minecraft.item.Items.IRON_AXE);
+        elfAxe2.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Elven Woodland Axe").formatted(Formatting.GREEN));
+
+        ItemStack elfBow = new ItemStack(net.minecraft.item.Items.BOW);
+        elfBow.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Elven Hunting Bow").formatted(Formatting.GREEN));
+
+        player.giveItemStack(elfAxe1);
+        player.giveItemStack(elfAxe2);
+        player.giveItemStack(elfBow);
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.ARROW, 16));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.APPLE, 8));
 
@@ -226,13 +254,27 @@ public class RaceSelectionAltarBlock extends Block {
                 .formatted(Formatting.GREEN), false);
         player.sendMessage(Text.literal("One with nature and the forest!")
                 .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Enhanced woodcutting and mobility!")
+                .formatted(Formatting.GREEN), false);
     }
 
     private void initializeOrc(PlayerEntity player) {
-        // Orcs are strong hunters
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_SWORD));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.FISHING_ROD));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.BOW));
+        // Orcs get combat and hunting tools
+        ItemStack orcSword = new ItemStack(net.minecraft.item.Items.IRON_SWORD);
+        orcSword.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Orcish War Blade").formatted(Formatting.DARK_RED));
+
+        ItemStack orcBow = new ItemStack(net.minecraft.item.Items.BOW);
+        orcBow.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Orcish Hunter's Bow").formatted(Formatting.DARK_RED));
+
+        ItemStack fishingRod = new ItemStack(net.minecraft.item.Items.FISHING_ROD);
+        fishingRod.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Orcish Fishing Spear").formatted(Formatting.DARK_RED));
+
+        player.giveItemStack(orcSword);
+        player.giveItemStack(fishingRod);
+        player.giveItemStack(orcBow);
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.ARROW, 16));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_PORKCHOP, 8));
 
@@ -240,6 +282,8 @@ public class RaceSelectionAltarBlock extends Block {
                 .formatted(Formatting.DARK_RED), false);
         player.sendMessage(Text.literal("Fierce hunters and warriors!")
                 .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Enhanced combat and hunting prowess!")
+                .formatted(Formatting.GREEN), false);
     }
 
     private boolean isRaceToken(ItemStack stack) {

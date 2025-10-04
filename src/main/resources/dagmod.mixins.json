@@ -4,8 +4,11 @@
 	"package": "com.github.hitman20081.dagmod.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"MageStatusEffectMixin",
-		"RogueDamageMixin"
+      "MageStatusEffectMixin",
+      "RogueDamageMixin",
+      "RaceMiningMixin",
+      "RaceHuntingMixin",
+      "HumanExperienceMixin"
 	],
 	"client": [],
 	"injectors": {

@@ -9,6 +9,7 @@ import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.block.ModBlocks;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.registry.QuestRegistry;
+import com.github.hitman20081.dagmod.race_system.PlayerTickHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -59,6 +60,10 @@ public class DagMod implements ModInitializer {
         QuestRegistry.registerQuests();
         QuestManager.getInstance();
         LOGGER.info("Quest System initialized successfully!");
+
+// Register race/class synergy ticker
+        PlayerTickHandler.register();
+        LOGGER.info("Race/Class synergy system initialized!");
 
         // Register command for class reset
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {

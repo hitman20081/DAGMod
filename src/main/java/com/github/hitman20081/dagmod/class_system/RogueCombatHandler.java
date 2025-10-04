@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.class_system;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -37,6 +38,12 @@ public class RogueCombatHandler {
         if (isAttackingFromBehind(attacker, target)) {
             finalDamage *= 1.5f; // +50% damage
             isBackstab = true;
+        }
+
+        // Check for Orc Rogue synergy - extra backstab damage
+        String playerRace = RaceSelectionAltarBlock.getPlayerRace(attacker.getUuid());
+        if ("Orc".equals(playerRace) && isBackstab) {
+            finalDamage *= 1.2f; // Additional +20% for Orc Rogues backstabbing
         }
 
         // Send feedback to player

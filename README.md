@@ -154,19 +154,25 @@ The compiled mod will be in `build/libs/`
 ### Project Structure
 ```
 src/main/java/com/github/hitman20081/dagmod/
-├── block/          - Custom blocks
-├── class_system/   - RPG class mechanics
+├── block/          - Custom blocks (Quest Block, Altars)
+├── class_system/   - RPG class mechanics and abilities
+├── race_system/    - Race selection and racial bonuses
 ├── command/        - Custom commands
 ├── effect/         - Custom status effects
 ├── entity/         - Custom entities
 ├── gui/            - User interface screens
-├── item/           - Custom items
+├── item/           - Custom items (tokens, tomes, food)
 ├── mixin/          - Mixins for modifying game behavior
 ├── potion/         - Custom potions
 └── quest/          - Quest system implementation
     ├── objectives/ - Quest objective types
     ├── rewards/    - Quest reward types
     └── registry/   - Quest registration
+
+data/dag011/        - Datapack integration
+├── structures/     - World-generated structures
+├── worldgen/       - World generation configs
+└── functions/      - Datapack functions
 ```
 
 ## Credits
