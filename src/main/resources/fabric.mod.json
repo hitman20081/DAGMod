@@ -3,7 +3,7 @@
 	"id": "dagmod",
 	"version": "${version}",
 	"name": "Dag Mod",
-	"description": "This is a mod to add datapack recipes items to the crafting table",
+	"description": "A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, class progression, custom items, and immersive gameplay mechanics.",
 	"authors": [
 		"Hitman20081"
 	],
