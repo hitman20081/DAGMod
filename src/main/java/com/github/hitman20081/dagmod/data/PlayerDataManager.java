@@ -11,11 +11,13 @@ import net.minecraft.nbt.NbtSizeTracker;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerDataManager {
@@ -95,6 +97,82 @@ public class PlayerDataManager {
 
         } catch (IOException e) {
             DagMod.LOGGER.error("Failed to load player data for " + player.getName().getString(), e);
+        }
+    }
+
+    private static final String HALL_LOCATION_KEY = "hall_of_champions_location";
+
+    /**
+     * Save the Hall of Champions location for this world
+     */
+    public static void saveHallLocation(MinecraftServer server, BlockPos pos) {
+        try {
+            File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+            File modDataDir = new File(worldDir, DATA_FOLDER);
+
+            if (!modDataDir.exists()) {
+                modDataDir.mkdirs();
+            }
+
+            File hallFile = new File(modDataDir, "hall_location.dat");
+            NbtCompound nbt = new NbtCompound();
+
+            nbt.putInt("x", pos.getX());
+            nbt.putInt("y", pos.getY());
+            nbt.putInt("z", pos.getZ());
+
+            try (FileOutputStream fos = new FileOutputStream(hallFile)) {
+                NbtIo.writeCompressed(nbt, fos);
+            }
+
+            DagMod.LOGGER.info("Saved Hall of Champions location: " + pos);
+
+        } catch (IOException e) {
+            DagMod.LOGGER.error("Failed to save Hall location", e);
+        }
+    }
+
+    /**
+     * Load the Hall of Champions location for this world
+     */
+    public static BlockPos loadHallLocation(MinecraftServer server) {
+        try {
+            File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+            File modDataDir = new File(worldDir, DATA_FOLDER);
+            File hallFile = new File(modDataDir, "hall_location.dat");
+
+            if (!hallFile.exists()) {
+                return null;
+            }
+
+            NbtCompound nbt;
+            try (FileInputStream fis = new FileInputStream(hallFile)) {
+                nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+            }
+
+            // Handle Optional<Integer> return type
+            if (!nbt.contains("x") || !nbt.contains("y") || !nbt.contains("z")) {
+                return null;
+            }
+
+            Optional<Integer> xOpt = nbt.getInt("x");
+            Optional<Integer> yOpt = nbt.getInt("y");
+            Optional<Integer> zOpt = nbt.getInt("z");
+
+            if (xOpt.isEmpty() || yOpt.isEmpty() || zOpt.isEmpty()) {
+                return null;
+            }
+
+            // Declare variables OUTSIDE the if block
+            int x = xOpt.get();
+            int y = yOpt.get();
+            int z = zOpt.get();
+
+            return new BlockPos(x, y, z);
+
+        } catch (IOException e) {
+            DagMod.LOGGER.error("Failed to load Hall location", e);
+            return null;
         }
     }
 

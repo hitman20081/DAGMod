@@ -41,6 +41,11 @@ public class RaceSelectionAltarBlock extends Block {
             return ActionResult.SUCCESS;
         }
 
+        // Save Hall location on first interaction
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            PlayerDataManager.saveHallLocation(serverPlayer.getServer(), pos);
+        }
+
         UUID playerId = player.getUuid();
         ItemStack heldItem = player.getStackInHand(Hand.MAIN_HAND);
 

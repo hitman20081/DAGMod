@@ -1,8 +1,10 @@
 package com.github.hitman20081.dagmod;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.command.InfoCommand;
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.effect.ModEffects;
+import com.github.hitman20081.dagmod.event.DeathMessageHandler;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.networking.ModNetworking;
 import com.github.hitman20081.dagmod.potion.ModPotions;
@@ -24,8 +26,10 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -66,7 +70,7 @@ public class DagMod implements ModInitializer {
         QuestManager.getInstance();
         LOGGER.info("Quest System initialized successfully!");
 
-// Register race/class synergy ticker
+        // Register race/class synergy ticker
         PlayerTickHandler.register();
         LOGGER.info("Race/Class synergy system initialized!");
 
@@ -75,9 +79,43 @@ public class DagMod implements ModInitializer {
             ResetClassCommand.register(dispatcher, registryAccess, environment);
         });
 
+        // Register commands
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            ResetClassCommand.register(dispatcher, registryAccess, environment);
+            InfoCommand.register(dispatcher, registryAccess, environment);
+        });
+
         // Apply class abilities when player respawns (including after death)
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             ClassAbilityManager.applyClassAbilities(newPlayer);
+
+            BlockPos hallPos = PlayerDataManager.loadHallLocation(newPlayer.getServer());
+
+            if (hallPos != null) {
+                // Schedule teleport for 5 ticks later (0.25 seconds)
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(250); // Wait 250ms
+                        newPlayer.getServer().execute(() -> {
+                            LOGGER.info("Executing delayed Hall teleport to: " + hallPos);
+                            newPlayer.teleport(
+                                    hallPos.getX() + 0.5,
+                                    hallPos.getY() + 1.0,
+                                    hallPos.getZ() + 0.5,
+                                    true
+                            );
+
+                            newPlayer.sendMessage(
+                                    Text.literal("You have respawned at the Hall of Champions")
+                                            .formatted(Formatting.GOLD),
+                                    false
+                            );
+                        });
+                    } catch (InterruptedException e) {
+                        LOGGER.error("Hall teleport interrupted", e);
+                    }
+                }).start();
+            }
         });
 
         // Apply class abilities when player logs in
@@ -109,12 +147,17 @@ public class DagMod implements ModInitializer {
             }
         });
 
-        // Hook into entity death events for kill objectives - ADD THIS HERE
+        // Hook into entity death events for kill objectives
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             // Check if a player killed this entity
             if (damageSource.getAttacker() instanceof ServerPlayerEntity player) {
                 // Update kill objectives for this player
                 QuestManager.getInstance().updateKillProgress(player, entity.getType());
+            }
+
+            // Add death message for players
+            if (entity instanceof ServerPlayerEntity deadPlayer) {
+                DeathMessageHandler.sendDeathMessage(deadPlayer);
             }
         });
         // Then replace the placeholder with:
@@ -176,4 +219,5 @@ public class DagMod implements ModInitializer {
     public static void updatePlayerQuestProgress(ServerPlayerEntity player) {
         QuestManager.getInstance().updateQuestProgress(player);
     }
+
 }
