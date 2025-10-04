@@ -96,6 +96,10 @@ public class ModItems {
     public static final Item RACE_SELECTION_TOME = register("race_selection_tome",
             RaceSelectionTome::new, new Item.Settings().maxCount(1));
 
+    // Hall Locator
+    public static final Item HALL_LOCATOR = register("hall_locator",
+            HallLocatorItem::new, new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
 
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
@@ -236,6 +240,10 @@ public class ModItems {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
                 .register((itemGroup) ->
                         itemGroup.add(ModItems.CLASS_RESET_CRYSTAL));
+
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
+                .register((itemGroup) ->
+                        itemGroup.add(ModItems.HALL_LOCATOR));
 
     }
 

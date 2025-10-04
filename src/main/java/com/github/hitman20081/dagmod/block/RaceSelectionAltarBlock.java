@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.block;
 
+import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
 import com.github.hitman20081.dagmod.item.ModItems;
 import net.minecraft.block.Block;
@@ -112,6 +113,11 @@ public class RaceSelectionAltarBlock extends Block {
 
         // Store race in memory
         playerRaces.put(playerId, raceName);
+
+        // Save to NBT
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            PlayerDataManager.savePlayerData(serverPlayer);
+        }
 
         // Remove unused tokens from inventory
         removeUnusedTokens(player, raceName);
@@ -303,5 +309,8 @@ public class RaceSelectionAltarBlock extends Block {
             return true;
         }
         return false;
+    }
+    public static void setPlayerRace(UUID playerId, String race) {
+        playerRaces.put(playerId, race);
     }
 }

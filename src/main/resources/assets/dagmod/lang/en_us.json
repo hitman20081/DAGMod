@@ -62,5 +62,6 @@
   "item.dagmod.orc_token": "Orcish Heritage Token",
   "item.dagmod.race_selection_tome": "Tome of Ancestral Heritage",
   "item.dagmod.race_selection_altar": "Altar of Heritage",
-  "block.dagmod.race_selection_altar": "Altar of Heritage"
+  "block.dagmod.race_selection_altar": "Altar of Heritage",
+  "item.dagmod.hall_locator": "Hall Locator"
 }

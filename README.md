@@ -1,6 +1,6 @@
 # DAGMod v1.2.0 - Fantasy RPG Minecraft Mod
 
-A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, class progression, custom items, and immersive gameplay mechanics.
+A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, class progression, race selection, synergy abilities, custom items, and immersive gameplay mechanics.
 
 ## Features
 
@@ -9,7 +9,7 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Quest Chains**: Interconnected storylines that guide player progression
 - **Multiple Quest Types**:
     - Fetch Quests - Gather specific items
-    - Kill Quests - Defeat enemies (Work in Progress)
+    - Kill Quests - Defeat enemies
     - Delivery Quests - Transport items to NPCs (Work in Progress)
     - Crafting Quests - Create specific items (Work in Progress)
     - Collection Quests - Gather diverse materials (Work in Progress)
@@ -30,7 +30,7 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
         - -25% melee attack damage
         - 50% reduced enchantment costs
         - 50% longer potion durations
-        - Enhanced spell-like abilities
+        - Permanent night vision
     - **Rogue**: 
         - -1 heart (-2 health)
         - +30% movement speed
@@ -42,50 +42,66 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Class Reset Crystal**: Allows players to change their chosen class
 - **Level-Based Class Reset**: Free class reset every 10 quests completed
 
-### Race System (NEW!)
+### Race System
 - **Four Playable Races**:
     - **Human - The Balanced**:
-        - Jack of all trades
-        - Can gather all resources
-        - Versatile gameplay with no penalties
+        - +25% experience gain from all sources
+        - Jack of all trades with no penalties
+        - Versatile gameplay
     - **Dwarf - The Miner**:
         - +20% mining speed
         - +1 heart (+2 health)
         - -5% movement speed
-        - Expert at mining rare ores
-        - Born for the depths
+        - 15% chance for bonus ore drops when mining
     - **Elf - The Ranger**:
         - +15% movement speed
         - +0.5 block interaction range
-        - Expert at woodcutting and hunting
-        - One with nature
+        - Permanent Hero of the Village effect
+        - 20% chance for bonus wood drops
     - **Orc - The Warrior**:
         - +15% melee attack damage
         - +2 hearts (+4 health)
-        - Expert at hunting and fishing
-        - Fierce and strong
+        - 20% chance for bonus meat from hunting
+        - Better fishing luck
 - **Race Selection Altar**: Discover your heritage at the Hall of Champions
 - **Race Selection Tome**: Learn about each race before making your choice
 - **Race + Class Combinations**: Stack racial bonuses with class abilities for unique builds
 - **Permanent Heritage**: Race selection cannot be changed once chosen
+
+### Race + Class Synergies
+Special abilities unlock when combining specific races and classes:
+- **Dwarf Warrior**: Resistance effect when underground (below Y=50)
+- **Elf Rogue**: Invisibility in forest biomes when sneaking
+- **Orc Warrior**: Berserker rage (Strength + Speed) when below 30% health
+- **Human Mage**: Random regeneration bursts for adaptability
+- **Dwarf Mage**: Permanent fire resistance from mountain forges
+- **Elf Mage**: Haste effect in forest biomes
+- **Orc Rogue**: +20% extra backstab damage (stacks with base backstab)
+- **Human Warrior**: Absorption hearts when taking damage
+- **Human Rogue**: Random jump boost for versatile movement
 
 ### World Generation
 - **Hall of Champions**: Spawns naturally in new worlds
     - Contains both Race and Class Selection Altars
     - Generates on solid ground in the Overworld
     - Your journey begins here
+- **Hall Locator**: New players receive a locator item to find the structure
+
+### Race-Specific Gathering
+- **Dwarves**: Bonus ore drops when mining (coal, iron, gold, diamond, emerald, etc.)
+- **Elves**: Bonus wood drops and extra items from leaves
+- **Orcs**: Bonus meat and leather from hunting animals
+- **Humans**: Enhanced experience gain to level faster
 
 ### Custom Items & Food
 Dozens of custom fantasy-themed items including:
 - **Quest Books**: Novice, Apprentice, Expert, and Master tiers
-- **Class Tokens**: Warrior, Mage, and Rogue tokens
+- **Class Tokens**: Warrior, Mage, and Rogue selection tokens
+- **Race Tokens**: Human, Dwarf, Elf, and Orc heritage tokens
+- **Selection Tomes**: Detailed information about classes and races
+- **Hall Locator**: Find the Hall of Champions
 - **Crafting Materials**: Various powders (Diamond, Emerald, Amethyst, Quartz), Echo Dust, Slimeball Dust
-- **Fantasy Foods**:
-    - Elven Bread, Mystic Stew, Phoenix Roast
-    - Dragonfruit Tart, Frostberry Pie, Pumpkin Parfait
-    - Void Truffles, Ethereal Cookies, Shadow Cake
-    - Nether Salad, Crimson Soup, Molten Chili
-    - And many more delicious items!
+- **Fantasy Foods**: Over 20 unique food items with special effects
 
 ### Custom Potions & Effects
 - **XP Effect**: Custom experience gain mechanics
@@ -100,10 +116,15 @@ Dozens of custom fantasy-themed items including:
 - **Race Selection Altar**: Determine your ancestral heritage
 - **Simple NPC**: Quest giver and interaction system
 
+### Persistent Data Storage
+- Race and class selections are saved across server restarts
+- Player data stored in world save files
+- Seamless experience for server play
+
 ## Installation
 
 ### Requirements
-- Minecraft (version specified in fabric.mod.json)
+- Minecraft 1.21.x
 - Fabric Loader
 - Fabric API
 
@@ -115,22 +136,26 @@ Dozens of custom fantasy-themed items including:
 
 ## Getting Started
 
-1. **Create a New World**: Generate a new world to find the Hall of Champions
-2. **Discover Your Heritage**: Find the Hall of Champions structure and approach the Race Selection Altar
-3. **Choose Your Race**: Read the Race Selection Tome and select from Human, Dwarf, Elf, or Orc
-4. **Choose Your Class**: Approach the Class Selection Altar and select Warrior, Mage, or Rogue
-5. **Begin Your Journey**: Look for Quest Blocks or craft one to start questing
-6. **Level Up**: Complete quests to earn rewards and upgrade your quest book
-7. **Master Your Build**: Use race and class synergies to create your unique playstyle
+1. **Create a New World**: Generate a new world to experience the full mod
+2. **Use the Hall Locator**: Right-click the item you receive on first join to find the Hall of Champions
+3. **Discover Your Heritage**: Locate the Hall of Champions and approach the Race Selection Altar
+4. **Choose Your Race**: Read the Race Selection Tome and select from Human, Dwarf, Elf, or Orc
+5. **Choose Your Class**: Approach the Class Selection Altar and select Warrior, Mage, or Rogue
+6. **Explore Synergies**: Experiment with different race+class combinations for unique abilities
+7. **Begin Questing**: Find Quest Blocks to start your adventure
+8. **Level Up**: Complete quests to earn rewards and upgrade your quest book
 
 ## Recommended Race + Class Combinations
 
-- **Dwarf Warrior**: Ultimate tank with massive health and mining prowess
-- **Elf Rogue**: Lightning-fast assassin with incredible mobility
-- **Orc Warrior**: Raw damage powerhouse with devastating melee attacks
-- **Human Mage**: Balanced spellcaster with maximum versatility
-- **Elf Mage**: Mobile magic user excelling at ranged combat
-- **Dwarf Mage**: Tanky spellcaster who can survive in the depths
+- **Dwarf Warrior**: Ultimate tank - massive health, resistance underground, mining bonuses
+- **Elf Rogue**: Stealth assassin - incredible speed, invisibility in forests, deadly backstabs
+- **Orc Warrior**: Berserker - devastating damage, rage mode at low health, extra meat from hunting
+- **Human Mage**: Versatile spellcaster - fast leveling, balanced stats, adaptable playstyle
+- **Elf Mage**: Nature mage - enhanced mobility, haste in forests, Hero of the Village
+- **Dwarf Mage**: Forge mage - fire resistance, tanky caster, mining prowess
+- **Orc Rogue**: Brutal assassin - extreme backstab damage, extra health, hunting expertise
+- **Human Warrior**: Adaptable tank - absorption hearts, balanced combat, fast progression
+- **Human Rogue**: Versatile scout - mobility boosts, fast leveling, jack of all trades
 
 ## Crafting Recipes
 
@@ -157,6 +182,7 @@ src/main/java/com/github/hitman20081/dagmod/
 ├── block/          - Custom blocks (Quest Block, Altars)
 ├── class_system/   - RPG class mechanics and abilities
 ├── race_system/    - Race selection and racial bonuses
+├── data/           - Persistent data management
 ├── command/        - Custom commands
 ├── effect/         - Custom status effects
 ├── entity/         - Custom entities
@@ -194,10 +220,12 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 Future planned features:
 - Additional quest types and chains
 - More class abilities and specializations
+- Race-specific quests and storylines
 - Custom structures and dungeons
 - Boss encounters
 - Reputation system with factions
 - Magic spell system expansion
+- Guild system
 
 ## Support
 
@@ -207,4 +235,13 @@ For bug reports, feature requests, or questions:
 
 ---
 
-**Enjoy your fantasy RPG adventure in Minecraft!**
+**Choose your race, select your class, unlock powerful synergies, and embark on an epic fantasy RPG adventure in Minecraft!**
+
+Key additions:
+- Updated race bonuses with gathering percentages
+- Added synergy abilities section
+- Added Hall Locator feature
+- Added persistent data storage note
+- Updated recommended combinations with synergy details
+- Added data/ folder to project structure
+- More detailed getting started guide

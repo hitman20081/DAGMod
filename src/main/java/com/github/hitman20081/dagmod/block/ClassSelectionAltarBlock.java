@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.block;
 
 import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
+import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestData;
@@ -230,6 +231,11 @@ public class ClassSelectionAltarBlock extends Block {
         // Store class in memory
         playerClasses.put(playerId, className);
 
+        // Save to NBT
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            PlayerDataManager.savePlayerData(serverPlayer);
+        }
+
         // Remove the unused tokens from inventory
         removeUnusedTokens(player, className);
 
@@ -391,5 +397,8 @@ public class ClassSelectionAltarBlock extends Block {
             return true;
         }
         return false;
+    }
+    public static void setPlayerClass(UUID playerId, String playerClass) {
+        playerClasses.put(playerId, playerClass);
     }
 }

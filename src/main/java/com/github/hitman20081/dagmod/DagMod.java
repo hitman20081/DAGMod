@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.effect.ModEffects;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.networking.ModNetworking;
@@ -10,6 +11,7 @@ import com.github.hitman20081.dagmod.block.ModBlocks;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.registry.QuestRegistry;
 import com.github.hitman20081.dagmod.race_system.PlayerTickHandler;
+import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -17,10 +19,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -78,7 +83,29 @@ public class DagMod implements ModInitializer {
         // Apply class abilities when player logs in
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity instanceof ServerPlayerEntity player) {
+                // Load persistent data first
+                PlayerDataManager.loadPlayerData(player);
+
+                // Give Hall Locator to new players
+                if (!PlayerDataManager.hasPlayerData(player)) {
+                    player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
+                    player.sendMessage(Text.literal("═══════════════════════════════")
+                            .formatted(Formatting.GOLD), false);
+                    player.sendMessage(Text.literal("Welcome to DAGMod!")
+                            .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
+                    player.sendMessage(Text.literal("═══════════════════════════════")
+                            .formatted(Formatting.GOLD), false);
+                    player.sendMessage(Text.literal("You've been given a Hall Locator!")
+                            .formatted(Formatting.YELLOW), false);
+                    player.sendMessage(Text.literal("Right-click it to find the Hall of Champions.")
+                            .formatted(Formatting.GRAY), false);
+                    player.sendMessage(Text.literal("═══════════════════════════════")
+                            .formatted(Formatting.GOLD), false);
+                }
+
+                // Then apply abilities (already loaded by loadPlayerData, but this ensures sync)
                 ClassAbilityManager.applyClassAbilities(player);
+                RaceAbilityManager.applyRaceAbilities(player);
             }
         });
 
