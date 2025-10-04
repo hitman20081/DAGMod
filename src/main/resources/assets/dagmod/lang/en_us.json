@@ -54,5 +54,13 @@
   "item.dagmod.warrior_token": "Warrior Token",
   "item.dagmod.mage_token": "Mage Token",
   "item.dagmod.rogue_token": "Rogue Token",
-  "item.dagmod.class_reset_crystal": "Class Reset Crystal"
+  "item.dagmod.class_reset_crystal": "Class Reset Crystal",
+
+  "item.dagmod.human_token": "Human Heritage Token",
+  "item.dagmod.dwarf_token": "Dwarven Heritage Token",
+  "item.dagmod.elf_token": "Elven Heritage Token",
+  "item.dagmod.orc_token": "Orcish Heritage Token",
+  "item.dagmod.race_selection_tome": "Tome of Ancestral Heritage",
+  "item.dagmod.race_selection_altar": "Altar of Heritage",
+  "block.dagmod.race_selection_altar": "Altar of Heritage"
 }

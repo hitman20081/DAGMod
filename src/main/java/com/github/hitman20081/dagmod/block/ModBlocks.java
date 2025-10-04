@@ -41,6 +41,14 @@ public class ModBlocks {
                     .requiresTool()
                     .luminance(state -> 5))); // Slight glow
 
+    public static final Block RACE_SELECTION_ALTAR = register("race_selection_altar",
+            new RaceSelectionAltarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "race_selection_altar")))
+                    .strength(3.0f)
+                    .sounds(BlockSoundGroup.STONE)
+                    .requiresTool()
+                    .luminance(state -> 10))); // Glows more than class altar
+
     public static void initialize() {
         // Add to creative inventory
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
@@ -49,6 +57,10 @@ public class ModBlocks {
         // NEW: Add class altar to functional group
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
                 .register((itemGroup) -> itemGroup.add(CLASS_SELECTION_ALTAR));
+
+        // NEW: Add race altar to functional group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+                .register((itemGroup) -> itemGroup.add(RACE_SELECTION_ALTAR));
 
         DagMod.LOGGER.info("Registering blocks for " + DagMod.MOD_ID);
     }

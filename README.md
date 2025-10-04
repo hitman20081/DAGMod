@@ -9,22 +9,71 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Quest Chains**: Interconnected storylines that guide player progression
 - **Multiple Quest Types**:
     - Fetch Quests - Gather specific items
-    - Kill Quests - Defeat enemies
-    - Delivery Quests - Transport items to NPCs
-    - Crafting Quests - Create specific items
-    - Collection Quests - Gather diverse materials
+    - Kill Quests - Defeat enemies (Work in Progress)
+    - Delivery Quests - Transport items to NPCs (Work in Progress)
+    - Crafting Quests - Create specific items (Work in Progress)
+    - Collection Quests - Gather diverse materials (Work in Progress)
 - **Quest Blocks**: Interactive blocks for accepting and completing quests
 - **Dynamic Quest Tracking**: Real-time progress monitoring
 - **Quest Book Upgrades**: Unlock higher-tier quests by completing challenges
 
 ### RPG Class System
 - **Three Distinct Classes**:
-    - **Warrior**: High health, melee damage bonuses, heavy armor proficiency
-    - **Mage**: Enhanced potion effects, spell-like abilities, mana system
-    - **Rogue**: Speed bonuses, critical hit chance, stealth mechanics
+    - **Warrior**: 
+        - +4 hearts (+8 health)
+        - +25% melee attack damage
+        - -10% movement speed
+        - 15% damage reduction from physical sources
+        - Heavy armor proficiency
+    - **Mage**: 
+        - -2 hearts (-4 health)
+        - -25% melee attack damage
+        - 50% reduced enchantment costs
+        - 50% longer potion durations
+        - Enhanced spell-like abilities
+    - **Rogue**: 
+        - -1 heart (-2 health)
+        - +30% movement speed
+        - 25% critical hit chance (2x damage)
+        - Backstab bonus (1.5x damage from behind)
+        - 50% reduced fall damage
 - **Class Selection Altar**: Choose your path at the start of your journey
-- **Class-Specific Abilities**: Unique powers for each class
+- **Class-Specific Abilities**: Unique powers and stat modifiers for each class
 - **Class Reset Crystal**: Allows players to change their chosen class
+- **Level-Based Class Reset**: Free class reset every 10 quests completed
+
+### Race System (NEW!)
+- **Four Playable Races**:
+    - **Human - The Balanced**:
+        - Jack of all trades
+        - Can gather all resources
+        - Versatile gameplay with no penalties
+    - **Dwarf - The Miner**:
+        - +20% mining speed
+        - +1 heart (+2 health)
+        - -5% movement speed
+        - Expert at mining rare ores
+        - Born for the depths
+    - **Elf - The Ranger**:
+        - +15% movement speed
+        - +0.5 block interaction range
+        - Expert at woodcutting and hunting
+        - One with nature
+    - **Orc - The Warrior**:
+        - +15% melee attack damage
+        - +2 hearts (+4 health)
+        - Expert at hunting and fishing
+        - Fierce and strong
+- **Race Selection Altar**: Discover your heritage at the Hall of Champions
+- **Race Selection Tome**: Learn about each race before making your choice
+- **Race + Class Combinations**: Stack racial bonuses with class abilities for unique builds
+- **Permanent Heritage**: Race selection cannot be changed once chosen
+
+### World Generation
+- **Hall of Champions**: Spawns naturally in new worlds
+    - Contains both Race and Class Selection Altars
+    - Generates on solid ground in the Overworld
+    - Your journey begins here
 
 ### Custom Items & Food
 Dozens of custom fantasy-themed items including:
@@ -48,6 +97,7 @@ Dozens of custom fantasy-themed items including:
 ### Interactive Elements
 - **Quest Block**: Central hub for quest interactions
 - **Class Selection Altar**: Choose and customize your character class
+- **Race Selection Altar**: Determine your ancestral heritage
 - **Simple NPC**: Quest giver and interaction system
 
 ## Installation
@@ -65,11 +115,22 @@ Dozens of custom fantasy-themed items including:
 
 ## Getting Started
 
-1. **Begin Your Journey**: Look for a Quest Block in your world or craft one
-2. **Choose Your Class**: Find or craft a Class Selection Altar to select your character class
-3. **Start Questing**: Right-click the Quest Block to view and accept quests
-4. **Level Up**: Complete quests to earn rewards and upgrade your quest book
-5. **Master Your Class**: Use class-specific abilities and develop your character
+1. **Create a New World**: Generate a new world to find the Hall of Champions
+2. **Discover Your Heritage**: Find the Hall of Champions structure and approach the Race Selection Altar
+3. **Choose Your Race**: Read the Race Selection Tome and select from Human, Dwarf, Elf, or Orc
+4. **Choose Your Class**: Approach the Class Selection Altar and select Warrior, Mage, or Rogue
+5. **Begin Your Journey**: Look for Quest Blocks or craft one to start questing
+6. **Level Up**: Complete quests to earn rewards and upgrade your quest book
+7. **Master Your Build**: Use race and class synergies to create your unique playstyle
+
+## Recommended Race + Class Combinations
+
+- **Dwarf Warrior**: Ultimate tank with massive health and mining prowess
+- **Elf Rogue**: Lightning-fast assassin with incredible mobility
+- **Orc Warrior**: Raw damage powerhouse with devastating melee attacks
+- **Human Mage**: Balanced spellcaster with maximum versatility
+- **Elf Mage**: Mobile magic user excelling at ranged combat
+- **Dwarf Mage**: Tanky spellcaster who can survive in the depths
 
 ## Crafting Recipes
 

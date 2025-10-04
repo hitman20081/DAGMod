@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "dagmod:block/quest_block"
+    "all": "dagmod:block/race_selection_altar"
   }
 }

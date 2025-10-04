@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "dagmod:block/race_selection_altar"
+  }
+}

@@ -4,6 +4,7 @@ import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestData;
+import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -235,6 +236,12 @@ public class ClassSelectionAltarBlock extends Block {
         // Apply class abilities immediately if server-side player
         if (player instanceof ServerPlayerEntity serverPlayer) {
             ClassAbilityManager.applyClassAbilities(serverPlayer);
+        }
+
+        // Apply class abilities immediately if server-side player
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            ClassAbilityManager.applyClassAbilities(serverPlayer);
+            RaceAbilityManager.applyRaceAbilities(serverPlayer); // ADD THIS LINE
         }
 
         // Send messages

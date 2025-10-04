@@ -79,6 +79,23 @@ public class ModItems {
     public static final Item CLASS_RESET_CRYSTAL = register("class_reset_crystal",
             ClassResetCrystalItem::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
 
+    // Race Tokens
+    public static final Item HUMAN_TOKEN = register("human_token",
+            Item::new, new Item.Settings());
+
+    public static final Item DWARF_TOKEN = register("dwarf_token",
+            Item::new, new Item.Settings());
+
+    public static final Item ELF_TOKEN = register("elf_token",
+            Item::new, new Item.Settings());
+
+    public static final Item ORC_TOKEN = register("orc_token",
+            Item::new, new Item.Settings());
+
+    // Race Selection Tome
+    public static final Item RACE_SELECTION_TOME = register("race_selection_tome",
+            RaceSelectionTome::new, new Item.Settings().maxCount(1));
+
 
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {

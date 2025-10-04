@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "dag011:hall_of_champions",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1648920074,
+    "spacing": 32,
+    "separation": 8
+  }
+}
