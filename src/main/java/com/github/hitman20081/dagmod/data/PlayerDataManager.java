@@ -80,18 +80,24 @@ public class PlayerDataManager {
             }
 
             if (nbt.contains(RACE_KEY)) {
-                String race = String.valueOf(nbt.getString(RACE_KEY));
-                if (!race.equals("none") && !race.isEmpty()) {
-                    RaceSelectionAltarBlock.setPlayerRace(player.getUuid(), race);
-                    RaceAbilityManager.applyRaceAbilities(player);
+                Optional<String> raceOpt = nbt.getString(RACE_KEY);
+                if (raceOpt.isPresent()) {
+                    String race = raceOpt.get();
+                    if (!race.equals("none") && !race.isEmpty()) {
+                        RaceSelectionAltarBlock.setPlayerRace(player.getUuid(), race);
+                        RaceAbilityManager.applyRaceAbilities(player);
+                    }
                 }
             }
 
             if (nbt.contains(CLASS_KEY)) {
-                String playerClass = String.valueOf(nbt.getString(CLASS_KEY));
-                if (!playerClass.equals("none") && !playerClass.isEmpty()) {
-                    ClassSelectionAltarBlock.setPlayerClass(player.getUuid(), playerClass);
-                    ClassAbilityManager.applyClassAbilities(player);
+                Optional<String> classOpt = nbt.getString(CLASS_KEY);
+                if (classOpt.isPresent()) {
+                    String playerClass = classOpt.get();
+                    if (!playerClass.equals("none") && !playerClass.isEmpty()) {
+                        ClassSelectionAltarBlock.setPlayerClass(player.getUuid(), playerClass);
+                        ClassAbilityManager.applyClassAbilities(player);
+                    }
                 }
             }
 
