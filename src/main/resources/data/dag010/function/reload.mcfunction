@@ -1,0 +1,1 @@
+tellraw @a {"text":"[DAG010] Spells Data pack reloaded successfully!","color":"green"}

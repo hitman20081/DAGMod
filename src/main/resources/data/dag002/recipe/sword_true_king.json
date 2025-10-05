@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:netherite_sword"
+  },
+  "result": {
+    "id": "minecraft:netherite_sword",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Sword of the one True King\",\"color\":\"gray\"}",
+      "minecraft:lore": [
+        "\"Only the worthy may wield me\""
+      ],
+      "minecraft:enchantments": {
+        "minecraft:sharpness": 10,
+        "minecraft:smite": 10,
+        "minecraft:unbreaking": 10
+      },
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:attack_knockback",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:armor_toughness",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_speed",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_damage",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        }
+      ],
+      "minecraft:item_model": "dag_customs:gilded_rapier"
+    }
+  }
+}

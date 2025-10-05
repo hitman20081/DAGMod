@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:ender_eye",
+    "s": "minecraft:shield",
+    "M": "minecraft:blackstone"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Shadowguard Shield\",\"color\":\"#6960b2\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.01,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:movement_efficiency",
+          "id": "minecraft:",
+          "amount": 0.25,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Cloaked in darkness, it deflects both strikes and stares.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

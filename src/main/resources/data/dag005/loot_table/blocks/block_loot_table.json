@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "functions": [
+        {
+          "function": "minecraft:set_loot_table",
+          "type": "minecraft:chest",
+          "name": "dag005:boss/boss_loot_table"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "dag005:boss/boss_loot_table",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "minecraft:ancient_debris",
+              "properties": {}
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "functions": [],
+  "random_sequence": "minecraft:blocks/ancient_debris"
+}

@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:amethyst_cluster",
+    "s": "minecraft:shield",
+    "M": "minecraft:echo_shard"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Crystal Ward\",\"color\":\"#00AAAA\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.01,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Gleaming with light, it reflects the purity and strength of its bearer.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

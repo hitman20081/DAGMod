@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X X",
+    "XCX",
+    "XCX"
+  ],
+  "key": {
+    "X": "minecraft:chain",
+    "C": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "minecraft:chainmail_chestplate",
+    "count": 1,
+    "components": {
+      "minecraft:item_name": {
+        "text": "Better Chainmail Chest",
+        "color": "#8cc0c0"
+      },
+      "minecraft:equippable": {
+        "equip_sound": "minecraft:item.armor.equip_chain",
+        "slot": "chest"
+      },
+      "minecraft:item_model": "minecraft:better_chainmail_chestplate",
+      "minecraft:max_damage": 1234,
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:armor",
+          "id": "minecraft:",
+          "amount": 9,
+          "operation": "add_value",
+          "slot": "chest"
+        }
+      ],
+      "minecraft:rarity": "uncommon"
+    }
+  }
+}

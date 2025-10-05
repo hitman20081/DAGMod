@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:powder_snow_bucket",
+    "s": "minecraft:shield",
+    "M": "minecraft:packed_ice"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Frostbound Shield\",\"color\":\"#55FFFF\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.025,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Cold to the touch, it freezes the resolve of its foes.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

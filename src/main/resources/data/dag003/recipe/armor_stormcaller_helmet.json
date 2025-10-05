@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/head_armor",
+    "R": "minecraft:wind_charge",
+    "E": "minecraft:breeze_rod"
+  },
+  "result": {
+    "id": "minecraft:iron_helmet",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "head"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "head"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Harness the power of the storms and unleash their wrath upon your enemies.\""
+      ],
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "StormCaller's Helm",
+        "color": "#55FFFF"
+      },
+      "minecraft:rarity": "rare"
+    }
+  }
+}

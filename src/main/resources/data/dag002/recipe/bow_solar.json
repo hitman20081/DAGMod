@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IBI",
+    "GSG",
+    "IBI"
+  ],
+  "key": {
+    "I": "minecraft:sunflower",
+    "B": "minecraft:blaze_rod",
+    "G": "minecraft:gold_block",
+    "S": "#minecraft:enchantable/bow"
+  },
+  "result": {
+    "id": "minecraft:bow",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Solar Bow\",\"color\":\"#FFFF55\"}",
+      "minecraft:lore": [
+        "\"You're my sunshine\""
+      ],
+      "minecraft:enchantments": {
+        "minecraft:flame": 5,
+        "minecraft:infinity": 3,
+        "minecraft:piercing": 5,
+        "minecraft:multishot": 3
+      },
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      }
+    }
+  }
+}

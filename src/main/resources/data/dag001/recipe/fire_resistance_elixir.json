@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "FPF",
+    " U "
+  ],
+  "key": {
+    "G": "minecraft:blaze_powder",
+    "P": "minecraft:experience_bottle",
+    "F": "minecraft:magma_cream",
+    "U": "minecraft:poppy"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "count": 1,
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:long_fire_resistance",
+        "custom_color": 16737792,
+        "custom_effects": [
+          {
+            "id": "minecraft:absorption",
+            "amplifier": 5,
+            "duration": 9600
+          },
+          {
+            "id": "minecraft:instant_health",
+            "amplifier": 0,
+            "duration": 9600
+          },
+          {
+            "id": "minecraft:regeneration",
+            "amplifier": 0,
+            "duration": 9600
+          },
+          {
+            "id": "minecraft:resistance",
+            "amplifier": 0,
+            "duration": 9600
+          }
+        ]
+      },
+      "minecraft:custom_name": "{\"text\":\"Elixir of Fire Resist\",\"color\":\"dark_red\"}",
+      "minecraft:lore": [
+        "\"Fire!\"",
+        "\"Whaaaat Fire\""
+      ],
+      "minecraft:max_stack_size": 32
+    }
+  }
+}

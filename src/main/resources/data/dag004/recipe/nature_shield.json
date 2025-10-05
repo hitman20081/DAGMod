@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:friend_pottery_sherd",
+    "s": "minecraft:shield",
+    "M": "minecraft:mossy_cobblestone"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Nature’s Bulwark\",\"color\":\"#00AA00\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.025,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Harnessed from the wilderness, it whispers the strength of nature itself.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

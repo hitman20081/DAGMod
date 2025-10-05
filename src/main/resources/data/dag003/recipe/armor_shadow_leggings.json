@@ -1,0 +1,65 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/leg_armor",
+    "R": "minecraft:ender_pearl",
+    "E": "minecraft:purpur_block"
+  },
+  "result": {
+    "id": "minecraft:leather_leggings",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:entity_interaction_range",
+          "id": "minecraft:",
+          "amount": -5,
+          "operation": "add_multiplied_base",
+          "slot": "legs"
+        },
+        {
+          "type": "minecraft:burning_time",
+          "id": "minecraft:",
+          "amount": -0.05,
+          "operation": "add_multiplied_base",
+          "slot": "legs"
+        },
+        {
+          "type": "minecraft:sneaking_speed",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "legs"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "legs"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Whispered to have been worn by the Ender King, it grants stealth and swiftness.\""
+      ],
+      "minecraft:dyed_color": 4655935,
+      "minecraft:equippable": {
+        "slot": "legs",
+        "asset_id": "obsidian"
+      },
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Shadow Leggings",
+        "color": "#AA00AA"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

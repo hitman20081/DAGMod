@@ -1,0 +1,18 @@
+{
+    "criteria": {
+      "charge _magic_wand": {
+        "trigger": "minecraft:using_item",
+        "conditions": {
+          "item": {
+            "items": "minecraft:blaze_rod",
+            "predicates": {
+              "minecraft:custom_data": "{magic_wand:true}"
+            }
+          }
+        }
+      }
+    },
+    "rewards": {
+      "function": "dag010:wand/charging"
+    }
+  }

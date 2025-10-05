@@ -1,0 +1,16 @@
+[
+  {
+    "function": "minecraft:set_name",
+    "name": {
+      "text": "Hell Key"
+    },
+    "target": "item_name",
+    "conditions": []
+  },
+  {
+    "function": "minecraft:set_custom_data",
+    "tag": {
+      "chest_key": true
+    }
+  }
+]

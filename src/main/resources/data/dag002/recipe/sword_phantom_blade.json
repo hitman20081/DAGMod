@@ -1,0 +1,75 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:feather",
+    "G": "minecraft:phantom_membrane",
+    "S": "minecraft:netherite_sword"
+  },
+  "result": {
+    "id": "minecraft:netherite_sword",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Phantom Blade\",\"color\":\"#AA00AA\"}",
+      "minecraft:lore": [
+        "\"You may want this for those pesky phantoms\""
+      ],
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:movement_speed",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:sneaking_speed",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:knockback_resistance",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_value",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_damage",
+          "id": "minecraft:",
+          "amount": 0.5,
+          "operation": "add_multiplied_total",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_speed",
+          "id": "minecraft:",
+          "amount": 0.25,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:flying_speed",
+          "id": "minecraft:",
+          "amount": 0,
+          "operation": "add_value",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:gravity",
+          "id": "minecraft:",
+          "amount": -0.025,
+          "operation": "add_value",
+          "slot": "mainhand"
+        }
+      ],
+      "minecraft:item_model": "dag_customs:shadowfang_sword"
+    }
+  }
+}

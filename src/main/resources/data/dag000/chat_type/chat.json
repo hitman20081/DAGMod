@@ -1,0 +1,22 @@
+{
+    "chat": {
+      "parameters": [
+        "sender",
+        "content"
+      ],
+      "translation_key": "chat.type.text",
+      "style": {
+        "color": "#a34dcb"
+      }
+    },
+    "narration": {
+      "parameters": [
+        "sender",
+        "content"
+      ],
+      "translation_key": "chat.type.text.narrate",
+      "style": {
+        "color": "#248b99"
+      }
+    }
+  }

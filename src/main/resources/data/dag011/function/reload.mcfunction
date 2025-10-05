@@ -1,0 +1,1 @@
+tellraw @a {"text":"[DAG011] Dimensions Data pack reloaded successfully!","color":"green"}

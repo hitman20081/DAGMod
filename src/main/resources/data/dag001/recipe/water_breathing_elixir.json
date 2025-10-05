@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "FPF",
+    " U "
+  ],
+  "key": {
+    "G": "minecraft:heart_of_the_sea",
+    "P": "minecraft:experience_bottle",
+    "F": "minecraft:pufferfish",
+    "U": "minecraft:dried_kelp"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "count": 1,
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:long_strength",
+        "custom_color": 5108469,
+        "custom_name": "Breath of the Sea Potion",
+        "custom_effects": [
+          {
+            "id": "minecraft:water_breathing",
+            "amplifier": 5,
+            "duration": 9600,
+            "show_particles": false
+          },
+          {
+            "id": "minecraft:dolphins_grace",
+            "amplifier": 5,
+            "duration": 9600
+          }
+        ]
+      },
+      "minecraft:custom_name": "{\"text\":\"Breath of the Sea Potion\",\"color\":\"#6fa4e3\"}",
+      "minecraft:lore": [
+        "\"Move over Aquaman\""
+      ],
+      "minecraft:max_stack_size": 32
+    }
+  }
+}

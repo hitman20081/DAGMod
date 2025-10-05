@@ -1,0 +1,1 @@
+give @s chest[container_loot={loot_table:"dag005:chests/start_chest_loot_table"}] 1

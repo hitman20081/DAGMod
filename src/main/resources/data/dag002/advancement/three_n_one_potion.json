@@ -1,0 +1,17 @@
+{
+    "criteria": {
+      "requirement": {
+        "trigger": "minecraft:kill_mob_near_sculk_catalyst",
+        "conditions": {
+          "player": {
+            "targeted_entity": {
+              "type": "minecraft:warden"
+            }
+          }
+        }
+      }
+    },
+    "rewards": {
+      "function": "dag002:potions/three_n_one_potion"
+    }
+  }

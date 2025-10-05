@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "FPF",
+    " U "
+  ],
+  "key": {
+    "G": "minecraft:golden_apple",
+    "P": "minecraft:honey_bottle",
+    "F": "minecraft:golden_carrot",
+    "U": "minecraft:chorus_fruit"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "count": 1,
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:luck",
+        "custom_color": 15922509,
+        "custom_effects": [
+          {
+            "id": "minecraft:luck",
+            "amplifier": 10,
+            "duration": 3600
+          }
+        ]
+      },
+      "minecraft:custom_name": "{\"text\":\"Elixir of Wisdom\",\"color\":\"gray\"}",
+      "minecraft:lore": [
+        "\"This potion will grant the drinker more wisdom.... maybe\""
+      ],
+      "minecraft:max_stack_size": 64
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:diamond_block",
+    "E": "minecraft:totem_of_undying",
+    "A": "#minecraft:enchantable/head_armor"
+  },
+  "result": {
+    "id": "minecraft:golden_helmet",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:scale",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "head"
+        },
+        {
+          "type": "minecraft:block_interaction_range",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "head"
+        },
+        {
+          "type": "entity_interaction_range",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_value",
+          "slot": "head"
+        }
+      ],
+      "minecraft:lore": [
+        "\"A crown capable of taking its wearer to GREAT heights.\""
+      ],
+      "minecraft:item_name": {
+        "text": "Crown of Greatness",
+        "color": "#FFAA00"
+      },
+      "minecraft:rarity": "rare"
+    }
+  }
+}

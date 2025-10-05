@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "eat_stew": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "minecraft:mushroom_stew"
+        }
+      }
+    },
+    "eat_suspicious_stew": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "minecraft:suspicious_stew"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "eat_stew",
+      "eat_suspicious_stew"
+    ]
+  ],
+  "rewards": {
+    "function": "dag000:player/classes/warrior/berserker_rage"
+  }
+}

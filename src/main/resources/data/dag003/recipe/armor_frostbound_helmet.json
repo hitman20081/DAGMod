@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/head_armor",
+    "R": "minecraft:wind_charge",
+    "E": "minecraft:packed_ice"
+  },
+  "result": {
+    "id": "minecraft:iron_helmet",
+    "count": 1,
+    "components": {
+      "minecraft:trim": {
+        "material": "minecraft:diamond",
+        "pattern": "minecraft:wayfinder"
+      },
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:knockback_resistance",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_multiplied_base",
+          "slot": "head"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_multiplied_base",
+          "slot": "head"
+        }
+      ],
+      "minecraft:custom_name": "{\"text\":\"Frosbound Helmet\",\"color\":\"#55FFFF\"}",
+      "minecraft:lore": [
+        "\"Enchanted with the eternal chill of frozen tundras, it keeps its wearer calm and focused.\""
+      ],
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Frosbound Helmet",
+        "color": "#55FFFF"
+      },
+      "minecraft:rarity": "rare"
+    }
+  }
+}

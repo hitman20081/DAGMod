@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:rabbit_foot",
+    "E": "minecraft:emerald",
+    "A": "#minecraft:enchantable/foot_armor"
+  },
+  "result": {
+    "id": "minecraft:golden_boots",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:luck",
+          "id": "minecraft:",
+          "amount": 50,
+          "operation": "add_value",
+          "slot": "feet"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Light as a feather, they guide the wearer to fortuitous paths..\""
+      ],
+      "minecraft:item_name": {
+        "text": "Fortuna's Steps",
+        "color": "#FFAA00"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

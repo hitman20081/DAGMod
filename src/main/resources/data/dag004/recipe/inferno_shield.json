@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:blaze_rod",
+    "s": "minecraft:shield",
+    "M": "minecraft:magma_block"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Blazing Aegis\",\"color\":\"#AA0000\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.01,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"A shield born of fire, its heat radiates a warning to enemies who dare approach.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

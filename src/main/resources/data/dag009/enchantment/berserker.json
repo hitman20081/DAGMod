@@ -1,0 +1,71 @@
+{
+  "description": {
+    "text": "Berserker",
+    "color": "#600b2d",
+    "hoverEvent": {
+      "action": "show_text",
+      "value": {
+        "text": "Kinda cursed but not a true curse. While a powerful enchantment, it does come with a hungry cost",
+        "type": "text",
+        "color": "#ec0909"
+      }
+    }
+  },
+  "exclusive_set": [
+    "minecraft:binding_curse",
+    "minecraft:vanishing_curse"
+  ],
+  "supported_items": "#minecraft:chest_armor",
+  "weight": 1,
+  "max_level": 10,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 1
+  },
+  "max_cost": {
+    "base": 1,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 3,
+  "slots": [
+    "chest"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "minecraft:attack_speed",
+        "id": "minecraft:",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 1,
+          "per_level_above_first": 0.05
+        },
+        "operation": "add_multiplied_base"
+      },
+      {
+        "attribute": "minecraft:attack_damage",
+        "id": "minecraft:",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 1,
+          "per_level_above_first": 0.05
+        },
+        "operation": "add_multiplied_base"
+      }
+    ],
+    "minecraft:post_attack": [
+      {
+        "effect": {
+          "type": "minecraft:apply_mob_effect",
+          "to_apply": "minecraft:hunger",
+          "min_duration": 1,
+          "max_duration": 3,
+          "min_amplifier": 3,
+          "max_amplifier": 6
+        },
+        "enchanted": "attacker",
+        "affected": "attacker"
+      }
+    ]
+  }
+}

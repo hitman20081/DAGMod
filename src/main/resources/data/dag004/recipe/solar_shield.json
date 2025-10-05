@@ -1,0 +1,55 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:gold_block",
+    "s": "minecraft:shield",
+    "M": "minecraft:glowstone"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Solar Protector\",\"color\":\"#e3df6f\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.025,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.02,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_health",
+          "id": "minecraft:",
+          "amount": 6,
+          "operation": "add_value",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:attack_speed",
+          "id": "minecraft:",
+          "amount": 5,
+          "operation": "add_value",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Blessed by the sun, it glows with the warmth of eternal light.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

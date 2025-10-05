@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " X ",
+    "XBX",
+    " X "
+  ],
+  "key": {
+    "X": "minecraft:blaze_powder",
+    "B": "minecraft:blaze_rod"
+  },
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Flame Wand\",\"color\":\"#ff6800\"}",
+      "minecraft:lore": [
+        "{\"text\":\"Is it getting hot in here??\",\"color\":\"#ff6800\"}"
+      ],
+      "minecraft:consumable": {
+        "consume_seconds": 1000000,
+        "has_consume_particles": true,
+        "on_consume_effects": []
+      },
+      "minecraft:food": {
+        "nutrition": 0,
+        "saturation": 0,
+        "can_always_eat": true
+      },
+      "minecraft:custom_data": "{flame_wand:true}"
+    },
+    "count": 1,
+    "id": "minecraft:blaze_rod"
+  }
+}

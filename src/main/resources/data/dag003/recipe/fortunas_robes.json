@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:rabbit_foot",
+    "E": "minecraft:emerald",
+    "A": "#minecraft:enchantable/chest_armor"
+  },
+  "result": {
+    "id": "minecraft:golden_chestplate",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:luck",
+          "id": "minecraft:",
+          "amount": 50,
+          "operation": "add_value",
+          "slot": "chest"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Each thread is woven with the essence of chance and prosperity.\""
+      ],
+      "minecraft:item_name": {
+        "text": "Fortuna's Robes",
+        "color": "#FFAA00"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

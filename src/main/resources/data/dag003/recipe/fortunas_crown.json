@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:rabbit_foot",
+    "E": "minecraft:emerald",
+    "A": "#minecraft:enchantable/head_armor"
+  },
+  "result": {
+    "id": "minecraft:golden_helmet",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:luck",
+          "id": "minecraft:",
+          "amount": 50,
+          "operation": "add_value",
+          "slot": "head"
+        }
+      ],
+      "minecraft:lore": [
+        "\"The crown of Fortuna, goddess of fortune, said to bestow endless opportunities to the worthy.\""
+      ],
+      "minecraft:item_name": {
+        "text": "Fortuna's crown",
+        "color": "#FFAA00"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

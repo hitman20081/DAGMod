@@ -1,0 +1,17 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:lock": {
+        "items": "minecraft:ominous_trial_key",
+        "count": 1,
+        "components": {
+          "minecraft:item_name": "\"Hell Key\"",
+          "minecraft:custom_data": {
+            "chest_key": true
+          }
+        }
+      }
+    }
+  }
+]

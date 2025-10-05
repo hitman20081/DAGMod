@@ -1,0 +1,55 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "minecraft:iron_boots",
+    "R": "minecraft:fire_charge",
+    "E": "minecraft:obsidian"
+  },
+  "result": {
+    "id": "minecraft:iron_boots",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:burning_time",
+          "id": "minecraft:",
+          "amount": -0.05,
+          "operation": "add_multiplied_base",
+          "slot": "feet"
+        },
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "feet"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.25,
+          "operation": "add_multiplied_base",
+          "slot": "feet"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Forged in the depths of the Nether\""
+      ],
+      "minecraft:item_model": "minecraft:obsidian_boots",
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Obsidian's Sabatons",
+        "color": "#3b122c"
+      },
+      "minecraft:rarity": "rare"
+    }
+  }
+}

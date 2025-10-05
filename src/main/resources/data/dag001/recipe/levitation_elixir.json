@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "FXF",
+    " O "
+  ],
+  "key": {
+    "P": "minecraft:phantom_membrane",
+    "X": "minecraft:experience_bottle",
+    "F": "minecraft:feather",
+    "O": "minecraft:chorus_fruit"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "count": 1,
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:mundane",
+        "custom_color": 16245512,
+        "custom_name": "Elixir of Levitation",
+        "custom_effects": [
+          {
+            "id": "minecraft:levitation",
+            "duration": 480
+          }
+        ]
+      },
+      "minecraft:custom_name": "{\"text\":\"Elixir of Levitation\",\"color\":\"gray\"}",
+      "minecraft:lore": [
+        "\"What could go wrong?\""
+      ],
+      "minecraft:max_stack_size": 32
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RLR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:amethyst_cluster",
+    "E": "minecraft:quartz",
+    "L": "minecraft:diamond_boots"
+  },
+  "result": {
+    "id": "minecraft:diamond_boots",
+    "count": 1,
+    "components": {
+      "minecraft:trim": {
+        "material": "minecraft:amethyst",
+        "pattern": "minecraft:tide"
+      },
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "feet",
+          "display": {
+            "type": "default"
+          }
+        },
+        {
+          "type": "minecraft:sneaking_speed",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "feet",
+          "display": {
+            "type": "default"
+          }
+        },
+        {
+          "type": "minecraft:burning_time",
+          "id": "minecraft:",
+          "amount": -0.05,
+          "operation": "add_multiplied_base",
+          "slot": "feet",
+          "display": {
+            "type": "default"
+          }
+        }
+      ],
+      "minecraft:lore": [
+        "\"Glowing with mystical energy, this armor sharpens the senses of its wearer.\""
+      ],
+      "minecraft:item_model": "dag_customs:crystalforge_boots",
+      "minecraft:equippable": {
+        "slot": "feet",
+        "asset_id": "crystalforge"
+      },
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Crystalforge Boots",
+        "color": "#9a22aa"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

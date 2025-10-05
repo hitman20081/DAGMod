@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/chest_armor",
+    "R": "minecraft:enchanted_golden_apple",
+    "E": "minecraft:blaze_rod"
+  },
+  "result": {
+    "id": "minecraft:golden_chestplate",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:knockback_resistance",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_multiplied_base",
+          "slot": "chest"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_multiplied_base",
+          "slot": "chest"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Its as if the rays from the sun were woven together to make this breast plate.\""
+      ],
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Solar Weave Plate",
+        "color": "#FFFF55"
+      },
+      "minecraft:rarity": "rare"
+    }
+  }
+}

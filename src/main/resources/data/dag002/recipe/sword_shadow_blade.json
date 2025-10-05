@@ -1,0 +1,62 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:wither_skeleton_skull",
+    "G": "minecraft:soul_sand",
+    "S": "minecraft:netherite_sword"
+  },
+  "result": {
+    "id": "minecraft:netherite_sword",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Shadow Blade\",\"color\":\"#AA00AA\"}",
+      "minecraft:lore": [
+        "\"No one will now what you did last summer\""
+      ],
+      "minecraft:enchantments": {},
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:sneaking_speed",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:movement_speed",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:knockback_resistance",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_value",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_damage",
+          "id": "minecraft:",
+          "amount": 0.5,
+          "operation": "add_multiplied_total",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_speed",
+          "id": "minecraft:",
+          "amount": 0.25,
+          "operation": "add_multiplied_total",
+          "slot": "mainhand"
+        }
+      ],
+      "minecraft:item_model": "dag_customs:shadowfang_sword"
+    }
+  }
+}

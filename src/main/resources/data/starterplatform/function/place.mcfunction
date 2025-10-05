@@ -1,0 +1,1 @@
+execute positioned ~ ~20 ~ run place template starterplatform:lab_platform

@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:enchanted_golden_apple",
+    "E": "minecraft:golden_carrot",
+    "A": "minecraft:leather_chestplate"
+  },
+  "result": {
+    "id": "minecraft:leather_chestplate",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:armor",
+          "id": "minecraft:",
+          "amount": 0.2,
+          "operation": "add_multiplied_base",
+          "slot": "chest"
+        },
+        {
+          "type": "minecraft:jump_strength",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "chest"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.25,
+          "operation": "add_multiplied_base",
+          "slot": "chest"
+        }
+      ],
+      "minecraft:custom_name": "{\"text\":\"Nature's Cuirass of the Guard\",\"color\":\"#00AA00\"}",
+      "minecraft:lore": [
+        "\"The forests themselves lend their strength to those who wear this armor.\""
+      ],
+      "minecraft:item_model": "dag_customs:naturesguard_chestplate",
+      "minecraft:equippable": {
+        "slot": "chest",
+        "asset_id": "naturesguard"
+      },
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Nature's Cuirass of the Guard",
+        "color": "#00AA00"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

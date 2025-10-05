@@ -1,0 +1,3 @@
+#data merge block ~ ~ ~ {lock:{id:"minecraft:ominous_trial_key",count:1,components:{"minecraft:custom_name":'{"color":"red","text":"Chest Key"}'}},Items:[{Slot:0b,id:"minecraft:gold_block",count:1},{Slot:1b,id:"minecraft:diamond_block",count:2},{Slot:2b,id:"minecraft:netherite_block",count:3}],CustomName:'{"color":"red","text":"Custom Chest"}'}
+
+give @s chest[lock={id:"minecraft:ominous_trial_key",count:1,components:{"minecraft:item_name":'{"color":"red","text":"Custom Key"}'}},item_name='{"color":"red","text":"Custom Chest"}',container_loot={loot_table:"dag005:chests/bonus_chest_loot_table"}] 1

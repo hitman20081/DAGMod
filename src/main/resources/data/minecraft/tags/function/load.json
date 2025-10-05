@@ -1,0 +1,19 @@
+{
+    "values": [
+        "starterplatform:load",
+        "dag011:load",
+        "dag000:load",
+        "dag001:load",
+        "dag002:load",
+        "dag003:load",
+        "dag004:load",
+        "dag005:load",
+        "dag006:load",
+        "dag009:load",
+        "dag010:load",        
+        "dag012:load",
+        "seasons:load",
+        "dag020:load"
+
+    ]
+}

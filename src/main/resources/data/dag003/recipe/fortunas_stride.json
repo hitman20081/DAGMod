@@ -1,0 +1,50 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:rabbit_foot",
+    "E": "minecraft:emerald",
+    "A": "#minecraft:enchantable/leg_armor"
+  },
+  "result": {
+    "id": "minecraft:golden_leggings",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:movement_speed",
+          "id": "minecraft:",
+          "amount": 0.5,
+          "operation": "add_value",
+          "slot": "legs"
+        },
+        {
+          "type": "minecraft:movement_efficiency",
+          "id": "minecraft:",
+          "amount": 1,
+          "operation": "add_value",
+          "slot": "legs"
+        },
+        {
+          "type": "minecraft:luck",
+          "id": "minecraft:",
+          "amount": 50,
+          "operation": "add_value",
+          "slot": "legs"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Blessed with fortune's favor, these grant unwavering stability and fleet movement..\""
+      ],
+      "minecraft:item_name": {
+        "text": "Fortuna's Stride",
+        "color": "#FFAA00"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

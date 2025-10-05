@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:snowball",
+    "G": "minecraft:blue_ice",
+    "S": "minecraft:netherite_axe"
+  },
+  "result": {
+    "id": "minecraft:netherite_axe",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Frostbite Axe\",\"color\":\"aqua\"}",
+      "minecraft:lore": [
+        "\"Leaves a chill in the room\""
+      ],
+      "minecraft:enchantments": {
+        "minecraft:wind_burst": 10,
+        "minecraft:frost_walker": 3
+      },
+      "minecraft:item_model": "dag_customs:frostbite_axe"
+    }
+  },
+  "show_notification": true
+}

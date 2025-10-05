@@ -1,0 +1,87 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "FPF",
+    " U "
+  ],
+  "key": {
+    "G": "minecraft:nether_star",
+    "P": "minecraft:experience_bottle",
+    "F": "minecraft:lapis_lazuli",
+    "U": "minecraft:blue_ice"
+  },
+  "result": {
+    "id": "minecraft:potion",
+    "count": 1,
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:luck",
+        "custom_color": 14018540,
+        "custom_effects": [
+          {
+            "id": "minecraft:absorption",
+            "amplifier": 5,
+            "duration": 6000
+          },
+          {
+            "id": "minecraft:instant_health",
+            "amplifier": 5,
+            "duration": 6000
+          },
+          {
+            "id": "minecraft:night_vision",
+            "amplifier": 5,
+            "duration": 6000
+          },
+          {
+            "id": "minecraft:regeneration",
+            "amplifier": 5,
+            "duration": 6000
+          },
+          {
+            "id": "minecraft:resistance",
+            "amplifier": 5,
+            "duration": 6000
+          },
+          {
+            "id": "minecraft:slow_falling",
+            "amplifier": 5,
+            "duration": 6000
+          }
+        ]
+      },
+      "minecraft:custom_name": "{\"text\":\"Elixir of Clarity\",\"color\":\"white\"}",
+      "minecraft:max_stack_size": 32,
+      "minecraft:consumable": {
+        "consume_seconds": 1.6,
+        "animation": "drink",
+        "sound": "minecraft:entity.witch.drink",
+        "on_consume_effects": [
+          {
+            "type": "minecraft:remove_effects",
+            "effects": [
+              "minecraft:bad_omen",
+              "minecraft:blindness",
+              "minecraft:darkness",
+              "minecraft:hunger",
+              "minecraft:infested",
+              "minecraft:mining_fatigue",
+              "minecraft:nausea",
+              "minecraft:oozing",
+              "minecraft:poison",
+              "minecraft:raid_omen",
+              "minecraft:slowness",
+              "minecraft:trial_omen",
+              "minecraft:unluck",
+              "minecraft:weakness",
+              "minecraft:weaving",
+              "minecraft:wind_charged",
+              "minecraft:wither"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

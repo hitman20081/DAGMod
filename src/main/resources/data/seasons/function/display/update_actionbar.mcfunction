@@ -1,0 +1,9 @@
+# Display current season information in action bar (only if enabled)
+
+execute unless score #enable_display seasons_config matches 0 if score #global seasons_current matches 1 run title @a actionbar ["",{"text":"🌸 Spring ","color":"green","bold":true},{"text":"Day ","color":"gray"},{"score":{"name":"#global","objective":"seasons_day"},"color":"white"},{"text":"/","color":"gray"},{"score":{"name":"#season_length","objective":"seasons_config"},"color":"white"}]
+
+execute unless score #enable_display seasons_config matches 0 if score #global seasons_current matches 2 run title @a actionbar ["",{"text":"☀ Summer ","color":"gold","bold":true},{"text":"Day ","color":"gray"},{"score":{"name":"#global","objective":"seasons_day"},"color":"white"},{"text":"/","color":"gray"},{"score":{"name":"#season_length","objective":"seasons_config"},"color":"white"}]
+
+execute unless score #enable_display seasons_config matches 0 if score #global seasons_current matches 3 run title @a actionbar ["",{"text":"🍂 Fall ","color":"red","bold":true},{"text":"Day ","color":"gray"},{"score":{"name":"#global","objective":"seasons_day"},"color":"white"},{"text":"/","color":"gray"},{"score":{"name":"#season_length","objective":"seasons_config"},"color":"white"}]
+
+execute unless score #enable_display seasons_config matches 0 if score #global seasons_current matches 4 run title @a actionbar ["",{"text":"❄ Winter ","color":"aqua","bold":true},{"text":"Day ","color":"gray"},{"score":{"name":"#global","objective":"seasons_day"},"color":"white"},{"text":"/","color":"gray"},{"score":{"name":"#season_length","objective":"seasons_config"},"color":"white"}]

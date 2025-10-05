@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:crying_obsidian",
+    "s": "minecraft:shield",
+    "M": "minecraft:dragon_breath"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Dragonbone Shield\",\"color\":\"#AA00AA\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.1,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.025,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Carved from the bones of an ancient beast, it carries the weight of legends.\""
+      ]
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

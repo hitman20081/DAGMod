@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "minecraft:iron_boots",
+    "R": "minecraft:fire_charge",
+    "E": "minecraft:blaze_powder"
+  },
+  "result": {
+    "id": "minecraft:iron_boots",
+    "count": 1,
+    "components": {
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:burning_time",
+          "id": "minecraft:",
+          "amount": -0.05,
+          "operation": "add_multiplied_base",
+          "slot": "feet"
+        },
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "feet"
+        },
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.25,
+          "operation": "add_multiplied_base",
+          "slot": "feet"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Forged in the depths of the Nether, this armor burns with the fury of a thousand suns.\""
+      ],
+      "minecraft:item_model": "dag_customs:inferno_boots",
+      "minecraft:equippable": {
+        "slot": "feet",
+        "asset_id": "inferno"
+      },
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false
+      },
+      "minecraft:item_name": {
+        "text": "Inferno's Sabatons",
+        "color": "#AA0000"
+      },
+      "minecraft:rarity": "epic"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:block_entity_data": {
+        "id": "minecraft:barrel"
+      },
+      "minecraft:container_loot": {
+        "loot_table": "dag005:boss/boss_loot_table"
+      },
+      "minecraft:item_name": "{\"text\":\"Special loot barrel\",\"color\":\"#AA00AA\"}"
+    }
+  }

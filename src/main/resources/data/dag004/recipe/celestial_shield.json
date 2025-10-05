@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": "minecraft:nether_star",
+    "s": "minecraft:shield",
+    "M": "minecraft:ghast_tear"
+  },
+  "pattern": [
+    "WMW",
+    "MsM",
+    " W "
+  ],
+  "result": {
+    "components": {
+      "minecraft:item_name": "{\"text\":\"Celestial Aegis\",\"color\":\"#1cfbfb\"}",
+      "minecraft:item_model": "minecraft:shield",
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:max_absorption",
+          "id": "minecraft:",
+          "amount": 0.025,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        },
+        {
+          "type": "minecraft:explosion_knockback_resistance",
+          "id": "minecraft:",
+          "amount": 0.05,
+          "operation": "add_multiplied_base",
+          "slot": "offhand"
+        }
+      ],
+      "minecraft:lore": [
+        "\"Shimmering with the essence of stars, it holds the power of the heavens.\""
+      ],
+      "minecraft:equippable": {
+        "slot": "offhand",
+        "asset_id": "dag_customs:celestial_shield"
+      }
+    },
+    "count": 1,
+    "id": "minecraft:shield"
+  }
+}

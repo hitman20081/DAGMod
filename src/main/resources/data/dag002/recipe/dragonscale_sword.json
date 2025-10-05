@@ -1,0 +1,54 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:dragon_breath",
+    "G": "minecraft:dragon_head",
+    "S": "minecraft:netherite_sword"
+  },
+  "result": {
+    "id": "minecraft:netherite_sword",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Dragonscale Blade\",\"color\":\"red\"}",
+      "minecraft:lore": [
+        "\"Feel the power of the Infernal Wyrm\""
+      ],
+      "minecraft:enchantments": {
+        "minecraft:fire_aspect": 5,
+        "minecraft:fire_protection": 5,
+        "minecraft:projectile_protection": 5,
+        "minecraft:blast_protection": 5,
+        "minecraft:unbreaking": 5
+      },
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:burning_time",
+          "id": "minecraft:",
+          "amount": -0.5,
+          "operation": "add_multiplied_base",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_speed",
+          "id": "minecraft:",
+          "amount": 3.2,
+          "operation": "add_value",
+          "slot": "mainhand"
+        },
+        {
+          "type": "minecraft:attack_damage",
+          "id": "minecraft:",
+          "amount": 10,
+          "operation": "add_value",
+          "slot": "mainhand"
+        }
+      ],
+      "minecraft:item_model": "dag_customs:dragonscale_sword"
+    }
+  }
+}
