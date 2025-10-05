@@ -2,7 +2,6 @@ package com.github.hitman20081.dagmod.quest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Quest {
     private String id;

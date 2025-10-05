@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.quest;
 
+import com.github.hitman20081.dagmod.progression.LevelRequirements;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;  // Add this too
 import net.minecraft.entity.EntityType;  // Add this line
@@ -116,7 +117,48 @@ public class QuestManager {
         return questChains.values();
     }
 
-    // Start a quest for a player
+
+    public boolean canAcceptQuest(PlayerEntity player, Quest quest) {
+        if (!quest.hasPrerequisites()) {
+            return true; // No prerequisites required
+        }
+
+        QuestData playerData = getPlayerData(player);
+        List<String> completedQuestIds = playerData.getCompletedQuestIdsList();
+
+        // Check if all prerequisite quests are completed
+        for (String prereqId : quest.getPrerequisiteQuestIds()) {
+            if (!completedQuestIds.contains(prereqId)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // ADD THIS METHOD:
+    public boolean canStartQuest(PlayerEntity player, Quest quest) {
+        QuestData playerData = getPlayerData(player);
+
+        // Check if already completed
+        if (playerData.isQuestCompleted(quest.getId())) {
+            return false;
+        }
+
+        // Check if already active
+        if (playerData.hasActiveQuest(quest.getId())) {
+            return false;
+        }
+
+        // Check prerequisites
+        if (!quest.canStart(playerData.getCompletedQuestIdsList())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Check if player can start a quest
     public boolean startQuest(PlayerEntity player, String questId) {
         Quest quest = allQuests.get(questId);
         if (quest == null) {
@@ -126,11 +168,18 @@ public class QuestManager {
 
         QuestData playerData = getPlayerData(player);
 
-        // NEW: Check if player's quest book tier allows this quest difficulty
+        // Check if player's quest book tier allows this quest difficulty
         if (!playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
             player.sendMessage(Text.literal("Your quest book tier doesn't allow " +
                     quest.getDifficulty().getDisplayName() + " quests!"), false);
             player.sendMessage(Text.literal("Upgrade your quest book to access this quest."), false);
+            return false;
+        }
+
+        // ADD THIS: Check level requirement
+        if (!LevelRequirements.meetsLevelRequirement((ServerPlayerEntity) player, quest)) {
+            int requiredLevel = LevelRequirements.getRequiredLevelForQuest(quest);
+            LevelRequirements.sendLevelRequirementMessage((ServerPlayerEntity) player, requiredLevel);
             return false;
         }
 
@@ -148,50 +197,6 @@ public class QuestManager {
         playerData.addActiveQuest(playerQuest);
 
         player.sendMessage(Text.literal("Quest started: " + quest.getName()), false);
-        return true;
-    }
-
-    public boolean canAcceptQuest(PlayerEntity player, Quest quest) {
-        if (!quest.hasPrerequisites()) {
-            return true; // No prerequisites required
-        }
-
-        QuestData playerData = getPlayerData(player);
-        // Use the existing method that returns List<String> instead
-        List<String> completedQuestIds = playerData.getCompletedQuestIdsList();
-
-        // Check if all prerequisite quests are completed
-        for (String prereqId : quest.getPrerequisiteQuestIds()) {
-            if (!completedQuestIds.contains(prereqId)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    // Check if player can start a quest
-    private boolean canStartQuest(PlayerEntity player, Quest quest) {
-        QuestData playerData = getPlayerData(player);
-
-        // Check if already completed
-        if (playerData.isQuestCompleted(quest.getId())) {
-            player.sendMessage(Text.literal("You have already completed this quest!"), false);
-            return false;
-        }
-
-        // Check if already active
-        if (playerData.hasActiveQuest(quest.getId())) {
-            player.sendMessage(Text.literal("This quest is already active!"), false);
-            return false;
-        }
-
-        // Check prerequisites
-        if (!quest.canStart(playerData.getCompletedQuestIdsList())) {
-            player.sendMessage(Text.literal("You haven't completed the required quests yet."), false);
-            return false;
-        }
-
         return true;
     }
 
@@ -264,7 +269,7 @@ public class QuestManager {
 
         // Mark quest as completed
         quest.setStatus(Quest.QuestStatus.TURNED_IN);
-        playerData.completeQuest(quest);
+        playerData.completeQuest(quest, (ServerPlayerEntity) player);
         checkChainCompletion(player, quest.getId());
 
         player.sendMessage(Text.literal("Quest turned in: " + quest.getName()), false);
@@ -347,6 +352,11 @@ public class QuestManager {
             // Check class requirement first
             if (quest.isClassRestricted() && !quest.getRequiredClass().equals(playerClass)) {
                 continue; // Skip quests for other classes
+            }
+
+            // ADD THIS: Check level requirement
+            if (!LevelRequirements.meetsLevelRequirement((ServerPlayerEntity) player, quest)) {
+                continue; // Skip quests player's level is too low for
             }
 
             // Check if player can start the quest AND if their quest book tier allows it

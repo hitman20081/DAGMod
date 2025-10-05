@@ -8,7 +8,8 @@
       "RogueDamageMixin",
       "RaceMiningMixin",
       "RaceHuntingMixin",
-      "HumanExperienceMixin"
+      "HumanExperienceMixin",
+      "LivingEntityMixin"
 	],
 	"client": [],
 	"injectors": {

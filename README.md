@@ -1,8 +1,27 @@
-# DAGMod v1.2.0 - Fantasy RPG Minecraft Mod
+# DAGMod v1.3.0 - Fantasy RPG Minecraft Mod
 
-A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, class progression, race selection, synergy abilities, custom items, and immersive gameplay mechanics.
+A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, progression system, class mechanics, race selection, synergy abilities, custom items, and immersive gameplay mechanics.
 
 ## Features
+
+### Progression System (NEW in v1.3.0)
+- **Level System (1-50)**: Gain experience through combat, mining, and quests
+- **Automatic XP Gains**:
+  - Mining ores: 5-40 XP (Diamond: 25 XP, Ancient Debris: 40 XP)
+  - Killing mobs: 10-2000 XP (Zombie: 15 XP, Ender Dragon: 2000 XP)
+  - Woodcutting: 2 XP per log
+  - Farming: 1-3 XP per crop
+  - Quest completion: 200-2500 XP based on difficulty
+- **Level-Based Stat Scaling**:
+  - +1 HP per level (49 bonus HP at max level)
+  - +1 Attack Damage every 5 levels
+  - +1 Armor every 10 levels
+- **Visual Progression HUD**: Real-time XP bar and level display
+- **Level Gates**: Quests locked behind level requirements
+  - Apprentice quests: Level 5+
+  - Expert quests: Level 15+
+  - Master quests: Level 25+
+- **Designed for 20+ hours** of engaging progression to reach max level
 
 ### Quest System
 - **Multi-tier Quest Books**: Progress from Novice to Master level
@@ -16,6 +35,7 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Quest Blocks**: Interactive blocks for accepting and completing quests
 - **Dynamic Quest Tracking**: Real-time progress monitoring
 - **Quest Book Upgrades**: Unlock higher-tier quests by completing challenges
+- **Level-Gated Content**: Higher difficulty quests require appropriate levels
 
 ### RPG Class System
 - **Three Distinct Classes**:
@@ -118,14 +138,15 @@ Dozens of custom fantasy-themed items including:
 
 ### Persistent Data Storage
 - Race and class selections are saved across server restarts
+- Player progression data (level, XP) persists between sessions
 - Player data stored in world save files
 - Seamless experience for server play
 
 ## Installation
 
 ### Requirements
-- Minecraft 1.21.x
-- Fabric Loader
+- Minecraft 1.21.8
+- Fabric Loader 0.17.2+
 - Fabric API
 
 ### Installation Steps
@@ -142,8 +163,25 @@ Dozens of custom fantasy-themed items including:
 4. **Choose Your Race**: Read the Race Selection Tome and select from Human, Dwarf, Elf, or Orc
 5. **Choose Your Class**: Approach the Class Selection Altar and select Warrior, Mage, or Rogue
 6. **Explore Synergies**: Experiment with different race+class combinations for unique abilities
-7. **Begin Questing**: Find Quest Blocks to start your adventure
-8. **Level Up**: Complete quests to earn rewards and upgrade your quest book
+7. **Begin Your Journey**: Start gaining XP through mining, combat, and exploration
+8. **Level Up**: Watch your character grow stronger with each level
+9. **Begin Questing**: Find Quest Blocks to start your adventure and earn massive XP
+10. **Progress Through Tiers**: Complete quests to unlock higher difficulties and better rewards
+
+## Progression Guide
+
+### Leveling Tips
+- **Early Game (Levels 1-10)**: Focus on mining and basic quests for steady XP
+- **Mid Game (Levels 10-25)**: Combat becomes more rewarding, unlock Apprentice and Expert quests
+- **Late Game (Levels 25-40)**: Master quests provide huge XP rewards
+- **End Game (Levels 40-50)**: Boss fights and difficult content for final levels
+
+### XP Sources Ranked
+1. **Quest Completion**: Highest XP per time (200-2500 XP)
+2. **Boss Fights**: Ender Dragon (2000 XP), Wither (1500 XP), Warden (1000 XP)
+3. **Mining Rare Ores**: Ancient Debris (40 XP), Diamonds (25 XP)
+4. **Combat**: Consistent 10-45 XP per mob
+5. **Gathering**: Passive XP while building (1-5 XP)
 
 ## Recommended Race + Class Combinations
 
@@ -182,6 +220,7 @@ src/main/java/com/github/hitman20081/dagmod/
 ├── block/          - Custom blocks (Quest Block, Altars)
 ├── class_system/   - RPG class mechanics and abilities
 ├── race_system/    - Race selection and racial bonuses
+├── progression/    - Level system, XP, stat scaling (NEW)
 ├── data/           - Persistent data management
 ├── command/        - Custom commands
 ├── effect/         - Custom status effects
@@ -217,15 +256,21 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 
 ## Roadmap
 
-Future planned features:
+### v1.4.0 (Planned)
+- Race-specific quest lines (4 unique storylines)
+- Class ability scaling with levels
+- Custom enchantments (race/class specific)
+- Ability cooldown systems
+
+### Future Features
 - Additional quest types and chains
 - More class abilities and specializations
-- Race-specific quests and storylines
 - Custom structures and dungeons
-- Boss encounters
+- Boss encounters with unique mechanics
 - Reputation system with factions
 - Magic spell system expansion
-- Guild system
+- Guild/Party system
+- PvP arena system
 
 ## Support
 
@@ -235,13 +280,4 @@ For bug reports, feature requests, or questions:
 
 ---
 
-**Choose your race, select your class, unlock powerful synergies, and embark on an epic fantasy RPG adventure in Minecraft!**
-
-Key additions:
-- Updated race bonuses with gathering percentages
-- Added synergy abilities section
-- Added Hall Locator feature
-- Added persistent data storage note
-- Updated recommended combinations with synergy details
-- Added data/ folder to project structure
-- More detailed getting started guide
+**Choose your race, select your class, unlock powerful synergies, level up through epic adventures, and embark on a complete fantasy RPG experience in Minecraft!**

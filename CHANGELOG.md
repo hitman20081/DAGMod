@@ -5,6 +5,84 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-10-05
+
+### Added - Progression System
+- **Level System (1-50)**: Complete progression system with exponential XP curve
+  - Designed for ~20 hours of gameplay to reach max level
+  - ~500,000 total XP required for level 50
+- **Automatic XP Gains** from multiple sources:
+  - Mining ores: 5-40 XP based on rarity (Coal: 5 XP, Diamond: 25 XP, Ancient Debris: 40 XP)
+  - Killing mobs: 10-2000 XP based on difficulty (Zombie: 15 XP, Ender Dragon: 2000 XP, Wither: 1500 XP)
+  - Woodcutting: 2 XP per log (all wood types)
+  - Farming: 1-3 XP per crop harvested
+  - Quest completion: 200-2500 XP based on difficulty tier
+- **Level-Based Stat Scaling**:
+  - +1 HP per level (total +49 HP at level 50)
+  - +1 Attack Damage every 5 levels (total +10 at level 50)
+  - +1 Armor every 10 levels (total +5 at level 50)
+  - Stats automatically apply on level up and persist across sessions
+- **Visual Progression HUD**:
+  - Real-time XP bar with level display
+  - Gold-colored level text, white XP progress text
+  - Material Design green progress bar
+  - Configurable position (top-left, top-right, above hotbar, etc.)
+  - Shows current XP, required XP, and percentage to next level
+- **Level-Up Experience**:
+  - Visual/audio feedback (sound effects, particles, messages)
+  - Full health restoration on level up
+  - Stat bonus display in level-up message
+- **Level Gates for Quests**:
+  - Novice quests: Available at level 1
+  - Apprentice quests: Require level 5
+  - Expert quests: Require level 15
+  - Master quests: Require level 25
+  - Clear messaging when level requirements not met
+- **Persistent Progression Data**:
+  - Level and XP saved to world files
+  - Data stored in `world/data/dagmod/progression/<uuid>.dat`
+  - Automatic loading on player join
+  - Stat bonuses reapply on server restart
+
+### Technical - Progression System
+- Created progression package with modular architecture:
+  - `PlayerProgressionData`: Core data class with XP calculations
+  - `ProgressionManager`: Server-side data management and caching
+  - `ProgressionStorage`: NBT file I/O for persistence
+  - `ProgressionPackets`: Server→Client networking for real-time updates
+  - `ProgressionEvents`: Lifecycle event handlers
+  - `XPEventHandler`: Automatic XP from gameplay events
+  - `StatScalingHandler`: Level-based attribute modifiers
+  - `LevelRequirements`: Quest level gate system
+- Client-side rendering:
+  - `ClientProgressionData`: Client-side data storage
+  - `ProgressionHUD`: Custom HUD overlay rendering
+- Integration:
+  - `LivingEntityMixin`: Mob kill XP rewards
+  - Block break events for mining/gathering XP
+  - Quest system integration for quest completion XP
+- Networking:
+  - Custom payload system for progression sync
+  - Real-time XP updates to client
+  - Efficient data synchronization
+
+### Changed
+- Quest system now awards XP based on difficulty:
+  - Novice: 200 XP
+  - Apprentice: 500 XP
+  - Expert: 1500 XP
+  - Master: 2500 XP
+- Quest availability now filtered by player level
+- `QuestManager.startQuest()` now checks level requirements
+- `QuestManager.getAvailableQuests()` now filters by level
+- `QuestData.completeQuest()` now awards XP automatically
+
+### Fixed
+- Quest difficulty getter now properly returns enum type
+- Progression data properly syncs between client and server
+- Stat bonuses correctly persist across sessions
+- Level-up healing now accounts for new max health
+
 ## [1.2.0] - 2025-10-04
 
 ### Added

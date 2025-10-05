@@ -1,5 +1,8 @@
 package com.github.hitman20081.dagmod.quest;
 
+import com.github.hitman20081.dagmod.progression.XPEventHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+
 import java.util.*;
 
 public class QuestData {
@@ -82,7 +85,7 @@ public class QuestData {
     }
 
     // Completed quest management
-    public void completeQuest(Quest quest) {
+    public void completeQuest(Quest quest, ServerPlayerEntity player) {
         // Remove from active quests
         removeActiveQuest(quest.getId());
 
@@ -93,6 +96,10 @@ public class QuestData {
 
         // Check for quest book upgrade
         checkQuestBookUpgrade();
+
+        // ADD THESE LINES:
+        // Award XP based on quest difficulty
+        XPEventHandler.onQuestCompleted(player, quest.getDifficulty().name());
     }
 
     public boolean isQuestCompleted(String questId) {

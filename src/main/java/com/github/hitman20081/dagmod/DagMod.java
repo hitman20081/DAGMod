@@ -10,6 +10,10 @@ import com.github.hitman20081.dagmod.networking.ModNetworking;
 import com.github.hitman20081.dagmod.potion.ModPotions;
 import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.block.ModBlocks;
+import com.github.hitman20081.dagmod.progression.ProgressionEvents;
+import com.github.hitman20081.dagmod.progression.ProgressionPackets;
+import com.github.hitman20081.dagmod.progression.ProgressionTestCommand;
+import com.github.hitman20081.dagmod.progression.XPEventHandler;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.registry.QuestRegistry;
 import com.github.hitman20081.dagmod.race_system.PlayerTickHandler;
@@ -25,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -74,6 +79,15 @@ public class DagMod implements ModInitializer {
         PlayerTickHandler.register();
         LOGGER.info("Race/Class synergy system initialized!");
 
+        // Register progression system events
+        ProgressionEvents.register();
+
+        // Register progression packets
+        ProgressionPackets.registerServerPackets();
+
+        // Register XP Event Handler
+        XPEventHandler.register();
+
         // Register command for class reset
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             ResetClassCommand.register(dispatcher, registryAccess, environment);
@@ -83,6 +97,11 @@ public class DagMod implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             ResetClassCommand.register(dispatcher, registryAccess, environment);
             InfoCommand.register(dispatcher, registryAccess, environment);
+        });
+
+        // In your main mod class onInitialize()
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            ProgressionTestCommand.register(dispatcher, registryAccess, environment);
         });
 
         // Apply class abilities when player respawns (including after death)
