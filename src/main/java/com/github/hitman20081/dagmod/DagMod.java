@@ -145,19 +145,22 @@ public class DagMod implements ModInitializer {
 
                 // Give Hall Locator to new players
                 if (!PlayerDataManager.hasPlayerData(player)) {
-                    player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
-                    player.sendMessage(Text.literal("═══════════════════════════════")
-                            .formatted(Formatting.GOLD), false);
-                    player.sendMessage(Text.literal("Welcome to DAGMod!")
-                            .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
-                    player.sendMessage(Text.literal("═══════════════════════════════")
-                            .formatted(Formatting.GOLD), false);
-                    player.sendMessage(Text.literal("You've been given a Hall Locator!")
-                            .formatted(Formatting.YELLOW), false);
-                    player.sendMessage(Text.literal("Right-click it to find the Hall of Champions.")
-                            .formatted(Formatting.GRAY), false);
-                    player.sendMessage(Text.literal("═══════════════════════════════")
-                            .formatted(Formatting.GOLD), false);
+                    // Check if player already has a Hall Locator in their inventory
+                    if (!hasHallLocator(player)) {
+                        player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
+                        player.sendMessage(Text.literal("═══════════════════════════════")
+                                .formatted(Formatting.GOLD), false);
+                        player.sendMessage(Text.literal("Welcome to DAGMod!")
+                                .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
+                        player.sendMessage(Text.literal("═══════════════════════════════")
+                                .formatted(Formatting.GOLD), false);
+                        player.sendMessage(Text.literal("You've been given a Hall Locator!")
+                                .formatted(Formatting.YELLOW), false);
+                        player.sendMessage(Text.literal("Right-click it to find the Hall of Champions.")
+                                .formatted(Formatting.GRAY), false);
+                        player.sendMessage(Text.literal("═══════════════════════════════")
+                                .formatted(Formatting.GOLD), false);
+                    }
                 }
 
                 // Then apply abilities (already loaded by loadPlayerData, but this ensures sync)
@@ -237,6 +240,17 @@ public class DagMod implements ModInitializer {
     // Helper method for updating quest progress - THIS GOES OUTSIDE onInitialize()
     public static void updatePlayerQuestProgress(ServerPlayerEntity player) {
         QuestManager.getInstance().updateQuestProgress(player);
+    }
+
+    // Helper method to check if player has Hall Locator in inventory
+    private static boolean hasHallLocator(ServerPlayerEntity player) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.getItem() == ModItems.HALL_LOCATOR) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

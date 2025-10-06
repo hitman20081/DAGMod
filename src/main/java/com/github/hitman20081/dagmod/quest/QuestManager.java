@@ -345,13 +345,19 @@ public class QuestManager {
         QuestData playerData = getPlayerData(player);
         List<Quest> available = new ArrayList<>();
 
-        // Get player's class
+        // Get player's class and race
         String playerClass = com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerRace = com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
 
         for (Quest quest : allQuests.values()) {
-            // Check class requirement first
+            // Check class requirement
             if (quest.isClassRestricted() && !quest.getRequiredClass().equals(playerClass)) {
                 continue; // Skip quests for other classes
+            }
+
+            // Check race requirement
+            if (quest.isRaceRestricted() && !quest.getRequiredRace().equals(playerRace)) {
+                continue; // Skip quests for other races
             }
 
             // ADD THIS: Check level requirement

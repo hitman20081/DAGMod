@@ -19,6 +19,7 @@ public class Quest {
     private long cooldownTime = 0; // In milliseconds
     private String seasonRequirement = null; // "spring", "summer", etc.
     private String requiredClass = null; // "Warrior", "Mage", "Rogue", or null for any class
+    private String requiredRace = null; // "Dwarf", "Elf", "Human", "Orc", or null for any race
 
     // Quest difficulty levels
     public enum QuestDifficulty {
@@ -112,6 +113,19 @@ public class Quest {
     public Quest setRequiredClass(String className) {
         this.requiredClass = className;
         return this;
+    }
+
+    public String getRequiredRace() {
+        return requiredRace;
+    }
+
+    public Quest setRequiredRace(String raceName) {
+        this.requiredRace = raceName;
+        return this;
+    }
+
+    public boolean isRaceRestricted() {
+        return requiredRace != null;
     }
 
     // Getters
