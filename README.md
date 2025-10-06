@@ -7,31 +7,42 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 ### Progression System (NEW in v1.3.0)
 - **Level System (1-50)**: Gain experience through combat, mining, and quests
 - **Automatic XP Gains**:
-  - Mining ores: 5-40 XP (Diamond: 25 XP, Ancient Debris: 40 XP)
-  - Killing mobs: 10-2000 XP (Zombie: 15 XP, Ender Dragon: 2000 XP)
-  - Woodcutting: 2 XP per log
-  - Farming: 1-3 XP per crop
-  - Quest completion: 200-2500 XP based on difficulty
+    - Mining ores: 5-40 XP (Diamond: 25 XP, Ancient Debris: 40 XP)
+    - Killing mobs: 10-2000 XP (Zombie: 15 XP, Ender Dragon: 2000 XP)
+    - Woodcutting: 2 XP per log
+    - Farming: 1-3 XP per crop
+    - Quest completion: 200-2500 XP based on difficulty
 - **Level-Based Stat Scaling**:
-  - +1 HP per level (49 bonus HP at max level)
-  - +1 Attack Damage every 5 levels
-  - +1 Armor every 10 levels
+    - +1 HP per level (49 bonus HP at max level)
+    - +1 Attack Damage every 5 levels
+    - +1 Armor every 10 levels
 - **Visual Progression HUD**: Real-time XP bar and level display
 - **Level Gates**: Quests locked behind level requirements
-  - Apprentice quests: Level 5+
-  - Expert quests: Level 15+
-  - Master quests: Level 25+
+    - Apprentice quests: Level 5+
+    - Expert quests: Level 15+
+    - Master quests: Level 25+
 - **Designed for 20+ hours** of engaging progression to reach max level
 
 ### Quest System
-- **Multi-tier Quest Books**: Progress from Novice to Master level
-- **Quest Chains**: Interconnected storylines that guide player progression
+- **8 Quest Chains** with unique storylines and rewards:
+    - **General Progression Chains** (4):
+        - Adventurer's Path (3 quests) - Tutorial progression
+        - Village Development (5 quests) - Settlement building
+        - Master Craftsman (3 quests) - Crafting mastery
+        - Combat Specialist (4 quests) - Combat prowess
+    - **Race-Specific Chains** (4) - NEW in v1.3.0:
+        - **The Forgemaster's Legacy** (Dwarf, 10 quests) - Mining and smithing mastery
+        - **Guardian of the Wilds** (Elf, 10 quests) - Nature and archery path
+        - **Jack of All Trades** (Human, 10 quests) - Versatile exploration and mastery
+        - **Path of the Warlord** (Orc, 10 quests) - Combat and conquest
+- **64 Total Quests** including:
+    - 9 Class-specific quests (Warrior, Mage, Rogue)
+    - 40 Race-specific quests with unique storylines
+    - 15 General progression quests
 - **Multiple Quest Types**:
     - Fetch Quests - Gather specific items
     - Kill Quests - Defeat enemies
-    - Delivery Quests - Transport items to NPCs (Work in Progress)
-    - Crafting Quests - Create specific items (Work in Progress)
-    - Collection Quests - Gather diverse materials (Work in Progress)
+    - Multi-objective Quests - Complex challenges
 - **Quest Blocks**: Interactive blocks for accepting and completing quests
 - **Dynamic Quest Tracking**: Real-time progress monitoring
 - **Quest Book Upgrades**: Unlock higher-tier quests by completing challenges
@@ -39,24 +50,27 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 
 ### RPG Class System
 - **Three Distinct Classes**:
-    - **Warrior**: 
+    - **Warrior**:
         - +4 hearts (+8 health)
         - +25% melee attack damage
         - -10% movement speed
         - 15% damage reduction from physical sources
         - Heavy armor proficiency
-    - **Mage**: 
+        - **3 class-specific quests** with unique storyline
+    - **Mage**:
         - -2 hearts (-4 health)
         - -25% melee attack damage
         - 50% reduced enchantment costs
         - 50% longer potion durations
         - Permanent night vision
-    - **Rogue**: 
+        - **3 class-specific quests** with unique storyline
+    - **Rogue**:
         - -1 heart (-2 health)
         - +30% movement speed
         - 25% critical hit chance (2x damage)
         - Backstab bonus (1.5x damage from behind)
         - 50% reduced fall damage
+        - **3 class-specific quests** with unique storyline
 - **Class Selection Altar**: Choose your path at the start of your journey
 - **Class-Specific Abilities**: Unique powers and stat modifiers for each class
 - **Class Reset Crystal**: Allows players to change their chosen class
@@ -68,21 +82,25 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
         - +25% experience gain from all sources
         - Jack of all trades with no penalties
         - Versatile gameplay
+        - **10-quest unique storyline**: "Jack of All Trades" - Master exploration, trading, and diverse skills
     - **Dwarf - The Miner**:
         - +20% mining speed
         - +1 heart (+2 health)
         - -5% movement speed
         - 15% chance for bonus ore drops when mining
+        - **10-quest unique storyline**: "The Forgemaster's Legacy" - Master mining and ancient smithing
     - **Elf - The Ranger**:
         - +15% movement speed
         - +0.5 block interaction range
         - Permanent Hero of the Village effect
         - 20% chance for bonus wood drops
+        - **10-quest unique storyline**: "Guardian of the Wilds" - Protect nature and master archery
     - **Orc - The Warrior**:
         - +15% melee attack damage
         - +2 hearts (+4 health)
         - 20% chance for bonus meat from hunting
         - Better fishing luck
+        - **10-quest unique storyline**: "Path of the Warlord" - Conquer through strength and combat
 - **Race Selection Altar**: Discover your heritage at the Hall of Champions
 - **Race Selection Tome**: Learn about each race before making your choice
 - **Race + Class Combinations**: Stack racial bonuses with class abilities for unique builds
