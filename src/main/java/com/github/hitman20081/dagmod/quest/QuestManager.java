@@ -168,6 +168,9 @@ public class QuestManager {
 
         QuestData playerData = getPlayerData(player);
 
+        // DEBUG: Add this
+        player.sendMessage(Text.literal("DEBUG: Attempting to start quest: " + quest.getName()), false);
+
         // Check if player's quest book tier allows this quest difficulty
         if (!playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
             player.sendMessage(Text.literal("Your quest book tier doesn't allow " +
@@ -176,6 +179,9 @@ public class QuestManager {
             return false;
         }
 
+        // DEBUG: Add this
+        player.sendMessage(Text.literal("DEBUG: Tier check passed"), false);
+
         // ADD THIS: Check level requirement
         if (!LevelRequirements.meetsLevelRequirement((ServerPlayerEntity) player, quest)) {
             int requiredLevel = LevelRequirements.getRequiredLevelForQuest(quest);
@@ -183,11 +189,17 @@ public class QuestManager {
             return false;
         }
 
+        // DEBUG: Add this
+        player.sendMessage(Text.literal("DEBUG: Level check passed"), false);
+
         // Check active quest limit
         if (playerData.getActiveQuests().size() >= getMaxActiveQuests(playerData)) {
             player.sendMessage(Text.literal("You have too many active quests! Complete some first."), false);
             return false;
         }
+
+        // DEBUG: Add this
+        player.sendMessage(Text.literal("DEBUG: Active quest limit check passed"), false);
 
         // Create a copy of the quest for this player
         Quest playerQuest = copyQuest(quest);

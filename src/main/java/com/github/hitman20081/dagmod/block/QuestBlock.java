@@ -131,6 +131,9 @@ public class QuestBlock extends Block {
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
+        // DEBUG
+        player.sendMessage(Text.literal("DEBUG: showBrowseQuests - index=" + selectedIndex + ", sneaking=" + player.isSneaking()), false);
+
         if (availableQuests == null || availableQuests.isEmpty()) {
             player.sendMessage(Text.literal("No quests available for your current level."), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
@@ -196,12 +199,21 @@ public class QuestBlock extends Block {
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.get(playerId) - 1; // Go back one since we incremented
 
+        // DEBUG - Add these lines
+        player.sendMessage(Text.literal("DEBUG: showConfirmAccept called"), false);
+        player.sendMessage(Text.literal("DEBUG: selectedIndex after -1 = " + selectedIndex), false);
+        player.sendMessage(Text.literal("DEBUG: availableQuests size = " + (availableQuests != null ? availableQuests.size() : "NULL")), false);
+
         if (selectedIndex < 0 || selectedIndex >= availableQuests.size()) {
+            player.sendMessage(Text.literal("DEBUG: Index out of bounds! Returning to menu."), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         Quest questToAccept = availableQuests.get(selectedIndex);
+
+        // DEBUG - Add this line
+        player.sendMessage(Text.literal("DEBUG: Quest to accept = " + questToAccept.getId() + " (" + questToAccept.getName() + ")"), false);
 
         player.sendMessage(Text.literal("=== CONFIRM QUEST ACCEPTANCE ==="), false);
         player.sendMessage(Text.literal("Quest: " + questToAccept.getName()), false);
