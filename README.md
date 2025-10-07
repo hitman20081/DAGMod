@@ -57,7 +57,7 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
         - 15% damage reduction from physical sources
         - Heavy armor proficiency
         - **3 class-specific quests** with unique storyline
-  - **Mage**:
+  - **Mage**: (NEW in v1.3.1)
       - -2 hearts (-4 health)
       - -25% melee attack damage
       - **100 Mana Pool** with 2 mana/second regeneration
@@ -78,7 +78,7 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Class Reset Crystal**: Allows players to change their chosen class
 - **Level-Based Class Reset**: Free class reset every 10 quests completed
 
-### Spell System (Mage Class)
+### Spell System (Mage Class) (NEW in v1.3.1)
 Mages harness arcane power through a mana system and spell scrolls:
 
 **Mana Mechanics**:
