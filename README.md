@@ -1,4 +1,4 @@
-# DAGMod v1.3.0 - Fantasy RPG Minecraft Mod
+# DAGMod v1.3.1 - Fantasy RPG Minecraft Mod
 
 A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, progression system, class mechanics, race selection, synergy abilities, custom items, and immersive gameplay mechanics.
 
