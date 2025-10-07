@@ -63,5 +63,13 @@
   "item.dagmod.race_selection_tome": "Tome of Ancestral Heritage",
   "item.dagmod.race_selection_altar": "Altar of Heritage",
   "block.dagmod.race_selection_altar": "Altar of Heritage",
-  "item.dagmod.hall_locator": "Hall Locator"
+  "item.dagmod.hall_locator": "Hall Locator",
+
+  "item.dagmod.heal_scroll": "Scroll of Healing",
+  "item.dagmod.absorption_scroll": "Arcane Shield",
+  "item.dagmod.fireball_scroll": "Fireball",
+  "item.dagmod.lightning_scroll": "Lightning Bolt",
+  "item.dagmod.frost_nova_scroll": "Frost Nova",
+  "item.dagmod.teleport_scroll": "Blink",
+  "item.dagmod.mana_shield_scroll": "Mana Shield"
 }

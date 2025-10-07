@@ -5,6 +5,53 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2025-10-06
+
+### Added - Mage Mana System
+- **Mana Pool for Mages**: 100 mana pool exclusive to Mage class
+- **Automatic Mana Regeneration**: 2 mana per second passive regeneration
+- **Visual Mana Bar HUD**:
+    - Blue mana bar displayed above hunger bar
+    - Real-time mana tracking with current/max display
+    - Only visible to Mage players
+- **7 Spell Scrolls** with unique magical effects:
+    - **Heal Scroll** (20 mana) - Restores 3 hearts instantly with heart particles
+    - **Fireball Scroll** (30 mana) - Launches explosive fireball projectile
+    - **Absorption Scroll** (25 mana) - Grants 4 absorption hearts for 30 seconds
+    - **Lightning Scroll** (35 mana) - Summons lightning bolt at target location (30 block range)
+    - **Frost Nova Scroll** (40 mana) - Freezes and damages enemies in 8 block radius
+    - **Blink Scroll** (30 mana) - Teleports to targeted block (20 block range)
+    - **Mana Shield Scroll** (15 mana) - Grants Resistance II for 10 seconds
+- **Smart Mana Consumption**: Spells only consume mana on successful cast
+    - Failed teleports (no valid target) don't consume mana
+    - Proper feedback for failed spell attempts
+- **Class-Locked Spells**: Only Mages can use spell scrolls
+- **Visual Spell Effects**: Unique particle effects for each spell type
+
+### Technical - Mana System
+- Created mana subsystem in `class_system/mana/`:
+    - `ManaData`: Core mana storage and manipulation
+    - `ManaManager`: Server-side mana management and regeneration
+    - `ManaNetworking`: Custom payload for client-server mana sync
+    - `ClientManaData`: Client-side mana state tracking
+    - `ManaHudRenderer`: Custom HUD overlay for mana bar
+- Integrated with existing class system
+- Persistent mana data storage in player data files
+- Real-time networking for seamless mana updates
+- Efficient tick-based regeneration (every 20 ticks)
+
+### Changed
+- Mage class now has functional mana system replacing placeholder benefits
+- Updated Class Selection Tome to accurately reflect mana mechanics
+- Mana bar positioned above hunger bar for optimal visibility
+- DagModClient now handles mana packet registration and HUD rendering
+
+### Fixed
+- Mana data properly persists across server restarts
+- Mana regeneration only applies to Mage class
+- Spell scrolls provide proper feedback when requirements not met
+- Blink spell validates target before consuming mana
+
 ## [1.3.0] - 2025-10-05
 
 ### Added - Progression System

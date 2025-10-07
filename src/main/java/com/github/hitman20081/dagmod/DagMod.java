@@ -1,7 +1,9 @@
 package com.github.hitman20081.dagmod;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.class_system.mana.ManaManager;
 import com.github.hitman20081.dagmod.command.InfoCommand;
+import com.github.hitman20081.dagmod.command.QuestCommand;
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.effect.ModEffects;
 import com.github.hitman20081.dagmod.event.DeathMessageHandler;
@@ -15,6 +17,7 @@ import com.github.hitman20081.dagmod.progression.ProgressionPackets;
 import com.github.hitman20081.dagmod.progression.ProgressionTestCommand;
 import com.github.hitman20081.dagmod.progression.XPEventHandler;
 import com.github.hitman20081.dagmod.quest.QuestManager;
+import com.github.hitman20081.dagmod.quest.QuestUtils;
 import com.github.hitman20081.dagmod.quest.registry.QuestRegistry;
 import com.github.hitman20081.dagmod.race_system.PlayerTickHandler;
 import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
@@ -69,6 +72,10 @@ public class DagMod implements ModInitializer {
         // Initialize Networking
         ModNetworking.initialize();
 
+        // Register mana payloads
+        com.github.hitman20081.dagmod.class_system.mana.ManaNetworking.registerPayloads();
+        LOGGER.info("Mana system networking initialized!");
+
         // Initialize Quest System
         LOGGER.info("Initializing Quest System for " + MOD_ID);
         QuestRegistry.registerQuests();
@@ -93,13 +100,18 @@ public class DagMod implements ModInitializer {
             ResetClassCommand.register(dispatcher, registryAccess, environment);
         });
 
+        // Quest Command
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            QuestCommand.register(dispatcher);
+        });
+
         // Register commands
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             ResetClassCommand.register(dispatcher, registryAccess, environment);
             InfoCommand.register(dispatcher, registryAccess, environment);
         });
 
-        // In your main mod class onInitialize()
+        // Progression Test Command
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             ProgressionTestCommand.register(dispatcher, registryAccess, environment);
         });
@@ -148,6 +160,8 @@ public class DagMod implements ModInitializer {
                     // Check if player already has a Hall Locator in their inventory
                     if (!hasHallLocator(player)) {
                         player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
+                        player.giveItemStack(QuestUtils.createWelcomeBook());
+                        player.giveItemStack(new ItemStack(ModItems.NOVICE_QUEST_BOOK));
                         player.sendMessage(Text.literal("═══════════════════════════════")
                                 .formatted(Formatting.GOLD), false);
                         player.sendMessage(Text.literal("Welcome to DAGMod!")
@@ -182,13 +196,17 @@ public class DagMod implements ModInitializer {
                 DeathMessageHandler.sendDeathMessage(deadPlayer);
             }
         });
-        // Then replace the placeholder with:
+
+        // Combined server tick events: Mana regeneration + Night Vision for Mages
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
 
+                // Mana regeneration for all players (ManaManager checks if they're Mage)
+                ManaManager.tick(player);
+
+                // Night Vision for Mages
                 if ("Mage".equals(playerClass)) {
-                    // Give Mages permanent Night Vision
                     if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
                         player.addStatusEffect(new StatusEffectInstance(
                                 StatusEffects.NIGHT_VISION,
@@ -253,4 +271,5 @@ public class DagMod implements ModInitializer {
         return false;
     }
 
-}
+
+} // This is the final closing brace of the DagMod class

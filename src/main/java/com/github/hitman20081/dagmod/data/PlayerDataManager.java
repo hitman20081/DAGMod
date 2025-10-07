@@ -54,6 +54,15 @@ public class PlayerDataManager {
             nbt.putString(RACE_KEY, race);
             nbt.putString(CLASS_KEY, playerClass);
 
+            // Save mana data for Mages - ADD THIS
+            if ("Mage".equals(playerClass)) {
+                com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
+                        com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
+                NbtCompound manaNbt = new NbtCompound();
+                manaData.writeToNbt(manaNbt);
+                nbt.put("manaData", manaNbt);
+            }
+
             try (FileOutputStream fos = new FileOutputStream(dataFile)) {
                 NbtIo.writeCompressed(nbt, fos);
             }
@@ -97,6 +106,14 @@ public class PlayerDataManager {
                     if (!playerClass.equals("none") && !playerClass.isEmpty()) {
                         ClassSelectionAltarBlock.setPlayerClass(player.getUuid(), playerClass);
                         ClassAbilityManager.applyClassAbilities(player);
+
+                        // Load mana data for Mages - ADD THIS
+                        if ("Mage".equals(playerClass) && nbt.contains("manaData")) {
+                            NbtCompound manaNbt = nbt;
+                            com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
+                                    com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
+                            manaData.readFromNbt(manaNbt);
+                        }
                     }
                 }
             }

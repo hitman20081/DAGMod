@@ -3,12 +3,14 @@ package com.github.hitman20081.dagmod.block;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
+import com.github.hitman20081.dagmod.quest.QuestUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -23,10 +25,10 @@ import java.util.Map;
 public class QuestBlock extends Block {
 
     // Track what menu state each player is in
-    private static final Map<UUID, MenuState> playerMenuState = new HashMap<>();
+    public static final Map<UUID, MenuState> playerMenuState = new HashMap<>();
     private static final Map<UUID, List<Quest>> playerAvailableQuests = new HashMap<>();
     private static final Map<UUID, List<Quest>> playerCompletedQuests = new HashMap<>();
-    private static final Map<UUID, Integer> playerSelectedIndex = new HashMap<>();
+    public static final Map<UUID, Integer> playerSelectedIndex = new HashMap<>();
 
     public enum MenuState {
         MAIN_MENU,
@@ -131,9 +133,6 @@ public class QuestBlock extends Block {
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
-        // DEBUG
-        player.sendMessage(Text.literal("DEBUG: showBrowseQuests - index=" + selectedIndex + ", sneaking=" + player.isSneaking()), false);
-
         if (availableQuests == null || availableQuests.isEmpty()) {
             player.sendMessage(Text.literal("No quests available for your current level."), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
@@ -141,7 +140,6 @@ public class QuestBlock extends Block {
         }
 
         if (selectedIndex >= availableQuests.size()) {
-            // Finished browsing, return to main menu
             player.sendMessage(Text.literal("=== End of Quest List ==="), false);
             player.sendMessage(Text.literal("Returning to main menu..."), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
@@ -151,55 +149,50 @@ public class QuestBlock extends Block {
 
         Quest currentQuest = availableQuests.get(selectedIndex);
 
-        player.sendMessage(Text.literal("=== Quest " + (selectedIndex + 1) + "/" + availableQuests.size() + " ==="), false);
+        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("Quest " + (selectedIndex + 1) + "/" + availableQuests.size()).formatted(Formatting.YELLOW), false);
+        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
 
-        // Show class requirement if it exists
         if (currentQuest.isClassRestricted()) {
-            player.sendMessage(Text.literal("[" + currentQuest.getRequiredClass() + " Only]"), false);
+            player.sendMessage(Text.literal("[" + currentQuest.getRequiredClass() + " Only]").formatted(Formatting.AQUA), false);
+        }
+        if (currentQuest.isRaceRestricted()) {
+            player.sendMessage(Text.literal("[" + currentQuest.getRequiredRace() + " Only]").formatted(Formatting.AQUA), false);
         }
 
         Text questTitle = Text.literal("📜 " + currentQuest.getName())
                 .append(Text.literal(" (" + currentQuest.getDifficulty().getDisplayName() + ")")
                         .styled(style -> style.withColor(currentQuest.getDifficulty().getColor())));
         player.sendMessage(questTitle, false);
-        player.sendMessage(Text.literal(currentQuest.getDescription()), false);
+        player.sendMessage(Text.literal(currentQuest.getDescription()).formatted(Formatting.GRAY), false);
         player.sendMessage(Text.literal(""), false);
 
-        // Show objectives
-        player.sendMessage(Text.literal("Objectives:"), false);
+        player.sendMessage(Text.literal("Objectives:").formatted(Formatting.YELLOW), false);
         for (var objective : currentQuest.getObjectives()) {
-            player.sendMessage(Text.literal("• " + objective.getDescription()), false);
+            player.sendMessage(Text.literal("  • " + objective.getDescription()), false);
         }
 
-        // Show rewards
         player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Rewards:"), false);
+        player.sendMessage(Text.literal("Rewards:").formatted(Formatting.YELLOW), false);
         for (var reward : currentQuest.getRewards()) {
-            player.sendMessage(reward.getDisplayText(), false);
+            player.sendMessage(Text.literal("  ").append(reward.getDisplayText()), false);
         }
 
         player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click to VIEW NEXT quest"), false);
-        player.sendMessage(Text.literal("Sneak + Right-click to ACCEPT this quest"), false);
-        player.sendMessage(Text.literal("==================="), false);
+        player.sendMessage(Text.literal(">> Right-click to: ACCEPT THIS QUEST <<").formatted(Formatting.GREEN).formatted(Formatting.BOLD), false);
+        player.sendMessage(Text.literal(">> OR type: /quest skip <<").formatted(Formatting.YELLOW), false);
+        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
 
-        // Check if player is sneaking (shift + right click)
-        if (player.isSneaking()) {
-            // Player wants to accept this quest - go to confirmation
-            playerMenuState.put(playerId, MenuState.CONFIRM_ACCEPT);
-            return;
-        }
-
-        // Move to next quest for browsing
-        playerSelectedIndex.put(playerId, selectedIndex + 1);
+        // Next click always goes to confirmation
+        playerMenuState.put(playerId, MenuState.CONFIRM_ACCEPT);
     }
 
     private void showConfirmAccept(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
         UUID playerId = player.getUuid();
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
-        int selectedIndex = playerSelectedIndex.get(playerId) - 1; // Go back one since we incremented
+        int selectedIndex = playerSelectedIndex.get(playerId);
 
-        // DEBUG - Add these lines
+        // DEBUG
         player.sendMessage(Text.literal("DEBUG: showConfirmAccept called"), false);
         player.sendMessage(Text.literal("DEBUG: selectedIndex after -1 = " + selectedIndex), false);
         player.sendMessage(Text.literal("DEBUG: availableQuests size = " + (availableQuests != null ? availableQuests.size() : "NULL")), false);
@@ -212,7 +205,7 @@ public class QuestBlock extends Block {
 
         Quest questToAccept = availableQuests.get(selectedIndex);
 
-        // DEBUG - Add this line
+        // DEBUG
         player.sendMessage(Text.literal("DEBUG: Quest to accept = " + questToAccept.getId() + " (" + questToAccept.getName() + ")"), false);
 
         player.sendMessage(Text.literal("=== CONFIRM QUEST ACCEPTANCE ==="), false);
@@ -352,6 +345,9 @@ public class QuestBlock extends Block {
         // Perform upgrade
         playerData.setQuestBookTier(nextTier);
         player.sendMessage(Text.literal("✓ Quest book upgraded to: " + nextTier.getDisplayName()), false);
+
+// Give the physical book item
+        QuestUtils.giveQuestBookForTier(player, nextTier);
 
         playerMenuState.put(playerId, MenuState.MAIN_MENU);
     }

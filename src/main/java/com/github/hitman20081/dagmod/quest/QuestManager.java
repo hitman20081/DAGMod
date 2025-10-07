@@ -2,8 +2,9 @@ package com.github.hitman20081.dagmod.quest;
 
 import com.github.hitman20081.dagmod.progression.LevelRequirements;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
-import com.github.hitman20081.dagmod.quest.objectives.KillObjective;  // Add this too
-import net.minecraft.entity.EntityType;  // Add this line
+import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
+import com.github.hitman20081.dagmod.quest.QuestUtils;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -84,6 +85,9 @@ public class QuestManager {
                             playerData.getQuestBookTier().getTier() < chain.getRewardTier().getTier()) {
                         playerData.setQuestBookTier(chain.getRewardTier());
                         player.sendMessage(Text.literal("Quest Book upgraded to: " + chain.getRewardTier().getDisplayName()), false);
+
+                        // Give the physical book item - ADD THIS LINE
+                        com.github.hitman20081.dagmod.quest.QuestUtils.giveQuestBookForTier((ServerPlayerEntity) player, chain.getRewardTier());
                     }
 
                     // Start next chain automatically if it exists

@@ -57,13 +57,15 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
         - 15% damage reduction from physical sources
         - Heavy armor proficiency
         - **3 class-specific quests** with unique storyline
-    - **Mage**:
-        - -2 hearts (-4 health)
-        - -25% melee attack damage
-        - 50% reduced enchantment costs
-        - 50% longer potion durations
-        - Permanent night vision
-        - **3 class-specific quests** with unique storyline
+  - **Mage**:
+      - -2 hearts (-4 health)
+      - -25% melee attack damage
+      - **100 Mana Pool** with 2 mana/second regeneration
+      - **7 Unique Spells** via spell scrolls
+      - 50% reduced enchantment costs
+      - 50% longer potion durations
+      - Permanent night vision
+      - **3 class-specific quests** with unique storyline
     - **Rogue**:
         - -1 heart (-2 health)
         - +30% movement speed
@@ -75,6 +77,31 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Class-Specific Abilities**: Unique powers and stat modifiers for each class
 - **Class Reset Crystal**: Allows players to change their chosen class
 - **Level-Based Class Reset**: Free class reset every 10 quests completed
+
+### Spell System (Mage Class)
+Mages harness arcane power through a mana system and spell scrolls:
+
+**Mana Mechanics**:
+- 100 maximum mana pool
+- 2 mana regenerated per second
+- Visual mana bar above hunger display
+- Mana persists across sessions
+
+**Available Spells**:
+- **Heal** (20 mana): Instantly restore 3 hearts with healing particles
+- **Fireball** (30 mana): Launch an explosive fireball projectile
+- **Arcane Shield** (25 mana): Gain 4 absorption hearts for 30 seconds
+- **Lightning Bolt** (35 mana): Summon lightning at your target (30 block range)
+- **Frost Nova** (40 mana): Freeze and damage all enemies within 8 blocks
+- **Blink** (30 mana): Teleport to targeted block (20 block range)
+- **Mana Shield** (15 mana): Gain Resistance II for 10 seconds
+
+**Spell Mechanics**:
+- Spells only usable by Mage class
+- Mana consumed only on successful cast
+- Failed casts (invalid targets) don't consume mana
+- Each spell has unique visual and audio effects
+- Spell scrolls stackable (16 per stack)
 
 ### Race System
 - **Four Playable Races**:
@@ -137,6 +164,7 @@ Dozens of custom fantasy-themed items including:
 - **Class Tokens**: Warrior, Mage, and Rogue selection tokens
 - **Race Tokens**: Human, Dwarf, Elf, and Orc heritage tokens
 - **Selection Tomes**: Detailed information about classes and races
+- **Spell Scrolls**: 7 unique mage spells (Heal, Fireball, Absorption, Lightning, Frost Nova, Blink, Mana Shield)
 - **Hall Locator**: Find the Hall of Champions
 - **Crafting Materials**: Various powders (Diamond, Emerald, Amethyst, Quartz), Echo Dust, Slimeball Dust
 - **Fantasy Foods**: Over 20 unique food items with special effects
@@ -180,6 +208,7 @@ Dozens of custom fantasy-themed items including:
 3. **Discover Your Heritage**: Locate the Hall of Champions and approach the Race Selection Altar
 4. **Choose Your Race**: Read the Race Selection Tome and select from Human, Dwarf, Elf, or Orc
 5. **Choose Your Class**: Approach the Class Selection Altar and select Warrior, Mage, or Rogue
+    - **Mages**: Use spell scrolls to cast powerful magic using your mana pool
 6. **Explore Synergies**: Experiment with different race+class combinations for unique abilities
 7. **Begin Your Journey**: Start gaining XP through mining, combat, and exploration
 8. **Level Up**: Watch your character grow stronger with each level
@@ -275,10 +304,20 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 ## Roadmap
 
 ### v1.4.0 (Planned)
-- Race-specific quest lines (4 unique storylines)
-- Class ability scaling with levels
+- Warrior ability system (rage, shield bash, war cry)
+- Rogue ability system (smoke bomb, poison dagger, shadow step)
+- More spell scrolls for Mages
+- Spell crafting recipes
 - Custom enchantments (race/class specific)
+
+### Future Features
+- Additional quest types and chains
+- More class abilities and specializations
 - Ability cooldown systems
+- Custom structures and dungeons
+- Boss encounters with unique mechanics
+- Reputation system with factions
+- Guild/Party system
 
 ### Future Features
 - Additional quest types and chains

@@ -100,6 +100,35 @@ public class ModItems {
     public static final Item HALL_LOCATOR = register("hall_locator",
             HallLocatorItem::new, new Item.Settings().maxCount(1).rarity(Rarity.RARE));
 
+    // Mage Spell Scrolls
+    public static final Item HEAL_SCROLL = register("heal_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.HEAL),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item FIREBALL_SCROLL = register("fireball_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.FIREBALL),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item ABSORPTION_SCROLL = register("absorption_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.ABSORPTION),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item LIGHTNING_SCROLL = register("lightning_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.LIGHTNING),
+            new Item.Settings().maxCount(16).rarity(Rarity.RARE));
+
+    public static final Item FROST_NOVA_SCROLL = register("frost_nova_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.FROST_NOVA),
+            new Item.Settings().maxCount(16).rarity(Rarity.RARE));
+
+    public static final Item TELEPORT_SCROLL = register("teleport_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.TELEPORT),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item MANA_SHIELD_SCROLL = register("mana_shield_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.MANA_SHIELD),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
 
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
@@ -244,6 +273,18 @@ public class ModItems {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
                 .register((itemGroup) ->
                         itemGroup.add(ModItems.HALL_LOCATOR));
+
+        // Spell Scrolls - Add to Tools group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.HEAL_SCROLL);
+                    itemGroup.add(ModItems.FIREBALL_SCROLL);
+                    itemGroup.add(ModItems.ABSORPTION_SCROLL);
+                    itemGroup.add(ModItems.LIGHTNING_SCROLL);
+                    itemGroup.add(ModItems.FROST_NOVA_SCROLL);
+                    itemGroup.add(ModItems.TELEPORT_SCROLL);
+                    itemGroup.add(ModItems.MANA_SHIELD_SCROLL);
+                });
 
     }
 

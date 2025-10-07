@@ -77,7 +77,7 @@ public class ClassAbilityManager {
             healthAttribute.addTemporaryModifier(
                     new EntityAttributeModifier(
                             Identifier.of("dagmod", "mage_health"),
-                            -4.0, // -2 hearts
+                            4.0, // +2 hearts
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );
@@ -108,7 +108,7 @@ public class ClassAbilityManager {
             healthAttribute.addTemporaryModifier(
                     new EntityAttributeModifier(
                             Identifier.of("dagmod", "rogue_health"),
-                            -2.0, // -1 heart
+                            2.0, // +1 heart
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );
