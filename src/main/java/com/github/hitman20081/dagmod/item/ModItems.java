@@ -129,6 +129,102 @@ public class ModItems {
             settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.MANA_SHIELD),
             new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
 
+    // === WARRIOR ABILITY ITEMS ===
+
+    /**
+     * Rage Totem - Activates Rage ability
+     * Grants +50% attack damage, +30% speed, +2 hearts absorption for 10 seconds
+     * Cooldown: 60 seconds
+     */
+    public static final Item RAGE_TOTEM = register("rage_totem",
+            RageTotemItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    /**
+     * War Horn - Activates War Cry ability
+     * Buffs allies and debuffs enemies in 15 block radius
+     * Cooldown: 90 seconds
+     */
+    public static final Item WAR_HORN = register("war_horn",
+            WarHornItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    // Note: Shield Bash uses vanilla shields, no new item needed
+
+    // ===== ROGUE ITEMS =====
+
+    /**
+     * Rogue Ability Tome - Contains all three Rogue abilities
+     * Shift+Right-click to cycle abilities, Right-click to use
+     * Abilities: Smoke Bomb, Poison Dagger, Shadow Step
+     */
+    public static final Item ROGUE_ABILITY_TOME = register("rogue_ability_tome",
+            RogueAbilityItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    // ===== CONSUMABLE ITEMS (Made from Powders) =====
+
+    // Essential Consumables
+    public static final Item MANA_CRYSTAL = register("mana_crystal",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.MANA_CRYSTAL),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item ENERGY_TONIC = register("energy_tonic",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.ENERGY_TONIC),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item COOLDOWN_ELIXIR = register("cooldown_elixir",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.COOLDOWN_ELIXIR),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item VAMPIRE_DUST = register("vampire_dust",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.VAMPIRE_DUST),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item PHANTOM_DUST = register("phantom_dust",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.PHANTOM_DUST),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item SPELL_ECHO = register("spell_echo",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.SPELL_ECHO),
+            new Item.Settings().maxCount(16).rarity(Rarity.RARE));
+
+    public static final Item BATTLE_FRENZY = register("battle_frenzy",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.BATTLE_FRENZY),
+            new Item.Settings().maxCount(16).rarity(Rarity.RARE));
+
+    public static final Item SHADOW_BLEND = register("shadow_blend",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.SHADOW_BLEND),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item FORTUNE_DUST = register("fortune_dust",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.FORTUNE_DUST),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item FEATHERFALL_POWDER = register("featherfall_powder",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.FEATHERFALL_POWDER),
+            new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
+
+    // Advanced Consumables
+    public static final Item LAST_STAND_POWDER = register("last_stand_powder",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.LAST_STAND_POWDER),
+            new Item.Settings().maxCount(8).rarity(Rarity.EPIC));
+
+    public static final Item TIME_DISTORTION = register("time_distortion",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.TIME_DISTORTION),
+            new Item.Settings().maxCount(8).rarity(Rarity.EPIC));
+
+    public static final Item OVERCHARGE_DUST = register("overcharge_dust",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.OVERCHARGE_DUST),
+            new Item.Settings().maxCount(8).rarity(Rarity.EPIC));
+
+    public static final Item TITAN_STRENGTH = register("titan_strength",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.TITAN_STRENGTH),
+            new Item.Settings().maxCount(8).rarity(Rarity.EPIC));
+
+    public static final Item PERFECT_DODGE = register("perfect_dodge",
+            settings -> new ConsumableItem(settings, ConsumableItem.ConsumableType.PERFECT_DODGE),
+            new Item.Settings().maxCount(8).rarity(Rarity.EPIC));
 
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
@@ -286,6 +382,41 @@ public class ModItems {
                     itemGroup.add(ModItems.MANA_SHIELD_SCROLL);
                 });
 
+        // Warrior Ability Items - Add to Combat group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.RAGE_TOTEM);
+                    itemGroup.add(ModItems.WAR_HORN);
+                });
+
+        // Rogue Ability Items - Add to Combat group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.ROGUE_ABILITY_TOME);
+                });
+
+        // Consumable Items - Add to Tools group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
+                .register((itemGroup) -> {
+                    // Essential Consumables
+                    itemGroup.add(ModItems.MANA_CRYSTAL);
+                    itemGroup.add(ModItems.ENERGY_TONIC);
+                    itemGroup.add(ModItems.COOLDOWN_ELIXIR);
+                    itemGroup.add(ModItems.VAMPIRE_DUST);
+                    itemGroup.add(ModItems.PHANTOM_DUST);
+                    itemGroup.add(ModItems.SPELL_ECHO);
+                    itemGroup.add(ModItems.BATTLE_FRENZY);
+                    itemGroup.add(ModItems.SHADOW_BLEND);
+                    itemGroup.add(ModItems.FORTUNE_DUST);
+                    itemGroup.add(ModItems.FEATHERFALL_POWDER);
+
+                    // Advanced Consumables
+                    itemGroup.add(ModItems.LAST_STAND_POWDER);
+                    itemGroup.add(ModItems.TIME_DISTORTION);
+                    itemGroup.add(ModItems.OVERCHARGE_DUST);
+                    itemGroup.add(ModItems.TITAN_STRENGTH);
+                    itemGroup.add(ModItems.PERFECT_DODGE);
+                });
     }
 
     public static void registerModItems() {

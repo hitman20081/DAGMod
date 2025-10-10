@@ -27,7 +27,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Luck\",\"color\":\"gold\"}",
+      "minecraft:item_name": {
+        "text": "Elixir of Luck",
+        "color": "gold"
+      },
       "minecraft:lore": [
         "\"777  \""
       ],

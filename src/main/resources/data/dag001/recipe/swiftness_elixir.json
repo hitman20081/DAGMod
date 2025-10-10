@@ -27,7 +27,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Swiftness\",\"color\":\"#51d1cf\"}",
+      "minecraft:item_name": {
+        "text": "Elixir of Swiftness",
+        "color": "#51d1cf"
+      },
       "minecraft:lore": [
         "\"I may not be A-Train....\""
       ],

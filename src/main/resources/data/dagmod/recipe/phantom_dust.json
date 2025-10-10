@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:echo_dust",
+    "minecraft:phantom_membrane",
+    "minecraft:feather"
+  ],
+  "result": {
+    "id": "dagmod:phantom_dust",
+    "components": {
+      "minecraft:item_model": "dagmod:phantom_dust"
+    },
+    "count": 3
+  }
+}

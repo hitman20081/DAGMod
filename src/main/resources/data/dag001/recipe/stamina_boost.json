@@ -26,7 +26,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Stamina Boost\",\"color\":\"#33fff9\"}",
+      "minecraft:item_name": {
+        "text": "Stamina Boost",
+        "color": "#33fff9"
+      },
       "minecraft:lore": [
         "\"Who needs caffeine\""
       ],

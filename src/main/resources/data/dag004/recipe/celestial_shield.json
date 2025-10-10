@@ -13,7 +13,10 @@
   ],
   "result": {
     "components": {
-      "minecraft:item_name": "{\"text\":\"Celestial Aegis\",\"color\":\"#1cfbfb\"}",
+      "minecraft:item_name": {
+        "text": "Celestial Aegis",
+        "color": "#1cfbfb"
+      },
       "minecraft:item_model": "minecraft:shield",
       "minecraft:attribute_modifiers": [
         {

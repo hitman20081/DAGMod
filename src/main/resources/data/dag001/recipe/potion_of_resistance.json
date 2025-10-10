@@ -25,7 +25,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Resistance potion\",\"color\":\"#597f8a\"}",
+      "minecraft:item_name": {
+        "text": "Resistance potion",
+        "color": "#597f8a"
+      },
       "minecraft:lore": [
         "\"Just to help get you out of a bind\""
       ],

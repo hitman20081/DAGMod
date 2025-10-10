@@ -31,7 +31,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Night\",\"color\":\"dark_purple\"}",
+      "minecraft:item_name": {
+        "text": "Elixir of The Night",
+        "color": "dark_purple"
+      },
       "minecraft:lore": [
         "\"In the still of the night\"",
         "\"Walk amongst the night creatures\""

@@ -27,7 +27,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Strength Elixir\",\"color\":\"dark_red\"}",
+      "minecraft:item_name": {
+        "text": "Strength Elixir",
+        "color": "dark_red"
+      },
       "minecraft:lore": [
         "\"By the sweat of Hercules\""
       ],

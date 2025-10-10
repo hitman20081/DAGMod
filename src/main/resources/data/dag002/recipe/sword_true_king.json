@@ -14,7 +14,10 @@
     "id": "minecraft:netherite_sword",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Sword of the one True King\",\"color\":\"gray\"}",
+      "minecraft:item_name": {
+        "text": "Sword of the one True King\"",
+        "color": "gray"
+      },
       "minecraft:lore": [
         "\"Only the worthy may wield me\""
       ],

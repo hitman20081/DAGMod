@@ -14,7 +14,10 @@
     "id": "minecraft:iron_sword",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Inferno Blade\",\"color\":\"red\"}",
+      "minecraft:item_name": {
+        "text": "Inferno Blade",
+        "color": "red"
+      },
       "minecraft:lore": [
         "\"Now that's a spicy meatball\""
       ],

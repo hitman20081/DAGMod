@@ -14,15 +14,18 @@
     "id": "minecraft:trident",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Thunder Pike\",\"color\":\"gray\"}",
+      "minecraft:item_name": {
+        "text": "Thunder Pike",
+        "color": "gray"
+      },
       "minecraft:lore": [
         "\"Just another fancy trident\""
       ],
       "minecraft:enchantments": {
-          "minecraft:channeling": 6,
-          "minecraft:impaling": 6,
-          "minecraft:loyalty": 1,
-          "minecraft:blast_protection": 8
+        "minecraft:channeling": 6,
+        "minecraft:impaling": 6,
+        "minecraft:loyalty": 1,
+        "minecraft:blast_protection": 8
       },
       "minecraft:item_model": "dag_customs:thunder_pike",
       "minecraft:equippable": {

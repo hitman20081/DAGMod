@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:emerald_powder",
+    "minecraft:totem_of_undying",
+    "minecraft:golden_apple"
+  ],
+  "result": {
+    "id": "dagmod:last_stand_powder",
+    "components": {
+      "minecraft:item_model": "dagmod:last_stand_powder"
+    },
+    "count": 1
+  }
+}

@@ -71,5 +71,68 @@
   "item.dagmod.lightning_scroll": "Lightning Bolt",
   "item.dagmod.frost_nova_scroll": "Frost Nova",
   "item.dagmod.teleport_scroll": "Blink",
-  "item.dagmod.mana_shield_scroll": "Mana Shield"
+  "item.dagmod.mana_shield_scroll": "Mana Shield",
+
+  "item.dagmod.rage_totem": "Rage Totem",
+  "item.dagmod.war_horn": "War Horn",
+
+  "item.dagmod.rage_totem.tooltip": "Warrior Ability: Rage",
+  "item.dagmod.rage_totem.tooltip.description": "Enter a rage state for 10 seconds",
+  "item.dagmod.rage_totem.tooltip.effects": "+50% Attack Damage, +30% Speed, +2 Hearts",
+  "item.dagmod.rage_totem.tooltip.cooldown": "Cooldown: 60 seconds",
+
+  "item.dagmod.war_horn.tooltip": "Warrior Ability: War Cry",
+  "item.dagmod.war_horn.tooltip.description": "Rally allies and terrify enemies",
+  "item.dagmod.war_horn.tooltip.effects": "15 block radius team buff",
+  "item.dagmod.war_horn.tooltip.cooldown": "Cooldown: 90 seconds",
+
+  "item.dagmod.rogue_ability_tome": "Rogue Ability Tome",
+  "item.dagmod.rogue_ability_tome.tooltip": "Shift+Right-click to cycle abilities",
+
+  "ability.dagmod.smoke_bomb": "Smoke Bomb",
+  "ability.dagmod.poison_dagger": "Poison Dagger",
+  "ability.dagmod.shadow_step": "Shadow Step",
+
+  "ability.dagmod.smoke_bomb.desc": "Create a smoke cloud for invisibility and escape",
+  "ability.dagmod.poison_dagger.desc": "Empower your next attack with deadly poison",
+  "ability.dagmod.shadow_step.desc": "Teleport with a shadow decoy",
+
+  "hud.dagmod.energy": "Energy",
+
+  "item.dagmod.mana_crystal": "Mana Crystal",
+  "item.dagmod.energy_tonic": "Energy Tonic",
+  "item.dagmod.cooldown_elixir": "Cooldown Elixir",
+  "item.dagmod.vampire_dust": "Vampire Dust",
+  "item.dagmod.phantom_dust": "Phantom Dust",
+  "item.dagmod.spell_echo": "Spell Echo",
+  "item.dagmod.battle_frenzy": "Battle Frenzy",
+  "item.dagmod.shadow_blend": "Shadow Blend",
+  "item.dagmod.fortune_dust": "Fortune Dust",
+  "item.dagmod.featherfall_powder": "Featherfall Powder",
+  "item.dagmod.last_stand_powder": "Last Stand Powder",
+  "item.dagmod.time_distortion": "Time Distortion",
+  "item.dagmod.overcharge_dust": "Overcharge Dust",
+  "item.dagmod.titan_strength": "Titan's Strength",
+  "item.dagmod.perfect_dodge": "Perfect Dodge",
+
+  "item.dagmod.mana_crystal.tooltip": "Restores 50 mana instantly",
+  "item.dagmod.energy_tonic.tooltip": "Restores 50 energy instantly",
+  "item.dagmod.cooldown_elixir.tooltip": "Reduces all cooldowns",
+  "item.dagmod.vampire_dust.tooltip": "Gain lifesteal for 20 seconds",
+  "item.dagmod.phantom_dust.tooltip": "50% dodge chance for 15 seconds",
+  "item.dagmod.spell_echo.tooltip": "Next spell casts twice",
+  "item.dagmod.battle_frenzy.tooltip": "Massive combat boost for 15 seconds",
+  "item.dagmod.shadow_blend.tooltip": "Invisibility until you attack",
+  "item.dagmod.fortune_dust.tooltip": "Fortune III on next 10 blocks",
+  "item.dagmod.featherfall_powder.tooltip": "No fall damage for 60 seconds",
+  "item.dagmod.last_stand_powder.tooltip": "Auto-revive if you die within 60s",
+  "item.dagmod.time_distortion.tooltip": "Slow motion effect for 10 seconds",
+  "item.dagmod.overcharge_dust.tooltip": "Next spell has 2x power",
+  "item.dagmod.titan_strength.tooltip": "+100% melee damage for 20 seconds",
+  "item.dagmod.perfect_dodge.tooltip": "100% dodge chance for 10 seconds",
+
+  "consumable.dagmod.class_locked.mage": "Only Mages can use this!",
+  "consumable.dagmod.class_locked.warrior": "Only Warriors can use this!",
+  "consumable.dagmod.class_locked.rogue": "Only Rogues can use this!"
+
 }

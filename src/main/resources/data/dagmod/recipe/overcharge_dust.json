@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:diamond_powder",
+    "dagmod:amethyst_powder",
+    "minecraft:nether_star"
+  ],
+  "result": {
+    "id": "dagmod:overcharge_dust",
+    "components": {
+      "minecraft:item_model": "dagmod:overcharge_dust"
+    },
+    "count": 2
+  }
+}

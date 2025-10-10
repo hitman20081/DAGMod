@@ -14,14 +14,17 @@
     "id": "minecraft:trident",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Poison Fang Spear\",\"color\":\"#00AA00\"}",
+      "minecraft:item_name": {
+        "text": "Poison Fang Spear",
+        "color": "#00AA00"
+      },
       "minecraft:lore": [
         "\"Just another fancy trident\""
       ],
       "minecraft:enchantments": {
-          "minecraft:loyalty": 1,
-          "minecraft:bane_of_arthropods": 10,
-          "minecraft:impaling": 7
+        "minecraft:loyalty": 1,
+        "minecraft:bane_of_arthropods": 10,
+        "minecraft:impaling": 7
       },
       "minecraft:item_model": "dag_customs:poison_fang_spear"
     }

@@ -14,7 +14,10 @@
     "id": "minecraft:netherite_sword",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Phantom Blade\",\"color\":\"#AA00AA\"}",
+      "minecraft:item_name": {
+        "text": "Phantom Blade",
+        "color": "#621362"
+      },
       "minecraft:lore": [
         "\"You may want this for those pesky phantoms\""
       ],

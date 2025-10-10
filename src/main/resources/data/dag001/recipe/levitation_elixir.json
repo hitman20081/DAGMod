@@ -26,7 +26,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Levitation\",\"color\":\"gray\"}",
+      "minecraft:item_name": {
+        "text": "Elixir of Levitation",
+        "color": "gray"
+      },
       "minecraft:lore": [
         "\"What could go wrong?\""
       ],

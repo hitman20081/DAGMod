@@ -33,7 +33,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Breath of the Sea Potion\",\"color\":\"#6fa4e3\"}",
+      "minecraft:item_name": {
+        "text": "Breath of the Sea Potion",
+        "color": "#6fa4e3"
+      },
       "minecraft:lore": [
         "\"Move over Aquaman\""
       ],

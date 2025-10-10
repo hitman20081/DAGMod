@@ -7,10 +7,19 @@
   "result": {
     "id": "minecraft:amethyst_shard",
     "components": {
-      "minecraft:item_name": "{\"text\":\"Silk Touch Amethyst\",\"color\":\"#e898e4\"}",
+      "minecraft:item_name": {
+        "text": "Silk Touch Amethyst",
+        "color": "#e898e4"
+      },
       "minecraft:lore": [
-        "{\"text\":\"Who needs books when\",\"color\":\"#e898e4\"}",
-        "{\"text\":\"crystals can stack?\",\"color\":\"#e898e4\"}"
+        {
+          "text": "Who needs books when",
+          "color": "#e898e4"
+        },
+        {
+          "text": "crystals can stack?",
+          "color": "#e898e4"
+        }
       ],
       "minecraft:enchantable": {
         "value": 1

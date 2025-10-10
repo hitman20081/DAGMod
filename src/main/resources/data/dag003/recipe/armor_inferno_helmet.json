@@ -37,7 +37,10 @@
           "slot": "head"
         }
       ],
-      "minecraft:custom_name": "{\"text\":\"Inferno's Helm\",\"color\":\"#AA0000\"}",
+      "minecraft:custom_name": {
+        "text": "Inferno's Helm",
+        "color": "#AA0000"
+      },
       "minecraft:lore": [
         "\"Forged in the depths of the Nether, this armor burns with the fury of a thousand suns.\""
       ],

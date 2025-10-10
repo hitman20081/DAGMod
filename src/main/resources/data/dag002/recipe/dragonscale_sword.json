@@ -14,7 +14,10 @@
     "id": "minecraft:netherite_sword",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Dragonscale Blade\",\"color\":\"red\"}",
+      "minecraft:item_name": {
+        "text": "Dragonscale Blade",
+        "color": "#510101"
+      },
       "minecraft:lore": [
         "\"Feel the power of the Infernal Wyrm\""
       ],

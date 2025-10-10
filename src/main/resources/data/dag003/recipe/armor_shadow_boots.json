@@ -18,7 +18,7 @@
         {
           "type": "minecraft:entity_interaction_range",
           "id": "minecraft:",
-          "amount": -5,
+          "amount": 0.5,
           "operation": "add_multiplied_base",
           "slot": "feet"
         },

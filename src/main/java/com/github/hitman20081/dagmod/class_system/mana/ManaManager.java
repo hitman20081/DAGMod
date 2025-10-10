@@ -18,24 +18,29 @@ public class ManaManager {
 
     public static void tick(ServerPlayerEntity player) {
         String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+
         if (!"Mage".equals(playerClass)) {
-            return;
+            return; // Only Mages have mana
         }
 
-        ManaData manaData = getManaData(player);
-        int ticks = regenTicks.getOrDefault(player.getUuid(), 0);
-        ticks++;
+        ManaData data = getManaData(player);
 
-        if (ticks >= 20) { // Every second
-            ticks = 0;
-            if (manaData.getCurrentMana() < manaData.getMaxMana()) {
-                manaData.addMana(MANA_REGEN_PER_SECOND);
-                // Sync to client (we'll add this next)
-                ManaNetworking.sendManaUpdate(player, manaData.getCurrentMana(), manaData.getMaxMana());
+        // Regenerate mana every 20 ticks (1 second)
+        if (player.getWorld().getTime() % 20 == 0) {
+            if (data.getCurrentMana() < data.getMaxMana()) {
+                float baseRegen = 2.0f; // Base 2 mana per second
+
+                // Apply armor set mana regen bonus
+                float armorBonus = com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus
+                        .getManaRegenBonus(player);
+                float totalRegen = baseRegen * (1.0f + armorBonus);
+
+                data.addMana((int)totalRegen);
+
+                // Sync to client
+                ManaNetworking.sendManaUpdate(player, data.getCurrentMana(), data.getMaxMana());
             }
         }
-
-        regenTicks.put(player.getUuid(), ticks);
     }
 
     public static void clearPlayerData(UUID playerId) {

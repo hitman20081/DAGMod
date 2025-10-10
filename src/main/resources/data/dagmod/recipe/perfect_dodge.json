@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:amethyst_powder",
+    "minecraft:feather",
+    "minecraft:rabbit_foot"
+  ],
+  "result": {
+    "id": "dagmod:perfect_dodge",
+    "components": {
+      "minecraft:item_model": "dagmod:perfect_dodge"
+    },
+    "count": 2
+  }
+}

@@ -33,11 +33,14 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Haste\",\"color\":\"aqua\"}",
       "minecraft:lore": [
         "\"Dig....DIG!!!!\""
       ],
-      "minecraft:max_stack_size": 32
+      "minecraft:max_stack_size": 32,
+      "minecraft:item_name": {
+        "text": "Elixir of Haste",
+        "color": "aqua"
+      }
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:quartz_powder",
+    "dagmod:slimeball_dust",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "dagmod:energy_tonic",
+    "components": {
+      "minecraft:item_model": "dagmod:energy_tonic"
+    },
+    "count": 3
+  }
+}

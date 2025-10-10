@@ -26,7 +26,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Invisibility\",\"color\":\"gray\"}",
+      "minecraft:item_name": {
+        "text": "Elixir of Invisibility",
+        "color": "gray"
+      },
       "minecraft:lore": [
         "\"You remember that one wish?\"",
         "\"Yea.... don't be weird with it!\""

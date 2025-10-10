@@ -41,7 +41,10 @@
           }
         ]
       },
-      "minecraft:custom_name": "{\"text\":\"Elixir of Fire Resist\",\"color\":\"dark_red\"}",
+      "minecraft:item_name": {
+        "text": "Elixir of Fire Resist",
+        "color": "dark_red"
+      },
       "minecraft:lore": [
         "\"Fire!\"",
         "\"Whaaaat Fire\""

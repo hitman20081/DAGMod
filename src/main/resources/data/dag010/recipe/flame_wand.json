@@ -12,9 +12,16 @@
   },
   "result": {
     "components": {
-      "minecraft:item_name": "{\"text\":\"Flame Wand\",\"color\":\"#ff6800\"}",
+      "minecraft:item_name": {
+        "text": "Flame Wand",
+        "color": "#ff6800"
+      },
       "minecraft:lore": [
-        "{\"text\":\"Is it getting hot in here??\",\"color\":\"#ff6800\"}"
+        {
+          "text": "Is it getting hot in here??",
+          "color": "#bb00ff"
+        },
+        ""
       ],
       "minecraft:consumable": {
         "consume_seconds": 1000000,

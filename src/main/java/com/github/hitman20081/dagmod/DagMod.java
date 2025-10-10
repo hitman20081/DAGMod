@@ -2,6 +2,10 @@ package com.github.hitman20081.dagmod;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.class_system.mana.ManaManager;
+import com.github.hitman20081.dagmod.class_system.warrior.ShieldBashListener;
+import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
+import com.github.hitman20081.dagmod.class_system.rogue.EnergyManager;
+import com.github.hitman20081.dagmod.class_system.rogue.EnergyNetworking;
 import com.github.hitman20081.dagmod.command.InfoCommand;
 import com.github.hitman20081.dagmod.command.QuestCommand;
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
@@ -25,6 +29,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -75,6 +81,25 @@ public class DagMod implements ModInitializer {
         // Register mana payloads
         com.github.hitman20081.dagmod.class_system.mana.ManaNetworking.registerPayloads();
         LOGGER.info("Mana system networking initialized!");
+
+        // Register warrior ability systems
+        registerWarriorSystems();
+
+        // ===== ROGUE SYSTEM INITIALIZATION =====
+
+        // Register energy networking packets
+        PayloadTypeRegistry.playS2C().register(
+                EnergyNetworking.EnergySyncPayload.ID,
+                EnergyNetworking.EnergySyncPayload.CODEC
+        );
+
+        // Initialize energy management system
+        EnergyManager.initialize();
+
+        // Register Rogue combat handler (backstab + poison dagger)
+        RogueCombatHandler.register();
+
+        LOGGER.info("Rogue ability system initialized!");
 
         // Initialize Quest System
         LOGGER.info("Initializing Quest System for " + MOD_ID);
@@ -197,7 +222,7 @@ public class DagMod implements ModInitializer {
             }
         });
 
-        // Combined server tick events: Mana regeneration + Night Vision for Mages
+        // Combined server tick events: Mana regeneration + Night Vision for Mages + Custom Armor Set Bonuses
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
@@ -218,30 +243,12 @@ public class DagMod implements ModInitializer {
                         ));
                     }
                 }
-            }
-        });
-        // Rogue critical hit and backstab system
-        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (!world.isClient && player instanceof ServerPlayerEntity serverPlayer) {
-                if (entity instanceof LivingEntity target) {
-                    // Note: We can't directly modify damage here, but we can track it
-                    // The actual damage modification happens in a mixin or damage event
 
-                    // For now, we'll handle this differently - see the mixin approach below
-                }
+                // Custom armor set bonuses (Dragonscale, Crystalforge, Inferno, Nature's Guard, Shadow, Fortuna)
+                com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus.applySetBonuses(player);
             }
-            return ActionResult.PASS;
         });
 
-        // Rogue fall damage reduction
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-            if (entity instanceof ServerPlayerEntity player && source.getName().equals("fall")) {
-                float modifiedDamage = RogueCombatHandler.modifyFallDamage(player, amount);
-                // Unfortunately, we can't modify damage in ALLOW_DAMAGE
-                // We need to use a mixin for proper damage modification
-            }
-            return true;
-        });
 
         FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {
             builder.registerPotionRecipe(
@@ -254,6 +261,23 @@ public class DagMod implements ModInitializer {
             );
         });
     } // Make sure this closing brace for onInitialize() is here
+
+    /**
+     * Register warrior ability systems
+     */
+    private void registerWarriorSystems() {
+        LOGGER.info("Registering Warrior Ability Systems");
+
+        // Register Shield Bash listener
+        ShieldBashListener.register();
+
+        // Clear cooldowns on player disconnect (cooldowns reset on logout)
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            CooldownManager.clearPlayerCooldowns(handler.player.getUuid());
+        });
+
+        LOGGER.info("Warrior Ability Systems registered successfully");
+    }
 
     // Helper method for updating quest progress - THIS GOES OUTSIDE onInitialize()
     public static void updatePlayerQuestProgress(ServerPlayerEntity player) {

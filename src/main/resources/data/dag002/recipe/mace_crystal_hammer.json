@@ -15,14 +15,16 @@
     "id": "minecraft:mace",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Crystal Hammer\",\"color\":\"#AA00AA\"}",
+      "minecraft:item_name": {
+        "text": "Crystal Hammer",
+        "color": "#AA00AA"
+      },
       "minecraft:lore": [
         "\"Not Quite Mjolnir but will do the trick\""
       ],
       "minecraft:enchantments": {
-          "minecraft:density": 10,
-          "minecraft:breach": 10
-        
+        "minecraft:density": 10,
+        "minecraft:breach": 10
       },
       "minecraft:item_model": "dag_customs:crystalhammer"
     }

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ESE",
+    "PBP",
+    "GGG"
+  ],
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "S": "minecraft:echo_shard",
+    "P": "minecraft:phantom_membrane",
+    "B": "minecraft:book",
+    "G": "minecraft:gunpowder"
+  },
+  "result": {
+    "id": "dagmod:rogue_ability_tome",
+    "components": {
+      "minecraft:item_model": "dagmod:rogue_ability_tome"
+    },
+    "count": 1
+  }
+}

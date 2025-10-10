@@ -94,15 +94,17 @@ public class RaceAbilityManager {
             );
         }
 
-        // Hero of the Village - Elves are respected by villagers
+        // Hero of the Village - Applied continuously by tick handler
+        // Duration: 300 ticks (15 seconds), reapplied constantly = effectively permanent
+        // But can be cleared if player changes race
         if (!player.hasStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE)) {
             player.addStatusEffect(new StatusEffectInstance(
                     StatusEffects.HERO_OF_THE_VILLAGE,
-                    Integer.MAX_VALUE, // Permanent
+                    300, // 15 seconds (will be reapplied by synergy system)
                     0,
                     true,  // ambient
                     false, // no particles
-                    true   // show icon
+                    false  // no icon (changed from true to reduce clutter)
             ));
         }
     }
@@ -167,6 +169,11 @@ public class RaceAbilityManager {
         var reachAttribute = player.getAttributeInstance(EntityAttributes.BLOCK_INTERACTION_RANGE);
         if (reachAttribute != null) {
             reachAttribute.removeModifier(Identifier.of("dagmod", "elf_reach"));
+        }
+
+        // Remove Hero of the Village effect (Elf-specific)
+        if (player.hasStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE)) {
+            player.removeStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE);
         }
     }
 }

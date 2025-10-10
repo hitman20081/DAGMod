@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.quest.registry;
 
+import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestChain;
@@ -27,7 +28,7 @@ public class QuestRegistry {
     }
 
     private static void registerIndividualQuests(QuestManager manager) {
-            // ========== CLASS-SPECIFIC QUESTS ==========
+        // ========== RACE-SPECIFIC QUESTS ==========
 
         // ========== DWARF RACE QUESTS ==========
         manager.registerQuest(createDwarfApprenticeQuest());
@@ -77,22 +78,22 @@ public class QuestRegistry {
         manager.registerQuest(createChallengeTheWitherQuest());
         manager.registerQuest(createWarlordQuest());
 
-                // ========== CLASS-SPECIFIC QUESTS ==========
+        // ========== CLASS-SPECIFIC QUESTS ==========
 
-        // Warrior Quests
-        manager.registerQuest(createShieldBearerQuest());
-        manager.registerQuest(createWarriorTrainingQuest());
-        manager.registerQuest(createBattleMasterQuest());
+        // Warrior Quests - NEW ABILITY CHAIN
+        manager.registerQuest(createTrialOfFuryQuest());
+        manager.registerQuest(createCallToArmsQuest());
+        manager.registerQuest(createShieldBearersTrialQuest());
 
-        // Mage Quests
-        manager.registerQuest(createArcanistApprenticeQuest());
-        manager.registerQuest(createPotionMasterQuest());
-        manager.registerQuest(createEnchantmentSageQuest());
+        // Mage Quests - NEW SPELL SCROLL CHAIN
+        manager.registerQuest(createApprenticeScrollsQuest());
+        manager.registerQuest(createAdeptScrollsQuest());
+        manager.registerQuest(createMasterScrollsQuest());
 
-        // Rogue Quests
-        manager.registerQuest(createShadowStrikerQuest());
-        manager.registerQuest(createTreasureHunterQuest());
-        manager.registerQuest(createMasterAssassinQuest());
+        // Rogue Quests - NEW ABILITY TOME CHAIN
+        manager.registerQuest(createShadowsCallingQuest());
+        manager.registerQuest(createPhantomHunterQuest());
+        manager.registerQuest(createEchoesOfTheDeepQuest());
 
         // ========== CHAIN QUESTS ==========
         // Adventurer's Path Chain
@@ -195,18 +196,19 @@ public class QuestRegistry {
         registerElfQuestChain(manager);
         registerHumanQuestChain(manager);
         registerOrcQuestChain(manager);
+        registerWarriorQuestChain(manager);
+        registerMageQuestChain(manager);
+        registerRogueQuestChain(manager);
     }
 
     // ========== DWARF RACE QUESTS - "The Forgemaster's Legacy" ==========
-// Theme: Mining, crafting, underground exploration
-// Unlocks at: Levels 1, 10, 20, 30, 40
 
     private static Quest createDwarfApprenticeQuest() {
         return new Quest("dwarf_apprentice")
                 .setName("Apprentice of the Forge")
                 .setDescription("Every dwarf must prove their worth at the forge. Gather materials for your first creation.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .setRequiredRace("Dwarf") // Requires Dwarf race
+                .setRequiredRace("Dwarf")
                 .addObjective(new CollectObjective(Items.IRON_INGOT, 16))
                 .addObjective(new CollectObjective(Items.COAL, 32))
                 .addObjective(new CollectObjective(Items.STONE, 64))
@@ -360,14 +362,13 @@ public class QuestRegistry {
                 .addPrerequisite("heart_of_mountain");
     }
 
-    // Register the Dwarf chain
     private static void registerDwarfQuestChain(QuestManager manager) {
         QuestChain dwarfChain = new QuestChain(
                 "forgemasters_legacy",
                 "The Forgemaster's Legacy",
                 "Follow the ancient path of dwarven smiths. Master mining, crafting, and the secrets of the deep earth.",
                 QuestData.QuestBookTier.NOVICE,
-                null // No tier reward, race-specific
+                null
         )
                 .addQuest("dwarf_apprentice")
                 .addQuest("deep_delving")
@@ -387,15 +388,13 @@ public class QuestRegistry {
     }
 
     // ========== ELF RACE QUESTS - "Guardian of the Wilds" ==========
-// Theme: Nature, archery, forest protection, harmony with the land
-// Unlocks at: Levels 1, 10, 20, 30, 40
 
     private static Quest createSeedlingQuest() {
         return new Quest("seedling")
                 .setName("The Seedling")
                 .setDescription("Every great forest begins with a single seed. Plant the foundations of a thriving woodland.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .setRequiredClass("Elf") // Requires Elf race
+                .setRequiredClass("Elf")
                 .addObjective(new CollectObjective(Items.OAK_SAPLING, 32))
                 .addObjective(new CollectObjective(Items.BIRCH_SAPLING, 16))
                 .addObjective(new CollectObjective(Items.SPRUCE_SAPLING, 16))
@@ -549,14 +548,13 @@ public class QuestRegistry {
                 .addPrerequisite("moonlit_ritual");
     }
 
-    // Register the Elf chain
     private static void registerElfQuestChain(QuestManager manager) {
         QuestChain elfChain = new QuestChain(
                 "guardian_of_wilds",
                 "Guardian of the Wilds",
                 "Walk the path of the ancient elven rangers. Protect the forests, master the bow, and commune with nature.",
                 QuestData.QuestBookTier.NOVICE,
-                null // No tier reward, race-specific
+                null
         )
                 .addQuest("seedling")
                 .addQuest("roots_run_deep")
@@ -576,15 +574,13 @@ public class QuestRegistry {
     }
 
     // ========== HUMAN RACE QUESTS - "Jack of All Trades" ==========
-// Theme: Versatility, exploration, adaptability, mastering diverse skills
-// Unlocks at: Levels 1, 10, 20, 30, 40
 
     private static Quest createWandererQuest() {
         return new Quest("wanderer")
                 .setName("The Wanderer")
                 .setDescription("Humans thrive through adaptability. Begin your journey by mastering the basics of survival.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .setRequiredClass("Human") // Requires Human race
+                .setRequiredClass("Human")
                 .addObjective(new CollectObjective(Items.BREAD, 16))
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 32))
                 .addObjective(new CollectObjective(Items.OAK_LOG, 16))
@@ -744,14 +740,13 @@ public class QuestRegistry {
                 .addPrerequisite("master_of_all_trades");
     }
 
-    // Register the Human chain
     private static void registerHumanQuestChain(QuestManager manager) {
         QuestChain humanChain = new QuestChain(
                 "jack_of_all_trades",
                 "Jack of All Trades",
                 "The human path is one of infinite possibility. Master all skills, explore all lands, and become legendary.",
                 QuestData.QuestBookTier.NOVICE,
-                null // No tier reward, race-specific
+                null
         )
                 .addQuest("wanderer")
                 .addQuest("taste_of_everything")
@@ -771,15 +766,13 @@ public class QuestRegistry {
     }
 
     // ========== ORC RACE QUESTS - "Path of the Warlord" ==========
-// Theme: Combat, hunting, strength, conquest, honor in battle
-// Unlocks at: Levels 1, 10, 20, 30, 40
 
     private static Quest createGruntQuest() {
         return new Quest("grunt")
                 .setName("The Grunt")
                 .setDescription("Every warrior begins as a grunt. Prove your strength in combat and bring meat for the clan.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .setRequiredClass("Orc") // Requires Orc race
+                .setRequiredClass("Orc")
                 .addObjective(KillObjective.zombies(10))
                 .addObjective(new CollectObjective(Items.COOKED_BEEF, 8))
                 .addObjective(new CollectObjective(Items.COOKED_PORKCHOP, 8))
@@ -934,14 +927,13 @@ public class QuestRegistry {
                 .addPrerequisite("challenge_the_wither");
     }
 
-    // Register the Orc chain
     private static void registerOrcQuestChain(QuestManager manager) {
         QuestChain orcChain = new QuestChain(
                 "path_of_warlord",
                 "Path of the Warlord",
                 "The way of the warrior is written in blood and steel. Prove your strength, conquer your foes, and become Warlord.",
                 QuestData.QuestBookTier.NOVICE,
-                null // No tier reward, race-specific
+                null
         )
                 .addQuest("grunt")
                 .addQuest("prove_your_strength")
@@ -962,136 +954,200 @@ public class QuestRegistry {
 
     // ========== WARRIOR CLASS QUESTS ==========
 
-    private static Quest createShieldBearerQuest() {
-        return new Quest("shield_bearer")
-                .setName("The Shield Bearer")
-                .setDescription("A warrior needs protection. Gather materials for defensive equipment.")
+    private static Quest createTrialOfFuryQuest() {
+        return new Quest("trial_of_fury")
+                .setName("Trial of Fury")
+                .setDescription("Awaken the berserker within. Prove your warrior spirit by defeating enemies in honorable combat.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Warrior")
-                .addObjective(new CollectObjective(Items.IRON_INGOT, 24))
-                .addObjective(new CollectObjective(Items.LEATHER, 8))
-                .addReward(new ItemReward(Items.SHIELD, 1))
-                .addReward(new ItemReward(Items.IRON_HELMET, 1))
+                .addObjective(KillObjective.zombies(10))
+                .addObjective(KillObjective.skeletons(5))
+                .addObjective(new CollectObjective(Items.IRON_INGOT, 8))
+                .addReward(new ItemReward(ModItems.RAGE_TOTEM, 1))
+                .addReward(new ItemReward(Items.IRON_SWORD, 1))
                 .addReward(XpReward.novice());
     }
 
-    private static Quest createWarriorTrainingQuest() {
-        return new Quest("warrior_training")
-                .setName("Warrior's Training")
-                .setDescription("Prove your combat prowess by slaying enemies in honorable battle.")
+    private static Quest createCallToArmsQuest() {
+        return new Quest("call_to_arms")
+                .setName("Call to Arms")
+                .setDescription("A true warrior rallies allies to battle. Gather the materials to forge a legendary war horn.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Warrior")
-                .addObjective(KillObjective.zombies(15))
-                .addObjective(KillObjective.skeletons(10))
-                .addReward(new ItemReward(Items.IRON_SWORD, 1))
-                .addReward(new ItemReward(Items.IRON_CHESTPLATE, 1))
-                .addReward(XpReward.apprentice());
+                .addObjective(new KillObjective(EntityType.PILLAGER, 8))
+                .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
+                .addObjective(new CollectObjective(Items.IRON_BLOCK, 3))
+                .addReward(new ItemReward(ModItems.WAR_HORN, 1))
+                .addReward(new ItemReward(Items.SHIELD, 1))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
+                .addReward(XpReward.apprentice())
+                .addPrerequisite("trial_of_fury");
     }
 
-    private static Quest createBattleMasterQuest() {
-        return new Quest("battle_master")
-                .setName("Battle Master")
-                .setDescription("Face the most dangerous foes and emerge victorious.")
+    private static Quest createShieldBearersTrialQuest() {
+        return new Quest("shield_bearers_trial")
+                .setName("Shield Bearer's Trial")
+                .setDescription("Master the ancient technique of Shield Bash. Face powerful foes and emerge victorious.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Warrior")
-                .addObjective(new KillObjective(EntityType.CREEPER, 5))
-                .addObjective(new KillObjective(EntityType.SPIDER, 8))
-                .addObjective(KillObjective.zombies(12))
-                .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
+                .addObjective(new KillObjective(EntityType.VINDICATOR, 6))
+                .addObjective(new KillObjective(EntityType.RAVAGER, 2))
+                .addObjective(new CollectObjective(Items.DIAMOND, 8))
+                .addReward(new ItemReward(Items.SHIELD, 1))
                 .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
-                .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
-                .addReward(XpReward.expert());
+                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
+                .addReward(XpReward.expert())
+                .addPrerequisite("call_to_arms");
+    }
+
+    private static void registerWarriorQuestChain(QuestManager manager) {
+        QuestChain warriorChain = new QuestChain(
+                "path_of_the_berserker",
+                "Path of the Berserker",
+                "Master the three pillars of warrior combat: Rage, Rally, and Shield. Become an unstoppable force on the battlefield.",
+                QuestData.QuestBookTier.NOVICE,
+                null
+        )
+                .addQuest("trial_of_fury")
+                .addQuest("call_to_arms")
+                .addQuest("shield_bearers_trial")
+                .addChainReward(new ItemReward(Items.NETHERITE_SWORD, 1))
+                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5));
+
+        manager.registerQuestChain(warriorChain);
     }
 
     // ========== MAGE CLASS QUESTS ==========
 
-    private static Quest createArcanistApprenticeQuest() {
-        return new Quest("arcanist_apprentice")
-                .setName("Arcanist's Apprentice")
-                .setDescription("Gather magical reagents to begin your study of the arcane arts.")
+    private static Quest createApprenticeScrollsQuest() {
+        return new Quest("apprentice_scrolls")
+                .setName("Apprentice's Scrolls")
+                .setDescription("Begin your magical journey. Gather components to create basic spell scrolls.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Mage")
-                .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 32))
-                .addObjective(new CollectObjective(Items.BOOK, 5))
-                .addObjective(new CollectObjective(Items.GLOWSTONE_DUST, 16))
-                .addReward(new ItemReward(Items.ENCHANTING_TABLE, 1))
-                .addReward(new ItemReward(Items.BOOKSHELF, 3))
+                .addObjective(new CollectObjective(Items.PAPER, 16))
+                .addObjective(new CollectObjective(Items.GLOWSTONE_DUST, 8))
+                .addObjective(new CollectObjective(Items.REDSTONE, 16))
+                .addReward(new ItemReward(ModItems.HEAL_SCROLL, 4))
+                .addReward(new ItemReward(ModItems.ABSORPTION_SCROLL, 3))
+                .addReward(new ItemReward(ModItems.MANA_SHIELD_SCROLL, 3))
                 .addReward(XpReward.novice());
     }
 
-    private static Quest createPotionMasterQuest() {
-        return new Quest("potion_master")
-                .setName("Potion Master")
-                .setDescription("Master the art of potion brewing by gathering rare ingredients.")
+    private static Quest createAdeptScrollsQuest() {
+        return new Quest("adept_scrolls")
+                .setName("Adept's Scrolls")
+                .setDescription("Your magical prowess grows. Gather rare materials to craft more powerful spell scrolls.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Mage")
-                .addObjective(new CollectObjective(Items.NETHER_WART, 16))
                 .addObjective(new CollectObjective(Items.BLAZE_POWDER, 8))
-                .addObjective(new CollectObjective(Items.SPIDER_EYE, 4))
-                .addReward(new ItemReward(Items.BREWING_STAND, 1))
-                .addReward(new ItemReward(Items.POTION, 3))
-                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 5))
-                .addReward(XpReward.apprentice());
+                .addObjective(new CollectObjective(Items.ENDER_PEARL, 6))
+                .addObjective(new CollectObjective(Items.GHAST_TEAR, 2))
+                .addReward(new ItemReward(ModItems.FIREBALL_SCROLL, 4))
+                .addReward(new ItemReward(ModItems.TELEPORT_SCROLL, 3))
+                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 8))
+                .addReward(XpReward.apprentice())
+                .addPrerequisite("apprentice_scrolls");
     }
 
-    private static Quest createEnchantmentSageQuest() {
-        return new Quest("enchantment_sage")
-                .setName("Enchantment Sage")
-                .setDescription("Collect powerful enchantments to unlock the secrets of magic.")
+    private static Quest createMasterScrollsQuest() {
+        return new Quest("master_scrolls")
+                .setName("Master's Scrolls")
+                .setDescription("Unlock the most devastating spells. Gather legendary components for ultimate power.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Mage")
-                .addObjective(new CollectObjective(Items.DIAMOND, 8))
-                .addObjective(new CollectObjective(Items.OBSIDIAN, 16))
-                .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 64))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 3))
-                .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
-                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 10))
-                .addReward(XpReward.expert());
+                .addObjective(new CollectObjective(Items.NETHER_STAR, 1))
+                .addObjective(new CollectObjective(Items.DRAGON_BREATH, 3))
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 2))
+                .addReward(new ItemReward(ModItems.LIGHTNING_SCROLL, 4))
+                .addReward(new ItemReward(ModItems.FROST_NOVA_SCROLL, 4))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
+                .addReward(XpReward.expert())
+                .addPrerequisite("adept_scrolls");
+    }
+
+    private static void registerMageQuestChain(QuestManager manager) {
+        QuestChain mageChain = new QuestChain(
+                "path_of_the_archmage",
+                "Path of the Archmage",
+                "Master the arcane arts through gathering rare components. Unlock all spell scrolls and become an Archmage.",
+                QuestData.QuestBookTier.NOVICE,
+                null
+        )
+                .addQuest("apprentice_scrolls")
+                .addQuest("adept_scrolls")
+                .addQuest("master_scrolls")
+                .addChainReward(new ItemReward(Items.ENCHANTED_BOOK, 5))
+                .addChainReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 32));
+
+        manager.registerQuestChain(mageChain);
     }
 
     // ========== ROGUE CLASS QUESTS ==========
 
-    private static Quest createShadowStrikerQuest() {
-        return new Quest("shadow_striker")
-                .setName("Shadow Striker")
-                .setDescription("Use your agility to hunt down swift and dangerous prey.")
+    private static Quest createShadowsCallingQuest() {
+        return new Quest("shadows_calling")
+                .setName("Shadow's Calling")
+                .setDescription("The path of stealth begins in darkness. Gather components for your first shadowy tools.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Rogue")
                 .addObjective(new KillObjective(EntityType.SPIDER, 10))
                 .addObjective(new KillObjective(EntityType.CAVE_SPIDER, 5))
+                .addObjective(new CollectObjective(Items.GUNPOWDER, 3))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.ARROW, 64))
                 .addReward(new ItemReward(Items.LEATHER_BOOTS, 1))
                 .addReward(XpReward.novice());
     }
 
-    private static Quest createTreasureHunterQuest() {
-        return new Quest("treasure_hunter")
-                .setName("Treasure Hunter")
-                .setDescription("Seek out valuable treasures hidden in dangerous places.")
+    private static Quest createPhantomHunterQuest() {
+        return new Quest("phantom_hunter")
+                .setName("Phantom Hunter")
+                .setDescription("To master stealth, you must learn from creatures of the night sky. Hunt phantoms and claim their essence.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Rogue")
-                .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
-                .addObjective(new CollectObjective(Items.EMERALD, 5))
-                .addObjective(new CollectObjective(Items.DIAMOND, 3))
-                .addReward(new ItemReward(Items.ENDER_PEARL, 8))
+                .addObjective(new KillObjective(EntityType.PHANTOM, 4))
+                .addObjective(new CollectObjective(Items.PHANTOM_MEMBRANE, 2))
+                .addObjective(new CollectObjective(Items.ENDER_PEARL, 2))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
-                .addReward(XpReward.apprentice());
+                .addReward(new ItemReward(Items.ARROW, 32))
+                .addReward(XpReward.apprentice())
+                .addPrerequisite("shadows_calling");
     }
 
-    private static Quest createMasterAssassinQuest() {
-        return new Quest("master_assassin")
-                .setName("Master Assassin")
-                .setDescription("Execute precision strikes against formidable enemies.")
+    private static Quest createEchoesOfTheDeepQuest() {
+        return new Quest("echoes_of_the_deep")
+                .setName("Echoes of the Deep")
+                .setDescription("Venture into the ancient cities to claim the Echo Shard - the final component for your Rogue Ability Tome.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Rogue")
-                .addObjective(KillObjective.skeletons(15))
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 1))
+                .addObjective(new CollectObjective(Items.BOOK, 1))
                 .addObjective(new KillObjective(EntityType.ENDERMAN, 3))
-                .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
                 .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
-                .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
-                .addReward(XpReward.expert());
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
+                .addReward(XpReward.expert())
+                .addPrerequisite("phantom_hunter");
+    }
+
+    private static void registerRogueQuestChain(QuestManager manager) {
+        QuestChain rogueChain = new QuestChain(
+                "path_of_shadows",
+                "Path of Shadows",
+                "Walk in darkness, strike from the shadows. Gather rare components to forge your Rogue Ability Tome and unlock devastating stealth techniques.",
+                QuestData.QuestBookTier.NOVICE,
+                null
+        )
+                .addQuest("shadows_calling")
+                .addQuest("phantom_hunter")
+                .addQuest("echoes_of_the_deep")
+                .addChainReward(new ItemReward(Items.DIAMOND_SWORD, 1))
+                .addChainReward(new ItemReward(Items.BOW, 1))
+                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5));
+
+        manager.registerQuestChain(rogueChain);
     }
 
     // ========== ADVENTURER'S PATH CHAIN QUESTS ==========

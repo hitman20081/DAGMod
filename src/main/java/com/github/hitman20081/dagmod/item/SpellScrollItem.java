@@ -76,10 +76,16 @@ public class SpellScrollItem extends Item {
             return ActionResult.FAIL;
         }
 
+        // Calculate final mana cost with armor bonus
+        float baseCost = manaCost;
+        float costReduction = com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus
+                .getManaCostReduction(serverPlayer);
+        float finalCost = baseCost * (1.0f - costReduction);
+
         // Check if player has enough mana (but don't consume yet)
         ManaData manaData = ManaManager.getManaData(serverPlayer);
-        if (!manaData.hasMana(manaCost)) {
-            player.sendMessage(Text.literal("Not enough mana! Need " + manaCost + " mana.")
+        if (!manaData.hasMana(finalCost)) {
+            player.sendMessage(Text.literal("Not enough mana! Need " + String.format("%.0f", finalCost) + " mana.")
                     .formatted(Formatting.RED), true);
             return ActionResult.FAIL;
         }
@@ -89,10 +95,18 @@ public class SpellScrollItem extends Item {
 
         // Only consume mana if spell was successful
         if (spellSuccess) {
-            manaData.useMana(manaCost);
+            manaData.useMana(finalCost);
 
-            player.sendMessage(Text.literal("✦ Cast " + spellType.getDisplayName() + "! ✦")
-                    .formatted(Formatting.AQUA), true);
+            // Show mana cost reduction if applicable
+            if (costReduction > 0) {
+                player.sendMessage(Text.literal("✦ Cast " + spellType.getDisplayName() + "! ✦ ")
+                        .formatted(Formatting.AQUA)
+                        .append(Text.literal("(" + String.format("%.0f", finalCost) + " mana)")
+                                .formatted(Formatting.DARK_AQUA)), true);
+            } else {
+                player.sendMessage(Text.literal("✦ Cast " + spellType.getDisplayName() + "! ✦")
+                        .formatted(Formatting.AQUA), true);
+            }
 
             // Play sound
             world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_EVOKER_CAST_SPELL,

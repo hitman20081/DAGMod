@@ -15,7 +15,10 @@
     "id": "minecraft:bow",
     "count": 1,
     "components": {
-      "minecraft:custom_name": "{\"text\":\"Solar Bow\",\"color\":\"#FFFF55\"}",
+      "minecraft:item_name": {
+        "text": "Solar Bow",
+        "color": "#FFFF55"
+      },
       "minecraft:lore": [
         "\"You're my sunshine\""
       ],

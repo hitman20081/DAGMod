@@ -13,7 +13,10 @@
   ],
   "result": {
     "components": {
-      "minecraft:item_name": "{\"text\":\"Dragonbone Shield\",\"color\":\"#AA00AA\"}",
+      "minecraft:item_name": {
+        "text": "Dragonbone Shield",
+        "color": "#510101"
+      },
       "minecraft:item_model": "minecraft:shield",
       "minecraft:attribute_modifiers": [
         {
