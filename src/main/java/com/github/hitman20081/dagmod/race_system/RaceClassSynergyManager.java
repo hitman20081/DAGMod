@@ -90,7 +90,7 @@ public class RaceClassSynergyManager {
      * Elf Rogue - Invisibility in forest biomes
      */
     private static void applyElfRogueSynergy(ServerPlayerEntity player) {
-        ServerWorld world = player.getWorld();
+        ServerWorld world = player.getEntityWorld();
         BlockPos pos = player.getBlockPos();
 
         // Check if in forest biome
@@ -158,7 +158,7 @@ public class RaceClassSynergyManager {
      * Elf Mage - Night vision in forests
      */
     private static void applyElfMageSynergy(ServerPlayerEntity player) {
-        ServerWorld world = player.getWorld();
+        ServerWorld world = player.getEntityWorld();
         BlockPos pos = player.getBlockPos();
 
         if (world.getBiome(pos).isIn(BiomeTags.IS_FOREST)) {

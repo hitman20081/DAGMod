@@ -53,7 +53,7 @@ public class ClassSelectionAltarBlock extends Block {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos,
                                  PlayerEntity player, BlockHitResult hit) {
 
-        if (world.isClient) {
+        if (world.isClient()) {
             return ActionResult.SUCCESS;
         }
 
@@ -334,7 +334,7 @@ public class ClassSelectionAltarBlock extends Block {
 
         // Create Protection I Book
         ItemStack protectionBook = new ItemStack(net.minecraft.item.Items.ENCHANTED_BOOK);
-        Registry<Enchantment> enchantmentRegistry = player.getWorld()
+        Registry<Enchantment> enchantmentRegistry = player.getEntityWorld().getServer()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT);
 

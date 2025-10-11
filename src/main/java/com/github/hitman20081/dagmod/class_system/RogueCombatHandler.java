@@ -23,11 +23,10 @@ public class RogueCombatHandler {
 
     public static void register() {
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient || !(entity instanceof LivingEntity target)) {
+            if (world.isClient() || !(entity instanceof LivingEntity target)) {
                 return ActionResult.PASS;
             }
 
-            // FIX: use getUuid()
             if (!ClassSelectionAltarBlock.getPlayerClass(player.getUuid()).equals("rogue")) {
                 return ActionResult.PASS;
             }
@@ -59,8 +58,8 @@ public class RogueCombatHandler {
     }
 
     private static boolean isBackstabAngle(PlayerEntity player, LivingEntity target) {
-        Vec3d playerPos = player.getPos();
-        Vec3d targetPos = target.getPos();
+        Vec3d playerPos = player.getTrackedPosition().getPos();
+        Vec3d targetPos = target.getTrackedPosition().getPos();
         Vec3d targetLook = target.getRotationVec(1.0f);
         Vec3d toPlayer = playerPos.subtract(targetPos).normalize();
         double dotProduct = targetLook.dotProduct(toPlayer);
@@ -68,8 +67,8 @@ public class RogueCombatHandler {
     }
 
     private static void applyBackstabVisuals(ServerPlayerEntity player, LivingEntity target) {
-        ServerWorld world = (ServerWorld) player.getWorld();
-        Vec3d targetPos = target.getPos();
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        Vec3d targetPos = target.getTrackedPosition().getPos();
 
         for (int i = 0; i < 15; i++) {
             double offsetX = (world.random.nextDouble() - 0.5) * target.getWidth();
@@ -80,7 +79,7 @@ public class RogueCombatHandler {
                     targetPos.x + offsetX,
                     targetPos.y + offsetY,
                     targetPos.z + offsetZ,
-                    1, 0, 0, 0, 0.1);
+                    1, 0.0, 0.0, 0.0, 0.1);
         }
 
         world.playSound(null, target.getX(), target.getY(), target.getZ(),
@@ -95,19 +94,20 @@ public class RogueCombatHandler {
         target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 120, 1));
         target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 100, 0));
 
-        ServerWorld world = (ServerWorld) player.getWorld();
-        Vec3d targetPos = target.getPos();
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        Vec3d targetPos = target.getTrackedPosition().getPos();
 
         for (int i = 0; i < 30; i++) {
             double offsetX = (world.random.nextDouble() - 0.5) * target.getWidth() * 2;
             double offsetY = world.random.nextDouble() * target.getHeight();
             double offsetZ = (world.random.nextDouble() - 0.5) * target.getWidth() * 2;
 
-            world.spawnParticles(ParticleTypes.DRAGON_BREATH,
+            // Changed to CAMPFIRE_COSY_SMOKE to avoid particle type error
+            world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     targetPos.x + offsetX,
                     targetPos.y + offsetY,
                     targetPos.z + offsetZ,
-                    1, 0, 0, 0, 0.05);
+                    1, 0.0, 0.0, 0.0, 0.05);
         }
 
         world.playSound(null, target.getX(), target.getY(), target.getZ(),
@@ -117,7 +117,6 @@ public class RogueCombatHandler {
                 .formatted(Formatting.DARK_GREEN), true);
     }
 
-    // Method called from mixin for damage modification
     // Method called from mixin for damage modification
     public static float handleRogueDamage(ServerPlayerEntity attacker, LivingEntity target, float amount) {
         // Base backstab check

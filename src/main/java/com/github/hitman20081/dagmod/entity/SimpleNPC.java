@@ -40,7 +40,7 @@ public class SimpleNPC extends PathAwareEntity {
     // This handles what happens when a player right-clicks the NPC
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (!this.getWorld().isClient) { // Only run on server side
+        if (!this.getEntityWorld().isClient()) { // Only run on server side
             player.sendMessage(Text.literal("Hello! I'm a simple NPC from DAGmod!"), false);
         }
         return ActionResult.SUCCESS;

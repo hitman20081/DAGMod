@@ -20,7 +20,7 @@ public class QuestBookItem extends Item {
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        if (world.isClient) {
+        if (world.isClient()) {
             // Call client-side handler through a proxy
             QuestBookClientHandler.openQuestBook(tier);
         }

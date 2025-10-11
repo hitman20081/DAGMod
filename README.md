@@ -482,9 +482,9 @@ Dozens of custom fantasy-themed items including:
 ## Installation
 
 ### Requirements
-- Minecraft 1.21.8
-- Fabric Loader 0.17.2+
-- Fabric API
+- Minecraft 1.21.10
+- Fabric Loader 0.17.3+
+- Fabric API 0.135.0+1.21.10
 
 ### Installation Steps
 1. Download the latest release from the [Releases](https://github.com/hitman20081/DAGMod/releases) page

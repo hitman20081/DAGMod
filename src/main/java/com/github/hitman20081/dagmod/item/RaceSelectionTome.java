@@ -18,7 +18,7 @@ public class RaceSelectionTome extends Item {
 
     @Override
     public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        if (!world.isClient) {
+        if (!world.isClient()) {
             // Display race information
             player.sendMessage(Text.literal("═══════════════════════════════")
                     .formatted(Formatting.GOLD), false);

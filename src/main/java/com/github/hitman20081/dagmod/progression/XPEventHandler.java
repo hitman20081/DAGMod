@@ -24,7 +24,7 @@ public class XPEventHandler {
     public static void register() {
         // Block breaking (mining/gathering)
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            if (!world.isClient && player instanceof ServerPlayerEntity serverPlayer) {
+            if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
                 onBlockBroken(serverPlayer, state.getBlock());
             }
         });

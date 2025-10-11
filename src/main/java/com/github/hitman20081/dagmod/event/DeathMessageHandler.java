@@ -27,7 +27,7 @@ public class DeathMessageHandler {
                 message.append(playerClass);
             }
 
-            player.getServer().getPlayerManager().broadcast(
+            player.getEntityWorld().getServer().getPlayerManager().broadcast(
                     Text.literal(player.getName().getString() + " (" + message + ") has died")
                             .formatted(Formatting.RED),
                     false

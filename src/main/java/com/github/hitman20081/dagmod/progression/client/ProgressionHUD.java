@@ -185,6 +185,16 @@ public class ProgressionHUD {
     }
 
     /**
+     * Helper method to draw a border
+     */
+    private static void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+        context.fill(x, y, x + width, y + 1, color); // Top
+        context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
+        context.fill(x, y, x + 1, y + height, color); // Left
+        context.fill(x + width - 1, y, x + width, y + height, color); // Right
+    }
+
+    /**
      * Render the XP progress bar
      */
     private static void renderXPBar(DrawContext context, int x, int y, PlayerProgressionData data) {
@@ -192,7 +202,7 @@ public class ProgressionHUD {
         context.fill(x, y, x + BAR_WIDTH, y + BAR_HEIGHT, COLOR_BAR_BACKGROUND);
 
         // Draw border
-        context.drawBorder(x, y, BAR_WIDTH, BAR_HEIGHT, COLOR_BAR_BORDER);
+        drawBorder(context, x, y, BAR_WIDTH, BAR_HEIGHT, COLOR_BAR_BORDER);
 
         // Calculate fill width
         double progress = data.getProgressToNextLevel();

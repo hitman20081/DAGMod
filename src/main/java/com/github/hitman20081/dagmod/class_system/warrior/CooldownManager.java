@@ -27,7 +27,7 @@ public class CooldownManager {
      */
     public static void startCooldown(PlayerEntity player, WarriorAbility ability) {
         UUID uuid = player.getUuid();
-        long endTime = player.getWorld().getTime() + ability.getCooldownTicks();
+        long endTime = player.getEntityWorld().getTime() + ability.getCooldownTicks();
 
         cooldowns.computeIfAbsent(uuid, k -> new HashMap<>()).put(ability, endTime);
 
@@ -52,7 +52,7 @@ public class CooldownManager {
             return false;
         }
 
-        long currentTime = player.getWorld().getTime();
+        long currentTime = player.getEntityWorld().getTime();
         long endTime = playerCooldowns.get(ability);
 
         if (currentTime >= endTime) {
@@ -75,7 +75,7 @@ public class CooldownManager {
             return 0;
         }
 
-        long currentTime = player.getWorld().getTime();
+        long currentTime = player.getEntityWorld().getTime();
         long endTime = playerCooldowns.get(ability);
 
         return Math.max(0, (int)(endTime - currentTime));
@@ -130,7 +130,7 @@ public class CooldownManager {
         Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns != null) {
-            long currentTime = player.getWorld().getTime();
+            long currentTime = player.getEntityWorld().getTime();
 
             for (Map.Entry<WarriorAbility, Long> entry : playerCooldowns.entrySet()) {
                 int remaining = (int)(entry.getValue() - currentTime);

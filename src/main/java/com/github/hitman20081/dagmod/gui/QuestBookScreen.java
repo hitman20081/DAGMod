@@ -58,7 +58,7 @@ public class QuestBookScreen extends Screen {
 
         // Book background
         context.fill(bookX, bookY, bookX + 192, bookY + 192, 0xFFF5DEB3);
-        context.drawBorder(bookX, bookY, 192, 192, 0xFF8B4513);
+        drawBorder(context, bookX, bookY, 192, 192, 0xFF8B4513);
 
         // Inner page
         context.fill(bookX + 10, bookY + 10, bookX + 182, bookY + 182, 0xFFFFFFF8);
@@ -270,6 +270,15 @@ public class QuestBookScreen extends Screen {
 
         context.drawText(font, Text.literal("Apprentice Complete"), textX, textY, color, false);
         context.drawText(font, Text.literal(check + " Complete 10 quests"), textX + 80, textY, color, false);
+    }
+
+    // Add this helper method at the end of the class, before the closing brace:
+
+    private void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+        context.fill(x, y, x + width, y + 1, color); // Top
+        context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
+        context.fill(x, y, x + 1, y + height, color); // Left
+        context.fill(x + width - 1, y, x + width, y + height, color); // Right
     }
 
     @Override

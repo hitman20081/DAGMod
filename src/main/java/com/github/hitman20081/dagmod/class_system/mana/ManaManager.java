@@ -26,7 +26,7 @@ public class ManaManager {
         ManaData data = getManaData(player);
 
         // Regenerate mana every 20 ticks (1 second)
-        if (player.getWorld().getTime() % 20 == 0) {
+        if (player.getEntityWorld().getTime() % 20 == 0) {
             if (data.getCurrentMana() < data.getMaxMana()) {
                 float baseRegen = 2.0f; // Base 2 mana per second
 

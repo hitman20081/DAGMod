@@ -62,7 +62,7 @@ public class SpellScrollItem extends Item {
 
     @Override
     public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        if (world.isClient) {
+        if (world.isClient()) {
             return ActionResult.SUCCESS;
         }
 
@@ -133,7 +133,7 @@ public class SpellScrollItem extends Item {
 
     private boolean castHeal(ServerPlayerEntity player) {
         player.heal(6.0f);
-        spawnParticles((ServerWorld) player.getWorld(), player.getPos(), ParticleTypes.HEART, 10);
+        spawnParticles((ServerWorld) player.getEntityWorld(), player.getTrackedPosition().getPos(), ParticleTypes.HEART, 10);
         return true;
     }
 
@@ -156,7 +156,7 @@ public class SpellScrollItem extends Item {
                 false,
                 true
         ));
-        spawnParticles((ServerWorld) player.getWorld(), player.getPos(), ParticleTypes.ENCHANT, 30);
+        spawnParticles((ServerWorld) player.getEntityWorld(), player.getTrackedPosition().getPos(), ParticleTypes.ENCHANT, 30);
         return true;
     }
 
@@ -196,10 +196,10 @@ public class SpellScrollItem extends Item {
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 3));
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 100, 2));
             entity.damage((ServerWorld) world, world.getDamageSources().freeze(), 4.0f);
-            spawnParticles((ServerWorld) world, entity.getPos(), ParticleTypes.SNOWFLAKE, 20);
+            spawnParticles((ServerWorld) world, entity.getTrackedPosition().getPos(), ParticleTypes.SNOWFLAKE, 20);
         }
 
-        spawnParticles((ServerWorld) world, player.getPos(), ParticleTypes.SNOWFLAKE, 50);
+        spawnParticles((ServerWorld) world, player.getTrackedPosition().getPos(), ParticleTypes.SNOWFLAKE, 50);
         player.sendMessage(Text.literal("Froze " + nearbyEntities.size() + " enemies!")
                 .formatted(Formatting.AQUA), true);
         return true;
@@ -219,9 +219,9 @@ public class SpellScrollItem extends Item {
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             Vec3d targetPos = hitResult.getPos().add(0, 1, 0);
 
-            spawnParticles((ServerWorld) world, player.getPos(), ParticleTypes.PORTAL, 30);
+            spawnParticles((ServerWorld) world, player.getTrackedPosition().getPos(), ParticleTypes.PORTAL, 30);
             player.teleport(targetPos.x, targetPos.y, targetPos.z, true);
-            spawnParticles((ServerWorld) world, player.getPos(), ParticleTypes.PORTAL, 30);
+            spawnParticles((ServerWorld) world, player.getTrackedPosition().getPos(), ParticleTypes.PORTAL, 30);
 
             return true; // Success!
         } else {
@@ -239,7 +239,7 @@ public class SpellScrollItem extends Item {
                 false,
                 true
         ));
-        spawnParticles((ServerWorld) player.getWorld(), player.getPos(), ParticleTypes.ENCHANTED_HIT, 40);
+        spawnParticles((ServerWorld) player.getEntityWorld(), player.getTrackedPosition().getPos(), ParticleTypes.ENCHANTED_HIT, 40);
         return true;
     }
 
@@ -251,7 +251,7 @@ public class SpellScrollItem extends Item {
 
             world.spawnParticles(particle,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
-                    1, 0, 0, 0, 0);
+                    1, 0.0, 0.0, 0.0, 0.0);
         }
     }
 }

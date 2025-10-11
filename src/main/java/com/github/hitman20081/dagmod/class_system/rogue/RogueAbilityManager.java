@@ -47,7 +47,8 @@ public class RogueAbilityManager {
      * Activate Smoke Bomb ability
      */
     public static boolean useSmokeBomb(ServerPlayerEntity player) {
-        long worldTime = player.getWorld().getTime();
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        long worldTime = world.getTime();
 
         // Check cooldown
         if (RogueCooldownData.isOnCooldown(player.getUuid(), SMOKE_BOMB_KEY, worldTime)) {
@@ -78,7 +79,7 @@ public class RogueAbilityManager {
         createSmokeCloud(player);
 
         // Sound
-        player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 1.0f, 0.5f);
 
         player.sendMessage(Text.literal("Smoke Bomb activated!")
@@ -88,8 +89,8 @@ public class RogueAbilityManager {
     }
 
     private static void createSmokeCloud(ServerPlayerEntity player) {
-        ServerWorld world = (ServerWorld) player.getWorld();
-        Vec3d pos = player.getPos();
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        Vec3d pos = player.getEntityPos();
 
         AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(world, pos.x, pos.y, pos.z);
         cloud.setRadius(3.0f);
@@ -97,7 +98,6 @@ public class RogueAbilityManager {
         cloud.setRadiusGrowth(0.0f);
         cloud.addEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 40, 1));
         cloud.setParticleType(ParticleTypes.LARGE_SMOKE);
-        // Note: setColor() doesn't exist in 1.21.8, color is automatic
 
         world.spawnEntity(cloud);
 
@@ -109,7 +109,7 @@ public class RogueAbilityManager {
 
             world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
-                    1, 0, 0, 0, 0.01);
+                    1, 0.0, 0.0, 0.0, 0.01);
         }
     }
 
@@ -128,19 +128,20 @@ public class RogueAbilityManager {
 
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0, false, false));
 
-        player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 0.7f);
 
-        ServerWorld world = (ServerWorld) player.getWorld();
-        Vec3d pos = player.getPos();
+        Vec3d pos = player.getEntityPos();
         for (int i = 0; i < 20; i++) {
             double offsetX = (world.random.nextDouble() - 0.5) * 1.5;
             double offsetY = world.random.nextDouble() * 2;
             double offsetZ = (world.random.nextDouble() - 0.5) * 1.5;
 
-            world.spawnParticles(ParticleTypes.DRAGON_BREATH,
+            // Changed to CAMPFIRE_COSY_SMOKE
+            world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
-                    1, 0, 0, 0, 0.01);
+                    1, 0.0, 0.0, 0.0, 0.01);
         }
 
         player.sendMessage(Text.literal("Poison Dagger ready!")
@@ -171,7 +172,8 @@ public class RogueAbilityManager {
      * Activate Shadow Step
      */
     public static boolean useShadowStep(ServerPlayerEntity player) {
-        long worldTime = player.getWorld().getTime();
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        long worldTime = world.getTime();
 
         if (RogueCooldownData.isOnCooldown(player.getUuid(), SHADOW_STEP_KEY, worldTime)) {
             long remaining = RogueCooldownData.getRemainingCooldown(player.getUuid(), SHADOW_STEP_KEY, worldTime);
@@ -191,7 +193,7 @@ public class RogueAbilityManager {
         Vec3d direction = player.getRotationVec(1.0f);
         Vec3d end = start.add(direction.multiply(25));
 
-        BlockHitResult hitResult = player.getWorld().raycast(new RaycastContext(
+        BlockHitResult hitResult = world.raycast(new RaycastContext(
                 start, end, RaycastContext.ShapeType.OUTLINE,
                 RaycastContext.FluidHandling.NONE, player
         ));
@@ -203,21 +205,21 @@ public class RogueAbilityManager {
         }
 
         BlockPos targetPos = hitResult.getBlockPos().offset(hitResult.getSide());
-        Vec3d oldPos = player.getPos();
+        Vec3d oldPos = player.getEntityPos();
 
         EnergyManager.consumeEnergy(player, SHADOW_STEP_COST);
         RogueCooldownData.startCooldown(player.getUuid(), SHADOW_STEP_KEY, worldTime, SHADOW_STEP_COOLDOWN);
 
-        createShadowDecoy((ServerWorld) player.getWorld(), oldPos);
+        createShadowDecoy(world, oldPos);
 
-        // Fixed teleport for 1.21.8
+        // Teleport
         player.teleport(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5, true);
 
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 60, 0));
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 10, 4));
 
-        spawnShadowStepParticles((ServerWorld) player.getWorld(), oldPos, player.getPos());
-        player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+        spawnShadowStepParticles(world, oldPos, player.getEntityPos());
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 0.5f);
 
         player.sendMessage(Text.literal("Shadow Step!")
@@ -232,7 +234,6 @@ public class RogueAbilityManager {
         decoy.setDuration(60);
         decoy.setRadiusGrowth(0.0f);
         decoy.setParticleType(ParticleTypes.SMOKE);
-        // Note: setColor() removed
 
         world.spawnEntity(decoy);
 
@@ -243,7 +244,7 @@ public class RogueAbilityManager {
 
             world.spawnParticles(ParticleTypes.PORTAL,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
-                    1, 0, 0, 0, 0.1);
+                    1, 0.0, 0.0, 0.0, 0.1);
         }
     }
 
@@ -251,20 +252,21 @@ public class RogueAbilityManager {
         for (int i = 0; i < 30; i++) {
             world.spawnParticles(ParticleTypes.PORTAL,
                     from.x, from.y + 1, from.z,
-                    1, 0.5, 1, 0.5, 0.1);
+                    1, 0.5, 1.0, 0.5, 0.1);
         }
 
         for (int i = 0; i < 30; i++) {
             world.spawnParticles(ParticleTypes.REVERSE_PORTAL,
                     to.x, to.y + 1, to.z,
-                    1, 0.5, 1, 0.5, 0.1);
+                    1, 0.5, 1.0, 0.5, 0.1);
         }
 
         Vec3d direction = to.subtract(from).normalize();
         double distance = from.distanceTo(to);
         for (double d = 0; d < distance; d += 0.5) {
             Vec3d point = from.add(direction.multiply(d));
-            world.spawnParticles(ParticleTypes.DRAGON_BREATH,
+            // Changed to WITCH particle
+            world.spawnParticles(ParticleTypes.WITCH,
                     point.x, point.y + 1, point.z,
                     1, 0.1, 0.1, 0.1, 0.01);
         }

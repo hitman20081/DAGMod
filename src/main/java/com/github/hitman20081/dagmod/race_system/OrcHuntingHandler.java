@@ -25,7 +25,7 @@ public class OrcHuntingHandler {
         }
 
         Random random = player.getRandom();
-        ServerWorld world = (ServerWorld) killed.getWorld();
+        ServerWorld world = (ServerWorld) killed.getEntityWorld();
 
         // 20% chance for bonus meat from animals
         if (random.nextFloat() < 0.20f) {

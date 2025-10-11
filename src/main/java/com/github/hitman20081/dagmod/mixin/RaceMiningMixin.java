@@ -24,7 +24,7 @@ public class RaceMiningMixin {
     )
     private void onBlockBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<BlockState> cir) {
         // Only run on server side
-        if (!world.isClient && player instanceof ServerPlayerEntity serverPlayer) {
+        if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
             ServerWorld serverWorld = (ServerWorld) world;
 
             // Handle Dwarf mining bonuses

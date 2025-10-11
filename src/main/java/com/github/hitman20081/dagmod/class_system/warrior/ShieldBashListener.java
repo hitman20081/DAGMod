@@ -32,7 +32,7 @@ public class ShieldBashListener {
         }
 
         // Only on server side
-        if (world.isClient) {
+        if (world.isClient()) {
             return ActionResult.PASS;
         }
 

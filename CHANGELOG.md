@@ -5,6 +5,28 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2025-10-11
+
+### Changed
+- Updated to Minecraft 1.21.10
+- Updated Fabric Loader to 0.17.3
+- Updated Fabric API to 0.135.0+1.21.10
+
+### Fixed
+- Fixed all `.getWorld()` method calls to use `.getEntityWorld()`
+- Fixed all `.getPos()` method calls to use `.getTrackedPosition().getPos()`
+- Updated entity position tracking for 1.21.10 API changes
+- Fixed particle spawn parameters to use doubles instead of integers
+- Added missing `drawBorder()` helper methods to GUI classes
+- Updated world generation files for 1.21.10 format
+
+### Technical
+- Replaced deprecated Minecraft API methods with 1.21.10 equivalents
+- ServerPlayerEntity now uses `.getEntityWorld()` instead of `.getWorld()`
+- All entities use `.getTrackedPosition().getPos()` for position data
+- Particle effects updated to new API format
+- GUI rendering updated for 1.21.10 DrawContext API
+
 ## [1.4.0] - 2025-10-08
 
 ### Added - Rogue Ability System

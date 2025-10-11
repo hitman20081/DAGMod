@@ -45,7 +45,7 @@ public class PlayerDataManager {
      */
     public static void savePlayerData(ServerPlayerEntity player) {
         try {
-            File dataFile = getPlayerDataFile(player.getServer(), player.getUuid());
+            File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
             NbtCompound nbt = new NbtCompound();
 
             String race = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
@@ -77,7 +77,7 @@ public class PlayerDataManager {
      */
     public static void loadPlayerData(ServerPlayerEntity player) {
         try {
-            File dataFile = getPlayerDataFile(player.getServer(), player.getUuid());
+            File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
 
             if (!dataFile.exists()) {
                 return; // No data to load for new players
@@ -200,7 +200,7 @@ public class PlayerDataManager {
     }
 
     public static boolean hasPlayerData(ServerPlayerEntity player) {
-        File dataFile = getPlayerDataFile(player.getServer(), player.getUuid());
+        File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
         return dataFile.exists();
     }
 }

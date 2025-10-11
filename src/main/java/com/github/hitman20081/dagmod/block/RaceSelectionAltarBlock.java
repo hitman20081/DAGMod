@@ -37,13 +37,13 @@ public class RaceSelectionAltarBlock extends Block {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos,
                                  PlayerEntity player, BlockHitResult hit) {
 
-        if (world.isClient) {
+        if (world.isClient()) {
             return ActionResult.SUCCESS;
         }
 
         // Save Hall location on first interaction
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            PlayerDataManager.saveHallLocation(serverPlayer.getServer(), pos);
+            PlayerDataManager.saveHallLocation(player.getEntityWorld().getServer(), pos);
         }
 
         UUID playerId = player.getUuid();

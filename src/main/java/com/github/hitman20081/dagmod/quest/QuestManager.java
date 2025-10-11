@@ -77,7 +77,7 @@ public class QuestManager {
 
                     // Give chain completion rewards
                     for (QuestReward reward : chain.getChainCompletionRewards()) {
-                        reward.giveReward(player, player.getWorld());
+                        reward.giveReward(player, player.getEntityWorld());
                     }
 
                     // Auto-upgrade quest book tier if applicable
@@ -274,7 +274,7 @@ public class QuestManager {
         // Give rewards
         boolean allRewardsGiven = true;
         for (QuestReward reward : quest.getRewards()) {
-            if (!reward.giveReward(player, player.getWorld())) {
+            if (!reward.giveReward(player, player.getEntityWorld())) {
                 allRewardsGiven = false;
             }
         }

@@ -45,7 +45,7 @@ public class ShieldBashAbility {
      * Activate Shield Bash ability
      */
     public static boolean activate(PlayerEntity player) {
-        if (!(player.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(player.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return false;
         }
 
@@ -67,7 +67,7 @@ public class ShieldBashAbility {
         Vec3d dashVec = lookVec.multiply(DASH_DISTANCE);
 
         // Store initial position for collision detection
-        Vec3d startPos = player.getPos();
+        Vec3d startPos = ((ServerPlayerEntity) player).getCommandSource().getPosition();
         Vec3d endPos = startPos.add(dashVec);
 
         // Apply dash velocity
@@ -117,7 +117,7 @@ public class ShieldBashAbility {
                 hitCount++;
 
                 // Impact particles at entity location
-                spawnImpactParticles(serverWorld, livingEntity.getPos());
+                spawnImpactParticles(serverWorld, livingEntity.getTrackedPosition().getPos());
             }
         }
 
@@ -183,7 +183,7 @@ public class ShieldBashAbility {
                     ParticleTypes.SWEEP_ATTACK,
                     pos.x, pos.y + 1.0, pos.z,
                     1,
-                    0, 0, 0,
+                    0.0, 0.0, 0.0,
                     0.0
             );
         }
@@ -198,7 +198,7 @@ public class ShieldBashAbility {
                 ParticleTypes.EXPLOSION,
                 pos.x, pos.y + 1.0, pos.z,
                 1,
-                0, 0, 0,
+                0.0, 0.0, 0.0,
                 0.0
         );
 
@@ -214,7 +214,7 @@ public class ShieldBashAbility {
                     pos.y + offsetY,
                     pos.z + offsetZ,
                     1,
-                    0, 0.1, 0,
+                    0.0, 0.1, 0.0,
                     0.1
             );
         }

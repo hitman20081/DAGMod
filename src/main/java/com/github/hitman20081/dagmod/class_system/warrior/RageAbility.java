@@ -31,7 +31,7 @@ public class RageAbility {
      * Activate Rage ability
      */
     public static boolean activate(PlayerEntity player) {
-        if (!(player.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(player.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return false;
         }
 

@@ -45,7 +45,7 @@ public class QuestBlock extends Block {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient) { // Server side only
+        if (!world.isClient()) { // Server side only
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
             QuestManager questManager = QuestManager.getInstance();
             QuestData playerData = questManager.getPlayerData(player);

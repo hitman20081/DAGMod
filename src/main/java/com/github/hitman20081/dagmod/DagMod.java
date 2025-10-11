@@ -145,14 +145,14 @@ public class DagMod implements ModInitializer {
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             ClassAbilityManager.applyClassAbilities(newPlayer);
 
-            BlockPos hallPos = PlayerDataManager.loadHallLocation(newPlayer.getServer());
+            BlockPos hallPos = PlayerDataManager.loadHallLocation(newPlayer.getEntityWorld().getServer());
 
             if (hallPos != null) {
                 // Schedule teleport for 5 ticks later (0.25 seconds)
                 new Thread(() -> {
                     try {
                         Thread.sleep(250); // Wait 250ms
-                        newPlayer.getServer().execute(() -> {
+                        newPlayer.getEntityWorld().getServer().execute(() -> {
                             LOGGER.info("Executing delayed Hall teleport to: " + hallPos);
                             newPlayer.teleport(
                                     hallPos.getX() + 0.5,

@@ -18,7 +18,7 @@ public class HallLocatorItem extends Item {
 
     @Override
     public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        if (!world.isClient && player instanceof ServerPlayerEntity) {
+        if (!world.isClient() && player instanceof ServerPlayerEntity) {
             player.sendMessage(Text.literal("═══════════════════════════════")
                     .formatted(Formatting.GOLD), false);
             player.sendMessage(Text.literal("HALL OF CHAMPIONS LOCATOR")

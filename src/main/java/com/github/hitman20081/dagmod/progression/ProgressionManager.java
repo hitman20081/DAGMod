@@ -175,7 +175,7 @@ public class ProgressionManager {
         );
 
         // Spawn particles
-        player.getWorld().sendEntityStatus(player, (byte) 32); // Hearts particle effect
+        player.getEntityWorld().sendEntityStatus(player, (byte) 32); // Hearts particle effect
 
         // Heal player on level up (reward feeling)
         player.setHealth(player.getMaxHealth());

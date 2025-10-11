@@ -33,12 +33,12 @@ public class WarCryAbility {
      * Activate War Cry ability
      */
     public static boolean activate(PlayerEntity player) {
-        if (!(player.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(player.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return false;
         }
 
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-        Vec3d playerPos = player.getPos();
+        Vec3d playerPos = player.getTrackedPosition().getPos();
 
         // Find all entities in radius
         Box searchBox = new Box(playerPos, playerPos).expand(RADIUS);
@@ -57,7 +57,7 @@ public class WarCryAbility {
                 continue;
             }
 
-            double distance = entity.getPos().distanceTo(playerPos);
+            double distance = entity.getTrackedPosition().getPos().distanceTo(playerPos);
             if (distance > RADIUS) {
                 continue;
             }

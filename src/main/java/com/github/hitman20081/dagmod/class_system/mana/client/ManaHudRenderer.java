@@ -23,12 +23,12 @@ public class ManaHudRenderer implements HudRenderCallback {
         int screenWidth = client.getWindow().getScaledWidth();
         int screenHeight = client.getWindow().getScaledHeight();
 
-        // Position: Over hunger bar (right side) - CHANGED THIS
-        int x = screenWidth / 2 + 10; // Right side of screen (hunger bar starts at +10)
-        int y = screenHeight - 49; // Same y as health/hunger bar
+        // Position: Over hunger bar (right side)
+        int x = screenWidth / 2 + 10;
+        int y = screenHeight - 49;
 
         float manaPercentage = ClientManaData.getManaPercentage();
-        int manaBarWidth = (int) (81 * manaPercentage); // 81 is standard bar width
+        int manaBarWidth = (int) (81 * manaPercentage);
 
         // Draw mana bar background (dark blue/purple)
         drawContext.fill(x, y, x + 81, y + 5, 0xFF000033);
@@ -37,10 +37,17 @@ public class ManaHudRenderer implements HudRenderCallback {
         drawContext.fill(x, y, x + manaBarWidth, y + 5, 0xFF00AAFF);
 
         // Draw border
-        drawContext.drawBorder(x - 1, y - 1, 83, 7, 0xFF000000);
+        drawBorder(drawContext, x - 1, y - 1, 83, 7, 0xFF000000);
 
         // Draw mana text
         String manaText = String.format("%.0f/%.0f", ClientManaData.getCurrentMana(), (float) ClientManaData.getMaxMana());
         drawContext.drawText(client.textRenderer, manaText, x + 41 - client.textRenderer.getWidth(manaText) / 2, y - 10, 0x00AAFF, true);
+    }
+
+    private void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+        context.fill(x, y, x + width, y + 1, color); // Top
+        context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
+        context.fill(x, y, x + 1, y + height, color); // Left
+        context.fill(x + width - 1, y, x + width, y + height, color); // Right
     }
 }

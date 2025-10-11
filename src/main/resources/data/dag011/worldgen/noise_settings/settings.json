@@ -27,6 +27,7 @@
     "continents": "minecraft:overworld/continents",
     "depth": "minecraft:overworld/depth",
     "erosion": "minecraft:overworld/erosion",
+    "preliminary_surface_level": "minecraft:overworld/continents",
     "final_density": {
       "type": "minecraft:min",
       "argument1": {
