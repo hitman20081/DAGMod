@@ -9,8 +9,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/barracks",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/barracks",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -18,8 +18,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/chamber_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/chamber_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -27,8 +27,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/chamber_2",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/chamber_2",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -36,8 +36,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/chamber_3",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/chamber_3",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -45,8 +45,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/sauna_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/sauna_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -54,8 +54,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/small_statue",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/small_statue",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -63,8 +63,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/large_ruin_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/large_ruin_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -72,8 +72,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/tall_ruin_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/tall_ruin_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -81,8 +81,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/tall_ruin_2",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/tall_ruin_2",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -90,8 +90,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/tall_ruin_3",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/tall_ruin_3",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 2
@@ -99,8 +99,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/tall_ruin_4",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/tall_ruin_4",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 2
@@ -111,20 +111,20 @@
         "elements": [
           {
             "element_type": "minecraft:single_pool_element",
-            "location": "minecraft:ancient_city/structures/camp_1",
-            "processors": "minecraft:ancient_city_generic_degradation",
+            "location": "dag011:skeleton_kingdom/structures/camp_1",
+            "processors": "dag011:skeleton_kingdom_generic_degradation",
             "projection": "rigid"
           },
           {
             "element_type": "minecraft:single_pool_element",
-            "location": "minecraft:ancient_city/structures/camp_2",
-            "processors": "minecraft:ancient_city_generic_degradation",
+            "location": "dag011:skeleton_kingdom/structures/camp_2",
+            "processors": "dag011:skeleton_kingdom_generic_degradation",
             "projection": "rigid"
           },
           {
             "element_type": "minecraft:single_pool_element",
-            "location": "minecraft:ancient_city/structures/camp_3",
-            "processors": "minecraft:ancient_city_generic_degradation",
+            "location": "dag011:skeleton_kingdom/structures/camp_3",
+            "processors": "dag011:skeleton_kingdom_generic_degradation",
             "projection": "rigid"
           }
         ],
@@ -135,8 +135,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/medium_ruin_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/medium_ruin_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -144,8 +144,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/medium_ruin_2",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/medium_ruin_2",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -153,8 +153,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/small_ruin_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/small_ruin_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -162,8 +162,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/small_ruin_2",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/small_ruin_2",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -171,8 +171,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/large_pillar_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/large_pillar_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -180,8 +180,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/structures/medium_pillar_1",
-        "processors": "minecraft:ancient_city_generic_degradation",
+        "location": "dag011:skeleton_kingdom/structures/medium_pillar_1",
+        "processors": "dag011:skeleton_kingdom_generic_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -192,7 +192,7 @@
         "elements": [
           {
             "element_type": "minecraft:single_pool_element",
-            "location": "minecraft:ancient_city/structures/ice_box_1",
+            "location": "dag011:skeleton_kingdom/structures/ice_box_1",
             "processors": {
               "processors": []
             },

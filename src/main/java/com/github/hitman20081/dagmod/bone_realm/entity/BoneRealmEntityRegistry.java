@@ -36,6 +36,16 @@ public class BoneRealmEntityRegistry {
                             Identifier.of(DagMod.MOD_ID, "skeleton_lord")))
     );
 
+    public static final EntityType<SkeletonSummonerEntity> SKELETON_SUMMONER = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "skeleton_summoner"),
+            EntityType.Builder.create(SkeletonSummonerEntity::new, SpawnGroup.MONSTER)
+                    .dimensions(0.6f, 1.99f)
+                    .maxTrackingRange(8)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE,
+                            Identifier.of(DagMod.MOD_ID, "skeleton_summoner")))
+    );
+
     public static final EntityType<BonelingEntity> BONELING = Registry.register(
             Registries.ENTITY_TYPE,
             Identifier.of(DagMod.MOD_ID, "boneling"),
@@ -57,6 +67,10 @@ public class BoneRealmEntityRegistry {
                 SKELETON_LORD,
                 SkeletonLordEntity.createSkeletonLordAttributes()
         );
+
+        FabricDefaultAttributeRegistry.register(
+                SKELETON_SUMMONER,
+                SkeletonSummonerEntity.createSkeletonSummonerAttributes());
 
         FabricDefaultAttributeRegistry.register(
                 BONELING,

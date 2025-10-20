@@ -1,6 +1,10 @@
 package com.github.hitman20081.dagmod;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.bone_realm.BoneRealmRegistry;
+import com.github.hitman20081.dagmod.bone_realm.chest.BoneRealmChestRegistry;
+import com.github.hitman20081.dagmod.bone_realm.chest.BossDeathEventHandler;
+import com.github.hitman20081.dagmod.bone_realm.entity.BoneRealmEntityRegistry;
 import com.github.hitman20081.dagmod.class_system.mana.ManaManager;
 import com.github.hitman20081.dagmod.class_system.warrior.ShieldBashListener;
 import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
@@ -72,6 +76,17 @@ public class DagMod implements ModInitializer {
 
         ModEffects.registerEffects();
         ModPotions.registerPotion();
+
+        BoneRealmRegistry.register(); // Register Bone realm
+
+        // Register Bone Realm Entities
+        BoneRealmEntityRegistry.register();
+
+        // Register Bone Realm chests
+        BoneRealmChestRegistry.register();
+
+        // Register boss death handler
+        BossDeathEventHandler.register();
 
         ModBlocks.initialize();
 

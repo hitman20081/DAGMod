@@ -1,7 +1,5 @@
 {
-  "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "dagmod:block/skeleton_king_chest",
-    "particle": "dagmod:block/skeleton_king_chest"
+    "particle": "minecraft:block/obsidian"
   }
 }

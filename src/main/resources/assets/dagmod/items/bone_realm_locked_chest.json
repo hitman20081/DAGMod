@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "dagmod:block/bone_realm_locked_chest"
+    "type": "minecraft:special",
+    "base": "dagmod:item/bone_realm_locked_chest",
+    "model": {
+      "type": "minecraft:chest",
+      "texture": "dagmod:bone_realm_locked_chest"
+    }
   }
 }

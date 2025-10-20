@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "dagmod:block/skeleton_king_chest"
+    "type": "minecraft:special",
+    "base": "dagmod:item/skeleton_king_chest",
+    "model": {
+      "type": "minecraft:chest",
+      "texture": "dagmod:skeleton_king_chest"
+    }
   }
 }

@@ -30,9 +30,9 @@
       }
     },
     {
-      "weight": 80,
+      "weight": 40,
       "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_stairway",
+        "location": "dag011:bone_dungeon/bone_dungeon_portal_room",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -66,9 +66,9 @@
       }
     },
     {
-      "weight": 100,
+      "weight": 40,
       "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_treasure_room",
+        "location": "dag011:bone_dungeon/bone_dungeon_stairway",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -77,7 +77,7 @@
     {
       "weight": 100,
       "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_portal_room",
+        "location": "dag011:bone_dungeon/bone_dungeon_treasure_room",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

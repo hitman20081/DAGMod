@@ -81,8 +81,6 @@ public class BoneRealmChestRegistry {
 
         // Add to creative tabs
         addToCreativeTabs();
-
-        System.out.println("Bone Realm chests registered!");
     }
 
     private static Block registerChestBlock(String id, Block block, boolean createItem) {

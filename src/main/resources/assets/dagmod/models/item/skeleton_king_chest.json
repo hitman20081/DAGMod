@@ -1,3 +1,6 @@
 {
-  "parent": "dagmod:block/skeleton_king_chest"
+  "parent": "minecraft:item/template_chest",
+  "textures": {
+    "particle": "minecraft:block/obsidian"
+  }
 }

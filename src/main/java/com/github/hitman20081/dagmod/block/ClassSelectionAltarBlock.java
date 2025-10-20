@@ -305,7 +305,23 @@ public class ClassSelectionAltarBlock extends Block {
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_SWORD));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_CHESTPLATE));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.SHIELD));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_BEEF, 16));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_BEEF, 32));
+
+        // Create Healing Potion
+        ItemStack healingPotion1 = new ItemStack(net.minecraft.item.Items.POTION);
+        healingPotion1.set(DataComponentTypes.POTION_CONTENTS,
+                new PotionContentsComponent(Potions.HEALING));
+        player.giveItemStack(healingPotion1);
+
+        ItemStack healingPotion2 = new ItemStack(net.minecraft.item.Items.POTION);
+        healingPotion2.set(DataComponentTypes.POTION_CONTENTS,
+                new PotionContentsComponent(Potions.HEALING));
+        player.giveItemStack(healingPotion2);
+
+        ItemStack healingPotion3 = new ItemStack(net.minecraft.item.Items.POTION);
+        healingPotion2.set(DataComponentTypes.POTION_CONTENTS,
+                new PotionContentsComponent(Potions.HEALING));
+        player.giveItemStack(healingPotion3);
 
         player.sendMessage(Text.literal("⚔ Warrior abilities unlocked!")
                 .formatted(Formatting.RED), false);
@@ -360,7 +376,7 @@ public class ClassSelectionAltarBlock extends Block {
 
         // Give lapis and bread
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.LAPIS_LAZULI, 16));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.BREAD, 16));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.BREAD, 32));
 
         player.sendMessage(Text.literal("✦ Mage abilities unlocked!")
                 .formatted(Formatting.AQUA), false);
@@ -373,7 +389,7 @@ public class ClassSelectionAltarBlock extends Block {
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_CHESTPLATE));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.BOW));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.ARROW, 32));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_CHICKEN, 16));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_CHICKEN, 32));
 
         player.sendMessage(Text.literal("⚡ Rogue abilities unlocked!")
                 .formatted(Formatting.DARK_GREEN), false);

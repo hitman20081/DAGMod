@@ -1,5 +1,5 @@
 {
-  "name": "dag011:bone_dungeon/bone_dungeon_entryway",
+  "name": "dag011:bone_dungeon_entryway",
   "fallback": "minecraft:empty",
   "elements": [
     {

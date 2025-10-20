@@ -1,7 +1,7 @@
 {
   "sources": [
     {
-      "type": "dagmod:directory",
+      "type": "directory",
       "prefix": "entity/chest/",
       "source": "entity/chest"
     }

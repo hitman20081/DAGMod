@@ -1,19 +1,7 @@
 {
   "variants": {
-    "facing=north": {
+    "": {
       "model": "dagmod:block/bone_realm_locked_chest"
-    },
-    "facing=south": {
-      "model": "dagmod:block/bone_realm_locked_chest",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "dagmod:block/bone_realm_locked_chest",
-      "y": 270
-    },
-    "facing=east": {
-      "model": "dagmod:block/bone_realm_locked_chest",
-      "y": 90
     }
   }
 }

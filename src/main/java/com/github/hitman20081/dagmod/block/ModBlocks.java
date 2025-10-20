@@ -49,6 +49,20 @@ public class ModBlocks {
                     .requiresTool()
                     .luminance(state -> 10))); // Glows more than class altar
 
+
+    private static Block registerBlock(String name, Block block) {
+        registerBlockItem(name, block);
+        return Registry.register(Registries.BLOCK, Identifier.of(DagMod.MOD_ID, name), block);
+    }
+
+    private static void registerBlockItem(String name, Block block) {
+        Registry.register(Registries.ITEM, Identifier.of(DagMod.MOD_ID, name), new BlockItem(block, new Item.Settings()));
+    }
+
+    public static void registerModBlocks() {
+        DagMod.LOGGER.info("Registering Mod Blocks for " + DagMod.MOD_ID);
+    }
+
     public static void initialize() {
         // Add to creative inventory
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)

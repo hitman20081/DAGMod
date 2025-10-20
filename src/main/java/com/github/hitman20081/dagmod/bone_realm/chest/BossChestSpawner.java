@@ -117,9 +117,6 @@ public class BossChestSpawner {
 
         // Set loot table
         if (world.getBlockEntity(pos) instanceof LockedBoneChestBlockEntity chestEntity) {
-            System.out.println("DEBUG: Setting loot table for chest at " + pos);
-            System.out.println("DEBUG: Loot table ID: " + lootTableId);
-
             chestEntity.setLootTable(
                     net.minecraft.registry.RegistryKey.of(
                             net.minecraft.registry.RegistryKeys.LOOT_TABLE,
@@ -129,8 +126,6 @@ public class BossChestSpawner {
             );
 
             chestEntity.markDirty();
-
-            System.out.println("DEBUG: Loot table after setting: " + chestEntity.getLootTable());
         }
 
         // Epic spawn effects

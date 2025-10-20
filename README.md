@@ -1,10 +1,149 @@
-# DAGMod v1.3.1 - Fantasy RPG Minecraft Mod
+# DAGMod v1.4.2-beta - Fantasy RPG Minecraft Mod
 
 A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, progression system, class mechanics, race selection, synergy abilities, custom items, and immersive gameplay mechanics.
 
 ## Features
 
-### Progression System (NEW in v1.3.0)
+### Bone Realm Boss System (NEW in v1.4.2)
+Face a complete boss hierarchy with chain-summoning mechanics and epic loot!
+
+**Boss Hierarchy**:
+```
+Skeleton King (Epic Boss)
+│
+├── Skeleton Lord (Mini-Boss)
+    │
+    ├── Skeleton Summoner (Elite Mob)
+        │
+        ├── Boneling (Weak Minion)
+```
+
+---
+
+#### **Boss Entities**
+
+**1. Skeleton King** (Epic Realm Boss):
+- **Stats**: 60 HP, 8 attack damage, 2.0 scale (double size!)
+- **Appearance**: Full netherite armor with purple custom names
+- **UI**: Purple boss bar - "Skeleton King"
+- **Sounds**: Intimidating wither skeleton sounds
+- **Behavior**: Never despawns, extremely dangerous
+- **Loot**:
+    - Full enchanted netherite armor (Protection V, Thorns III, Unbreaking III)
+    - Netherite sword (Sharpness V, Looting III, Fire Aspect II, Unbreaking III)
+    - 1 Nether Star (guaranteed!)
+    - 1-2 Wither Skeleton Skulls
+    - 3-6 Netherite Ingots
+    - 10-20 Diamonds
+- **Chest**: Drops Skeleton King Chest (requires key to unlock)
+- **Location**: Will spawn in special structure (under development)
+
+**2. Skeleton Lord** (Mini-Boss):
+- **Stats**: 45 HP, 6 attack damage, 1.5 scale (50% larger)
+- **Appearance**: Full diamond armor with red custom names
+- **UI**: Red boss bar - "Skeleton Lord"
+- **Behavior**: Summons up to 3 Skeleton Summoners during combat
+- **Spawning**: Naturally in Bone Realm dimension
+- **Loot**:
+    - Full enchanted diamond armor (Protection IV, Thorns II, Unbreaking III)
+    - Diamond sword (Sharpness IV, Looting II, Unbreaking III)
+    - 5-15 Bones
+    - 1-3 Diamonds
+- **Chest**: Drops Bone Realm Locked Chest (requires key)
+
+**3. Skeleton Summoner** (Elite Mob):
+- **Stats**: 30 HP, 4 attack damage, 1.1 scale (slightly larger)
+- **Appearance**: Iron helmet + gray leather robes
+- **Behavior**: Summons up to 4 Bonelings every 6-12 seconds
+- **Summoning**: Called by Skeleton Lords during battle
+- **Effects**: Purple witch particles when summoning, evoker sounds
+- **Drops**: Standard skeleton drops (no special loot)
+
+**4. Boneling** (Weak Minion):
+- **Stats**: 12 HP, 2.5 attack damage, 0.7 scale (small - 70% size)
+- **Speed**: Very fast (35% movement speed)
+- **Appearance**: Tiny skeletons with no armor
+- **Sounds**: Higher-pitched skeleton sounds (1.4x pitch)
+- **Lifetime**: Auto-despawns after 3 minutes
+- **Effects**:
+    - Ash particles while alive
+    - Explodes into bone meal + soul particles on death
+- **Drops**: Nothing (3 XP only)
+
+---
+
+#### **Locked Treasure Chests**
+
+**Skeleton King Chest**:
+- **Appearance**: Glowing bone-themed texture (light level 10)
+- **Strength**: Nearly indestructible (50 hardness, 1200 blast resistance)
+- **Key**: Skeleton King's Key (dropped by Skeleton King)
+- **Unlock**: One-time unlock, then works as normal chest
+- **Location**: Spawns at King's death location with epic particle effects
+
+**Bone Realm Locked Chest**:
+- **Appearance**: Eerie bone texture with dim glow (light level 5)
+- **Strength**: Reinforced (5 hardness, 6 blast resistance)
+- **Key**: Bone Realm Chest Key (from Skeleton Lord)
+- **Unlock**: Key consumed on unlock (creative mode exempt)
+- **Location**: Spawns at Lord's death location
+
+**Chest Mechanics**:
+- Completely locked until correct key is used
+- Visual feedback: Particles when attempting to open
+- Unlock effects: Epic particle pillar + dragon growl sound
+- Wrong key: Clear feedback, no unlock
+- Custom textures via advanced mixin rendering system
+
+---
+
+#### **Combat Strategy**
+
+**Fighting Skeleton Lords**:
+1. Focus fire on Summoners first - prevent Boneling swarms
+2. Kite and use ranged attacks to manage adds
+3. Lords summon Summoners every 10-15 seconds - be ready!
+4. High armor and knockback resistance make them tanky
+
+**Managing Summons**:
+- Each Summoner spawns 4 Bonelings
+- Lords can have up to 3 Summoners active (12+ Bonelings!)
+- Bonelings despawn after 3 minutes if not killed
+- AOE attacks very effective against Boneling swarms
+
+**Boss Armor Benefits**:
+- Significantly increases boss survivability
+- High knockback resistance prevents cheese strategies
+- Makes boss fights feel epic and challenging
+
+**Preparation Tips**:
+- Bring strong gear - full diamond/netherite recommended
+- Potions of Strength and Regeneration help immensely
+- Bow/crossbow for managing adds at range
+- Shield for blocking powerful attacks
+- Food for sustain during long fights
+
+---
+
+#### **Rewards**
+
+**Why Fight Skeleton Lords?**
+- Full enchanted diamond armor set
+- Bone Realm Locked Chest with rare loot
+- Practice for Skeleton King fight
+- Good XP and materials
+
+**Why Fight Skeleton King?**
+- Full enchanted netherite armor (best in game!)
+- Nether Star (required for beacons)
+- Wither Skeleton Skulls (summon Wither boss)
+- Massive diamond and netherite rewards
+- Ultimate bragging rights
+
+---
+
+
+### Progression System
 - **Level System (1-50)**: Gain experience through combat, mining, and quests
 - **Automatic XP Gains**:
     - Mining ores: 5-40 XP (Diamond: 25 XP, Ancient Debris: 40 XP)
@@ -57,15 +196,15 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
         - 15% damage reduction from physical sources
         - Heavy armor proficiency
         - **3 class-specific quests** with unique storyline
-  - **Mage**: (NEW in v1.3.1)
-      - -2 hearts (-4 health)
-      - -25% melee attack damage
-      - **100 Mana Pool** with 2 mana/second regeneration
-      - **7 Unique Spells** via spell scrolls
-      - 50% reduced enchantment costs
-      - 50% longer potion durations
-      - Permanent night vision
-      - **3 class-specific quests** with unique storyline
+    - **Mage**:
+        - -2 hearts (-4 health)
+        - -25% melee attack damage
+        - **100 Mana Pool** with 2 mana/second regeneration
+        - **7 Unique Spells** via spell scrolls
+        - 50% reduced enchantment costs
+        - 50% longer potion durations
+        - Permanent night vision
+        - **3 class-specific quests** with unique storyline
     - **Rogue**: (UPDATED in v1.4.0)
         - -1 heart (-2 health)
         - +30% movement speed
@@ -80,7 +219,7 @@ A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring a
 - **Class Reset Crystal**: Allows players to change their chosen class
 - **Level-Based Class Reset**: Free class reset every 10 quests completed
 
-### Spell System (Mage Class) (Updated in v1.3.1)
+### Spell System (Mage Class)
 Mages harness arcane power through a mana system and spell scrolls:
 
 **Mana Mechanics**:
@@ -106,7 +245,7 @@ Mages harness arcane power through a mana system and spell scrolls:
 - Spell scrolls stackable (16 per stack)
 
 
-### Rogue Ability System (NEW in v1.4.0)
+### Rogue Ability System
 Rogues harness agility and stealth through an energy system and the Rogue Ability Tome:
 
 **Energy Mechanics**:
@@ -173,7 +312,7 @@ Rogues excel at hit-and-run tactics:
 - **Tactical Repositioning**: Smoke Bomb → Move while invisible → Shadow Step to new position
 - **Boss Fights**: Shadow Step decoy draws aggro while you deal damage safely
 
-### Consumable Powder System (NEW in v1.4.0)
+### Consumable Powder System
 Transform custom powders into powerful consumables for tactical advantages:
 
 **Crafting Materials**:
@@ -230,7 +369,7 @@ Transform custom powders into powerful consumables for tactical advantages:
 - Strategic resource management
 - Craft in survival using custom powders
 
-### Custom Armor Set Bonus System (NEW in v1.4.0)
+### Custom Armor Set Bonus System
 Equip matching armor pieces to unlock powerful progressive bonuses!
 
 **How It Works**:
@@ -315,7 +454,7 @@ Equip matching armor pieces to unlock powerful progressive bonuses!
 
 ---
 
-### Weapon + Armor Synergy System (NEW in v1.4.0)
+### Weapon + Armor Synergy System
 Combine matching weapons with armor sets for devastating bonuses!
 
 **How It Works**:
@@ -365,7 +504,7 @@ Stack bonuses for maximum assassination damage:
 
 ---
 
-### Themed Weapons & Shields (NEW in v1.4.0)
+### Themed Weapons & Shields
 
 **Custom Weapons**:
 - **Dragonscale Blade** (Netherite Sword) - Dragon-themed, fire aspect

@@ -71,13 +71,13 @@ public class ClassAbilityManager {
     }
 
     private static void applyMageAbilities(ServerPlayerEntity player) {
-        // -2 hearts (4 health points)
+        // +1 hearts (2 health points)
         var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (healthAttribute != null) {
             healthAttribute.addTemporaryModifier(
                     new EntityAttributeModifier(
                             Identifier.of("dagmod", "mage_health"),
-                            4.0, // +2 hearts
+                            2.0, // +1 hearts
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );
@@ -102,13 +102,13 @@ public class ClassAbilityManager {
     }
 
     private static void applyRogueAbilities(ServerPlayerEntity player) {
-        // -1 heart (2 health points)
+        // +2 heart (4 health points)
         var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (healthAttribute != null) {
             healthAttribute.addTemporaryModifier(
                     new EntityAttributeModifier(
                             Identifier.of("dagmod", "rogue_health"),
-                            2.0, // +1 heart
+                            4.0, // +2 heart
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );

@@ -133,6 +133,18 @@
 
   "consumable.dagmod.class_locked.mage": "Only Mages can use this!",
   "consumable.dagmod.class_locked.warrior": "Only Warriors can use this!",
-  "consumable.dagmod.class_locked.rogue": "Only Rogues can use this!"
+  "consumable.dagmod.class_locked.rogue": "Only Rogues can use this!",
+
+  "block.dagmod.ancient_bone_block": "Ancient Bone Block",
+  "item.dagmod.ancient_bone_block": "Ancient Bone Block",
+  "block.dagmod.bone_realm_portal": "Bone Realm Portal",
+  "item.dagmod.bone_realm_portal": "Bone Realm Portal",
+  "block.dagmod.bone_realm_locked_chest": "Bone Realm Locked Chest",
+  "item.dagmod.bone_realm_locked_chest": "Bone Realm Locked Chest",
+  "item.dagmod.bone_realm_chest_key": "Bone Realm Chest Key",
+  "block.dagmod.skeleton_king_chest": "Skeleton King Chest",
+  "item.dagmod.skeleton_king_chest": "Skeleton King Chest",
+  "item.dagmod.skeleton_king_key": "Skeleton King Chest Key",
+  "item.dagmod.necrotic_key": "Necrotic Key"
 
 }

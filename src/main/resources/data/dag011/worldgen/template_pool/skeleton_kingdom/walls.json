@@ -3,8 +3,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_corner_wall_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_corner_wall_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -12,8 +12,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_intersection_wall_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_intersection_wall_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -21,8 +21,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_lshape_wall_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_lshape_wall_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -30,8 +30,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -39,8 +39,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_2",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_2",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -48,8 +48,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_stairs_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_stairs_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -57,8 +57,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_stairs_2",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_stairs_2",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -66,8 +66,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_stairs_3",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_stairs_3",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -75,8 +75,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_stairs_4",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_stairs_4",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 4
@@ -84,8 +84,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/intact_horizontal_wall_passage_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/intact_horizontal_wall_passage_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 3
@@ -93,8 +93,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/ruined_corner_wall_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/ruined_corner_wall_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -102,8 +102,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/ruined_corner_wall_2",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/ruined_corner_wall_2",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -111,8 +111,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/ruined_horizontal_wall_stairs_1",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/ruined_horizontal_wall_stairs_1",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 2
@@ -120,8 +120,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/ruined_horizontal_wall_stairs_2",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/ruined_horizontal_wall_stairs_2",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 2
@@ -129,8 +129,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/ruined_horizontal_wall_stairs_3",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/ruined_horizontal_wall_stairs_3",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 3
@@ -138,8 +138,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/walls/ruined_horizontal_wall_stairs_4",
-        "processors": "minecraft:ancient_city_walls_degradation",
+        "location": "dag011:skeleton_kingdom/walls/ruined_horizontal_wall_stairs_4",
+        "processors": "dag011:skeleton_kingdom_walls_degradation",
         "projection": "rigid"
       },
       "weight": 3
