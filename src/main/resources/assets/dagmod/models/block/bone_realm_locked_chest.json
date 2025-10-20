@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "dagmod:block/bone_realm_locked_chest",
+    "particle": "dagmod:block/bone_realm_locked_chest"
+  }
+}

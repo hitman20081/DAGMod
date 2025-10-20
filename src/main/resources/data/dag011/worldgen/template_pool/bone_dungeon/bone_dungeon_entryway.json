@@ -1,0 +1,15 @@
+{
+  "name": "dag011:bone_dungeon/bone_dungeon_entryway",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_entryway",
+        "processors": "minecraft:empty",
+	    	"projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

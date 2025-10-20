@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "dagmod:block/bone_realm_locked_chest"
+  }
+}
