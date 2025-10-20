@@ -5,6 +5,111 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.2-beta] - 2025-10-20
+
+### Added - Complete Boss Hierarchy System
+- **Skeleton King Entity**: Epic realm boss with full netherite armor
+    - 60 health, 8 attack damage, 2.0 scale (double size)
+    - Purple boss bar with "Skeleton King" title
+    - Custom named netherite equipment (Crown of the Bone Sovereign, etc.)
+    - Wither skeleton sounds for intimidation
+    - Drops full enchanted netherite armor set + legendary loot
+    - Never despawns - must be defeated
+    - **Loot**: Full netherite set (Protection V, Thorns III, Unbreaking III), Sharpness V sword, Nether Star, 1-2 Wither Skeleton Skulls, 3-6 Netherite Ingots, 10-20 Diamonds
+
+- **Skeleton Lord Entity**: Mini-boss with full diamond armor
+    - 45 health, 6 attack damage, 1.5 scale (50% larger)
+    - Red boss bar with "Skeleton Lord" title
+    - Custom named diamond equipment (Helm of the Bone Lord, etc.)
+    - Summons up to 3 Skeleton Summoners to fight alongside it
+    - Drops full enchanted diamond armor set + loot
+    - Spawns naturally in Bone Realm dimension
+    - Never despawns
+    - **Loot**: Full diamond set (Protection IV, Thorns II, Unbreaking III), Sharpness IV sword, 5-15 Bones, 1-3 Diamonds
+
+- **Skeleton Summoner Entity**: Elite mob that spawns Bonelings
+    - 30 health, 4 attack damage, 1.1 scale (slightly larger)
+    - Iron helmet + leather robes (gray theme)
+    - Summons up to 4 Bonelings periodically
+    - Summoned by Skeleton Lords during combat
+    - Purple witch particle effects when summoning
+    - Evoker casting sounds
+    - Never despawns while active
+
+- **Boneling Entity**: Weak skeleton minion
+    - 12 health, 2.5 attack damage, 0.7 scale (70% size, small!)
+    - Fast movement (35% speed)
+    - No armor, fragile
+    - **Limited lifetime**: Despawns after 3 minutes with poof particles
+    - **Ambient particles**: Ash particles while alive
+    - **Death effects**: Explodes into bone meal + soul particles
+    - **Higher-pitched sounds**: 1.4x pitch for creepy effect
+    - No loot drops - summoned creatures
+    - 3 XP only
+
+- **Boss Hierarchy System**:
+    - Skeleton King (planned for structure spawning)
+    - â†' Skeleton Lord (spawns naturally in Bone Realm)
+    - â†' â†' Skeleton Summoner (summoned by Lords)
+    - â†' â†' â†' Boneling (summoned by Summoners)
+    - Complete chain-summon combat system
+
+- **Enchanted Boss Loot Tables**:
+    - **Skeleton King drops**: Protection V, Thorns III, Unbreaking III, Respiration III, Feather Falling IV, Sharpness V, Looting III, Fire Aspect II
+    - **Skeleton Lord drops**: Protection IV, Thorns II, Unbreaking III, Respiration II, Feather Falling III, Sharpness IV, Looting II
+    - Loot tables handle all drops including armor and bonus items
+    - Boss equipment doesn't drop separately (0% drop chance)
+
+- **Custom Locked Chest Rendering System**:
+    - **Skeleton King Chest**: Requires Skeleton King's Key to unlock
+        - Custom bone-themed texture with glowing effects
+        - 50.0F hardness, 1200.0F blast resistance
+        - Luminance: 10 (glows in the dark)
+    - **Bone Realm Locked Chest**: Requires Bone Realm Chest Key to unlock
+        - Custom eerie bone texture
+        - 5.0F hardness, 6.0F blast resistance
+        - Luminance: 5 (dim glow)
+    - Chests display unique textures using advanced rendering mixins
+    - Visual/audio feedback when attempting to open locked chests
+    - Particle effects on successful unlock
+    - Keys consumed on unlock (except in creative mode)
+    - Boss chests spawn automatically on boss death with epic effects
+
+### Technical - Boss & Chest Systems
+- Extended `SkeletonEntity` for all boss entities for proper armor rendering
+- Implemented `AbstractSkeletonEntityRenderer` for proper armor display
+- Created complete boss hierarchy:
+    - `SkeletonKingEntity`: Epic boss with boss bar and chest spawning
+    - `SkeletonLordEntity`: Mini-boss with boss bar, summons Summoners
+    - `SkeletonSummonerEntity`: Elite mob that summons Bonelings
+    - `BonelingEntity`: Enhanced minion with particles and lifetime limit
+- Created custom chest rendering system:
+    - `ChestRenderStateAccessor`: Interface for storing custom chest data in render state
+    - `ChestRenderStateMixin`: Implements custom chest type tracking
+    - `LockedChestTextureMixin`: Intercepts texture lookups for custom rendering
+    - `ChestTextureHolder`: ThreadLocal helper for mixin communication
+- Boss entities registered with proper attributes and AI goals
+- `BossChestSpawner`: Handles chest spawning with particle effects and key distribution
+- Proper VoxelShape definitions for accurate chest hitboxes
+- Entity renderers registered for all boss entities
+- Loot table system for enchanted armor and bonus drops
+
+### Changed
+- Skeleton-based bosses now properly display equipped armor
+- Custom chest blocks updated to `ENTITYBLOCK_ANIMATED` render type
+- Chest hitboxes match visual model size (14x14x14 pixels)
+- Boss combat now involves managing summoned mobs
+- Bonelings auto-despawn after 3 minutes to prevent overwhelming the world
+- Summoners use witch particles instead of soul particles for visual distinction
+
+### Fixed
+- Boss armor now renders correctly (was invisible before)
+- Custom chest textures display properly for both chest types
+- No visual gaps around chests showing underground areas
+- Texture persistence when moving around chests
+- Skeleton Lord now properly spawns chests on death
+- Equipment drop chances set to 0% (loot tables handle all drops)
+
 ## [1.4.1] - 2025-10-11
 
 ### Changed

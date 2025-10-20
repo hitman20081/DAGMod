@@ -56,13 +56,13 @@ public class RaceAbilityManager {
             );
         }
 
-        // +1 heart (2 health points)
+        // +0.5 heart (1 health points)
         var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (healthAttribute != null) {
             healthAttribute.addTemporaryModifier(
                     new EntityAttributeModifier(
                             Identifier.of("dagmod", "dwarf_health"),
-                            2.0, // +1 heart
+                            2.0, // +0.5 heart
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );
@@ -122,13 +122,13 @@ public class RaceAbilityManager {
             );
         }
 
-        // +2 hearts (4 health points)
+        // +1.5 hearts (3 health points)
         var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (healthAttribute != null) {
             healthAttribute.addTemporaryModifier(
                     new EntityAttributeModifier(
                             Identifier.of("dagmod", "orc_health"),
-                            4.0, // +2 hearts
+                            3.0, // +1.5 hearts
                             EntityAttributeModifier.Operation.ADD_VALUE
                     )
             );

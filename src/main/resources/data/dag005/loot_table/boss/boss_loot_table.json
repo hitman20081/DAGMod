@@ -6,6 +6,53 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "dagmod:skeleton_king_key",
+          "weight": 100,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "text": "Skeleton King's Key",
+                "color": "#8B008B",
+                "italic": false
+              },
+              "target": "item_name"
+            },
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                {
+                  "text": "A dark key that radiates death",
+                  "color": "gray",
+                  "italic": true
+                },
+                {
+                  "text": "Opens the Skeleton King's Treasure",
+                  "color": "dark_purple",
+                  "italic": false
+                }
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:necrotic_key",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:potion",
           "weight": 10,
           "functions": [
@@ -15,8 +62,7 @@
                 "type": "minecraft:uniform",
                 "min": 1,
                 "max": 1
-              },
-              "conditions": []
+              }
             },
             {
               "function": "minecraft:set_potion",

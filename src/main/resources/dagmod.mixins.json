@@ -11,7 +11,11 @@
       "HumanExperienceMixin",
       "LivingEntityMixin"
 	],
-	"client": [],
+  "client": [
+    "ChestRenderStateMixin",
+    "LockedChestTextureMixin$ChestRendererMixin",
+    "LockedChestTextureMixin$TexturedRenderLayersMixin"
+  ],
 	"injectors": {
 		"defaultRequire": 1
 	}

@@ -3,8 +3,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/city_center/city_center_1",
-        "processors": "minecraft:ancient_city_start_degradation",
+        "location": "dag011:skeleton_kingdom/city_center/city_center_1",
+        "processors": "dag011:skeleton_kingdom_start_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -12,8 +12,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/city_center/city_center_2",
-        "processors": "minecraft:ancient_city_start_degradation",
+        "location": "dag011:skeleton_kingdom/city_center/city_center_2",
+        "processors": "dag011:skeleton_kingdom_start_degradation",
         "projection": "rigid"
       },
       "weight": 1
@@ -21,8 +21,8 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "minecraft:ancient_city/city_center/city_center_3",
-        "processors": "minecraft:ancient_city_start_degradation",
+        "location": "dag011:skeleton_kingdom/city_center/city_center_3",
+        "processors": "dag011:skeleton_kingdom_start_degradation",
         "projection": "rigid"
       },
       "weight": 1

@@ -1,0 +1,87 @@
+{
+  "name": "dag011:main",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 50,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_corner",
+        "processors": "minecraft:empty",
+	    	"projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+  	{	
+      "weight": 70,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_crossway",
+        "processors": "minecraft:empty",
+	    	"projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 80,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_hallway",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 40,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_portal_room",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 40,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_room1",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 40,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_room2",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 40,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_room3",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 40,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_stairway",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_treasure_room",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
