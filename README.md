@@ -1,10 +1,56 @@
-# DAGMod v1.4.2-beta - Fantasy RPG Minecraft Mod
+# DAGMod v1.4.3-beta - Fantasy RPG Minecraft Mod
 
-A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, progression system, class mechanics, race selection, synergy abilities, custom items, and immersive gameplay mechanics.
+A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, progression system, class mechanics, race selection, synergy abilities, custom items, procedurally generated dungeons, and immersive gameplay mechanics.
+
+## What's New in v1.4.3-beta
+
+### 🏰 Bone Dungeon Structure System (NEW!)
+Explore procedurally generated underground dungeons with random layouts!
+
+**Features**:
+- **Jigsaw-based generation** - Every dungeon is unique
+- **10 structure pieces**: Entryway, Hallway, Corner, Crossway, Stairway, 3 Rooms, Treasure Room, Portal Room, Endcap
+- **Custom loot tables** with themed rewards for each room type
+- **Smart generation** - Entryway spawns near surface, chambers spread underground
+- **Weighted spawning** - Balanced mix of corridors and treasure rooms
+- **Natural integration** - Uses terrain adaptation to blend with the world
+
+**Loot**:
+- **Treasure Room**: Enchanted books, diamonds, emeralds, golden apples, rare gear
+- **Portal Room**: Ender pearls, obsidian, eyes of ender, portal-themed items
+- **Regular Rooms**: Bones, arrows, iron, gold, basic supplies
+
+### ✨ Enhanced Consumables (IMPROVED!)
+Three consumables now work properly with full functionality:
+
+**Shadow Blend** (Rogue) - *Now fully functional!*
+- Grants invisibility for up to 5 minutes
+- **Invisibility breaks when you attack** - Perfect for stealth gameplay
+- Sneak up on enemies, then strike to break stealth
+
+**Fortune Dust** - *Now fully functional!*
+- Tracks exactly **10 blocks mined**
+- Applies **Fortune III bonus drops** to each block
+- Counter displays blocks remaining after each mine
+- Works on all ores for maximum efficiency
+
+**Cooldown Elixir** (Warrior) - *Now fully functional!*
+- Reduces **all active Warrior ability cooldowns by 30 seconds**
+- Affects Rage, Shield Bash, and War Cry
+- Shows number of cooldowns reduced
+- Perfect for intense combat situations
+
+### 🧹 Cleanup & Polish
+- Removed deprecated dag010 datapack
+- Cleaned up TODO comments and debug code
+- Improved data tracking system (HashMap-based storage)
+- Better event handling for consumable items
+
+---
 
 ## Features
 
-### Bone Realm Boss System (NEW in v1.4.2)
+### Bone Realm Boss System
 Face a complete boss hierarchy with chain-summoning mechanics and epic loot!
 
 **Boss Hierarchy**:
@@ -169,7 +215,7 @@ Skeleton King (Epic Boss)
         - Village Development (5 quests) - Settlement building
         - Master Craftsman (3 quests) - Crafting mastery
         - Combat Specialist (4 quests) - Combat prowess
-    - **Race-Specific Chains** (4) - NEW in v1.3.0:
+    - **Race-Specific Chains** (4):
         - **The Forgemaster's Legacy** (Dwarf, 10 quests) - Mining and smithing mastery
         - **Guardian of the Wilds** (Elf, 10 quests) - Nature and archery path
         - **Jack of All Trades** (Human, 10 quests) - Versatile exploration and mastery
@@ -205,7 +251,7 @@ Skeleton King (Epic Boss)
         - 50% longer potion durations
         - Permanent night vision
         - **3 class-specific quests** with unique storyline
-    - **Rogue**: (UPDATED in v1.4.0)
+    - **Rogue**:
         - -1 heart (-2 health)
         - +30% movement speed
         - **100 Energy Pool** with 5 energy/second regeneration
@@ -327,8 +373,9 @@ Transform custom powders into powerful consumables for tactical advantages:
     - Recipe: Amethyst Powder + Echo Dust + Amethyst Shard
 - **Energy Tonic** (Rogue only) - Instantly restore 50 energy
     - Recipe: Quartz Powder + Slimeball Dust + Glass Bottle
-- **Cooldown Elixir** (Warrior only) - Reduce all cooldowns
+- **Cooldown Elixir** (Warrior only) - ✨ **Reduce all cooldowns by 30 seconds**
     - Recipe: Diamond Powder + Emerald Powder + Glass Bottle
+    - *Fully functional in v1.4.3!*
 
 **Combat Enhancers**:
 - **Vampire Dust** - Lifesteal effect for 20 seconds
@@ -339,12 +386,14 @@ Transform custom powders into powerful consumables for tactical advantages:
     - Recipe: Diamond Powder + Redstone + Blaze Powder
 
 **Utility Consumables**:
-- **Fortune Dust** - Fortune III effect for mining
+- **Fortune Dust** - ✨ **Fortune III effect for exactly 10 blocks**
     - Recipe: Emerald Powder + Lapis Lazuli + Gold Nugget
+    - *Fully functional in v1.4.3!*
 - **Feather-fall Powder** - No fall damage for 60 seconds
     - Recipe: Slimeball Dust + Feather + Phantom Membrane
-- **Shadow Blend** (Rogue only) - Invisibility until you attack
+- **Shadow Blend** (Rogue only) - ✨ **Invisibility until you attack**
     - Recipe: Echo Dust + Coal + Fermented Spider Eye
+    - *Fully functional in v1.4.3!*
 
 **Class Power Boosts**:
 - **Spell Echo** (Mage only) - Next spell casts twice
@@ -578,6 +627,10 @@ Special abilities unlock when combining specific races and classes:
     - Contains both Race and Class Selection Altars
     - Generates on solid ground in the Overworld
     - Your journey begins here
+- **Bone Dungeon**: Procedurally generated underground structures *(NEW in v1.4.3!)*
+    - Spawns naturally in the Overworld
+    - Contains treasure chests with custom loot
+    - Unique jigsaw-based layouts
 - **Hall Locator**: New players receive a locator item to find the structure
 
 ### Race-Specific Gathering
@@ -594,7 +647,7 @@ Dozens of custom fantasy-themed items including:
 - **Selection Tomes**: Detailed information about classes and races
 - **Spell Scrolls**: 7 unique mage spells (Heal, Fireball, Absorption, Lightning, Frost Nova, Blink, Mana Shield)
 - **Rogue Ability Tome**: Multi-ability item with Smoke Bomb, Poison Dagger, and Shadow Step
-- **Consumables**: 15 powder-based consumables for tactical advantages (NEW in v1.4.0)
+- **Consumables**: 15 powder-based consumables for tactical advantages
 - **Hall Locator**: Find the Hall of Champions
 - **Crafting Materials**: Various powders (Diamond, Emerald, Amethyst, Quartz), Echo Dust, Slimeball Dust
 - **Fantasy Foods**: Over 20 unique food items with special effects
@@ -646,6 +699,7 @@ Dozens of custom fantasy-themed items including:
 8. **Level Up**: Watch your character grow stronger with each level
 9. **Begin Questing**: Find Quest Blocks to start your adventure and earn massive XP
 10. **Progress Through Tiers**: Complete quests to unlock higher difficulties and better rewards
+11. **Explore Dungeons**: Search for Bone Dungeons naturally generating underground *(NEW!)*
 
 ## Progression Guide
 
@@ -673,7 +727,8 @@ Dozens of custom fantasy-themed items including:
 - **Orc Rogue**: Brutal assassin - extreme backstab damage, extra health, hunting expertise
 - **Human Warrior**: Adaptable tank - absorption hearts, balanced combat, fast progression
 - **Human Rogue**: Versatile scout - mobility boosts, fast leveling, jack of all trades
-- **Rogue Combinations**:
+
+### Rogue Combinations Detailed
 - **Elf Rogue**: Ultimate stealth - forest invisibility, high speed, deadly backstabs
 - **Orc Rogue**: Brutal assassin - extreme backstab damage (1.5x + 20%), extra health
 - **Human Rogue**: Versatile scout - mobility boosts, fast leveling, balanced playstyle
@@ -704,11 +759,12 @@ src/main/java/com/github/hitman20081/dagmod/
 ├── block/          - Custom blocks (Quest Block, Altars)
 ├── class_system/   - RPG class mechanics and abilities
 ├── race_system/    - Race selection and racial bonuses
-├── progression/    - Level system, XP, stat scaling (NEW)
+├── progression/    - Level system, XP, stat scaling
 ├── data/           - Persistent data management
 ├── command/        - Custom commands
 ├── effect/         - Custom status effects
 ├── entity/         - Custom entities
+├── event/          - Event handlers (NEW in v1.4.3)
 ├── gui/            - User interface screens
 ├── item/           - Custom items (tokens, tomes, food)
 ├── mixin/          - Mixins for modifying game behavior
@@ -719,8 +775,11 @@ src/main/java/com/github/hitman20081/dagmod/
     └── registry/   - Quest registration
 
 data/dag011/        - Datapack integration
-├── structures/     - World-generated structures
+├── structures/     - World-generated structures (NEW: Bone Dungeon)
 ├── worldgen/       - World generation configs
+│   ├── template_pool/ - Jigsaw structure pools
+│   └── structure/     - Structure definitions
+├── loot_table/     - Custom loot tables (NEW: Dungeon chests)
 └── functions/      - Datapack functions
 ```
 
@@ -738,9 +797,28 @@ This project is licensed under the terms specified in the LICENSE file.
 
 Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
 ## Roadmap
 
-### v1.4.0 (RELEASED - October 2025)
+### v1.4.3-beta (CURRENT RELEASE - October 2025)
+- ✅ Bone Dungeon structure generation system
+- ✅ Custom loot tables for dungeon chests
+- ✅ Enhanced Shadow Blend (breaks on attack)
+- ✅ Enhanced Fortune Dust (tracks 10 blocks)
+- ✅ Enhanced Cooldown Elixir (reduces all cooldowns)
+- ✅ Cleaned up deprecated code and TODOs
+- ✅ Improved data tracking systems
+
+### v1.4.2-beta (October 2025)
+- ✅ Bone Realm Boss System
+- ✅ Skeleton King, Skeleton Lord, and minion hierarchy
+- ✅ Locked treasure chests with keys
+- ✅ Boss summoning mechanics
+
+### v1.4.0 (October 2025)
 - ✅ Rogue ability system (Smoke Bomb, Poison Dagger, Shadow Step)
 - ✅ Energy system for Rogues with visual HUD
 - ✅ Rogue Ability Tome with ability cycling
@@ -753,40 +831,40 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 - ✅ Enhanced backstab damage stacking
 
 ### v1.5.0 (Planned)
+- Full implementation of placeholder consumables:
+    - Vampire Dust: True lifesteal mechanic
+    - Phantom Dust / Perfect Dodge: Actual dodge system
+    - Spell Echo / Overcharge Dust: Spell modification
+    - Last Stand Powder: Death prevention system
+    - Time Distortion: AoE slow effect
 - More spell scrolls for Mages
 - Spell crafting recipes
 - Custom enchantments (race/class specific)
 - Additional armor sets
 - More weapon synergies
-- Enhanced consumable effects
+- Boss encounters in Bone Dungeons
 
 ### Future Features
 - Additional quest types and chains
 - More class abilities and specializations
 - Custom structures and dungeons
-- Boss encounters with unique mechanics
+- Enhanced boss encounters with unique mechanics
 - Reputation system with factions
 - Guild/Party system
 - PvP arena system
+- Dimension expansion
 
-### Future Features
-- Additional quest types and chains
-- More class abilities and specializations
-- Ability cooldown systems
-- Custom structures and dungeons
-- Boss encounters with unique mechanics
-- Reputation system with factions
-- Guild/Party system
+## Known Issues
 
-### Future Features
-- Additional quest types and chains
-- More class abilities and specializations
-- Custom structures and dungeons
-- Boss encounters with unique mechanics
-- Reputation system with factions
-- Magic spell system expansion
-- Guild/Party system
-- PvP arena system
+### v1.4.3-beta
+- Some consumables use placeholder effects (marked in code):
+    - Vampire Dust: Uses Regeneration (lifesteal planned for v1.5.0)
+    - Phantom Dust / Perfect Dodge: Uses Resistance (dodge system planned)
+    - Spell Echo / Overcharge Dust: Not fully functional (requires spell system integration)
+    - Last Stand Powder: Uses Absorption (death prevention planned)
+    - Time Distortion: Only affects player (AoE planned)
+
+See GitHub Issues for complete bug tracking.
 
 ## Support
 
@@ -796,4 +874,4 @@ For bug reports, feature requests, or questions:
 
 ---
 
-**Choose your race, select your class, unlock powerful synergies, level up through epic adventures, and embark on a complete fantasy RPG experience in Minecraft!**
+**Choose your race, select your class, unlock powerful synergies, explore procedurally generated dungeons, level up through epic adventures, and embark on a complete fantasy RPG experience in Minecraft!**
