@@ -328,6 +328,8 @@ public class ClassSelectionAltarBlock extends Block {
     }
 
     private void initializeMage(ServerPlayerEntity player) {
+        // Give Apprentice Wand
+        player.giveItemStack(new ItemStack(ModItems.APPRENTICE_WAND));
         // Give wooden sword
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.WOODEN_SWORD));
 

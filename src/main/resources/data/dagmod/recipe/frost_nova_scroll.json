@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:diamond_powder",
+    "minecraft:ice",
+    "minecraft:snowball"
+  ],
+  "result": {
+    "id": "dagmod:frost_nova_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:frost_nova_scroll"
+    },
+    "count": 1
+  }
+}

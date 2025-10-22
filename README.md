@@ -10,12 +10,12 @@ Face a complete boss hierarchy with chain-summoning mechanics and epic loot!
 **Boss Hierarchy**:
 ```
 Skeleton King (Epic Boss)
-â"‚
-â"œâ"€â"€ Skeleton Lord (Mini-Boss)
-    â"‚
-    â"œâ"€â"€ Skeleton Summoner (Elite Mob)
-        â"‚
-        â"œâ"€â"€ Boneling (Weak Minion)
+│
+├── Skeleton Lord (Mini-Boss)
+    │
+    ├── Skeleton Summoner (Elite Mob)
+        │
+        ├── Boneling (Weak Minion)
 ```
 
 ---

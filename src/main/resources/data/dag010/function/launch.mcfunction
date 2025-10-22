@@ -1,1 +1,0 @@
-execute anchored eyes summon fireball run function dag010:fireball_launch

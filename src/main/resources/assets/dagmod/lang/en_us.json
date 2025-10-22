@@ -72,6 +72,9 @@
   "item.dagmod.frost_nova_scroll": "Frost Nova",
   "item.dagmod.teleport_scroll": "Blink",
   "item.dagmod.mana_shield_scroll": "Mana Shield",
+  "item.dagmod.apprentice_wand": "Apprentice Wand",
+  "item.dagmod.adept_wand": "Adept Wand",
+  "item.dagmod.master_wand": "Master Wand",
 
   "item.dagmod.rage_totem": "Rage Totem",
   "item.dagmod.war_horn": "War Horn",

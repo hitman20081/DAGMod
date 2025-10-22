@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:quartz_powder",
+    "minecraft:lapis_lazuli"
+  ],
+  "result": {
+    "id": "dagmod:mana_shield_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:mana_shield_scroll"
+    },
+    "count": 1
+  }
+}

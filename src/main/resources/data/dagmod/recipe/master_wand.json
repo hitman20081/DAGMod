@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:adept_wand",
+    "dagmod:diamond_powder",
+    "dagmod:diamond_powder",
+    "minecraft:nether_star"
+  ],
+  "result": {
+    "id": "dagmod:master_wand",
+    "components": {
+      "minecraft:item_model": "dagmod:master_wand"
+    },
+    "count": 1
+  }
+}

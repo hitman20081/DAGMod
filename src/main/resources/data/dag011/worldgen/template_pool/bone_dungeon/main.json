@@ -1,27 +1,9 @@
 {
-  "name": "dag011:main",
+  "name": "dag011:bone_dungeon/main",
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 50,
-      "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_corner",
-        "processors": "minecraft:empty",
-	    	"projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-  	{	
-      "weight": 70,
-      "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_crossway",
-        "processors": "minecraft:empty",
-	    	"projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 80,
+      "weight": 40,
       "element": {
         "location": "dag011:bone_dungeon/bone_dungeon_hallway",
         "processors": "minecraft:empty",
@@ -30,43 +12,25 @@
       }
     },
     {
-      "weight": 40,
+      "weight": 25,
       "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_portal_room",
+        "location": "dag011:bone_dungeon/bone_dungeon_corner",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 40,
+      "weight": 15,
       "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_room1",
+        "location": "dag011:bone_dungeon/bone_dungeon_crossway",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 40,
-      "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_room2",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 40,
-      "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_room3",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 40,
+      "weight": 10,
       "element": {
         "location": "dag011:bone_dungeon/bone_dungeon_stairway",
         "processors": "minecraft:empty",
@@ -75,9 +39,54 @@
       }
     },
     {
-      "weight": 100,
+      "weight": 5,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_room1",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_room2",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_room3",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
       "element": {
         "location": "dag011:bone_dungeon/bone_dungeon_treasure_room",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_portal_room",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_wall_endcap",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

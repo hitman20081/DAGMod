@@ -1,2 +1,0 @@
-give @s blaze_rod[minecraft:item_name='"Magic Wand"', custom_data={magic_wand:true}, food={nutrition:0, saturation:0, can_always_eat:true}, consumable={"consume_seconds": 1000000,} ]
-give @s blaze_rod[minecraft:item_name='"Flame Wand"', custom_data={flame_wand:true}, food={nutrition:0, saturation:0, can_always_eat:true}, consumable={"consume_seconds": 1000000,} ]

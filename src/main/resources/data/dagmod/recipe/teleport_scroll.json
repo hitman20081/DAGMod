@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:echo_dust",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "dagmod:teleport_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:teleport_scroll"
+    },
+    "count": 1
+  }
+}
