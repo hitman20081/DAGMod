@@ -5,6 +5,38 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.3-beta] - 2025-10-22
+
+### Added
+- **Bone Dungeon Structure System**
+    - New jigsaw-based dungeon generation with random layouts
+    - 10 unique structure pieces: Entryway, Hallway, Corner, Crossway, Stairway, 3 Rooms, Treasure Room, Portal Room
+    - Loot tables for dungeon chests with themed rewards
+    - Dungeon spawns near surface with underground chambers
+    - Endcap structures to cleanly terminate dungeon paths
+
+- **Consumable Items - Enhanced**
+    - Shadow Blend (Rogue): Invisibility now properly breaks when attacking
+    - Fortune Dust: Tracks exactly 10 blocks mined with Fortune III bonus drops
+    - Cooldown Elixir (Warrior): Reduces all active ability cooldowns by 30 seconds
+
+### Fixed
+- Consumable items now use proper data storage system (HashMap-based)
+- Improved consumable effect tracking and reliability
+
+### Removed
+- dag010 datapack (deprecated/unused)
+- Cleaned up unused debug code and TODOs
+
+### Technical
+- Implemented event handlers for Shadow Blend and Fortune Dust
+- Added `ShadowBlendHandler.java` for invisibility breaking on attack
+- Added `FortuneDustHandler.java` for tracked Fortune drops
+- Updated `CooldownManager.java` with `reduceAllCooldowns()` method
+- Bone dungeon uses weighted pool system for balanced generation
+
+---
+
 ## [1.4.2-beta] - 2025-10-20
 
 ### Added - Complete Boss Hierarchy System

@@ -14,7 +14,16 @@
     {
       "weight": 25,
       "element": {
-        "location": "dag011:bone_dungeon/bone_dungeon_corner",
+        "location": "dag011:bone_dungeon/bone_dungeon_corner_left",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 25,
+      "element": {
+        "location": "dag011:bone_dungeon/bone_dungeon_corner_right",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
