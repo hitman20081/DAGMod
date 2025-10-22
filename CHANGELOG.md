@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Bone Dungeon Structure System**
     - New jigsaw-based dungeon generation with random layouts
-    - 10 unique structure pieces: Entryway, Hallway, Corner, Crossway, Stairway, 3 Rooms, Treasure Room, Portal Room
+    - 10 unique structure pieces: Entryway, Hallway, (Corners Left and Right), Crossway, Stairway, 3 Rooms, Treasure Room, Portal Room
     - Loot tables for dungeon chests with themed rewards
     - Dungeon spawns near surface with underground chambers
     - Endcap structures to cleanly terminate dungeon paths
