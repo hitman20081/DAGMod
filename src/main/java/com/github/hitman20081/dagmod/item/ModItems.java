@@ -129,6 +129,21 @@ public class ModItems {
             settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.MANA_SHIELD),
             new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON));
 
+    // Apprentice Wand - Early game Mage weapon
+    public static final Item APPRENTICE_WAND = register("apprentice_wand",
+            settings -> new ApprenticeWandItem(settings),
+            new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
+
+    // Adept Wand - Mid game Mage weapon
+    public static final Item ADEPT_WAND = register("adept_wand",
+            settings -> new AdeptWandItem(settings),
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    // Master Wand - Late game Mage weapon
+    public static final Item MASTER_WAND = register("master_wand",
+            settings -> new MasterWandItem(settings),
+            new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
+
     // === WARRIOR ABILITY ITEMS ===
 
     /**
@@ -369,6 +384,16 @@ public class ModItems {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
                 .register((itemGroup) ->
                         itemGroup.add(ModItems.HALL_LOCATOR));
+
+        // Add to Tools group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.APPRENTICE_WAND);
+                    itemGroup.add(ModItems.ADEPT_WAND);
+                    itemGroup.add(ModItems.MASTER_WAND);
+                    // ... other items
+                });
+
 
         // Spell Scrolls - Add to Tools group
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:diamond_powder",
+    "minecraft:glowstone_dust",
+    "minecraft:copper_ingot"
+  ],
+  "result": {
+    "id": "dagmod:lightning_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:lightning_scroll"
+    },
+    "count": 1
+  }
+}

@@ -49,9 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Boss Hierarchy System**:
     - Skeleton King (planned for structure spawning)
-    - â†' Skeleton Lord (spawns naturally in Bone Realm)
-    - â†' â†' Skeleton Summoner (summoned by Lords)
-    - â†' â†' â†' Boneling (summoned by Summoners)
+    - Skeleton Lord (spawns naturally in Bone Realm)
+    - Skeleton Summoner (summoned by Lords)
+    - Boneling (summoned by Summoners)
     - Complete chain-summon combat system
 
 - **Enchanted Boss Loot Tables**:

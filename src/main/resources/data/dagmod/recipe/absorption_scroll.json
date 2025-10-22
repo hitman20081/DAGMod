@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:amethyst_powder",
+    "minecraft:golden_apple"
+  ],
+  "result": {
+    "id": "dagmod:absorption_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:absorption_scroll"
+    },
+    "count": 1
+  }
+}
