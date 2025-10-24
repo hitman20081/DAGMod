@@ -15,6 +15,8 @@ import com.github.hitman20081.dagmod.command.QuestCommand;
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.effect.ModEffects;
 import com.github.hitman20081.dagmod.event.DeathMessageHandler;
+import com.github.hitman20081.dagmod.event.FortuneDustHandler;
+import com.github.hitman20081.dagmod.event.ShadowBlendHandler;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.networking.ModNetworking;
 import com.github.hitman20081.dagmod.potion.ModPotions;
@@ -107,6 +109,10 @@ public class DagMod implements ModInitializer {
                 EnergyNetworking.EnergySyncPayload.ID,
                 EnergyNetworking.EnergySyncPayload.CODEC
         );
+
+        ShadowBlendHandler.register();
+
+        FortuneDustHandler.register();
 
         // Initialize energy management system
         EnergyManager.initialize();

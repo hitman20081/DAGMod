@@ -77,6 +77,5 @@ public class BoneRealmEntityRegistry {
                 BonelingEntity.createBonelingAttributes()
         );
 
-        System.out.println("Bone Realm entities registered!");
     }
 }

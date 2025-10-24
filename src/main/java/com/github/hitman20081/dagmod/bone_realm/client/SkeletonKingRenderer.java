@@ -13,7 +13,6 @@ public class SkeletonKingRenderer extends AbstractSkeletonEntityRenderer<Skeleto
 
     public SkeletonKingRenderer(EntityRendererFactory.Context context) {
         super(context, EntityModelLayers.SKELETON, EntityModelLayers.SKELETON_EQUIPMENT);
-        System.out.println("DEBUG: SkeletonKingRenderer created using AbstractSkeletonEntityRenderer");
     }
 
     @Override

@@ -13,7 +13,6 @@ public class SkeletonLordRenderer extends AbstractSkeletonEntityRenderer<Skeleto
 
     public SkeletonLordRenderer(EntityRendererFactory.Context context) {
         super(context, EntityModelLayers.SKELETON, EntityModelLayers.SKELETON_EQUIPMENT);
-        System.out.println("DEBUG: SkeletonLordRenderer created using AbstractSkeletonEntityRenderer");
     }
 
     @Override

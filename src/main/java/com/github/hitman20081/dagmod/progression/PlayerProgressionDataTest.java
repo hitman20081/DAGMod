@@ -9,7 +9,6 @@ import java.util.UUID;
 public class PlayerProgressionDataTest {
 
     public static void main(String[] args) {
-        System.out.println("=== DAGMod Progression System Tests ===\n");
 
         testXPCurve();
         testLevelUps();
@@ -17,16 +16,13 @@ public class PlayerProgressionDataTest {
         testNBTSerialization();
         testDisplayStrings();
 
-        System.out.println("\n=== All Tests Complete ===");
+
     }
 
     /**
      * Test 1: Verify XP curve progression
      */
     private static void testXPCurve() {
-        System.out.println("TEST 1: XP Curve Validation");
-        System.out.println("Level | XP Required | Total XP | Increase %");
-        System.out.println("------|-------------|----------|------------");
 
         int previousXP = 0;
         int totalXP = 0;
@@ -58,7 +54,7 @@ public class PlayerProgressionDataTest {
      * Test 2: Level up mechanics
      */
     private static void testLevelUps() {
-        System.out.println("TEST 2: Level Up Mechanics");
+
 
         UUID testUUID = UUID.randomUUID();
         PlayerProgressionData data = new PlayerProgressionData(testUUID);
@@ -87,14 +83,13 @@ public class PlayerProgressionDataTest {
         System.out.printf("\nProgress with 50 XP at level 1: %d%%\n",
                 data.getProgressPercentage());
 
-        System.out.println();
+
     }
 
     /**
      * Test 3: Max level behavior
      */
     private static void testMaxLevel() {
-        System.out.println("TEST 3: Max Level Behavior");
 
         UUID testUUID = UUID.randomUUID();
         PlayerProgressionData data = new PlayerProgressionData(testUUID);
@@ -115,14 +110,14 @@ public class PlayerProgressionDataTest {
         System.out.printf("XP required for next level: %d\n",
                 data.getXPRequiredForNextLevel());
 
-        System.out.println();
+
     }
 
     /**
      * Test 4: NBT serialization
      */
     private static void testNBTSerialization() {
-        System.out.println("TEST 4: NBT Serialization");
+
 
         UUID testUUID = UUID.randomUUID();
         PlayerProgressionData original = new PlayerProgressionData(testUUID);
@@ -140,15 +135,13 @@ public class PlayerProgressionDataTest {
         // NbtCompound nbt = original.toNbt();
         // PlayerProgressionData loaded = PlayerProgressionData.fromNbt(nbt);
 
-        System.out.println("NBT serialization methods exist and are ready to use");
-        System.out.println();
     }
 
     /**
      * Test 5: Display strings
      */
     private static void testDisplayStrings() {
-        System.out.println("TEST 5: Display Strings");
+
 
         UUID testUUID = UUID.randomUUID();
         PlayerProgressionData data = new PlayerProgressionData(testUUID);
@@ -170,7 +163,6 @@ public class PlayerProgressionDataTest {
      * Bonus: Calculate XP distribution for 20-hour gameplay
      */
     public static void analyzeXPSources() {
-        System.out.println("\n=== XP Source Analysis for 20-Hour Gameplay ===");
 
         int totalXP = PlayerProgressionData.calculateTotalXPForLevel(50);
         int targetMinutes = 20 * 60; // 20 hours in minutes

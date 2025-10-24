@@ -142,4 +142,48 @@ public class CooldownManager {
 
         return active;
     }
+    /**
+     * Reduces all active cooldowns for a player by the specified amount
+     * Used by Cooldown Elixir consumable item
+     * @param player The player whose cooldowns to reduce
+     * @param ticks Amount of ticks to reduce (20 ticks = 1 second)
+     */
+    public static void reduceAllCooldowns(ServerPlayerEntity player, int ticks) {
+        UUID uuid = player.getUuid();
+        Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
+
+        if (playerCooldowns == null || playerCooldowns.isEmpty()) {
+            player.sendMessage(
+                    Text.literal("No active cooldowns to reduce!")
+                            .formatted(Formatting.YELLOW),
+                    true
+            );
+            return;
+        }
+
+        long currentTime = player.getEntityWorld().getTime();
+        int reducedCount = 0;
+
+        // Reduce each cooldown
+        for (Map.Entry<WarriorAbility, Long> entry : playerCooldowns.entrySet()) {
+            long cooldownEndTime = entry.getValue();
+
+            // Only reduce if cooldown is still active
+            if (cooldownEndTime > currentTime) {
+                long newEndTime = cooldownEndTime - ticks;
+                // Make sure we don't go below current time (instant ready)
+                newEndTime = Math.max(currentTime, newEndTime);
+                entry.setValue(newEndTime);
+                reducedCount++;
+            }
+        }
+
+        if (reducedCount > 0) {
+            player.sendMessage(
+                    Text.literal("⏰ Reduced " + reducedCount + " cooldown(s) by " + (ticks / 20) + " seconds!")
+                            .formatted(Formatting.GOLD),
+                    true
+            );
+        }
+    }
 }

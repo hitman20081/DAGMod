@@ -103,7 +103,6 @@ public class BoneRealmRegistry {
         // Add items to creative tabs
         addToCreativeTabs();
 
-        System.out.println("Bone Realm content registered!");
     }
 
     /**

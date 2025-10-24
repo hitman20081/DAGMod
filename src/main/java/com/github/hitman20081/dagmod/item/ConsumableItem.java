@@ -1,12 +1,16 @@
 package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
+import com.github.hitman20081.dagmod.event.FortuneDustHandler;
+import com.github.hitman20081.dagmod.event.ShadowBlendHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -124,9 +128,10 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // Reduce all cooldowns by 30 seconds - SIMPLIFIED
-                // TODO: Implement actual cooldown reduction via CooldownManager
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 600, 2)); // Temporary effect
+
+                // Reduce all cooldowns by 30 seconds (600 ticks)
+                CooldownManager.reduceAllCooldowns(player, 600);
+
                 player.sendMessage(Text.literal("⏰ Cooldown reduction active! ⏰")
                         .formatted(Formatting.GOLD), true);
                 return true;
@@ -185,7 +190,10 @@ public class ConsumableItem extends Item {
                 }
                 // Invisibility until attack
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 6000, 0)); // 5 minutes
-                // TODO: Remove invisibility on attack
+
+                // Mark that Shadow Blend is active
+                ShadowBlendHandler.activateShadowBlend(player.getUuid());
+
                 player.sendMessage(Text.literal("🌑 Shadow Blend active! 🌑")
                         .formatted(Formatting.DARK_GRAY), true);
                 return true;
@@ -193,9 +201,9 @@ public class ConsumableItem extends Item {
 
             case FORTUNE_DUST -> {
                 // Fortune III on next 10 blocks
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.LUCK, 600, 2)); // 30s Luck III (approximation)
-                // TODO: Track block counter for exact 10 blocks
-                player.sendMessage(Text.literal("💎 Fortune Dust active! 💎")
+                FortuneDustHandler.activateFortuneDust(player.getUuid(), 10);
+
+                player.sendMessage(Text.literal("💎 Fortune Dust active for next 10 blocks! 💎")
                         .formatted(Formatting.GREEN), true);
                 return true;
             }

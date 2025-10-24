@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "dag011:castle_pale_garden",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1649512345,
+    "spacing": 100,
+    "separation": 50,
+    "locate_offset": [0, 0, 0]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "dag011:house_villager",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1649512346,
+    "spacing": 16,
+    "separation": 8,
+    "locate_offset": [0, 0, 0]
+  }
+}
