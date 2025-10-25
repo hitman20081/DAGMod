@@ -20,24 +20,78 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * UPDATED VERSION - Consolidates all DAGMod player data into a single directory structure
+ *
+ * New structure:
+ * world/
+ *   data/
+ *     dagmod/
+ *       players/         <-- All player-specific data
+ *         {uuid}.dat
+ *       world/           <-- World-specific data (Hall location, etc.)
+ *         hall_location.dat
+ *       progression/     <-- This folder will be used by ProgressionStorage
+ *         {uuid}.dat
+ */
 public class PlayerDataManager {
 
     private static final String RACE_KEY = "dagmod_race";
     private static final String CLASS_KEY = "dagmod_class";
-    private static final String DATA_FOLDER = "dagmod";
+
+    // Updated path constants
+    private static final String DATA_ROOT = "data/dagmod";      // Base directory
+    private static final String PLAYERS_FOLDER = "players";     // Player data subfolder
+    private static final String WORLD_FOLDER = "world";         // World data subfolder
+
+    /**
+     * Get the root DAGMod data directory
+     */
+    private static File getDataRoot(MinecraftServer server) {
+        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+        File dagmodRoot = new File(worldDir, DATA_ROOT);
+
+        if (!dagmodRoot.exists()) {
+            dagmodRoot.mkdirs();
+        }
+
+        return dagmodRoot;
+    }
+
+    /**
+     * Get the players data directory
+     */
+    private static File getPlayersDirectory(MinecraftServer server) {
+        File dagmodRoot = getDataRoot(server);
+        File playersDir = new File(dagmodRoot, PLAYERS_FOLDER);
+
+        if (!playersDir.exists()) {
+            playersDir.mkdirs();
+        }
+
+        return playersDir;
+    }
+
+    /**
+     * Get the world data directory (for hall location, etc.)
+     */
+    private static File getWorldDirectory(MinecraftServer server) {
+        File dagmodRoot = getDataRoot(server);
+        File worldDir = new File(dagmodRoot, WORLD_FOLDER);
+
+        if (!worldDir.exists()) {
+            worldDir.mkdirs();
+        }
+
+        return worldDir;
+    }
 
     /**
      * Get the data file for a specific player
      */
     private static File getPlayerDataFile(MinecraftServer server, UUID playerId) {
-        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
-        File modDataDir = new File(worldDir, DATA_FOLDER);
-
-        if (!modDataDir.exists()) {
-            modDataDir.mkdirs();
-        }
-
-        return new File(modDataDir, playerId.toString() + ".dat");
+        File playersDir = getPlayersDirectory(server);
+        return new File(playersDir, playerId.toString() + ".dat");
     }
 
     /**
@@ -54,7 +108,7 @@ public class PlayerDataManager {
             nbt.putString(RACE_KEY, race);
             nbt.putString(CLASS_KEY, playerClass);
 
-            // Save mana data for Mages - ADD THIS
+            // Save mana data for Mages
             if ("Mage".equals(playerClass)) {
                 com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
                         com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
@@ -107,7 +161,7 @@ public class PlayerDataManager {
                         ClassSelectionAltarBlock.setPlayerClass(player.getUuid(), playerClass);
                         ClassAbilityManager.applyClassAbilities(player);
 
-                        // Load mana data for Mages - ADD THIS
+                        // Load mana data for Mages
                         if ("Mage".equals(playerClass) && nbt.contains("manaData")) {
                             NbtCompound manaNbt = nbt;
                             com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
@@ -123,23 +177,17 @@ public class PlayerDataManager {
         }
     }
 
-    private static final String HALL_LOCATION_KEY = "hall_of_champions_location";
+    private static final String HALL_LOCATION_FILE = "hall_location.dat";
 
     /**
      * Save the Hall of Champions location for this world
      */
     public static void saveHallLocation(MinecraftServer server, BlockPos pos) {
         try {
-            File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
-            File modDataDir = new File(worldDir, DATA_FOLDER);
+            File worldDir = getWorldDirectory(server);
+            File hallFile = new File(worldDir, HALL_LOCATION_FILE);
 
-            if (!modDataDir.exists()) {
-                modDataDir.mkdirs();
-            }
-
-            File hallFile = new File(modDataDir, "hall_location.dat");
             NbtCompound nbt = new NbtCompound();
-
             nbt.putInt("x", pos.getX());
             nbt.putInt("y", pos.getY());
             nbt.putInt("z", pos.getZ());
@@ -160,9 +208,8 @@ public class PlayerDataManager {
      */
     public static BlockPos loadHallLocation(MinecraftServer server) {
         try {
-            File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
-            File modDataDir = new File(worldDir, DATA_FOLDER);
-            File hallFile = new File(modDataDir, "hall_location.dat");
+            File worldDir = getWorldDirectory(server);
+            File hallFile = new File(worldDir, HALL_LOCATION_FILE);
 
             if (!hallFile.exists()) {
                 return null;
@@ -186,7 +233,6 @@ public class PlayerDataManager {
                 return null;
             }
 
-            // Declare variables OUTSIDE the if block
             int x = xOpt.get();
             int y = yOpt.get();
             int z = zOpt.get();
@@ -199,6 +245,9 @@ public class PlayerDataManager {
         }
     }
 
+    /**
+     * Check if player has existing data
+     */
     public static boolean hasPlayerData(ServerPlayerEntity player) {
         File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
         return dataFile.exists();

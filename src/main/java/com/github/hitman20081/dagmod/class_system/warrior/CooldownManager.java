@@ -18,6 +18,9 @@ public class CooldownManager {
     public static final int RAGE_COOLDOWN = 60 * 20; // 60 seconds
     public static final int SHIELD_BASH_COOLDOWN = 15 * 20; // 15 seconds
     public static final int WAR_CRY_COOLDOWN = 90 * 20; // 90 seconds
+    public static final int BATTLE_SHOUT_COOLDOWN = 45 * 20;  // 45 seconds
+    public static final int WHIRLWIND_COOLDOWN = 30 * 20;     // 30 seconds
+    public static final int IRON_SKIN_COOLDOWN = 120 * 20;    // 120 seconds (2 minutes)
 
     // Storage: UUID -> (AbilityType -> cooldown end time)
     private static final Map<UUID, Map<WarriorAbility, Long>> cooldowns = new HashMap<>();

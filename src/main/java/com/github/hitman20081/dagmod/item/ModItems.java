@@ -79,6 +79,22 @@ public class ModItems {
     public static final Item CLASS_RESET_CRYSTAL = register("class_reset_crystal",
             ClassResetCrystalItem::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
 
+    // Race & Character Reset Items
+    public static final Item RACE_RESET_CRYSTAL = register("race_reset_crystal",
+            Item::new, new Item.Settings().maxCount(16).rarity(Rarity.RARE));
+
+    public static final Item CHARACTER_RESET_CRYSTAL = register("character_reset_crystal",
+            Item::new, new Item.Settings().maxCount(16).rarity(Rarity.EPIC));
+
+    public static final Item POTION_OF_RACIAL_REBIRTH = register("potion_of_racial_rebirth",
+            Item::new, new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item POTION_OF_CLASS_REBIRTH = register("potion_of_class_rebirth",
+            Item::new, new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item POTION_OF_TOTAL_REBIRTH = register("potion_of_total_rebirth",
+            Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
+
     // Race Tokens
     public static final Item HUMAN_TOKEN = register("human_token",
             Item::new, new Item.Settings());
@@ -134,7 +150,7 @@ public class ModItems {
             settings -> new ApprenticeWandItem(settings),
             new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
 
-    // Adept Wand - Mid game Mage weapon
+    // Adept Wand - Mid-game Mage weapon
     public static final Item ADEPT_WAND = register("adept_wand",
             settings -> new AdeptWandItem(settings),
             new Item.Settings().maxCount(1).rarity(Rarity.RARE));
@@ -165,6 +181,50 @@ public class ModItems {
             new Item.Settings().maxCount(1).rarity(Rarity.RARE));
 
     // Note: Shield Bash uses vanilla shields, no new item needed
+    /**
+     * Battle Standard - Activates Battle Shout ability
+     * Heals 6 hearts, buffs damage, removes debuffs
+     * Cooldown: 45 seconds
+     */
+    public static final Item BATTLE_STANDARD = register("battle_standard",
+            BattleStandardItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    /**
+     * Whirlwind Axe - Activates Whirlwind ability
+     * AoE spin attack hitting all nearby enemies
+     * Cooldown: 30 seconds
+     */
+    public static final Item WHIRLWIND_AXE = register("whirlwind_axe",
+            WhirlwindAxeItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    /**
+     * Iron Talisman - Activates Iron Skin ability
+     * Massive damage reduction + absorption hearts
+     * Cooldown: 120 seconds
+     */
+    public static final Item IRON_TALISMAN = register("iron_talisman",
+            IronTalismanItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
+
+    // ===== NEW MAGE ABILITY ITEMS =====
+
+    public static final Item ARCANE_ORB = register("arcane_orb",
+            ArcaneOrbItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item TEMPORAL_CRYSTAL = register("temporal_crystal",
+            TemporalCrystalItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item MANA_CATALYST = register("mana_catalyst",
+            ManaCatalystItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item BARRIER_CHARM = register("barrier_charm",
+            BarrierCharmItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
 
     // ===== ROGUE ITEMS =====
 
@@ -176,6 +236,24 @@ public class ModItems {
     public static final Item ROGUE_ABILITY_TOME = register("rogue_ability_tome",
             RogueAbilityItem::new,
             new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    // ===== COOLDOWN-BASED ROGUE ABILITIES =====
+
+    public static final Item VOID_BLADE = register("void_blade",
+            VoidBladeItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item VANISH_CLOAK = register("vanish_cloak",
+            VanishCloakItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item POISON_VIAL = register("poison_vial",
+            PoisonVialItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.RARE));
+
+    public static final Item ASSASSINS_MARK = register("assassins_mark",
+            AssassinsMarkItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
 
     // ===== CONSUMABLE ITEMS (Made from Powders) =====
 
@@ -258,6 +336,8 @@ public class ModItems {
     public static void initialize() {
         // Get the event for modifying entries in the ingredients group.
         // And register an event handler that adds our suspicious item to the ingredients group.
+
+        DagMod.LOGGER.info("Registering items for " + DagMod.MOD_ID);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS)
                 .register((itemGroup) ->
@@ -380,6 +460,16 @@ public class ModItems {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
                 .register((itemGroup) ->
                         itemGroup.add(ModItems.CLASS_RESET_CRYSTAL));
+        // Reset Items - Add to Tools group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.RACE_RESET_CRYSTAL);
+                    itemGroup.add(ModItems.CHARACTER_RESET_CRYSTAL);
+                    itemGroup.add(ModItems.POTION_OF_RACIAL_REBIRTH);
+                    itemGroup.add(ModItems.POTION_OF_CLASS_REBIRTH);
+                    itemGroup.add(ModItems.POTION_OF_TOTAL_REBIRTH);
+                });
+
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
                 .register((itemGroup) ->
@@ -412,6 +502,23 @@ public class ModItems {
                 .register((itemGroup) -> {
                     itemGroup.add(ModItems.RAGE_TOTEM);
                     itemGroup.add(ModItems.WAR_HORN);
+                });
+
+        // New Warrior Abilities
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.BATTLE_STANDARD);
+                    itemGroup.add(ModItems.WHIRLWIND_AXE);
+                    itemGroup.add(ModItems.IRON_TALISMAN);
+                });
+
+        // === NEW MAGE ABILITIES ===
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
+                .register((itemGroup) -> {
+                    itemGroup.add(ModItems.ARCANE_ORB);
+                    itemGroup.add(ModItems.TEMPORAL_CRYSTAL);
+                    itemGroup.add(ModItems.MANA_CATALYST);
+                    itemGroup.add(ModItems.BARRIER_CHARM);
                 });
 
         // Rogue Ability Items - Add to Combat group

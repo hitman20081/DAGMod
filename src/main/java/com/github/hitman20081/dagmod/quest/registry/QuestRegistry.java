@@ -121,6 +121,11 @@ public class QuestRegistry {
 
         // Additional quests
         manager.registerQuest(createDeepMinerQuest());
+
+        // Reset System Quests
+        manager.registerQuest(createIdentityCrisisQuest());
+        manager.registerQuest(createPathOfDestinyQuest());
+        manager.registerQuest(createRebirthRitualQuest());
     }
 
     private static void registerQuestChains(QuestManager manager) {
@@ -1370,5 +1375,113 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_BOOK, 1))
                 .addReward(XpReward.expert());
+    }
+
+    /**
+     * IDENTITY CRISIS - Level 25+ Expert Quest
+     * Rewards: Potion of Racial Rebirth (free race reset)
+     * <p>
+     * A quest about questioning your heritage and seeking a new path.
+     * Requires collecting materials from all 4 racial homelands.
+     * Note: Level requirement is handled by LevelRequirements.meetsLevelRequirement()
+     */
+    private static Quest createIdentityCrisisQuest() {
+        return new Quest("identity_crisis")
+                .setName("Identity Crisis")
+                .setDescription("You've begun to question your heritage. Perhaps there's another path for you? " +
+                        "Collect materials from all racial homelands to undergo the Ritual of Rebirth.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                // Dwarf homeland material
+                .addObjective(new CollectObjective(Items.DEEPSLATE, 32))
+                .addObjective(new CollectObjective(Items.IRON_INGOT, 16))
+                // Elf homeland material
+                .addObjective(new CollectObjective(Items.OAK_LOG, 32))
+                .addObjective(new CollectObjective(Items.SWEET_BERRIES, 16))
+                // Human homeland material
+                .addObjective(new CollectObjective(Items.WHEAT, 32))
+                .addObjective(new CollectObjective(Items.BREAD, 16))
+                // Orc homeland material
+                .addObjective(new CollectObjective(Items.PORKCHOP, 16))
+                .addObjective(new CollectObjective(Items.BONE, 32))
+                // Ritual materials
+                .addObjective(new CollectObjective(Items.AMETHYST_SHARD, 8))
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 2))
+                // Rewards
+                .addReward(new ItemReward(ModItems.POTION_OF_RACIAL_REBIRTH, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 1))
+                .addReward(XpReward.expert());
+    }
+
+    /**
+     * PATH OF DESTINY - Level 30+ Expert Quest
+     * Rewards: Potion of Class Rebirth (free class reset)
+     * <p>
+     * A quest about mastering your class and considering a new calling.
+     * Requires demonstrating mastery across multiple class abilities.
+     * Note: Level requirement is handled by LevelRequirements.meetsLevelRequirement()
+     */
+    private static Quest createPathOfDestinyQuest() {
+        return new Quest("path_of_destiny")
+                .setName("Path of Destiny")
+                .setDescription("You've mastered your current class, but feel the call of a different destiny. " +
+                        "Prove your versatility to earn the right to choose a new path.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                // Combat mastery
+                .addObjective(KillObjective.zombies(25))
+                .addObjective(KillObjective.skeletons(20))
+                .addObjective(new KillObjective(EntityType.ENDERMAN, 5))
+                // Resource gathering (versatility)
+                .addObjective(new CollectObjective(Items.DIAMOND, 8))
+                .addObjective(new CollectObjective(Items.EMERALD, 4))
+                .addObjective(new CollectObjective(Items.NETHER_STAR, 1))
+                // Magic materials
+                .addObjective(new CollectObjective(Items.BLAZE_ROD, 8))
+                .addObjective(new CollectObjective(Items.ENDER_PEARL, 12))
+                // Ritual components
+                .addObjective(new CollectObjective(Items.ENCHANTED_BOOK, 3))
+                .addObjective(new CollectObjective(Items.EXPERIENCE_BOTTLE, 10))
+                // Rewards
+                .addReward(new ItemReward(ModItems.POTION_OF_CLASS_REBIRTH, 1))
+                .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
+                .addReward(XpReward.expert());
+    }
+
+    /**
+     * REBIRTH RITUAL - Level 40+ Master Quest
+     * Rewards: Potion of Total Rebirth (free race + class reset)
+     * <p>
+     * The ultimate quest - a complete character reset.
+     * Requires completion of both Identity Crisis and Path of Destiny.
+     * Note: Level requirement is handled by LevelRequirements.meetsLevelRequirement()
+     */
+    private static Quest createRebirthRitualQuest() {
+        return new Quest("rebirth_ritual")
+                .setName("The Rebirth Ritual")
+                .setDescription("You seek to completely remake yourself - race, class, everything. " +
+                        "This ancient ritual requires the ultimate sacrifice and the rarest of materials. " +
+                        "Are you certain this is your path?")
+                .setDifficulty(Quest.QuestDifficulty.MASTER)
+                // Must complete both previous reset quests first
+                .addPrerequisite("identity_crisis")
+                .addPrerequisite("path_of_destiny")
+                // Ultimate boss challenges
+                .addObjective(new KillObjective(EntityType.WITHER, 1))
+                .addObjective(new KillObjective(EntityType.ENDER_DRAGON, 1))
+                // Legendary materials
+                .addObjective(new CollectObjective(Items.DRAGON_EGG, 1))
+                .addObjective(new CollectObjective(Items.NETHER_STAR, 3))
+                .addObjective(new CollectObjective(Items.ELYTRA, 1))
+                // Rare ritual components
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 8))
+                .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 4))
+                .addObjective(new CollectObjective(Items.TOTEM_OF_UNDYING, 2))
+                // Magical essences
+                .addObjective(new CollectObjective(Items.ENCHANTED_GOLDEN_APPLE, 5))
+                .addObjective(new CollectObjective(Items.EXPERIENCE_BOTTLE, 64))
+                // Rewards
+                .addReward(new ItemReward(ModItems.POTION_OF_TOTAL_REBIRTH, 1))
+                .addReward(new ItemReward(Items.NETHERITE_INGOT, 8))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
+                .addReward(XpReward.master());
     }
 }

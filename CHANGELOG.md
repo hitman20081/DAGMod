@@ -5,6 +5,163 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.4-beta] - 2025-10-25
+
+### Added - 11 New Class Abilities
+
+#### ⚔️ **Warrior Abilities (3 new)**
+
+**Battle Standard** (Battle Shout ability):
+- **Healing**: Instantly restores 6 hearts (12 HP)
+- **Strength II**: 10 seconds duration for devastating damage
+- **Regeneration II**: 8 seconds of sustained healing
+- **Cooldown**: 45 seconds
+- Perfect for turning the tide of battle with self-sustain and damage boost
+- Custom textures and epic visual effects
+
+**Whirlwind Axe** (Whirlwind ability):
+- **360° Spin Attack**: Hits all enemies within 5 block radius
+- **Damage**: 8 damage per enemy hit
+- **Effects**: Applies knockback and slowness to all targets
+- **Cooldown**: 30 seconds
+- Spectacular particle effects during execution
+- Ideal for crowd control and AoE situations
+
+**Iron Talisman** (Iron Skin ability):
+- **Resistance III**: 12 seconds of massive damage reduction
+- **Knockback Reduction**: 50% reduced knockback
+- **Shield Effect**: Creates protective damage absorption
+- **Cooldown**: 60 seconds
+- Essential defensive tool for tanking boss encounters
+- Custom protective particle effects
+
+#### 🔮 **Mage Abilities (4 new)**
+
+**Arcane Orb** (Arcane Missiles ability):
+- **Homing Missiles**: Fires 5 auto-tracking magical projectiles
+- **Damage**: 4 damage per missile (20 total potential)
+- **Targeting**: Automatically seeks nearest enemy
+- **Cooldown**: 20 seconds
+- Beautiful purple particle trails
+- Reliable ranged damage output
+
+**Temporal Crystal** (Time Warp ability):
+- **AoE Crowd Control**: Affects all enemies in 10 block radius
+- **Slowness IV**: 8 seconds of extreme movement reduction
+- **Cooldown**: 40 seconds
+- Stunning blue time manipulation particle effects
+- Perfect for kiting or escaping dangerous situations
+- Mass crowd control tool
+
+**Mana Catalyst** (Mana Burst ability):
+- **Massive Explosion**: 8 block radius AoE damage
+- **Damage**: 12 damage to all enemies in range
+- **Knockback**: Strong knockback effect
+- **Cooldown**: 35 seconds
+- Spectacular cyan explosion particles
+- Ultimate room-clearing ability
+
+**Barrier Charm** (Arcane Barrier ability):
+- **Absorption Shield**: Grants 10 absorption hearts (5 full hearts)
+- **Duration**: Lasts 30 seconds or until depleted
+- **Cooldown**: 50 seconds
+- Light blue barrier particles surround player
+- Essential defensive tool for glass cannon builds
+- Visible shield effect for tactical awareness
+
+#### 🗡️ **Rogue Abilities (4 new - Cooldown-based)**
+
+**Void Blade** (Blink Strike ability):
+- **Teleportation**: Instantly teleport behind nearest enemy within 15 blocks
+- **Invisibility**: Brief invisibility (2 seconds) after teleport
+- **Speed Boost**: Enhanced movement for quick followup
+- **Cooldown**: 25 seconds
+- Dark purple particle effects
+- Perfect for engaging or disengaging combat
+
+**Vanish Cloak** (Vanish ability):
+- **Invisibility**: 8 seconds of complete invisibility
+- **Speed II**: 8 seconds of enhanced mobility
+- **Enemy Blind**: Blinds all enemies within 6 block radius for 4 seconds
+- **Cooldown**: 40 seconds
+- Gray smoke cloud on activation
+- Ultimate escape tool when overwhelmed
+
+**Poison Vial** (Poison Strike ability):
+- **Deadly Toxin**: Poison IV for 8 seconds (~16 damage total)
+- **Debuffs**: Applies Weakness II and Slowness I
+- **Initial Damage**: 4 damage on application
+- **Cooldown**: 20 seconds
+- Green poison particle effects
+- Excellent for taking down tough single targets
+
+**Assassin's Mark** (Assassinate ability):
+- **Manual Backstab**: 20 damage (10 hearts) from behind
+- **Front Attack**: 10 damage (5 hearts) as backup
+- **Visual Feedback**: Red critical hit particles
+- **Blood Effect**: Special particles on successful backstab
+- **Cooldown**: 15 seconds
+- Complements passive backstab mechanic for combo potential
+
+### Changed - Class System Enhancement
+
+**Warrior Class**:
+- Now has **5 total abilities** with diverse offensive and defensive options
+- Enhanced survivability with self-healing and damage reduction
+- Added AoE crowd control capability
+- Improved combat flow with complementary ability cooldowns
+
+**Mage Class**:
+- Now has **4 permanent abilities** plus wands and spell scrolls
+- Balanced offensive and defensive options
+- Added homing projectile capability for reliable damage
+- Enhanced crowd control with time manipulation
+- Improved survivability with absorption shield
+
+**Rogue Class**:
+- **Dual Ability System**:
+    - Energy-based (existing): Smoke Bomb, Poison Dagger, Shadow Step via Rogue Ability Tome
+    - Cooldown-based (NEW): Blink Strike, Vanish, Poison Strike, Assassinate via individual items
+- Now has **7 total abilities** plus passive backstab
+- Added teleportation and advanced stealth mechanics
+- Enhanced burst damage with manual backstab activation
+- Improved versatility with two distinct ability systems
+
+### Technical - Ability Implementation
+
+**Item Creation**:
+- Created 11 new ability items with custom textures and models
+- Implemented custom tooltips with cooldown and effect descriptions
+- Added proper item registration and creative tab integration
+
+**Cooldown Management**:
+- Extended cooldown system to support new abilities
+- Implemented separate cooldown tracking for each ability
+- Added visual feedback for cooldown states
+- Proper cooldown persistence across sessions
+
+**Effect Systems**:
+- Warrior abilities use attribute modifiers and potion effects
+- Mage abilities use particle systems and custom damage calculations
+- Rogue abilities use teleportation, stealth, and debuff mechanics
+- All abilities have unique particle effects and sound feedback
+
+**Code Organization**:
+- Warrior abilities in `class_system/warrior/` package
+- Mage abilities in `class_system/mage/` package
+- Rogue abilities in `class_system/rogue/` package
+- Ability items in `item/ability/` package
+- Shared utility code in `class_system/AbilityUtils.java`
+
+### Balance Changes
+- Warrior cooldowns balanced for sustained combat (15-60s range)
+- Mage abilities balanced for burst rotation (20-50s range)
+- Rogue abilities balanced for tactical gameplay (15-40s range)
+- All abilities designed to complement existing class mechanics
+- Power levels tuned for progression through game stages
+
+---
+
 ## [1.4.3-beta] - 2025-10-22
 
 ### Added
@@ -160,298 +317,164 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Technical
 - Replaced deprecated Minecraft API methods with 1.21.10 equivalents
 - ServerPlayerEntity now uses `.getEntityWorld()` instead of `.getWorld()`
-- All entities use `.getTrackedPosition().getPos()` for position data
-- Particle effects updated to new API format
-- GUI rendering updated for 1.21.10 DrawContext API
+- Entity position tracking updated to use `.getTrackedPosition().getPos()`
+- Particle spawning uses proper double parameters
+- GUI rendering updated for 1.21.10 API changes
+- World generation configs updated to 1.21.10 format specifications
 
-## [1.4.0] - 2025-10-08
+## [1.4.0] - 2025-10-10
 
-### Added - Rogue Ability System
-- **Energy System for Rogues**: 100 energy pool exclusive to Rogue class
-- **Automatic Energy Regeneration**: 5 energy per second (faster than mana for active gameplay)
-- **Visual Energy Bar HUD**:
-    - Purple/dark energy bar displayed above hunger bar (right side)
-    - Real-time energy tracking with current/max display
-    - Only visible to Rogue players
-- **3 Unique Rogue Abilities** via Rogue Ability Tome:
-    - **Smoke Bomb** (40 energy, 20s cooldown) - Creates smoke cloud for invisibility and escape
-        - Grants Invisibility for 6 seconds
-        - Grants Speed II for 6 seconds
-        - Creates lingering smoke cloud (3 block radius, 5 seconds)
-        - Enemies in smoke get Blindness II
-        - Breaks mob targeting for clean escapes
-    - **Poison Dagger** (25 energy, no cooldown) - Empowers next melee attack with deadly poison
-        - Active for 5 seconds after activation
-        - Applies Poison III for 8 seconds
-        - Applies Weakness II for 6 seconds
-        - Applies Nausea for 5 seconds
-        - Green particle effects on weapon and target
-    - **Shadow Step** (50 energy, 30s cooldown) - Advanced teleportation with tactical advantages
-        - Teleports to targeted block (25 block range)
-        - Can phase through walls (unlike Mage's Blink)
-        - Leaves shadow decoy at starting position (lasts 3 seconds, draws aggro)
-        - Grants Invisibility for 3 seconds after teleport
-        - Brief invulnerability during teleport (0.5s)
-- **Rogue Ability Tome**: Multi-ability item with ability cycling
-    - Shift+Right-click to cycle between abilities
-    - Right-click to use selected ability
-    - Dynamic name display shows currently selected ability
-    - Enchanted glint for visual appeal
-- **Smart Energy Consumption**: Abilities only consume energy on successful use
-    - Failed teleports don't consume energy
-    - Proper feedback for failed ability attempts
-- **Class-Locked Abilities**: Only Rogues can use the ability tome
-- **Enhanced Combat Integration**:
-    - Poison Dagger integrates with existing backstab mechanics
-    - Invisibility breaks on attack for balance
-    - Visual and audio feedback for all abilities
+### Added - Rogue Class Abilities & Energy System
+- **Rogue Ability Tome**: Right-click to cycle abilities, sneak+right-click to use
+    - Smoke Bomb: AoE invisibility + blinds enemies (30 energy)
+    - Poison Dagger: Apply poison damage to target (40 energy)
+    - Shadow Step: Short-range teleport (50 energy)
+- **Energy System**: 100 max energy, 1 energy/second regeneration
+- **Energy HUD**: Visual energy bar for Rogues (toggleable)
+- **Rogue Stats**:
+    - 25% critical hit chance on all attacks
+    - 50% reduced fall damage
+    - 1.5x backstab damage from behind (automatic)
+    - Works with Orc racial bonus for extreme backstab damage
 
-### Technical - Rogue System
-- Created rogue subsystem in `class_system/rogue/`:
-    - `EnergyData`: Core energy storage and manipulation
-    - `EnergyManager`: Server-side energy management and regeneration
-    - `EnergyNetworking`: Custom payload for client-server energy sync
-    - `RogueCooldownData`: Separate cooldown system for Rogue abilities
-    - `RogueAbilityManager`: Ability implementations (Smoke Bomb, Poison Dagger, Shadow Step)
-- Client-side rendering:
-    - `EnergyHudRenderer`: Custom HUD overlay for energy bar (purple theme)
-    - `ClientEnergyNetworking`: Client-side packet handling
-- Item system:
-    - `RogueAbilityItem`: Multi-ability tome with cycling functionality
-- Updated `RogueCombatHandler`: Enhanced with Poison Dagger integration
-- Efficient energy regeneration (1 energy per 4 ticks = 5/second)
-- Shadow decoy uses area effect clouds for mob aggro manipulation
+### Added - Complete Armor System (6 Sets)
+- **Apprentice Set** (Leather-tier):
+    - Helmet: +10 mana, +5 energy, 1 armor, 1 toughness
+    - Chestplate: +10 mana, +5 energy, 3 armor, 1 toughness
+    - Leggings: +10 mana, +5 energy, 2 armor, 1 toughness
+    - Boots: +10 mana, +5 energy, 1 armor, 1 toughness
+- **Adept Set** (Chainmail-tier):
+    - Helmet: +15 mana, +8 energy, 2 armor, 1 toughness
+    - Chestplate: +15 mana, +8 energy, 5 armor, 1 toughness
+    - Leggings: +15 mana, +8 energy, 4 armor, 1 toughness
+    - Boots: +15 mana, +8 energy, 1 armor, 1 toughness
+- **Mystic Set** (Iron-tier):
+    - Helmet: +20 mana, +10 energy, 2 armor, 1 toughness
+    - Chestplate: +20 mana, +10 energy, 6 armor, 1 toughness
+    - Leggings: +20 mana, +10 energy, 5 armor, 1 toughness
+    - Boots: +20 mana, +10 energy, 2 armor, 1 toughness
+- **Archmage Set** (Gold-tier):
+    - Helmet: +25 mana, +12 energy, 2 armor, 1 toughness
+    - Chestplate: +25 mana, +12 energy, 5 armor, 1 toughness
+    - Leggings: +25 mana, +12 energy, 3 armor, 1 toughness
+    - Boots: +25 mana, +12 energy, 1 armor, 1 toughness
+- **Exalted Set** (Diamond-tier):
+    - Helmet: +30 mana, +15 energy, 3 armor, 2 toughness
+    - Chestplate: +30 mana, +15 energy, 8 armor, 2 toughness
+    - Leggings: +30 mana, +15 energy, 6 armor, 2 toughness
+    - Boots: +30 mana, +15 energy, 3 armor, 2 toughness
+- **Ethereal Set** (Netherite-tier):
+    - Helmet: +40 mana, +20 energy, 3 armor, 3 toughness
+    - Chestplate: +40 mana, +20 energy, 8 armor, 3 toughness
+    - Leggings: +40 mana, +20 energy, 6 armor, 3 toughness
+    - Boots: +40 mana, +20 energy, 3 armor, 3 toughness
 
-### Changed
-- Rogue class now has functional ability system with strategic resource management
-- Updated documentation to reflect new Rogue abilities
-- Energy bar positioned opposite mana bar for visual balance
-- Rogue combat flow now includes ability rotations and combos
+### Added - Consumable Powders (15 types)
+**Warrior Powders**:
+- Berserker Blood: +50% damage, -25% defense (60s)
+- Titan Powder: +4 max hearts (120s)
+- Battle Dust: +30% attack speed (45s)
+- Last Stand Powder: Death prevention (placeholder: +5 absorption hearts)
 
-### Fixed
-- Energy data properly stores in memory (matches mana system architecture)
-- Energy regeneration only applies to Rogue class
-- Abilities provide proper feedback when requirements not met
-- Shadow Step validates target before consuming energy
-- Invisibility properly breaks on attack
+**Mage Powders**:
+- Arcane Powder: +50% spell damage (60s)
+- Spell Echo: Spell duplication (placeholder: +20% attack speed)
+- Overcharge Dust: Enhanced spell power (placeholder: +50% spell damage)
+- Time Distortion: Slow nearby enemies (placeholder: Speed II)
 
-### Added - Consumable Powder System
-- **15 New Consumable Items** crafted from custom powders (Amethyst, Diamond, Emerald, Echo, Quartz, Slimeball)
-- **Essential Consumables** (10 items):
-    - **Mana Crystal** (Amethyst Powder + Echo Dust + Glass Bottle) - Restores 50 mana instantly
-    - **Energy Tonic** (Quartz Powder + Slimeball Dust + Glass Bottle) - Restores 50 energy instantly
-    - **Cooldown Elixir** (Diamond Powder + Emerald Powder + Glass Bottle) - Reduces cooldowns
-    - **Vampire Dust** (Diamond Powder + Redstone + Rotten Flesh) - Lifesteal effect for 20 seconds
-    - **Phantom Dust** (Echo Dust + Phantom Membrane + Feather) - 50% dodge chance for 15 seconds
-    - **Spell Echo** (Quartz Powder + Amethyst Powder + Echo Dust) - Next spell casts twice
-    - **Battle Frenzy** (Diamond Powder + Redstone + Blaze Powder) - Massive combat boost for 15 seconds
-    - **Shadow Blend** (Echo Dust + Coal + Fermented Spider Eye) - Invisibility until attack
-    - **Fortune Dust** (Emerald Powder + Lapis + Gold Nugget) - Fortune III on next 10 blocks
-    - **Featherfall Powder** (Slimeball Dust + Feather + Phantom Membrane) - No fall damage for 60 seconds
-- **Advanced Consumables** (5 items - Epic rarity):
-    - **Last Stand Powder** (Emerald Powder + Totem of Undying + Golden Apple) - Auto-revive within 60 seconds
-    - **Time Distortion** (Echo Dust + Clock + Ender Pearl) - Slow motion effect for 10 seconds
-    - **Overcharge Dust** (Diamond Powder + Amethyst Powder + Nether Star) - Next spell has 2x power
-    - **Titan's Strength** (Emerald Powder + Netherite Scrap + Blaze Rod) - +100% melee damage for 20 seconds
-    - **Perfect Dodge** (Amethyst Powder + Feather + Rabbit Foot) - 100% dodge for 10 seconds
-- **Class-Specific Consumables**:
-    - Mana Crystal and Spell Echo - Mage only
-    - Energy Tonic and Shadow Blend - Rogue only
-    - Cooldown Elixir, Battle Frenzy, Titan's Strength - Warrior only
-    - Vampire Dust, Phantom Dust, Fortune Dust, Featherfall Powder, Perfect Dodge - Universal
-    - Last Stand Powder and Time Distortion - Universal (Epic)
-- **Crafting System**: All consumables craftable in survival mode using custom powders
-- **Resource Sink**: Custom powders now have meaningful gameplay purpose
-- **Stackable**: Essential consumables stack to 16, advanced consumables stack to 8
-- **Visual Feedback**: Unique particle effects for each consumable type
+**Rogue Powders**:
+- Shadow Blend: Extended invisibility (5 minutes, breaks on attack)
+- Phantom Dust: Dodge chance (placeholder: Resistance II)
+- Perfect Dodge: Auto-dodge (placeholder: Resistance II)
 
-### Technical - Consumable System
-- Created `ConsumableItem` class with enum-based consumable types
-- 15 new items registered in ModItems
-- 15 crafting recipes using custom powders and vanilla materials
-- Integration with existing class systems (mana, energy, cooldowns)
-- Proper class-locking with feedback messages
-- Item models and lang file entries for all consumables
+**Universal Powders**:
+- Vampire Dust: Lifesteal (placeholder: Regeneration II)
+- Fortune Dust: Fortune III on next 10 blocks mined
+- Haste Dust: Haste III (60s)
+- Luck Dust: Luck II (120s)
 
-### Changed
-- Custom powders (Amethyst, Diamond, Emerald, Echo, Quartz, Slimeball) now have crafting recipes
-- Enhanced resource economy with powder-based consumables
-- Added utility for previously underutilized custom materials
+### Added - Weapon & Shield System (18 items)
+**9 Themed Weapons + 9 Matching Shields**:
+1. **Flame Series**: Fire Aspect II, Ignites targets
+2. **Frost Series**: Slowness effect on hit
+3. **Storm Series**: Lightning damage, Speed boost
+4. **Shadow Series**: Weakness and Blindness
+5. **Radiant Series**: Healing on hit, Regeneration
+6. **Venom Series**: Poison damage over time
+7. **Earth Series**: Mining speed, Resistance
+8. **Arcane Series**: Mana regeneration boost
+9. **Blood Series**: Lifesteal on hit
 
-### Added - Custom Armor Set Bonus System
-- **6 Unique Armor Sets** with progressive bonuses (2-piece and 4-piece)
-- **Universal Set Detection System**: Automatically detects and applies bonuses
-- **Class-Specific Bonuses**: Different effects for Warrior, Mage, and Rogue
-- **Visual Notifications**: Action bar messages when equipping sets
-- **Real-time Bonus Application**: Effects update immediately when changing armor
+### Added - Weapon Synergy System
+- Wearing matching armor set enhances weapon abilities
+- Example: Flame Sword + Mystic Armor = Enhanced fire damage
+- System detects armor set and weapon type
+- Bonus effects trigger automatically during combat
+- Stacks with existing class and race bonuses
 
-**Armor Sets:**
-1. **Dragonscale** (Netherite - Dark Red):
-    - 2pc: Warrior (Resistance I), Mage (Glowing + 15% spell cost reduction), Rogue (Speed I + 20% crit)
-    - 4pc: Warrior (Resistance II), Mage (50% mana regen), Rogue (Speed II + 25% energy regen)
+### Changed - Spell System Integration
+- **Spell Scrolls** now cost 75% normal mana (was 100%)
+- Wearing full mana-boosting armor sets reduces spell costs further
+- Mages with Archmage Set or higher: 50% spell cost reduction
+- Maximum spell cost reduction: 62.5% with full Ethereal Set
+- Spell scrolls remain consumable items (crafted, not unlimited)
 
-2. **Crystalforge** (Diamond - Purple):
-    - 2pc: Night Vision + class bonuses (Warrior: Absorption, Mage: Regen + 25% mana regen, Rogue: Jump Boost + 15% energy regen)
-    - 4pc: Glowing + enhanced class bonuses (Mage: -20% spell costs)
+### Changed - Backstab System Enhancement
+- Base backstab multiplier: 1.5x (automatic, passive)
+- Orc Rogue synergy: Additional +20% backstab damage
+- Combined Orc Rogue backstab: 1.7x total multiplier
+- Works on all melee attacks from behind (135-degree arc)
+- Visual feedback: Critical hit particles on backstab
+- Scales with all damage bonuses (race, level, gear)
 
-3. **Inferno** (Iron - Red):
-    - 2pc: Fire Resistance + class bonuses (Warrior: Strength, Mage: Regen + 10% spell cost reduction, Rogue: Speed)
-    - 4pc: Fire Resistance II + Glowing + enhanced bonuses
+### Technical - Energy System
+- Created `RogueEnergyManager` for energy tracking
+- Energy stored per-player with automatic saving
+- Energy HUD overlay in top-right corner (toggleable)
+- Energy regeneration every 20 ticks (1/second)
+- Energy costs: Smoke Bomb (30), Poison Dagger (40), Shadow Step (50)
+- Ability cycling with proper feedback messages
 
-4. **Nature's Guard** (Leather - Green):
-    - 2pc: Regeneration + class bonuses (Warrior: Resistance, Mage: Luck + 30% mana regen at 4pc, Rogue: Jump Boost II + 15% crit at 4pc)
-    - 4pc: Regen II + Saturation + class bonuses (Rogue: Invisibility)
+### Technical - Armor System
+- 30 new armor piece items across 6 complete sets
+- Custom armor materials extending vanilla materials
+- Mixin system for applying mana/energy bonuses
+- Armor detection on equip/unequip events
+- Bonus persistence across sessions
+- Full integration with existing class systems
 
-5. **Shadow** (Leather - Purple):
-    - 2pc: Speed + Night Vision (Rogue: Invisibility + 25% crit + 10% spell cost reduction)
-    - 4pc: Speed II + Night Vision + class bonuses (Rogue: Invisibility + Jump Boost II + 35% energy regen)
-
-6. **Fortuna** (Gold - Orange):
-    - 2pc: Luck III + Speed I
-    - 4pc: Luck V + Hero of the Village + Speed II
-
-**Integrated Bonuses:**
-- Mana regeneration bonuses apply to mage spell system
-- Spell cost reductions apply to all spell scrolls
-- Energy regeneration bonuses apply to rogue ability system
-- Critical hit bonuses apply to rogue combat mechanics
-
-### Added - Weapon + Armor Synergy System
-- **Enhanced bonuses when wearing matching armor set + weapon**
-- **5 Weapon Sets** with 2-piece and 4-piece synergy bonuses
-- **Dynamic damage scaling** based on armor pieces worn
-- **Action bar notifications** when synergy activates
-
-**Weapon Synergies:**
-
-1. **Dragonscale Blade + Dragonscale Armor**:
-    - 2pc: Strength I + 15% melee damage bonus
-    - 4pc: Strength II + Fire Resistance + 30% melee damage (Warrior: Absorption II)
-
-2. **Inferno Blade + Inferno Armor**:
-    - 2pc: Strength I + 15% melee damage
-    - 4pc: Strength II + Haste II + 25% melee damage
-
-3. **Shadow Blade/Phantom Blade + Shadow Armor** (Rogue):
-    - 2pc: Speed II + Invisibility + 35% backstab bonus (total 2.05x)
-    - 4pc: Speed III + Jump Boost III + Invisibility + 75% backstab bonus (total 2.45x!)
-    - **Orc Rogue + 4pc Shadow + Shadow Blade**: 2.65x backstab damage!
-
-4. **Poison Fang Spear + Nature's Guard**:
-    - 2pc: Regeneration II + Luck I
-    - 4pc: Regeneration III + Luck II + Saturation
-
-5. **Crystal Hammer + Crystalforge Armor**:
-    - 2pc: Absorption II + Resistance I
-    - 4pc: Absorption III + Resistance II + Jump Boost III
-
-**Backstab Damage Stacking**:
-- Base Rogue backstab: 1.5x damage
-- Orc Rogue: 1.7x damage (+20%)
-- Shadow 2pc + Shadow Blade: 2.05x damage (+35%)
-- Shadow 4pc + Shadow Blade: 2.45x damage (+75%)
-- Orc Rogue + Shadow 4pc + Shadow Blade: 2.65x damage (devastating!)
-
-### Added - Themed Weapons & Shields
-**9 Custom Weapons**:
-- Dragonscale Blade, Inferno Blade, Shadow Blade, Phantom Blade
-- Sword of the True King, Solar Bow, Frostbite Axe
-- Crystal Hammer (Mace), Poison Fang Spear, Thunder Pike (Tridents)
-
-**9 Custom Shields**:
-- Dragonbone Shield, Blazing Aegis, Nature's Bulwark, Shadowguard Shield
-- Crystal Ward, Solar Protector, Frostbound Shield, Celestial Aegis, Stormguard Shield
-- All shields provide unique stat bonuses and themed effects
-
-### Technical - Armor & Weapon Systems
-- Created `CustomArmorSetBonus` class in `class_system/armor/`
-- Enum-based armor set detection system
-- Per-player state tracking to prevent notification spam
-- Integration with existing mana/energy systems via bonus getters
-- Weapon detection through item name matching
-- Real-time bonus application through server tick events
-- Modified `RogueDamageMixin` to apply weapon synergy damage bonuses
-- Updated `SpellScrollItem` to apply mana cost reductions
-- Updated `ManaManager` and `EnergyManager` for armor regen bonuses
-
-### Changed
-- Mana and energy regeneration now scale with armor bonuses
-- Spell costs dynamically reduce based on equipped armor
-- Backstab damage now stacks: base + race + armor synergy
-- Weapon damage applies synergy multipliers when matching armor equipped
-- Action bar shows reduced mana costs when applicable
+### Technical - Weapon System
+- 18 new weapon items (9 weapons + 9 shields)
+- Custom weapon/shield materials with special properties
+- Effect application on entity hit
+- Synergy detection system comparing armor and weapon types
+- Effect stacking with existing damage modifiers
+- Visual particle effects for special abilities
 
 ### Fixed
-- Hero of the Village now only applies to Elves (or Fortuna 4pc armor)
-- Hero of the Village uses 300 tick duration (reapplied by synergy system) instead of infinite duration
-- Non-Elf races no longer receive Hero of the Village on login
-- Shadow Blade interaction range fixed (was -500%, now +50%)
-- All weapons now deal proper damage
-- Armor set detection works with `item_name` component (not just `custom_name`)
-- Energy and mana systems properly sync with armor bonus changes
+- Backstab damage now properly multiplies base damage
+- Energy regeneration works correctly in all scenarios
+- Armor bonuses apply immediately on equip
+- Spell costs calculate correctly with armor bonuses
+- Weapon effects trigger reliably on hit
 
-## [1.3.1] - 2025-10-06
+## [1.3.0] - 2025-10-04
 
-### Added - Mage Mana System
-- **Mana Pool for Mages**: 100 mana pool exclusive to Mage class
-- **Automatic Mana Regeneration**: 2 mana per second passive regeneration
-- **Visual Mana Bar HUD**:
-    - Blue mana bar displayed above hunger bar
-    - Real-time mana tracking with current/max display
-    - Only visible to Mage players
-- **7 Spell Scrolls** with unique magical effects:
-    - **Heal Scroll** (20 mana) - Restores 3 hearts instantly with heart particles
-    - **Fireball Scroll** (30 mana) - Launches explosive fireball projectile
-    - **Absorption Scroll** (25 mana) - Grants 4 absorption hearts for 30 seconds
-    - **Lightning Scroll** (35 mana) - Summons lightning bolt at target location (30 block range)
-    - **Frost Nova Scroll** (40 mana) - Freezes and damages enemies in 8 block radius
-    - **Blink Scroll** (30 mana) - Teleports to targeted block (20 block range)
-    - **Mana Shield Scroll** (15 mana) - Grants Resistance II for 10 seconds
-- **Smart Mana Consumption**: Spells only consume mana on successful cast
-    - Failed teleports (no valid target) don't consume mana
-    - Proper feedback for failed spell attempts
-- **Class-Locked Spells**: Only Mages can use spell scrolls
-- **Visual Spell Effects**: Unique particle effects for each spell type
-
-### Technical - Mana System
-- Created mana subsystem in `class_system/mana/`:
-    - `ManaData`: Core mana storage and manipulation
-    - `ManaManager`: Server-side mana management and regeneration
-    - `ManaNetworking`: Custom payload for client-server mana sync
-    - `ClientManaData`: Client-side mana state tracking
-    - `ManaHudRenderer`: Custom HUD overlay for mana bar
-- Integrated with existing class system
-- Persistent mana data storage in player data files
-- Real-time networking for seamless mana updates
-- Efficient tick-based regeneration (every 20 ticks)
-
-### Changed
-- Mage class now has functional mana system replacing placeholder benefits
-- Updated Class Selection Tome to accurately reflect mana mechanics
-- Mana bar positioned above hunger bar for optimal visibility
-- DagModClient now handles mana packet registration and HUD rendering
-
-### Fixed
-- Mana data properly persists across server restarts
-- Mana regeneration only applies to Mage class
-- Spell scrolls provide proper feedback when requirements not met
-- Blink spell validates target before consuming mana
-
-## [1.3.0] - 2025-10-05
-
-### Added - Progression System
-- **Level System (1-50)**: Complete progression system with exponential XP curve
-    - Designed for ~20 hours of gameplay to reach max level
-    - ~500,000 total XP required for level 50
-- **Automatic XP Gains** from multiple sources:
-    - Mining ores: 5-40 XP based on rarity (Coal: 5 XP, Diamond: 25 XP, Ancient Debris: 40 XP)
-    - Killing mobs: 10-2000 XP based on difficulty (Zombie: 15 XP, Ender Dragon: 2000 XP, Wither: 1500 XP)
-    - Woodcutting: 2 XP per log (all wood types)
-    - Farming: 1-3 XP per crop harvested
-    - Quest completion: 200-2500 XP based on difficulty tier
-- **Level-Based Stat Scaling**:
-    - +1 HP per level (total +49 HP at level 50)
-    - +1 Attack Damage every 5 levels (total +10 at level 50)
+### Added - Complete Progression System
+- **Level System (1-50)**:
+    - Exponential XP scaling (100 base XP, 1.15 multiplier per level)
+    - Level 1→2: 100 XP, Level 49→50: ~6,000 XP
+    - Total XP for level 50: ~140,000 XP
+- **Automatic XP Rewards**:
+    - Mining ores: 5-40 XP (Coal: 5, Iron: 10, Gold: 15, Diamond: 25, Ancient Debris: 40)
+    - Killing mobs: 10-2000 XP (Zombie: 15, Skeleton: 20, Enderman: 45, Wither: 1500, Ender Dragon: 2000)
+    - Woodcutting: 2 XP per log
+    - Farming: 1-5 XP (Wheat: 1, Carrots/Potatoes: 2, Nether Wart: 5)
+    - Fishing: 2-15 XP (Fish: 2, Treasure: 15, Junk: 1)
+    - Quest completion: 200-2500 XP based on difficulty
+- **Stat Bonuses** (apply automatically every 10 levels):
+    - +1 Max Health per 10 levels (total +5 hearts at level 50)
+    - +0.5 Attack Damage per 10 levels (total +2.5 attack at level 50)
     - +1 Armor every 10 levels (total +5 at level 50)
     - Stats automatically apply on level up and persist across sessions
 - **Visual Progression HUD**:

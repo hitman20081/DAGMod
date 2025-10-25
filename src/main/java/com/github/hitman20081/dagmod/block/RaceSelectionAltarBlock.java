@@ -49,6 +49,28 @@ public class RaceSelectionAltarBlock extends Block {
         UUID playerId = player.getUuid();
         ItemStack heldItem = player.getStackInHand(Hand.MAIN_HAND);
 
+        // ===== RESET OPTIONS =====
+
+        // Check for Race Reset Crystal
+        if (heldItem.isOf(ModItems.RACE_RESET_CRYSTAL)) {
+            return handleRaceReset(player, heldItem, pos, world, "crystal");
+        }
+
+        // Check for Racial Rebirth Potion
+        if (heldItem.isOf(ModItems.POTION_OF_RACIAL_REBIRTH)) {
+            return handleRaceReset(player, heldItem, pos, world, "potion");
+        }
+
+        // Check for Character Reset Crystal (resets BOTH race and class)
+        if (heldItem.isOf(ModItems.CHARACTER_RESET_CRYSTAL)) {
+            return handleCharacterReset(player, heldItem, pos, world, "crystal");
+        }
+
+        // Check for Total Rebirth Potion (resets BOTH race and class)
+        if (heldItem.isOf(ModItems.POTION_OF_TOTAL_REBIRTH)) {
+            return handleCharacterReset(player, heldItem, pos, world, "potion");
+        }
+
         // Check if player already has a race
         if (playerRaces.containsKey(playerId)) {
             String playerRace = playerRaces.get(playerId);
@@ -295,6 +317,139 @@ public class RaceSelectionAltarBlock extends Block {
                 .formatted(Formatting.GRAY), false);
         player.sendMessage(Text.literal("Enhanced combat and hunting prowess!")
                 .formatted(Formatting.GREEN), false);
+    }
+
+    // ===== RESET HANDLER METHODS =====
+
+    /**
+     * Handle race reset (Race Reset Crystal or Racial Rebirth Potion)
+     */
+    private ActionResult handleRaceReset(PlayerEntity player, ItemStack item,
+                                         BlockPos pos, World world, String resetType) {
+        UUID playerId = player.getUuid();
+
+        if (!playerRaces.containsKey(playerId)) {
+            player.sendMessage(Text.literal("You don't have a race to reset!")
+                    .formatted(Formatting.RED), false);
+            return ActionResult.FAIL;
+        }
+
+        String oldRace = playerRaces.get(playerId);
+        playerRaces.remove(playerId);
+
+        // Consume the item
+        if (item != null) {
+            item.decrement(1);
+        }
+
+        // Give race tokens back
+        player.giveItemStack(new ItemStack(ModItems.HUMAN_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.DWARF_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.ELF_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.ORC_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.RACE_SELECTION_TOME));
+
+        player.sendMessage(Text.empty(), false);
+        player.sendMessage(Text.literal("═══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("RACE RESET SUCCESSFUL")
+                .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
+        player.sendMessage(Text.literal("═══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("You are no longer a " + oldRace)
+                .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Your heritage has been cleansed.")
+                .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Choose your new path!")
+                .formatted(Formatting.YELLOW), false);
+        player.sendMessage(Text.empty(), false);
+
+        // Visual effects
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(ParticleTypes.PORTAL,
+                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                    50, 0.5, 0.5, 0.5, 0.5);
+            serverWorld.spawnParticles(ParticleTypes.SOUL,
+                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                    30, 0.5, 0.5, 0.5, 0.1);
+        }
+
+        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE,
+                SoundCategory.BLOCKS, 1.0f, 0.8f);
+
+        return ActionResult.SUCCESS;
+    }
+
+    /**
+     * Handle character reset (Character Reset Crystal or Total Rebirth Potion)
+     * Resets BOTH race and class
+     */
+    private ActionResult handleCharacterReset(PlayerEntity player, ItemStack item,
+                                              BlockPos pos, World world, String resetType) {
+        UUID playerId = player.getUuid();
+
+        if (!playerRaces.containsKey(playerId)) {
+            player.sendMessage(Text.literal("You don't have a race to reset!")
+                    .formatted(Formatting.RED), false);
+            return ActionResult.FAIL;
+        }
+
+        String oldRace = playerRaces.get(playerId);
+        String oldClass = ClassSelectionAltarBlock.getPlayerClass(playerId);
+
+        // Reset both race and class
+        playerRaces.remove(playerId);
+        ClassSelectionAltarBlock.resetPlayerClass(playerId);
+
+        // Consume the item
+        if (item != null) {
+            item.decrement(1);
+        }
+
+        // Give both race and class tokens back
+        player.giveItemStack(new ItemStack(ModItems.HUMAN_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.DWARF_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.ELF_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.ORC_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.RACE_SELECTION_TOME));
+
+        player.giveItemStack(new ItemStack(ModItems.WARRIOR_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.MAGE_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.ROGUE_TOKEN));
+        player.giveItemStack(new ItemStack(ModItems.CLASS_SELECTION_TOME));
+
+        player.sendMessage(Text.empty(), false);
+        player.sendMessage(Text.literal("═══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("CHARACTER RESET SUCCESSFUL")
+                .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
+        player.sendMessage(Text.literal("═══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("Race: " + oldRace + " → Not Selected")
+                .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Class: " + oldClass + " → Not Selected")
+                .formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Visit both altars to forge a new identity!")
+                .formatted(Formatting.YELLOW), false);
+        player.sendMessage(Text.empty(), false);
+
+        // Visual effects
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(ParticleTypes.PORTAL,
+                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                    60, 0.5, 0.5, 0.5, 0.5);
+            serverWorld.spawnParticles(ParticleTypes.END_ROD,
+                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                    40, 0.5, 0.5, 0.5, 0.1);
+            serverWorld.spawnParticles(ParticleTypes.SOUL,
+                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                    30, 0.5, 0.5, 0.5, 0.1);
+        }
+
+        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_POWER_SELECT,
+                SoundCategory.BLOCKS, 1.0f, 0.6f);
+
+        return ActionResult.SUCCESS;
     }
 
     private boolean isRaceToken(ItemStack stack) {

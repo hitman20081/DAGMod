@@ -261,6 +261,11 @@ public class ClassSelectionAltarBlock extends Block {
         player.sendMessage(Text.literal("Your journey begins...")
                 .formatted(Formatting.YELLOW), false);
         player.sendMessage(Text.empty(), false);
+        player.sendMessage(Text.literal("You've received an Apprentice Quest Book!")
+                .formatted(Formatting.AQUA), false);
+
+        // Give Apprentice Quest Book on class selection
+        player.giveItemStack(new ItemStack(ModItems.NOVICE_QUEST_BOOK));
 
         // Initialize class
         switch (className.toLowerCase()) {

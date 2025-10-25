@@ -17,6 +17,7 @@ import com.github.hitman20081.dagmod.effect.ModEffects;
 import com.github.hitman20081.dagmod.event.DeathMessageHandler;
 import com.github.hitman20081.dagmod.event.FortuneDustHandler;
 import com.github.hitman20081.dagmod.event.ShadowBlendHandler;
+import com.github.hitman20081.dagmod.item.ModItemGroups;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.networking.ModNetworking;
 import com.github.hitman20081.dagmod.potion.ModPotions;
@@ -75,6 +76,9 @@ public class DagMod implements ModInitializer {
     public void onInitialize() {
         ModItems.initialize();
         ModItems.registerModItems();
+
+        ModItemGroups.registerItemGroups();
+
 
         ModEffects.registerEffects();
         ModPotions.registerPotion();
@@ -195,37 +199,43 @@ public class DagMod implements ModInitializer {
             }
         });
 
-        // Apply class abilities when player logs in
+        // Load player data when entity loads (login, respawn, dimension change)
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity instanceof ServerPlayerEntity player) {
                 // Load persistent data first
                 PlayerDataManager.loadPlayerData(player);
 
-                // Give Hall Locator to new players
-                if (!PlayerDataManager.hasPlayerData(player)) {
-                    // Check if player already has a Hall Locator in their inventory
-                    if (!hasHallLocator(player)) {
-                        player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
-                        player.giveItemStack(QuestUtils.createWelcomeBook());
-                        player.giveItemStack(new ItemStack(ModItems.NOVICE_QUEST_BOOK));
-                        player.sendMessage(Text.literal("═══════════════════════════════")
-                                .formatted(Formatting.GOLD), false);
-                        player.sendMessage(Text.literal("Welcome to DAGMod!")
-                                .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
-                        player.sendMessage(Text.literal("═══════════════════════════════")
-                                .formatted(Formatting.GOLD), false);
-                        player.sendMessage(Text.literal("You've been given a Hall Locator!")
-                                .formatted(Formatting.YELLOW), false);
-                        player.sendMessage(Text.literal("Right-click it to find the Hall of Champions.")
-                                .formatted(Formatting.GRAY), false);
-                        player.sendMessage(Text.literal("═══════════════════════════════")
-                                .formatted(Formatting.GOLD), false);
-                    }
-                }
-
                 // Then apply abilities (already loaded by loadPlayerData, but this ensures sync)
                 ClassAbilityManager.applyClassAbilities(player);
                 RaceAbilityManager.applyRaceAbilities(player);
+            }
+        });
+
+        // Give starter items ONLY on first join (not on dimension change or respawn)
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayerEntity player = handler.player;
+
+            // Only give items to completely new players (no race/class data)
+            if (!PlayerDataManager.hasPlayerData(player)) {
+                // Check if player already has a Hall Locator (double-check safety)
+                if (!hasHallLocator(player)) {
+                    player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
+                    player.giveItemStack(QuestUtils.createWelcomeBook());
+                    // NOTE: Removed NOVICE_QUEST_BOOK - it will be given on class selection instead
+
+                    player.sendMessage(Text.literal("═══════════════════════════════")
+                            .formatted(Formatting.GOLD), false);
+                    player.sendMessage(Text.literal("Welcome to DAGMod!")
+                            .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
+                    player.sendMessage(Text.literal("═══════════════════════════════")
+                            .formatted(Formatting.GOLD), false);
+                    player.sendMessage(Text.literal("You've been given a Hall Locator!")
+                            .formatted(Formatting.YELLOW), false);
+                    player.sendMessage(Text.literal("Right-click it to find the Hall of Champions.")
+                            .formatted(Formatting.GRAY), false);
+                    player.sendMessage(Text.literal("═══════════════════════════════")
+                            .formatted(Formatting.GOLD), false);
+                }
             }
         });
 

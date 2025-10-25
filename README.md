@@ -1,6 +1,127 @@
-# DAGMod v1.4.3-beta - Fantasy RPG Minecraft Mod
+# DAGMod v1.4.4-beta - Fantasy RPG Minecraft Mod
 
 A comprehensive fantasy RPG modification for Minecraft using Fabric, featuring an intricate quest system, progression system, class mechanics, race selection, synergy abilities, custom items, procedurally generated dungeons, and immersive gameplay mechanics.
+
+## What's New in v1.4.4-beta
+
+### ⚔️ **Warriors - 3 New Abilities**
+
+**1. Battle Standard** (Battle Shout ability)
+- Powerful self-healing and combat buff activation
+- **Healing**: Restores 6 hearts instantly
+- **Strength II** for 10 seconds - devastating damage output
+- **Regeneration II** for 8 seconds - sustained healing
+- **Cooldown**: 45 seconds
+- Perfect for turning the tide of difficult battles
+
+**2. Whirlwind Axe** (Whirlwind ability)
+- Execute a devastating 360° spin attack
+- Hits **all enemies** within 5 block radius
+- **8 damage** per enemy hit
+- Applies knockback and slowness to affected targets
+- Epic particle effects during the spin
+- **Cooldown**: 30 seconds
+- Ideal for crowd control and AoE damage
+
+**3. Iron Talisman** (Iron Skin ability)
+- Transform into an unstoppable tank
+- **Resistance III** for 12 seconds - massive damage reduction
+- 50% reduced knockback resistance
+- Creates a protective damage reduction shield
+- **Cooldown**: 60 seconds
+- Essential for surviving boss encounters and tough fights
+
+**Warriors now have 5 total abilities** - combining devastating offense with incredible survivability!
+
+---
+
+### 🔮 **Mages - 4 New Abilities**
+
+**1. Arcane Orb** (Arcane Missiles ability)
+- Unleash a barrage of homing magic missiles
+- Fires **5 missiles** that automatically seek targets
+- **4 damage per missile** (20 total damage potential)
+- Auto-targets the nearest enemy within range
+- Beautiful purple particle trails
+- **Cooldown**: 20 seconds
+- Excellent for consistent ranged damage
+
+**2. Temporal Crystal** (Time Warp ability)
+- Manipulate time itself to control the battlefield
+- Slows **all enemies** within 10 block radius
+- **Slowness IV** for 8 seconds - extreme movement reduction
+- Mass crowd control for overwhelming situations
+- Stunning blue time particle effects
+- **Cooldown**: 40 seconds
+- Perfect for kiting dangerous mobs or escaping
+
+**3. Mana Catalyst** (Mana Burst ability)
+- Detonate a massive magical explosion
+- **8 block radius** AoE damage
+- **12 damage** to all enemies in range
+- Strong knockback effect
+- Spectacular cyan explosion particles
+- **Cooldown**: 35 seconds
+- Ultimate room-clearing ability
+
+**4. Barrier Charm** (Arcane Barrier ability)
+- Conjure a protective magical shield
+- Grants **10 absorption hearts** (5 full hearts)
+- Lasts 30 seconds or until depleted
+- Light blue barrier particles surround you
+- **Cooldown**: 50 seconds
+- Essential defensive tool for glass cannon mages
+
+**Mages now have 4 permanent abilities** plus wands and scrolls for incredible versatility!
+
+---
+
+### 🗡️ **Rogues - 4 New Abilities**
+
+**Important**: These abilities use **cooldown-based activation** (individual items), separate from the existing **energy-based** Rogue Ability Tome system!
+
+**1. Void Blade** (Blink Strike ability)
+- Teleport behind your target for a surprise attack
+- Instantly teleport behind nearest enemy within **15 blocks**
+- Brief **invisibility** (2 seconds) after teleport
+- **Speed boost** for quick followup
+- Perfect for engaging or disengaging combat
+- Dark purple particle effects
+- **Cooldown**: 25 seconds
+
+**2. Vanish Cloak** (Vanish ability)
+- Disappear completely from the battlefield
+- **Invisibility** for 8 seconds
+- **Speed II** for 8 seconds - enhanced mobility
+- **Blinds nearby enemies** (6 block radius) for 4 seconds
+- Perfect escape tool when overwhelmed
+- Gray smoke cloud on activation
+- **Cooldown**: 40 seconds
+
+**3. Poison Vial** (Poison Strike ability)
+- Apply deadly toxins to your target
+- **Poison IV** for 8 seconds (~16 damage total)
+- Also applies **Weakness II** and **Slowness I**
+- **4 initial damage** on application
+- Green poison particle effects
+- **Cooldown**: 20 seconds
+- Excellent for taking down tough single targets
+
+**4. Assassin's Mark** (Assassinate ability)
+- Execute a powerful manual backstab
+- **20 damage (10 hearts)** when attacking from behind
+- **10 damage (5 hearts)** from front as backup
+- Red critical hit particles
+- Blood effect particles on successful backstab
+- **Cooldown**: 15 seconds
+- Complements the passive backstab mechanic
+
+**Rogues now have TWO ability systems:**
+- **Energy-based** (Rogue Ability Tome): Smoke Bomb, Poison Dagger, Shadow Step
+- **Cooldown-based** (Individual items): Blink Strike, Vanish, Poison Strike, Assassinate
+- **Total**: 7 abilities + passive backstab mechanic for ultimate versatility!
+
+---
 
 ## What's New in v1.4.3-beta
 
@@ -195,488 +316,207 @@ Skeleton King (Epic Boss)
     - Mining ores: 5-40 XP (Diamond: 25 XP, Ancient Debris: 40 XP)
     - Killing mobs: 10-2000 XP (Zombie: 15 XP, Ender Dragon: 2000 XP)
     - Woodcutting: 2 XP per log
-    - Farming: 1-3 XP per crop
+    - Farming: 1-5 XP per crop (Nether Wart: 5 XP)
+    - Fishing: 2-15 XP (Fish: 2 XP, Treasure: 15 XP)
     - Quest completion: 200-2500 XP based on difficulty
-- **Level-Based Stat Scaling**:
-    - +1 HP per level (49 bonus HP at max level)
-    - +1 Attack Damage every 5 levels
-    - +1 Armor every 10 levels
-- **Visual Progression HUD**: Real-time XP bar and level display
-- **Level Gates**: Quests locked behind level requirements
-    - Apprentice quests: Level 5+
-    - Expert quests: Level 15+
-    - Master quests: Level 25+
-- **Designed for 20+ hours** of engaging progression to reach max level
+- **Stat Scaling**: +1 HP, +0.5 attack, +1 armor per 10 levels
+- **Visual HUD**: Real-time XP bar with level display
+- **Level Gates**: Quests unlock at levels 1, 5, 15, and 25
+- **Persistent Progress**: All data saves to world files
 
 ### Quest System
-- **8 Quest Chains** with unique storylines and rewards:
-    - **General Progression Chains** (4):
-        - Adventurer's Path (3 quests) - Tutorial progression
-        - Village Development (5 quests) - Settlement building
-        - Master Craftsman (3 quests) - Crafting mastery
-        - Combat Specialist (4 quests) - Combat prowess
-    - **Race-Specific Chains** (4):
-        - **The Forgemaster's Legacy** (Dwarf, 10 quests) - Mining and smithing mastery
-        - **Guardian of the Wilds** (Elf, 10 quests) - Nature and archery path
-        - **Jack of All Trades** (Human, 10 quests) - Versatile exploration and mastery
-        - **Path of the Warlord** (Orc, 10 quests) - Combat and conquest
-- **64 Total Quests** including:
-    - 9 Class-specific quests (Warrior, Mage, Rogue)
-    - 40 Race-specific quests with unique storylines
-    - 15 General progression quests
-- **Multiple Quest Types**:
-    - Fetch Quests - Gather specific items
-    - Kill Quests - Defeat enemies
-    - Multi-objective Quests - Complex challenges
-- **Quest Blocks**: Interactive blocks for accepting and completing quests
-- **Dynamic Quest Tracking**: Real-time progress monitoring
-- **Quest Book Upgrades**: Unlock higher-tier quests by completing challenges
-- **Level-Gated Content**: Higher difficulty quests require appropriate levels
+- **64 Total Quests** across 4 difficulty tiers
+- **Tier Levels**: Novice (Lv1+), Apprentice (Lv5+), Expert (Lv15+), Master (Lv25+)
+- **40 Race-Specific Quests** with unique storylines:
+    - **The Forgemaster's Legacy** (Dwarf) - 10 quests
+    - **Guardian of the Wilds** (Elf) - 10 quests
+    - **Jack of All Trades** (Human) - 10 quests
+    - **Path of the Warlord** (Orc) - 10 quests
+- **Quest Types**: Gather, Kill, Explore, Craft
+- **Progressive Rewards**: Items, XP, enchantments
+- **Quest Tracking**: Active quest display and objective progress
+- **Quest Block**: Central hub for quest management
 
-### RPG Class System
-- **Three Distinct Classes**:
-    - **Warrior**:
-        - +4 hearts (+8 health)
-        - +25% melee attack damage
-        - -10% movement speed
-        - 15% damage reduction from physical sources
-        - Heavy armor proficiency
-        - **3 class-specific quests** with unique storyline
-    - **Mage**:
-        - -2 hearts (-4 health)
-        - -25% melee attack damage
-        - **100 Mana Pool** with 2 mana/second regeneration
-        - **7 Unique Spells** via spell scrolls
-        - 50% reduced enchantment costs
-        - 50% longer potion durations
-        - Permanent night vision
-        - **3 class-specific quests** with unique storyline
-    - **Rogue**:
-        - -1 heart (-2 health)
-        - +30% movement speed
-        - **100 Energy Pool** with 5 energy/second regeneration
-        - **3 Unique Abilities** via Rogue Ability Tome
-        - 25% critical hit chance (2x damage)
-        - Backstab bonus (1.5x damage from behind)
-        - 50% reduced fall damage
-        - **3 class-specific quests** with unique storyline
-- **Class Selection Altar**: Choose your path at the start of your journey
-- **Class-Specific Abilities**: Unique powers and stat modifiers for each class
-- **Class Reset Crystal**: Allows players to change their chosen class
-- **Level-Based Class Reset**: Free class reset every 10 quests completed
+### Class System
+Choose from 3 distinct classes, each with unique abilities and playstyles:
 
-### Spell System (Mage Class)
-Mages harness arcane power through a mana system and spell scrolls:
+#### ⚔️ **Warrior** - Tank and Melee Damage Dealer
+- **Base Stats**:
+    - +2 max hearts (4 HP)
+    - +2 attack damage
+    - +2 armor
+    - 15% physical damage reduction
+- **Class Abilities** (5 total):
+    - **Rage**: +50% damage for 10 seconds (60s cooldown)
+    - **Shield Bash**: 6 damage + knockback + stun (20s cooldown)
+    - **War Cry**: AoE fear + weakness (45s cooldown)
+    - **Battle Standard** ✨NEW: Self-heal + Strength II + Regeneration II (45s cooldown)
+    - **Whirlwind Axe** ✨NEW: 360° spin attack, 8 damage AoE (30s cooldown)
+    - **Iron Talisman** ✨NEW: Resistance III shield, 50% knockback reduction (60s cooldown)
+- **Consumables**:
+    - Cooldown Elixir: Reduces all ability cooldowns by 30 seconds
+- **Playstyle**: Frontline tank with crowd control and sustain
 
-**Mana Mechanics**:
-- 100 maximum mana pool
-- 2 mana regenerated per second
-- Visual mana bar above hunger display
-- Mana persists across sessions
+#### 🔮 **Mage** - Spellcaster and Ranged DPS
+- **Base Stats**:
+    - +1 max heart (2 HP)
+    - +50 max mana
+    - Permanent Night Vision
+- **Passive Abilities**:
+    - 50% reduced enchantment costs
+    - 50% longer potion durations
+- **Class Abilities** (4 permanent abilities + spell scrolls + wands):
+    - **Arcane Orb** ✨NEW: 5 homing missiles, 4 damage each (20s cooldown)
+    - **Temporal Crystal** ✨NEW: AoE Slowness IV, 10 block radius (40s cooldown)
+    - **Mana Catalyst** ✨NEW: Massive 8-block AoE explosion, 12 damage (35s cooldown)
+    - **Barrier Charm** ✨NEW: 10 absorption hearts, lasts 30 seconds (50s cooldown)
+- **Spell Scrolls**: Fireball, Lightning, Ice Blast (mana-based)
+- **Wands**: Flame Wand, Frost Wand, Storm Wand, Shadow Wand (mana-based)
+- **Consumables**:
+    - Mana Potion, Arcane Essence, various magical powders
+- **Playstyle**: Versatile spellcaster with offensive and defensive options
 
-**Available Spells**:
-- **Heal** (20 mana): Instantly restore 3 hearts with healing particles
-- **Fireball** (30 mana): Launch an explosive fireball projectile
-- **Arcane Shield** (25 mana): Gain 4 absorption hearts for 30 seconds
-- **Lightning Bolt** (35 mana): Summon lightning at your target (30 block range)
-- **Frost Nova** (40 mana): Freeze and damage all enemies within 8 blocks
-- **Blink** (30 mana): Teleport to targeted block (20 block range)
-- **Mana Shield** (15 mana): Gain Resistance II for 10 seconds
-
-**Spell Mechanics**:
-- Spells only usable by Mage class
-- Mana consumed only on successful cast
-- Failed casts (invalid targets) don't consume mana
-- Each spell has unique visual and audio effects
-- Spell scrolls stackable (16 per stack)
-
-
-### Rogue Ability System
-Rogues harness agility and stealth through an energy system and the Rogue Ability Tome:
-
-**Energy Mechanics**:
-- 100 maximum energy pool
-- 5 energy regenerated per second (faster than mana for active gameplay)
-- Visual purple energy bar above hunger display (right side)
-- Energy persists in memory during session
-
-**Rogue Ability Tome**:
-- Multi-ability item containing all 3 Rogue abilities
-- **Shift + Right-Click**: Cycle between abilities
-- **Right-Click**: Use currently selected ability
-- Item name dynamically shows selected ability
-- Always has enchanted glint effect
-
-**Available Abilities**:
-
-1. **Smoke Bomb** (40 energy, 20 second cooldown)
-    - Creates smoke cloud at your location
-    - Grants **Invisibility** for 6 seconds
-    - Grants **Speed II** for 6 seconds
-    - Smoke cloud lingers for 5 seconds (3 block radius)
-    - Enemies in cloud get **Blindness II**
-    - Breaks mob targeting for clean escapes
-    - Perfect for: Escaping, repositioning, breaking combat
-
-2. **Poison Dagger** (25 energy, no cooldown)
-    - Buffs your next melee attack (5-second window)
-    - Applies **Poison III** for 8 seconds (high damage over time)
-    - Applies **Weakness II** for 6 seconds (reduces enemy damage)
-    - Applies **Nausea** for 5 seconds (disorients target)
-    - Green particle effects on weapon and target
-    - Buff is consumed on successful hit
-    - Perfect for: Burst damage, weakening tough enemies
-
-3. **Shadow Step** (50 energy, 30 second cooldown)
-    - Teleports to targeted block (25 block range)
-    - **Can phase through walls** (unlike Mage Blink)
-    - Leaves shadow decoy at starting position
-    - Decoy lasts 3 seconds and draws mob aggro
-    - Grants **Invisibility** for 3 seconds after teleport
-    - Brief **invulnerability** during teleport (0.5s)
-    - Perfect for: Escaping, flanking, repositioning, tactical plays
-
-**Combat Mechanics**:
-- Abilities only usable by Rogue class
-- Energy consumed only on successful use
-- Failed attempts (invalid targets) don't consume energy
-- Invisibility breaks when attacking
-- Each ability has unique visual and audio effects
-- Poison Dagger integrates with backstab mechanics
-
-**Strategic Gameplay**:
-Rogues excel at hit-and-run tactics:
-1. Use **Shadow Step** to position behind enemies
-2. Activate **Poison Dagger** for enhanced damage
-3. Execute backstab (1.5x damage + poison effects)
-4. Throw **Smoke Bomb** to escape and reset
-5. Energy regenerates quickly for next engagement
-
-**Ability Synergies**:
-- **Assassin Combo**: Shadow Step → Poison Dagger → Backstab → Smoke Bomb escape
-- **Sustained Damage**: Poison Dagger → Normal attacks while poison ticks
-- **Tactical Repositioning**: Smoke Bomb → Move while invisible → Shadow Step to new position
-- **Boss Fights**: Shadow Step decoy draws aggro while you deal damage safely
-
-### Consumable Powder System
-Transform custom powders into powerful consumables for tactical advantages:
-
-**Crafting Materials**:
-- Amethyst Powder, Diamond Powder, Emerald Powder
-- Echo Dust, Quartz Powder, Slimeball Dust
-- Combined with vanilla materials for unique consumables
-
-**Essential Consumables** (Uncommon - Stack 16):
-
-**Resource Restoration**:
-- **Mana Crystal** (Mage only) - Instantly restore 50 mana
-    - Recipe: Amethyst Powder + Echo Dust + Amethyst Shard
-- **Energy Tonic** (Rogue only) - Instantly restore 50 energy
-    - Recipe: Quartz Powder + Slimeball Dust + Glass Bottle
-- **Cooldown Elixir** (Warrior only) - ✨ **Reduce all cooldowns by 30 seconds**
-    - Recipe: Diamond Powder + Emerald Powder + Glass Bottle
-    - *Fully functional in v1.4.3!*
-
-**Combat Enhancers**:
-- **Vampire Dust** - Lifesteal effect for 20 seconds
-    - Recipe: Diamond Powder + Redstone + Rotten Flesh
-- **Phantom Dust** - 50% dodge chance for 15 seconds
-    - Recipe: Echo Dust + Phantom Membrane + Feather
-- **Battle Frenzy** (Warrior only) - Strength, Speed, Haste for 15 seconds
-    - Recipe: Diamond Powder + Redstone + Blaze Powder
-
-**Utility Consumables**:
-- **Fortune Dust** - ✨ **Fortune III effect for exactly 10 blocks**
-    - Recipe: Emerald Powder + Lapis Lazuli + Gold Nugget
-    - *Fully functional in v1.4.3!*
-- **Feather-fall Powder** - No fall damage for 60 seconds
-    - Recipe: Slimeball Dust + Feather + Phantom Membrane
-- **Shadow Blend** (Rogue only) - ✨ **Invisibility until you attack**
-    - Recipe: Echo Dust + Coal + Fermented Spider Eye
-    - *Fully functional in v1.4.3!*
-
-**Class Power Boosts**:
-- **Spell Echo** (Mage only) - Next spell casts twice
-    - Recipe: Quartz Powder + Amethyst Powder + Echo Dust
-
-**Advanced Consumables** (Epic - Stack 8):
-- **Last Stand Powder** - Auto-revive if you die within 60 seconds
-    - Recipe: Emerald Powder + Totem of Undying + Golden Apple
-- **Time Distortion** - Slow motion effect for 10 seconds
-    - Recipe: Echo Dust + Clock + Ender Pearl
-- **Overcharge Dust** (Mage only) - Next spell has 2x power
-    - Recipe: Diamond Powder + Amethyst Powder + Nether Star
-- **Titan's Strength** (Warrior only) - +100% melee damage for 20 seconds
-    - Recipe: Emerald Powder + Netherite Scrap + Blaze Rod
-- **Perfect Dodge** (Rogue only) - 100% dodge chance for 10 seconds
-    - Recipe: Amethyst Powder + Feather + Rabbit Foot
-
-**Consumable Mechanics**:
-- Right-click to consume and gain effect
-- Class-locked consumables provide clear feedback
-- Unique particle effects for each type
-- Strategic resource management
-- Craft in survival using custom powders
-
-### Custom Armor Set Bonus System
-Equip matching armor pieces to unlock powerful progressive bonuses!
-
-**How It Works**:
-- Wear 2 pieces of matching armor → Activate 2-piece bonus
-- Wear all 4 pieces → Unlock 4-piece bonus (more powerful)
-- Bonuses vary by class (Warrior, Mage, Rogue get different effects)
-- Visual notifications appear when bonuses activate
-- Remove armor → bonuses disappear instantly
-
----
-
-#### **Armor Sets**
-
-**🐉 Dragonscale Set** (Netherite - Epic):
-- **Crafting**: Dragon Breath + Crying Obsidian + Netherite Armor
-- **2-Piece Bonuses**:
-    - Warrior: Resistance I (10% damage reduction)
-    - Mage: Glowing + 15% reduced spell costs
-    - Rogue: Speed I + 20% critical hit chance
-- **4-Piece Bonuses**:
-    - Warrior: Resistance II (20% damage reduction)
-    - Mage: +50% mana regeneration (3 mana/second)
-    - Rogue: Speed II + 25% energy regeneration (6.25 energy/second)
-
-**💎 Crystalforge Set** (Diamond - Epic):
-- **Crafting**: Amethyst Cluster + Quartz + Diamond Armor
-- **2-Piece Bonuses**:
-    - All Classes: Night Vision
-    - Warrior: Absorption I
-    - Mage: Regeneration I + 25% mana regeneration
-    - Rogue: Jump Boost I + 15% energy regeneration
-- **4-Piece Bonuses**:
-    - All Classes: Glowing
-    - Warrior: Absorption II
-    - Mage: Regeneration II + 20% reduced spell costs
-    - Rogue: Jump Boost II
-
-**🔥 Inferno Set** (Iron - Epic):
-- **Crafting**: Fire Charge + Blaze Powder + Iron Armor
-- **2-Piece Bonuses**:
-    - All Classes: Fire Resistance
-    - Warrior: Strength I
-    - Mage: Regeneration I + 10% reduced spell costs
-    - Rogue: Speed I
-- **4-Piece Bonuses**:
-    - All Classes: Fire Resistance II + Glowing
-    - Warrior: Strength II
-    - Mage: Regeneration II
-    - Rogue: Haste II
-
-**🌿 Nature's Guard Set** (Leather - Epic):
-- **Crafting**: Enchanted Golden Apple + Golden Carrot + Leather Armor
-- **2-Piece Bonuses**:
-    - All Classes: Regeneration I
-    - Warrior: Resistance I
-    - Mage: Luck I
-    - Rogue: Jump Boost II
-- **4-Piece Bonuses**:
-    - All Classes: Regeneration II + Saturation
-    - Warrior: Absorption II
-    - Mage: Luck II + 30% mana regeneration
-    - Rogue: Invisibility + 15% critical hit chance
-
-**🌑 Shadow Set** (Leather - Epic):
-- **Crafting**: Ender Pearl + Purpur Block + Leather Armor
-- **2-Piece Bonuses**:
-    - All Classes: Speed I + Night Vision
-    - Mage: 10% reduced spell costs
-    - Rogue: Invisibility + 25% critical hit chance
-- **4-Piece Bonuses**:
-    - All Classes: Speed II + Night Vision
-    - Warrior: Resistance I
-    - Rogue: Invisibility + Jump Boost II + 35% energy regeneration
-
-**🍀 Fortuna Set** (Gold - Epic):
-- **Crafting**: Rabbit Foot + Emerald + Gold Armor
-- **2-Piece Bonuses**:
-    - All Classes: Luck III + Speed I
-- **4-Piece Bonuses**:
-    - All Classes: Luck V + Hero of the Village + Speed II
-    - Massive fortune for looting and trading!
-
----
-
-### Weapon + Armor Synergy System
-Combine matching weapons with armor sets for devastating bonuses!
-
-**How It Works**:
-- Wear 2+ pieces of armor set + wield matching weapon
-- Unlock enhanced combat bonuses and effects
-- 4-piece armor + weapon = maximum power
-- "⚔️ Weapon Synergy Activated!" notification appears
-
----
-
-#### **Weapon Synergies**
-
-**🐉 Dragonscale Blade + Dragonscale Armor**:
-- **2-Piece**: Strength I + 15% melee damage bonus
-- **4-Piece**: Strength II + Fire Resistance + 30% melee damage
-    - Warrior Bonus: Absorption II (extra survivability)
-
-**🔥 Inferno Blade + Inferno Armor**:
-- **2-Piece**: Strength I + 15% melee damage
-- **4-Piece**: Strength II + Haste II + 25% melee damage
-    - Fire-themed warrior build
-
-**🌑 Shadow Blade/Phantom Blade + Shadow Armor** (Rogue):
-- **2-Piece**: Speed II + Invisibility + **35% backstab damage** (total 2.05x)
-- **4-Piece**: Speed III + Jump Boost III + Invisibility + **75% backstab damage** (total 2.45x!)
-- **Orc Rogue Ultimate**: Orc (+20%) + Shadow 4pc (+75%) = **2.65x backstab damage!**
-
-**🌿 Poison Fang Spear + Nature's Guard**:
-- **2-Piece**: Regeneration II + Luck I
-- **4-Piece**: Regeneration III + Luck II + Saturation
-    - Sustain-focused melee build
-
-**💎 Crystal Hammer + Crystalforge Armor**:
-- **2-Piece**: Absorption II + Resistance I
-- **4-Piece**: Absorption III + Resistance II + Jump Boost III
-    - Tank build with mace smash attacks
-
----
-
-#### **Backstab Damage Breakdown** (Rogue)
-Stack bonuses for maximum assassination damage:
-- **Base Rogue**: 1.5x backstab damage
-- **Orc Rogue**: 1.7x damage (+20% racial bonus)
-- **Shadow 2pc + Shadow Blade**: 2.05x damage (+35% synergy)
-- **Shadow 4pc + Shadow Blade**: 2.45x damage (+75% synergy)
-- **Orc + Shadow 4pc + Shadow Blade**: **2.65x damage** (ultimate assassin!)
-
----
-
-### Themed Weapons & Shields
-
-**Custom Weapons**:
-- **Dragonscale Blade** (Netherite Sword) - Dragon-themed, fire aspect
-- **Inferno Blade** (Iron Sword) - Fire aspect, magma-themed
-- **Shadow Blade** (Netherite Sword) - Stealth-focused, movement bonuses
-- **Phantom Blade** (Netherite Sword) - Reduced gravity, phantom-themed
-- **Sword of the True King** (Netherite Sword) - Legendary balanced stats
-- **Solar Bow** - Fire and piercing enchantments
-- **Frostbite Axe** (Netherite Axe) - Ice-themed
-- **Crystal Hammer** (Mace) - Enhanced density damage
-- **Poison Fang Spear** (Trident) - Bane of Arthropods, poison-themed
-- **Thunder Pike** (Trident) - Channeling, lightning-themed
-
-**Custom Shields**:
-- **Dragonbone Shield** - Explosion resistance, absorption
-- **Blazing Aegis** - Fire-themed stats
-- **Nature's Bulwark** - Nature-themed defense
-- **Shadowguard Shield** - Movement efficiency bonus
-- **Crystal Ward** - Absorption bonuses
-- **Solar Protector** - Max health +3 hearts, attack speed
-- **Frostbound Shield** - Cold-themed defense
-- **Celestial Aegis** - High-tier universal shield
-- **Stormguard Shield** - Storm-themed defense
-
-All weapons and shields craftable in survival mode!
+#### 🗡️ **Rogue** - Stealth and Critical Strikes
+- **Base Stats**:
+    - +1 attack damage
+    - +1 max heart (2 HP)
+    - 25% critical hit chance
+    - 50% reduced fall damage
+- **Backstab Mechanic**:
+    - Passive: 1.5x damage from behind
+    - Active (Assassin's Mark): 20 damage from behind, 10 from front
+- **Energy-Based Abilities** (via Rogue Ability Tome):
+    - **Smoke Bomb**: AoE blind + invisibility (30 energy)
+    - **Poison Dagger**: Apply poison to target (40 energy)
+    - **Shadow Step**: Short-range teleport (50 energy)
+- **Cooldown-Based Abilities** ✨NEW (Individual items):
+    - **Void Blade** (Blink Strike): Teleport behind enemy + invisibility (25s cooldown)
+    - **Vanish Cloak** (Vanish): Invisibility + Speed II + blind enemies (40s cooldown)
+    - **Poison Vial** (Poison Strike): Deadly Poison IV + Weakness + Slowness (20s cooldown)
+    - **Assassin's Mark** (Assassinate): Manual backstab, 20 damage from behind (15s cooldown)
+- **Total**: 7 abilities (3 energy + 4 cooldown) + passive backstab
+- **Consumables**:
+    - Shadow Blend, Perfect Dodge, various stealth-enhancing items
+- **Playstyle**: High-risk, high-reward assassin with incredible mobility and burst damage
 
 ### Race System
-- **Four Playable Races**:
-    - **Human - The Balanced**:
-        - +25% experience gain from all sources
-        - Jack of all trades with no penalties
-        - Versatile gameplay
-        - **10-quest unique storyline**: "Jack of All Trades" - Master exploration, trading, and diverse skills
-    - **Dwarf - The Miner**:
-        - +20% mining speed
-        - +1 heart (+2 health)
-        - -5% movement speed
-        - 15% chance for bonus ore drops when mining
-        - **10-quest unique storyline**: "The Forgemaster's Legacy" - Master mining and ancient smithing
-    - **Elf - The Ranger**:
-        - +15% movement speed
-        - +0.5 block interaction range
-        - Permanent Hero of the Village effect
-        - 20% chance for bonus wood drops
-        - **10-quest unique storyline**: "Guardian of the Wilds" - Protect nature and master archery
-    - **Orc - The Warrior**:
-        - +15% melee attack damage
-        - +2 hearts (+4 health)
-        - 20% chance for bonus meat from hunting
-        - Better fishing luck
-        - **10-quest unique storyline**: "Path of the Warlord" - Conquer through strength and combat
-- **Race Selection Altar**: Discover your heritage in the Hall of Champions
-- **Race Selection Tome**: Learn about each race before making your choice
-- **Race + Class Combinations**: Stack racial bonuses with class abilities for unique builds
-- **Permanent Heritage**: Race selection cannot be changed once chosen
+Choose from 4 unique races with distinct bonuses and gathering abilities:
 
-### Race + Class Synergies
-Special abilities unlock when combining specific races and classes:
-- **Dwarf Warrior**: Resistance effect when underground (below Y=50)
-- **Elf Rogue**: Invisibility in forest biomes when sneaking
-- **Orc Warrior**: Berserker rage (Strength + Speed) when below 30% health
-- **Human Mage**: Random regeneration bursts for adaptability
-- **Dwarf Mage**: Permanent fire resistance from mountain forges
-- **Elf Mage**: Haste effect in forest biomes
-- **Orc Rogue**: +20% extra backstab damage (stacks with base backstab)
-- **Human Warrior**: Absorption hearts when taking damage
-- **Human Rogue**: Random jump boost for versatile movement
+#### 🧑 **Human** - Versatile and Adaptable
+- **Racial Bonuses**:
+    - +25% experience gain from all sources
+    - Well-rounded stat distribution
+- **Gathering Bonus**: 25% XP bonus from all activities
+- **Synergies**:
+    - Human Warrior: Absorption hearts when taking damage
+    - Human Mage: Random regeneration bursts
+    - Human Rogue: Random jump boosts for mobility
+
+#### ⛏️ **Dwarf** - Master Craftsmen and Miners
+- **Racial Bonuses**:
+    - +20% mining speed
+    - +1 max heart (2 HP)
+    - -5% movement speed
+- **Gathering Bonus**: 15% chance for bonus ore drops when mining
+- **Synergies**:
+    - Dwarf Warrior: Resistance effect underground (below Y=50)
+    - Dwarf Mage: Permanent fire resistance
+    - Dwarf Rogue: Extra survivability from health bonus
+
+#### 🏹 **Elf** - Swift and Graceful
+- **Racial Bonuses**:
+    - +15% movement speed
+    - +0.5 block reach distance
+    - Permanent Hero of the Village effect
+- **Gathering Bonuses**:
+    - 20% chance for bonus wood drops
+    - 25% chance for extra items from leaves
+- **Synergies**:
+    - Elf Warrior: Balanced mobility tank
+    - Elf Mage: Haste effect in forest biomes
+    - Elf Rogue: Invisibility in forests when sneaking
+
+#### 🗡️ **Orc** - Fierce Warriors and Hunters
+- **Racial Bonuses**:
+    - +15% melee damage
+    - +2 max hearts (4 HP)
+    - Improved fishing luck
+- **Gathering Bonuses**:
+    - 20% chance for bonus meat from hunting
+    - 15% chance for bonus leather
+- **Synergies**:
+    - Orc Warrior: Berserker rage when below 30% health (Strength + Speed)
+    - Orc Mage: Tanky spellcaster
+    - Orc Rogue: +20% extra backstab damage (stacks with base backstab)
+
+### Custom Items & Gear
+
+#### Consumable Powders (15 types)
+Class-specific consumables with powerful temporary effects:
+- **Warrior Powders**: Berserker Blood, Titan Powder, Battle Dust, Last Stand Powder
+- **Mage Powders**: Arcane Powder, Spell Echo, Overcharge Dust, Time Distortion
+- **Rogue Powders**: Shadow Blend, Phantom Dust, Perfect Dodge
+- **Universal Powders**: Vampire Dust, Fortune Dust, Haste Dust, Luck Dust
+
+#### Armor Sets (6 complete sets)
+Progressive armor tiers with mana/energy bonuses:
+1. **Apprentice Set** (Leather): +10 mana, +5 energy per piece
+2. **Adept Set** (Chainmail): +15 mana, +8 energy per piece
+3. **Mystic Set** (Iron): +20 mana, +10 energy per piece
+4. **Archmage Set** (Gold): +25 mana, +12 energy per piece
+5. **Exalted Set** (Diamond): +30 mana, +15 energy per piece
+6. **Ethereal Set** (Netherite): +40 mana, +20 energy per piece
+
+Full set bonuses integrate with class abilities for enhanced power.
+
+#### Weapons & Shields (18 items)
+9 themed weapons with matching shields:
+- **Flame Series**: Fire damage and ignition
+- **Frost Series**: Slowness and ice effects
+- **Storm Series**: Lightning and speed
+- **Shadow Series**: Weakness and blindness
+- **Radiant Series**: Healing and regeneration
+- **Venom Series**: Poison damage
+- **Earth Series**: Mining and resistance
+- **Arcane Series**: Mana regeneration
+- **Blood Series**: Lifesteal effects
+
+**Weapon + Armor Synergy**: Wearing matching armor set enhances weapon abilities!
 
 ### World Generation
-- **Hall of Champions**: Spawns naturally in new worlds
-    - Contains both Race and Class Selection Altars
-    - Generates on solid ground in the Overworld
-    - Your journey begins here
-- **Bone Dungeon**: Procedurally generated underground structures *(NEW in v1.4.3!)*
-    - Spawns naturally in the Overworld
-    - Contains treasure chests with custom loot
-    - Unique jigsaw-based layouts
-- **Hall Locator**: New players receive a locator item to find the structure
 
-### Race-Specific Gathering
-- **Dwarves**: Bonus ore drops when mining (coal, iron, gold, diamond, emerald, etc.)
-- **Elves**: Bonus wood drops and extra items from leaves
-- **Orcs**: Bonus meat and leather from hunting animals
-- **Humans**: Enhanced experience gain to level faster
+#### Hall of Champions
+- Naturally spawning surface structure
+- Contains Race Selection Altar and Class Selection Altar
+- Given Hall Locator on first join to help find it
+- Surface-adaptive placement for accessibility
 
-### Custom Items & Food
-Dozens of custom fantasy-themed items including:
-- **Quest Books**: Novice, Apprentice, Expert, and Master tiers
-- **Class Tokens**: Warrior, Mage, and Rogue selection tokens
-- **Race Tokens**: Human, Dwarf, Elf, and Orc heritage tokens
-- **Selection Tomes**: Detailed information about classes and races
-- **Spell Scrolls**: 7 unique mage spells (Heal, Fireball, Absorption, Lightning, Frost Nova, Blink, Mana Shield)
-- **Rogue Ability Tome**: Multi-ability item with Smoke Bomb, Poison Dagger, and Shadow Step
-- **Consumables**: 15 powder-based consumables for tactical advantages
-- **Hall Locator**: Find the Hall of Champions
-- **Crafting Materials**: Various powders (Diamond, Emerald, Amethyst, Quartz), Echo Dust, Slimeball Dust
-- **Fantasy Foods**: Over 20 unique food items with special effects
+#### Bone Dungeons ✨NEW
+- Procedurally generated underground dungeons
+- Jigsaw-based random layouts
+- 10 unique structure pieces
+- Custom loot tables with themed rewards
+- Naturally integrated into terrain
 
-### Custom Potions & Effects
-- **XP Effect**: Custom experience gain mechanics
-- **Potion of the Phoenix**: Special revival properties
-- **Potion of the Supes**: Enhanced abilities
-- **Super Stamina Boost**: Extended endurance
-- **Essence of Thanos**: Powerful endgame potion
+### Bone Realm Dimension
+Custom dimension with unique features:
+- Bone-themed terrain and structures
+- Skeleton Lord boss spawns naturally
+- Exclusive materials and loot
+- Challenging environment for high-level players
 
-### Interactive Elements
-- **Quest Block**: Central hub for quest interactions
-- **Class Selection Altar**: Choose and customize your character class
-- **Race Selection Altar**: Determine your ancestral heritage
-- **Simple NPC**: Quest giver and interaction system
+## Requirements
 
-### Persistent Data Storage
-- Race and class selections are saved across server restarts
-- Player progression data (level, XP) persists between sessions
-- Player data stored in world save files
-- Seamless experience for server play
+- **Minecraft Version**: 1.21.10
+- **Mod Loader**: Fabric Loader 0.17.3+
+- **Required Dependencies**:
+    - Fabric API 0.135.0+1.21.10
 
 ## Installation
 
-### Requirements
-- Minecraft 1.21.10
-- Fabric Loader 0.17.3+
-- Fabric API 0.135.0+1.21.10
+### Prerequisites
+1. Install [Fabric Loader](https://fabricmc.net/use/) for Minecraft 1.21.10
+2. Download [Fabric API](https://modrinth.com/mod/fabric-api) 0.135.0+1.21.10
 
 ### Installation Steps
 1. Download the latest release from the [Releases](https://github.com/hitman20081/DAGMod/releases) page
@@ -691,9 +531,9 @@ Dozens of custom fantasy-themed items including:
 3. **Discover Your Heritage**: Locate the Hall of Champions and approach the Race Selection Altar
 4. **Choose Your Race**: Read the Race Selection Tome and select from Human, Dwarf, Elf, or Orc
 5. **Choose Your Class**: Approach the Class Selection Altar and select Warrior, Mage, or Rogue
-    - **Mages**: Use spell scrolls to cast powerful magic using your mana pool
-    - **Rogues**: Use the Rogue Ability Tome to execute stealth abilities with your energy pool
-    - **Warriors**: Utilize your enhanced combat stats and damage reduction
+    - **Mages**: Now have 4 powerful permanent abilities plus spell scrolls and wands for incredible versatility ✨
+    - **Rogues**: Master TWO ability systems - energy-based tome abilities AND cooldown-based individual abilities for 7 total abilities ✨
+    - **Warriors**: Dominate the battlefield with 5 powerful abilities including devastating AoE and incredible survivability ✨
 6. **Explore Synergies**: Experiment with different race+class combinations for unique abilities
 7. **Begin Your Journey**: Start gaining XP through mining, combat, and exploration
 8. **Level Up**: Watch your character grow stronger with each level
@@ -803,7 +643,15 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
 ## Roadmap
 
-### v1.4.3-beta (CURRENT RELEASE - October 2025)
+### v1.4.4-beta (CURRENT RELEASE - October 2025)
+- ✅ 11 new class abilities (3 Warrior, 4 Mage, 4 Rogue)
+- ✅ Warrior abilities: Battle Standard, Whirlwind Axe, Iron Talisman
+- ✅ Mage abilities: Arcane Orb, Temporal Crystal, Mana Catalyst, Barrier Charm
+- ✅ Rogue cooldown-based abilities: Void Blade, Vanish Cloak, Poison Vial, Assassin's Mark
+- ✅ Dual ability system for Rogues (energy + cooldown)
+- ✅ Custom textures and models for all new abilities
+
+### v1.4.3-beta (October 2025)
 - ✅ Bone Dungeon structure generation system
 - ✅ Custom loot tables for dungeon chests
 - ✅ Enhanced Shadow Blend (breaks on attack)
@@ -856,7 +704,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
 ## Known Issues
 
-### v1.4.3-beta
+### v1.4.4-beta
 - Some consumables use placeholder effects (marked in code):
     - Vampire Dust: Uses Regeneration (lifesteal planned for v1.5.0)
     - Phantom Dust / Perfect Dodge: Uses Resistance (dodge system planned)
@@ -874,4 +722,4 @@ For bug reports, feature requests, or questions:
 
 ---
 
-**Choose your race, select your class, unlock powerful synergies, explore procedurally generated dungeons, level up through epic adventures, and embark on a complete fantasy RPG experience in Minecraft!**
+**Choose your race, select your class, master powerful abilities, explore procedurally generated dungeons, level up through epic adventures, and embark on a complete fantasy RPG experience in Minecraft!**

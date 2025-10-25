@@ -1,4 +1,6 @@
 {
+  "itemGroup.dagmod": "DAGMod",
+
   "effect.dagmod.xp": "XP Power",
 
   "item.minecraft.potion.effect.xp": "XP Potion",
@@ -8,7 +10,7 @@
 
   "item.dagmod.quest_block": "Quest Block",
   "block.dagmod.quest_block": "Quest Block",
-  "block.dagmodmod.pedestal": "Quest Pedestal",
+  "block.dagmod.pedestal": "Quest Pedestal",
 
   "item.dagmod.class_selection_altar": "Class Selection Altar",
   "block.dagmod.class_selection_altar": "Class Selection Altar",
@@ -55,6 +57,11 @@
   "item.dagmod.mage_token": "Mage Token",
   "item.dagmod.rogue_token": "Rogue Token",
   "item.dagmod.class_reset_crystal": "Class Reset Crystal",
+  "item.dagmod.race_reset_crystal": "Race Reset Crystal",
+  "item.dagmod.character_reset_crystal": "Character Reset Crystal",
+  "item.dagmod.potion_of_racial_rebirth": "Potion of Racial Rebirth",
+  "item.dagmod.potion_of_class_rebirth": "Potion of Class Rebirth", 
+  "item.dagmod.potion_of_total_rebirth": "Potion of Total Rebirth",
 
   "item.dagmod.human_token": "Human Heritage Token",
   "item.dagmod.dwarf_token": "Dwarven Heritage Token",
@@ -89,6 +96,35 @@
   "item.dagmod.war_horn.tooltip.effects": "15 block radius team buff",
   "item.dagmod.war_horn.tooltip.cooldown": "Cooldown: 90 seconds",
 
+  "item.dagmod.battle_standard": "Battle Standard",
+  "item.dagmod.battle_standard.tooltip": "Warrior Ability: Battle Shout",
+  "item.dagmod.battle_standard.tooltip.shift": "Heals 6 hearts and grants attack/speed buffs for 12 seconds. Removes negative effects. Cooldown: 45s",
+
+  "item.dagmod.whirlwind_axe": "Whirlwind Axe",
+  "item.dagmod.whirlwind_axe.tooltip": "Warrior Ability: Whirlwind",
+  "item.dagmod.whirlwind_axe.tooltip.shift": "Spin attack hitting all enemies in 5 block radius for 4 hearts damage. Cooldown: 30s",
+
+  "item.dagmod.iron_talisman": "Iron Talisman",
+  "item.dagmod.iron_talisman.tooltip": "Warrior Ability: Iron Skin",
+  "item.dagmod.iron_talisman.tooltip.shift": "Grants 8 absorption hearts and 60% damage reduction for 15 seconds. Cooldown: 120s",
+
+  "item.dagmod.arcane_orb": "Arcane Orb",
+  "item.dagmod.arcane_orb.tooltip": "Mage Ability: Arcane Missiles",
+  "item.dagmod.arcane_orb.tooltip.shift": "Fires 5 homing arcane missiles that deal 3 damage each. Auto-targets enemies. Cooldown: 20s",
+
+  "item.dagmod.temporal_crystal": "Temporal Crystal",
+  "item.dagmod.temporal_crystal.tooltip": "Mage Ability: Time Warp",
+  "item.dagmod.temporal_crystal.tooltip.shift": "Slows all enemies in 10 block radius. Slowness IV + Weakness II for 8 seconds. Cooldown: 45s",
+
+  "item.dagmod.mana_catalyst": "Mana Catalyst",
+  "item.dagmod.mana_catalyst.tooltip": "Mage Ability: Mana Burst",
+  "item.dagmod.mana_catalyst.tooltip.shift": "Explosive mana burst in 7 block radius. 10 damage + knockback. Ignores armor. Cooldown: 30s",
+
+  "item.dagmod.barrier_charm": "Barrier Charm",
+  "item.dagmod.barrier_charm.tooltip": "Mage Ability: Arcane Barrier",
+  "item.dagmod.barrier_charm.tooltip.shift": "Creates magical barrier. 10 absorption hearts + Resistance II for 10 seconds. Cooldown: 60s",
+
+
   "item.dagmod.rogue_ability_tome": "Rogue Ability Tome",
   "item.dagmod.rogue_ability_tome.tooltip": "Shift+Right-click to cycle abilities",
 
@@ -99,6 +135,11 @@
   "ability.dagmod.smoke_bomb.desc": "Create a smoke cloud for invisibility and escape",
   "ability.dagmod.poison_dagger.desc": "Empower your next attack with deadly poison",
   "ability.dagmod.shadow_step.desc": "Teleport with a shadow decoy",
+
+  "item.dagmod.void_blade": "Void Blade",
+  "item.dagmod.vanish_cloak": "Vanish Cloak",
+  "item.dagmod.poison_vial": "Poison Vial",
+  "item.dagmod.assassins_mark": "Assassin's Mark",
 
   "hud.dagmod.energy": "Energy",
 

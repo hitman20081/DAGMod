@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "dagmod:item/character_reset_crystal"
+  }
+}
