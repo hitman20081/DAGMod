@@ -15,7 +15,8 @@ public record QuestSyncPacket(
         int activeQuestCount,
         int maxActiveQuests,
         int totalCompleted,
-        List<QuestInfo> activeQuests
+        List<QuestInfo> activeQuests,
+        List<QuestInfo> availableQuests  // NEW: Added available quests
 ) implements CustomPayload {
 
     public static final CustomPayload.Id<QuestSyncPacket> ID =
@@ -30,7 +31,8 @@ public record QuestSyncPacket(
                 buf.readInt(),
                 buf.readInt(),
                 buf.readInt(),
-                buf.readList(QuestInfo::new)
+                buf.readList(QuestInfo::new),
+                buf.readList(QuestInfo::new)  // NEW: Read available quests
         );
     }
 
@@ -40,6 +42,7 @@ public record QuestSyncPacket(
         buf.writeInt(maxActiveQuests);
         buf.writeInt(totalCompleted);
         buf.writeCollection(activeQuests, (buffer, quest) -> quest.write(buffer));
+        buf.writeCollection(availableQuests, (buffer, quest) -> quest.write(buffer));  // NEW: Write available quests
     }
 
     @Override

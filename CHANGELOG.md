@@ -5,6 +5,275 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0-beta] - 2025-11-19
+
+### Added - Comprehensive Tutorial System
+
+> **Note**: This version follows Semantic Versioning (MINOR bump from v1.4.5).
+> New features added (task-based tutorial, quest gating, Quest Notes) warrant a MINOR version increment, not just a PATCH.
+
+**Task-Based Tutorial System**:
+- Players must complete 3 tasks before accessing the quest system
+- **Task 1 (Resourcefulness)**: Gather 10 Oak Logs → Garrick's First Note
+- **Task 2 (Courage)**: Defeat 5 hostile mobs → Garrick's Second Note
+- **Task 3 (Dedication)**: Bring 1 Iron Ingot → Garrick's Third Note
+- All 3 Quest Notes combine at Quest Block → Novice Quest Book
+- Quest system remains locked until Quest Book is obtained
+- Task progress persists across sessions via NBT data
+
+**Innkeeper Garrick Tutorial NPC**:
+- Comprehensive tutorial guide with state-based dialogue
+- Different dialogue for each task phase (not started, in progress, complete)
+- Real-time inventory checking for Task 1 and Task 3
+- Event-based mob kill tracking for Task 2
+- Clear, helpful instructions for each task
+- Progress feedback and encouragement
+- `/summon_garrick` command for testing/structure placement (OP level 2)
+- NPC cannot despawn and is invulnerable to damage
+
+**Quest Note Items**:
+- 3 new items: Garrick's First Note, Second Note, Third Note
+- Uncommon rarity, max stack 1
+- Given as rewards for completing tutorial tasks
+- Required to craft Novice Quest Book at Quest Block
+- Custom item models and language entries
+
+**Quest System Gating**:
+- Quest Blocks locked until meeting Garrick
+- Job Boards locked until meeting Garrick
+- Quest Blocks require Quest Book to access quests
+- Job Boards require Quest Book to access jobs
+- Clear messaging at each gate explaining requirements
+- Shows progress (e.g., "You have 2/3 Quest Notes")
+
+**Quest Note Combination System**:
+- Quest Block detects all 3 Quest Notes in inventory
+- Automatically consumes notes and gives Novice Quest Book
+- Celebratory dialogue on completion
+- Tutorial completion unlocks full quest system
+
+**Mob Kill Tracking**:
+- Real-time hostile mob kill counter for Task 2
+- Action bar progress display (e.g., "3/5 hostile mobs defeated")
+- Completion notification when 5 kills reached
+- Auto-saves progress after each kill
+- Only counts hostile mobs (zombies, skeletons, creepers, etc.)
+
+### Fixed - Critical Bugs
+
+**Progression System**:
+- **CRITICAL**: Fixed health/stats not persisting after player death
+  - Extra hearts from leveling now persist through death and respawn
+  - Attack damage bonuses now persist through death
+  - Armor bonuses now persist through death
+  - Stats are reapplied in `ServerPlayerEvents.AFTER_RESPAWN` handler
+  - Progression stats from `StatScalingHandler` now properly reapply
+
+**Code Cleanup**:
+- Removed all debug messages from InnkeeperGarrickNPC
+- Cleaned up debug output for production readiness
+
+### Changed - User Experience
+
+**Quest Block**:
+- Updated texture to use multiple faces (ornate bookshelf design)
+- Bottom: Oak planks
+- Top: Chiseled bookshelf top
+- Sides: Bookshelf and chiseled bookshelf variants
+- More visually distinct from regular bookshelves
+
+**Tutorial Flow**:
+- No formal quests available until Quest Book obtained
+- Garrick's tasks are simple errands, not formal quest system
+- Tasks teach basic game mechanics (gathering, combat, mining/smelting)
+- Progressive difficulty (easy → medium → harder)
+
+### Technical - System Integration
+
+**PlayerDataManager Updates**:
+- Added `MET_GARRICK_KEY` NBT tracking for NPC interactions
+- Added task completion tracking (Task 1, 2, 3)
+- Added mob kill counter for Task 2
+- In-memory cache with file persistence
+- Auto-save on task completion and NPC interaction
+- `hasCompletedAllTasks()` helper method
+
+**Quest Block Updates**:
+- Quest Note detection system
+- `combineNotesIntoQuestBook()` method
+- Quest Book requirement check (all tiers)
+- Helpful progress messages for incomplete tutorials
+
+**Job Board Updates**:
+- Quest Book requirement check (all tiers)
+- Clear tutorial progression messaging
+
+**DagMod Main Class**:
+- Added `/summon_garrick` command registration
+- Added `registerTutorialMobKillTracking()` event handler
+- Hostile mob kill tracking via `ServerLivingEntityEvents.AFTER_DEATH`
+- Action bar progress feedback on kills
+
+**Garrick NPC Architecture**:
+- State-based dialogue system with 4 handler methods
+- `handleFirstMeeting()` - Welcome and Task 1
+- `handleTask1()` - Oak log inventory check
+- `handleTask2()` - Mob kill progress check
+- `handleTask3()` - Iron ingot inventory check
+- `handleAllTasksComplete()` - Final instructions
+- Clean separation of concerns
+
+### Added - World Generation
+
+**Village NPC Structures**:
+- New village-like structure generation system with 5 buildings
+- **Village Inn** - Large tavern building (primary Garrick spawn location)
+- **Village Tavern** - Alternative Garrick spawn location
+- **Village Shop 1** - First shop building
+- **Village Shop 2** - Second shop building
+- **Village Docks** - Waterfront structure
+- Structures cluster together in small village groups (jigsaw system)
+- Spawn in temperate biomes: plains, meadows, forests, taiga, rivers
+- Excluded from harsh environments (desert, badlands, savanna)
+- Spacing: 28 chunks apart with 10 chunk minimum separation
+- Template pool system for varied village layouts
+
+**Structure Overlap Prevention**:
+- Added exclusion zones to all 11 structure sets to prevent overlapping
+- Bone Dungeons: 10 chunk exclusion from village NPCs
+- Hall of Champions: 20 chunk exclusion from village NPCs
+- Skeleton Kingdom: 12 chunk exclusion from village NPCs
+- All 4 Castles: 25 chunk exclusion from village NPCs each
+- Houses (NPC/Villager): 6-8 chunk exclusion from village NPCs
+- Increased spacing on most structures for better world distribution
+- Prevents structures from generating inside each other and causing air block conflicts
+
+**Bone Dungeon Improvements**:
+- Adjusted entryway depth from -5 to -15 blocks below surface
+- Proper underground positioning while keeping entryway accessible
+- Prevents surface structure overlap issues
+- Maintains "discoverable underground dungeon" feel
+
+### Changed - Visual Polish
+
+**Quest Block Textures**:
+- Multi-face design (changed from uniform bookshelf)
+- Bottom: Oak Planks
+- Top: Chiseled Bookshelf Top
+- North/South: Bookshelf
+- East/West: Chiseled Bookshelf Side
+- More ornate and visually distinct appearance
+
+**Race Selection Altar Textures**:
+- Multi-face "Mystical/Ancient" theme
+- Top: Chiseled Stone Bricks (decorative patterns)
+- Bottom: Smooth Stone (solid foundation)
+- North/South: Cracked Stone Bricks (ancient weathering)
+- East/West: Stone Bricks (classic sides)
+- Represents permanent, ancient racial choice
+
+**Class Selection Altar Textures**:
+- Multi-face "Ancient Power/Stronghold" theme
+- Top: Enchanting Table Top (glowing magical runes)
+- Bottom: Obsidian (dark power base)
+- North/South: Polished Blackstone Bricks (refined stronghold)
+- East/West: Chiseled Polished Blackstone (shield emblem)
+- Dark blackstone theme represents strength and power
+
+**Block Visual Differentiation**:
+- Quest Block: Wood/Books theme (library aesthetic)
+- Race Altar: Stone theme (ancient/permanent)
+- Class Altar: Blackstone theme (power/stronghold)
+- All three blocks now have completely distinct appearances
+
+### Technical - World Generation Architecture
+
+**Template Pool System**:
+- Created `village_npc/town_center.json` - Inn/tavern as main anchor
+- Created `village_npc/buildings.json` - Surrounding shops and docks
+- Created `village_npc/terminators.json` - Structure endpoint pool
+- Jigsaw structure size 4 allows 4 iterations from center
+- `terrain_adaptation: beard_thin` for natural landscape blending
+
+**Structure Set Configuration**:
+- All structure sets now use `exclusion_zone` parameter
+- Format: `{"other_set": "structure_set_name", "chunk_count": N}`
+- Prevents structures within N chunks of other structure types
+- Improved spacing/separation values across all structures
+
+**Biome Tag System**:
+- Created `has_structure/village_npc.json` biome tag
+- Includes 12 temperate biome types
+- Plains, forests, taiga, and river biomes only
+- Excludes extreme/harsh biomes for immersive placement
+
+---
+
+## [1.4.5-beta] - 2025-10-29
+
+### Added - Quest System Enhancements
+
+**Job Board Block**:
+- New Job Board block for quest categorization and organization
+- Separate interface for JOB and DAILY category quests
+- Independent turn-in system from Quest Block
+- Wall-mountable with directional facing
+- Custom voxel shape for proper collision detection
+
+**Quest Categories**:
+- MAIN - Main story progression quests (Quest Block)
+- SIDE - Optional side content quests (Quest Block)
+- CLASS - Class-specific quests (Quest Block)
+- JOB - Simple gathering/combat tasks (Job Board)
+- DAILY - Repeatable daily quests (Job Board, future use)
+
+**Quest Block Improvements**:
+- Quest Block now filters to show only MAIN and SIDE category quests
+- Improved turn-in flow - completed quests now get priority
+- Better menu state management
+- Enhanced user feedback with clear quest categorization
+
+### Changed - Quest System Organization
+
+**Quest Categorization**:
+- Added `.setCategory()` method to Quest class for proper categorization
+- Quest Block and Job Board now filter quests by category
+- Improved quest discovery - players can find story quests at Quest Blocks and work at Job Boards
+- Better separation of quest types for clearer player experience
+
+**Quest Turn-In Flow**:
+- Quest Block immediately shows turn-in screen when completed quests are available
+- No more cycling through menus to turn in completed quests
+- Separate turn-in systems for Quest Block and Job Board
+- Improved priority handling for completed quests
+
+### Technical - Quest System Architecture
+
+**Block System**:
+- Created JobBoardBlock extending HorizontalFacingBlock
+- Implemented menu state management system for Job Board
+- Added quest filtering by category in both Quest Block and Job Board
+- Proper blockstate, model, and item registration
+
+**Code Organization**:
+- Quest category enum in Quest.java
+- Filtering logic in QuestBlock.java and JobBoardBlock.java
+- Improved ModBlocks registration system
+- Cleaned up duplicate registration methods
+
+**Quest Registry**:
+- Added quest categorization support throughout QuestRegistry
+- Simple job quests ready for Job Board (gathering, hunting, basic tasks)
+- Framework for daily repeatable quests
+
+### Fixed
+- Quest Block turn-in flow now properly prioritizes completed quests
+- Removed debug code from JobBoardBlock
+- Fixed block registration issues with proper registry key setting
+- Cleaned up duplicate item registration
+
+---
+
 ## [1.4.4-beta] - 2025-10-25
 
 ### Added - 11 New Class Abilities

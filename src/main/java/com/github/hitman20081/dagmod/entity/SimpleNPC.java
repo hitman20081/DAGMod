@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.entity;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
@@ -44,5 +45,19 @@ public class SimpleNPC extends PathAwareEntity {
             player.sendMessage(Text.literal("Hello! I'm a simple NPC from DAGmod!"), false);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public boolean cannotDespawn() {
+        return true; // NPC never despawns
+    }
+
+
+    public boolean damage(DamageSource source, float amount) {
+        return false; // Ignore all damage - this is the main invulnerability method
+    }
+
+    public void pushAwayFrom(net.minecraft.entity.Entity entity) {
+        // Don't get pushed by other entities
     }
 }

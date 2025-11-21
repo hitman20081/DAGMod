@@ -26,7 +26,7 @@
         "minecraft:density": 10,
         "minecraft:breach": 10
       },
-      "minecraft:item_model": "dag_customs:crystalhammer"
+      "minecraft:item_model": "minecraft:crystalhammer"
     }
   }
 }

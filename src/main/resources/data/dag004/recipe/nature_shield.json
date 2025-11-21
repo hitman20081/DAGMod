@@ -17,7 +17,7 @@
         "text": "Nature’s Bulwark",
         "color": "#00AA00"
       },
-      "minecraft:item_model": "minecraft:shield",
+      "minecraft:item_model": "minecraft:nature_shield",
       "minecraft:attribute_modifiers": [
         {
           "type": "minecraft:explosion_knockback_resistance",

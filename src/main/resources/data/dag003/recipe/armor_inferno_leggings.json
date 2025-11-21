@@ -44,7 +44,7 @@
       "minecraft:lore": [
         "\"Forged in the depths of the Nether, this armor burns with the fury of a thousand suns.\""
       ],
-      "minecraft:item_model": "dag_customs:inferno_leggings",
+      "minecraft:item_model": "minecraft:inferno_leggings",
       "minecraft:equippable": {
         "slot": "legs",
         "asset_id": "inferno"
@@ -56,7 +56,8 @@
         "text": "Inferno's Chausses",
         "color": "#AA0000"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 500
     }
   }
 }

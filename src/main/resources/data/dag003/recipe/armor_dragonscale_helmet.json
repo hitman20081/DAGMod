@@ -44,7 +44,7 @@
       "minecraft:lore": [
         "\"Forged from the remnants of the Ender Dragon, it carries a fragment of its might.\""
       ],
-      "minecraft:item_model": "dag_customs:dragonscale_helmet",
+      "minecraft:item_model": "minecraft:dragonscale_helmet",
       "minecraft:equippable": {
         "slot": "head",
         "asset_id": "dragonscale"

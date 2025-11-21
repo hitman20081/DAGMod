@@ -17,7 +17,7 @@
         "text": "Frostbound Shield",
         "color": "#55FFFF"
       },
-      "minecraft:item_model": "minecraft:shield",
+      "minecraft:item_model": "minecraft:frost_shield",
       "minecraft:attribute_modifiers": [
         {
           "type": "minecraft:explosion_knockback_resistance",

@@ -44,7 +44,8 @@
         "text": "Crown of Greatness",
         "color": "#FFAA00"
       },
-      "minecraft:rarity": "rare"
+      "minecraft:rarity": "rare",
+      "minecraft:max_damage": 700
     }
   }
 }

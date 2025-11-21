@@ -13,6 +13,7 @@ public class ClientQuestData {
     private int maxActiveQuests = 2;
     private int totalCompleted = 0;
     private List<QuestSyncPacket.QuestInfo> activeQuests = new ArrayList<>();
+    private List<QuestSyncPacket.QuestInfo> availableQuests = new ArrayList<>();
 
     public static ClientQuestData getInstance() {
         if (instance == null) {
@@ -27,6 +28,7 @@ public class ClientQuestData {
         this.maxActiveQuests = packet.maxActiveQuests();
         this.totalCompleted = packet.totalCompleted();
         this.activeQuests = new ArrayList<>(packet.activeQuests());
+        this.availableQuests = new ArrayList<>(packet.availableQuests());
     }
 
     public QuestData.QuestBookTier getTier() { return tier; }
@@ -34,4 +36,5 @@ public class ClientQuestData {
     public int getMaxActiveQuests() { return maxActiveQuests; }
     public int getTotalCompleted() { return totalCompleted; }
     public List<QuestSyncPacket.QuestInfo> getActiveQuests() { return activeQuests; }
+    public List<QuestSyncPacket.QuestInfo> getAvailableQuests() { return availableQuests; }
 }

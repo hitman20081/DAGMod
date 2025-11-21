@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "dagmod:block/class_selection_altar"
+    "particle": "minecraft:block/polished_blackstone_bricks",
+    "down": "minecraft:block/obsidian",
+    "up": "minecraft:block/enchanting_table_top",
+    "north": "minecraft:block/polished_blackstone_bricks",
+    "south": "minecraft:block/polished_blackstone_bricks",
+    "east": "minecraft:block/chiseled_polished_blackstone",
+    "west": "minecraft:block/chiseled_polished_blackstone"
   }
 }

@@ -59,7 +59,8 @@
         "text": "Shadow Leggings",
         "color": "#AA00AA"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 400
     }
   }
 }

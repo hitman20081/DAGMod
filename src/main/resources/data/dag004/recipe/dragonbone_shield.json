@@ -17,7 +17,7 @@
         "text": "Dragonbone Shield",
         "color": "#510101"
       },
-      "minecraft:item_model": "minecraft:shield",
+      "minecraft:item_model": "minecraft:dragonbone_shield",
       "minecraft:attribute_modifiers": [
         {
           "type": "minecraft:explosion_knockback_resistance",

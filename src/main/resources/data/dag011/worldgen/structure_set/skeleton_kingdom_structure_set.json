@@ -2,13 +2,17 @@
   "placement": {
     "type": "minecraft:random_spread",
     "salt": 20083232,
-    "separation": 8,
-    "spacing": 24
+    "separation": 12,
+    "spacing": 34
   },
   "structures": [
     {
       "structure": "dag011:skeleton_kingdom",
       "weight": 1
     }
-  ]
+  ],
+  "exclusion_zone": {
+    "other_set": "dag011:village_npc_set",
+    "chunk_count": 12
+  }
 }

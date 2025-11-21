@@ -4,6 +4,7 @@ import com.github.hitman20081.dagmod.progression.LevelRequirements;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import com.github.hitman20081.dagmod.quest.QuestUtils;
+import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -172,9 +173,6 @@ public class QuestManager {
 
         QuestData playerData = getPlayerData(player);
 
-        // DEBUG: Add this
-        player.sendMessage(Text.literal("DEBUG: Attempting to start quest: " + quest.getName()), false);
-
         // Check if player's quest book tier allows this quest difficulty
         if (!playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
             player.sendMessage(Text.literal("Your quest book tier doesn't allow " +
@@ -183,9 +181,6 @@ public class QuestManager {
             return false;
         }
 
-        // DEBUG: Add this
-        player.sendMessage(Text.literal("DEBUG: Tier check passed"), false);
-
         // ADD THIS: Check level requirement
         if (!LevelRequirements.meetsLevelRequirement((ServerPlayerEntity) player, quest)) {
             int requiredLevel = LevelRequirements.getRequiredLevelForQuest(quest);
@@ -193,17 +188,11 @@ public class QuestManager {
             return false;
         }
 
-        // DEBUG: Add this
-        player.sendMessage(Text.literal("DEBUG: Level check passed"), false);
-
         // Check active quest limit
         if (playerData.getActiveQuests().size() >= getMaxActiveQuests(playerData)) {
             player.sendMessage(Text.literal("You have too many active quests! Complete some first."), false);
             return false;
         }
-
-        // DEBUG: Add this
-        player.sendMessage(Text.literal("DEBUG: Active quest limit check passed"), false);
 
         // Create a copy of the quest for this player
         Quest playerQuest = copyQuest(quest);
@@ -256,6 +245,11 @@ public class QuestManager {
             return false;
         }
 
+        // Refresh progress immediately before validation
+        for (QuestObjective objective : quest.getObjectives()) {
+            objective.updateProgress(player);
+        }
+
         if (!quest.isCompleted()) {
             player.sendMessage(Text.literal("Quest objectives not completed yet!"), false);
             return false;
@@ -265,6 +259,11 @@ public class QuestManager {
         for (QuestObjective objective : quest.getObjectives()) {
             if (objective instanceof CollectObjective collectObj) {
                 if (!collectObj.consumeItems(player)) {
+                    player.sendMessage(Text.literal("Error: Could not consume required items!"), false);
+                    return false;
+                }
+            } else if (objective instanceof TagCollectObjective tagCollectObj) {
+                if (!tagCollectObj.consumeItems(player)) {
                     player.sendMessage(Text.literal("Error: Could not consume required items!"), false);
                     return false;
                 }
@@ -312,6 +311,7 @@ public class QuestManager {
     public Quest copyQuest(Quest original) {
         Quest copy = new Quest(original.getId())
                 .setName(original.getName())
+                .setCategory(original.getCategory())
                 .setDescription(original.getDescription())
                 .setDifficulty(original.getDifficulty())
                 .setNextQuest(original.getNextQuestId());
@@ -386,6 +386,26 @@ public class QuestManager {
                 available.add(quest);
             }
         }
+
+        // ✨ SORT QUESTS BY PRIORITY ✨
+        // This ensures tutorial quests appear first, followed by difficulty and name
+        available.sort((q1, q2) -> {
+            // PRIORITY 1: Tutorial quest (Garrick's Welcome) always appears first
+            boolean q1IsTutorial = q1.getId().equals("garricks_special_brew");
+            boolean q2IsTutorial = q2.getId().equals("garricks_special_brew");
+
+            if (q1IsTutorial && !q2IsTutorial) return -1;  // q1 comes first
+            if (!q1IsTutorial && q2IsTutorial) return 1;   // q2 comes first
+
+            // PRIORITY 2: Sort by difficulty (NOVICE → APPRENTICE → EXPERT → MASTER)
+            int difficultyCompare = q1.getDifficulty().compareTo(q2.getDifficulty());
+            if (difficultyCompare != 0) {
+                return difficultyCompare;
+            }
+
+            // PRIORITY 3: Sort alphabetically by quest name
+            return q1.getName().compareTo(q2.getName());
+        });
 
         return available;
     }

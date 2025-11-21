@@ -35,18 +35,18 @@
           "slot": "head"
         }
       ],
-      "minecraft:custom_name": "{\"text\":\"Frosbound Helmet\",\"color\":\"#55FFFF\"}",
+      "minecraft:item_name": {
+        "text": "Frosbound Helmet",
+        "color": "#55FFFF"
+      },
       "minecraft:lore": [
         "\"Enchanted with the eternal chill of frozen tundras, it keeps its wearer calm and focused.\""
       ],
       "minecraft:tooltip_display": {
         "hide_tooltip": false
       },
-      "minecraft:item_name": {
-        "text": "Frosbound Helmet",
-        "color": "#55FFFF"
-      },
-      "minecraft:rarity": "rare"
+      "minecraft:rarity": "rare",
+      "minecraft:max_damage": 500
     }
   }
 }

@@ -51,7 +51,7 @@
           "slot": "mainhand"
         }
       ],
-      "minecraft:item_model": "dag_customs:dragonscale_sword"
+      "minecraft:item_model": "minecraft:dragonscale_sword"
     }
   }
 }

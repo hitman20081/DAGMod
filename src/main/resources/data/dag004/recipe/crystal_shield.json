@@ -17,7 +17,7 @@
         "text": "Crystal Ward",
         "color": "#00AAAA"
       },
-      "minecraft:item_model": "minecraft:shield",
+      "minecraft:item_model": "minecraft:crystal_shield",
       "minecraft:attribute_modifiers": [
         {
           "type": "minecraft:explosion_knockback_resistance",

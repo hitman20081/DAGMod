@@ -38,6 +38,13 @@ public class PlayerDataManager {
 
     private static final String RACE_KEY = "dagmod_race";
     private static final String CLASS_KEY = "dagmod_class";
+    private static final String MET_GARRICK_KEY = "dagmod_met_garrick";
+
+    // Tutorial task tracking keys
+    private static final String TASK1_COMPLETE_KEY = "dagmod_task1_complete";
+    private static final String TASK2_COMPLETE_KEY = "dagmod_task2_complete";
+    private static final String TASK3_COMPLETE_KEY = "dagmod_task3_complete";
+    private static final String TASK2_MOB_KILLS_KEY = "dagmod_task2_mob_kills";
 
     // Updated path constants
     private static final String DATA_ROOT = "data/dagmod";      // Base directory
@@ -108,6 +115,15 @@ public class PlayerDataManager {
             nbt.putString(RACE_KEY, race);
             nbt.putString(CLASS_KEY, playerClass);
 
+            // Save NPC interaction tracking
+            nbt.putBoolean(MET_GARRICK_KEY, hasMetGarrick(player.getUuid()));
+
+            // Save tutorial task tracking
+            nbt.putBoolean(TASK1_COMPLETE_KEY, isTask1Complete(player.getUuid()));
+            nbt.putBoolean(TASK2_COMPLETE_KEY, isTask2Complete(player.getUuid()));
+            nbt.putBoolean(TASK3_COMPLETE_KEY, isTask3Complete(player.getUuid()));
+            nbt.putInt(TASK2_MOB_KILLS_KEY, getTask2MobKills(player.getUuid()));
+
             // Save mana data for Mages
             if ("Mage".equals(playerClass)) {
                 com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
@@ -169,6 +185,40 @@ public class PlayerDataManager {
                             manaData.readFromNbt(manaNbt);
                         }
                     }
+                }
+            }
+
+            // Load NPC interaction tracking
+            if (nbt.contains(MET_GARRICK_KEY)) {
+                Optional<Boolean> metGarrickOpt = nbt.getBoolean(MET_GARRICK_KEY);
+                if (metGarrickOpt.isPresent() && metGarrickOpt.get()) {
+                    markMetGarrick(player.getUuid());
+                }
+            }
+
+            // Load tutorial task tracking
+            if (nbt.contains(TASK1_COMPLETE_KEY)) {
+                Optional<Boolean> task1Opt = nbt.getBoolean(TASK1_COMPLETE_KEY);
+                if (task1Opt.isPresent() && task1Opt.get()) {
+                    markTask1Complete(player.getUuid());
+                }
+            }
+            if (nbt.contains(TASK2_COMPLETE_KEY)) {
+                Optional<Boolean> task2Opt = nbt.getBoolean(TASK2_COMPLETE_KEY);
+                if (task2Opt.isPresent() && task2Opt.get()) {
+                    markTask2Complete(player.getUuid());
+                }
+            }
+            if (nbt.contains(TASK3_COMPLETE_KEY)) {
+                Optional<Boolean> task3Opt = nbt.getBoolean(TASK3_COMPLETE_KEY);
+                if (task3Opt.isPresent() && task3Opt.get()) {
+                    markTask3Complete(player.getUuid());
+                }
+            }
+            if (nbt.contains(TASK2_MOB_KILLS_KEY)) {
+                Optional<Integer> mobKillsOpt = nbt.getInt(TASK2_MOB_KILLS_KEY);
+                if (mobKillsOpt.isPresent()) {
+                    setTask2MobKills(player.getUuid(), mobKillsOpt.get());
                 }
             }
 
@@ -251,5 +301,125 @@ public class PlayerDataManager {
     public static boolean hasPlayerData(ServerPlayerEntity player) {
         File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
         return dataFile.exists();
+    }
+
+    // ========== NPC INTERACTION TRACKING ==========
+
+    /**
+     * In-memory cache of players who have met Garrick (session only, persisted via save/load)
+     */
+    private static final java.util.Set<UUID> playersWhoMetGarrick = new java.util.HashSet<>();
+
+    /**
+     * Check if a player has met Innkeeper Garrick
+     */
+    public static boolean hasMetGarrick(UUID playerId) {
+        return playersWhoMetGarrick.contains(playerId);
+    }
+
+    /**
+     * Mark that a player has met Innkeeper Garrick
+     */
+    public static void markMetGarrick(UUID playerId) {
+        playersWhoMetGarrick.add(playerId);
+    }
+
+    /**
+     * Check if a player has met Innkeeper Garrick (ServerPlayerEntity version)
+     */
+    public static boolean hasMetGarrick(ServerPlayerEntity player) {
+        return hasMetGarrick(player.getUuid());
+    }
+
+    /**
+     * Mark that a player has met Innkeeper Garrick (ServerPlayerEntity version)
+     */
+    public static void markMetGarrick(ServerPlayerEntity player) {
+        markMetGarrick(player.getUuid());
+        // Auto-save immediately
+        savePlayerData(player);
+    }
+
+    // ========== TUTORIAL TASK TRACKING ==========
+
+    /**
+     * In-memory caches for tutorial task completion
+     */
+    private static final java.util.Set<UUID> task1CompleteSet = new java.util.HashSet<>();
+    private static final java.util.Set<UUID> task2CompleteSet = new java.util.HashSet<>();
+    private static final java.util.Set<UUID> task3CompleteSet = new java.util.HashSet<>();
+    private static final java.util.Map<UUID, Integer> task2MobKills = new java.util.HashMap<>();
+
+    // Task 1: Gather 10 Oak Logs
+    public static boolean isTask1Complete(UUID playerId) {
+        return task1CompleteSet.contains(playerId);
+    }
+
+    public static void markTask1Complete(UUID playerId) {
+        task1CompleteSet.add(playerId);
+    }
+
+    public static void markTask1Complete(ServerPlayerEntity player) {
+        markTask1Complete(player.getUuid());
+        savePlayerData(player);
+    }
+
+    // Task 2: Kill 5 hostile mobs
+    public static boolean isTask2Complete(UUID playerId) {
+        return task2CompleteSet.contains(playerId);
+    }
+
+    public static void markTask2Complete(UUID playerId) {
+        task2CompleteSet.add(playerId);
+    }
+
+    public static void markTask2Complete(ServerPlayerEntity player) {
+        markTask2Complete(player.getUuid());
+        savePlayerData(player);
+    }
+
+    public static int getTask2MobKills(UUID playerId) {
+        return task2MobKills.getOrDefault(playerId, 0);
+    }
+
+    public static void setTask2MobKills(UUID playerId, int kills) {
+        task2MobKills.put(playerId, kills);
+    }
+
+    public static void incrementTask2MobKills(ServerPlayerEntity player) {
+        int currentKills = getTask2MobKills(player.getUuid());
+        setTask2MobKills(player.getUuid(), currentKills + 1);
+
+        // Check if task is complete (5 kills)
+        if (currentKills + 1 >= 5 && !isTask2Complete(player.getUuid())) {
+            markTask2Complete(player);
+        } else {
+            savePlayerData(player);
+        }
+    }
+
+    // Task 3: Bring 1 Iron Ingot
+    public static boolean isTask3Complete(UUID playerId) {
+        return task3CompleteSet.contains(playerId);
+    }
+
+    public static void markTask3Complete(UUID playerId) {
+        task3CompleteSet.add(playerId);
+    }
+
+    public static void markTask3Complete(ServerPlayerEntity player) {
+        markTask3Complete(player.getUuid());
+        savePlayerData(player);
+    }
+
+    /**
+     * Check if player has completed all 3 tutorial tasks
+     */
+    public static boolean hasCompletedAllTasks(UUID playerId) {
+        return isTask1Complete(playerId) && isTask2Complete(playerId) && isTask3Complete(playerId);
+    }
+
+    public static boolean hasCompletedAllTasks(ServerPlayerEntity player) {
+        return hasCompletedAllTasks(player.getUuid());
     }
 }

@@ -95,6 +95,8 @@ public class ModItemGroups {
                             entries.add(ModBlocks.CLASS_SELECTION_ALTAR);
                             entries.add(ModBlocks.RACE_SELECTION_ALTAR);
                             entries.add(ModBlocks.QUEST_BLOCK);
+                            entries.add(ModBlocks.JOB_BOARD_BLOCK);
+
 
                             // === POWDERS ===
                             entries.add(ModItems.AMETHYST_POWDER);

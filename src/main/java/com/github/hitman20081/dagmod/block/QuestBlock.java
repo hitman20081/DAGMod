@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.block;
 
+import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
@@ -47,6 +48,76 @@ public class QuestBlock extends Block {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) { // Server side only
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+
+            // Check if player has met Innkeeper Garrick (tutorial gate)
+            if (!PlayerDataManager.hasMetGarrick(serverPlayer)) {
+                player.sendMessage(
+                    Text.literal("🔒 This Quest Block is locked!").formatted(Formatting.RED, Formatting.BOLD),
+                    false
+                );
+                player.sendMessage(Text.literal(""), false);
+                player.sendMessage(
+                    Text.literal("Find Innkeeper Garrick to learn how to use the quest system.").formatted(Formatting.YELLOW),
+                    false
+                );
+                player.sendMessage(
+                    Text.literal("(He can usually be found at an inn or tavern)").formatted(Formatting.GRAY),
+                    false
+                );
+                return ActionResult.CONSUME;
+            }
+
+            // Check if player has all 3 quest notes (tutorial completion)
+            boolean hasNote1 = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_FIRST_NOTE));
+            boolean hasNote2 = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE));
+            boolean hasNote3 = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_THIRD_NOTE));
+            boolean hasQuestBook = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK)) ||
+                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.APPRENTICE_QUEST_BOOK)) ||
+                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.EXPERT_QUEST_BOOK)) ||
+                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.MASTER_QUEST_TOME));
+
+            // If player has all 3 notes, combine them into Quest Book
+            if (hasNote1 && hasNote2 && hasNote3 && !hasQuestBook) {
+                combineNotesIntoQuestBook(serverPlayer);
+                return ActionResult.CONSUME;
+            }
+
+            // If player doesn't have Quest Book and doesn't have all notes, block access
+            if (!hasQuestBook) {
+                player.sendMessage(
+                    Text.literal("📚 You need a Quest Book to use this!").formatted(Formatting.YELLOW, Formatting.BOLD),
+                    false
+                );
+                player.sendMessage(Text.literal(""), false);
+
+                if (hasNote1 || hasNote2 || hasNote3) {
+                    int noteCount = (hasNote1 ? 1 : 0) + (hasNote2 ? 1 : 0) + (hasNote3 ? 1 : 0);
+                    player.sendMessage(
+                        Text.literal("You have " + noteCount + "/3 of Garrick's Quest Notes.").formatted(Formatting.GRAY),
+                        false
+                    );
+                    player.sendMessage(
+                        Text.literal("Complete all of Garrick's tasks to get all 3 notes,").formatted(Formatting.GRAY),
+                        false
+                    );
+                    player.sendMessage(
+                        Text.literal("then return here to combine them into a Quest Book.").formatted(Formatting.GRAY),
+                        false
+                    );
+                } else {
+                    player.sendMessage(
+                        Text.literal("Complete Garrick's 3 tasks to earn Quest Notes.").formatted(Formatting.GRAY),
+                        false
+                    );
+                    player.sendMessage(
+                        Text.literal("Find Innkeeper Garrick to begin your tutorial!").formatted(Formatting.GRAY),
+                        false
+                    );
+                }
+
+                return ActionResult.CONSUME;
+            }
+
             QuestManager questManager = QuestManager.getInstance();
             QuestData playerData = questManager.getPlayerData(player);
             UUID playerId = player.getUuid();
@@ -102,7 +173,9 @@ public class QuestBlock extends Block {
         // If no completed quests, show other options
         player.sendMessage(Text.literal("Right-click again to:"), false);
 
+        // FILTER: Only show MAIN and SIDE category quests
         List<Quest> availableQuests = questManager.getAvailableQuests(player).stream()
+                .filter(q -> q.getCategory() == Quest.QuestCategory.MAIN || q.getCategory() == Quest.QuestCategory.SIDE)
                 .toList();
 
         if (!availableQuests.isEmpty() && playerData.canAcceptMoreQuests()) {
@@ -350,5 +423,79 @@ public class QuestBlock extends Block {
         QuestUtils.giveQuestBookForTier(player, nextTier);
 
         playerMenuState.put(playerId, MenuState.MAIN_MENU);
+    }
+
+    /**
+     * Combine 3 Quest Notes into a Novice Quest Book
+     */
+    private void combineNotesIntoQuestBook(ServerPlayerEntity player) {
+        player.sendMessage(
+            Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
+            false
+        );
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(
+            Text.literal("📚 QUEST NOTES DETECTED!").formatted(Formatting.GOLD, Formatting.BOLD),
+            false
+        );
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(
+            Text.literal("You have all 3 of Garrick's Quest Notes!").formatted(Formatting.YELLOW),
+            false
+        );
+        player.sendMessage(
+            Text.literal("The Quest Block combines them into a proper Quest Book...").formatted(Formatting.GRAY),
+            false
+        );
+        player.sendMessage(Text.literal(""), false);
+
+        // Remove the 3 notes from inventory
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
+            if (stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_FIRST_NOTE ||
+                stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE ||
+                stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_THIRD_NOTE) {
+                stack.decrement(1);
+            }
+        }
+
+        // Give Novice Quest Book
+        player.giveItemStack(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK));
+
+        player.sendMessage(
+            Text.literal("✓ Received: Novice Quest Book!").formatted(Formatting.GREEN, Formatting.BOLD),
+            false
+        );
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(
+            Text.literal("Congratulations! You've completed Garrick's tutorial!").formatted(Formatting.YELLOW),
+            false
+        );
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(
+            Text.literal("You can now:").formatted(Formatting.WHITE),
+            false
+        );
+        player.sendMessage(
+            Text.literal("  • Accept quests from Quest Blocks and Job Boards").formatted(Formatting.GRAY),
+            false
+        );
+        player.sendMessage(
+            Text.literal("  • Track your progress in your Quest Book").formatted(Formatting.GRAY),
+            false
+        );
+        player.sendMessage(
+            Text.literal("  • Turn in completed quests for rewards").formatted(Formatting.GRAY),
+            false
+        );
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(
+            Text.literal("Right-click this Quest Block again to start questing!").formatted(Formatting.AQUA, Formatting.BOLD),
+            false
+        );
+        player.sendMessage(
+            Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
+            false
+        );
     }
 }

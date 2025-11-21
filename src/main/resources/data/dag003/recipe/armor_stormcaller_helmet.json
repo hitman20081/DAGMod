@@ -40,7 +40,8 @@
         "text": "StormCaller's Helm",
         "color": "#55FFFF"
       },
-      "minecraft:rarity": "rare"
+      "minecraft:rarity": "rare",
+      "minecraft:max_damage": 400
     }
   }
 }

@@ -307,12 +307,19 @@ public class ClassSelectionAltarBlock extends Block {
     }
 
     private void initializeWarrior(PlayerEntity player) {
+        // Weapon & Shield
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_SWORD));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_CHESTPLATE));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.SHIELD));
+
+        // Full Chainmail Armor Set (Heavy armor for Warriors)
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.CHAINMAIL_HELMET));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.CHAINMAIL_CHESTPLATE));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.CHAINMAIL_LEGGINGS));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.CHAINMAIL_BOOTS));
+
+        // Food & Potions
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_BEEF, 32));
 
-        // Create Healing Potion
         ItemStack healingPotion1 = new ItemStack(net.minecraft.item.Items.POTION);
         healingPotion1.set(DataComponentTypes.POTION_CONTENTS,
                 new PotionContentsComponent(Potions.HEALING));
@@ -324,19 +331,26 @@ public class ClassSelectionAltarBlock extends Block {
         player.giveItemStack(healingPotion2);
 
         ItemStack healingPotion3 = new ItemStack(net.minecraft.item.Items.POTION);
-        healingPotion2.set(DataComponentTypes.POTION_CONTENTS,
+        healingPotion3.set(DataComponentTypes.POTION_CONTENTS,
                 new PotionContentsComponent(Potions.HEALING));
         player.giveItemStack(healingPotion3);
 
         player.sendMessage(Text.literal("⚔ Warrior abilities unlocked!")
                 .formatted(Formatting.RED), false);
+        player.sendMessage(Text.literal("Heavy armor equipped - ready for battle!")
+                .formatted(Formatting.GRAY), false);
     }
 
     private void initializeMage(ServerPlayerEntity player) {
-        // Give Apprentice Wand
+        // Weapon
         player.giveItemStack(new ItemStack(ModItems.APPRENTICE_WAND));
-        // Give wooden sword
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.WOODEN_SWORD));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_SWORD));
+
+        // Full Leather Armor Set (Light armor for Mages - mobility)
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_HELMET));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_CHESTPLATE));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_LEGGINGS));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_BOOTS));
 
         // Create Healing Potion
         ItemStack healingPotion1 = new ItemStack(net.minecraft.item.Items.POTION);
@@ -387,19 +401,29 @@ public class ClassSelectionAltarBlock extends Block {
 
         player.sendMessage(Text.literal("✦ Mage abilities unlocked!")
                 .formatted(Formatting.AQUA), false);
-        player.sendMessage(Text.literal("Your potions and enchanted books are ready!")
+        player.sendMessage(Text.literal("Light armor equipped - magic and mobility!")
                 .formatted(Formatting.GRAY), false);
     }
 
     private void initializeRogue(PlayerEntity player) {
+        // Weapons
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.IRON_SWORD));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_CHESTPLATE));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.BOW));
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.ARROW, 32));
+
+        // Full Leather Armor Set (Light armor for Rogues - stealth & speed)
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_HELMET));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_CHESTPLATE));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_LEGGINGS));
+        player.giveItemStack(new ItemStack(net.minecraft.item.Items.LEATHER_BOOTS));
+
+        // Food
         player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_CHICKEN, 32));
 
         player.sendMessage(Text.literal("⚡ Rogue abilities unlocked!")
                 .formatted(Formatting.DARK_GREEN), false);
+        player.sendMessage(Text.literal("Light armor equipped - move fast, strike hard!")
+                .formatted(Formatting.GRAY), false);
     }
 
     private boolean isClassToken(ItemStack stack) {

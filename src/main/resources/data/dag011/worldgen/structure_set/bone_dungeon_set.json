@@ -7,8 +7,12 @@
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 32,
-    "separation": 8,
+    "spacing": 40,
+    "separation": 12,
     "salt": 14357621
+  },
+  "exclusion_zone": {
+    "other_set": "dag011:village_npc_set",
+    "chunk_count": 10
   }
 }

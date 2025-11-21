@@ -56,7 +56,7 @@
           "slot": "mainhand"
         }
       ],
-      "minecraft:item_model": "dag_customs:gilded_rapier"
+      "minecraft:item_model": "minecraft:gilded_rapier"
     }
   }
 }

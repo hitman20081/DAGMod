@@ -17,7 +17,7 @@
         "text": "Shadowguard Shield",
         "color": "#6960b2"
       },
-      "minecraft:item_model": "minecraft:shield",
+      "minecraft:item_model": "minecraft:shadow_shield",
       "minecraft:attribute_modifiers": [
         {
           "type": "minecraft:max_absorption",

@@ -18,7 +18,6 @@
       "minecraft:potion_contents": {
         "potion": "minecraft:mundane",
         "custom_color": 4348994,
-        "custom_name": "{\"text\":\"Antidote Vial\",\"color\":\"green\"}",
         "custom_effects": [
           {
             "id": "minecraft:regeneration",

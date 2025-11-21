@@ -44,7 +44,7 @@
       "minecraft:lore": [
         "\"Forged from the remnants of the Ender Dragon, it carries a fragment of its might.\""
       ],
-      "minecraft:item_model": "dag_customs:dragonscale_boots",
+      "minecraft:item_model": "minecraft:dragonscale_boots",
       "minecraft:equippable": {
         "slot": "feet",
         "asset_id": "dragonscale"
@@ -56,7 +56,8 @@
         "text": "Dragonscale Boots",
         "color": "#3d0505"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 600
     }
   }
 }

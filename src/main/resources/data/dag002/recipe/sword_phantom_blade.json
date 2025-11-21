@@ -72,7 +72,7 @@
           "slot": "mainhand"
         }
       ],
-      "minecraft:item_model": "dag_customs:shadowfang_sword"
+      "minecraft:item_model": "minecraft:shadowfang_sword"
     }
   }
 }

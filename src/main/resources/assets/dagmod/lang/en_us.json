@@ -1,21 +1,50 @@
 {
+  "comment": "DAGMod Language File - Organized by Category",
+
+  "_comment_creative_tab": "=== CREATIVE TAB ===",
   "itemGroup.dagmod": "DAGMod",
 
+  "_comment_effects": "=== STATUS EFFECTS ===",
   "effect.dagmod.xp": "XP Power",
 
+  "_comment_potions": "=== POTIONS ===",
   "item.minecraft.potion.effect.xp": "XP Potion",
   "item.minecraft.splash_potion.effect.xp": "XP Splash Potion",
   "item.minecraft.lingering_potion.effect.xp": "XP Lingering Potion",
 
-
-  "item.dagmod.quest_block": "Quest Block",
+  "_comment_blocks": "=== BLOCKS & STRUCTURES ===",
   "block.dagmod.quest_block": "Quest Block",
+  "item.dagmod.quest_block": "Quest Block",
   "block.dagmod.pedestal": "Quest Pedestal",
+  "block.dagmod.job_board": "Job Board",
+  "item.dagmod.job_board": "Job Board",
+  "block.dagmod.ship_helm": "Ship Helm",
+  "item.dagmod.ship_helm": "Ship Helm",
 
-  "item.dagmod.class_selection_altar": "Class Selection Altar",
   "block.dagmod.class_selection_altar": "Class Selection Altar",
+  "item.dagmod.class_selection_altar": "Class Selection Altar",
 
+  "block.dagmod.race_selection_altar": "Altar of Heritage",
+  "item.dagmod.race_selection_altar": "Altar of Heritage",
 
+  "block.dagmod.ancient_bone_block": "Ancient Bone Block",
+  "item.dagmod.ancient_bone_block": "Ancient Bone Block",
+
+  "block.dagmod.bone_realm_portal": "Bone Realm Portal",
+  "item.dagmod.bone_realm_portal": "Bone Realm Portal",
+
+  "_comment_locked_chests": "=== LOCKED CHESTS ===",
+  "block.dagmod.bone_realm_locked_chest": "Bone Realm Locked Chest",
+  "item.dagmod.bone_realm_locked_chest": "Bone Realm Locked Chest",
+  "item.dagmod.bone_realm_chest_key": "Bone Realm Chest Key",
+
+  "block.dagmod.skeleton_king_chest": "Skeleton King Chest",
+  "item.dagmod.skeleton_king_chest": "Skeleton King Chest",
+  "item.dagmod.skeleton_king_key": "Skeleton King Chest Key",
+
+  "item.dagmod.necrotic_key": "Necrotic Key",
+
+  "_comment_food": "=== FOOD ITEMS ===",
   "item.dagmod.beef_stew": "Beef Stew",
   "item.dagmod.candied_apple": "Candied Apple",
   "item.dagmod.chicken_stew": "Chicken Stew",
@@ -39,6 +68,7 @@
   "item.dagmod.stormfish_fillet": "Stormfish Fillet",
   "item.dagmod.void_truffles": "Void Truffles",
 
+  "_comment_materials": "=== CRAFTING MATERIALS ===",
   "item.dagmod.amethyst_powder": "Amethyst Powder",
   "item.dagmod.diamond_powder": "Diamond Powder",
   "item.dagmod.echo_dust": "Echo Dust",
@@ -47,50 +77,47 @@
   "item.dagmod.slimeball_dust": "Slimeball Dust",
   "item.dagmod.suspicious_substance": "Suspicious Substance",
 
+  "_comment_quest_books": "=== QUEST BOOKS ===",
   "item.dagmod.novice_quest_book": "Novice Quest Book",
   "item.dagmod.apprentice_quest_book": "Apprentice Quest Book",
   "item.dagmod.expert_quest_book": "Expert Quest Book",
   "item.dagmod.master_quest_tome": "Master Quest Tome",
 
+  "_comment_quest_notes": "=== TUTORIAL QUEST NOTES ===",
+  "item.dagmod.garricks_first_note": "Garrick's First Note",
+  "item.dagmod.garricks_second_note": "Garrick's Second Note",
+  "item.dagmod.garricks_third_note": "Garrick's Third Note",
+
+  "_comment_class_system": "=== CLASS SELECTION SYSTEM ===",
   "item.dagmod.class_selection_tome": "Class Selection Tome",
   "item.dagmod.warrior_token": "Warrior Token",
   "item.dagmod.mage_token": "Mage Token",
   "item.dagmod.rogue_token": "Rogue Token",
-  "item.dagmod.class_reset_crystal": "Class Reset Crystal",
-  "item.dagmod.race_reset_crystal": "Race Reset Crystal",
-  "item.dagmod.character_reset_crystal": "Character Reset Crystal",
-  "item.dagmod.potion_of_racial_rebirth": "Potion of Racial Rebirth",
-  "item.dagmod.potion_of_class_rebirth": "Potion of Class Rebirth", 
-  "item.dagmod.potion_of_total_rebirth": "Potion of Total Rebirth",
 
+  "_comment_race_system": "=== RACE SELECTION SYSTEM ===",
+  "item.dagmod.race_selection_tome": "Tome of Ancestral Heritage",
   "item.dagmod.human_token": "Human Heritage Token",
   "item.dagmod.dwarf_token": "Dwarven Heritage Token",
   "item.dagmod.elf_token": "Elven Heritage Token",
   "item.dagmod.orc_token": "Orcish Heritage Token",
-  "item.dagmod.race_selection_tome": "Tome of Ancestral Heritage",
-  "item.dagmod.race_selection_altar": "Altar of Heritage",
-  "block.dagmod.race_selection_altar": "Altar of Heritage",
   "item.dagmod.hall_locator": "Hall Locator",
 
-  "item.dagmod.heal_scroll": "Scroll of Healing",
-  "item.dagmod.absorption_scroll": "Arcane Shield",
-  "item.dagmod.fireball_scroll": "Fireball",
-  "item.dagmod.lightning_scroll": "Lightning Bolt",
-  "item.dagmod.frost_nova_scroll": "Frost Nova",
-  "item.dagmod.teleport_scroll": "Blink",
-  "item.dagmod.mana_shield_scroll": "Mana Shield",
-  "item.dagmod.apprentice_wand": "Apprentice Wand",
-  "item.dagmod.adept_wand": "Adept Wand",
-  "item.dagmod.master_wand": "Master Wand",
+  "_comment_reset_items": "=== CHARACTER RESET ITEMS ===",
+  "item.dagmod.class_reset_crystal": "Class Reset Crystal",
+  "item.dagmod.race_reset_crystal": "Race Reset Crystal",
+  "item.dagmod.character_reset_crystal": "Character Reset Crystal",
+  "item.dagmod.potion_of_class_rebirth": "Potion of Class Rebirth",
+  "item.dagmod.potion_of_racial_rebirth": "Potion of Racial Rebirth",
+  "item.dagmod.potion_of_total_rebirth": "Potion of Total Rebirth",
 
+  "_comment_warrior_abilities": "=== WARRIOR ABILITIES ===",
   "item.dagmod.rage_totem": "Rage Totem",
-  "item.dagmod.war_horn": "War Horn",
-
   "item.dagmod.rage_totem.tooltip": "Warrior Ability: Rage",
   "item.dagmod.rage_totem.tooltip.description": "Enter a rage state for 10 seconds",
   "item.dagmod.rage_totem.tooltip.effects": "+50% Attack Damage, +30% Speed, +2 Hearts",
   "item.dagmod.rage_totem.tooltip.cooldown": "Cooldown: 60 seconds",
 
+  "item.dagmod.war_horn": "War Horn",
   "item.dagmod.war_horn.tooltip": "Warrior Ability: War Cry",
   "item.dagmod.war_horn.tooltip.description": "Rally allies and terrify enemies",
   "item.dagmod.war_horn.tooltip.effects": "15 block radius team buff",
@@ -108,6 +135,7 @@
   "item.dagmod.iron_talisman.tooltip": "Warrior Ability: Iron Skin",
   "item.dagmod.iron_talisman.tooltip.shift": "Grants 8 absorption hearts and 60% damage reduction for 15 seconds. Cooldown: 120s",
 
+  "_comment_mage_abilities": "=== MAGE ABILITIES ===",
   "item.dagmod.arcane_orb": "Arcane Orb",
   "item.dagmod.arcane_orb.tooltip": "Mage Ability: Arcane Missiles",
   "item.dagmod.arcane_orb.tooltip.shift": "Fires 5 homing arcane missiles that deal 3 damage each. Auto-targets enemies. Cooldown: 20s",
@@ -124,16 +152,30 @@
   "item.dagmod.barrier_charm.tooltip": "Mage Ability: Arcane Barrier",
   "item.dagmod.barrier_charm.tooltip.shift": "Creates magical barrier. 10 absorption hearts + Resistance II for 10 seconds. Cooldown: 60s",
 
+  "_comment_mage_spells": "=== MAGE SPELL SCROLLS & WANDS ===",
+  "item.dagmod.heal_scroll": "Scroll of Healing",
+  "item.dagmod.absorption_scroll": "Arcane Shield",
+  "item.dagmod.fireball_scroll": "Fireball",
+  "item.dagmod.lightning_scroll": "Lightning Bolt",
+  "item.dagmod.frost_nova_scroll": "Frost Nova",
+  "item.dagmod.teleport_scroll": "Blink",
+  "item.dagmod.mana_shield_scroll": "Mana Shield",
 
+  "item.dagmod.apprentice_wand": "Apprentice Wand",
+  "item.dagmod.adept_wand": "Adept Wand",
+  "item.dagmod.master_wand": "Master Wand",
+
+  "_comment_rogue_abilities": "=== ROGUE ABILITIES ===",
   "item.dagmod.rogue_ability_tome": "Rogue Ability Tome",
   "item.dagmod.rogue_ability_tome.tooltip": "Shift+Right-click to cycle abilities",
 
   "ability.dagmod.smoke_bomb": "Smoke Bomb",
-  "ability.dagmod.poison_dagger": "Poison Dagger",
-  "ability.dagmod.shadow_step": "Shadow Step",
-
   "ability.dagmod.smoke_bomb.desc": "Create a smoke cloud for invisibility and escape",
+
+  "ability.dagmod.poison_dagger": "Poison Dagger",
   "ability.dagmod.poison_dagger.desc": "Empower your next attack with deadly poison",
+
+  "ability.dagmod.shadow_step": "Shadow Step",
   "ability.dagmod.shadow_step.desc": "Teleport with a shadow decoy",
 
   "item.dagmod.void_blade": "Void Blade",
@@ -141,54 +183,60 @@
   "item.dagmod.poison_vial": "Poison Vial",
   "item.dagmod.assassins_mark": "Assassin's Mark",
 
+  "_comment_hud": "=== HUD ELEMENTS ===",
   "hud.dagmod.energy": "Energy",
 
-  "item.dagmod.mana_crystal": "Mana Crystal",
-  "item.dagmod.energy_tonic": "Energy Tonic",
-  "item.dagmod.cooldown_elixir": "Cooldown Elixir",
-  "item.dagmod.vampire_dust": "Vampire Dust",
-  "item.dagmod.phantom_dust": "Phantom Dust",
-  "item.dagmod.spell_echo": "Spell Echo",
-  "item.dagmod.battle_frenzy": "Battle Frenzy",
-  "item.dagmod.shadow_blend": "Shadow Blend",
+  "_comment_consumables_universal": "=== CONSUMABLES - UNIVERSAL ===",
   "item.dagmod.fortune_dust": "Fortune Dust",
-  "item.dagmod.featherfall_powder": "Featherfall Powder",
-  "item.dagmod.last_stand_powder": "Last Stand Powder",
-  "item.dagmod.time_distortion": "Time Distortion",
-  "item.dagmod.overcharge_dust": "Overcharge Dust",
-  "item.dagmod.titan_strength": "Titan's Strength",
-  "item.dagmod.perfect_dodge": "Perfect Dodge",
-
-  "item.dagmod.mana_crystal.tooltip": "Restores 50 mana instantly",
-  "item.dagmod.energy_tonic.tooltip": "Restores 50 energy instantly",
-  "item.dagmod.cooldown_elixir.tooltip": "Reduces all cooldowns",
-  "item.dagmod.vampire_dust.tooltip": "Gain lifesteal for 20 seconds",
-  "item.dagmod.phantom_dust.tooltip": "50% dodge chance for 15 seconds",
-  "item.dagmod.spell_echo.tooltip": "Next spell casts twice",
-  "item.dagmod.battle_frenzy.tooltip": "Massive combat boost for 15 seconds",
-  "item.dagmod.shadow_blend.tooltip": "Invisibility until you attack",
   "item.dagmod.fortune_dust.tooltip": "Fortune III on next 10 blocks",
+
+  "item.dagmod.featherfall_powder": "Featherfall Powder",
   "item.dagmod.featherfall_powder.tooltip": "No fall damage for 60 seconds",
-  "item.dagmod.last_stand_powder.tooltip": "Auto-revive if you die within 60s",
-  "item.dagmod.time_distortion.tooltip": "Slow motion effect for 10 seconds",
-  "item.dagmod.overcharge_dust.tooltip": "Next spell has 2x power",
+
+  "_comment_consumables_warrior": "=== CONSUMABLES - WARRIOR ===",
+  "item.dagmod.cooldown_elixir": "Cooldown Elixir",
+  "item.dagmod.cooldown_elixir.tooltip": "Reduces all cooldowns",
+
+  "item.dagmod.battle_frenzy": "Battle Frenzy",
+  "item.dagmod.battle_frenzy.tooltip": "Massive combat boost for 15 seconds",
+
+  "item.dagmod.titan_strength": "Titan's Strength",
   "item.dagmod.titan_strength.tooltip": "+100% melee damage for 20 seconds",
+
+  "item.dagmod.last_stand_powder": "Last Stand Powder",
+  "item.dagmod.last_stand_powder.tooltip": "Auto-revive if you die within 60s",
+
+  "_comment_consumables_mage": "=== CONSUMABLES - MAGE ===",
+  "item.dagmod.mana_crystal": "Mana Crystal",
+  "item.dagmod.mana_crystal.tooltip": "Restores 50 mana instantly",
+
+  "item.dagmod.spell_echo": "Spell Echo",
+  "item.dagmod.spell_echo.tooltip": "Next spell casts twice",
+
+  "item.dagmod.overcharge_dust": "Overcharge Dust",
+  "item.dagmod.overcharge_dust.tooltip": "Next spell has 2x power",
+
+  "item.dagmod.time_distortion": "Time Distortion",
+  "item.dagmod.time_distortion.tooltip": "Slow motion effect for 10 seconds",
+
+  "_comment_consumables_rogue": "=== CONSUMABLES - ROGUE ===",
+  "item.dagmod.energy_tonic": "Energy Tonic",
+  "item.dagmod.energy_tonic.tooltip": "Restores 50 energy instantly",
+
+  "item.dagmod.shadow_blend": "Shadow Blend",
+  "item.dagmod.shadow_blend.tooltip": "Invisibility until you attack",
+
+  "item.dagmod.phantom_dust": "Phantom Dust",
+  "item.dagmod.phantom_dust.tooltip": "50% dodge chance for 15 seconds",
+
+  "item.dagmod.perfect_dodge": "Perfect Dodge",
   "item.dagmod.perfect_dodge.tooltip": "100% dodge chance for 10 seconds",
 
-  "consumable.dagmod.class_locked.mage": "Only Mages can use this!",
+  "item.dagmod.vampire_dust": "Vampire Dust",
+  "item.dagmod.vampire_dust.tooltip": "Gain lifesteal for 20 seconds",
+
+  "_comment_class_restrictions": "=== CLASS RESTRICTION MESSAGES ===",
   "consumable.dagmod.class_locked.warrior": "Only Warriors can use this!",
-  "consumable.dagmod.class_locked.rogue": "Only Rogues can use this!",
-
-  "block.dagmod.ancient_bone_block": "Ancient Bone Block",
-  "item.dagmod.ancient_bone_block": "Ancient Bone Block",
-  "block.dagmod.bone_realm_portal": "Bone Realm Portal",
-  "item.dagmod.bone_realm_portal": "Bone Realm Portal",
-  "block.dagmod.bone_realm_locked_chest": "Bone Realm Locked Chest",
-  "item.dagmod.bone_realm_locked_chest": "Bone Realm Locked Chest",
-  "item.dagmod.bone_realm_chest_key": "Bone Realm Chest Key",
-  "block.dagmod.skeleton_king_chest": "Skeleton King Chest",
-  "item.dagmod.skeleton_king_chest": "Skeleton King Chest",
-  "item.dagmod.skeleton_king_key": "Skeleton King Chest Key",
-  "item.dagmod.necrotic_key": "Necrotic Key"
-
+  "consumable.dagmod.class_locked.mage": "Only Mages can use this!",
+  "consumable.dagmod.class_locked.rogue": "Only Rogues can use this!"
 }

@@ -20,21 +20,29 @@ import com.github.hitman20081.dagmod.event.ShadowBlendHandler;
 import com.github.hitman20081.dagmod.item.ModItemGroups;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.networking.ModNetworking;
+import com.github.hitman20081.dagmod.party.command.PartyCommand;
+import com.github.hitman20081.dagmod.party.quest.PartyQuestManager;
+import com.github.hitman20081.dagmod.party.quest.PartyQuestRegistry;
 import com.github.hitman20081.dagmod.potion.ModPotions;
 import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.block.ModBlocks;
 import com.github.hitman20081.dagmod.progression.ProgressionEvents;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
 import com.github.hitman20081.dagmod.progression.ProgressionPackets;
 import com.github.hitman20081.dagmod.progression.ProgressionTestCommand;
+import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
+import com.github.hitman20081.dagmod.progression.StatScalingHandler;
 import com.github.hitman20081.dagmod.progression.XPEventHandler;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestUtils;
 import com.github.hitman20081.dagmod.quest.registry.QuestRegistry;
 import com.github.hitman20081.dagmod.race_system.PlayerTickHandler;
 import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -45,26 +53,31 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import com.github.hitman20081.dagmod.command.ResetClassCommand;
 import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
-import com.github.hitman20081.dagmod.class_system.MagePotionHandler;
 import com.github.hitman20081.dagmod.class_system.RogueCombatHandler;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.minecraft.util.ActionResult;
-import net.minecraft.entity.LivingEntity;
+import com.github.hitman20081.dagmod.party.quest.PartyQuestRegistry;
+import com.github.hitman20081.dagmod.party.quest.PartyQuestManager;
+import com.github.hitman20081.dagmod.party.command.PartyQuestCommand;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.util.WorldSavePath;
 
 import static com.github.hitman20081.dagmod.potion.ModPotions.XP_POTION;
 
@@ -80,8 +93,15 @@ public class DagMod implements ModInitializer {
         ModItemGroups.registerItemGroups();
 
 
+        ModEntities.initialize();
+
         ModEffects.registerEffects();
         ModPotions.registerPotion();
+
+        // Copy bundled Bleakwind world data on server start
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+            copyBundledBleakwindWorld(server);
+        });
 
         BoneRealmRegistry.register(); // Register Bone realm
 
@@ -93,6 +113,9 @@ public class DagMod implements ModInitializer {
 
         // Register boss death handler
         BossDeathEventHandler.register();
+
+        // Register tutorial mob kill tracking
+        registerTutorialMobKillTracking();
 
         ModBlocks.initialize();
 
@@ -118,6 +141,9 @@ public class DagMod implements ModInitializer {
 
         FortuneDustHandler.register();
 
+        // Register Party Quest block break handler
+        com.github.hitman20081.dagmod.event.PartyQuestBlockBreakHandler.register();
+
         // Initialize energy management system
         EnergyManager.initialize();
 
@@ -132,6 +158,9 @@ public class DagMod implements ModInitializer {
         QuestManager.getInstance();
         LOGGER.info("Quest System initialized successfully!");
 
+        // Register party quest system
+        PartyQuestRegistry.registerQuests();
+
         // Register race/class synergy ticker
         PlayerTickHandler.register();
         LOGGER.info("Race/Class synergy system initialized!");
@@ -145,30 +174,71 @@ public class DagMod implements ModInitializer {
         // Register XP Event Handler
         XPEventHandler.register();
 
-        // Register command for class reset
+        // Register all commands
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            ResetClassCommand.register(dispatcher, registryAccess, environment);
-        });
-
-        // Quest Command
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            QuestCommand.register(dispatcher);
-        });
-
-        // Register commands
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            ResetClassCommand.register(dispatcher, registryAccess, environment);
             InfoCommand.register(dispatcher, registryAccess, environment);
-        });
-
-        // Progression Test Command
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            QuestCommand.register(dispatcher);
+            ResetClassCommand.register(dispatcher, registryAccess, environment);
             ProgressionTestCommand.register(dispatcher, registryAccess, environment);
+            PartyCommand.register(dispatcher, registryAccess, environment);
+            PartyQuestCommand.register(dispatcher, registryAccess, environment);
+
+            // Ship Travel Command
+            dispatcher.register(net.minecraft.server.command.CommandManager.literal("travel")
+                    .then(net.minecraft.server.command.CommandManager.argument("destination",
+                                    com.mojang.brigadier.arguments.StringArgumentType.word())
+                            .executes(context -> {
+                                ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                String destination = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "destination");
+
+                                com.github.hitman20081.dagmod.travel.ShipTravelManager
+                                        .travelToDestination(player, destination);
+
+                                return 1;
+                            })
+                    )
+            );
+
+            // Summon Innkeeper Garrick Command (for testing/structure blocks)
+            dispatcher.register(CommandManager.literal("summon_garrick")
+                    .requires(source -> source.hasPermissionLevel(2)) // Requires OP
+                    .executes(context -> {
+                        ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+
+                        // Spawn Garrick at player's location
+                        com.github.hitman20081.dagmod.entity.InnkeeperGarrickNPC garrick =
+                            new com.github.hitman20081.dagmod.entity.InnkeeperGarrickNPC(
+                                ModEntities.INNKEEPER_GARRICK,
+                                player.getEntityWorld()
+                            );
+
+                        garrick.refreshPositionAndAngles(
+                            player.getX(),
+                            player.getY(),
+                            player.getZ(),
+                            player.getYaw(),
+                            0.0F
+                        );
+
+                        player.getEntityWorld().spawnEntity(garrick);
+
+                        player.sendMessage(
+                            Text.literal("Innkeeper Garrick summoned!").formatted(Formatting.GREEN),
+                            false
+                        );
+
+                        return 1;
+                    })
+            );
         });
 
         // Apply class abilities when player respawns (including after death)
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             ClassAbilityManager.applyClassAbilities(newPlayer);
+
+            // Reapply progression stats (fixes health/attack/armor reset on death)
+            PlayerProgressionData progressionData = ProgressionManager.getPlayerData(newPlayer);
+            StatScalingHandler.applyLevelStats(newPlayer, progressionData.getCurrentLevel());
 
             BlockPos hallPos = PlayerDataManager.loadHallLocation(newPlayer.getEntityWorld().getServer());
 
@@ -245,6 +315,41 @@ public class DagMod implements ModInitializer {
             if (damageSource.getAttacker() instanceof ServerPlayerEntity player) {
                 // Update kill objectives for this player
                 QuestManager.getInstance().updateKillProgress(player, entity.getType());
+
+                // --- PARTY QUEST OBJECTIVE TRACKING ---
+                com.github.hitman20081.dagmod.party.quest.PartyQuestData quest = com.github.hitman20081.dagmod.party.quest.PartyQuestManager.getInstance().getActiveQuest(player);
+                if (quest != null) {
+                    String mobType = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
+
+                    // Handle KILL_ENTITY objectives
+                    for (var objective : quest.getTemplate().getObjectives()) {
+                        if (objective.getType() == com.github.hitman20081.dagmod.party.quest.PartyQuestObjectiveType.KILL_ENTITY) {
+                            boolean isHostile = entity instanceof net.minecraft.entity.mob.Monster;
+                            if (objective.getTarget().equals(mobType) || (objective.getTarget().equals("hostile") && isHostile)) {
+                                com.github.hitman20081.dagmod.party.quest.PartyQuestManager.getInstance().updateObjective(
+                                        quest.getPartyId(),
+                                        objective.getId(),
+                                        1
+                                );
+                            }
+                        }
+                    }
+
+                    // Handle KILL_BOSS objectives
+                    if (com.github.hitman20081.dagmod.party.PartyLootHandler.isBossEntity(entity)) {
+                        for (var objective : quest.getTemplate().getObjectives()) {
+                            if (objective.getType() == com.github.hitman20081.dagmod.party.quest.PartyQuestObjectiveType.KILL_BOSS) {
+                                if (objective.getTarget().contains(mobType)) {
+                                    com.github.hitman20081.dagmod.party.quest.PartyQuestManager.getInstance().updateObjective(
+                                            quest.getPartyId(),
+                                            objective.getId(),
+                                            1
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             // Add death message for players
@@ -255,6 +360,9 @@ public class DagMod implements ModInitializer {
 
         // Combined server tick events: Mana regeneration + Night Vision for Mages + Custom Armor Set Bonuses
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // Tick party quest manager for timeouts
+            PartyQuestManager.getInstance().tick();
+
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
 
@@ -291,6 +399,19 @@ public class DagMod implements ModInitializer {
                     Registries.POTION.getEntry(XP_POTION)
             );
         });
+
+        // Register party quest system
+        PartyQuestRegistry.registerQuests();
+
+        // Register party quest commands
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            PartyQuestCommand.register(dispatcher, registryAccess, environment);
+        });
+
+        // Tick quest manager for timeouts
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            PartyQuestManager.getInstance().tick();
+        });
     } // Make sure this closing brace for onInitialize() is here
 
     /**
@@ -324,6 +445,164 @@ public class DagMod implements ModInitializer {
             }
         }
         return false;
+    }
+
+    /**
+     * Copy bundled Bleakwind world data from mod resources to the server's dimension folder
+     */
+    private static void copyBundledBleakwindWorld(MinecraftServer server) {
+        try {
+            // The dimension folder path should match your dimension JSON location
+            Path dimensionPath = server.getSavePath(WorldSavePath.ROOT)
+                    .resolve("dimensions/dagmod/bleakwind");
+
+            Path regionPath = dimensionPath.resolve("region");
+
+            // Only copy if the dimension hasn't been generated yet
+            if (!Files.exists(regionPath) || isDirectoryEmpty(regionPath)) {
+                LOGGER.info("Copying bundled Bleakwind world data...");
+
+                // Copy region files (terrain and blocks)
+                copyResourceFolder("/bundled_worlds/bleakwind/region", regionPath);
+
+                // Copy entities
+                copyResourceFolder("/bundled_worlds/bleakwind/entities",
+                        dimensionPath.resolve("entities"));
+
+                // Copy POI (points of interest)
+                copyResourceFolder("/bundled_worlds/bleakwind/poi",
+                        dimensionPath.resolve("poi"));
+
+                // Copy data (structures, etc.)
+                copyResourceFolder("/bundled_worlds/bleakwind/data",
+                        dimensionPath.resolve("data"));
+
+                LOGGER.info("Bleakwind world data copied successfully!");
+            } else {
+                LOGGER.info("Bleakwind world already exists, skipping copy.");
+            }
+        } catch (IOException e) {
+            LOGGER.error("Failed to copy Bleakwind world data", e);
+        }
+    }
+
+    private static boolean isDirectoryEmpty(Path path) throws IOException {
+        if (!Files.exists(path)) return true;
+        try (var stream = Files.list(path)) {
+            return !stream.findAny().isPresent();
+        }
+    }
+
+    /**
+     * Copy a folder from mod resources to filesystem
+     */
+    private static void copyResourceFolder(String resourcePath, Path destination) throws IOException {
+        Files.createDirectories(destination);
+
+        // Get resource as URL from classpath
+        var resource = DagMod.class.getResource(resourcePath);
+        if (resource == null) {
+            LOGGER.warn("Resource not found: " + resourcePath);
+            return;
+        }
+
+        try {
+            // Handle both JAR and IDE (file system) scenarios
+            if (resource.toURI().getScheme().equals("jar")) {
+                copyFromJar(resourcePath, destination);
+            } else {
+                copyFromFileSystem(Paths.get(resource.toURI()), destination);
+            }
+        } catch (URISyntaxException e) {
+            throw new IOException("Invalid resource URI", e);
+        }
+    }
+
+    private static void copyFromJar(String resourcePath, Path destination) throws IOException {
+        try {
+            // Get the JAR file system
+            URI uri = DagMod.class.getResource(resourcePath).toURI();
+            Map<String, String> env = new HashMap<>();
+
+            // Get or create the filesystem - handle case where it already exists
+            FileSystem fs;
+            try {
+                // Try to get existing filesystem first
+                fs = FileSystems.getFileSystem(uri);
+            } catch (FileSystemNotFoundException e) {
+                // If it doesn't exist, create it
+                fs = FileSystems.newFileSystem(uri, env);
+            }
+
+            // Don't use try-with-resources since we didn't create it (or it may be shared)
+            // The filesystem will be closed when the JVM shuts down
+            Path source = fs.getPath(resourcePath);
+            Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Path target = destination.resolve(source.relativize(file).toString());
+                    Files.createDirectories(target.getParent());
+                    Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (URISyntaxException e) {
+            throw new IOException("Invalid resource URI", e);
+        }
+    }
+
+    private static void copyFromFileSystem(Path source, Path destination) throws IOException {
+        Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Path target = destination.resolve(source.relativize(file));
+                Files.createDirectories(target.getParent());
+                Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    /**
+     * Register tutorial mob kill tracking for Garrick's Task 2
+     */
+    private static void registerTutorialMobKillTracking() {
+        net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
+            // Only process on server side
+            if (entity.getEntityWorld().isClient()) {
+                return;
+            }
+
+            // Check if killer is a player
+            if (!(damageSource.getAttacker() instanceof net.minecraft.server.network.ServerPlayerEntity player)) {
+                return;
+            }
+
+            // Only count hostile mobs (monsters)
+            if (entity instanceof net.minecraft.entity.mob.HostileEntity) {
+                // Only track if player hasn't completed task 2 yet and has met Garrick
+                if (!PlayerDataManager.isTask2Complete(player.getUuid()) && PlayerDataManager.hasMetGarrick(player)) {
+                    PlayerDataManager.incrementTask2MobKills(player);
+
+                    // Send feedback to player
+                    int kills = PlayerDataManager.getTask2MobKills(player.getUuid());
+                    player.sendMessage(
+                        net.minecraft.text.Text.literal("✓ Tutorial Progress: " + kills + "/5 hostile mobs defeated")
+                            .formatted(net.minecraft.util.Formatting.GRAY),
+                        true // Action bar
+                    );
+
+                    // Notify when complete
+                    if (kills >= 5) {
+                        player.sendMessage(
+                            net.minecraft.text.Text.literal("✓ Task Complete! Return to Innkeeper Garrick")
+                                .formatted(net.minecraft.util.Formatting.GREEN, net.minecraft.util.Formatting.BOLD),
+                            false
+                        );
+                    }
+                }
+            }
+        });
     }
 
 

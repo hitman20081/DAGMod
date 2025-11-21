@@ -1,0 +1,55 @@
+{
+    "model": {
+        "type": "minecraft:select",
+        "property": "custom_model_data",
+        "fallback": {
+        "type": "minecraft:model",
+        "model": "item/netherite_sword"
+        },
+        "cases": [
+        {
+            "when": "dragonscale_sword",
+            "model": {
+                "type": "model",
+                "model": "minecraft:item/dragonscale_sword"
+                }
+        },
+		{"when": "bloodthirster_blade",
+            "model": {
+                    "type": "model",
+                    "model": "minecraft:item/bloodthirster_blade"
+                }
+            },
+        {"when": "inferno_sword",
+            "model": {
+                    "type": "model",
+                    "model": "minecraft:item/inferno_sword"
+                }
+            },
+        {"when": "crystal_katana",
+            "model": {
+                    "type": "model",
+                    "model": "minecraft:item/crystal_katana"
+                }
+            },
+        {"when": "ethereal_blade",
+            "model": {
+                    "type": "model",
+                    "model": "minecraft:item/ethereal_blade"
+                }
+            },
+        {"when": "gilded_rapier",
+            "model": {
+                    "type": "model",
+                    "model": "minecraft:item/gilded_rapier"
+                }
+            },
+        {"when": "shadowfang_sword",
+            "model": {
+                    "type": "model",
+                    "model": "minecraft:item/shadowfang_sword"
+                }
+            }
+        ]
+    }
+}

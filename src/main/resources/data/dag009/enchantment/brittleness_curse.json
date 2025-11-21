@@ -1,5 +1,5 @@
 {
-  "description": "Curse of brittleness",
+  "description": "Curse of Brittleness",
   "exclusive_set": "minecraft:unbreaking",
   "supported_items": "#minecraft:enchantable/durability",
   "weight": 2,

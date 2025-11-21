@@ -25,7 +25,7 @@
         "minecraft:fire_aspect": 8,
         "minecraft:fire_protection": 10
       },
-      "minecraft:item_model": "dag_customs:inferno_sword"
+      "minecraft:item_model": "minecraft:inferno_sword"
     }
   }
 }

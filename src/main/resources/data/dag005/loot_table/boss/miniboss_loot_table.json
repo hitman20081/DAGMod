@@ -6,15 +6,44 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "dagmod:bone_realm_chest_key",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "text": "Bone Realm Chest Key",
+                "color": "#E0E0E0",
+                "italic": false
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                {
+                  "text": "Opens locked chests in the Bone Realm",
+                  "color": "gray",
+                  "italic": true
+                }
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:potion",
           "weight": 4,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 1,
-                "max": 2
+                "type": "minecraft:constant",
+                "value": 1
               },
               "conditions": []
             },
@@ -142,22 +171,6 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 15,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:amethyst_shard",
-          "weight": 3
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
                 "max": 5,
                 "min": 1
               },
@@ -220,40 +233,8 @@
             {
               "add": false,
               "count": {
-                "type": "minecraft:uniform",
-                "max": 15,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:echo_shard",
-          "weight": 4
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
                 "type": "minecraft:constant",
                 "value": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:shield",
-          "weight": 4
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3,
-                "min": 1
               },
               "function": "minecraft:set_count"
             },

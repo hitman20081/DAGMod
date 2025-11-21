@@ -27,10 +27,10 @@
         "minecraft:loyalty": 1,
         "minecraft:blast_protection": 8
       },
-      "minecraft:item_model": "dag_customs:thunder_pike",
+      "minecraft:item_model": "minecraft:thunder_pike",
       "minecraft:equippable": {
         "slot": "mainhand",
-        "asset_id": "dag_customs:thunder_pike"
+        "asset_id": "minecraft:thunder_pike"
       }
     }
   }

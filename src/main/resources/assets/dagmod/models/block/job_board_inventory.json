@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/oak_shelf_inventory",
+  "textures": {
+    "texture": "dagmod:block/job_board"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
   "start_pool": "dag011:castle/castle_fort",
-  "size": 1,
+  "size": 20,
   "max_distance_from_center": 80,
   "start_height": {
     "absolute": 1

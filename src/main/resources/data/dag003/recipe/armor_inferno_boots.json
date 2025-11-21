@@ -41,7 +41,7 @@
       "minecraft:lore": [
         "\"Forged in the depths of the Nether, this armor burns with the fury of a thousand suns.\""
       ],
-      "minecraft:item_model": "dag_customs:inferno_boots",
+      "minecraft:item_model": "minecraft:inferno_boots",
       "minecraft:equippable": {
         "slot": "feet",
         "asset_id": "inferno"
@@ -53,7 +53,8 @@
         "text": "Inferno's Sabatons",
         "color": "#AA0000"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 500
     }
   }
 }

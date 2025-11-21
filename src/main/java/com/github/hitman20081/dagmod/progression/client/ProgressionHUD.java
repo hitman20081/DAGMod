@@ -13,6 +13,9 @@ import net.minecraft.text.Text;
  */
 public class ProgressionHUD {
 
+    // Background visibility toggle
+    private static boolean backgroundEnabled = false; // Default: no background
+
     // Position options - change this to move the HUD
     private static final HUDPosition POSITION = HUDPosition.TOP_LEFT;
 
@@ -25,8 +28,8 @@ public class ProgressionHUD {
     }
 
     // Bar dimensions
-    private static final int BAR_WIDTH = 182;
-    private static final int BAR_HEIGHT = 5;
+    private static final int BAR_WIDTH = 120;  // Reduced from 182
+    private static final int BAR_HEIGHT = 4;   // Reduced from 5
     private static final int PADDING = 10;
 
     // Colors (ARGB format) - Professional theme
@@ -36,8 +39,23 @@ public class ProgressionHUD {
     private static final int COLOR_BAR_FILL_GLOW = 0xFF81C784; // Light green
     private static final int COLOR_TEXT_LEVEL = 0xFFFFD700; // Gold
     private static final int COLOR_TEXT_XP = 0xFFFFFFFF; // White
-    private static final int COLOR_BACKGROUND = 0xC0000000; // Semi-transparent black
     private static final int COLOR_TEXT_SHADOW = 0x000000; // Black
+
+    // Background color options (semi-transparent)
+    private static final int BG_COLOR_BLACK = 0xC0000000;
+    private static final int BG_COLOR_RED = 0xC0AA0000;
+    private static final int BG_COLOR_GREEN = 0xC000AA00;
+    private static final int BG_COLOR_BLUE = 0xC00000AA;
+    private static final int BG_COLOR_YELLOW = 0xC0FFFF00;
+    private static final int BG_COLOR_PURPLE = 0xC0AA00AA;
+    private static final int BG_COLOR_CYAN = 0xC000AAAA;
+    private static final int BG_COLOR_ORANGE = 0xC0FF6600;
+    private static final int BG_COLOR_PINK = 0xC0FF66AA;
+    private static final int BG_COLOR_GRAY = 0xC0555555;
+    private static final int BG_COLOR_WHITE = 0xC0FFFFFF;
+
+    // Current background color (default: black)
+    private static int currentBackgroundColor = BG_COLOR_BLACK;
 
     /**
      * Register the HUD renderer
@@ -100,8 +118,10 @@ public class ProgressionHUD {
      * Render centered style (for above hotbar)
      */
     private static void renderCentered(DrawContext context, MinecraftClient client, int x, int y, PlayerProgressionData data) {
-        // Background behind text and bar
-        context.fill(x - 2, y - 15, x + BAR_WIDTH + 2, y + BAR_HEIGHT + 2, COLOR_BACKGROUND);
+        // Draw background if enabled
+        if (backgroundEnabled) {
+            context.fill(x - 2, y - 15, x + BAR_WIDTH + 2, y + BAR_HEIGHT + 2, currentBackgroundColor);
+        }
 
         // Level text (gold, left side)
         String levelText = "Level " + data.getCurrentLevel();
@@ -144,10 +164,12 @@ public class ProgressionHUD {
     private static void renderCompact(DrawContext context, MinecraftClient client, int x, int y, PlayerProgressionData data) {
         // Calculate background size
         int bgWidth = BAR_WIDTH + 4;
-        int bgHeight = 32;
+        int bgHeight = 26;  // Reduced from 32
 
-        // Draw semi-transparent background
-        context.fill(x - 2, y - 2, x + bgWidth, y + bgHeight, COLOR_BACKGROUND);
+        // Draw background if enabled
+        if (backgroundEnabled) {
+            context.fill(x - 2, y - 2, x + bgWidth, y + bgHeight, currentBackgroundColor);
+        }
 
         // Level text (gold color)
         String levelText = "Level " + data.getCurrentLevel();
@@ -213,5 +235,84 @@ public class ProgressionHUD {
             context.fill(x + 1, y + 1, x + fillWidth - 1, y + BAR_HEIGHT - 1, COLOR_BAR_FILL);
             context.fill(x + 1, y + 1, x + fillWidth - 1, y + 2, COLOR_BAR_FILL_GLOW);
         }
+    }
+
+    /**
+     * Toggle the HUD background on/off
+     * @return new state (true = enabled, false = disabled)
+     */
+    public static boolean toggleBackground() {
+        backgroundEnabled = !backgroundEnabled;
+        return backgroundEnabled;
+    }
+
+    /**
+     * Check if HUD background is currently enabled
+     * @return true if enabled, false if disabled
+     */
+    public static boolean isBackgroundEnabled() {
+        return backgroundEnabled;
+    }
+
+    /**
+     * Set HUD background visibility state
+     * @param enabled true to show, false to hide
+     */
+    public static void setBackgroundEnabled(boolean enabled) {
+        backgroundEnabled = enabled;
+    }
+
+    /**
+     * Set the background color by name
+     * @param color color name (black, red, green, blue, yellow, purple, cyan, orange, pink, gray, white)
+     * @return true if color was valid and set, false otherwise
+     */
+    public static boolean setBackgroundColor(String color) {
+        switch (color.toLowerCase()) {
+            case "black":
+                currentBackgroundColor = BG_COLOR_BLACK;
+                return true;
+            case "red":
+                currentBackgroundColor = BG_COLOR_RED;
+                return true;
+            case "green":
+                currentBackgroundColor = BG_COLOR_GREEN;
+                return true;
+            case "blue":
+                currentBackgroundColor = BG_COLOR_BLUE;
+                return true;
+            case "yellow":
+                currentBackgroundColor = BG_COLOR_YELLOW;
+                return true;
+            case "purple":
+                currentBackgroundColor = BG_COLOR_PURPLE;
+                return true;
+            case "cyan":
+                currentBackgroundColor = BG_COLOR_CYAN;
+                return true;
+            case "orange":
+                currentBackgroundColor = BG_COLOR_ORANGE;
+                return true;
+            case "pink":
+                currentBackgroundColor = BG_COLOR_PINK;
+                return true;
+            case "gray":
+            case "grey":
+                currentBackgroundColor = BG_COLOR_GRAY;
+                return true;
+            case "white":
+                currentBackgroundColor = BG_COLOR_WHITE;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Get list of available background colors
+     * @return array of color names
+     */
+    public static String[] getAvailableColors() {
+        return new String[]{"black", "red", "green", "blue", "yellow", "purple", "cyan", "orange", "pink", "gray", "white"};
     }
 }

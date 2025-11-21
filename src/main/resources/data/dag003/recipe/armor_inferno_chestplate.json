@@ -52,7 +52,8 @@
         "text": "Inferno's Plate",
         "color": "#AA0000"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 500
     }
   }
 }

@@ -20,9 +20,18 @@ public class ModEntities {
                     .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "simple_npc")))
     );
 
+    public static final EntityType<InnkeeperGarrickNPC> INNKEEPER_GARRICK = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "innkeeper_garrick"),
+            EntityType.Builder.create(InnkeeperGarrickNPC::new, SpawnGroup.CREATURE)
+                    .dimensions(0.6f, 1.95f)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "innkeeper_garrick")))
+    );
+
     public static void initialize() {
         // Register entity attributes
         FabricDefaultAttributeRegistry.register(SIMPLE_NPC, SimpleNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(INNKEEPER_GARRICK, InnkeeperGarrickNPC.createMobAttributes());
 
         DagMod.LOGGER.info("Registering entities for " + DagMod.MOD_ID);
     }

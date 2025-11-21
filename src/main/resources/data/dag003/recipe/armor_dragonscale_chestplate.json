@@ -44,7 +44,7 @@
       "minecraft:lore": [
         "\"Forged from the remnants of the Ender Dragon, it carries a fragment of its might.\""
       ],
-      "minecraft:item_model": "dag_customs:dragonscale_chestplate",
+      "minecraft:item_model": "minecraft:dragonscale_chestplate",
       "minecraft:equippable": {
         "slot": "chest",
         "asset_id": "dragonscale"
@@ -56,7 +56,8 @@
         "text": "Dragonscale Chest",
         "color": "#3d0505"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 600
     }
   }
 }

@@ -30,7 +30,8 @@
         "text": "Fortuna's crown",
         "color": "#FFAA00"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 400
     }
   }
 }

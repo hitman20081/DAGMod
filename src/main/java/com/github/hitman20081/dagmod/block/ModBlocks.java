@@ -32,6 +32,12 @@ public class ModBlocks {
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "quest_block")))
                     .strength(2.0f)));
 
+    public static final Block JOB_BOARD_BLOCK = register("job_board",
+            new JobBoardBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "job_board")))
+                    .strength(2.0f)
+                    .sounds(BlockSoundGroup.WOOD)));
+
     // NEW: Class Selection Altar
     public static final Block CLASS_SELECTION_ALTAR = register("class_selection_altar",
             new ClassSelectionAltarBlock(AbstractBlock.Settings.create()
@@ -49,15 +55,14 @@ public class ModBlocks {
                     .requiresTool()
                     .luminance(state -> 10))); // Glows more than class altar
 
+    public static final Block SHIP_HELM = register("ship_helm",
+            new ShipHelmBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "ship_helm")))
+                    .strength(2.5f)
+                    .sounds(BlockSoundGroup.WOOD)
+                    .requiresTool()));
 
-    private static Block registerBlock(String name, Block block) {
-        registerBlockItem(name, block);
-        return Registry.register(Registries.BLOCK, Identifier.of(DagMod.MOD_ID, name), block);
-    }
 
-    private static void registerBlockItem(String name, Block block) {
-        Registry.register(Registries.ITEM, Identifier.of(DagMod.MOD_ID, name), new BlockItem(block, new Item.Settings()));
-    }
 
     public static void registerModBlocks() {
         DagMod.LOGGER.info("Registering Mod Blocks for " + DagMod.MOD_ID);
@@ -68,6 +73,9 @@ public class ModBlocks {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
                 .register((itemGroup) -> itemGroup.add(QUEST_BLOCK));
 
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+                .register((itemGroup) -> itemGroup.add(JOB_BOARD_BLOCK));
+
         // NEW: Add class altar to functional group
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
                 .register((itemGroup) -> itemGroup.add(CLASS_SELECTION_ALTAR));
@@ -76,7 +84,12 @@ public class ModBlocks {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
                 .register((itemGroup) -> itemGroup.add(RACE_SELECTION_ALTAR));
 
+        // NEW: Add ship helm to functional group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+                .register((itemGroup) -> itemGroup.add(SHIP_HELM));
+
         DagMod.LOGGER.info("Registering blocks for " + DagMod.MOD_ID);
     }
+
 
 }

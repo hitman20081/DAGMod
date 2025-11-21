@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "minecraft:naturesguard_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "minecraft:naturesguard_armor"
+      }
+    ]
+  }
+}

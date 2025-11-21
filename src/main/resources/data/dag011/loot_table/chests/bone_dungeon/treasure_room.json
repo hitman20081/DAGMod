@@ -9,7 +9,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:bone",
+          "name": "minecraft:cooked_beef",
           "weight": 20,
           "functions": [
             {
@@ -23,7 +23,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:bone_block",
+          "name": "minecraft:cooked_chicken",
           "weight": 15,
           "functions": [
             {
@@ -70,11 +70,17 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:enchanted_book",
+          "name": "minecraft:book",
           "weight": 8,
+          "conditions": [],
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:treasure"
+            },
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:exclusive_set/armor"
             }
           ]
         },
@@ -99,6 +105,20 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "minecraft:diamond_chestplate",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:enchanted_golden_apple",
           "weight": 1
         },
@@ -112,14 +132,75 @@
               "levels": {
                 "min": 20,
                 "max": 30
-              },
-              "treasure": true
+              }
             }
           ]
         },
         {
           "type": "minecraft:empty",
           "weight": 6
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_helmet",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_chestplate",
+          "weight": 1,
+          "conditions": [],
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_leggings",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_boots",
+          "weight": 1,
+          "conditions": [],
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ]
         }
       ]
     }

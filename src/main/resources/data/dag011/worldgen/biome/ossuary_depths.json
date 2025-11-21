@@ -63,9 +63,9 @@
     "creature": [
       {
         "type": "minecraft:skeleton",
-        "maxCount": 5,
-        "minCount": 1,
-        "weight": 100
+        "maxCount": 15,
+        "minCount": 10,
+        "weight": 60
       }
     ],
     "misc": [],
@@ -74,7 +74,7 @@
         "type": "minecraft:skeleton_horse",
         "maxCount": 2,
         "minCount": 1,
-        "weight": 50
+        "weight": 30
       },
       {
         "type": "minecraft:wither_skeleton",

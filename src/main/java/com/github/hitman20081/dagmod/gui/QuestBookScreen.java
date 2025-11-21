@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.client.font.TextRenderer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuestBookScreen extends Screen {
@@ -152,16 +153,12 @@ public class QuestBookScreen extends Screen {
             context.drawText(font, Text.literal(progress), textX + 5, textY, 0xFF666666, false);
             textY += 15;
 
-            // Show first 2 objectives
+            // Show first 2 objectives with text wrapping
             int objToShow = Math.min(2, quest.objectiveDescriptions().size());
             for (int j = 0; j < objToShow; j++) {
                 String obj = quest.objectiveDescriptions().get(j);
-                // Truncate if too long
-                if (font.getWidth(obj) > 140) {
-                    obj = obj.substring(0, 20) + "...";
-                }
-                context.drawText(font, Text.literal("- " + obj), textX + 5, textY, 0xFF000000, false);
-                textY += 10;
+                // Draw objective with wrapping (max 2 lines per objective)
+                textY = drawWrappedText(context, font, "- " + obj, textX + 5, textY, 135, 2, 0xFF000000);
             }
 
             if (quest.isCompleted()) {
@@ -177,23 +174,63 @@ public class QuestBookScreen extends Screen {
     }
 
     private void renderAvailableQuestsPage(DrawContext context, TextRenderer font, int textX, int textY) {
-        context.drawText(font, Text.literal("Available for Your Tier:"), textX, textY, 0xFF444444, false);
+        ClientQuestData data = ClientQuestData.getInstance();
+        List<QuestSyncPacket.QuestInfo> availableQuests = data.getAvailableQuests();
+
+        context.drawText(font, Text.literal("Available Quests:"), textX, textY, 0xFF444444, false);
         textY += 20;
 
-        context.drawText(font, Text.literal("Visit a Quest Block to see"), textX, textY, 0xFF666666, false);
+        if (availableQuests.isEmpty()) {
+            context.drawText(font, Text.literal("No quests available"), textX, textY, 0xFF666666, false);
+            textY += 15;
+            context.drawText(font, Text.literal("Complete more quests to"), textX, textY, 0xFF888888, false);
+            textY += 10;
+            context.drawText(font, Text.literal("unlock new ones!"), textX, textY, 0xFF888888, false);
+            return;
+        }
+
+        // Show first 4 available quests (space limited)
+        int questsToShow = Math.min(4, availableQuests.size());
+        for (int i = 0; i < questsToShow; i++) {
+            QuestSyncPacket.QuestInfo quest = availableQuests.get(i);
+
+            // Quest name with difficulty color
+            int difficultyColor = quest.difficulty().getColor();
+            String questName = quest.name();
+
+            // Truncate quest name if too long
+            if (font.getWidth(questName) > 150) {
+                while (font.getWidth(questName + "...") > 150 && questName.length() > 10) {
+                    questName = questName.substring(0, questName.length() - 1);
+                }
+                questName = questName + "...";
+            }
+
+            context.drawText(font, Text.literal(questName), textX, textY, difficultyColor, false);
+            textY += 12;
+
+            // Description - use text wrapping (allow up to 3 lines)
+            String desc = quest.description();
+            int maxWidth = 140;
+            int maxLines = 3; // Allow 3 lines for description
+            textY = drawWrappedText(context, font, desc, textX + 5, textY, maxWidth, maxLines, 0xFF666666);
+
+            // Show number of objectives
+            String objectives = quest.totalObjectives() + " objective" + (quest.totalObjectives() != 1 ? "s" : "");
+            context.drawText(font, Text.literal(objectives), textX + 5, textY, 0xFF888888, false);
+            textY += 15;
+        }
+
+        if (availableQuests.size() > 4) {
+            context.drawText(font, Text.literal("+" + (availableQuests.size() - 4) + " more available"),
+                    textX, textY, 0xFF888888, false);
+            textY += 10;
+        }
+
+        textY += 5;
+        context.drawText(font, Text.literal("Visit a Quest Block to"), textX, textY, 0xFF00AA00, false);
         textY += 10;
-        context.drawText(font, Text.literal("and accept available quests."), textX, textY, 0xFF666666, false);
-        textY += 20;
-
-        context.drawText(font, Text.literal("Quest Types:"), textX, textY, 0xFF444444, false);
-        textY += 15;
-        context.drawText(font, Text.literal("- Gathering quests"), textX, textY, 0xFF000000, false);
-        textY += 12;
-        context.drawText(font, Text.literal("- Combat quests"), textX, textY, 0xFF000000, false);
-        textY += 12;
-        context.drawText(font, Text.literal("- Class-specific quests"), textX, textY, 0xFF000000, false);
-        textY += 12;
-        context.drawText(font, Text.literal("- Quest chains"), textX, textY, 0xFF000000, false);
+        context.drawText(font, Text.literal("accept these quests!"), textX, textY, 0xFF00AA00, false);
     }
 
     private void renderStatisticsPage(DrawContext context, TextRenderer font, int textX, int textY) {
@@ -248,28 +285,34 @@ public class QuestBookScreen extends Screen {
         context.drawText(font, Text.literal("Achievements:"), textX, textY, 0xFF444444, false);
         textY += 20;
 
+        // Achievement 1: First Steps
         boolean hasCompleted = data.getTotalCompleted() > 0;
         int color = hasCompleted ? 0xFF00AA00 : 0xFF666666;
-        String check = hasCompleted ? "v" : "x";
+        String check = hasCompleted ? "✓" : "✗";
 
         context.drawText(font, Text.literal("First Steps"), textX, textY, color, false);
-        context.drawText(font, Text.literal(check + " Complete first quest"), textX + 80, textY, color, false);
-        textY += 15;
+        textY += 12;
+        context.drawText(font, Text.literal(check + " Complete first quest"), textX + 5, textY, color, false);
+        textY += 18;
 
+        // Achievement 2: Novice Complete
         boolean hasFive = data.getTotalCompleted() >= 5;
         color = hasFive ? 0xFF00AA00 : 0xFF666666;
-        check = hasFive ? "v" : "x";
+        check = hasFive ? "✓" : "✗";
 
         context.drawText(font, Text.literal("Novice Complete"), textX, textY, color, false);
-        context.drawText(font, Text.literal(check + " Complete 5 quests"), textX + 80, textY, color, false);
-        textY += 15;
+        textY += 12;
+        context.drawText(font, Text.literal(check + " Complete 5 quests"), textX + 5, textY, color, false);
+        textY += 18;
 
+        // Achievement 3: Apprentice Complete
         boolean hasTen = data.getTotalCompleted() >= 10;
         color = hasTen ? 0xFF00AA00 : 0xFF666666;
-        check = hasTen ? "v" : "x";
+        check = hasTen ? "✓" : "✗";
 
         context.drawText(font, Text.literal("Apprentice Complete"), textX, textY, color, false);
-        context.drawText(font, Text.literal(check + " Complete 10 quests"), textX + 80, textY, color, false);
+        textY += 12;
+        context.drawText(font, Text.literal(check + " Complete 10 quests"), textX + 5, textY, color, false);
     }
 
     // Add this helper method at the end of the class, before the closing brace:
@@ -279,6 +322,81 @@ public class QuestBookScreen extends Screen {
         context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
         context.fill(x, y, x + 1, y + height, color); // Left
         context.fill(x + width - 1, y, x + width, y + height, color); // Right
+    }
+
+
+    // ========== TEXT WRAPPING UTILITY METHODS ==========
+
+    /**
+     * Wraps text to fit within a maximum width, returning a list of lines.
+     * @param font The text renderer
+     * @param text The text to wrap
+     * @param maxWidth Maximum width in pixels
+     * @return List of wrapped text lines
+     */
+    private List<String> wrapText(TextRenderer font, String text, int maxWidth) {
+        List<String> lines = new ArrayList<>();
+        String[] words = text.split(" ");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            String testLine = currentLine.length() > 0
+                    ? currentLine.toString() + " " + word
+                    : word;
+
+            if (font.getWidth(testLine) <= maxWidth) {
+                if (currentLine.length() > 0) {
+                    currentLine.append(" ");
+                }
+                currentLine.append(word);
+            } else {
+                // Current line is full, start new line
+                if (currentLine.length() > 0) {
+                    lines.add(currentLine.toString());
+                    currentLine = new StringBuilder(word);
+                } else {
+                    // Single word is too long, add it anyway and truncate
+                    lines.add(word);
+                }
+            }
+        }
+
+        // Add the last line
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+
+        return lines;
+    }
+
+    /**
+     * Draws wrapped text with a maximum number of lines.
+     * If text exceeds maxLines, the last line ends with "..."
+     * @return The final Y position after drawing all lines
+     */
+    private int drawWrappedText(DrawContext context, TextRenderer font, String text,
+                                int x, int y, int maxWidth, int maxLines, int color) {
+        List<String> lines = wrapText(font, text, maxWidth);
+        int linesDrawn = 0;
+
+        for (int i = 0; i < lines.size() && linesDrawn < maxLines; i++) {
+            String line = lines.get(i);
+
+            // If this is the last line we can draw and there are more lines, add "..."
+            if (i == maxLines - 1 && lines.size() > maxLines) {
+                // Truncate to fit "..."
+                while (font.getWidth(line + "...") > maxWidth && line.length() > 3) {
+                    line = line.substring(0, line.length() - 1);
+                }
+                line = line + "...";
+            }
+
+            context.drawText(font, Text.literal(line), x, y, color, false);
+            y += 8; // Line height
+            linesDrawn++;
+        }
+
+        return y;
     }
 
     @Override

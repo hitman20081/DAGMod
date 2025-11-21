@@ -39,7 +39,7 @@
       ],
       "minecraft:equippable": {
         "slot": "offhand",
-        "asset_id": "dag_customs:celestial_shield"
+        "asset_id": "minecraft:celestial_shield"
       }
     },
     "count": 1,

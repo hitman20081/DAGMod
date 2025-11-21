@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "dagmod:block/quest_block"
+    "particle": "minecraft:block/bookshelf",
+    "down": "minecraft:block/oak_planks",
+    "up": "minecraft:block/chiseled_bookshelf_top",
+    "north": "minecraft:block/bookshelf",
+    "south": "minecraft:block/bookshelf",
+    "east": "minecraft:block/chiseled_bookshelf_side",
+    "west": "minecraft:block/chiseled_bookshelf_side"
   }
 }

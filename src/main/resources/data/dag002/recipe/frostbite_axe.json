@@ -25,7 +25,7 @@
         "minecraft:wind_burst": 10,
         "minecraft:frost_walker": 3
       },
-      "minecraft:item_model": "dag_customs:frostbite_axe"
+      "minecraft:item_model": "minecraft:frostbite_axe"
     }
   },
   "show_notification": true

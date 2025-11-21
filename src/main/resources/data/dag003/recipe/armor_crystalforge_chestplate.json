@@ -53,7 +53,7 @@
       "minecraft:lore": [
         "\"Glowing with mystical energy, this armor sharpens the senses of its wearer.\""
       ],
-      "minecraft:item_model": "dag_customs:crystalforge_chestplate",
+      "minecraft:item_model": "minecraft:crystalforge_chestplate",
       "minecraft:equippable": {
         "slot": "chest",
         "asset_id": "crystalforge"
@@ -65,7 +65,8 @@
         "text": "Crystalforge Chest",
         "color": "#9a22aa"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 500
     }
   }
 }

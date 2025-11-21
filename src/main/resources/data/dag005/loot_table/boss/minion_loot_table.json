@@ -6,26 +6,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:potion",
-          "weight": 15,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1,
-                "max": 3
-              },
-              "conditions": []
-            },
-            {
-              "function": "minecraft:set_potion",
-              "id": "minecraft:long_strength"
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
           "weight": 40,
           "functions": [
             {
@@ -108,22 +88,6 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 15,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:amethyst_shard",
-          "weight": 20
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
                 "max": 5,
                 "min": 1
               },
@@ -180,38 +144,6 @@
           ],
           "name": "minecraft:iron_chestplate",
           "weight": 3
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 15,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:echo_shard",
-          "weight": 20
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minecraft:shield",
-          "weight": 8
         },
         {
           "type": "minecraft:item",

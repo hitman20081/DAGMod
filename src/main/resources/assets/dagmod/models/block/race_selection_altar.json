@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "dagmod:block/race_selection_altar"
+    "particle": "minecraft:block/stone_bricks",
+    "down": "minecraft:block/smooth_stone",
+    "up": "minecraft:block/chiseled_stone_bricks",
+    "north": "minecraft:block/cracked_stone_bricks",
+    "south": "minecraft:block/cracked_stone_bricks",
+    "east": "minecraft:block/stone_bricks",
+    "west": "minecraft:block/stone_bricks"
   }
 }

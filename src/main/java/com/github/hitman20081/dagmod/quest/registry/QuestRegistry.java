@@ -6,7 +6,9 @@ import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestChain;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
+import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
+import net.minecraft.registry.tag.ItemTags;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
 import net.minecraft.entity.EntityType;
@@ -126,6 +128,15 @@ public class QuestRegistry {
         manager.registerQuest(createIdentityCrisisQuest());
         manager.registerQuest(createPathOfDestinyQuest());
         manager.registerQuest(createRebirthRitualQuest());
+
+        // NPC Quests
+        manager.registerQuest(createGarricksSpecialBrewQuest());
+
+        // ========== JOB BOARD QUESTS ==========
+        manager.registerQuest(createGatherCobblestoneJob());
+        manager.registerQuest(createHuntZombiesJob());
+        manager.registerQuest(createCollectWheatJob());
+        manager.registerQuest(createMineIronJob());
     }
 
     private static void registerQuestChains(QuestManager manager) {
@@ -133,13 +144,14 @@ public class QuestRegistry {
         QuestChain adventurerPath = new QuestChain(
                 "adventurer_path",
                 "The Adventurer's Path",
-                "Your first steps into the world of adventure. Master the basics of survival.",
+                "Your first steps into the world of adventure. Start at the inn!",
                 QuestData.QuestBookTier.NOVICE,
                 QuestData.QuestBookTier.APPRENTICE
         )
-                .addQuest("the_beginning")
-                .addQuest("equip_yourself")
-                .addQuest("ready_for_adventure")
+                .addQuest("garricks_special_brew")  // FIRST - Tutorial quest at the inn
+                .addQuest("the_beginning")          // SECOND - Basic tool gathering
+                .addQuest("equip_yourself")         // THIRD - Better equipment
+                .addQuest("ready_for_adventure")    // FOURTH - Advanced preparation
                 .addChainReward(new ItemReward(Items.IRON_SWORD, 1))
                 .addChainReward(new ItemReward(Items.EMERALD, 5))
                 .addChainReward(XpReward.apprentice());
@@ -211,6 +223,7 @@ public class QuestRegistry {
     private static Quest createDwarfApprenticeQuest() {
         return new Quest("dwarf_apprentice")
                 .setName("Apprentice of the Forge")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Every dwarf must prove their worth at the forge. Gather materials for your first creation.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredRace("Dwarf")
@@ -225,6 +238,7 @@ public class QuestRegistry {
     private static Quest createDeepDelvingQuest() {
         return new Quest("deep_delving")
                 .setName("Deep Delving")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The deepest treasures lie far below. Mine at the lowest depths to find rare ores.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredRace("Dwarf")
@@ -241,6 +255,7 @@ public class QuestRegistry {
     private static Quest createAncientAlloysQuest() {
         return new Quest("ancient_alloys")
                 .setName("Ancient Alloys")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Learn the secrets of dwarven metallurgy. Craft with the strongest materials.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredRace("Dwarf")
@@ -257,6 +272,7 @@ public class QuestRegistry {
     private static Quest createMountainKingsTributeQuest() {
         return new Quest("mountain_kings_tribute")
                 .setName("Mountain King's Tribute")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Gather a tribute worthy of the Mountain Kings of old.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Dwarf")
@@ -273,6 +289,7 @@ public class QuestRegistry {
     private static Quest createRubyInTheRoughQuest() {
         return new Quest("ruby_in_rough")
                 .setName("Ruby in the Rough")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Find the rarest gems hidden in the deepest caverns.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Dwarf")
@@ -289,6 +306,7 @@ public class QuestRegistry {
     private static Quest createNetherForgeQuest() {
         return new Quest("nether_forge")
                 .setName("The Nether Forge")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Brave the Nether to gather materials for the ultimate forge.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Dwarf")
@@ -305,6 +323,7 @@ public class QuestRegistry {
     private static Quest createMasterBlacksmithQuest() {
         return new Quest("master_blacksmith")
                 .setName("Master Blacksmith")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Craft the finest armor and weapons known to dwarf-kind.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Dwarf")
@@ -321,6 +340,7 @@ public class QuestRegistry {
     private static Quest createRuneOfPowerQuest() {
         return new Quest("rune_of_power")
                 .setName("Rune of Power")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Inscribe ancient dwarven runes into your masterwork equipment.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Dwarf")
@@ -337,6 +357,7 @@ public class QuestRegistry {
     private static Quest createHeartOfMountainQuest() {
         return new Quest("heart_of_mountain")
                 .setName("Heart of the Mountain")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Descend to the world's core and retrieve the legendary Heart of the Mountain.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Dwarf")
@@ -353,6 +374,7 @@ public class QuestRegistry {
     private static Quest createForgemasterLegacyQuest() {
         return new Quest("forgemaster_legacy")
                 .setName("The Forgemaster's Legacy")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Complete your journey and become a true Forgemaster, worthy of the ancient dwarven halls.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Dwarf")
@@ -397,6 +419,7 @@ public class QuestRegistry {
     private static Quest createSeedlingQuest() {
         return new Quest("seedling")
                 .setName("The Seedling")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Every great forest begins with a single seed. Plant the foundations of a thriving woodland.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Elf")
@@ -411,6 +434,7 @@ public class QuestRegistry {
     private static Quest createRootsRunDeepQuest() {
         return new Quest("roots_run_deep")
                 .setName("Roots Run Deep")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The ancient trees remember. Gather wood from the eldest groves.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Elf")
@@ -427,6 +451,7 @@ public class QuestRegistry {
     private static Quest createBowmastersTrialQuest() {
         return new Quest("bowmasters_trial")
                 .setName("Bowmaster's Trial")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Master the sacred art of the bow. Hunt with precision and honor.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Elf")
@@ -443,6 +468,7 @@ public class QuestRegistry {
     private static Quest createCorruptedGroveQuest() {
         return new Quest("corrupted_grove")
                 .setName("The Corrupted Grove")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Darkness has taken root in the sacred groves. Cleanse the corruption.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Elf")
@@ -459,6 +485,7 @@ public class QuestRegistry {
     private static Quest createWhispersOfLeavesQuest() {
         return new Quest("whispers_of_leaves")
                 .setName("Whispers of the Leaves")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The forest speaks to those who listen. Gather its gifts with reverence.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Elf")
@@ -475,6 +502,7 @@ public class QuestRegistry {
     private static Quest createSilverBowQuest() {
         return new Quest("silver_bow")
                 .setName("The Silver Bow")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Craft a bow worthy of the ancient elven rangers. Imbue it with moonlight.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Elf")
@@ -491,6 +519,7 @@ public class QuestRegistry {
     private static Quest createWildernessWardenQuest() {
         return new Quest("wilderness_warden")
                 .setName("Wilderness Warden")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Protect the sacred places. Drive back those who would defile nature.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Elf")
@@ -507,6 +536,7 @@ public class QuestRegistry {
     private static Quest createWorldTreeSaplingQuest() {
         return new Quest("world_tree_sapling")
                 .setName("The World Tree's Sapling")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Seek the legendary World Tree's offspring, hidden in the deepest forests.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Elf")
@@ -523,6 +553,7 @@ public class QuestRegistry {
     private static Quest createMoonlitRitualQuest() {
         return new Quest("moonlit_ritual")
                 .setName("The Moonlit Ritual")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Under the full moon, perform the ancient ritual of renewal.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Elf")
@@ -539,6 +570,7 @@ public class QuestRegistry {
     private static Quest createForestLordQuest() {
         return new Quest("forest_lord")
                 .setName("Forest Lord")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Achieve mastery over nature itself. Become one with the eternal forest.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Elf")
@@ -583,6 +615,7 @@ public class QuestRegistry {
     private static Quest createWandererQuest() {
         return new Quest("wanderer")
                 .setName("The Wanderer")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Humans thrive through adaptability. Begin your journey by mastering the basics of survival.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Human")
@@ -598,6 +631,7 @@ public class QuestRegistry {
     private static Quest createTasteOfEverythingQuest() {
         return new Quest("taste_of_everything")
                 .setName("A Taste of Everything")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("True versatility comes from experiencing all aspects of life. Craft items from diverse categories.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Human")
@@ -615,6 +649,7 @@ public class QuestRegistry {
     private static Quest createWorldTravelerQuest() {
         return new Quest("world_traveler")
                 .setName("World Traveler")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Explore the diverse biomes of the world. Adaptability requires understanding all environments.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Human")
@@ -632,6 +667,7 @@ public class QuestRegistry {
     private static Quest createMasterTraderQuest() {
         return new Quest("master_trader")
                 .setName("Master Trader")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Humans excel at diplomacy and trade. Build relationships with the world's merchants.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Human")
@@ -648,6 +684,7 @@ public class QuestRegistry {
     private static Quest createRenaissanceScholarQuest() {
         return new Quest("renaissance_scholar")
                 .setName("Renaissance Scholar")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Knowledge is power. Master the arts of enchanting, brewing, and crafting.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Human")
@@ -665,6 +702,7 @@ public class QuestRegistry {
     private static Quest createBridgeBuilderQuest() {
         return new Quest("bridge_builder")
                 .setName("The Bridge Builder")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Humans unite disparate peoples. Gather resources that span all realms.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Human")
@@ -681,6 +719,7 @@ public class QuestRegistry {
     private static Quest createHerosJourneyQuest() {
         return new Quest("heros_journey")
                 .setName("Hero's Journey")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Prove yourself against the greatest challenges. Complete tasks from all walks of life.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Human")
@@ -697,6 +736,7 @@ public class QuestRegistry {
     private static Quest createDiplomaticMissionQuest() {
         return new Quest("diplomatic_mission")
                 .setName("Diplomatic Mission")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Forge alliances with all peoples. Gather tributes from every corner of the realm.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Human")
@@ -713,6 +753,7 @@ public class QuestRegistry {
     private static Quest createMasterOfAllTradesQuest() {
         return new Quest("master_of_all_trades")
                 .setName("Master of All Trades")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Achieve true mastery. Demonstrate expertise in combat, crafting, and exploration.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Human")
@@ -729,6 +770,7 @@ public class QuestRegistry {
     private static Quest createLegendQuest() {
         return new Quest("legend")
                 .setName("Legend")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Transcend mortality. Become a legend whose name echoes through the ages.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Human")
@@ -775,6 +817,7 @@ public class QuestRegistry {
     private static Quest createGruntQuest() {
         return new Quest("grunt")
                 .setName("The Grunt")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Every warrior begins as a grunt. Prove your strength in combat and bring meat for the clan.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Orc")
@@ -790,6 +833,7 @@ public class QuestRegistry {
     private static Quest createProveYourStrengthQuest() {
         return new Quest("prove_your_strength")
                 .setName("Prove Your Strength")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The weak fall, the strong survive. Deal devastating blows to your enemies.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Orc")
@@ -806,6 +850,7 @@ public class QuestRegistry {
     private static Quest createHuntTheMightyQuest() {
         return new Quest("hunt_the_mighty")
                 .setName("Hunt the Mighty")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Only the greatest hunters can claim the mightiest trophies. Bring down powerful beasts.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Orc")
@@ -822,6 +867,7 @@ public class QuestRegistry {
     private static Quest createRaidLeaderQuest() {
         return new Quest("raid_leader")
                 .setName("Raid Leader")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Lead your warriors to victory. Complete dangerous raids and emerge triumphant.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Orc")
@@ -838,6 +884,7 @@ public class QuestRegistry {
     private static Quest createBloodAndIronQuest() {
         return new Quest("blood_and_iron")
                 .setName("Blood and Iron")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Forge weapons in the fires of battle. Gather the materials of war.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Orc")
@@ -854,6 +901,7 @@ public class QuestRegistry {
     private static Quest createBattleScarsQuest() {
         return new Quest("battle_scars")
                 .setName("Battle Scars")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Every scar tells a story of survival. Face the deadliest foes and live to tell the tale.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Orc")
@@ -870,6 +918,7 @@ public class QuestRegistry {
     private static Quest createChampionOfTheClanQuest() {
         return new Quest("champion_of_clan")
                 .setName("Champion of the Clan")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Rise above your peers. Become the champion your clan needs.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Orc")
@@ -886,6 +935,7 @@ public class QuestRegistry {
     private static Quest createConquerTheNetherQuest() {
         return new Quest("conquer_the_nether")
                 .setName("Conquer the Nether")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The Nether belongs to the strong. Claim its treasures through might and fury.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Orc")
@@ -902,6 +952,7 @@ public class QuestRegistry {
     private static Quest createChallengeTheWitherQuest() {
         return new Quest("challenge_the_wither")
                 .setName("Challenge the Wither")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Only the mightiest warriors dare challenge the Wither. Prove you are worthy.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Orc")
@@ -917,6 +968,7 @@ public class QuestRegistry {
     private static Quest createWarlordQuest() {
         return new Quest("warlord")
                 .setName("Warlord")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("You have conquered all challenges. Claim your place as Warlord, the ultimate warrior.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredClass("Orc")
@@ -962,6 +1014,7 @@ public class QuestRegistry {
     private static Quest createTrialOfFuryQuest() {
         return new Quest("trial_of_fury")
                 .setName("Trial of Fury")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("Awaken the berserker within. Prove your warrior spirit by defeating enemies in honorable combat.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Warrior")
@@ -976,6 +1029,7 @@ public class QuestRegistry {
     private static Quest createCallToArmsQuest() {
         return new Quest("call_to_arms")
                 .setName("Call to Arms")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("A true warrior rallies allies to battle. Gather the materials to forge a legendary war horn.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Warrior")
@@ -992,6 +1046,7 @@ public class QuestRegistry {
     private static Quest createShieldBearersTrialQuest() {
         return new Quest("shield_bearers_trial")
                 .setName("Shield Bearer's Trial")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("Master the ancient technique of Shield Bash. Face powerful foes and emerge victorious.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Warrior")
@@ -1028,6 +1083,7 @@ public class QuestRegistry {
     private static Quest createApprenticeScrollsQuest() {
         return new Quest("apprentice_scrolls")
                 .setName("Apprentice's Scrolls")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("Begin your magical journey. Gather components to create basic spell scrolls.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Mage")
@@ -1043,6 +1099,7 @@ public class QuestRegistry {
     private static Quest createAdeptScrollsQuest() {
         return new Quest("adept_scrolls")
                 .setName("Adept's Scrolls")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("Your magical prowess grows. Gather rare materials to craft more powerful spell scrolls.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Mage")
@@ -1059,6 +1116,7 @@ public class QuestRegistry {
     private static Quest createMasterScrollsQuest() {
         return new Quest("master_scrolls")
                 .setName("Master's Scrolls")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("Unlock the most devastating spells. Gather legendary components for ultimate power.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Mage")
@@ -1094,6 +1152,7 @@ public class QuestRegistry {
     private static Quest createShadowsCallingQuest() {
         return new Quest("shadows_calling")
                 .setName("Shadow's Calling")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("The path of stealth begins in darkness. Gather components for your first shadowy tools.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredClass("Rogue")
@@ -1109,6 +1168,7 @@ public class QuestRegistry {
     private static Quest createPhantomHunterQuest() {
         return new Quest("phantom_hunter")
                 .setName("Phantom Hunter")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("To master stealth, you must learn from creatures of the night sky. Hunt phantoms and claim their essence.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredClass("Rogue")
@@ -1124,6 +1184,7 @@ public class QuestRegistry {
     private static Quest createEchoesOfTheDeepQuest() {
         return new Quest("echoes_of_the_deep")
                 .setName("Echoes of the Deep")
+                .setCategory(Quest.QuestCategory.CLASS)
                 .setDescription("Venture into the ancient cities to claim the Echo Shard - the final component for your Rogue Ability Tome.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredClass("Rogue")
@@ -1155,24 +1216,49 @@ public class QuestRegistry {
         manager.registerQuestChain(rogueChain);
     }
 
+    // ========== INNKEEPER GARRICK QUEST ==========
+
+    /**
+     * Garrick's Special Brew - Early game fetch quest from Innkeeper Garrick
+     * Rewards: Emeralds and custom food item
+     * A simple gathering quest to help the barkeep create his special brew.
+     * Uses common Overworld materials for early game accessibility.
+     */
+    private static Quest createGarricksSpecialBrewQuest() {
+        return new Quest("garricks_special_brew")
+                .setName("Garrick's Welcome")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("Innkeeper Garrick welcomes all newcomers with a simple task. " +
+                        "A perfect introduction to the quest system!")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(new CollectObjective(Items.WHEAT, 3))
+                .addObjective(new CollectObjective(Items.APPLE, 1))
+                .addReward(new ItemReward(Items.BREAD, 5))
+                .addReward(new ItemReward(Items.EMERALD, 3))
+                .addReward(XpReward.novice());
+    }
+
     // ========== ADVENTURER'S PATH CHAIN QUESTS ==========
 
     private static Quest createTheBeginningQuest() {
         return new Quest("the_beginning")
                 .setName("The Beginning")
-                .setDescription("Every adventurer needs basic tools. Start your journey here.")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("Gather wood for basic tools. Any logs will do - use what's nearby!")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new CollectObjective(Items.OAK_LOG, 5))
+                .addObjective(new TagCollectObjective(ItemTags.LOGS, 3, "Logs (any type)"))
                 .addReward(new ItemReward(Items.WOODEN_AXE, 1))
+                .addReward(new ItemReward(Items.STICK, 4))
                 .addReward(XpReward.novice());
     }
 
     private static Quest createEquipYourselfQuest() {
         return new Quest("equip_yourself")
                 .setName("Equip Yourself")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Now that you have an axe, gather materials for better tools.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new CollectObjective(Items.OAK_LOG, 10))
+                .addObjective(new TagCollectObjective(ItemTags.LOGS, 10, "Logs (any type)"))
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 16))
                 .addReward(new ItemReward(Items.STONE_SWORD, 1))
                 .addReward(new ItemReward(Items.STONE_PICKAXE, 1))
@@ -1183,6 +1269,7 @@ public class QuestRegistry {
     private static Quest createReadyForAdventureQuest() {
         return new Quest("ready_for_adventure")
                 .setName("Ready for Adventure")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Stock up on supplies. Your real adventure begins now!")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.BREAD, 8))
@@ -1198,6 +1285,7 @@ public class QuestRegistry {
     private static Quest createVillageFounderQuest() {
         return new Quest("village_founder")
                 .setName("Village Founder")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Start building the foundation of a great village.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 128))
@@ -1209,6 +1297,7 @@ public class QuestRegistry {
     private static Quest createVillageBuilderQuest() {
         return new Quest("village_builder")
                 .setName("Village Builder")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The village is expanding! Help construct new buildings.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 64))
@@ -1223,6 +1312,7 @@ public class QuestRegistry {
     private static Quest createLivestockKeeperQuest() {
         return new Quest("livestock_keeper")
                 .setName("Livestock Keeper")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Establish proper livestock management for the village.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.BEEF, 8))
@@ -1239,6 +1329,7 @@ public class QuestRegistry {
     private static Quest createVillageDefenderQuest() {
         return new Quest("village_defender")
                 .setName("Village Defender")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Protect the growing village from threats.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(KillObjective.zombies(10))
@@ -1251,6 +1342,7 @@ public class QuestRegistry {
     private static Quest createVillageMasterQuest() {
         return new Quest("village_master")
                 .setName("Village Master")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Complete the transformation into a thriving settlement.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(new CollectObjective(Items.EMERALD, 15))
@@ -1266,6 +1358,7 @@ public class QuestRegistry {
     private static Quest createToolmakerQuest() {
         return new Quest("toolmaker")
                 .setName("The Toolmaker")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The village blacksmith needs help creating quality tools.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.IRON_INGOT, 16))
@@ -1280,6 +1373,7 @@ public class QuestRegistry {
     private static Quest createIronMinerQuest() {
         return new Quest("iron_miner")
                 .setName("Iron Miner")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The village needs iron for advanced tools and armor.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(new CollectObjective(Items.RAW_IRON, 24))
@@ -1294,6 +1388,7 @@ public class QuestRegistry {
     private static Quest createMasterCrafterQuest() {
         return new Quest("master_crafter")
                 .setName("Master Crafter")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Prove your mastery by gathering the rarest materials.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .addObjective(new CollectObjective(Items.DIAMOND, 5))
@@ -1311,6 +1406,7 @@ public class QuestRegistry {
     private static Quest createMonsterHunterQuest() {
         return new Quest("monster_hunter")
                 .setName("Monster Hunter")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The village is under threat! Clear out dangerous creatures.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(KillObjective.zombies(3))
@@ -1324,6 +1420,7 @@ public class QuestRegistry {
     private static Quest createCaveCleanerQuest() {
         return new Quest("cave_cleaner")
                 .setName("Cave Cleaner")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("The mines are infested with dangerous creatures. Make them safe.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(KillObjective.spiders(4))
@@ -1337,6 +1434,7 @@ public class QuestRegistry {
     private static Quest createNightWatchQuest() {
         return new Quest("night_watch")
                 .setName("Night Watch")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Protect the village through the dangerous night hours.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(KillObjective.zombies(8))
@@ -1351,6 +1449,7 @@ public class QuestRegistry {
     private static Quest createBountyHunterQuest() {
         return new Quest("bounty_hunter")
                 .setName("Bounty Hunter")
+                .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Eliminate threats and collect proof of your victories.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(KillObjective.zombies(5))
@@ -1367,6 +1466,7 @@ public class QuestRegistry {
     private static Quest createDeepMinerQuest() {
         return new Quest("deep_miner")
                 .setName("Deep Miner")
+                .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("Venture into the depths to gather precious resources.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(new CollectObjective(Items.IRON_ORE, 20))
@@ -1388,6 +1488,7 @@ public class QuestRegistry {
     private static Quest createIdentityCrisisQuest() {
         return new Quest("identity_crisis")
                 .setName("Identity Crisis")
+                .setCategory(Quest.QuestCategory.SIDE)
                 .setDescription("You've begun to question your heritage. Perhaps there's another path for you? " +
                         "Collect materials from all racial homelands to undergo the Ritual of Rebirth.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
@@ -1423,6 +1524,7 @@ public class QuestRegistry {
     private static Quest createPathOfDestinyQuest() {
         return new Quest("path_of_destiny")
                 .setName("Path of Destiny")
+                .setCategory(Quest.QuestCategory.SIDE)
                 .setDescription("You've mastered your current class, but feel the call of a different destiny. " +
                         "Prove your versatility to earn the right to choose a new path.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
@@ -1457,6 +1559,7 @@ public class QuestRegistry {
     private static Quest createRebirthRitualQuest() {
         return new Quest("rebirth_ritual")
                 .setName("The Rebirth Ritual")
+                .setCategory(Quest.QuestCategory.SIDE)
                 .setDescription("You seek to completely remake yourself - race, class, everything. " +
                         "This ancient ritual requires the ultimate sacrifice and the rarest of materials. " +
                         "Are you certain this is your path?")
@@ -1484,4 +1587,54 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
                 .addReward(XpReward.master());
     }
+
+    // ========== JOB BOARD QUESTS ==========
+
+    private static Quest createGatherCobblestoneJob() {
+        return new Quest("gather_cobblestone")
+                .setName("Gather Cobblestone")
+                .setCategory(Quest.QuestCategory.JOB)
+                .setDescription("The town needs building materials. Gather cobblestone.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(new CollectObjective(Items.COBBLESTONE, 64))
+                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createHuntZombiesJob() {
+        return new Quest("hunt_zombies")
+                .setName("Hunt Zombies")
+                .setCategory(Quest.QuestCategory.JOB)
+                .setDescription("Clear out the undead threats near town.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(KillObjective.zombies(10))
+                .addReward(new ItemReward(Items.EMERALD, 3))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createCollectWheatJob() {
+        return new Quest("collect_wheat")
+                .setName("Collect Wheat")
+                .setCategory(Quest.QuestCategory.JOB)
+                .setDescription("The baker needs wheat for bread.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(new CollectObjective(Items.WHEAT, 32))
+                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new ItemReward(Items.BREAD, 8))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createMineIronJob() {
+        return new Quest("mine_iron")
+                .setName("Mine Raw Iron")
+                .setCategory(Quest.QuestCategory.JOB)
+                .setDescription("The blacksmith needs raw iron.")
+                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .addObjective(new CollectObjective(Items.RAW_IRON, 16))
+                .addReward(new ItemReward(Items.EMERALD, 4))
+                .addReward(XpReward.apprentice());
+    }
+
+
+
 }

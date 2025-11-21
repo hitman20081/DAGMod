@@ -21,6 +21,18 @@ public class Quest {
     private String requiredClass = null; // "Warrior", "Mage", "Rogue", or null for any class
     private String requiredRace = null; // "Dwarf", "Elf", "Human", "Orc", or null for any race
 
+    // NEW: Quest category
+    private QuestCategory category = QuestCategory.SIDE; // Default to SIDE
+
+    // Quest category types
+    public enum QuestCategory {
+        MAIN,       // Main story/progression quests
+        SIDE,       // Optional side quests
+        CLASS,      // Class-specific quests
+        DAILY,      // Daily repeatable quests
+        JOB         // Job board gathering/crafting quests
+    }
+
     // Quest difficulty levels
     public enum QuestDifficulty {
         NOVICE("Novice", 0x00FF00),    // Green
@@ -128,6 +140,7 @@ public class Quest {
         return requiredRace != null;
     }
 
+
     // Getters
     public String getId() { return id; }
     public String getName() { return name; }
@@ -174,5 +187,15 @@ public class Quest {
 
     public boolean isClassRestricted() {
         return requiredClass != null;
+    }
+
+    // NEW: Category methods
+    public Quest setCategory(QuestCategory category) {
+        this.category = category;
+        return this;
+    }
+
+    public QuestCategory getCategory() {
+        return category;
     }
 }

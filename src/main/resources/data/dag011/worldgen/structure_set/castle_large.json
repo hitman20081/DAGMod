@@ -15,5 +15,9 @@
       0,
       0
     ]
+  },
+  "exclusion_zone": {
+    "other_set": "dag011:village_npc_set",
+    "chunk_count": 25
   }
 }

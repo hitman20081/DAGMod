@@ -6,14 +6,19 @@ import com.github.hitman20081.dagmod.bone_realm.client.SkeletonKingRenderer;
 import com.github.hitman20081.dagmod.bone_realm.client.SkeletonLordRenderer;
 import com.github.hitman20081.dagmod.bone_realm.client.SkeletonSummonerRenderer;
 import com.github.hitman20081.dagmod.bone_realm.entity.BoneRealmEntityRegistry;
+import com.github.hitman20081.dagmod.entity.ModEntities;
+import com.github.hitman20081.dagmod.entity.client.SimpleNPCRenderer;
+import com.github.hitman20081.dagmod.entity.client.InnkeeperGarrickRenderer;
 import com.github.hitman20081.dagmod.class_system.mana.ManaNetworking;
 import com.github.hitman20081.dagmod.class_system.mana.client.ClientManaData;
 import com.github.hitman20081.dagmod.class_system.mana.client.ManaHudRenderer;
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.progression.client.ClientProgressionData;
 import com.github.hitman20081.dagmod.progression.client.ProgressionHUD;
+import com.github.hitman20081.dagmod.progression.client.ToggleProgressionHUDCommand;
 import com.github.hitman20081.dagmod.quest.ClientQuestData;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -24,6 +29,10 @@ public class DagModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         System.out.println("DAGMod client initializing...");
+
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+            ToggleProgressionHUDCommand.register(dispatcher);
+        });
 
         // Register progression system FIRST (before any packets)
         ClientProgressionData.registerClientPackets();
@@ -65,6 +74,12 @@ public class DagModClient implements ClientModInitializer {
         EntityRendererRegistry.register(BoneRealmEntityRegistry.SKELETON_LORD, SkeletonLordRenderer::new);
         EntityRendererRegistry.register(BoneRealmEntityRegistry.BONELING, BonelingRenderer::new);
         EntityRendererRegistry.register(BoneRealmEntityRegistry.SKELETON_SUMMONER, SkeletonSummonerRenderer::new);
+
+        // Register SimpleNPC renderer
+        EntityRendererRegistry.register(ModEntities.SIMPLE_NPC, SimpleNPCRenderer::new);
+
+        // Register Innkeeper Garrick renderer
+        EntityRendererRegistry.register(ModEntities.INNKEEPER_GARRICK, InnkeeperGarrickRenderer::new);
 
         System.out.println("Entity renderers registered!");
     }

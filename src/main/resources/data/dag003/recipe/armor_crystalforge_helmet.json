@@ -53,7 +53,7 @@
       "minecraft:lore": [
         "\"Glowing with mystical energy, this armor sharpens the senses of its wearer.\""
       ],
-      "minecraft:item_model": "dag_customs:crystalforge_helmet",
+      "minecraft:item_model": "minecraft:crystalforge_helmet",
       "minecraft:equippable": {
         "slot": "head",
         "asset_id": "crystalforge"
@@ -65,7 +65,8 @@
         "text": "Crystalforge Helmet",
         "color": "#9a22aa"
       },
-      "minecraft:rarity": "epic"
+      "minecraft:rarity": "epic",
+      "minecraft:max_damage": 500
     }
   }
 }

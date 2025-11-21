@@ -16,8 +16,8 @@ public class QuestNetworkHandler {
         QuestManager manager = QuestManager.getInstance();
         QuestData playerData = manager.getPlayerData(player);
 
-        // Build quest info list
-        List<QuestSyncPacket.QuestInfo> questInfos = new ArrayList<>();
+        // Build active quest info list
+        List<QuestSyncPacket.QuestInfo> activeQuestInfos = new ArrayList<>();
 
         for (Quest quest : playerData.getActiveQuests()) {
             List<String> objectiveDescs = new ArrayList<>();
@@ -30,7 +30,7 @@ public class QuestNetworkHandler {
                 }
             }
 
-            questInfos.add(new QuestSyncPacket.QuestInfo(
+            activeQuestInfos.add(new QuestSyncPacket.QuestInfo(
                     quest.getId(),
                     quest.getName(),
                     quest.getDescription(),
@@ -42,13 +42,37 @@ public class QuestNetworkHandler {
             ));
         }
 
-        // Send sync packet
+        // NEW: Build available quest info list
+        List<QuestSyncPacket.QuestInfo> availableQuestInfos = new ArrayList<>();
+        List<Quest> availableQuests = manager.getAvailableQuests(player);
+
+        for (Quest quest : availableQuests) {
+            List<String> objectiveDescs = new ArrayList<>();
+
+            for (QuestObjective obj : quest.getObjectives()) {
+                objectiveDescs.add(obj.getDisplayText().getString());
+            }
+
+            availableQuestInfos.add(new QuestSyncPacket.QuestInfo(
+                    quest.getId(),
+                    quest.getName(),
+                    quest.getDescription(),
+                    quest.getDifficulty(),
+                    0,  // Not started yet, so 0 objectives complete
+                    quest.getObjectives().size(),
+                    false,  // Not completed
+                    objectiveDescs
+            ));
+        }
+
+        // Send sync packet with both active and available quests
         QuestSyncPacket syncPacket = new QuestSyncPacket(
                 playerData.getQuestBookTier(),
                 playerData.getActiveQuestCount(),
                 playerData.getMaxActiveQuests(),
                 playerData.getTotalQuestsCompleted(),
-                questInfos
+                activeQuestInfos,
+                availableQuestInfos  // NEW: Include available quests
         );
 
         ServerPlayNetworking.send(player, syncPacket);

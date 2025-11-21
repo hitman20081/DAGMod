@@ -60,6 +60,14 @@ public class ModItems {
     public static final Item MASTER_QUEST_TOME = register("master_quest_tome",
             settings -> new QuestBookItem(settings, QuestData.QuestBookTier.MASTER), new Item.Settings().maxCount(1));
 
+    // Tutorial Quest Notes - Given by Innkeeper Garrick
+    public static final Item GARRICKS_FIRST_NOTE = register("garricks_first_note",
+            Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
+    public static final Item GARRICKS_SECOND_NOTE = register("garricks_second_note",
+            Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
+    public static final Item GARRICKS_THIRD_NOTE = register("garricks_third_note",
+            Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
+
     // NEW: Class Selection System Items
     public static final Item CLASS_SELECTION_TOME = register("class_selection_tome",
             ClassSelectionTomeItem::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
