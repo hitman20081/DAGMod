@@ -5,6 +5,57 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1-beta] - 2025-11-23
+
+### Fixed - Tutorial & Quest System Bugs
+
+**Tutorial Task Ordering**:
+- Fixed tutorial tasks completing out of order
+- Added prerequisite checks: Task 1 must complete before Task 2, Task 2 before Task 3
+- Added Task 1 completion check to mob kill event handler (DagMod.java:584-586)
+
+**Tutorial Task 2 Note Issue**:
+- Fixed Task 2 not giving Garrick's Second Note to player
+- Removed auto-complete logic from `PlayerDataManager.incrementTask2MobKills()` (line 389-395)
+- Only Innkeeper Garrick dialogue now marks Task 2 complete and gives the note
+- Added sequential task enforcement in `InnkeeperGarrickNPC` dialogue logic (lines 98-118)
+
+**Quest Note Consumption**:
+- Fixed Quest Notes not being consumed when creating Quest Book at Quest Block
+- Replaced unreliable `.contains()` with custom `hasItemInInventory()` helper method (QuestBlock.java:499-507)
+- Notes are now properly removed from inventory when combining
+
+**Quest System**:
+- Removed debug messages from QuestRegistry and QuestBlock
+- Added CLASS category to Quest Block filter so class-specific quests appear (QuestBlock.java:176-181)
+- Removed "The Beginning" quest due to buggy TagCollectObjective with ItemTags.LOGS
+
+### Changed - Quest Reward Rebalancing
+
+**Fixed Backwards Progression** (Stone/Leather → Iron/Chainmail minimum):
+- **Equip Yourself**: Stone Sword + Stone Pickaxe → Iron Sword + Iron Pickaxe + Iron Axe
+- **Ready for Adventure**: Leather Boots + Leather Helmet → Iron Boots + Iron Helmet + Beef Stew + Golden Apples
+- **The Wanderer** (Human): Stone Sword + Stone Pickaxe → Iron Sword + Iron Pickaxe + Mystic Stew + Golden Apple Strudel
+- **The Grunt** (Orc): Leather Chestplate → Chainmail Chestplate + Iron Axe + Savory Beef Roast + Molten Chili
+- **Shadow's Calling** (Rogue): Leather Boots → Chainmail Boots + Golden Apples
+
+**Added Custom Foods to Quest Rewards**:
+- **Garrick's Welcome**: Added Honey Bread + Candied Apple (replaced plain Bread)
+- **Apprentice of the Forge** (Dwarf): Added Beef Stew + Honey Bread
+- **The Seedling** (Elf): Added Elven Bread + Glowberry Jam
+- All custom foods are universal items (safe for any class to use)
+
+**Design Philosophy**:
+- NOVICE tier quests now give Iron/Chainmail minimum (no stone/leather gear)
+- Race quests include culturally themed custom foods
+- Class-specific items (scrolls, ability items) ONLY appear in matching CLASS quests
+- Created `CUSTOM_ITEM_CATEGORIES.md` reference guide
+
+### Removed
+- **"The Beginning" quest**: Collection quest with 3 oak logs removed due to TagCollectObjective bugs
+- Castle structure files: Removed castle_fort.nbt (12MB) and castle_large.nbt (2.3MB) to reduce mod size
+- Kept castle_medieval.nbt and castle_pale_garden.nbt for future dimension implementations
+
 ## [1.5.0-beta] - 2025-11-19
 
 ### Added - Comprehensive Tutorial System

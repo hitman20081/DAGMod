@@ -68,13 +68,13 @@ public class QuestBlock extends Block {
             }
 
             // Check if player has all 3 quest notes (tutorial completion)
-            boolean hasNote1 = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_FIRST_NOTE));
-            boolean hasNote2 = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE));
-            boolean hasNote3 = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_THIRD_NOTE));
-            boolean hasQuestBook = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK)) ||
-                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.APPRENTICE_QUEST_BOOK)) ||
-                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.EXPERT_QUEST_BOOK)) ||
-                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.MASTER_QUEST_TOME));
+            boolean hasNote1 = hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.GARRICKS_FIRST_NOTE);
+            boolean hasNote2 = hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE);
+            boolean hasNote3 = hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.GARRICKS_THIRD_NOTE);
+            boolean hasQuestBook = hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK) ||
+                                   hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.APPRENTICE_QUEST_BOOK) ||
+                                   hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.EXPERT_QUEST_BOOK) ||
+                                   hasItemInInventory(player, com.github.hitman20081.dagmod.item.ModItems.MASTER_QUEST_TOME);
 
             // If player has all 3 notes, combine them into Quest Book
             if (hasNote1 && hasNote2 && hasNote3 && !hasQuestBook) {
@@ -173,9 +173,11 @@ public class QuestBlock extends Block {
         // If no completed quests, show other options
         player.sendMessage(Text.literal("Right-click again to:"), false);
 
-        // FILTER: Only show MAIN and SIDE category quests
+        // FILTER: Show MAIN, SIDE, and CLASS category quests (Job Board handles JOB and DAILY)
         List<Quest> availableQuests = questManager.getAvailableQuests(player).stream()
-                .filter(q -> q.getCategory() == Quest.QuestCategory.MAIN || q.getCategory() == Quest.QuestCategory.SIDE)
+                .filter(q -> q.getCategory() == Quest.QuestCategory.MAIN
+                          || q.getCategory() == Quest.QuestCategory.SIDE
+                          || q.getCategory() == Quest.QuestCategory.CLASS)
                 .toList();
 
         if (!availableQuests.isEmpty() && playerData.canAcceptMoreQuests()) {
@@ -265,21 +267,13 @@ public class QuestBlock extends Block {
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.get(playerId);
 
-        // DEBUG
-        player.sendMessage(Text.literal("DEBUG: showConfirmAccept called"), false);
-        player.sendMessage(Text.literal("DEBUG: selectedIndex after -1 = " + selectedIndex), false);
-        player.sendMessage(Text.literal("DEBUG: availableQuests size = " + (availableQuests != null ? availableQuests.size() : "NULL")), false);
-
         if (selectedIndex < 0 || selectedIndex >= availableQuests.size()) {
-            player.sendMessage(Text.literal("DEBUG: Index out of bounds! Returning to menu."), false);
+            player.sendMessage(Text.literal("Invalid quest selection. Returning to menu."), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         Quest questToAccept = availableQuests.get(selectedIndex);
-
-        // DEBUG
-        player.sendMessage(Text.literal("DEBUG: Quest to accept = " + questToAccept.getId() + " (" + questToAccept.getName() + ")"), false);
 
         player.sendMessage(Text.literal("=== CONFIRM QUEST ACCEPTANCE ==="), false);
         player.sendMessage(Text.literal("Quest: " + questToAccept.getName()), false);
@@ -357,6 +351,12 @@ public class QuestBlock extends Block {
 
         Quest questToTurnIn = completedQuests.get(selectedIndex);
 
+        // Refresh quest progress BEFORE checking completion
+        // This is critical for collect quests - ensures items are still in inventory
+        for (var objective : questToTurnIn.getObjectives()) {
+            objective.updateProgress(player);
+        }
+
         player.sendMessage(Text.literal("=== Turn In Quest " + (selectedIndex + 1) + "/" + completedQuests.size() + " ==="), false);
         player.sendMessage(Text.literal("📜 " + questToTurnIn.getName()), false);
         player.sendMessage(Text.literal(""), false);
@@ -368,8 +368,10 @@ public class QuestBlock extends Block {
         }
         player.sendMessage(Text.literal(""), false);
 
+        // Check if quest is STILL completed after refresh
         if (!questToTurnIn.isCompleted()) {
-            player.sendMessage(Text.literal("✗ This quest is not yet completed!"), false);
+            player.sendMessage(Text.literal("✗ This quest is no longer completed!"), false);
+            player.sendMessage(Text.literal("(Collect quests require items in inventory at turn-in)").formatted(net.minecraft.util.Formatting.GRAY), false);
             List<Quest> mutableCompletedQuests = new ArrayList<>(completedQuests);
             mutableCompletedQuests.remove(selectedIndex);
             playerCompletedQuests.put(playerId, mutableCompletedQuests);
@@ -497,5 +499,18 @@ public class QuestBlock extends Block {
             Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
             false
         );
+    }
+
+    /**
+     * Helper method to check if player has a specific item in their inventory
+     */
+    private boolean hasItemInInventory(PlayerEntity player, net.minecraft.item.Item item) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
+            if (!stack.isEmpty() && stack.getItem() == item) {
+                return true;
+            }
+        }
+        return false;
     }
 }

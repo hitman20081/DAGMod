@@ -35,7 +35,7 @@ public abstract class QuestObjective {
 
     // Set progress directly
     public void setProgress(int progress) {
-        currentProgress = Math.min(progress, requiredProgress);
+        currentProgress = progress; // Don't cap progress - let subclasses handle it
         completed = currentProgress >= requiredProgress;
     }
 

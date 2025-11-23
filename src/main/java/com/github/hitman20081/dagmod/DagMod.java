@@ -580,8 +580,10 @@ public class DagMod implements ModInitializer {
 
             // Only count hostile mobs (monsters)
             if (entity instanceof net.minecraft.entity.mob.HostileEntity) {
-                // Only track if player hasn't completed task 2 yet and has met Garrick
-                if (!PlayerDataManager.isTask2Complete(player.getUuid()) && PlayerDataManager.hasMetGarrick(player)) {
+                // Only track if player has completed Task 1, hasn't completed task 2 yet, and has met Garrick
+                if (!PlayerDataManager.isTask2Complete(player.getUuid())
+                        && PlayerDataManager.hasMetGarrick(player)
+                        && PlayerDataManager.isTask1Complete(player.getUuid())) {
                     PlayerDataManager.incrementTask2MobKills(player);
 
                     // Send feedback to player

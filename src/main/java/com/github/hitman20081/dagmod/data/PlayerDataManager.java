@@ -390,12 +390,8 @@ public class PlayerDataManager {
         int currentKills = getTask2MobKills(player.getUuid());
         setTask2MobKills(player.getUuid(), currentKills + 1);
 
-        // Check if task is complete (5 kills)
-        if (currentKills + 1 >= 5 && !isTask2Complete(player.getUuid())) {
-            markTask2Complete(player);
-        } else {
-            savePlayerData(player);
-        }
+        // Save the kill count (Garrick will mark task complete when giving the note)
+        savePlayerData(player);
     }
 
     // Task 3: Bring 1 Iron Ingot

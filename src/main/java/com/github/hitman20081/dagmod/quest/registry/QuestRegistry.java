@@ -24,9 +24,6 @@ public class QuestRegistry {
 
         // Then register quest chains
         registerQuestChains(manager);
-
-        System.out.println("Registered " + manager.getAllQuests().size() + " quests and " +
-                manager.getAllChains().size() + " quest chains for DAGmod");
     }
 
     private static void registerIndividualQuests(QuestManager manager) {
@@ -99,7 +96,7 @@ public class QuestRegistry {
 
         // ========== CHAIN QUESTS ==========
         // Adventurer's Path Chain
-        manager.registerQuest(createTheBeginningQuest());
+        // REMOVED: createTheBeginningQuest() - buggy log collection
         manager.registerQuest(createEquipYourselfQuest());
         manager.registerQuest(createReadyForAdventureQuest());
 
@@ -149,9 +146,8 @@ public class QuestRegistry {
                 QuestData.QuestBookTier.APPRENTICE
         )
                 .addQuest("garricks_special_brew")  // FIRST - Tutorial quest at the inn
-                .addQuest("the_beginning")          // SECOND - Basic tool gathering
-                .addQuest("equip_yourself")         // THIRD - Better equipment
-                .addQuest("ready_for_adventure")    // FOURTH - Advanced preparation
+                .addQuest("equip_yourself")         // SECOND - Gather materials
+                .addQuest("ready_for_adventure")    // THIRD - Advanced preparation
                 .addChainReward(new ItemReward(Items.IRON_SWORD, 1))
                 .addChainReward(new ItemReward(Items.EMERALD, 5))
                 .addChainReward(XpReward.apprentice());
@@ -232,6 +228,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.STONE, 64))
                 .addReward(new ItemReward(Items.IRON_PICKAXE, 1))
                 .addReward(new ItemReward(Items.IRON_AXE, 1))
+                .addReward(new ItemReward(ModItems.BEEF_STEW, 3))
+                .addReward(new ItemReward(ModItems.HONEY_BREAD, 3))
                 .addReward(XpReward.novice());
     }
 
@@ -427,6 +425,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.BIRCH_SAPLING, 16))
                 .addObjective(new CollectObjective(Items.SPRUCE_SAPLING, 16))
                 .addReward(new ItemReward(Items.BONE_MEAL, 32))
+                .addReward(new ItemReward(ModItems.ELVEN_BREAD, 4))
+                .addReward(new ItemReward(ModItems.GLOWBERRY_JAM, 3))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.novice());
     }
@@ -622,9 +622,11 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.BREAD, 16))
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 32))
                 .addObjective(new CollectObjective(Items.OAK_LOG, 16))
-                .addReward(new ItemReward(Items.STONE_SWORD, 1))
-                .addReward(new ItemReward(Items.STONE_PICKAXE, 1))
-                .addReward(new ItemReward(Items.COOKED_BEEF, 8))
+                .addReward(new ItemReward(Items.IRON_SWORD, 1))
+                .addReward(new ItemReward(Items.IRON_PICKAXE, 1))
+                .addReward(new ItemReward(ModItems.MYSTIC_STEW, 3))
+                .addReward(new ItemReward(ModItems.GOLDEN_APPLE_STRUDEL, 2))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.novice());
     }
 
@@ -825,8 +827,10 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.COOKED_BEEF, 8))
                 .addObjective(new CollectObjective(Items.COOKED_PORKCHOP, 8))
                 .addReward(new ItemReward(Items.IRON_SWORD, 1))
-                .addReward(new ItemReward(Items.COOKED_BEEF, 16))
-                .addReward(new ItemReward(Items.LEATHER_CHESTPLATE, 1))
+                .addReward(new ItemReward(Items.IRON_AXE, 1))
+                .addReward(new ItemReward(ModItems.SAVORY_BEEF_ROAST, 4))
+                .addReward(new ItemReward(ModItems.MOLTEN_CHILI, 3))
+                .addReward(new ItemReward(Items.CHAINMAIL_CHESTPLATE, 1))
                 .addReward(XpReward.novice());
     }
 
@@ -1161,7 +1165,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.GUNPOWDER, 3))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.ARROW, 64))
-                .addReward(new ItemReward(Items.LEATHER_BOOTS, 1))
+                .addReward(new ItemReward(Items.CHAINMAIL_BOOTS, 1))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.novice());
     }
 
@@ -1233,7 +1238,8 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.WHEAT, 3))
                 .addObjective(new CollectObjective(Items.APPLE, 1))
-                .addReward(new ItemReward(Items.BREAD, 5))
+                .addReward(new ItemReward(ModItems.HONEY_BREAD, 3))
+                .addReward(new ItemReward(ModItems.CANDIED_APPLE, 2))
                 .addReward(new ItemReward(Items.EMERALD, 3))
                 .addReward(XpReward.novice());
     }
@@ -1244,9 +1250,9 @@ public class QuestRegistry {
         return new Quest("the_beginning")
                 .setName("The Beginning")
                 .setCategory(Quest.QuestCategory.MAIN)
-                .setDescription("Gather wood for basic tools. Any logs will do - use what's nearby!")
+                .setDescription("Gather oak wood for basic tools.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new TagCollectObjective(ItemTags.LOGS, 3, "Logs (any type)"))
+                .addObjective(new CollectObjective(Items.OAK_LOG, 5))
                 .addReward(new ItemReward(Items.WOODEN_AXE, 1))
                 .addReward(new ItemReward(Items.STICK, 4))
                 .addReward(XpReward.novice());
@@ -1256,14 +1262,15 @@ public class QuestRegistry {
         return new Quest("equip_yourself")
                 .setName("Equip Yourself")
                 .setCategory(Quest.QuestCategory.MAIN)
-                .setDescription("Now that you have an axe, gather materials for better tools.")
+                .setDescription("Gather materials for better tools and weapons.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new TagCollectObjective(ItemTags.LOGS, 10, "Logs (any type)"))
-                .addObjective(new CollectObjective(Items.COBBLESTONE, 16))
-                .addReward(new ItemReward(Items.STONE_SWORD, 1))
-                .addReward(new ItemReward(Items.STONE_PICKAXE, 1))
+                .addObjective(new CollectObjective(Items.COBBLESTONE, 20))
+                .addObjective(new CollectObjective(Items.IRON_INGOT, 3))
+                .addReward(new ItemReward(Items.IRON_SWORD, 1))
+                .addReward(new ItemReward(Items.IRON_PICKAXE, 1))
+                .addReward(new ItemReward(Items.IRON_AXE, 1))
                 .addReward(XpReward.novice())
-                .addPrerequisite("the_beginning");
+                .addPrerequisite("garricks_special_brew");
     }
 
     private static Quest createReadyForAdventureQuest() {
@@ -1274,8 +1281,10 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.BREAD, 8))
                 .addObjective(new CollectObjective(Items.COOKED_BEEF, 4))
-                .addReward(new ItemReward(Items.LEATHER_BOOTS, 1))
-                .addReward(new ItemReward(Items.LEATHER_HELMET, 1))
+                .addReward(new ItemReward(Items.IRON_BOOTS, 1))
+                .addReward(new ItemReward(Items.IRON_HELMET, 1))
+                .addReward(new ItemReward(ModItems.BEEF_STEW, 4))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.novice())
                 .addPrerequisite("equip_yourself");
     }

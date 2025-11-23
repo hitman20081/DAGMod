@@ -44,6 +44,13 @@ public class TagCollectObjective extends QuestObjective {
         return currentProgress > oldProgress;
     }
 
+    @Override
+    public boolean isCompleted() {
+        // Check cached progress - this is updated by updateProgress()
+        // Note: progress is ALWAYS refreshed before completion checks in the quest system
+        return currentProgress >= requiredProgress;
+    }
+
     // Count all items matching the tag in player's inventory
     private int countTaggedItemsInInventory(PlayerEntity player) {
         int count = 0;

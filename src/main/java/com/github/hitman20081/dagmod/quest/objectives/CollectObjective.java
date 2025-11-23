@@ -57,7 +57,8 @@ public class CollectObjective extends QuestObjective {
 
     // Method to consume items when quest is turned in
     public boolean consumeItems(PlayerEntity player) {
-        if (!isCompleted()) {
+        // Check if player actually has the required items in inventory
+        if (!hasRequiredItems(player)) {
             return false;
         }
 

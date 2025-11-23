@@ -212,9 +212,13 @@ public class QuestManager {
         for (Quest quest : playerData.getActiveQuests()) {
             boolean progressMade = false;
 
-            // Update each objective
+            // Update each objective (always update collect objectives to track current inventory)
             for (QuestObjective objective : quest.getObjectives()) {
-                if (!objective.isCompleted()) {
+                // Always update collect objectives (they need to track current inventory state)
+                boolean isCollectObjective = (objective instanceof CollectObjective) ||
+                                            (objective instanceof TagCollectObjective);
+
+                if (!objective.isCompleted() || isCollectObjective) {
                     boolean objProgress = objective.updateProgress(player);
                     if (objProgress) {
                         progressMade = true;
@@ -226,6 +230,13 @@ public class QuestManager {
             if (quest.isCompleted() && quest.getStatus() == Quest.QuestStatus.ACTIVE) {
                 quest.setStatus(Quest.QuestStatus.COMPLETED);
                 player.sendMessage(Text.literal("Quest completed: " + quest.getName() + "! Return to turn it in."), false);
+            }
+
+            // Check if a COMPLETED quest is no longer complete (e.g., dropped collect items)
+            if (!quest.isCompleted() && quest.getStatus() == Quest.QuestStatus.COMPLETED) {
+                quest.setStatus(Quest.QuestStatus.ACTIVE);
+                player.sendMessage(Text.literal("Quest no longer complete: " + quest.getName()).formatted(net.minecraft.util.Formatting.YELLOW), false);
+                player.sendMessage(Text.literal("(Collect quests require items at turn-in)").formatted(net.minecraft.util.Formatting.GRAY), false);
             }
 
             // Notify player of progress (optional, might be too spammy)
@@ -259,14 +270,18 @@ public class QuestManager {
         for (QuestObjective objective : quest.getObjectives()) {
             if (objective instanceof CollectObjective collectObj) {
                 if (!collectObj.consumeItems(player)) {
-                    player.sendMessage(Text.literal("Error: Could not consume required items!"), false);
+                    player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
+                    player.sendMessage(Text.literal("Quest requires items to be present at turn-in.").formatted(net.minecraft.util.Formatting.GRAY), false);
                     return false;
                 }
+                player.sendMessage(Text.literal("✓ Consumed quest items").formatted(net.minecraft.util.Formatting.GRAY), false);
             } else if (objective instanceof TagCollectObjective tagCollectObj) {
                 if (!tagCollectObj.consumeItems(player)) {
-                    player.sendMessage(Text.literal("Error: Could not consume required items!"), false);
+                    player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
+                    player.sendMessage(Text.literal("Quest requires: " + tagCollectObj.getDescription()).formatted(net.minecraft.util.Formatting.GRAY), false);
                     return false;
                 }
+                player.sendMessage(Text.literal("✓ Consumed " + tagCollectObj.getRequiredAmount() + " " + tagCollectObj.getDisplayName()).formatted(net.minecraft.util.Formatting.GRAY), false);
             }
         }
 

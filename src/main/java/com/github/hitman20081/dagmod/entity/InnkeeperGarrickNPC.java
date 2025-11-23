@@ -95,24 +95,25 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
             boolean task3Done = PlayerDataManager.isTask3Complete(serverPlayer.getUuid());
             boolean allTasksDone = task1Done && task2Done && task3Done;
 
-            // Handle dialogue based on progress
+            // Handle dialogue based on progress (SEQUENTIAL ORDER ENFORCED)
             if (allTasksDone) {
                 // All tasks complete - direct player to Quest Block
                 handleAllTasksComplete(serverPlayer);
-            } else if (task3Done) {
-                // Should never happen, but safety check
-                handleAllTasksComplete(serverPlayer);
-            } else if (task2Done) {
-                // Task 2 done, offer Task 3 or check if they have iron
+            } else if (task1Done && task2Done && !task3Done) {
+                // Tasks 1 & 2 done, now working on Task 3
                 handleTask3(serverPlayer, task3Done);
-            } else if (task1Done) {
-                // Task 1 done, offer Task 2 or check mob kills
+            } else if (task1Done && !task2Done) {
+                // Task 1 done, now working on Task 2
                 handleTask2(serverPlayer, task2Done);
-            } else if (firstMeeting) {
-                // First meeting - offer Task 1
-                handleFirstMeeting(serverPlayer);
+            } else if (!task1Done) {
+                // Working on Task 1 (or first meeting)
+                if (firstMeeting) {
+                    handleFirstMeeting(serverPlayer);
+                } else {
+                    handleTask1(serverPlayer, task1Done);
+                }
             } else {
-                // Return visit before Task 1 complete - check if they have logs
+                // Safety fallback - should not reach here
                 handleTask1(serverPlayer, task1Done);
             }
         }
@@ -207,6 +208,13 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
      * Handle Task 2 - Kill 5 hostile mobs
      */
     private void handleTask2(net.minecraft.server.network.ServerPlayerEntity player, boolean alreadyComplete) {
+        // Enforce prerequisite: Task 1 must be complete
+        if (!PlayerDataManager.isTask1Complete(player.getUuid())) {
+            sendDialogue(player, "You need to complete Task 1 first!", Formatting.RED);
+            handleTask1(player, false);
+            return;
+        }
+
         if (alreadyComplete) {
             // Task 2 done, give note if they don't have it
             boolean hasNote = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE));
@@ -230,6 +238,8 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
 
         if (mobKills >= 5) {
             // Just completed!
+            // Mark Task 2 as complete BEFORE giving the note
+            PlayerDataManager.markTask2Complete(player);
             player.giveItemStack(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE));
 
             sendDialogue(player, "Impressive! You've proven your courage in battle!", Formatting.GREEN);
@@ -263,6 +273,13 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
      * Handle Task 3 - Bring 1 Iron Ingot
      */
     private void handleTask3(net.minecraft.server.network.ServerPlayerEntity player, boolean alreadyComplete) {
+        // Enforce prerequisite: Task 2 must be complete
+        if (!PlayerDataManager.isTask2Complete(player.getUuid())) {
+            sendDialogue(player, "You need to complete Task 2 first!", Formatting.RED);
+            handleTask2(player, false);
+            return;
+        }
+
         if (alreadyComplete) {
             handleAllTasksComplete(player);
             return;

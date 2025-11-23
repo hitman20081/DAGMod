@@ -1,4 +1,4 @@
-# DAGMod v1.5.0-beta - Fantasy RPG Minecraft Mod
+# DAGMod v1.5.1-beta - Fantasy RPG Minecraft Mod
 
 A comprehensive fantasy RPG modification for Minecraft 1.21 using Fabric, featuring a dynamic quest system, player progression, class mechanics, race selection, custom abilities, procedurally generated dungeons, and immersive gameplay.
 
@@ -145,7 +145,7 @@ Choose from **4 races** and **3 classes** for unique playstyles:
     - Spawn with a Hall Locator
     - Find the Hall of Champions structure
     - Choose your race at the Race Selection Altar (ancient stone design)
-    - Choose your class at the Class Selection Altar (dark blackstone with enchanting table top)
+    - Choose your class at the Class Selection Altar (dark blackstone with enchanting table-top)
     - **Find Innkeeper Garrick** at a Village Inn/Tavern to begin the tutorial
       - Village structures spawn in temperate biomes (plains, forests, meadows, taiga)
       - Look for clustered buildings near rivers and flat terrain
@@ -236,7 +236,7 @@ data/dagmod/
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
-**Latest**: v1.5.0-beta - Innkeeper Garrick tutorial NPC, quest system gating, village NPC structures, structure overlap prevention, altar visual updates, health persistence fix
+**Latest**: v1.5.1-beta - Tutorial bug fixes (task ordering, note giving), quest reward rebalancing (iron/chainmail minimum, custom foods), class quest visibility fix, quest note consumption fix
 
 ## Roadmap
 
