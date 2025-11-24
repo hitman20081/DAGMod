@@ -3,7 +3,7 @@
 .gradle/
 build/
 out/
-classes/
+
 
 # eclipse
 
@@ -38,3 +38,9 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+/.claude/settings.local.json
+/BACKWARDS_REWARDS.md
+/CUSTOM_ITEM_CATEGORIES.md
+/GEMINI.md
+/QUEST_REWARD_CHANGES_v1.5.1.md
+/QUEST_REWARDS_REVIEW.md
