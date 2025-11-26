@@ -208,5 +208,36 @@ public class QuestData {
         totalQuestsCompleted = 0;
         questBookTier = QuestBookTier.NOVICE;
     }
-    // Persistence methods
+
+    // ========== PERSISTENCE HELPER METHODS ==========
+    // These methods are used by QuestStorage for save/load operations
+
+    /**
+     * Mark a quest as completed (used when loading from NBT)
+     * Does NOT trigger completion logic, just restores the completed state
+     */
+    public void markQuestCompleted(String questId) {
+        completedQuestIds.add(questId);
+    }
+
+    /**
+     * Set quest completion time (used when loading from NBT)
+     */
+    public void setQuestCompletionTime(String questId, long time) {
+        questCompletionTimes.put(questId, time);
+    }
+
+    /**
+     * Set total quests completed counter (used when loading from NBT)
+     */
+    public void setTotalQuestsCompleted(int count) {
+        this.totalQuestsCompleted = count;
+    }
+
+    /**
+     * Get quest completion times map (used when saving to NBT)
+     */
+    public Map<String, Long> getQuestCompletionTimes() {
+        return new HashMap<>(questCompletionTimes);
+    }
 }

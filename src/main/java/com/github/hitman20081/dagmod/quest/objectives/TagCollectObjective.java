@@ -105,4 +105,9 @@ public class TagCollectObjective extends QuestObjective {
                 net.minecraft.util.Identifier.of(tagId));
         return new TagCollectObjective(tag, amount, displayName);
     }
+
+    @Override
+    public QuestObjective copy() {
+        return new TagCollectObjective(this.itemTag, this.requiredAmount, this.displayName);
+    }
 }

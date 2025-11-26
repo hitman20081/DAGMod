@@ -4,17 +4,17 @@ import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages energy for Rogue players
  * Stores energy per-player in memory (like the mana system)
  */
 public class EnergyManager {
-    private static final Map<UUID, EnergyData> playerEnergyMap = new HashMap<>();
-    private static final Map<UUID, Integer> regenTickCounter = new HashMap<>();
+    private static final Map<UUID, EnergyData> playerEnergyMap = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> regenTickCounter = new ConcurrentHashMap<>();
     private static final int TICKS_PER_ENERGY = 4; // 5 energy/sec = 1 energy per 4 ticks
 
     /**
@@ -147,5 +147,12 @@ public class EnergyManager {
     public static void clearPlayerEnergy(UUID playerUuid) {
         playerEnergyMap.remove(playerUuid);
         regenTickCounter.remove(playerUuid);
+    }
+
+    /**
+     * Alias for clearPlayerEnergy - consistent naming with other managers
+     */
+    public static void clearPlayerData(UUID playerUuid) {
+        clearPlayerEnergy(playerUuid);
     }
 }

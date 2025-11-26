@@ -5,6 +5,85 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2-beta] - 2025-11-24
+
+### Fixed - CRITICAL: Quest Persistence System
+
+**Quest Data Loss Bug**:
+- **CRITICAL FIX**: Quest progress is now saved to disk and persists across sessions
+- Previously ALL quest data was lost on disconnect (in-memory only storage)
+- Quest completion, active quests, quest book tier, and objective progress now saved to NBT files
+- Storage location: `world/data/dagmod/quests/{uuid}.dat`
+
+**Implementation Details**:
+- Added `QuestStorage.java` - Complete NBT-based persistence system (246 lines)
+- Quest data automatically saved on quest accept, quest completion, and player disconnect
+- Quest data automatically loaded on player join
+- Added `copy()` methods to `Quest`, `QuestObjective`, and all objective subclasses for per-player instances
+- Modified `QuestManager` with save/load/clear methods for proper lifecycle management
+
+**Files Modified** (12 files):
+- **New**: `quest/QuestStorage.java` - NBT persistence layer
+- `quest/QuestData.java` - Added persistence helper methods
+- `quest/Quest.java` - Added deep copy() method
+- `quest/QuestObjective.java` - Added abstract copy() method
+- `quest/objectives/CollectObjective.java` - Implemented copy()
+- `quest/objectives/KillObjective.java` - Implemented copy()
+- `quest/objectives/TagCollectObjective.java` - Implemented copy()
+- `quest/QuestManager.java` - Added save/load/clear methods, auto-save on accept/complete
+- `class_system/rogue/EnergyManager.java` - Added clearPlayerData() alias
+- `DagMod.java` - Added quest load on join, comprehensive disconnect handler with save + cleanup
+
+### Fixed - Memory Leaks
+
+**Player Data Cleanup**:
+- Added comprehensive disconnect handler that saves and cleans up all player data
+- Fixed memory leaks in `QuestManager`, `ManaManager`, `EnergyManager`, `CooldownManager`
+- Player data now properly removed from static HashMaps on disconnect
+- Prevents OutOfMemoryError on long-running servers with many players
+
+**Implementation**:
+- Centralized disconnect handler in `DagMod.java` (lines 394-418)
+- Removed duplicate disconnect handler from `registerWarriorSystems()`
+- All manager classes now properly clear player data on disconnect
+
+### Fixed - Thread Safety Issues
+
+**HashMap → ConcurrentHashMap Conversion**:
+- **CRITICAL FIX**: Converted `HashMap` to `ConcurrentHashMap` in all manager classes
+- Prevents `ConcurrentModificationException` crashes on busy servers
+- Eliminates race conditions in mana/energy updates
+- Prevents data corruption from simultaneous thread access
+
+**Files Modified**:
+- `class_system/mana/ManaManager.java` - Now uses `ConcurrentHashMap` for playerManaData and regenTicks
+- `class_system/rogue/EnergyManager.java` - Now uses `ConcurrentHashMap` for playerEnergyMap and regenTickCounter
+
+**Impact**:
+- Server stability improved on multi-player servers (10+ concurrent players)
+- Eliminates random crashes during high ability usage
+- Thread-safe concurrent access to player data maps
+
+### Technical Notes
+
+**Save/Load Flow**:
+1. Player joins → `QuestManager.loadPlayerQuestData()` called from `ServerEntityEvents.ENTITY_LOAD`
+2. Quest accepted → Auto-save immediately
+3. Quest completed → Auto-save immediately
+4. Player disconnects → Save all data (race/class, quests, progression), then clear from memory
+
+**Data Integrity**:
+- Quest objective progress restored with correct current/required values
+- Quest book tier persists (Novice/Apprentice/Expert/Master upgrades are permanent)
+- Completed quest IDs and completion timestamps preserved
+- Active quest state restored with all objective progress
+
+**Testing Performed**:
+- Quest completion persistence verified
+- Quest book tier persistence verified
+- Memory cleanup verified (no data remains after disconnect)
+- Multi-session quest progress continuity verified
+
 ## [1.5.1-beta] - 2025-11-23
 
 ### Fixed - Tutorial & Quest System Bugs

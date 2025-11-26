@@ -201,6 +201,11 @@ public class QuestManager {
         // Add to player's active quests
         playerData.addActiveQuest(playerQuest);
 
+        // Save quest data immediately after accepting quest
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            savePlayerQuestData(serverPlayer);
+        }
+
         player.sendMessage(Text.literal("Quest started: " + quest.getName()), false);
         return true;
     }
@@ -302,6 +307,11 @@ public class QuestManager {
         playerData.completeQuest(quest, (ServerPlayerEntity) player);
         checkChainCompletion(player, quest.getId());
 
+        // Save quest data immediately after completion
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            savePlayerQuestData(serverPlayer);
+        }
+
         player.sendMessage(Text.literal("Quest turned in: " + quest.getName()), false);
 
         // Start next quest in chain if exists
@@ -324,31 +334,8 @@ public class QuestManager {
 
     // Copy a quest for a player (so each player has their own progress)
     public Quest copyQuest(Quest original) {
-        Quest copy = new Quest(original.getId())
-                .setName(original.getName())
-                .setCategory(original.getCategory())
-                .setDescription(original.getDescription())
-                .setDifficulty(original.getDifficulty())
-                .setNextQuest(original.getNextQuestId());
-
-        // Copy objectives (each player needs their own objective instances)
-        for (QuestObjective objective : original.getObjectives()) {
-            // Create new instances of objectives
-            if (objective instanceof CollectObjective collectObj) {
-                copy.addObjective(new CollectObjective(collectObj.getTargetItem(), collectObj.getRequiredAmount()));
-            }
-            if (objective instanceof KillObjective killObj) {
-                copy.addObjective(new KillObjective(killObj.getTargetEntityType(), killObj.getRequiredKills()));
-            }
-            // Add other objective types here as we create them
-        }
-
-        // Copy rewards (rewards can be shared references)
-        for (QuestReward reward : original.getRewards()) {
-            copy.addReward(reward);
-        }
-
-        return copy;
+        // Use the Quest.copy() method which handles all objective types
+        return original.copy();
     }
     public void updateKillProgress(ServerPlayerEntity player, EntityType<?> killedEntityType) {
         QuestData playerData = getPlayerData(player);
@@ -433,5 +420,43 @@ public class QuestManager {
     // Get all registered quests
     public Collection<Quest> getAllQuests() {
         return allQuests.values();
+    }
+
+    // ========== PERSISTENCE METHODS ==========
+
+    /**
+     * Save player's quest data to disk
+     */
+    public void savePlayerQuestData(ServerPlayerEntity player) {
+        QuestData questData = getPlayerData(player);
+        QuestStorage.saveQuestData(player, questData);
+    }
+
+    /**
+     * Load player's quest data from disk
+     * Called when player joins the server
+     */
+    public void loadPlayerQuestData(ServerPlayerEntity player) {
+        QuestData loadedData = QuestStorage.loadQuestData(player);
+
+        if (loadedData != null) {
+            // Replace the in-memory data with loaded data
+            playerQuestData.put(player.getUuid(), loadedData);
+        }
+        // If null, player is new - keep the default QuestData created by getPlayerData()
+    }
+
+    /**
+     * Clear player data from memory (called on disconnect for cleanup)
+     */
+    public void clearPlayerData(UUID playerId) {
+        playerQuestData.remove(playerId);
+    }
+
+    /**
+     * Clear all player data (called on server shutdown)
+     */
+    public void clearAllData() {
+        playerQuestData.clear();
     }
 }

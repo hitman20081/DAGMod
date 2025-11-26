@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.5.0-beta
-**Last Updated**: 2025-01-18
+**Current Version**: v1.5.2-beta
+**Last Updated**: 2025-01-24
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -476,11 +476,12 @@ Priority: **LOW**
 ## 🗓️ **Development Timeline**
 
 ### **Released**
-- ✅ **v1.4.5-beta** (Oct 2025) - Job Board, quest categorization
+- ✅ **v1.4.5-beta** (Oct 2024) - Job Board, quest categorization
 - ✅ **v1.5.0-beta** (Jan 2025) - Garrick NPC, quest gating, health persistence fix
+- ✅ **v1.5.1-beta** (Jan 2025) - Patch: Quest reward fixes, backward compatibility
+- ✅ **v1.5.2-beta** (Jan 2025) - CRITICAL: Quest persistence, memory leaks, thread safety
 
 ### **Short-term** - Next 3-6 months
-- 🎯 **v1.5.1** (Patch) - Bug fixes for v1.5.0 if needed
 - 🎯 **v1.6.0** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
 - 🎯 **v1.7.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.8.0** (Minor) - Daily quest system with rotation
@@ -545,7 +546,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2025-01-18
+**Last Updated**: 2025-01-24
 **Maintained By**: hitman20081
-**Current Version**: v1.5.0-beta
+**Current Version**: v1.5.2-beta
 **License**: See LICENSE file

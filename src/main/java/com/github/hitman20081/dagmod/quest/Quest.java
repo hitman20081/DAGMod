@@ -198,4 +198,37 @@ public class Quest {
     public QuestCategory getCategory() {
         return category;
     }
+
+    /**
+     * Create a deep copy of this quest
+     * Used when assigning quests to individual players so each has independent progress
+     */
+    public Quest copy() {
+        Quest copy = new Quest(this.id);
+        copy.name = this.name;
+        copy.description = this.description;
+        copy.difficulty = this.difficulty;
+        copy.status = this.status;
+        copy.nextQuestId = this.nextQuestId;
+        copy.repeatable = this.repeatable;
+        copy.cooldownTime = this.cooldownTime;
+        copy.seasonRequirement = this.seasonRequirement;
+        copy.requiredClass = this.requiredClass;
+        copy.requiredRace = this.requiredRace;
+        copy.category = this.category;
+
+        // Deep copy prerequisites
+        copy.prerequisites = new ArrayList<>(this.prerequisites);
+
+        // Deep copy objectives (each objective gets a fresh progress counter)
+        copy.objectives = new ArrayList<>();
+        for (QuestObjective objective : this.objectives) {
+            copy.objectives.add(objective.copy());
+        }
+
+        // Deep copy rewards
+        copy.rewards = new ArrayList<>(this.rewards);
+
+        return copy;
+    }
 }

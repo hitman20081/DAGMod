@@ -31,6 +31,7 @@ import com.github.hitman20081.dagmod.progression.ProgressionManager;
 import com.github.hitman20081.dagmod.progression.ProgressionPackets;
 import com.github.hitman20081.dagmod.progression.ProgressionTestCommand;
 import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
+import com.github.hitman20081.dagmod.progression.ProgressionStorage;
 import com.github.hitman20081.dagmod.progression.StatScalingHandler;
 import com.github.hitman20081.dagmod.progression.XPEventHandler;
 import com.github.hitman20081.dagmod.quest.QuestManager;
@@ -77,6 +78,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import net.minecraft.util.WorldSavePath;
 
 import static com.github.hitman20081.dagmod.potion.ModPotions.XP_POTION;
@@ -275,6 +277,9 @@ public class DagMod implements ModInitializer {
                 // Load persistent data first
                 PlayerDataManager.loadPlayerData(player);
 
+                // Load quest data
+                QuestManager.getInstance().loadPlayerQuestData(player);
+
                 // Then apply abilities (already loaded by loadPlayerData, but this ensures sync)
                 ClassAbilityManager.applyClassAbilities(player);
                 RaceAbilityManager.applyRaceAbilities(player);
@@ -388,6 +393,31 @@ public class DagMod implements ModInitializer {
             }
         });
 
+        // ========== PLAYER DISCONNECT HANDLER - SAVE ALL DATA ==========
+        // This is CRITICAL for data persistence - saves all player progress on disconnect
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            ServerPlayerEntity player = handler.player;
+            UUID playerId = player.getUuid();
+
+            LOGGER.info("Saving data for disconnecting player: " + player.getName().getString());
+
+            // Save race/class data
+            PlayerDataManager.savePlayerData(player);
+
+            // Save quest data
+            QuestManager.getInstance().savePlayerQuestData(player);
+
+            // Save progression data (XP, levels, stats)
+            ProgressionStorage.savePlayerData(ProgressionManager.getPlayerData(player));
+
+            // Clean up memory (prevent memory leaks)
+            QuestManager.getInstance().clearPlayerData(playerId);
+            ManaManager.clearPlayerData(playerId);
+            EnergyManager.clearPlayerData(playerId);
+            CooldownManager.clearPlayerCooldowns(playerId);
+
+            LOGGER.info("Successfully saved and cleaned up data for: " + player.getName().getString());
+        });
 
         FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {
             builder.registerPotionRecipe(
@@ -423,10 +453,7 @@ public class DagMod implements ModInitializer {
         // Register Shield Bash listener
         ShieldBashListener.register();
 
-        // Clear cooldowns on player disconnect (cooldowns reset on logout)
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            CooldownManager.clearPlayerCooldowns(handler.player.getUuid());
-        });
+        // NOTE: Cooldown clearing is now handled in the main disconnect handler (line ~396)
 
         LOGGER.info("Warrior Ability Systems registered successfully");
     }

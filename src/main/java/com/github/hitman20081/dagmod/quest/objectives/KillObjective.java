@@ -68,4 +68,9 @@ public class KillObjective extends QuestObjective {
     public static KillObjective spiders(int amount) {
         return new KillObjective(EntityType.SPIDER, amount);
     }
+
+    @Override
+    public QuestObjective copy() {
+        return new KillObjective(this.targetEntityType, this.requiredKills);
+    }
 }

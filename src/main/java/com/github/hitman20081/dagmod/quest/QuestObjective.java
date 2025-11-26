@@ -22,6 +22,9 @@ public abstract class QuestObjective {
     // Abstract method - each objective type defines what triggers it
     public abstract ObjectiveType getType();
 
+    // Abstract method - create a copy of this objective with fresh progress
+    public abstract QuestObjective copy();
+
     // Check if objective is completed
     public boolean isCompleted() {
         return completed || currentProgress >= requiredProgress;

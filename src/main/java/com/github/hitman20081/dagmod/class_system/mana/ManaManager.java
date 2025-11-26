@@ -3,13 +3,13 @@ package com.github.hitman20081.dagmod.class_system.mana;
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ManaManager {
-    private static final Map<UUID, ManaData> playerManaData = new HashMap<>();
-    private static final Map<UUID, Integer> regenTicks = new HashMap<>();
+    private static final Map<UUID, ManaData> playerManaData = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> regenTicks = new ConcurrentHashMap<>();
     private static final float MANA_REGEN_PER_SECOND = 2.0f;
 
     public static ManaData getManaData(ServerPlayerEntity player) {

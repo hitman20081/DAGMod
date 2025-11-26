@@ -91,4 +91,9 @@ public class CollectObjective extends QuestObjective {
         Item item = Registries.ITEM.get(Identifier.of(itemId));
         return new CollectObjective(item, amount);
     }
+
+    @Override
+    public QuestObjective copy() {
+        return new CollectObjective(this.targetItem, this.requiredAmount);
+    }
 }
