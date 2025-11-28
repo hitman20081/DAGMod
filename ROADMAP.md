@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.5.2-beta
-**Last Updated**: 2025-01-24
+**Current Version**: v1.5.3-beta
+**Last Updated**: 2025-11-28
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 

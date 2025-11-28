@@ -18,19 +18,19 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 50 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.5.2-beta (January 2025)
+Current Version v1.5.3-beta (January 2025)
 
 ---
 
-## 🎮 What's New in v1.5.2-beta
+## 🎮 What's New in v1.5.3-beta
 
-### Critical Bug Fixes!
+### Critical Quest Progression Fix!
 
-✅ **Quest Persistence** - Quest progress now saves properly! No more lost quest data on disconnect
-✅ **Memory Leak Fixes** - Server memory properly cleaned up on player disconnect
-✅ **Thread Safety** - Fixed random crashes from concurrent player data access
+✅ **Quest Progression Blocker Fixed** - Players can no longer get stuck at level 20 unable to progress
+✅ **Quest Book Upgrade Info** - Quest Block now shows which chain unlocks the next quest book tier
+✅ **Circular Dependency Resolved** - Final chain quests no longer require the tier they unlock
 
-v1.5.2-beta ensures a stable, reliable experience with proper data persistence!
+v1.5.3-beta fixes the game-breaking quest progression wall and improves quest information display!
 
 ---
 

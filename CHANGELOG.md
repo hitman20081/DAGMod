@@ -5,6 +5,75 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3-beta] - 2025-11-28
+
+### Fixed - CRITICAL: Quest Progression Blocker at Level 20
+
+**Circular Dependency in Quest Book Upgrade System**:
+- **CRITICAL FIX**: Players can no longer get stuck at level 20 unable to progress
+- Fixed circular dependency where final chain quests required EXPERT difficulty book to accept, but completing those quests was needed to unlock EXPERT book
+- Changed 4 tier-unlocking quests from EXPERT → APPRENTICE difficulty:
+  - `village_master` (Village Development chain → unlocks Expert Quest Book)
+  - `shield_bearers_trial` (Warrior class chain)
+  - `master_scrolls` (Mage class chain)
+  - `echoes_of_the_deep` (Rogue class chain)
+
+**Logic**: Quests that unlock a tier should be completable BEFORE you have that tier.
+
+**Impact**:
+- Village Development chain (5 quests) now fully completable with APPRENTICE book
+- All 3 class chains now completable without EXPERT book requirement
+- Players can reach Expert Quest Book tier at appropriate level progression
+- Removes game-breaking progression wall at level 20
+
+### Added - Quest Book Upgrade Information Display
+
+**Enhanced Quest Block UI**:
+- Added `showQuestBookUpgradeInfo()` method to Quest Block interactions
+- Players now see which quest chain unlocks the next quest book tier
+- Displays chain progress (e.g., "4/5 quests completed")
+- Clear, actionable information replaces generic "upgrade available" message
+
+**Before**:
+```
+⭐ Upgrade Quest Book (AVAILABLE!)
+[No other information]
+```
+
+**After**:
+```
+📖 Next Quest Book: Expert Quest Book
+   Complete: Village Development
+   Progress: 4/5 quests
+```
+
+**Implementation Details**:
+- Quest Block now queries `QuestChain.getRewardTier()` to identify tier-unlocking chains
+- Displays real-time progress using `QuestChain.getChainProgress(playerData)`
+- Shows upgrade message when chain is complete
+- Provides clear instructions when chain is in progress
+
+**Files Modified** (2 files):
+- `quest/registry/QuestRegistry.java` - Changed 4 quests from EXPERT → APPRENTICE difficulty (lines 1050-1066, 1120-1135, 1189-1204, 1351-1363)
+- `block/QuestBlock.java` - Added import for QuestChain, added showQuestBookUpgradeInfo() method (lines 515-556)
+
+### Technical Notes
+
+**Quest Chain Completion System**:
+- Quest chains automatically reward quest book tier upgrades upon completion
+- `QuestManager.checkChainCompletion()` triggers on last quest turn-in
+- Auto-upgrades player's quest book tier and gives physical book item
+- Three chains unlock tiers:
+  - Adventurer's Path (3 quests) → APPRENTICE Book
+  - Village Development (5 quests) → EXPERT Book
+  - Master Craftsman (3 quests) → MASTER Book
+
+**Testing Performed**:
+- Verified all class chains completable with APPRENTICE book
+- Verified Village Development chain completable without EXPERT book
+- Confirmed Expert Quest Book unlocks correctly after Village Development
+- Tested Quest Block upgrade information display accuracy
+
 ## [1.5.2-beta] - 2025-11-24
 
 ### Fixed - CRITICAL: Quest Persistence System

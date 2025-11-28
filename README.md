@@ -1,4 +1,4 @@
-# DAGMod v1.5.2-beta - Fantasy RPG Minecraft Mod
+# DAGMod v1.5.3-beta - Fantasy RPG Minecraft Mod
 
 A comprehensive fantasy RPG modification for Minecraft 1.21 using Fabric, featuring a dynamic quest system, player progression, class mechanics, race selection, custom abilities, procedurally generated dungeons, and immersive gameplay.
 
@@ -236,7 +236,7 @@ data/dagmod/
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
-**Latest**: v1.5.2-beta - CRITICAL: Quest persistence system (fixes quest data loss on disconnect), memory leak fixes (disconnect handler cleanup), thread safety fixes (HashMap → ConcurrentHashMap)
+**Latest**: v1.5.3-beta - CRITICAL: Fixed quest progression blocker at level 20 (circular dependency in quest book upgrade system), improved quest book upgrade information display
 
 ## Roadmap
 

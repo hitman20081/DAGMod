@@ -2,16 +2,16 @@
 
 Get started with DAGMod by following this comprehensive installation guide. Whether you're playing singleplayer or setting up a server, this guide will help you install and configure the mod properly.
 
-**Current Version:** v1.5.2-beta (January 2025)
+**Current Version:** v1.5.3-beta (January 2025)
 
 ---
 
-## What's New in v1.5.2-beta
+## What's New in v1.5.3-beta
 
 **Critical Bug Fixes:**
-- ✅ **Quest Persistence** - Quest progress now properly saves and loads (fixed data loss bug)
-- ✅ **Memory Leak Fixes** - Server memory properly cleaned up on disconnect
-- ✅ **Thread Safety** - Fixed concurrent modification crashes on busy servers
+- ✅ **Quest Progression Blocker** - Players can no longer get stuck at level 20 unable to progress
+- ✅ **Quest Book Upgrade Info** - Quest Block now shows which chain unlocks the next quest book tier
+- ✅ **Circular Dependency** - Final chain quests no longer require the tier they unlock
 
 **Core Features:**
 - **17 new class abilities** (6 Warrior, 4 Mage, 7 Rogue)
@@ -91,7 +91,7 @@ Choose the installation method that best fits your needs:
 
 ### Step 3: Install DAGMod
 
-1. Download **DAGMod v1.5.2-beta** from:
+1. Download **DAGMod v1.5.3-beta** from:
    - [GitHub Releases](https://github.com/hitman20081/DAGMod/releases)
    - [Modrinth](https://modrinth.com/mod/dag-mod)
    - [CurseForge](https://curseforge.com/minecraft/mc-mods/dag-mod) [Not available yet] 
@@ -101,7 +101,7 @@ Choose the installation method that best fits your needs:
 ### Step 4: Launch Minecraft
 
 1. Open the Minecraft Launcher
-2. Select the **Fabric Loader 1.21.10** profile (or "DAGMod v1.5.2-beta" if you named it)
+2. Select the **Fabric Loader 1.21.10** profile (or "DAGMod v1.5.3-beta" if you named it)
 3. Click "Play"
 4. Wait for Minecraft to load
 5. Check the main menu - you should see "X mods loaded" in the bottom-left
@@ -151,7 +151,7 @@ Choose the installation method that best fits your needs:
 
 ### Step 3: Install DAGMod
 
-1. Download **DAGMod v1.5.2-beta**
+1. Download **DAGMod v1.5.3-beta**
 2. Place it in the `mods` folder (alongside Fabric API)
 
 ### Step 4: Configure Server
@@ -189,7 +189,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 ### Step 6: Connect to Your Server
 
-1. Start Minecraft with the same mods (Fabric API + DAGMod v1.5.2-beta)
+1. Start Minecraft with the same mods (Fabric API + DAGMod v1.5.3-beta)
 2. Go to "Multiplayer"
 3. Click "Add Server"
 4. Enter server address (e.g., `localhost` or your server IP)
@@ -205,7 +205,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **In-Game Verification:**
 1. Press F3 to open debug screen
 2. Check right side for mod list
-3. DAGMod v1.5.2-beta should appear in the list
+3. DAGMod v1.5.3-beta should appear in the list
 
 **Command Verification:**
 1. Type `/dagmod` in chat
@@ -231,7 +231,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 - **Solution:** Verify all mods are for the correct Minecraft version
 - Check Fabric Loader version 0.17.3
 - Check Fabric API version 0.138.0+1.21.10
-- Check DAGMod is v1.5.2-beta
+- Check DAGMod is v1.5.3-beta
 
 **Issue: Mods not loading**
 - **Cause:** Incorrect folder or wrong Minecraft version
@@ -261,7 +261,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **Issue: Client can't connect to server**
 - **Cause:** Version mismatch between client and server
 - **Solution:**
-  - Ensure both client and server have DAGMod v1.5.2-beta
+  - Ensure both client and server have DAGMod v1.5.3-beta
   - Ensure both have same Fabric API version
   - Check server is running and accessible
 
@@ -275,7 +275,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
    - Navigate to `.minecraft/saves`
    - Copy your world folders to a safe location
 2. **Remove old DAGMod version** from mods folder
-3. **Download DAGMod v1.5.2-beta** (or newer)
+3. **Download DAGMod v1.5.3-beta** (or newer)
 4. **Place new `.jar` in mods folder**
 5. **Launch Minecraft**
 6. **Load your world** - progress should be preserved
@@ -287,7 +287,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
    - Especially backup the `world` folder
 2. **Stop the server**
 3. **Remove old DAGMod `.jar`** from mods folder
-4. **Add new DAGMod v1.5.2-beta `.jar`** to mods folder
+4. **Add new DAGMod v1.5.3-beta `.jar`** to mods folder
 5. **Start the server**
 6. **Verify update:** Check console logs for version number
 
@@ -297,7 +297,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 ## Configuration
 
-### Current Configuration (v1.5.2-beta)
+### Current Configuration (v1.5.3-beta)
 
 
 DAGMod configuration options:
@@ -432,7 +432,7 @@ If you encounter issues not covered in this guide:
 2. **Search for similar problems** - someone may have solved it
 3. **Create a new issue** with:
    - Minecraft version
-   - DAGMod version (v1.5.2-beta)
+   - DAGMod version (v1.5.3-beta)
    - Fabric Loader version
    - Fabric API version
    - Full error log (from `.minecraft/logs/latest.log`)
@@ -456,13 +456,13 @@ Enable debug logging for detailed information:
 
 **Client:**
 1. Navigate to `.minecraft/mods`
-2. Delete `DAGMod-1.5.2-beta.jar`
+2. Delete `DAGMod-1.5.3-beta.jar`
 3. Launch Minecraft
 
 **Server:**
 1. Stop the server
 2. Navigate to server `mods` folder
-3. Delete `DAGMod-1.5.2-beta.jar`
+3. Delete `DAGMod-1.5.3-beta.jar`
 4. Restart server
 
 **Note:** Player data (races/classes/levels/quests) will remain in save files but won't be accessible without the mod.
@@ -486,8 +486,8 @@ A: No. Quest progress, race/class selections, level/XP, and player data persist 
 **Q: How much RAM should I allocate?**
 A: Minimum 4GB, recommended 6-8GB for smooth performance with all DAGMod features (dungeons, bosses, abilities, etc.).
 
-**Q: What's new in v1.5.2-beta?**
-A: Critical bug fixes! Quest persistence now works properly (no more data loss), memory leaks fixed, and thread safety issues resolved. Plus all 17 class abilities from v1.4.4 and complete quest system with 64 quests.
+**Q: What's new in v1.5.3-beta?**
+A: Critical bug fix! Quest progression blocker at level 20 resolved (circular dependency in quest book upgrade system). Players can now complete quest chains and unlock Expert Quest Book. Quest Block now displays which chain unlocks the next tier.
 
 ---
 
