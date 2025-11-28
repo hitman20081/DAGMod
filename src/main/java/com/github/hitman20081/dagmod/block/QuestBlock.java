@@ -2,6 +2,7 @@ package com.github.hitman20081.dagmod.block;
 
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.quest.Quest;
+import com.github.hitman20081.dagmod.quest.QuestChain;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestUtils;
@@ -195,10 +196,8 @@ public class QuestBlock extends Block {
             player.sendMessage(Text.literal("No quests available at your current level."), false);
         }
 
-        // Quest book upgrade
-        if (playerData.canUpgradeQuestBook()) {
-            player.sendMessage(Text.literal("⭐ Upgrade Quest Book (AVAILABLE!)"), false);
-        }
+        // Quest book upgrade information
+        showQuestBookUpgradeInfo(player, questManager, playerData);
 
         player.sendMessage(Text.literal("==================="), false);
     }
@@ -512,5 +511,48 @@ public class QuestBlock extends Block {
             }
         }
         return false;
+    }
+
+    /**
+     * Show information about quest book upgrades and which chains unlock them
+     */
+    private void showQuestBookUpgradeInfo(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
+        QuestData.QuestBookTier nextTier = playerData.getNextQuestBookTier();
+
+        // Already at max tier
+        if (nextTier == null) {
+            return;
+        }
+
+        // Find chains that reward this tier
+        boolean foundChain = false;
+        for (QuestChain chain : questManager.getAllChains()) {
+            if (chain.getRewardTier() == nextTier) {
+                float progress = chain.getChainProgress(playerData);
+                int completed = (int)(progress * chain.getChainLength());
+                int total = chain.getChainLength();
+
+                if (completed == total) {
+                    // Chain completed, upgrade available
+                    player.sendMessage(Text.literal("⭐ Quest Book Upgrade (AVAILABLE!)").formatted(Formatting.GOLD), false);
+                    player.sendMessage(Text.literal("   Right-click to upgrade to: " + nextTier.getDisplayName()).formatted(Formatting.YELLOW), false);
+                } else {
+                    // Chain in progress
+                    player.sendMessage(Text.literal(""), false);
+                    player.sendMessage(Text.literal("📖 Next Quest Book: " + nextTier.getDisplayName()).formatted(Formatting.AQUA), false);
+                    player.sendMessage(Text.literal("   Complete: " + chain.getChainName()).formatted(Formatting.GRAY), false);
+                    player.sendMessage(Text.literal("   Progress: " + completed + "/" + total + " quests").formatted(Formatting.GRAY), false);
+                }
+                foundChain = true;
+                break;
+            }
+        }
+
+        // If no specific chain, just show the tier info
+        if (!foundChain) {
+            player.sendMessage(Text.literal(""), false);
+            player.sendMessage(Text.literal("📖 Next Quest Book: " + nextTier.getDisplayName()).formatted(Formatting.AQUA), false);
+            player.sendMessage(Text.literal("   Complete quest chains to unlock!").formatted(Formatting.GRAY), false);
+        }
     }
 }
