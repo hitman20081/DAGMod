@@ -240,7 +240,9 @@ public class DagMod implements ModInitializer {
 
             // Reapply progression stats (fixes health/attack/armor reset on death)
             PlayerProgressionData progressionData = ProgressionManager.getPlayerData(newPlayer);
-            StatScalingHandler.applyLevelStats(newPlayer, progressionData.getCurrentLevel());
+            if (progressionData != null) {
+                StatScalingHandler.applyLevelStats(newPlayer, progressionData.getCurrentLevel());
+            }
 
             BlockPos hallPos = PlayerDataManager.loadHallLocation(newPlayer.getEntityWorld().getServer());
 
@@ -408,7 +410,10 @@ public class DagMod implements ModInitializer {
             QuestManager.getInstance().savePlayerQuestData(player);
 
             // Save progression data (XP, levels, stats)
-            ProgressionStorage.savePlayerData(ProgressionManager.getPlayerData(player));
+            PlayerProgressionData progressionData = ProgressionManager.getPlayerData(player);
+            if (progressionData != null) {
+                ProgressionStorage.savePlayerData(progressionData);
+            }
 
             // Clean up memory (prevent memory leaks)
             QuestManager.getInstance().clearPlayerData(playerId);

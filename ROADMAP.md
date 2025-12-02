@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
 **Current Version**: v1.5.3-beta
-**Last Updated**: 2025-11-28
+**Last Updated**: 2025-12-01
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -480,6 +480,7 @@ Priority: **LOW**
 - ✅ **v1.5.0-beta** (Jan 2025) - Garrick NPC, quest gating, health persistence fix
 - ✅ **v1.5.1-beta** (Jan 2025) - Patch: Quest reward fixes, backward compatibility
 - ✅ **v1.5.2-beta** (Jan 2025) - CRITICAL: Quest persistence, memory leaks, thread safety
+- ✅ **v1.5.3-beta** (Dec 2025) - CRITICAL: Progression reset fix, new world data leakage fix, quest level 20 blocker fix
 
 ### **Short-term** - Next 3-6 months
 - 🎯 **v1.6.0** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
@@ -546,7 +547,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2025-01-24
+**Last Updated**: 2025-12-01
 **Maintained By**: hitman20081
-**Current Version**: v1.5.2-beta
+**Current Version**: v1.5.3-beta
 **License**: See LICENSE file

@@ -1,10 +1,78 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Analysis Date**: 2025-11-24
-**Version**: v1.5.2-beta
+**Analysis Date**: 2025-12-01
+**Version**: v1.5.3-beta
 **Files Analyzed**: 189 Java files across 21 packages
 
 This document lists all known issues, potential bugs, and code quality concerns found in the DAGMod codebase through systematic analysis.
+
+---
+
+## ✅ FIXED in v1.5.3-beta
+
+### 14. Quest Progression Blocker at Level 20 (CRITICAL) - **FIXED**
+
+**Status**: ✅ RESOLVED in v1.5.3-beta
+
+**Problem** (Previous):
+Players were getting stuck at level 20, unable to unlock the Expert Quest Book or complete class quest chains due to a circular dependency. Final quests in tier-unlocking chains required EXPERT difficulty book to accept, but completing those quests was required to unlock the EXPERT book.
+
+**Solution Implemented**:
+- Changed 4 tier-unlocking quests from EXPERT → APPRENTICE difficulty:
+  - `village_master` (Village Development chain → unlocks Expert Quest Book)
+  - `shield_bearers_trial` (Warrior class chain)
+  - `master_scrolls` (Mage class chain)
+  - `echoes_of_the_deep` (Rogue class chain)
+- Added `showQuestBookUpgradeInfo()` method to Quest Block to display chain progress
+- Players now see which chain unlocks the next tier and their progress (e.g., "4/5 quests")
+
+**Impact**: Game-breaking progression wall at level 20 eliminated, all quest chains now completable
+
+**Files Modified**:
+- `quest/registry/QuestRegistry.java` - 4 quest difficulty changes
+- `block/QuestBlock.java` - New upgrade info display method
+
+---
+
+### 15. Progression Reset on Reload (CRITICAL) - **FIXED**
+
+**Status**: ✅ RESOLVED in v1.5.3-beta
+
+**Problem** (Previous):
+Player level and XP reset to 1 when reloading a saved game. The `ProgressionManager.getPlayerData()` method used `computeIfAbsent()` which auto-created fresh level 1 data if accessed before file data was loaded, causing data corruption.
+
+**Solution Implemented**:
+- Removed auto-create logic from `getPlayerData()` - now returns null instead of creating fake data
+- Added null safety checks in all code that accesses progression data
+- Added `clearPlayerData()` method to properly clear memory for new worlds
+- Prevents data corruption from premature access
+
+**Impact**: Progression now properly persists across sessions, no more level resets
+
+**Files Modified**:
+- `progression/ProgressionManager.java` - Removed computeIfAbsent, added clearPlayerData()
+- `data/PlayerDataManager.java` - Clear progression on new world
+- `DagMod.java` - Added null checks (2 locations)
+- `progression/LevelRequirements.java` - Added null checks (3 methods)
+
+---
+
+### 16. New World Data Leakage (CRITICAL) - **FIXED**
+
+**Status**: ✅ RESOLVED in v1.5.3-beta
+
+**Problem** (Previous):
+When creating a new world after playing an existing world, players would start with the same race/class/tutorial progress from the previous world. Static HashMaps in RaceSelectionAltarBlock and ClassSelectionAltarBlock persisted across worlds.
+
+**Solution Implemented**:
+- Added clearing logic in `PlayerDataManager.loadPlayerData()` when no data file exists
+- Clears race, class, progression, and tutorial task tracking on new world detection
+- Ensures fresh start for each new world
+
+**Impact**: New worlds now start correctly with no race/class selected, prevents data leakage
+
+**Files Modified**:
+- `data/PlayerDataManager.java` - Added clearing logic for new worlds (lines 152-168)
 
 ---
 
@@ -558,14 +626,14 @@ Add validation layer in packet handlers and command processors.
 
 ## Summary of Issues by Category
 
-| Category | Critical | Medium | Low | Total | Fixed (v1.5.2) |
-|----------|----------|--------|-----|-------|----------------|
-| **Memory/Threading** | 2 | 0 | 2 | 4 | ✅ 2 (Memory leak + Thread safety) |
-| **Quest System** | 1 | 2 | 0 | 3 | ✅ 1 (Persistence) |
-| **Data Persistence** | 0 | 1 | 1 | 2 | - |
+| Category | Critical | Medium | Low | Total | Fixed |
+|----------|----------|--------|-----|-------|-------|
+| **Memory/Threading** | 2 | 0 | 2 | 4 | ✅ 2 (v1.5.2: Memory leak + Thread safety) |
+| **Quest System** | 1 | 2 | 0 | 3 | ✅ 1 (v1.5.2: Persistence) + ✅ 1 (v1.5.3: Progression blocker) |
+| **Data Persistence** | 2 | 1 | 1 | 4 | ✅ 2 (v1.5.3: Progression reset + New world leakage) |
 | **Code Quality** | 0 | 1 | 1 | 2 | - |
 | **Features** | 0 | 1 | 0 | 1 | - |
-| **Total** | **3** | **5** | **4** | **12** | **3 Fixed** |
+| **Total** | **5** | **5** | **4** | **14** | **6 Fixed** |
 | **Remaining** | **0** | **5** | **4** | **9** | - |
 
 ---
@@ -577,21 +645,26 @@ Add validation layer in packet handlers and command processors.
 2. ✅ **FIXED**: Memory leak - Added disconnect handlers to clear player data maps from QuestManager, ManaManager, EnergyManager, CooldownManager
 3. ✅ **FIXED**: Thread safety - Converted HashMap → ConcurrentHashMap in ManaManager and EnergyManager
 
+### ✅ Completed (v1.5.3-beta)
+4. ✅ **FIXED**: Quest progression blocker - Removed circular dependency in quest book upgrade system
+5. ✅ **FIXED**: Progression reset bug - Removed auto-create logic, added null safety checks
+6. ✅ **FIXED**: New world data leakage - Added proper data clearing for new worlds
+
 ### Short-term (v1.6.0)
-4. Implement lifesteal for VAMPIRE_DUST
-5. Implement dodge system for PHANTOM_DUST/PERFECT_DODGE
-6. Add data persistence backup system
-7. Complete party quest integration
+7. Implement lifesteal for VAMPIRE_DUST
+8. Implement dodge system for PHANTOM_DUST/PERFECT_DODGE
+9. Add data persistence backup system
+10. Complete party quest integration
 
 ### Medium-term (v1.7.0)
-8. Implement spell modification system (SPELL_ECHO, OVERCHARGE_DUST)
-9. Add configuration system for tunable values
-10. Improve error handling and validation
+11. Implement spell modification system (SPELL_ECHO, OVERCHARGE_DUST)
+12. Add configuration system for tunable values
+13. Improve error handling and validation
 
 ### Long-term (v2.0.0)
-11. Refactor TagCollectObjective or deprecate it
-12. Add comprehensive resource cleanup system
-13. Add integration tests for concurrency
+14. Refactor TagCollectObjective or deprecate it
+15. Add comprehensive resource cleanup system
+16. Add integration tests for concurrency
 
 ---
 
@@ -620,5 +693,13 @@ Add validation layer in packet handlers and command processors.
 
 ---
 
-**Last Updated**: 2025-11-24
+**Last Updated**: 2025-12-01
 **Next Review**: Before v1.6.0 release
+
+---
+
+## Changelog
+
+- **2025-12-01** (v1.5.3-beta): Added 3 critical fixes (quest progression blocker, progression reset, new world leakage)
+- **2025-11-24** (v1.5.2-beta): Added 3 critical fixes (quest persistence, memory leak, thread safety)
+- **2025-11-24**: Initial comprehensive analysis

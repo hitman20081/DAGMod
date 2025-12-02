@@ -150,6 +150,21 @@ public class PlayerDataManager {
             File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
 
             if (!dataFile.exists()) {
+                // No data file exists (new world or new player)
+                // Clear static HashMaps to ensure fresh start
+                RaceSelectionAltarBlock.resetPlayerRace(player.getUuid());
+                ClassSelectionAltarBlock.resetPlayerClass(player.getUuid());
+
+                // Clear progression data (level/XP)
+                com.github.hitman20081.dagmod.progression.ProgressionManager.clearPlayerData(player.getUuid());
+
+                // Clear tutorial task tracking
+                playersWhoMetGarrick.remove(player.getUuid());
+                task1CompleteSet.remove(player.getUuid());
+                task2CompleteSet.remove(player.getUuid());
+                task3CompleteSet.remove(player.getUuid());
+                task2MobKills.remove(player.getUuid());
+
                 return; // No data to load for new players
             }
 

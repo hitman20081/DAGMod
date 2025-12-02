@@ -5,7 +5,111 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.3-beta] - 2025-11-28
+## [1.5.3-beta] - 2025-12-01
+
+### Fixed - CRITICAL: Tutorial Bypass Bug
+
+**Quest Book Given on Class Selection**:
+- **CRITICAL FIX**: Class selection no longer bypasses Garrick's tutorial system
+- Removed NOVICE_QUEST_BOOK being given when selecting a class
+- Players must now properly complete Garrick's 3 tasks to earn Quest Book
+- Enforces intended tutorial flow: Meet Garrick → Complete tasks → Get Quest Notes → Combine for Quest Book
+
+**Implementation Details**:
+- Removed lines 264-268 in `ClassSelectionAltarBlock.java`
+- Removed "You've received an Apprentice Quest Book!" message
+- Removed `player.giveItemStack(new ItemStack(ModItems.NOVICE_QUEST_BOOK))`
+
+**Files Modified** (1 file):
+- `block/ClassSelectionAltarBlock.java` - Removed quest book reward from class selection (lines 264-268 deleted)
+
+**Root Cause**:
+- Leftover code from pre-v1.5.0 tutorial system
+- When Garrick tutorial was added in v1.5.0, this reward wasn't removed
+- Created bypass where players could skip entire tutorial
+
+**Impact**:
+- Tutorial system now works as designed
+- Players must interact with Garrick and complete tasks
+- Quest system gating functions correctly
+- No shortcuts to accessing quests
+
+### Fixed - CRITICAL: Progression Reset on Reload
+
+**Player Level Resetting to 1 Bug**:
+- **CRITICAL FIX**: Player progression no longer resets when loading existing saves
+- Fixed race condition where `computeIfAbsent()` created fresh level 1 data before file loaded
+- Removed auto-create pattern in `ProgressionManager.getPlayerData()`
+- Changed from `computeIfAbsent(uuid, PlayerProgressionData::new)` to explicit null checking
+- Added defensive null checks throughout codebase
+
+**Implementation Details**:
+- Modified `ProgressionManager.getPlayerData()` to return null if data not loaded (lines 37-43)
+- Added `clearPlayerData()` method for proper cleanup on new worlds (lines 115-122)
+- Added null safety in `DagMod.java` respawn handler (line 244) and disconnect handler (line 415)
+- Added null safety in `LevelRequirements.java` (3 methods: lines 32-34, 90-92, 112-114)
+- Prevents data corruption from premature data access
+
+**Files Modified** (3 files):
+- `progression/ProgressionManager.java` - Removed computeIfAbsent, added null return and clearPlayerData()
+- `DagMod.java` - Added null checks before accessing progression data (2 locations)
+- `progression/LevelRequirements.java` - Added null checks in meetsLevelRequirement(), sendLevelRequirementMessage(), canAccessContent()
+
+**Root Cause**:
+- `computeIfAbsent()` auto-created fresh PlayerProgressionData(uuid) instances
+- If called before `ProgressionStorage.loadPlayerData()` completed, fresh level 1 data overwrote file data
+- Created race condition between entity load events and file I/O
+
+**Impact**:
+- Players retain level/XP when loading existing saves
+- Progression data loads reliably from disk
+- No more unexpected level resets
+- Proper data lifecycle management
+
+### Fixed - CRITICAL: New World Data Leakage
+
+**Race/Class Persisting Across Worlds Bug**:
+- **CRITICAL FIX**: Starting a new world no longer carries over race/class/tutorial progress from previous worlds
+- Static HashMaps now properly cleared when no save file exists
+- Fresh start guaranteed for each new world
+
+**Implementation Details**:
+- Modified `PlayerDataManager.loadPlayerData()` to detect new worlds (no data file exists)
+- Clears static race/class HashMaps using existing reset methods
+- Clears progression data via `ProgressionManager.clearPlayerData()`
+- Clears tutorial task tracking (Garrick interaction, all 3 tasks, mob kill counter)
+
+**Files Modified** (1 file):
+- `data/PlayerDataManager.java` - Added clearing logic when data file doesn't exist (lines 152-168)
+
+**Root Cause**:
+- Static HashMaps persist for entire Minecraft session (not per-world)
+- `RaceSelectionAltarBlock.playerRaces` and `ClassSelectionAltarBlock.playerClasses` retained data
+- Tutorial tracking Sets/Maps also persisted across world switches
+- No cleanup logic existed for new world scenarios
+
+**Clearing Logic**:
+```java
+if (!dataFile.exists()) {
+    // Clear static HashMaps to ensure fresh start
+    RaceSelectionAltarBlock.resetPlayerRace(player.getUuid());
+    ClassSelectionAltarBlock.resetPlayerClass(player.getUuid());
+    ProgressionManager.clearPlayerData(player.getUuid());
+    // Clear tutorial task tracking
+    playersWhoMetGarrick.remove(player.getUuid());
+    task1CompleteSet.remove(player.getUuid());
+    task2CompleteSet.remove(player.getUuid());
+    task3CompleteSet.remove(player.getUuid());
+    task2MobKills.remove(player.getUuid());
+    return; // No data to load for new players
+}
+```
+
+**Impact**:
+- New worlds start completely fresh (no inherited progress)
+- Race/class selection required for each new world
+- Tutorial tasks reset properly
+- No cross-world data contamination
 
 ### Fixed - CRITICAL: Quest Progression Blocker at Level 20
 

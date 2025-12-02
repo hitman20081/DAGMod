@@ -29,12 +29,17 @@ public class ProgressionManager {
     }
 
     /**
-     * Get or create progression data by UUID
+     * Get progression data by UUID
+     * Does NOT auto-create to prevent data loss issues
      * @param uuid Player UUID
-     * @return Their progression data
+     * @return Their progression data, or null if not loaded
      */
     public static PlayerProgressionData getPlayerData(UUID uuid) {
-        return playerDataMap.computeIfAbsent(uuid, PlayerProgressionData::new);
+        PlayerProgressionData data = playerDataMap.get(uuid);
+        if (data == null) {
+            LOGGER.warn("Attempted to get progression data for player {} before it was loaded! Returning null.", uuid);
+        }
+        return data;
     }
 
     /**
@@ -104,6 +109,16 @@ public class ProgressionManager {
      */
     public static void unloadPlayerData(UUID uuid) {
         playerDataMap.remove(uuid);
+    }
+
+    /**
+     * Clear player data from memory without saving
+     * Used when loading a new world to prevent data leakage from previous worlds
+     * @param uuid Player UUID
+     */
+    public static void clearPlayerData(UUID uuid) {
+        playerDataMap.remove(uuid);
+        LOGGER.debug("Cleared progression data for player {} (new world/fresh start)", uuid);
     }
 
     /**

@@ -29,6 +29,9 @@ public class LevelRequirements {
      */
     public static boolean meetsLevelRequirement(ServerPlayerEntity player, Quest quest) {
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
+        if (data == null) {
+            return false; // Data not loaded yet, deny access
+        }
         int playerLevel = data.getCurrentLevel();
         int requiredLevel = getRequiredLevelForQuest(quest);
 
@@ -84,6 +87,9 @@ public class LevelRequirements {
      */
     public static void sendLevelRequirementMessage(ServerPlayerEntity player, int requiredLevel) {
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
+        if (data == null) {
+            return; // Data not loaded yet, skip message
+        }
         int currentLevel = data.getCurrentLevel();
         int levelsNeeded = requiredLevel - currentLevel;
 
@@ -103,6 +109,9 @@ public class LevelRequirements {
      */
     public static boolean canAccessContent(ServerPlayerEntity player, int requiredLevel) {
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
+        if (data == null) {
+            return false; // Data not loaded yet, deny access
+        }
         return data.getCurrentLevel() >= requiredLevel;
     }
 
