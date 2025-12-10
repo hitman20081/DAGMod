@@ -17,7 +17,7 @@ public class ResetClassCommand {
                                 CommandManager.RegistrationEnvironment environment) {
 
         dispatcher.register(CommandManager.literal("resetclass")
-                .requires(source -> source.hasPermissionLevel(2)) // Requires OP level 2
+                // TODO: Re-add OP permission check using Fabric Permissions API
                 .executes(ResetClassCommand::resetOwnClass)
                 .then(CommandManager.argument("player",
                                 net.minecraft.command.argument.EntityArgumentType.player())

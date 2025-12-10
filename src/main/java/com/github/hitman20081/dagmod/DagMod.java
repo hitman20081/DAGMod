@@ -203,7 +203,7 @@ public class DagMod implements ModInitializer {
 
             // Summon Innkeeper Garrick Command (for testing/structure blocks)
             dispatcher.register(CommandManager.literal("summon_garrick")
-                    .requires(source -> source.hasPermissionLevel(2)) // Requires OP
+                    // TODO: Re-add OP permission check using Fabric Permissions API
                     .executes(context -> {
                         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
 

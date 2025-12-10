@@ -79,7 +79,6 @@ public class WhirlwindAbility {
                                 0.3, // Upward knockback
                                 dz * KNOCKBACK_STRENGTH
                         );
-                        entity.velocityModified = true;
                     }
 
                     hitCount++;

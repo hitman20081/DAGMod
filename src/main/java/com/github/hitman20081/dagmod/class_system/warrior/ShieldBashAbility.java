@@ -72,7 +72,6 @@ public class ShieldBashAbility {
 
         // Apply dash velocity
         player.setVelocity(dashVec.x, 0.2, dashVec.z); // Slight upward for clearance
-        player.velocityModified = true;
 
         // Make player briefly invulnerable during dash
         player.setInvulnerable(true);
@@ -101,7 +100,6 @@ public class ShieldBashAbility {
                 livingEntity.setVelocity(
                         livingEntity.getVelocity().add(knockbackVec.x, 0.5, knockbackVec.z)
                 );
-                livingEntity.velocityModified = true;
 
                 // Apply stun (slowness)
                 StatusEffectInstance stun = new StatusEffectInstance(

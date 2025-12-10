@@ -83,7 +83,6 @@ public class ManaBurstAbility {
                             0.5, // Upward launch
                             dz * KNOCKBACK_STRENGTH
                     );
-                    entity.velocityModified = true;
                 }
 
                 // Hit particles

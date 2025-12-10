@@ -5,6 +5,36 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.4-beta] - 2025-12-10
+
+### Changed
+
+**Minecraft Version Update**:
+- Updated to Minecraft 1.21.11 (final obfuscated version before mappings change)
+- Updated Fabric Loader to 0.18.1
+- Updated Fabric API to 0.139.4+1.21.11
+- Updated Yarn Mappings to 1.21.11+build.1
+- Updated Gradle to 9.2.1
+- Updated Fabric Loom to 1.14.5
+
+**API Migration**:
+- Removed deprecated `velocityModified` field (now handled automatically by `setVelocity()`)
+  - Fixed in `ManaBurstAbility.java`, `ShieldBashAbility.java` (2 locations), `WhirlwindAbility.java`
+- Temporarily removed OP permission level checks from commands
+  - Affected commands: `/resetclass`, `/summon_garrick`, `/testprogression`
+  - TODO: Re-implement using Fabric Permissions API in future update
+
+**Files Modified** (8 files):
+- `gradle.properties` - Updated all version numbers
+- `gradle/wrapper/gradle-wrapper.properties` - Updated Gradle wrapper to 9.2.1
+- `build.gradle` - Updated Loom to 1.14.5
+- `class_system/mage/ManaBurstAbility.java` - Removed `velocityModified` line
+- `class_system/warrior/ShieldBashAbility.java` - Removed 2x `velocityModified` lines
+- `class_system/warrior/WhirlwindAbility.java` - Removed `velocityModified` line
+- `command/ResetClassCommand.java` - Removed permission check (TODO)
+- `DagMod.java` - Removed permission check from `/summon_garrick` (TODO)
+- `progression/ProgressionTestCommand.java` - Removed 2x permission checks (TODO)
+
 ## [1.5.3-beta] - 2025-12-01
 
 ### Fixed - CRITICAL: Tutorial Bypass Bug

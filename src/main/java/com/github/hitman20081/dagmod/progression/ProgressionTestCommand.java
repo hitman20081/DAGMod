@@ -21,14 +21,14 @@ public class ProgressionTestCommand {
                                 CommandManager.RegistrationEnvironment environment) {
 
         dispatcher.register(CommandManager.literal("testprogression")
-                .requires(source -> source.hasPermissionLevel(2)) // Requires OP
+                // TODO: Re-add OP permission check using Fabric Permissions API
                 .then(CommandManager.argument("xp", IntegerArgumentType.integer(0))
                         .executes(ProgressionTestCommand::executeAddXP))
                 .executes(ProgressionTestCommand::executeInfo)
         );
 
         dispatcher.register(CommandManager.literal("testprogression")
-                .requires(source -> source.hasPermissionLevel(2))
+                // TODO: Re-add OP permission check using Fabric Permissions API
                 .then(CommandManager.literal("info")
                         .executes(ProgressionTestCommand::executeInfo))
                 .then(CommandManager.literal("reset")
