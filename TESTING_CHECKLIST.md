@@ -1,10 +1,10 @@
-# DAGMod Testing Checklist - v1.5.0
+# DAGMod Testing Checklist - v1.5.4
 
-**Version**: v1.5.0-beta
+**Version**: v1.5.4-beta
 **Test Date**: _____________
 **Tester**: _____________
-**Minecraft Version**: 1.21.10
-**Fabric Loader**: 0.17.3
+**Minecraft Version**: 1.21.11
+**Fabric Loader**: 0.18.1
 
 ---
 

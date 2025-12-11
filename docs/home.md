@@ -18,11 +18,19 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 50 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.5.3-beta (January 2025)
+Current Version v1.5.4-beta (December 2025)
 
 ---
 
-## 🎮 What's New in v1.5.3-beta
+## 🎮 What's New in v1.5.4-beta
+
+### Minecraft Version Update!
+
+✅ **Updated to Minecraft 1.21.11** - Final obfuscated version before mappings change
+✅ **Updated Fabric Loader to 0.18.1** - Latest stable loader
+✅ **Updated Fabric API to 0.139.4+1.21.11** - Compatible with 1.21.11
+
+## What's New in v1.5.3-beta
 
 ### Critical Quest Progression Fix!
 

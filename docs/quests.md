@@ -2,7 +2,7 @@
 
 Complete quests to progress through DAGMod's tiered quest system, earning powerful rewards and unlocking new challenges. From humble beginnings as a Novice to legendary Master rank, your journey is filled with adventure, including epic race-specific storylines!
 
-**Current Version:** v1.5.3-beta
+**Current Version:** v1.5.4-beta
 **Total Quests:** 64 (including 40 race-specific quests)
 
 **⚠️ Important Update (v1.5.3-beta):** Quest progression blocker at level 20 has been fixed! Players can no longer get stuck unable to unlock Expert Quest Book. The circular dependency in quest book upgrade system has been resolved, and Quest Block now shows which chain unlocks the next tier.

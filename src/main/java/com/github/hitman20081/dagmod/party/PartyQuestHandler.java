@@ -75,9 +75,10 @@ public class PartyQuestHandler {
         // Notify party
         notifyPartyQuestProgress(killer, "killed " + mobName);
 
-        // TODO: Integrate with your quest system here
-        // For each nearby member, check if they have a quest requiring this mob
-        // and update their progress
+        // Update quest progress for all nearby party members
+        for (ServerPlayerEntity member : nearbyMembers) {
+            com.github.hitman20081.dagmod.quest.QuestManager.getInstance().updateQuestProgress(member);
+        }
     }
 
     /**
@@ -104,9 +105,10 @@ public class PartyQuestHandler {
         // Notify party
         notifyPartyQuestProgress(player, "collected " + itemName);
 
-        // TODO: Integrate with your quest system here
-        // For each nearby member, check if they have a quest requiring this item
-        // and update their progress
+        // Update quest progress for all nearby party members
+        for (ServerPlayerEntity member : nearbyMembers) {
+            com.github.hitman20081.dagmod.quest.QuestManager.getInstance().updateQuestProgress(member);
+        }
     }
 
     /**

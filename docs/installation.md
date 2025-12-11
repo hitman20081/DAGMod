@@ -2,9 +2,18 @@
 
 Get started with DAGMod by following this comprehensive installation guide. Whether you're playing singleplayer or setting up a server, this guide will help you install and configure the mod properly.
 
-**Current Version:** v1.5.3-beta (January 2025)
+**Current Version:** v1.5.4-beta (December 2025)
 
 ---
+
+## What's New in v1.5.4-beta
+
+**Minecraft Version Update:**
+- ✅ **Updated to Minecraft 1.21.11** - Final obfuscated version before mappings change
+- ✅ **Updated Fabric Loader to 0.18.1** - Latest stable loader
+- ✅ **Updated Fabric API to 0.139.4+1.21.11** - Compatible with 1.21.11
+
+See previous v1.5.3-beta changes below.
 
 ## What's New in v1.5.3-beta
 
@@ -30,19 +39,19 @@ See [CHANGELOG.md](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md)
 ## System Requirements
 
 ### Minecraft Version
-- **Minecraft 1.21.10** 
+- **Minecraft 1.21.11**
 - DAGMod is built for this specific version
 - Earlier or later versions may not be compatible
 
 ### Required Dependencies
-- **Fabric Loader** 0.17.3
-- **Fabric API** 0.138.0+1.21.10
+- **Fabric Loader** 0.18.1
+- **Fabric API** 0.139.4+1.21.11
 
 ### Recommended System Specs
 - **RAM:** 4GB minimum, 6-8GB recommended
 - **CPU:** Dual-core 2.5GHz or better
 - **Storage:** 500MB free space for mod and world saves
-- **Java:** Java 21 or newer (Minecraft 1.21.10 requirement)
+- **Java:** Java 21 or newer (Minecraft 1.21.11 requirement)
 
 ---
 
@@ -63,8 +72,8 @@ Choose the installation method that best fits your needs:
 
 1. Download the Fabric Installer from [fabricmc.net](https://fabricmc.net/use/installer/)
 2. Run the installer
-3. Select **Minecraft 1.21.10** 
-4. Select **Fabric Loader** 0.17.3
+3. Select **Minecraft 1.21.11**
+4. Select **Fabric Loader** 0.18.1
 5. Click "Install"
 6. Wait for installation to complete
 
@@ -73,13 +82,13 @@ Choose the installation method that best fits your needs:
 1. Open the Minecraft Launcher
 2. Go to "Installations"
 3. Click "New Installation"
-4. Select version: **fabric-loader-0.17.3-1.21.10** 
-5. Name it "DAGMod v1.5.2-beta"
+4. Select version: **fabric-loader-0.18.1-1.21.11**
+5. Name it "DAGMod v1.5.4-beta"
 6. Click "Create"
 
 ### Step 2: Install Fabric API
 
-1. Download **Fabric API 0.138.0+1.21.10** from:
+1. Download **Fabric API 0.139.4+1.21.11** from:
    - [Modrinth](https://modrinth.com/mod/fabric-api) (recommended)
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 2. Locate your Minecraft mods folder:
@@ -91,7 +100,7 @@ Choose the installation method that best fits your needs:
 
 ### Step 3: Install DAGMod
 
-1. Download **DAGMod v1.5.3-beta** from:
+1. Download **DAGMod v1.5.4-beta** from:
    - [GitHub Releases](https://github.com/hitman20081/DAGMod/releases)
    - [Modrinth](https://modrinth.com/mod/dag-mod)
    - [CurseForge](https://curseforge.com/minecraft/mc-mods/dag-mod) [Not available yet] 
@@ -101,7 +110,7 @@ Choose the installation method that best fits your needs:
 ### Step 4: Launch Minecraft
 
 1. Open the Minecraft Launcher
-2. Select the **Fabric Loader 1.21.10** profile (or "DAGMod v1.5.3-beta" if you named it)
+2. Select the **Fabric Loader 1.21.11** profile (or "DAGMod v1.5.4-beta" if you named it)
 3. Click "Play"
 4. Wait for Minecraft to load
 5. Check the main menu - you should see "X mods loaded" in the bottom-left
@@ -138,20 +147,20 @@ Choose the installation method that best fits your needs:
 **Or use the Fabric Installer:**
 1. Run the Fabric Installer
 2. Select "Server" tab
-2. Choose **Minecraft 1.21.10**
-3. Choose **Fabric Loader 0.17.3**
+2. Choose **Minecraft 1.21.11**
+3. Choose **Fabric Loader 0.18.1**
 5. Select your server folder
 6. Click "Install"
 
 ### Step 2: Install Fabric API
 
-1. Download **Fabric API 0.138.0+1.21.10**
+1. Download **Fabric API 0.139.4+1.21.11**
 2. Place it in the `mods` folder inside your server directory
 3. If the `mods` folder doesn't exist, create it
 
 ### Step 3: Install DAGMod
 
-1. Download **DAGMod v1.5.3-beta**
+1. Download **DAGMod v1.5.4-beta**
 2. Place it in the `mods` folder (alongside Fabric API)
 
 ### Step 4: Configure Server
@@ -189,7 +198,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 ### Step 6: Connect to Your Server
 
-1. Start Minecraft with the same mods (Fabric API + DAGMod v1.5.3-beta)
+1. Start Minecraft with the same mods (Fabric API + DAGMod v1.5.4-beta)
 2. Go to "Multiplayer"
 3. Click "Add Server"
 4. Enter server address (e.g., `localhost` or your server IP)
@@ -205,7 +214,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **In-Game Verification:**
 1. Press F3 to open debug screen
 2. Check right side for mod list
-3. DAGMod v1.5.3-beta should appear in the list
+3. DAGMod v1.5.4-beta should appear in the list
 
 **Command Verification:**
 1. Type `/dagmod` in chat
@@ -229,9 +238,9 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **Issue: "Incompatible mod set" error**
 - **Cause:** Version mismatch
 - **Solution:** Verify all mods are for the correct Minecraft version
-- Check Fabric Loader version 0.17.3
-- Check Fabric API version 0.138.0+1.21.10
-- Check DAGMod is v1.5.3-beta
+- Check Fabric Loader version 0.18.1
+- Check Fabric API version 0.139.4+1.21.11
+- Check DAGMod is v1.5.4-beta
 
 **Issue: Mods not loading**
 - **Cause:** Incorrect folder or wrong Minecraft version
@@ -242,7 +251,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 **Issue: DAGMod features not working**
 - **Cause:** Missing Fabric API
-- **Solution:** Install Fabric API [LATEST] for Minecraft 1.21.x
+- **Solution:** Install Fabric API 0.139.4+1.21.11
 
 **Issue: Hall of Champions not generating**
 - **Cause:** World generated before mod installation
@@ -261,7 +270,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **Issue: Client can't connect to server**
 - **Cause:** Version mismatch between client and server
 - **Solution:**
-  - Ensure both client and server have DAGMod v1.5.3-beta
+  - Ensure both client and server have DAGMod v1.5.4-beta
   - Ensure both have same Fabric API version
   - Check server is running and accessible
 
@@ -275,7 +284,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
    - Navigate to `.minecraft/saves`
    - Copy your world folders to a safe location
 2. **Remove old DAGMod version** from mods folder
-3. **Download DAGMod v1.5.3-beta** (or newer)
+3. **Download DAGMod v1.5.4-beta** (or newer)
 4. **Place new `.jar` in mods folder**
 5. **Launch Minecraft**
 6. **Load your world** - progress should be preserved
@@ -287,7 +296,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
    - Especially backup the `world` folder
 2. **Stop the server**
 3. **Remove old DAGMod `.jar`** from mods folder
-4. **Add new DAGMod v1.5.3-beta `.jar`** to mods folder
+4. **Add new DAGMod v1.5.4-beta `.jar`** to mods folder
 5. **Start the server**
 6. **Verify update:** Check console logs for version number
 
@@ -297,7 +306,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 ## Configuration
 
-### Current Configuration (v1.5.3-beta)
+### Current Configuration (v1.5.4-beta)
 
 
 DAGMod configuration options:
@@ -378,10 +387,10 @@ Want to contribute or modify DAGMod? Here's how to set up a development environm
 
 **gradle.properties:**
 ```properties
-minecraft_version=1.21.10
-yarn_mappings=1.21.10+build.2
-loader_version=0.17.3
-fabric_version=0.138.0+1.21.10
+minecraft_version=1.21.11
+yarn_mappings=1.21.11+build.1
+loader_version=0.18.1
+fabric_version=0.139.4+1.21.11
 ```
 
 **Project Structure:**
@@ -432,7 +441,7 @@ If you encounter issues not covered in this guide:
 2. **Search for similar problems** - someone may have solved it
 3. **Create a new issue** with:
    - Minecraft version
-   - DAGMod version (v1.5.3-beta)
+   - DAGMod version (v1.5.4-beta)
    - Fabric Loader version
    - Fabric API version
    - Full error log (from `.minecraft/logs/latest.log`)
@@ -456,13 +465,13 @@ Enable debug logging for detailed information:
 
 **Client:**
 1. Navigate to `.minecraft/mods`
-2. Delete `DAGMod-1.5.3-beta.jar`
+2. Delete `DAGMod-1.5.4-beta.jar`
 3. Launch Minecraft
 
 **Server:**
 1. Stop the server
 2. Navigate to server `mods` folder
-3. Delete `DAGMod-1.5.3-beta.jar`
+3. Delete `DAGMod-1.5.4-beta.jar`
 4. Restart server
 
 **Note:** Player data (races/classes/levels/quests) will remain in save files but won't be accessible without the mod.
@@ -486,8 +495,8 @@ A: No. Quest progress, race/class selections, level/XP, and player data persist 
 **Q: How much RAM should I allocate?**
 A: Minimum 4GB, recommended 6-8GB for smooth performance with all DAGMod features (dungeons, bosses, abilities, etc.).
 
-**Q: What's new in v1.5.3-beta?**
-A: Critical bug fix! Quest progression blocker at level 20 resolved (circular dependency in quest book upgrade system). Players can now complete quest chains and unlock Expert Quest Book. Quest Block now displays which chain unlocks the next tier.
+**Q: What's new in v1.5.4-beta?**
+A: Minecraft version update! Updated to Minecraft 1.21.11 (final obfuscated version before mappings change), Fabric Loader 0.18.1, and Fabric API 0.139.4+1.21.11. See v1.5.3-beta for previous critical bug fixes (quest progression blocker resolved).
 
 ---
 

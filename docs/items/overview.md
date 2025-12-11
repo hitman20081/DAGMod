@@ -2,7 +2,7 @@
 
 DAGMod features over 100 custom items that enhance your RPG experience. From selection tokens to fantasy foods, quest books to magical scrolls, powerful class ability items to custom armor sets, discover the complete catalog of items available in your adventure.
 
-**Current Version:** v1.5.0-beta
+**Current Version:** v1.5.4-beta
 
 ---
 

@@ -79,17 +79,14 @@ public class CustomArmorSetBonus {
         }
 
         String name = stack.getName().getString();
-        DagMod.LOGGER.info("Armor piece name: '" + name + "'"); // DEBUG
 
         // Check each armor set
         for (ArmorSet set : ArmorSet.values()) {
             if (set != ArmorSet.NONE && name.contains(set.getName())) {
-                DagMod.LOGGER.info("MATCHED SET: " + set.getName()); // DEBUG
                 return set;
             }
         }
 
-        DagMod.LOGGER.info("No match found for: '" + name + "'"); // DEBUG
         return ArmorSet.NONE;
     }
 

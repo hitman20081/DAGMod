@@ -2,7 +2,7 @@
 
 When race and class combine, something extraordinary happens. Race-class combinations can unlock unique synergy abilities that go beyond the sum of their parts. These synergies define your character's specialty and playstyle.
 
-**Current Version:** v1.5.0-beta
+**Current Version:** v1.5.4-beta
 
 ---
 

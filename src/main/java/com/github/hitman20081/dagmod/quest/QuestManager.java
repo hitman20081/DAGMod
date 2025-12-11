@@ -215,6 +215,11 @@ public class QuestManager {
         QuestData playerData = getPlayerData(player);
 
         for (Quest quest : playerData.getActiveQuests()) {
+            // Null safety check for quest objectives
+            if (quest == null || quest.getObjectives() == null) {
+                continue; // Skip malformed quest data
+            }
+
             boolean progressMade = false;
 
             // Update each objective (always update collect objectives to track current inventory)
@@ -258,6 +263,13 @@ public class QuestManager {
 
         if (quest == null) {
             player.sendMessage(Text.literal("You don't have that quest active."), false);
+            return false;
+        }
+
+        // Null safety check for quest objectives
+        if (quest.getObjectives() == null) {
+            player.sendMessage(Text.literal("Quest data error - invalid objectives.").formatted(net.minecraft.util.Formatting.RED), false);
+            com.github.hitman20081.dagmod.DagMod.LOGGER.error("Null objectives for quest: " + questId);
             return false;
         }
 

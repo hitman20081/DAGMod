@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -102,11 +104,25 @@ public class PlayerDataManager {
     }
 
     /**
-     * Save player's race and class to file
+     * Save player's race and class to file with backup system
+     *
+     * Backup flow: .tmp → .dat → .bak
+     * 1. Write to temporary file (.tmp)
+     * 2. If successful, backup old file to .bak (if exists)
+     * 3. Replace .dat with .tmp
+     * This prevents data loss on write failure
      */
     public static void savePlayerData(ServerPlayerEntity player) {
+        File dataFile = null;
+        File tempFile = null;
+        File backupFile = null;
+
         try {
-            File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
+            dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
+            tempFile = new File(dataFile.getPath() + ".tmp");
+            backupFile = new File(dataFile.getPath() + ".bak");
+
+            // Prepare NBT data
             NbtCompound nbt = new NbtCompound();
 
             String race = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
@@ -133,21 +149,38 @@ public class PlayerDataManager {
                 nbt.put("manaData", manaNbt);
             }
 
-            try (FileOutputStream fos = new FileOutputStream(dataFile)) {
+            // Step 1: Write to temporary file
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                 NbtIo.writeCompressed(nbt, fos);
             }
 
+            // Step 2: Backup old file if it exists
+            if (dataFile.exists()) {
+                Files.copy(dataFile.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            // Step 3: Replace main file with temp file
+            Files.move(tempFile.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
         } catch (IOException e) {
             DagMod.LOGGER.error("Failed to save player data for " + player.getName().getString(), e);
+
+            // Cleanup temp file if it exists
+            if (tempFile != null && tempFile.exists()) {
+                if (!tempFile.delete()) {
+                    DagMod.LOGGER.warn("Failed to delete temporary file: " + tempFile.getPath());
+                }
+            }
         }
     }
 
     /**
-     * Load player's race and class from file
+     * Load player's race and class from file with backup recovery
      */
     public static void loadPlayerData(ServerPlayerEntity player) {
         try {
             File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
+            File backupFile = new File(dataFile.getPath() + ".bak");
 
             if (!dataFile.exists()) {
                 // No data file exists (new world or new player)
@@ -168,9 +201,36 @@ public class PlayerDataManager {
                 return; // No data to load for new players
             }
 
-            NbtCompound nbt;
+            NbtCompound nbt = null;
+
+            // Try to load from main file
             try (FileInputStream fis = new FileInputStream(dataFile)) {
                 nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+            } catch (IOException mainFileError) {
+                DagMod.LOGGER.error("Failed to load player data from main file for " + player.getName().getString(), mainFileError);
+
+                // Try to load from backup file
+                if (backupFile.exists()) {
+                    DagMod.LOGGER.warn("Attempting to recover from backup file...");
+                    try (FileInputStream fis = new FileInputStream(backupFile)) {
+                        nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                        DagMod.LOGGER.info("Successfully recovered player data from backup for " + player.getName().getString());
+
+                        // Restore backup as main file
+                        Files.copy(backupFile.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException backupFileError) {
+                        DagMod.LOGGER.error("Failed to load from backup file as well for " + player.getName().getString(), backupFileError);
+                        throw backupFileError; // Rethrow to trigger outer catch
+                    }
+                } else {
+                    DagMod.LOGGER.error("No backup file available for recovery");
+                    throw mainFileError; // Rethrow to trigger outer catch
+                }
+            }
+
+            // If we still don't have data, bail out
+            if (nbt == null) {
+                return;
             }
 
             if (nbt.contains(RACE_KEY)) {

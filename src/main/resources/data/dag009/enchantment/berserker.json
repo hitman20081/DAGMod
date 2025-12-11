@@ -2,10 +2,10 @@
   "description": {
     "text": "Berserker",
     "color": "#600b2d",
-    "hoverEvent": {
+    "hover_event": {
       "action": "show_text",
       "value": {
-        "text": "Kinda cursed but not a true curse. While a powerful enchantment, it does come with a hungry cost",
+        "text": "\"Kinda cursed but not a true curse. While a powerful enchantment, it does come with a hungry cost\"",
         "type": "text",
         "color": "#ec0909"
       }

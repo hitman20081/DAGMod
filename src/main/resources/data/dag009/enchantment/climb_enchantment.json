@@ -1,6 +1,6 @@
 {
   "description": "Climb",
-  "supported_items": "minecraft:netherite_sword",
+  "supported_items": "#minecraft:enchantable/foot_armor",
   "weight": 50,
   "max_level": 10,
   "min_cost": {
@@ -13,7 +13,7 @@
   },
   "anvil_cost": 0,
   "slots": [
-    "mainhand"
+    "feet"
   ],
   "effects": {
     "minecraft:hit_block": [

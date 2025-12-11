@@ -2,7 +2,7 @@
 
 Master your destiny by choosing one of three powerful classes. Each class offers unique abilities, playstyles, and combat approaches. Combined with your race, classes unlock powerful synergies that define your role in the world.
 
-**Current Version:** v1.5.0-beta features 17 new class abilities bringing devastating power to all three classes!
+**Current Version:** v1.5.4-beta features 17 new class abilities bringing devastating power to all three classes!
 
 ## Class Overview
 
