@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BEB",
+    "BBB"
+  ],
+  "key": {
+    "B": "minecraft:bone_block",
+    "E": "minecraft:echo_shard"
+  },
+  "result": {
+    "id": "dagmod:ancient_bone_block",
+    "count": 1
+  }
+}

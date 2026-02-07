@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:smelting",
+    "category": "blocks",
+    "ingredient": "minecraft:magma_block",
+    "result": {
+      "id": "minecraft:lava_bucket",
+      "components": {
+        "minecraft:max_stack_size": 16
+      }
+    },
+    "experience": 0,
+    "cookingtime": 400
+  }

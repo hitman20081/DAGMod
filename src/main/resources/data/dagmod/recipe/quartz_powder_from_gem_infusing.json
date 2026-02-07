@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_infusing",
+  "ingredient": "minecraft:quartz",
+  "result": {
+    "id": "dagmod:quartz_powder",
+    "count": 2
+  }
+}

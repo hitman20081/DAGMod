@@ -1,0 +1,19 @@
+{
+    "model": {
+        "type": "minecraft:select",
+        "property": "custom_model_data",
+        "fallback": {
+        "type": "minecraft:model",
+        "model": "item/netherite_axe"
+        },
+        "cases": [
+            {
+                "when": "frostbite_axe",
+                "model": {
+                    "type": "model",
+                    "model": "minecraft:item/frostbite_axe"
+                }
+            }
+        ]
+    }
+}

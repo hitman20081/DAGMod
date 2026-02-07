@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "M M",
+    "M M"
+  ],
+  "key": {
+    "M": "dagmod:mythril_ingot"
+  },
+  "result": {
+    "id": "minecraft:diamond_leggings",
+    "count": 1,
+    "components": {
+      "minecraft:item_model": "minecraft:mythril_leggings",
+      "minecraft:item_name": {
+        "text": "Mythril Leggings",
+        "color": "#00d9ff"
+      },
+      "minecraft:equippable": {
+        "slot": "legs",
+        "asset_id": "mythril"
+      },
+      "minecraft:max_damage": 550,
+      "minecraft:attribute_modifiers": [
+        {
+          "type": "minecraft:armor",
+          "id": "minecraft:armor.leggings",
+          "amount": 6.0,
+          "operation": "add_value",
+          "slot": "legs"
+        },
+        {
+          "type": "minecraft:armor_toughness",
+          "id": "minecraft:armor.toughness",
+          "amount": 2.0,
+          "operation": "add_value",
+          "slot": "legs"
+        }
+      ],
+      "minecraft:rarity": "rare"
+    }
+  }
+}

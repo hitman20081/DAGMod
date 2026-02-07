@@ -1,0 +1,19 @@
+{
+  "structures": [
+    {
+      "structure": "dag011:house_npc",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1649512346,
+    "spacing": 36,
+    "separation": 16,
+    "locate_offset": [0, 0, 0]
+  },
+  "exclusion_zone": {
+    "other_set": "dag011:village_npc_set",
+    "chunk_count": 8
+  }
+}

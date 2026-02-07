@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:amethyst_powder",
+    "minecraft:glistering_melon_slice"
+  ],
+  "result": {
+    "id": "dagmod:heal_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:heal_scroll"
+    },
+    "count": 1
+  }
+}

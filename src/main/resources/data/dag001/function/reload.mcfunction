@@ -1,0 +1,1 @@
+tellraw @a {"text":"[DAG001] Enhanced Potions Data pack reloaded successfully!","color":"green"}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:mythril_ingot"
+  ],
+  "result": {
+    "id": "dagmod:mythril_nugget",
+    "count": 9
+  }
+}

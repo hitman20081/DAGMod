@@ -1,0 +1,29 @@
+{
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "equipment": {
+        "head": {
+          "predicates": {
+            "minecraft:custom_data": {"set":true}
+          }
+        },
+        "chest": {
+          "predicates": {
+            "minecraft:custom_data": {"set":true}
+          }
+        },
+        "legs": {
+          "predicates": {
+            "minecraft:custom_data": {"set":true}
+          }
+        },
+        "feet": {
+          "predicates": {
+            "minecraft:custom_data": {"set":true}
+          }
+        }
+      }
+    }
+  }
+  

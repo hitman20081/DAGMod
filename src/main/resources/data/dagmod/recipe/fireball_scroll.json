@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:emerald_powder",
+    "minecraft:fire_charge"
+  ],
+  "result": {
+    "id": "dagmod:fireball_scroll",
+    "components": {
+      "minecraft:item_model": "dagmod:fireball_scroll"
+    },
+    "count": 1
+  }
+}

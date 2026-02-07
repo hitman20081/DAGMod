@@ -1,0 +1,42 @@
+{
+  "description": "Xtra Damage",
+  "supported_items": "minecraft:netherite_sword",
+  "weight": 50,
+  "max_level": 10,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 1
+  },
+  "max_cost": {
+    "base": 3,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 0,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "linear",
+            "base": 30,
+            "per_level_above_first": 20
+          }
+        },
+        "requirements": {
+          "condition": "entity_properties",
+          "entity": "this",
+          "predicate": {
+            "type": "#minecraft:skeletons",
+            "flags": {
+              "is_sneaking": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

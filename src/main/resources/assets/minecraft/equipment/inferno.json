@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:inferno_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:inferno_armor"
+      }
+    ]
+  }
+}

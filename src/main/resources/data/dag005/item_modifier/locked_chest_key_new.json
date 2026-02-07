@@ -1,0 +1,10 @@
+[
+  {
+    "function": "minecraft:set_name",
+    "name": {
+      "text": "Chest Key",
+      "color": "#cb5454"
+    },
+    "target": "item_name"
+  }
+]

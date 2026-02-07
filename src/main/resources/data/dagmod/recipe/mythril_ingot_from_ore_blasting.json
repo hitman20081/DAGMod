@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "dagmod:mythril_ore",
+  "result": {
+    "id": "dagmod:mythril_ingot"
+  },
+  "experience": 1.5,
+  "cookingtime": 100
+}

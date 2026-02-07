@@ -1,0 +1,19 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/barrel_side",
+    "down": "minecraft:block/oak_planks",
+    "up": "minecraft:block/crafting_table_top",
+    "north": "minecraft:block/barrel_side",
+    "south": "minecraft:block/barrel_side",
+    "east": "minecraft:block/barrel_side",
+    "west": "minecraft:block/barrel_side"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 75, 45, 0 ],
+      "translation": [ 0, 2.5, 0],
+      "scale": [ 0.375, 0.375, 0.375 ]
+    }
+  }
+}

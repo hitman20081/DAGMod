@@ -1,0 +1,18 @@
+{
+    "criteria": {
+      "requirement": {
+        "trigger": "minecraft:recipe_crafted",
+        "conditions": {
+          "player": {},
+          "recipe_id": "dag001:antidote_vial",
+          "ingredients": [
+            {}
+          ]
+        }
+      }
+    },
+    "rewards": {
+      "function": "dag001:book"
+    }
+  }
+  

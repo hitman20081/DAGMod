@@ -1,0 +1,47 @@
+{
+  "description": "Shadow",
+  "supported_items": [
+    "minecraft:chainmail_leggings",
+    "minecraft:diamond_leggings",
+    "minecraft:golden_leggings",
+    "minecraft:iron_leggings",
+    "minecraft:leather_leggings",
+    "minecraft:netherite_leggings",
+    "minecraft:chainmail_boots",
+    "minecraft:diamond_boots",
+    "minecraft:golden_boots",
+    "minecraft:iron_boots",
+    "minecraft:leather_boots",
+    "minecraft:netherite_boots"
+  ],
+  "weight": 3,
+  "max_level": 5,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 2
+  },
+  "max_cost": {
+    "base": 51,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 3,
+  "slots": [
+    "armor"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "minecraft:movement_speed",
+        "id": "minecraft:",
+        "amount": 0.05,
+        "operation": "add_multiplied_base"
+      },
+      {
+        "attribute": "minecraft:movement_efficiency",
+        "id": "minecraft:",
+        "amount": 0.05,
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

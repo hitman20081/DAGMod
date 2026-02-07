@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "dagmod:raw_mythril",
+  "result": {
+    "id": "dagmod:mythril_ingot"
+  },
+  "experience": 1.5,
+  "cookingtime": 200
+}

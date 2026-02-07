@@ -1,0 +1,50 @@
+{
+  "primary_items": "#minecraft:swords",
+  "anvil_cost": 8,
+  "description": {
+    "text": "Leach",
+    "color": "#2b6313"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "effect": {
+          "type": "minecraft:apply_mob_effect",
+          "to_apply": "minecraft:wither",
+          "min_duration": 20,
+          "max_duration": 20,
+          "min_amplifier": 8,
+          "max_amplifier": 8
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
+      },
+      {
+        "effect": {
+          "type": "minecraft:apply_mob_effect",
+          "to_apply": "minecraft:health_boost",
+          "min_duration": 20,
+          "max_duration": 20,
+          "min_amplifier": 10,
+          "max_amplifier": 20
+        },
+        "enchanted": "attacker",
+        "affected": "attacker"
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "body"
+  ],
+  "supported_items": "#minecraft:swords",
+  "weight": 1
+}

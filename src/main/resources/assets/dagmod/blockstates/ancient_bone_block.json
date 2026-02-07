@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dagmod:block/ancient_bone_block"
+    }
+  }
+}

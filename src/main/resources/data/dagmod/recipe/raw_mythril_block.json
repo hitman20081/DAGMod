@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "RRR",
+    "RRR",
+    "RRR"
+  ],
+  "key": {
+    "R": "dagmod:raw_mythril"
+  },
+  "result": {
+    "id": "dagmod:raw_mythril_block",
+    "count": 1
+  }
+}

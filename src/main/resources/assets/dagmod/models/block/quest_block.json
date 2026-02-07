@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "minecraft:block/bookshelf",
+    "down": "minecraft:block/oak_planks",
+    "up": "minecraft:block/chiseled_bookshelf_top",
+    "north": "minecraft:block/bookshelf",
+    "south": "minecraft:block/bookshelf",
+    "east": "minecraft:block/chiseled_bookshelf_side",
+    "west": "minecraft:block/chiseled_bookshelf_side"
+  }
+}

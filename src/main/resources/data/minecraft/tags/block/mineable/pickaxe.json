@@ -1,0 +1,32 @@
+{
+  "values": [
+    "dagmod:mythril_ore",
+    "dagmod:mythril_block",
+    "dagmod:raw_mythril_block",
+    "dagmod:citrine_block",
+    "dagmod:pink_garnet_block",
+    "dagmod:ruby_block",
+    "dagmod:sapphire_block",
+    "dagmod:tanzanite_block",
+    "dagmod:zircon_block",
+    "dagmod:raw_citrine_block",
+    "dagmod:raw_pink_garnet_block",
+    "dagmod:raw_ruby_block",
+    "dagmod:raw_sapphire_block",
+    "dagmod:citrine_ore",
+    "dagmod:ruby_ore",
+    "dagmod:sapphire_ore",
+    "dagmod:tanzanite_ore",
+    "dagmod:zircon_ore",
+    "dagmod:deepslate_citrine_ore",
+    "dagmod:pink_garnet_deepslate_ore",
+    "dagmod:deepslate_ruby_ore",
+    "dagmod:deepslate_sapphire_ore",
+    "dagmod:deepslate_tanzanite_ore",
+    "dagmod:deepslate_zircon_ore",
+    "dagmod:gem_cutting_station",
+    "dagmod:gem_polishing_station",
+    "dagmod:gem_infusing_station",
+    "dagmod:iron_chest"
+  ]
+}

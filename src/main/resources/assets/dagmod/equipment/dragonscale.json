@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:dragonscale_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:dragonscale_armor"
+      }
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:diamond_block"
+          },
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:iron_block"
+          }
+        ]
+      },
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "netherite_block"
+          }
+        ]
+      },
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:honey_bottle",
+            "weight": 3
+          }
+        ]
+      },
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:crying_obsidian",
+            "weight": 3
+          }
+        ]
+      },
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:tag",
+            "name": "minecraft:wool",
+            "expand": true,
+            "weight": 5
+          }
+        ]
+      }
+    ]
+  }

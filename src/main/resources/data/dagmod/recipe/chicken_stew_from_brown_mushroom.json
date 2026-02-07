@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "chicken_stew",
+  "ingredients": [
+    "minecraft:baked_potato",
+    "minecraft:cooked_chicken",
+    "minecraft:bowl",
+    "minecraft:carrot",
+    "minecraft:brown_mushroom"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dagmod:chicken_stew"
+  }
+}

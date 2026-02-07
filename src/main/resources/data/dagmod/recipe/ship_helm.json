@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S S",
+    " C ",
+    "WWW"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "W": "minecraft:oak_planks",
+    "C": "minecraft:compass"
+  },
+  "result": {
+    "id": "dagmod:ship_helm",
+    "count": 1
+  }
+}

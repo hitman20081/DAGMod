@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "variant=red": {
+      "model": "dagmod:block/red_dragon_egg"
+    },
+    "variant=ice": {
+      "model": "dagmod:block/ice_dragon_egg"
+    },
+    "variant=lava": {
+      "model": "dagmod:block/lava_dragon_egg"
+    },
+    "variant=earth": {
+      "model": "dagmod:block/earth_dragon_egg"
+    },
+    "variant=wind": {
+      "model": "dagmod:block/wind_dragon_egg"
+    }
+  }
+}

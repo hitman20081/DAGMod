@@ -1,0 +1,1 @@
+give @p potion[potion_contents={custom_color:14663174,custom_effects:[{id:strength,duration:2400,amplifier:254},{id:resistance,duration:2400,amplifier:255},{id:speed,duration:2400,amplifier:10}]},custom_name=[{"text":"Potion of of the Supes","italic":false,"color":"gold"}]]

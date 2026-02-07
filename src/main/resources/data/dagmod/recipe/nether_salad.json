@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:warped_fungus",
+    "minecraft:warped_roots",
+    "minecraft:nether_wart",
+    "minecraft:crimson_fungus",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_name": "{\"text\":\"Nether Salad\",\"color\":\"#FFAA00\"}",
+      "minecraft:consumable": {
+        "consume_seconds": 1.6,
+        "animation": "eat",
+        "sound": "minecraft:entity.generic.eat",
+        "on_consume_effects": [
+          {
+            "type": "minecraft:apply_effects",
+            "effects": [
+              {
+                "id": "minecraft:fire_resistance",
+                "amplifier": 1,
+                "duration": 9600
+              },
+              {
+                "id": "minecraft:saturation",
+                "amplifier": 1,
+                "duration": 960
+              }
+            ]
+          }
+        ]
+      },
+      "minecraft:lore": [
+        "{\"text\":\"Healthier than a Fire potion\",\"color\":\"#FFAA00\"}",
+        "{\"text\":\"and more satisfying\",\"color\":\"#FFAA00\"}"
+      ],
+      "minecraft:max_stack_size": 16
+    },
+    "count": 1,
+    "id": "minecraft:suspicious_stew"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "dagmod:entity/chest/iron_chest",
+      "sprite": "dagmod:entity/chest/iron_chest"
+    },
+    {
+      "type": "single",
+      "resource": "dagmod:entity/chest/skeleton_king_chest",
+      "sprite": "dagmod:entity/chest/skeleton_king_chest"
+    },
+    {
+      "type": "single",
+      "resource": "dagmod:entity/chest/bone_realm_locked_chest",
+      "sprite": "dagmod:entity/chest/bone_realm_locked_chest"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+execute in dag011:bone_realm run summon wither_skeleton ~ ~ ~ {DeathLootTable:"dag005:boss/boss_loot_table",Tags:["id_custom_mob3","id_skeleton_king"],equipment:{feet:{id:"minecraft:netherite_boots",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:dune"},"minecraft:custom_name":{"color":"dark_purple","text":"Sovereign's Marrow Treads"}}},legs:{id:"minecraft:netherite_leggings",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:dune"},"minecraft:custom_name":{"color":"dark_purple","text":"Royal Bone Greaves"}}},chest:{id:"minecraft:netherite_chestplate",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:dune"},"minecraft:custom_name":{"color":"dark_purple","text":"Regalia of the Death Lord"}}},head:{id:"minecraft:netherite_helmet",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:dune"},"minecraft:custom_name":{"color":"dark_purple","text":"Crown of the Bone Sovereign"}}},mainhand:{id:"minecraft:netherite_sword",count:1,components:{"minecraft:attribute_modifiers":[{id:"attack_speed",type:"attack_speed",amount:0.05,operation:"add_multiplied_base",slot:"mainhand"}]}}},attributes:[{id:"minecraft:armor",base:20},{id:"minecraft:armor_toughness",base:5},{id:"minecraft:attack_damage",base:8},{id:"minecraft:attack_knockback",base:0.45},{id:"minecraft:attack_speed",base:0.75},{id:"minecraft:knockback_resistance",base:1},{id:"minecraft:max_health",base:60},{id:"minecraft:movement_efficiency",base:1},{id:"minecraft:scale",base:2.0}]}
+
+execute store result score @e[tag=id_skeleton_king, tag=init_me] skeleton_king run function dag005:skeleton_king/skeleton_king_summon
+
+tag @s remove init_me
+
+return 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

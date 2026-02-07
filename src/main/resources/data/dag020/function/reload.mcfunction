@@ -1,0 +1,1 @@
+tellraw @a {"text":"[DAG020] GUI Data pack reloaded successfully!","color":"green"}

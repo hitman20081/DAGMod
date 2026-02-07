@@ -1,0 +1,49 @@
+{
+  "attributes": {
+    "minecraft:visual/sky_color": 2300551,
+    "minecraft:visual/fog_color": 2300551,
+    "minecraft:visual/water_fog_color": 329011,
+    "minecraft:visual/ambient_particles": {
+      "modifier": "override",
+      "argument": [
+        {
+          "particle": {
+            "type": "minecraft:ash"
+          },
+          "probability": 0.11
+        }
+      ]
+    }
+  },
+  "temperature": 2,
+  "downfall": 0,
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon",
+    "minecraft:cave_extra_underground"
+  ],
+  "features": [
+    [
+      "dagmod:placed_ore_gilded_blackstone",
+      "dagmod:mythril_ore_surface"
+    ],
+    [
+      "dagmod:charred_trees"
+    ]
+  ],
+  "effects": {
+    "water_color": 4159204
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "dagmod:dragon_guardian",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ]
+  }
+}

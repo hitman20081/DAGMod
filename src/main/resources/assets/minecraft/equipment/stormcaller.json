@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:stormcaller_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:stormcaller_armor"
+      }
+    ]
+  }
+}

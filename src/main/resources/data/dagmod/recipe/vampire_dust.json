@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:diamond_powder",
+    "minecraft:redstone",
+    "minecraft:rotten_flesh"
+  ],
+  "result": {
+    "id": "dagmod:vampire_dust",
+    "components": {
+      "minecraft:item_model": "dagmod:vampire_dust"
+    },
+    "count": 3
+  }
+}

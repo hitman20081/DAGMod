@@ -1,0 +1,24 @@
+{
+  "name": "dagmod:ruined_tower",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "dagmod:ruined_tower",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "dagmod:ruined_tower1",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

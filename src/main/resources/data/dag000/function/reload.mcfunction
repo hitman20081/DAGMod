@@ -1,0 +1,1 @@
+tellraw @a {"text":"[DAG000] DAG Primary Data pack reloaded successfully!","color":"green"}

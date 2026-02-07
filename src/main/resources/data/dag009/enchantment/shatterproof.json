@@ -1,0 +1,30 @@
+{
+    "description": "Shatter Proof",
+    "supported_items": "#minecraft:enchantable/equippable",
+    "weight": 1,
+    "max_level": 1,
+    "min_cost": {
+      "base": 1,
+      "per_level_above_first": 1
+    },
+    "max_cost": {
+      "base": 10,
+      "per_level_above_first": 1
+    },
+    "anvil_cost": 4,
+    "slots": [],
+    "effects": {
+      "minecraft:damage_protection": [
+        {
+          "requirements": {
+            "condition": "minecraft:damage_source_properties",
+            "predicate": {}
+          },
+          "effect": {
+            "type": "minecraft:multiply",
+            "factor": 16
+          }
+        }
+      ]
+    }
+  }

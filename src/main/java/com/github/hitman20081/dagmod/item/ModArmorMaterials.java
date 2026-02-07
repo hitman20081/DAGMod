@@ -1,0 +1,209 @@
+package com.github.hitman20081.dagmod.item;
+
+import com.github.hitman20081.dagmod.DagMod;
+import com.github.hitman20081.dagmod.util.ModTags;
+import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentAsset;
+import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
+
+import java.util.EnumMap;
+
+public class ModArmorMaterials {
+    static RegistryKey<? extends Registry<EquipmentAsset>> REGISTRY_KEY = RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset"));
+
+    public static final RegistryKey<EquipmentAsset> MYTHRIL_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "mythril"));
+    public static final RegistryKey<EquipmentAsset> DRAGONSCALE_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "dragonscale"));
+    public static final RegistryKey<EquipmentAsset> INFERNO_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "inferno"));
+    public static final RegistryKey<EquipmentAsset> CRYSTALFORGE_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "crystalforge"));
+    public static final RegistryKey<EquipmentAsset> NATURESGUARD_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "naturesguard"));
+    public static final RegistryKey<EquipmentAsset> SHADOW_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "shadow"));
+    public static final RegistryKey<EquipmentAsset> FROSTBOUND_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "frostbound"));
+    public static final RegistryKey<EquipmentAsset> SOLARWEAVE_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "solarweave"));
+    public static final RegistryKey<EquipmentAsset> STORMCALLER_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "stormcaller"));
+    public static final RegistryKey<EquipmentAsset> OBSIDIAN_KEY =
+            RegistryKey.of(REGISTRY_KEY, Identifier.of(DagMod.MOD_ID, "obsidian"));
+
+    public static final ArmorMaterial MYTHRIL = new ArmorMaterial(
+            37,  // Durability multiplier (similar to Netherite)
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);       // Diamond: 3, Netherite: 3
+                map.put(EquipmentType.LEGGINGS, 6);    // Diamond: 6, Netherite: 6
+                map.put(EquipmentType.CHESTPLATE, 8);  // Diamond: 8, Netherite: 8
+                map.put(EquipmentType.HELMET, 3);      // Diamond: 3, Netherite: 3
+                map.put(EquipmentType.BODY, 11);       // Body armor (for horses, etc.)
+            }),
+            15,  // Enchantability (Diamond: 10, Netherite: 15)
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.0f,  // Toughness (Diamond: 2.0f, Netherite: 3.0f)
+            0.1f,  // Knockback Resistance (Diamond: 0.0f, Netherite: 0.1f)
+            ModTags.Items.MYTHRIL_REPAIR,
+            MYTHRIL_KEY
+    );
+
+    public static final ArmorMaterial DRAGONSCALE = new ArmorMaterial(
+            40,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 4);
+                map.put(EquipmentType.LEGGINGS, 7);
+                map.put(EquipmentType.CHESTPLATE, 9);
+                map.put(EquipmentType.HELMET, 4);
+                map.put(EquipmentType.BODY, 12);
+            }),
+            18,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            4.0f,
+            0.15f,
+            ModTags.Items.DRAGONSCALE_REPAIR,
+            DRAGONSCALE_KEY
+    );
+
+    public static final ArmorMaterial INFERNO = new ArmorMaterial(
+            35,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);
+                map.put(EquipmentType.LEGGINGS, 6);
+                map.put(EquipmentType.CHESTPLATE, 8);
+                map.put(EquipmentType.HELMET, 3);
+                map.put(EquipmentType.BODY, 11);
+            }),
+            20,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.5f,
+            0.1f,
+            ModTags.Items.INFERNO_REPAIR,
+            INFERNO_KEY
+    );
+
+    public static final ArmorMaterial CRYSTALFORGE = new ArmorMaterial(
+            30,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);
+                map.put(EquipmentType.LEGGINGS, 6);
+                map.put(EquipmentType.CHESTPLATE, 8);
+                map.put(EquipmentType.HELMET, 3);
+                map.put(EquipmentType.BODY, 11);
+            }),
+            25,
+            SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND,
+            2.5f,
+            0.0f,
+            ModTags.Items.CRYSTALFORGE_REPAIR,
+            CRYSTALFORGE_KEY
+    );
+
+    public static final ArmorMaterial NATURESGUARD = new ArmorMaterial(
+            28,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);
+                map.put(EquipmentType.LEGGINGS, 6);
+                map.put(EquipmentType.CHESTPLATE, 7);
+                map.put(EquipmentType.HELMET, 3);
+                map.put(EquipmentType.BODY, 10);
+            }),
+            15,
+            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
+            2.0f,
+            0.0f,
+            ModTags.Items.NATURESGUARD_REPAIR,
+            NATURESGUARD_KEY
+    );
+
+    public static final ArmorMaterial SHADOW = new ArmorMaterial(
+            25,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 2);
+                map.put(EquipmentType.LEGGINGS, 5);
+                map.put(EquipmentType.CHESTPLATE, 7);
+                map.put(EquipmentType.HELMET, 2);
+                map.put(EquipmentType.BODY, 9);
+            }),
+            20,
+            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
+            1.5f,
+            0.0f,
+            ModTags.Items.SHADOW_REPAIR,
+            SHADOW_KEY
+    );
+
+    public static final ArmorMaterial FROSTBOUND = new ArmorMaterial(
+            33,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);
+                map.put(EquipmentType.LEGGINGS, 6);
+                map.put(EquipmentType.CHESTPLATE, 8);
+                map.put(EquipmentType.HELMET, 3);
+                map.put(EquipmentType.BODY, 11);
+            }),
+            18,
+            SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND,
+            3.0f,
+            0.1f,
+            ModTags.Items.FROSTBOUND_REPAIR,
+            FROSTBOUND_KEY
+    );
+
+    public static final ArmorMaterial SOLARWEAVE = new ArmorMaterial(
+            32,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);
+                map.put(EquipmentType.LEGGINGS, 6);
+                map.put(EquipmentType.CHESTPLATE, 8);
+                map.put(EquipmentType.HELMET, 3);
+                map.put(EquipmentType.BODY, 11);
+            }),
+            22,
+            SoundEvents.ITEM_ARMOR_EQUIP_GOLD,
+            2.5f,
+            0.0f,
+            ModTags.Items.SOLARWEAVE_REPAIR,
+            SOLARWEAVE_KEY
+    );
+
+    public static final ArmorMaterial STORMCALLER = new ArmorMaterial(
+            30,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 3);
+                map.put(EquipmentType.LEGGINGS, 6);
+                map.put(EquipmentType.CHESTPLATE, 7);
+                map.put(EquipmentType.HELMET, 3);
+                map.put(EquipmentType.BODY, 10);
+            }),
+            20,
+            SoundEvents.ITEM_ARMOR_EQUIP_CHAIN,
+            2.0f,
+            0.0f,
+            ModTags.Items.STORMCALLER_REPAIR,
+            STORMCALLER_KEY
+    );
+
+    public static final ArmorMaterial OBSIDIAN = new ArmorMaterial(
+            38,
+            Util.make(new EnumMap<>(EquipmentType.class), map -> {
+                map.put(EquipmentType.BOOTS, 4);
+                map.put(EquipmentType.LEGGINGS, 7);
+                map.put(EquipmentType.CHESTPLATE, 9);
+                map.put(EquipmentType.HELMET, 4);
+                map.put(EquipmentType.BODY, 12);
+            }),
+            15,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.5f,
+            0.2f,
+            ModTags.Items.OBSIDIAN_REPAIR,
+            OBSIDIAN_KEY
+    );
+}

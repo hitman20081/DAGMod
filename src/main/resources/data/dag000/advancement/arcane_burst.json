@@ -1,0 +1,25 @@
+{
+  "criteria": {
+    "strike_entity": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "entity": {
+          "type": "#minecraft:undead",
+          "equipment": {
+            "mainhand": {
+              "items": "minecraft:trident"
+            }
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "strike_entity"
+    ]
+  ],
+  "rewards": {
+    "function": "dag000:player/classes/mage/arcane_burst"
+  }
+}

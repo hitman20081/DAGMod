@@ -1,0 +1,20 @@
+[
+    {
+      "function": "minecraft:set_loot_table",
+      "type": "minecraft:chest",
+      "name": "dag005:chests/locked_chest_black",
+      "conditions": []
+    },
+    {
+      "function": "minecraft:set_components",
+      "components": {
+        "minecraft:lock": {
+          "items": "minecraft:ominous_trial_key",
+          "count": 1,
+          "components": {
+            "minecraft:item_name": "\"Chest Key\""
+          }
+        }
+      }
+    }
+  ]

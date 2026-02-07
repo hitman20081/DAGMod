@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:apprentice_wand",
+    "dagmod:diamond_powder",
+    "dagmod:emerald_powder",
+    "minecraft:blaze_powder"
+  ],
+  "result": {
+    "id": "dagmod:adept_wand",
+    "components": {
+      "minecraft:item_model": "dagmod:adept_wand"
+    },
+    "count": 1
+  }
+}

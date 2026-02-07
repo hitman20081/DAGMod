@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:quartz_powder",
+    "dagmod:amethyst_powder",
+    "dagmod:echo_dust"
+  ],
+  "result": {
+    "id": "dagmod:spell_echo",
+    "components": {
+      "minecraft:item_model": "dagmod:spell_echo"
+    },
+    "count": 2
+  }
+}

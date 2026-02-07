@@ -1,0 +1,1 @@
+give @s potion[potion_contents={custom_color:12207638,custom_effects:[{id:strength,duration:2400,amplifier:2},{id:resistance,duration:2400,amplifier:2},{id:speed,duration:2400,amplifier:2}]},custom_name=[{"text":"3 In One Potion","italic":false,"color":"aqua"}]]

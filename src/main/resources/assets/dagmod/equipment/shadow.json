@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:shadow_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:shadow_armor"
+      }
+    ]
+  }
+}

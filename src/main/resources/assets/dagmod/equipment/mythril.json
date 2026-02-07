@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "horse_body": [
+      {
+        "texture": "dagmod:mythril"
+      }
+    ],
+    "humanoid": [
+      {
+        "texture": "dagmod:mythril"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:mythril"
+      }
+    ]
+  }
+}

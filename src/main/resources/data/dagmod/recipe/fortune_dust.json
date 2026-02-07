@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:emerald_powder",
+    "minecraft:lapis_lazuli",
+    "minecraft:gold_nugget"
+  ],
+  "result": {
+    "id": "dagmod:fortune_dust",
+    "components": {
+      "minecraft:item_model": "dagmod:fortune_dust"
+    },
+    "count": 3
+  }
+}

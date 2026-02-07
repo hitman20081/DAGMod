@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_infusing",
+  "ingredient": "dagmod:citrine",
+  "result": {
+    "count": 1,
+    "id": "dagmod:citrine_powder"
+  }
+}

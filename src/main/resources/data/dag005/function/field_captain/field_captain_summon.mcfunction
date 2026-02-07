@@ -1,0 +1,49 @@
+execute in dag011:bone_realm run summon skeleton ~ ~ ~ {DeathLootTable:"dag005:boss/field_captain_loot_table",Tags:["id_custom_mob4","id_field_captain","init_me"],equipment:{feet:{id:"minecraft:diamond_boots",count:1,components:{"minecraft:trim":{material:"minecraft:resin",pattern:"minecraft:sentry"},"minecraft:custom_name":{"color":"dark_red","text":"Field Captain's Sabatons"}}},legs:{id:"minecraft:diamond_leggings",count:1,components:{"minecraft:trim":{material:"minecraft:resin",pattern:"minecraft:sentry"},"minecraft:custom_name":{"color":"dark_red","text":"Field Captain's Leggings"}}},chest:{id:"minecraft:diamond_chestplate",count:1,components:{"minecraft:trim":{material:"minecraft:resin",pattern:"minecraft:sentry"},"minecraft:custom_name":{"color":"dark_red","text":"Field Captain's Chestplate"}}},head:{id:"minecraft:diamond_helmet",count:1,components:{"minecraft:trim":{material:"minecraft:resin",pattern:"minecraft:sentry"},"minecraft:custom_name":{"color":"dark_red","text":"Field Captain's Helm"}}},mainhand:{id:"minecraft:diamond_sword",count:1,components:{"minecraft:attribute_modifiers":[{id:"attack_speed",type:"attack_speed",amount:0.05,operation:"add_multiplied_base",slot:"hand"}]}}},attributes:[{id:"minecraft:armor",base:15},{id:"minecraft:armor_toughness",base:4},{id:"minecraft:attack_damage",base:6},{id:"minecraft:attack_knockback",base:0.25},{id:"minecraft:attack_speed",base:3},{id:"minecraft:knockback_resistance",base:1},{id:"minecraft:max_health",base:35},{id:"minecraft:movement_efficiency",base:1},{id:"minecraft:scale",base:1.25}]}
+
+execute store result score @e[tag=id_field_captain, tag=init_me] skeleton_timer run function dag005:field_captain/get_random_lay_time
+
+tag @s remove init_me
+
+return 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

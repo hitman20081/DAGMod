@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "MMM",
+    "MMM",
+    "MMM"
+  ],
+  "key": {
+    "M": "dagmod:mythril_ingot"
+  },
+  "result": {
+    "id": "dagmod:mythril_block",
+    "count": 1
+  }
+}
