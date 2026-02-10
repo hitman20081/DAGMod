@@ -43,7 +43,7 @@
     "per_level_above_first": 0
   },
   "slots": [
-    "body"
+    "mainhand"
   ],
   "supported_items": "#minecraft:swords",
   "weight": 1

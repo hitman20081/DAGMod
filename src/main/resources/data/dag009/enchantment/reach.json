@@ -19,7 +19,7 @@
     "minecraft:attributes": [
       {
         "attribute": "minecraft:block_interaction_range",
-        "id": "minecraft:",
+        "id": "dag009:enchantment.reach",
         "amount": {
           "type": "minecraft:linear",
           "base": 1,

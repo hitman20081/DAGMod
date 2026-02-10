@@ -10,7 +10,9 @@
       "RaceHuntingMixin",
       "HumanExperienceMixin",
       "LivingEntityMixin",
-      "ShieldBlockingMixin"
+      "ShieldBlockingMixin",
+      "ShatterproofMixin",
+      "SoulBoundMixin"
 	],
   "client": [
     "ChestRenderStateMixin",

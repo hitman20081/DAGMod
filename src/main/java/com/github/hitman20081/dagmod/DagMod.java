@@ -73,6 +73,8 @@ import com.github.hitman20081.dagmod.class_system.RogueCombatHandler;
 import com.github.hitman20081.dagmod.party.quest.PartyQuestRegistry;
 import com.github.hitman20081.dagmod.party.quest.PartyQuestManager;
 import com.github.hitman20081.dagmod.party.command.PartyQuestCommand;
+import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
+import com.github.hitman20081.dagmod.enchantment.SoulBoundStorage;
 import com.github.hitman20081.dagmod.trade.RotatingTradeManager;
 
 import java.io.IOException;
@@ -167,6 +169,9 @@ public class DagMod implements ModInitializer {
         ShadowBlendHandler.register();
 
         FortuneDustHandler.register();
+
+        // Register custom enchantment effects (Midas Touch, Mud Collector, Tunneling, Lucky Looter)
+        CustomEnchantmentEffects.register();
 
         // Register Party Quest block break handler
         com.github.hitman20081.dagmod.event.PartyQuestBlockBreakHandler.register();
@@ -263,6 +268,16 @@ public class DagMod implements ModInitializer {
 
         // Apply class abilities when player respawns (including after death)
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            // Restore Soul Bound enchanted items
+            java.util.List<ItemStack> soulItems = SoulBoundStorage.retrieve(newPlayer.getUuid());
+            if (soulItems != null) {
+                for (ItemStack item : soulItems) {
+                    newPlayer.giveItemStack(item);
+                }
+                newPlayer.sendMessage(Text.literal("Your Soul Bound items have been preserved!")
+                        .formatted(Formatting.LIGHT_PURPLE), false);
+            }
+
             ClassAbilityManager.applyClassAbilities(newPlayer);
 
             // Reapply progression stats (fixes health/attack/armor reset on death)
@@ -409,6 +424,9 @@ public class DagMod implements ModInitializer {
                 }
             }
 
+            // Update Solar Mending counter once per tick (before player loop)
+            com.github.hitman20081.dagmod.class_system.armor.SolarMendingHandler.serverTick();
+
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
 
@@ -431,6 +449,12 @@ public class DagMod implements ModInitializer {
 
                 // Custom armor set bonuses (Dragonscale, Crystalforge, Inferno, Nature's Guard, Shadow, Fortuna)
                 com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus.applySetBonuses(player);
+
+                // Auto-enchant DAGMod armor pieces when first equipped
+                com.github.hitman20081.dagmod.class_system.armor.ArmorEnchantmentHandler.tick(player);
+
+                // Solar Mending: repair Solarweave armor in direct sunlight
+                com.github.hitman20081.dagmod.class_system.armor.SolarMendingHandler.tick(player);
             }
         });
 

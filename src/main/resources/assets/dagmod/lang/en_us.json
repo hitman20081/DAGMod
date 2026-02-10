@@ -209,6 +209,8 @@
   "item.dagmod.dragon_egg": "Dragon Egg",
   "block.dagmod.obsidian_portal_frame": "Obsidian Portal Frame",
   "item.dagmod.obsidian_portal_frame": "Obsidian Portal Frame",
+  "block.dagmod.dragon_realm_portal": "Dragon Realm Portal",
+  "item.dagmod.dragon_realm_portal": "Dragon Realm Portal",
 
   "_comment_dragon_realm_keys": "=== DRAGON REALM KEYS ===",
   "item.dagmod.dragon_key": "Dragon Key",
@@ -288,6 +290,9 @@
   "item.dagmod.shadowfang_dagger": "Shadowfang Dagger",
   "item.dagmod.shadowfang_sword": "Shadowfang Sword",
   "item.dagmod.thunder_pike": "Thunder Pike",
+  "item.dagmod.solar_bow": "Solar Bow",
+  "item.dagmod.phantom_blade": "Phantom Blade",
+  "item.dagmod.true_king_sword": "True King's Sword",
   "item.dagmod.dragonbone_greatsword": "Dragonbone Greatsword",
   "item.dagmod.natures_wrath": "Nature's Wrath",
   "item.dagmod.frost_reaver": "Frost Reaver",
@@ -347,6 +352,7 @@
   "entity.dagmod.lumberjack_npc": "Lumberjack",
   "entity.dagmod.voodoo_illusioner_npc": "Voodoo Illusioner",
   "entity.dagmod.hunter_npc": "Hunter",
+  "entity.dagmod.luxury_merchant_npc": "Luxury Merchant",
   "entity.dagmod.trophy_dealer_npc": "Trophy Dealer",
 
   "_comment_dragons": "=== DRAGON ENTITIES ===",
@@ -362,6 +368,12 @@
   "entity.dagmod.wild_lava_dragon": "Wild Lava Dragon",
   "entity.dagmod.wild_earth_dragon": "Wild Earth Dragon",
   "entity.dagmod.wild_wind_dragon": "Wild Wind Dragon",
+
+  "_comment_bone_realm_entities": "=== BONE REALM ENTITIES ===",
+  "entity.dagmod.skeleton_king": "Skeleton King",
+  "entity.dagmod.skeleton_lord": "Skeleton Lord",
+  "entity.dagmod.skeleton_summoner": "Skeleton Summoner",
+  "entity.dagmod.boneling": "Boneling",
 
   "_comment_reset_items": "=== CHARACTER RESET ITEMS ===",
   "item.dagmod.class_reset_crystal": "Class Reset Crystal",

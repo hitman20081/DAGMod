@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/foot_armor",
+    "R": "minecraft:enchanted_golden_apple",
+    "E": "minecraft:blaze_rod"
+  },
+  "result": {
+    "id": "dagmod:solarweave_boots",
+    "count": 1
+  }
+}

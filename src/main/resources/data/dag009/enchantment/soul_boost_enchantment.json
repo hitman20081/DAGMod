@@ -28,11 +28,12 @@
           }
         },
         "effect": {
-          "type": "minecraft:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "minecraft:",
-          "amount": 20,
-          "operation": "add_value"
+          "type": "minecraft:apply_mob_effect",
+          "to_apply": "minecraft:health_boost",
+          "min_duration": 200,
+          "max_duration": 200,
+          "min_amplifier": 4,
+          "max_amplifier": 4
         }
       }
     ],
@@ -40,7 +41,7 @@
       {
         "requirements": {
           "condition": "minecraft:random_chance",
-          "chance": 5
+          "chance": 0.25
         },
         "effect": {
           "type": "minecraft:apply_mob_effect",

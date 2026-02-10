@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:spider_eye",
+    "G": "minecraft:wither_rose",
+    "S": "minecraft:trident"
+  },
+  "result": {
+    "id": "dagmod:poison_fang_spear",
+    "count": 1
+  }
+}

@@ -1,9 +1,8 @@
 {
   "anvil_cost": 4,
   "description": {
-    "text": "Lucky looter"
+    "text": "Lucky Looter"
   },
-  "exclusive_set": "#minecraft:exclusive_set/mining",
   "max_cost": {
     "base": 65,
     "per_level_above_first": 9
@@ -14,26 +13,8 @@
     "per_level_above_first": 9
   },
   "slots": [
-    "mainhand"
+    "head"
   ],
-  "supported_items": "#minecraft:enchantable/mining_loot",
-  "weight": 2,
-  "effects": {
-    "minecraft:hit_block": [
-      {
-        "requirements": {
-          "condition": "minecraft:block_state_property",
-          "block": "barrel",
-          "properties": {
-            "facing": "up",
-            "open": "false"
-          }
-        },
-        "effect": {
-          "type": "minecraft:run_function",
-          "function": "dag005:boss_loot"
-        }
-      }
-    ]
-  }
+  "supported_items": "#minecraft:enchantable/head_armor",
+  "weight": 2
 }

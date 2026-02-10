@@ -1,6 +1,6 @@
 {
   "description": "Solar",
-  "supported_items": "#minecraft:enchantable/crossbow",
+  "supported_items": "#minecraft:enchantable/bow",
   "primary_items": "#minecraft:enchantable/bow",
   "weight": 1,
   "max_level": 3,
