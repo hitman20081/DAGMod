@@ -14,19 +14,5 @@
   "anvil_cost": 3,
   "slots": [
     "mainhand"
-  ],
-  "effects": {
-    "minecraft:hit_block": [
-      {
-        "requirements": {
-          "condition": "minecraft:block_state_property",
-          "block": "stone"
-        },
-        "effect": {
-          "type": "minecraft:run_function",
-          "function": "dag009:enchantents/tunnel_break"
-        }
-      }
-    ]
-  }
+  ]
 }

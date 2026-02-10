@@ -21,13 +21,13 @@
         "effect": {
           "type": "minecraft:add",
           "value": {
-            "type": "linear",
+            "type": "minecraft:linear",
             "base": 30,
             "per_level_above_first": 20
           }
         },
         "requirements": {
-          "condition": "entity_properties",
+          "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
             "type": "#minecraft:skeletons",

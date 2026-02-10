@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "IBI",
+    "GSG",
+    "IBI"
+  ],
+  "key": {
+    "I": "minecraft:sunflower",
+    "B": "minecraft:blaze_rod",
+    "G": "minecraft:gold_block",
+    "S": "minecraft:bow"
+  },
+  "result": {
+    "id": "dagmod:solar_bow",
+    "count": 1
+  }
+}

@@ -16,21 +16,45 @@
     "mainhand"
   ],
   "effects": {
-    "minecraft:hit_block": [
+    "minecraft:post_attack": [
       {
         "effect": {
-          "type": "minecraft:run_function",
-          "function": "dag009:enchantents/lightning_function"
+          "type": "minecraft:damage_entity",
+          "damage_type": "minecraft:lightning_bolt",
+          "min_damage": 5,
+          "max_damage": 10
         },
-        "requirements": {
-          "condition": "entity_properties",
-          "entity": "this",
-          "predicate": {
-            "flags": {
-              "is_sneaking": true
-            }
-          }
-        }
+        "enchanted": "attacker",
+        "affected": "victim"
+      },
+      {
+        "effect": {
+          "type": "minecraft:spawn_particles",
+          "particle": {
+            "type": "minecraft:electric_spark"
+          },
+          "horizontal_position": {
+            "type": "entity_position",
+            "offset": 0,
+            "scale": 1
+          },
+          "vertical_position": {
+            "type": "entity_position",
+            "offset": 0.5,
+            "scale": 1
+          },
+          "horizontal_velocity": {
+            "base": 0.2,
+            "movement_scale": 0
+          },
+          "vertical_velocity": {
+            "base": 0.2,
+            "movement_scale": 0
+          },
+          "speed": 0.5
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
       }
     ]
   }

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ERE",
+    "RSR",
+    "ERE"
+  ],
+  "key": {
+    "E": "minecraft:quartz",
+    "R": "minecraft:amethyst_shard",
+    "S": "minecraft:shield"
+  },
+  "result": {
+    "id": "dagmod:crystal_shield",
+    "count": 1
+  }
+}

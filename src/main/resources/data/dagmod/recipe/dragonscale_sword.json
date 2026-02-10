@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:dragon_breath",
+    "G": "minecraft:dragon_head",
+    "S": "minecraft:netherite_sword"
+  },
+  "result": {
+    "id": "dagmod:dragonscale_sword",
+    "count": 1
+  }
+}

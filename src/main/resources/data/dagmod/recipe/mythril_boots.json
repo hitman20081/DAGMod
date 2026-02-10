@@ -10,36 +10,7 @@
     "M": "dagmod:mythril_ingot"
   },
   "result": {
-    "id": "minecraft:diamond_boots",
-    "count": 1,
-    "components": {
-      "minecraft:item_model": "minecraft:mythril_boots",
-      "minecraft:item_name": {
-        "text": "Mythril Boots",
-        "color": "#00d9ff"
-      },
-      "minecraft:equippable": {
-        "slot": "feet",
-        "asset_id": "mythril"
-      },
-      "minecraft:max_damage": 450,
-      "minecraft:attribute_modifiers": [
-        {
-          "type": "minecraft:armor",
-          "id": "minecraft:armor.boots",
-          "amount": 3.0,
-          "operation": "add_value",
-          "slot": "feet"
-        },
-        {
-          "type": "minecraft:armor_toughness",
-          "id": "minecraft:armor.toughness",
-          "amount": 2.0,
-          "operation": "add_value",
-          "slot": "feet"
-        }
-      ],
-      "minecraft:rarity": "rare"
-    }
+    "id": "dagmod:mythril_boots",
+    "count": 1
   }
 }

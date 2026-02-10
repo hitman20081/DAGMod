@@ -32,14 +32,22 @@
     "minecraft:attributes": [
       {
         "attribute": "minecraft:movement_speed",
-        "id": "minecraft:",
-        "amount": 0.05,
+        "id": "dag009:enchantment.shadow.movement_speed",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.05,
+          "per_level_above_first": 0.05
+        },
         "operation": "add_multiplied_base"
       },
       {
         "attribute": "minecraft:movement_efficiency",
-        "id": "minecraft:",
-        "amount": 0.05,
+        "id": "dag009:enchantment.shadow.movement_efficiency",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.05,
+          "per_level_above_first": 0.05
+        },
         "operation": "add_multiplied_base"
       }
     ]

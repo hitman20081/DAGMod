@@ -31,6 +31,11 @@ public class CustomArmorSetBonus {
         NATURES_GUARD("Nature", Formatting.GREEN),  // Detects "Nature's" in name
         SHADOW("Shadow", Formatting.DARK_PURPLE),
         FORTUNA("Fortuna", Formatting.GOLD),
+        MYTHRIL("Mythril", Formatting.AQUA),
+        FROSTBOUND("Frostbound", Formatting.BLUE),
+        SOLARWEAVE("Solarweave", Formatting.YELLOW),
+        STORMCALLER("Stormcaller", Formatting.DARK_AQUA),
+        OBSIDIAN("Obsidian", Formatting.DARK_GRAY),
         NONE("None", Formatting.GRAY);
 
         private final String name;

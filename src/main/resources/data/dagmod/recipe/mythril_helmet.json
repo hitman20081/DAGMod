@@ -10,36 +10,7 @@
     "M": "dagmod:mythril_ingot"
   },
   "result": {
-    "id": "minecraft:diamond_helmet",
-    "count": 1,
-    "components": {
-      "minecraft:item_model": "minecraft:mythril_helmet",
-      "minecraft:item_name": {
-        "text": "Mythril Helmet",
-        "color": "#00d9ff"
-      },
-      "minecraft:equippable": {
-        "slot": "head",
-        "asset_id": "mythril"
-      },
-      "minecraft:max_damage": 400,
-      "minecraft:attribute_modifiers": [
-        {
-          "type": "minecraft:armor",
-          "id": "minecraft:armor.helmet",
-          "amount": 3.0,
-          "operation": "add_value",
-          "slot": "head"
-        },
-        {
-          "type": "minecraft:armor_toughness",
-          "id": "minecraft:armor.toughness",
-          "amount": 2.0,
-          "operation": "add_value",
-          "slot": "head"
-        }
-      ],
-      "minecraft:rarity": "rare"
-    }
+    "id": "dagmod:mythril_helmet",
+    "count": 1
   }
 }

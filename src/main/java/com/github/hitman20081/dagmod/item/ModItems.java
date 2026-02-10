@@ -51,300 +51,312 @@ public class ModItems {
             new Item.Settings().maxCount(1).maxDamage(32));
 
     // Mythril Materials
-    public static final Item RAW_MYTHRIL = register("raw_mythril", Item::new, new Item.Settings().maxCount(64));
-    public static final Item MYTHRIL_INGOT = register("mythril_ingot", Item::new, new Item.Settings().maxCount(64));
-    public static final Item MYTHRIL_NUGGET = register("mythril_nugget", Item::new, new Item.Settings().maxCount(64));
+    public static final Item RAW_MYTHRIL = register("raw_mythril", Item::new, new Item.Settings().maxCount(64).fireproof());
+    public static final Item MYTHRIL_INGOT = register("mythril_ingot", Item::new, new Item.Settings().maxCount(64).fireproof());
+    public static final Item MYTHRIL_NUGGET = register("mythril_nugget", Item::new, new Item.Settings().maxCount(64).fireproof());
 
     // Mythril Tools
     public static final Item MYTHRIL_SWORD = register("mythril_sword",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 3, -2.4f)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_PICKAXE = register("mythril_pickaxe",
             settings -> new Item(settings.pickaxe(ModToolMaterials.MYTHRIL, 1, -2.8f)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_AXE = register("mythril_axe",
             settings -> new AxeItem(ModToolMaterials.MYTHRIL, 5.0f, -3.0f, settings),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_SHOVEL = register("mythril_shovel",
             settings -> new ShovelItem(ModToolMaterials.MYTHRIL, 1.5f, -3.0f, settings),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_HOE = register("mythril_hoe",
             settings -> new HoeItem(ModToolMaterials.MYTHRIL, 0, -3f, settings),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Mythril Armor
     public static final Item MYTHRIL_HELMET = register("mythril_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.MYTHRIL, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_CHESTPLATE = register("mythril_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.MYTHRIL, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_LEGGINGS = register("mythril_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.MYTHRIL, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item MYTHRIL_BOOTS = register("mythril_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.MYTHRIL, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Dragonscale Armor
     public static final Item DRAGONSCALE_HELMET = register("dragonscale_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.DRAGONSCALE, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item DRAGONSCALE_CHESTPLATE = register("dragonscale_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.DRAGONSCALE, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item DRAGONSCALE_LEGGINGS = register("dragonscale_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.DRAGONSCALE, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item DRAGONSCALE_BOOTS = register("dragonscale_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.DRAGONSCALE, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Inferno Armor
     public static final Item INFERNO_HELMET = register("inferno_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.INFERNO, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item INFERNO_CHESTPLATE = register("inferno_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.INFERNO, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item INFERNO_LEGGINGS = register("inferno_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.INFERNO, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item INFERNO_BOOTS = register("inferno_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.INFERNO, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Crystalforge Armor
     public static final Item CRYSTALFORGE_HELMET = register("crystalforge_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.CRYSTALFORGE, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CRYSTALFORGE_CHESTPLATE = register("crystalforge_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.CRYSTALFORGE, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CRYSTALFORGE_LEGGINGS = register("crystalforge_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.CRYSTALFORGE, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CRYSTALFORGE_BOOTS = register("crystalforge_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.CRYSTALFORGE, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Naturesguard Armor
     public static final Item NATURESGUARD_HELMET = register("naturesguard_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.NATURESGUARD, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item NATURESGUARD_CHESTPLATE = register("naturesguard_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.NATURESGUARD, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item NATURESGUARD_LEGGINGS = register("naturesguard_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.NATURESGUARD, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item NATURESGUARD_BOOTS = register("naturesguard_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.NATURESGUARD, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Shadow Armor
     public static final Item SHADOW_HELMET = register("shadow_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.SHADOW, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SHADOW_CHESTPLATE = register("shadow_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.SHADOW, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SHADOW_LEGGINGS = register("shadow_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.SHADOW, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SHADOW_BOOTS = register("shadow_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.SHADOW, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Frostbound Armor
     public static final Item FROSTBOUND_HELMET = register("frostbound_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.FROSTBOUND, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item FROSTBOUND_CHESTPLATE = register("frostbound_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.FROSTBOUND, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item FROSTBOUND_LEGGINGS = register("frostbound_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.FROSTBOUND, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item FROSTBOUND_BOOTS = register("frostbound_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.FROSTBOUND, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Solarweave Armor
     public static final Item SOLARWEAVE_HELMET = register("solarweave_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.SOLARWEAVE, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SOLARWEAVE_CHESTPLATE = register("solarweave_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.SOLARWEAVE, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SOLARWEAVE_LEGGINGS = register("solarweave_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.SOLARWEAVE, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SOLARWEAVE_BOOTS = register("solarweave_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.SOLARWEAVE, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Stormcaller Armor
     public static final Item STORMCALLER_HELMET = register("stormcaller_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.STORMCALLER, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item STORMCALLER_CHESTPLATE = register("stormcaller_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.STORMCALLER, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item STORMCALLER_LEGGINGS = register("stormcaller_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.STORMCALLER, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item STORMCALLER_BOOTS = register("stormcaller_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.STORMCALLER, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Obsidian Armor
     public static final Item OBSIDIAN_HELMET = register("obsidian_helmet",
             settings -> new Item(settings.armor(ModArmorMaterials.OBSIDIAN, EquipmentType.HELMET)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item OBSIDIAN_CHESTPLATE = register("obsidian_chestplate",
             settings -> new Item(settings.armor(ModArmorMaterials.OBSIDIAN, EquipmentType.CHESTPLATE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item OBSIDIAN_LEGGINGS = register("obsidian_leggings",
             settings -> new Item(settings.armor(ModArmorMaterials.OBSIDIAN, EquipmentType.LEGGINGS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item OBSIDIAN_BOOTS = register("obsidian_boots",
             settings -> new Item(settings.armor(ModArmorMaterials.OBSIDIAN, EquipmentType.BOOTS)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     // Dragon Materials
-    public static final Item DRAGON_SCALE = register("dragon_scale", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE));
-    public static final Item DRAGON_BONE = register("dragon_bone", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE));
-    public static final Item DRAGON_SKIN = register("dragon_skin", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE));
-    public static final Item DRAGON_HEART = register("dragon_heart", Item::new, new Item.Settings().maxCount(16).rarity(Rarity.EPIC));
-    public static final Item KINGS_SCALE = register("kings_scale", Item::new, new Item.Settings().maxCount(16).rarity(Rarity.EPIC));
+    public static final Item DRAGON_SCALE = register("dragon_scale", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE).fireproof());
+    public static final Item DRAGON_BONE = register("dragon_bone", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE).fireproof());
+    public static final Item DRAGON_SKIN = register("dragon_skin", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE).fireproof());
+    public static final Item DRAGON_HEART = register("dragon_heart", Item::new, new Item.Settings().maxCount(16).rarity(Rarity.EPIC).fireproof());
+    public static final Item KINGS_SCALE = register("kings_scale", Item::new, new Item.Settings().maxCount(16).rarity(Rarity.EPIC).fireproof());
 
     // Dragon Eggs (dragon_egg is the block item - see ModBlocks.DRAGON_EGG_BLOCK)
-    public static final Item ICE_DRAGON_EGG = register("ice_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
-    public static final Item LAVA_DRAGON_EGG = register("lava_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
-    public static final Item RED_DRAGON_EGG = register("red_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
-    public static final Item EARTH_DRAGON_EGG = register("earth_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
-    public static final Item WIND_DRAGON_EGG = register("wind_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
+    public static final Item ICE_DRAGON_EGG = register("ice_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC).fireproof());
+    public static final Item LAVA_DRAGON_EGG = register("lava_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC).fireproof());
+    public static final Item RED_DRAGON_EGG = register("red_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC).fireproof());
+    public static final Item EARTH_DRAGON_EGG = register("earth_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC).fireproof());
+    public static final Item WIND_DRAGON_EGG = register("wind_dragon_egg", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.EPIC).fireproof());
 
     // Special Weapons
     public static final Item DRAGONSCALE_SWORD = register("dragonscale_sword",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 9, -2.4f)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item INFERNO_SWORD = register("inferno_sword",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 9, -2.4f)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item BLOODTHIRSTER_BLADE = register("bloodthirster_blade",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 10, -2.4f).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CRYSTAL_KATANA = register("crystal_katana",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 9, -2.0f).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item ETHEREAL_BLADE = register("ethereal_blade",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 11, -2.2f).rarity(Rarity.EPIC)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item FROSTBITE_AXE = register("frostbite_axe",
             settings -> new AxeItem(ModToolMaterials.MYTHRIL, 11.0f, -3.0f, settings.rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item GILDED_RAPIER = register("gilded_rapier",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 8, -1.8f).rarity(Rarity.UNCOMMON)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item POISON_FANG_SPEAR = register("poison_fang_spear",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 8, -2.6f).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SHADOWFANG_DAGGER = register("shadowfang_dagger",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 7, -1.6f).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SHADOWFANG_SWORD = register("shadowfang_sword",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 9, -2.4f).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item THUNDER_PIKE = register("thunder_pike",
             settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 11, -2.8f).rarity(Rarity.EPIC)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CRYSTALHAMMER = register("crystalhammer",
             settings -> new AxeItem(ModToolMaterials.MYTHRIL, 12.0f, -3.2f, settings.rarity(Rarity.EPIC)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
+
+    public static final Item SOLAR_BOW = register("solar_bow",
+            BowItem::new,
+            new Item.Settings().maxDamage(500).rarity(Rarity.RARE).fireproof());
+
+    public static final Item PHANTOM_BLADE = register("phantom_blade",
+            settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 9, -1.8f).rarity(Rarity.RARE)),
+            new Item.Settings().fireproof());
+
+    public static final Item TRUE_KING_SWORD = register("true_king_sword",
+            settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 12, -2.4f).rarity(Rarity.EPIC)),
+            new Item.Settings().fireproof());
 
     // Special Shields - Using DagModShieldItem for custom shield rendering
     public static final Item INFERNO_SHIELD = register("inferno_shield",
             settings -> new DagModShieldItem("inferno", settings.maxDamage(500).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SHADOW_SHIELD = register("shadow_shield",
             settings -> new DagModShieldItem("shadow", settings.maxDamage(450).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CRYSTAL_SHIELD = register("crystal_shield",
             settings -> new DagModShieldItem("crystal", settings.maxDamage(400).rarity(Rarity.UNCOMMON)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item DRAGONBONE_SHIELD = register("dragonbone_shield",
             settings -> new DagModShieldItem("dragonbone", settings.maxDamage(600).rarity(Rarity.EPIC)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item FROST_SHIELD = register("frost_shield",
             settings -> new DagModShieldItem("frost", settings.maxDamage(450).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item NATURE_SHIELD = register("nature_shield",
             settings -> new DagModShieldItem("nature", settings.maxDamage(400).rarity(Rarity.UNCOMMON)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item SOLAR_SHIELD = register("solar_shield",
             settings -> new DagModShieldItem("solar", settings.maxDamage(500).rarity(Rarity.RARE)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item STORMGUARD_SHIELD = register("stormguard_shield",
             settings -> new DagModShieldItem("stormguard", settings.maxDamage(550).rarity(Rarity.EPIC)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CELESTIAL_SHIELD = register("celestial_shield",
             settings -> new DagModShieldItem("celestial", settings.maxDamage(700).rarity(Rarity.EPIC)),
-            new Item.Settings());
+            new Item.Settings().fireproof());
 
     public static final Item CHICKEN_STEW = register("chicken_stew", Item::new, new Item.Settings().food(ModFoodComponents.CHICKEN_STEW));
     public static final Item BEEF_STEW = register("beef_stew", Item::new, new Item.Settings().food(ModFoodComponents.BEEF_STEW));
@@ -835,6 +847,9 @@ public class ModItems {
                     itemGroup.add(ModItems.SHADOWFANG_SWORD);
                     itemGroup.add(ModItems.THUNDER_PIKE);
                     itemGroup.add(ModItems.CRYSTALHAMMER);
+                    itemGroup.add(ModItems.SOLAR_BOW);
+                    itemGroup.add(ModItems.PHANTOM_BLADE);
+                    itemGroup.add(ModItems.TRUE_KING_SWORD);
                 });
 
         // Special Shields - Add to Combat group
