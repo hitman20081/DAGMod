@@ -1,1 +1,0 @@
-tellraw @a {"text":"[DAG009] Enchantments Data pack reloaded successfully!","color":"green"}

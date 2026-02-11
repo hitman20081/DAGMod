@@ -5,6 +5,82 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0-beta] - 2026-02-10
+
+### Added
+
+**Custom Enchantment Implementations (Java-backed)**:
+- **Shatter Proof**: Prevents items from breaking. Caps durability at 1 instead of destroying the item. Items in broken state (1 durability) have 99% reduced effectiveness:
+  - Weapons deal 99% less damage
+  - Tools mine 99% slower
+  - Shields fail to block 99% of the time
+  - Now applies to all items with durability (weapons, tools, armor, shields, bows)
+- **Soul Bound**: Items with this enchantment are preserved on death. Removed from inventory before drops, returned automatically on respawn with a purple notification message.
+- **Midas Touch**: Mining Gilded Blackstone with this enchantment drops a Gold Block instead of normal drops.
+- **Mud Collector**: Mining dirt/grass/coarse dirt/rooted dirt while raining drops Mud blocks.
+- **Tunneling**: Mines a 3x3 area perpendicular to the face being mined. Skips air, bedrock, fluids, and unbreakable blocks.
+- **Lucky Looter**: 25% chance per mob kill to drop bonus valuable items. Hostile mobs drop diamonds/emeralds/gold; passive mobs drop nuggets.
+
+**New Java Files**:
+- `enchantment/CustomEnchantmentEffects.java` - Event handlers for Midas Touch, Mud Collector, Tunneling, Lucky Looter
+- `enchantment/ShatterproofHelper.java` - Utility for checking broken-state items
+- `enchantment/SoulBoundStorage.java` - Temporary storage for soul-bound items across death/respawn
+- `mixin/ShatterproofMixin.java` - Prevents item destruction at 0 durability
+- `mixin/ShatterproofDamageMixin.java` - 99% weapon damage reduction when broken
+- `mixin/ShatterproofMiningMixin.java` - 99% mining speed reduction when broken
+- `mixin/SoulBoundMixin.java` - Intercepts death to preserve soul-bound items
+
+**New Item Registrations**:
+- Phantom Blade, Solar Bow, True King Sword now properly registered with textures and models
+
+**Documentation Overhaul**:
+- Created `docs/items/enchantments.md` - All 26 custom enchantments documented
+- Rewrote `docs/items/weapons_shields.md` - Full stats for 15 weapons, 5 Mythril tools, 9 shields
+- Rewrote `docs/items/armor_sets.md` - All 11 armor sets with stats, enchantments, set bonuses
+- Rewrote `docs/bosses_dungeons.md` - Full boss stats, AI behavior, summoning mechanics
+- Rewrote `docs/mixins.md` - All server and client mixins documented
+- Filled in `docs/blocks.md` - Quest Block, Race/Class Altars, Job Board
+- Filled in `docs/progression.md` - XP curve, sources, stat scaling, level gates
+- Filled in `docs/configuration.md` - Admin commands, data storage
+- Filled in `docs/development.md` - Prerequisites, setup, project structure
+- Updated `docs/home.md` - Corrected item counts, added enchantments, fixed stat scaling
+- Updated `docs/items/overview.md` - Added enchantments link, updated known issues
+- Updated `docs/items/consumables.md` - Removed outdated version references
+
+### Fixed
+
+**Enchantment JSON Fixes (13 files)**:
+- `leach_enchantment.json`: Fixed slot from `body` to `mainhand`
+- `berserker.json`: Fixed empty `"id": "minecraft:"` fields, corrected `supported_items`
+- `reach.json`: Fixed empty ID field
+- `shadow_enchantment.json`: Fixed empty IDs, added level-scaling to movement speed bonus
+- `soul_boost_enchantment.json`: Fixed empty ID, corrected chance from `5` to `0.25`, replaced broken attribute effect with `apply_mob_effect`
+- `xdamage_enchantment.json`: Added `minecraft:` prefix to type and condition fields
+- `heart_armor.json`: Reduced weight from 100 to 5 (was appearing too frequently)
+- `solar_enchantment.json`: Fixed `supported_items` to match bow slot
+- `rise_of_the_zombies.json`: Changed damage predicate from arthropods to zombies
+- `lightning_enchantment.json`: Replaced broken `hit_block` with `post_attack` using `damage_entity` + `spawn_particles`
+- `climb_enchantment.json`: Replaced broken `hit_block` with `step_height` attribute modifier, reduced weight and max level
+- `tunneling_enchantment.json`: Removed broken JSON effects (Java handles logic)
+- `lucky_looter_enchantment.json`: Changed to head armor slot, removed broken effects (Java handles logic)
+- `shatterproof.json`: Changed `supported_items` from `equippable` to `durability`, fixed empty slots
+
+**Removed Duplicate Enchantment**:
+- Deleted `magma_walker.json` (duplicate of `magma_walker_enchantment.json`)
+
+**Recipe Fixes**:
+- Fixed all 44 armor recipes across 11 sets (corrected item IDs, crafting patterns, and result references)
+- Moved 10 weapon recipes from `dag002` to `dagmod` namespace with corrected item IDs
+- Moved 9 shield recipes from `dag004` to `dagmod` namespace with corrected item IDs
+- Fixed 4 Mythril armor recipes with correct crafting patterns
+
+### Changed
+
+**Shield Blocking Mixin**:
+- Updated `ShieldBlockingMixin` to apply shatterproof broken-state: shields at 1 durability with Shatterproof have 99% chance to fail blocking
+
+---
+
 ## [1.6.0-beta] - 2026-01-22
 
 ### Added

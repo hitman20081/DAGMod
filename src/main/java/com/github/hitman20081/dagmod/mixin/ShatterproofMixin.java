@@ -34,7 +34,7 @@ public abstract class ShatterproofMixin {
             for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
                 if (entry.getKey().isPresent()) {
                     Identifier id = entry.getKey().get().getValue();
-                    if (id.getNamespace().equals("dag009") && id.getPath().equals("shatterproof")) {
+                    if (id.getNamespace().equals("dagmod") && id.getPath().equals("shatterproof")) {
                         return getMaxDamage() - 1;
                     }
                 }

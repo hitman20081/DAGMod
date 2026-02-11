@@ -19,7 +19,7 @@
     "minecraft:attributes": [
       {
         "attribute": "minecraft:step_height",
-        "id": "dag009:enchantment.climb",
+        "id": "dagmod:enchantment.climb",
         "amount": {
           "type": "minecraft:linear",
           "base": 0.5,

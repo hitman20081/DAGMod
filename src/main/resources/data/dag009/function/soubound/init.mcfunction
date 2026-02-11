@@ -1,1 +1,0 @@
-scoreboard objectives add death_flag dummy

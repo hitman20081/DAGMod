@@ -9,7 +9,7 @@
       "minecraft:attributes": [
         {
           "attribute": "minecraft:max_health",
-          "id": "dag009:enchantment.heart_armor",
+          "id": "dagmod:enchantment.heart_armor",
           "amount": {
             "type": "minecraft:linear",
             "base": 2,

@@ -1,1 +1,0 @@
-tellraw @a {"text":"[DAG006] Enhanced NPCs Data pack reloaded successfully!","color":"green"}

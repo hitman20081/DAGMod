@@ -38,13 +38,13 @@ public class CustomEnchantmentEffects {
     }
 
     /**
-     * Get the level of a dag009 enchantment on an item stack.
+     * Get the level of a dagmod enchantment on an item stack.
      */
     public static int getEnchantmentLevel(ItemStack stack, World world, String enchantId) {
         if (stack.isEmpty()) return 0;
 
         var enchReg = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
-        RegistryKey<Enchantment> key = RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("dag009", enchantId));
+        RegistryKey<Enchantment> key = RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("dagmod", enchantId));
         Optional<RegistryEntry.Reference<Enchantment>> entry = enchReg.getOptional(key);
 
         if (entry.isEmpty()) return 0;

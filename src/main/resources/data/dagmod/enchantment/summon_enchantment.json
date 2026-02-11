@@ -29,7 +29,7 @@
         },
         "effect": {
           "type": "minecraft:run_function",
-          "function": "dag009:enchantents/summoned"
+          "function": "dagmod:enchantments/summoned"
         },
         "enchanted": "victim",
         "affected": "attacker"

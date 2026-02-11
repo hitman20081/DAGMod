@@ -34,7 +34,7 @@
     "minecraft:attributes": [
       {
         "attribute": "minecraft:attack_speed",
-        "id": "dag009:enchantment.berserker.attack_speed",
+        "id": "dagmod:enchantment.berserker.attack_speed",
         "amount": {
           "type": "minecraft:linear",
           "base": 1,
@@ -44,7 +44,7 @@
       },
       {
         "attribute": "minecraft:attack_damage",
-        "id": "dag009:enchantment.berserker.attack_damage",
+        "id": "dagmod:enchantment.berserker.attack_damage",
         "amount": {
           "type": "minecraft:linear",
           "base": 1,
