@@ -1,6 +1,6 @@
 {
   "description": "Shatter Proof",
-  "supported_items": "#minecraft:enchantable/equippable",
+  "supported_items": "#minecraft:enchantable/durability",
   "weight": 1,
   "max_level": 1,
   "min_cost": {

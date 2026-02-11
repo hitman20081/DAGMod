@@ -2,7 +2,7 @@
 
 DAGMod features over 100 custom items that enhance your RPG experience. From selection tokens to fantasy foods, quest books to magical scrolls, powerful class ability items to custom armor sets, discover the complete catalog of items available in your adventure.
 
-**Current Version:** v1.5.4-beta
+**Current Version:** v1.6.0-beta
 
 ---
 
@@ -15,6 +15,7 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 - [Consumable Powders](<./CONSUMABLES.md>)
 - [Armor Sets](<./ARMOR_SETS.md>)
 - [Weapons & Shields](<./WEAPONS_SHIELDS.md>)
+- [Custom Enchantments](<./ENCHANTMENTS.md>)
 - [Fantasy Foods](<./FANTASY_FOODS.md>)
 - [Boss & Dungeon Loot](<./BOSS_DUNGEON_LOOT.md>)
 - [Crafting Materials](<./CRAFTING_MATERIALS.md>)
@@ -93,20 +94,18 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 
 ---
 
-## Known Issues (v1.5.0-beta)
+## Known Issues (v1.6.0-beta)
 
 Some consumable powders use placeholder effects:
-- Vampire Dust: Uses Regeneration (lifesteal planned for v1.5.0)
+- Vampire Dust: Uses Regeneration (lifesteal planned)
 - Phantom Dust / Perfect Dodge: Uses Resistance (dodge system planned)
 - Spell Echo / Overcharge Dust: Not fully functional (spell system integration needed)
 - Last Stand Powder: Uses Absorption (death prevention planned)
 - Time Distortion: Only affects player (AoE planned)
 
-Full implementation planned for v1.5.0.
-
 ---
 
-## Future Item Plans (v1.5.0+)
+## Future Item Plans
 
 **Consumable System Completion:**
 - Vampire Dust: True lifesteal mechanic
@@ -114,13 +113,6 @@ Full implementation planned for v1.5.0.
 - Spell Echo / Overcharge Dust: Spell modification
 - Last Stand Powder: Death prevention system
 - Time Distortion: AoE slow effect
-
-**Crafting System Expansion:**
-- More spell scrolls for Mages
-- Spell crafting recipes
-- Custom enchantments (race/class specific)
-- Additional armor sets
-- More weapon synergies
 
 ---
 
@@ -133,7 +125,7 @@ A: Class ability items are primarily obtained through quest rewards and crafting
 A: Most items can be traded except selection tokens and bound items.
 
 **Q: What happens to my items when I die?**
-A: Items follow standard Minecraft death rules. Class ability items are lost on death.
+A: Items follow standard Minecraft death rules. Items with the Soul Bound enchantment are preserved across death. Class ability items without Soul Bound are lost on death.
 
 **Q: Can I craft spell scrolls?**
 A: As of v1.5.0-beta, spell scrolls cannot be crafted. Obtain through Mage quests.

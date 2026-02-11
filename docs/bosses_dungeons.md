@@ -1,17 +1,131 @@
 # Bosses and Dungeons
 
-This document provides details on the various bosses and dungeons found in DAGMod, including their mechanics, loot, and generation.
+The Bone Realm features a hierarchy of undead bosses and procedurally generated dungeons with unique loot.
+
+---
 
 ## Bosses
 
 ### Skeleton King
+**Role:** Top-tier Bone Realm boss
+
+| Stat | Value |
+|------|-------|
+| Health | 60 HP |
+| Attack Damage | 8.0 |
+| Armor | 20.0 |
+| Armor Toughness | 5.0 |
+| Movement Speed | 0.3 |
+| Detection Range | 48 blocks |
+| Knockback Resistance | 100% (immune) |
+| Size | 2.0x (double normal skeleton) |
+| XP on Kill | 100 |
+
+- **Boss Bar:** Purple, notched. Sky darkens while the boss is active.
+- **Equipment:** Full named Netherite armor set ("Crown of the Bone Sovereign", "Regalia of the Death Lord", "Royal Bone Greaves", "Sovereign's Marrow Treads") + Netherite sword. Equipment does not drop.
+- **Behavior:** Uses standard Skeleton AI (ranged bow + melee combat). Cannot despawn.
+- **On Death:** Spawns a locked boss chest with epic loot.
+
+---
 
 ### Skeleton Lord
+**Role:** Mid-tier boss. Summons Skeleton Summoners.
 
-### Field Captain
+| Stat | Value |
+|------|-------|
+| Health | 45 HP |
+| Attack Damage | 6.0 |
+| Armor | 15.0 |
+| Armor Toughness | 4.0 |
+| Movement Speed | 0.28 |
+| Detection Range | 40 blocks |
+| Knockback Resistance | 100% (immune) |
+| Size | 1.5x |
+| XP on Kill | 50 |
+
+- **Boss Bar:** Red, notched.
+- **Equipment:** Full named Diamond armor set ("Helm/Chest/Leggings/Sabatons of the Bone Lord") + Diamond sword. Equipment does not drop.
+- **Summoning:** Every 10-15 seconds, summons a Skeleton Summoner (max 3 within 40 blocks). Summoners inherit the Lord's current target.
+- **On Death:** Spawns a locked boss chest.
+
+---
+
+### Skeleton Summoner (Field Captain)
+**Role:** Elite mob summoned by the Skeleton Lord. Summons Bonelings.
+
+| Stat | Value |
+|------|-------|
+| Health | 30 HP |
+| Attack Damage | 4.0 |
+| Armor | 8.0 |
+| Armor Toughness | 2.0 |
+| Movement Speed | 0.26 |
+| Detection Range | 32 blocks |
+| Knockback Resistance | 30% |
+| Size | 1.1x |
+| XP on Kill | 25 |
+
+- **No boss bar.**
+- **Equipment:** Iron helmet ("Summoner's Hood"), leather chestplate ("Summoner's Robes"), iron sword.
+- **Summoning:** Every 6-12 seconds, summons a Boneling (max 4 within 24 blocks). Witch particles and evoker cast sound on summon.
+- Cannot despawn.
+
+---
 
 ### Boneling
+**Role:** Weak swarm minion summoned by Skeleton Summoners.
+
+| Stat | Value |
+|------|-------|
+| Health | 12 HP |
+| Attack Damage | 2.5 |
+| Armor | 0 |
+| Movement Speed | 0.35 (fast) |
+| Size | 0.7x (70% normal) |
+| XP on Kill | 3 |
+
+- **Temporary:** Self-destructs after 3 minutes with poof particles.
+- **Death Effect:** Bone shatter particles + soul particles.
+- **Ambient:** Ash particles every second while alive.
+
+---
+
+## Boss Fight Strategy
+
+The Bone Realm boss hierarchy creates escalating encounters:
+
+1. **Bonelings** are weak individually but swarm in groups. Clear them quickly.
+2. **Skeleton Summoners** create Bonelings constantly. Prioritize killing Summoners to stop the flood.
+3. **Skeleton Lord** spawns Summoners, creating a chain of minions. Focus the Lord while managing adds.
+4. **Skeleton King** is the ultimate challenge with high damage, heavy armor, and ranged attacks.
+
+**Tips:**
+- Bring good armor (Dragonscale or Obsidian recommended)
+- Area-of-effect abilities (Whirlwind, Mana Burst) are excellent for clearing Bonelings
+- Rogues can use backstab damage on bosses for high burst
+- Warriors should use Battle Standard for sustain during long fights
+
+---
 
 ## Dungeons
 
 ### Bone Dungeons
+
+Procedurally generated underground structures found throughout the world.
+
+**Generation:**
+- Uses Minecraft's jigsaw system for procedural layout
+- 10 unique structure pieces including corridors, rooms, treasure rooms, and portal rooms
+- Each dungeon layout is unique
+- Generates naturally underground with natural terrain integration
+
+**Features:**
+- Custom loot chests with enchanted gear, diamonds, and rare items
+- Boss spawner rooms with Bone Realm entities
+- Portal rooms that connect to the Bone Realm dimension
+- Locked treasure chests that require boss kills to open
+
+**Loot:**
+- Regular chests contain mid-tier loot (iron/diamond gear, enchanted books)
+- Boss chests contain epic loot (see [Boss & Dungeon Loot](items/boss_dungeon_loot.md))
+- Locked chests require defeating the boss that guards them

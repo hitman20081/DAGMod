@@ -32,9 +32,9 @@
 **Effect:** Strength V for 20 seconds (+100% melee damage).
 **Class:** Warrior-specific
 
-### Placeholder Effect Consumables (Planned for v1.5.0)
+### Placeholder Effect Consumables
 
-These consumables exist but use placeholder effects until full implementation in v1.5.0:
+These consumables exist but use placeholder effects until full implementation in a future update:
 
 #### Vampire Dust (Universal)
 **Current Effect:** Regeneration II for 20 seconds (placeholder).

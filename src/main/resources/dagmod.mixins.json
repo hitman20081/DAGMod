@@ -12,6 +12,8 @@
       "LivingEntityMixin",
       "ShieldBlockingMixin",
       "ShatterproofMixin",
+      "ShatterproofDamageMixin",
+      "ShatterproofMiningMixin",
       "SoulBoundMixin"
 	],
   "client": [

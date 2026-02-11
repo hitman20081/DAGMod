@@ -120,10 +120,10 @@ Discover 9 unique race-class combinations with special abilities
 - And 6 more powerful synergies!
 
 ### 📊 Progression System (Levels 1-50)
-- Gain XP from mining, combat, quests, and exploration
-- Earn stat bonuses every 10 levels (+1 heart, +0.5 attack damage, +1 armor)
+- Gain XP from mining, combat, quests, and gathering
+- Earn stat bonuses as you level: +1 HP per level, +1 attack every 5 levels, +1 armor every 10 levels
 - Visual progression HUD showing XP and level
-- Total of +5 hearts, +2.5 attack, and +5 armor at level 50!
+- Total of +49 HP, +10 attack, and +5 armor at level 50!
 
 ### 📜 Quest System
 Progress through an epic quest system
@@ -156,12 +156,13 @@ Face the Bone Realm Boss hierarchy
 - 11 new class ability items with cooldowns (v1.4.4-beta)
 - 15 consumable powders with class-specific effects
 - Rogue energy system with 3 abilities (Smoke Bomb, Poison Dagger, Shadow Step)
-- 6 custom armor sets with progressive bonuses
-- 9 themed weapons + 9 shields with synergy bonuses
+- 11 custom armor sets (6 with progressive set bonuses)
+- 15 special weapons + 5 Mythril tools + 9 shields with synergy bonuses
+- 26 custom enchantments (combat, utility, and passive effects)
 - Enhanced consumables Shadow Blend, Fortune Dust, Cooldown Elixir
 
 ### 🌍 Custom Content
-- 50+ custom items including fantasy foods, tokens, tomes, and magical scrolls
+- 100+ custom items including fantasy foods, tokens, tomes, and magical scrolls
 - Hall of Champions structure with Race and Class Selection Altars
 - Persistent data storage - your choices save across sessions
 - Custom crafting recipes for unique items and materials
