@@ -1,5 +1,5 @@
 # DAGMod: A Fantasy RPG Experience in Minecraft
-**v1.6.0-beta for Minecraft 1.21.11 (Fabric)**
+**v1.6.5-beta for Minecraft 1.21.11 (Fabric)**
 
 DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique race and class, master powerful abilities, level up through a dynamic quest system, and conquer procedurally generated dungeons filled with custom bosses.
 
@@ -13,17 +13,23 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 *   **📜 Embark on Epic Quests**: Discover over **64 quests** through a multi-layered system. Start with a tutorial from **Innkeeper Garrick** in a village tavern, then accept story quests from **Quest Blocks** and quick jobs from **Job Boards**.
 
-*   **⚔️ Master Unique Abilities**: Unleash devastating power with over **15 unique class abilities**. Whether you're a Warrior spinning through hordes of enemies, a Mage warping time, or a Rogue teleporting behind foes, combat is dynamic and engaging.
+*   **⚔️ Master Unique Abilities**: Unleash devastating power with **17 unique class abilities**. Whether you're a Warrior spinning through hordes of enemies, a Mage warping time, or a Rogue teleporting behind foes, combat is dynamic and engaging.
 
 *   **🐉 Challenge the Dragon Guardian**: Tame and ride new **Wild Dragons** that spawn in the overworld, or build a portal to the **Dragon Realm** to face the ultimate endgame boss—the fearsome **Dragon Guardian**. Defeat it to claim the rare `King's Scale` and other legendary rewards.
 
 *   **🏰 Explore a Living World**: The world is alive with new structures. Discover procedurally generated **Bone Dungeons** deep underground, face the formidable **Skeleton King** and his minions, and find shelter in new **Village Inns, Taverns, and Shops**.
 
-*   **🎒 Collect Epic Loot**: Craft and discover over **50 custom items**, including 6 themed armor sets, 9 unique weapons, powerful consumables, and magical wands.---
+*   **🎒 Collect Epic Loot**: Craft and discover over **50 custom items**, including 6 themed armor sets, 9 unique weapons, powerful consumables, and magical wands. Bone Dungeon chests feature a **3-tier enchanted book system** with 15+ custom enchantments.
+
+*   **🏪 Trade with Merchants**: Visit **8 unique merchant NPCs** — from the Armorer and Enchantsmith to the Mystery Merchant and Voodoo Illusioner. Each has a **rotating premium inventory** that cycles every 72 hours, so check back often for rare deals.
+
+*   **👥 Team Up with Friends**: Form **parties of up to 5 players** for cooperative play. Share XP within range, earn party size bonuses, and take on **party quests** with scaling difficulty from Easy to Legendary.
+
+*   **🌍 Travel Between Dimensions**: Explore **8 custom dimensions** including the Bone Realm (undead-themed dungeon world) and the Dragon Realm (endgame boss arena). Construct portal frames and acquire special keys to unlock passage.
 
 ## 🚀 Getting Started
 
-1.  **Installation**: Install **Minecraft 1.21.11**, **Fabric Loader**, and the **Fabric API**. Then, drop the DAGMod JAR file into your `mods` folder.
+1.  **Installation**: Install **Minecraft 1.21.11**, **Fabric Loader 0.18.4**, and **Fabric API 0.141.1+1.21.11**. Then, drop the DAGMod JAR file into your `mods` folder.
 
 2.  **Find the Hall of Champions**: When you first spawn, you'll have a **Hall Locator** item. Use it to find the Hall of Champions structure where you can choose your Race and Class at two distinct altars.
 
