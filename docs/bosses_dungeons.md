@@ -90,6 +90,35 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 
 ---
 
+### Dragon Guardian
+**Role:** Dragon Realm boss. Flying dragon that guards the Dragon Realm dimension.
+
+| Stat | Value |
+|------|-------|
+| Health | 200 HP |
+| Attack Damage | 12.0 |
+| Armor | 12.0 |
+| Armor Toughness | 4.0 |
+| Flying Speed | 0.4 |
+| Knockback Resistance | 80% |
+| Detection Range | 48 blocks |
+| XP on Kill | 50 |
+
+- **Boss Bar:** Purple, notched (10 segments). Named "Dragon Guardian".
+- **Spawn:** Triggered when a player enters the Dragon Realm for the first time (or after respawn timer expires). Spawns at arena center (0, surface+10, 0).
+- **Combat Abilities:**
+  - **Fire Breath:** Shoots fireballs at targets 4-20 blocks away. 2-second charge, 5-second cooldown.
+  - **Swoop Attack:** Dives from above for melee damage. 6-second cooldown.
+  - **Roar:** Intimidation display applying Slowness to all players within 10 blocks. 20-second cooldown.
+  - **Melee Attack:** Flying melee strikes when close.
+- **Drops:** Dragon Scale (3-7), Dragon Bone (2-4), Dragon Skin (1-2), Dragon Heart (1), King's Scale (1, boss exclusive).
+- **Respawn:** Timer starts on death. Boss will not respawn until the timer expires and a player enters the dimension.
+- **Immune to fall damage.** Cannot despawn.
+
+For more information on the Dragon Realm dimension, see [Dimensions](./dimensions.md).
+
+---
+
 ## Boss Fight Strategy
 
 The Bone Realm boss hierarchy creates escalating encounters:
@@ -99,11 +128,18 @@ The Bone Realm boss hierarchy creates escalating encounters:
 3. **Skeleton Lord** spawns Summoners, creating a chain of minions. Focus the Lord while managing adds.
 4. **Skeleton King** is the ultimate challenge with high damage, heavy armor, and ranged attacks.
 
-**Tips:**
+**Bone Realm Tips:**
 - Bring good armor (Dragonscale or Obsidian recommended)
 - Area-of-effect abilities (Whirlwind, Mana Burst) are excellent for clearing Bonelings
 - Rogues can use backstab damage on bosses for high burst
 - Warriors should use Battle Standard for sustain during long fights
+
+**Dragon Guardian Tips:**
+- Ranged attacks are essential against a flying boss
+- Watch for the charge-up animation before fire breath and dodge sideways
+- When the dragon roars, back away to avoid the Slowness debuff
+- Bring fire resistance potions for fire breath damage
+- Party up for this fight - a tank and ranged DPS combo works well
 
 ---
 

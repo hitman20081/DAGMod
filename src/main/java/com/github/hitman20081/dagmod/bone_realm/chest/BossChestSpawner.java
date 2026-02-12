@@ -73,7 +73,7 @@ public class BossChestSpawner {
                 world,
                 chestPos,
                 BoneRealmChestRegistry.SKELETON_KING_CHEST,
-                "dag005:chests/skeleton_king_chest"
+                "dagmod:chests/skeleton_king_chest"
         );
     }
 
@@ -101,7 +101,7 @@ public class BossChestSpawner {
                 world,
                 chestPos,
                 BoneRealmChestRegistry.BONE_REALM_LOCKED_CHEST,
-                "dag005:chests/bone_realm_locked_chest"
+                "dagmod:chests/bone_realm_locked_chest"
         );
     }
 

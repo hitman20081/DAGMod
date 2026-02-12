@@ -42,7 +42,7 @@ All mixins are registered in `src/main/resources/dagmod.mixins.json`.
 
 ### ShatterproofMixin
 **Target:** `ItemStack`
-**Purpose:** Implements the Shatter Proof enchantment. Intercepts `setDamage()` and caps durability damage at `maxDamage - 1` for items with the `dag009:shatterproof` enchantment, preventing them from ever breaking.
+**Purpose:** Implements the Shatter Proof enchantment. Intercepts `setDamage()` and caps durability damage at `maxDamage - 1` for items with the `dagmod:shatterproof` enchantment, preventing them from ever breaking.
 
 ### ShatterproofDamageMixin
 **Target:** `LivingEntity`
@@ -54,7 +54,7 @@ All mixins are registered in `src/main/resources/dagmod.mixins.json`.
 
 ### SoulBoundMixin
 **Target:** `ServerPlayerEntity`
-**Purpose:** Implements the Soul Bound enchantment. Injects at the `onDeath` method HEAD to scan the player's inventory for items with `dag009:soul_bound`, removes them before they drop, and stores them in `SoulBoundStorage`. Items are returned on respawn via the `AFTER_RESPAWN` event handler in `DagMod.java`.
+**Purpose:** Implements the Soul Bound enchantment. Injects at the `onDeath` method HEAD to scan the player's inventory for items with `dagmod:soul_bound`, removes them before they drop, and stores them in `SoulBoundStorage`. Items are returned on respawn via the `AFTER_RESPAWN` event handler in `DagMod.java`.
 
 ---
 

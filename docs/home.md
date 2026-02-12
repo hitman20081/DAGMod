@@ -8,6 +8,9 @@ This documentation provides a comprehensive overview of the features, mechanics,
 *   [Items](/items/overview)
 *   [Races](/races/overview)
 *   [Bosses & Dungeons](/bosses_dungeons)
+*   [Merchants](/merchants)
+*   [Party System](/party)
+*   [Dimensions](/dimensions)
 *   [Getting Started](/getting_started)
 *   [Progression](/progression)
 *   [Quests](/quests)
@@ -18,7 +21,17 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 50 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.6.0-beta (January 2026)
+Current Version v1.6.5-beta (February 2026)
+
+---
+
+## 🎮 What's New in v1.6.5-beta
+
+### Enchanted Book & Loot Fixes
+- Bone dungeon chests now correctly drop **tiered enchanted books** (common, uncommon, rare)
+- All datapacks consolidated from `dag00x`/`dag01x` namespaces to unified **`dagmod` namespace**
+- Treasure rooms, portal rooms, and regular rooms have **distinct loot tables**
+- Updated to **Fabric Loader 0.18.4** and **Fabric API 0.141.1+1.21.11**
 
 ---
 
@@ -53,8 +66,8 @@ Current Version v1.6.0-beta (January 2026)
 ### v1.5.4-beta - Minecraft Version Update
 
 ✅ **Updated to Minecraft 1.21.11** - Final obfuscated version before mappings change
-✅ **Updated Fabric Loader to 0.18.1** - Latest stable loader
-✅ **Updated Fabric API to 0.139.4+1.21.11** - Compatible with 1.21.11
+✅ **Updated Fabric Loader to 0.18.4** - Latest stable loader
+✅ **Updated Fabric API to 0.141.1+1.21.11** - Compatible with 1.21.11
 
 ### v1.5.3-beta - Critical Quest Fix
 
@@ -160,6 +173,23 @@ Face the Bone Realm Boss hierarchy
 - 15 special weapons + 5 Mythril tools + 9 shields with synergy bonuses
 - 26 custom enchantments (combat, utility, and passive effects)
 - Enhanced consumables Shadow Blend, Fortune Dust, Cooldown Elixir
+
+### 🛒 Merchant System
+- 8 unique merchant NPCs (Armorer, Mystery Merchant, Enchantsmith, and more)
+- Rotating premium trade inventories cycling every 72 hours
+- Merchant dialogue with unique greetings and stock hints
+- Static trades always available alongside rotating premium items
+
+### 👥 Party System
+- Form groups of up to 5 players with shared XP and party chat
+- XP bonuses scaling from +5% (2 players) to +20% (5 players)
+- 50-block XP sharing radius with cooperative party quests
+- Party quest difficulty tiers from Easy to Legendary
+
+### 🌐 Custom Dimensions
+- **Bone Realm** - Undead dimension with boss hierarchy and procedural dungeons
+- **Dragon Realm** - Volcanic dimension with Dragon Guardian boss (200 HP flying boss)
+- 6 additional themed dimensions (Badlands, Crimson Forest, Deep Dark, Pale Garden, Snowy Plains, Swamp)
 
 ### 🌍 Custom Content
 - 100+ custom items including fantasy foods, tokens, tomes, and magical scrolls

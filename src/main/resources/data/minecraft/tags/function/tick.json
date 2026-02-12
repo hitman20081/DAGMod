@@ -1,15 +1,6 @@
 {
     "values": [
         "starterplatform:tick",
-        "dag000:tick",
-        "dag001:tick",
-        "dag002:tick",
-        "dag003:tick",
-        "dag004:tick",
-        "dag005:tick",
-        "dag006:tick",
-        "dag011:tick",
-        "dag012:tick",
-        "dag020:tick"
+        "dagmod:boss_tick"
     ]
 }

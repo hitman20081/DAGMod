@@ -27,7 +27,7 @@ public class HallLocatorItem extends Item {
                     .formatted(Formatting.GOLD), false);
             player.sendMessage(Text.literal("To find the Hall of Champions, use:")
                     .formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("/locate structure dag011:hall_of_champions")
+            player.sendMessage(Text.literal("/locate structure dagmod:hall_of_champions")
                     .formatted(Formatting.AQUA), false);
             player.sendMessage(Text.literal("Then follow the coordinates!")
                     .formatted(Formatting.GRAY), false);

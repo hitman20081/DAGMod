@@ -5,6 +5,27 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.5-beta] - 2026-02-11
+
+### Fixed
+
+**Bone Dungeon Loot Table Enchanted Books**:
+- Fixed enchanted books in `regular_room.json` and `treasure_room.json` generating as blank books with no enchantment
+- Root cause: two `enchant_randomly` functions were stacked on the same book entry, causing the second to fail silently
+- Replaced the single broken entry with three tiered enchanted book pools:
+  - **Common** (weight 10/8): Standard vanilla enchantments (Sharpness, Protection, Efficiency, etc.) + custom (Climb, Reach, Light's Blessing, Frostbite, Blazing Strike, Mud Collector, Rise of the Zombies, Bane of White Walker)
+  - **Uncommon** (weight 5/6): Mid-tier vanilla (Looting, Fortune, Silk Touch, Infinity, etc.) + custom (Shadow, Heart Armor, Solar, Siphon, Soul Boost, Midas Touch)
+  - **Rare** (weight 2/4): High-value vanilla (Mending, Frost Walker) + custom (Soul Bound, Shatterproof, Leach, Lightning, Savage, Lucky Looter, Tunneling, Magma Walker, Berserker)
+- Treasure room has improved odds for uncommon and rare books compared to regular rooms
+
+### Changed
+
+**Namespace Migration (dag005/dag011 to dagmod)**:
+- Moved all loot tables, functions, dimensions, structures, and worldgen from old `dag00x`/`dag011` namespaces to unified `dagmod` namespace
+- Structure chests in existing worlds may need `/data merge block` to update loot table references
+
+---
+
 ## [1.6.0-beta] - 2026-02-10
 
 ### Added

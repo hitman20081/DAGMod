@@ -10,6 +10,7 @@ import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.entity.client.DragonGuardianModel;
 import com.github.hitman20081.dagmod.entity.client.SimpleNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.InnkeeperGarrickRenderer;
+import com.github.hitman20081.dagmod.entity.client.DragonGuardianRenderer;
 import com.github.hitman20081.dagmod.entity.client.WildDragonRenderer;
 import com.github.hitman20081.dagmod.entity.client.MysteryMerchantRenderer;
 import com.github.hitman20081.dagmod.entity.client.MinerNPCRenderer;
@@ -147,6 +148,9 @@ public class DagModClient implements ClientModInitializer {
 
         // Register Cute Villager renderer
         EntityRendererFactories.register(ModEntities.CUTE_VILLAGER_NPC, CuteVillagerNPCRenderer::new);
+
+        // Register Dragon Guardian renderer
+        EntityRendererFactories.register(ModEntities.DRAGON_GUARDIAN, DragonGuardianRenderer::new);
 
         // Register Wild Dragon renderer
         EntityRendererFactories.register(ModEntities.WILD_DRAGON, WildDragonRenderer::new);

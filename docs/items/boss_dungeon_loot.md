@@ -1,6 +1,6 @@
-# Boss & Dungeon Loot ⭐ NEW
+# Boss & Dungeon Loot
 
-### Boss System Loot (v1.4.2-beta)
+### Boss System Loot (v1.6.5-beta)
 
 **Skeleton King Hierarchy:**
 
@@ -28,29 +28,99 @@
 
 ---
 
-### Bone Dungeon Loot (v1.4.3-beta)
+### Dragon Guardian Loot (v1.6.5-beta)
 
-**Treasure Room Chests:**
-- Enchanted books (various levels)
-- Diamonds (multiple)
-- Emeralds
-- Golden apples
-- Rare gear and equipment
-- Best loot in dungeons
+**Dragon Guardian** (Dragon Realm Boss - 200 HP):
 
-**Portal Room Chests:**
-- Ender pearls (multiple)
-- Obsidian
-- Eyes of ender
-- Portal-themed items
-- Nether/End preparation items
+| Drop | Quantity | Notes |
+|------|----------|-------|
+| Dragon Scale | 3-7 | Crafting material for Dragon armor |
+| Dragon Bone | 2-4 | Crafting material |
+| Dragon Skin | 1-2 | Crafting material |
+| Dragon Heart | 1 (always) | Rare crafting material, used for taming baby dragons |
+| King's Scale | 1 (always) | Boss-exclusive rare material |
 
-**Regular Room Chests:**
-- Bones
-- Arrows
-- Iron ingots/ore
-- Gold ingots/ore
-- Basic supplies and materials
-- Standard dungeon loot
+The Dragon Guardian spawns in the Dragon Realm dimension. See [Dimensions](../dimensions.md) for portal construction details.
 
-**Acquisition:** Explore Bone Dungeons (generate naturally underground)
+---
+
+### Bone Dungeon Loot (v1.6.5-beta)
+
+Bone Dungeons contain three types of loot rooms, each with distinct loot tables. All rooms feature a **3-tier enchanted book system**.
+
+---
+
+#### Enchanted Book Tiers
+
+Enchanted books in bone dungeon chests come in 3 rarity tiers:
+
+**Common Tier** (highest drop weight):
+- Vanilla: Sharpness, Protection, Efficiency, Unbreaking, Power, Fire Aspect, Knockback, Projectile Protection, Blast Protection, Fire Protection, Aqua Affinity, Respiration
+- DAGMod: Climb, Reach, Light's Blessing, Frostbite, Blazing Strike, Mud Collector, Rise of the Zombies, Bane of the White Walker
+
+**Uncommon Tier** (medium drop weight):
+- Vanilla: Looting, Fortune, Silk Touch, Feather Falling, Infinity, Flame, Thorns, Depth Strider, Swift Sneak, Piercing, Multishot, Loyalty, Channeling
+- DAGMod: Shadow, Heart of the Armor, Solar, Siphon, Soul Boost, Midas Touch
+
+**Rare Tier** (lowest drop weight):
+- Vanilla: Mending, Frost Walker
+- DAGMod: Soul Bound, Shatterproof, Leach, Lightning, Savage, Lucky Looter, Tunneling, Magma Walker, Berserker
+
+---
+
+#### Regular Room Chests
+
+**Rolls:** 3-6 items per chest
+
+| Item | Weight | Quantity | Notes |
+|------|--------|----------|-------|
+| Cooked Beef | 20 | 8-16 | Food supply |
+| Cooked Chicken | 15 | 2-8 | Food supply |
+| Iron Ingot | 15 | 3-10 | Basic materials |
+| Diamond | 10 | 1-4 | Valuable resource |
+| Enchanted Book (Common) | 10 | 1 | Common tier enchantment |
+| Emerald | 8 | 2-6 | Currency/trading |
+| Golden Apple | 5 | 1 | Combat consumable |
+| Enchanted Book (Uncommon) | 5 | 1 | Uncommon tier enchantment |
+| Enchanted Book (Rare) | 2 | 1 | Rare tier enchantment |
+
+**Bonus Pool (1 roll):** 10% chance for enchanted diamond sword (level 20-30), 10% chance for enchanted golden apple, 60% chance empty.
+
+---
+
+#### Portal Room Chests
+
+**Rolls:** 2-4 items per chest
+
+| Item | Weight | Quantity | Notes |
+|------|--------|----------|-------|
+| Ender Pearl | 15 | 2-6 | End preparation |
+| Diamond | 12 | 1-3 | Valuable resource |
+| Obsidian | 10 | 4-12 | Portal building |
+| Ender Eye | 8 | 1-3 | End preparation |
+| Ender Chest | 5 | 1 | Portable storage |
+
+---
+
+#### Treasure Room Chests
+
+The best loot in bone dungeons. Contains the same base pool as regular rooms (with higher enchanted book weights) plus two additional gear pools.
+
+**Base Pool (3-6 rolls):** Same items as regular room but with higher weights for uncommon (weight 6) and rare (weight 4) enchanted books.
+
+**Bonus Armor/Weapon Pool (1 roll):**
+- Enchanted Diamond Chestplate (level 20-30)
+- Enchanted Golden Apple
+- Enchanted Diamond Sword (level 20-30)
+- 55% chance empty
+
+**Bonus Diamond Gear Pool (1 roll):**
+- Enchanted Diamond Helmet (level 20-30)
+- Enchanted Diamond Chestplate (level 20-30)
+- Enchanted Diamond Leggings (level 20-30)
+- Enchanted Diamond Boots (level 20-30)
+- Equal weight for each piece
+
+---
+
+**Acquisition:** Explore Bone Dungeons (generate naturally underground). See [Dimensions](../dimensions.md) for information on the Bone Realm.

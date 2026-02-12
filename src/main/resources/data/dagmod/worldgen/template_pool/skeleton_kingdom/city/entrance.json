@@ -1,0 +1,59 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city/entrance/entrance_connector",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city/entrance/entrance_path_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city/entrance/entrance_path_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city/entrance/entrance_path_3",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city/entrance/entrance_path_4",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city/entrance/entrance_path_5",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

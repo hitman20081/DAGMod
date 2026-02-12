@@ -1,6 +1,6 @@
 # Custom Enchantments
 
-DAGMod includes 26 custom enchantments from the dag009 datapack, ranging from combat enhancements to utility effects. Some are data-driven (JSON effects) while others have custom Java implementations for unique behavior.
+DAGMod includes 26 custom enchantments ranging from combat enhancements to utility effects. Some are data-driven (JSON effects) while others have custom Java implementations for unique behavior. Enchanted books with these enchantments can also be found in bone dungeon chests in 3 rarity tiers (common, uncommon, and rare).
 
 ---
 
@@ -214,6 +214,6 @@ DAGMod includes 26 custom enchantments from the dag009 datapack, ranging from co
 Custom enchantments can be obtained through:
 - **Enchanting Table** - Random chance based on weight/rarity
 - **Anvil** - Combine with enchanted books (anvil cost varies per enchantment)
-- **Commands** - `/enchant @s dag009:<enchantment_name>`
+- **Commands** - `/enchant @s dagmod:<enchantment_name>`
 - **Enchantsmith NPC** - Rotating enchanted book stock
 - **Quest Rewards** - Some quests reward enchanted gear

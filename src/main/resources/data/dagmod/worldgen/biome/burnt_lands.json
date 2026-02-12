@@ -36,14 +36,5 @@
   "effects": {
     "water_color": 4159204
   },
-  "spawners": {
-    "monster": [
-      {
-        "type": "dagmod:dragon_guardian",
-        "weight": 5,
-        "minCount": 1,
-        "maxCount": 1
-      }
-    ]
-  }
+  "spawners": {}
 }

@@ -1,0 +1,95 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/bottom_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/bottom_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/bottom_left_corner",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/bottom_right_corner_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/bottom_right_corner_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/left",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/right",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/top",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/top_right_corner",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/walls/top_left_corner",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

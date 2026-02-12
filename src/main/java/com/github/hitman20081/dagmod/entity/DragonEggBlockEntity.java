@@ -10,8 +10,11 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -135,14 +138,38 @@ public class DragonEggBlockEntity extends BlockEntity {
             20, 0.5, 0.5, 0.5, 0.1);
     }
 
-    /**
-     * Save NBT data (called when saving to disk and syncing to client)
-     * In Minecraft 1.21.11, this method should handle both persistence and sync
-     */
+    @Override
+    protected void writeData(WriteView data) {
+        super.writeData(data);
+        data.putInt("HatchingTicks", hatchingTicks);
+        data.putInt("Variant", variant.ordinal());
+        if (ownerUuid != null) {
+            data.putString("OwnerUUID", ownerUuid.toString());
+        }
+    }
+
+    @Override
+    protected void readData(ReadView data) {
+        super.readData(data);
+        this.hatchingTicks = data.getInt("HatchingTicks", 0);
+        int variantOrdinal = data.getInt("Variant", 0);
+        DragonGuardianEntity.DragonVariant[] variants = DragonGuardianEntity.DragonVariant.values();
+        if (variantOrdinal >= 0 && variantOrdinal < variants.length) {
+            this.variant = variants[variantOrdinal];
+        }
+        Optional<String> ownerOpt = data.getOptionalString("OwnerUUID");
+        if (ownerOpt.isPresent()) {
+            try {
+                this.ownerUuid = UUID.fromString(ownerOpt.get());
+            } catch (IllegalArgumentException e) {
+                this.ownerUuid = null;
+            }
+        }
+    }
+
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound nbt = super.toInitialChunkDataNbt(registryLookup);
-        // Save data to NBT
         nbt.putInt("HatchingTicks", hatchingTicks);
         nbt.putInt("Variant", variant.ordinal());
         if (ownerUuid != null) {

@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
@@ -131,6 +132,18 @@ public class DragonEggBlock extends BlockWithEntity {
         }
 
         return super.onBreak(world, pos, state, player);
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if (!world.isClient() && placer instanceof PlayerEntity player) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof DragonEggBlockEntity eggEntity) {
+                eggEntity.setOwnerUuid(player.getUuid());
+                eggEntity.markDirty();
+            }
+        }
     }
 
     // BlockEntityProvider implementation

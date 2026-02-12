@@ -1,1 +1,0 @@
-give @s ominous_trial_key[item_name='{"color":"red","text":"Custom Key"}'] 1

@@ -28,7 +28,7 @@ public class BoneRealmTeleporter {
     // Dimension keys
     public static final RegistryKey<World> BONE_REALM = RegistryKey.of(
             RegistryKeys.WORLD,
-            Identifier.of("dag011", "bone_realm")
+            Identifier.of("dagmod", "bone_realm")
     );
 
     public static final RegistryKey<World> OVERWORLD = World.OVERWORLD;

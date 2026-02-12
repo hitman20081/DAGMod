@@ -27,6 +27,8 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
 6.  **Begin Your Journey:**
     *   Start gaining XP through mining, combat, and exploration.
     *   Progress through 50 levels, earning stat bonuses every 10 levels.
+    *   Visit **Merchant NPCs** in the Hall of Champions to trade for gear and supplies.
+    *   In multiplayer, form a **Party** with `/party create <name>` for shared XP and group quests.
 7.  **Begin Questing (Garrick Quests):**
     *   Find **Quest Blocks** within the Hall of Champions or scattered throughout the world.
     *   Interact with a Quest Block to view available quests.
@@ -58,12 +60,15 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
 
 Now that you're familiar with the basics, dive deeper into the world of DAGMod:
 
-*   **[Races Overview](<./RACES/OVERVIEW.md>)**: Detailed information about each race and their bonuses.
-*   **[Classes Overview](<./CLASSES/OVERVIEW.md>)**: Class abilities, playstyles, and all available abilities.
-*   **[Synergies](<./SYNERGIES.md>)**: All race-class combination bonuses.
-*   **[Progression](<./PROGRESSION.md>)**: The complete leveling guide, XP sources, and stat bonuses.
-*   **[Quests](<./QUESTS.md>)**: A comprehensive guide to the quest system, tiers, and race-specific storylines.
-*   **[Items Overview](<./ITEMS/OVERVIEW.md>)**: A complete item catalog including ability items and consumables.
-*   **[Bosses & Dungeons](<./BOSSES_DUNGEONS.md>)**: Learn about boss mechanics, loot, and dungeon generation.
+*   **[Races Overview](./races/overview.md)**: Detailed information about each race and their bonuses.
+*   **[Classes Overview](./classes/overview.md)**: Class abilities, playstyles, and all available abilities.
+*   **[Synergies](./synergies.md)**: All race-class combination bonuses.
+*   **[Progression](./progression.md)**: The complete leveling guide, XP sources, and stat bonuses.
+*   **[Quests](./quests.md)**: A comprehensive guide to the quest system, tiers, and race-specific storylines.
+*   **[Items Overview](./items/overview.md)**: A complete item catalog including ability items and consumables.
+*   **[Bosses & Dungeons](./bosses_dungeons.md)**: Learn about boss mechanics, loot, and dungeon generation.
+*   **[Merchants](./merchants.md)**: All 8 merchant NPCs and their rotating trade inventories.
+*   **[Party System](./party.md)**: Multiplayer party commands, XP sharing, and party quests.
+*   **[Dimensions](./dimensions.md)**: Bone Realm, Dragon Realm, and custom dimension portals.
 
 Forge your legend in the world of DAGMod!

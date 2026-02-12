@@ -424,6 +424,9 @@ public class DagMod implements ModInitializer {
                 }
             }
 
+            // Tick Dragon Guardian respawn timer
+            com.github.hitman20081.dagmod.dragon_realm.boss.DragonRespawnTimerManager.get(server).tick(server);
+
             // Update Solar Mending counter once per tick (before player loop)
             com.github.hitman20081.dagmod.class_system.armor.SolarMendingHandler.serverTick();
 

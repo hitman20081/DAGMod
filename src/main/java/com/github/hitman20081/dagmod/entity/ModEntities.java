@@ -8,11 +8,14 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnLocationTypes;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.Heightmap;
 
 public class ModEntities {
 
@@ -154,6 +157,14 @@ public class ModEntities {
         // Register dragon entity attributes
         FabricDefaultAttributeRegistry.register(DRAGON_GUARDIAN, DragonGuardianEntity.createDragonGuardianAttributes());
         FabricDefaultAttributeRegistry.register(WILD_DRAGON, WildDragonEntity.createWildDragonAttributes());
+
+        // Block natural spawning of Dragon Guardian - it should only spawn via DragonGuardianSpawner
+        SpawnRestriction.register(
+                DRAGON_GUARDIAN,
+                SpawnLocationTypes.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                (type, world, spawnReason, pos, random) -> false
+        );
 
         DagMod.LOGGER.info("Registering entities for " + DagMod.MOD_ID);
     }

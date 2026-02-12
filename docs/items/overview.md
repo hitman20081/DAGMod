@@ -2,7 +2,7 @@
 
 DAGMod features over 100 custom items that enhance your RPG experience. From selection tokens to fantasy foods, quest books to magical scrolls, powerful class ability items to custom armor sets, discover the complete catalog of items available in your adventure.
 
-**Current Version:** v1.6.0-beta
+**Current Version:** v1.6.5-beta
 
 ---
 
@@ -94,7 +94,15 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 
 ---
 
-## Known Issues (v1.6.0-beta)
+## Related Guides
+
+- [Merchants](../merchants.md) - All 8 merchant NPCs and their rotating inventories
+- [Party System](../party.md) - Party quests and shared rewards
+- [Dimensions](../dimensions.md) - Dimension-specific loot and gear
+
+---
+
+## Known Issues (v1.6.5-beta)
 
 Some consumable powders use placeholder effects:
 - Vampire Dust: Uses Regeneration (lifesteal planned)
