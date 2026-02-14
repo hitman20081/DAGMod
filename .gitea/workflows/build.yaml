@@ -2,6 +2,7 @@ name: Build and Package Mod
 on:
   push:
     branches: [ master ]
+    tags: [ 'v*' ] # This triggers when you create a tag like v1.0, v1.1, etc.
 
 jobs:
   package:
@@ -10,13 +11,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Determine Version
+        id: get_version
+        run: |
+          # If this is a tag, use the tag name. Otherwise, use the short commit hash.
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=dev-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Release Zip
         run: |
           mkdir -p build
-          zip -r build/DAGMod-latest.zip . -x ".gitea/*" ".git/*"
+          zip -r build/DAGMod-${{ steps.get_version.outputs.VERSION }}.zip . -x ".gitea/*" ".git/*"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DAGMod-Zip
-          path: build/DAGMod-latest.zip
+          name: DAGMod-Package
+          path: build/DAGMod-*.zip
