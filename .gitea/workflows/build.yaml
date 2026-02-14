@@ -27,7 +27,7 @@ jobs:
           zip -r build/DAGMod-${{ steps.get_version.outputs.VERSION }}.zip . -x ".gitea/*" ".git/*"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: DAGMod-Package
-          path: build/DAGMod-*.zip
+          path: build/
