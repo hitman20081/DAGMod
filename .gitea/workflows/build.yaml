@@ -13,26 +13,28 @@ jobs:
 
       - name: Create Release Zip
         run: |
-          # Use the commit hash if no tag exists
           VERSION=${GITHUB_REF#refs/tags/}
           if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
           mkdir -p build
           zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*"
           echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Create Release via API
+      - name: Create Release and Upload Zip
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          curl -X 'POST' \
+          # 1. Create the Release and capture the internal ID
+          RESPONSE=$(curl -s -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases" \
-            -H "accept: application/json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"tag_name\": \"${{ env.FINAL_VERSION }}\",
-              \"target_commitish\": \"master\",
-              \"name\": \"Release ${{ env.FINAL_VERSION }}\",
-              \"body\": \"Automated release for ${{ env.FINAL_VERSION }}\",
-              \"draft\": false,
-              \"prerelease\": false
-            }"
+            -d "{\"tag_name\": \"${{ env.FINAL_VERSION }}\", \"name\": \"Release ${{ env.FINAL_VERSION }}\", \"body\": \"Automated release from TrueNAS\", \"draft\": false, \"prerelease\": false}")
+          
+          RELEASE_ID=$(echo $RESPONSE | jq '.id')
+
+          # 2. Upload the Zip file to that specific Release ID
+          curl -X 'POST' \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "accept: application/json" \
+            -H "Content-Type: multipart/form-data" \
+            -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
