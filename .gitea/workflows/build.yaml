@@ -16,22 +16,50 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/}
           if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
           mkdir -p build
-          
-          # Only zip the mod files (Excludes git, gitea, and github metadata)
           zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*" ".github/*" "*.md"
-          
           echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Upload Zip to Gitea Release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          # 1. Find the Release ID on your local Gitea
           RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ env.FINAL_VERSION }}" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
-
-          # 2. Upload the ZIP asset
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: multipart/form-data" \
             -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
+
+  sync-wiki:
+    runs-on: ubuntu-latest
+    # Only run if files in the docs folder were changed
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync Docs to Wiki
+        run: |
+          # Define Wiki URL (using the internal Gitea token for auth)
+          WIKI_URL="${{ github.server_url }}/${{ github.repository }}.wiki.git"
+          
+          # Setup Git identity
+          git config --global user.email "runner@truenas.local"
+          git config --global user.name "Wiki Sync Bot"
+          
+          # Clone the Wiki repo
+          git clone http://token:${{ secrets.GITHUB_TOKEN }}@192.168.10.15:30008/${{ github.repository }}.wiki.git wiki_repo
+          
+          # Copy files from /docs to wiki_repo (overwriting old versions)
+          cp -R docs/* wiki_repo/
+          
+          # Push changes back to Wiki
+          cd wiki_repo
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to wiki."
+          else
+            git commit -m "Auto-sync from docs folder: ${{ github.sha }}"
+            git push origin master
+          fi
