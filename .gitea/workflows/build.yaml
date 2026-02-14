@@ -11,30 +11,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create Release Zip
+      - name: Create Packages
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
           mkdir -p build
+          
+          # Create the Zip
           zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*"
+          
+          # Create the Jar
+          zip -r "build/DAGMod-$VERSION.jar" . -x ".gitea/*" ".git/*"
+          
           echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Create Release and Upload Zip
+      - name: Create Release and Upload Assets
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          # 1. Create the Release and capture the internal ID
+          # 1. Create the Release and get ID
           RESPONSE=$(curl -s -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"tag_name\": \"${{ env.FINAL_VERSION }}\", \"name\": \"Release ${{ env.FINAL_VERSION }}\", \"body\": \"Automated release from TrueNAS\", \"draft\": false, \"prerelease\": false}")
+            -d "{\"tag_name\": \"${{ env.FINAL_VERSION }}\", \"name\": \"Release ${{ env.FINAL_VERSION }}\", \"body\": \"Automated build with ZIP and JAR\", \"draft\": false, \"prerelease\": false}")
           
           RELEASE_ID=$(echo $RESPONSE | jq '.id')
 
-          # 2. Upload the Zip file to that specific Release ID
+          # 2. Upload the ZIP
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "accept: application/json" \
             -H "Content-Type: multipart/form-data" \
             -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
+
+          # 3. Upload the JAR
+          curl -X 'POST' \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.jar"
