@@ -11,35 +11,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create Packages
+      - name: Create Clean Zip
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
           mkdir -p build
           
-          # Create both files
-          zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*"
-          zip -r "build/DAGMod-$VERSION.jar" . -x ".gitea/*" ".git/*"
+          # Only zip the mod files (Excludes git, gitea, and github metadata)
+          zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*" ".github/*" "*.md"
           
           echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Upload Assets to Gitea
+      - name: Upload Zip to Gitea Release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          # 1. Get the Release ID for the current tag
+          # 1. Find the Release ID on your local Gitea
           RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ env.FINAL_VERSION }}" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
 
-          # 2. Upload ZIP
+          # 2. Upload the ZIP asset
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: multipart/form-data" \
             -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
-
-          # 3. Upload JAR
-          curl -X 'POST' \
-            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: multipart/form-data" \
-            -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.jar"
