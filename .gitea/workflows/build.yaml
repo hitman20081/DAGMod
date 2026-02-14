@@ -1,0 +1,22 @@
+name: Build and Package Mod
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Release Zip
+        run: |
+          mkdir -p build
+          zip -r build/DAGMod-latest.zip . -x ".gitea/*" ".git/*"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DAGMod-Zip
+          path: build/DAGMod-latest.zip
