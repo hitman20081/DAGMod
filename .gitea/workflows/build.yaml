@@ -9,10 +9,11 @@ jobs:
     outputs:
       new_release_published: ${{ steps.semantic.outputs.new_release_published }}
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+      new_release_upload_url: ${{ steps.semantic.outputs.new_release_upload_url }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required for version calculation
+          fetch-depth: 0
       - name: Semantic Release
         id: semantic
         uses: https://github.com/go-semantic-release/action@v1
@@ -35,7 +36,7 @@ jobs:
       - name: Create Release Zip
         run: |
           mkdir -p build
-          zip -r build/DAGMod-${{ needs.release.outputs.new_version }}.zip . -x ".gitea/*" ".git/*"
+          zip -r build/DAGMod-${{ needs.release.outputs.new_release_version }}.zip . -x ".gitea/*" ".git/*"
 
       - name: Upload to Release
         uses: https://github.com/actions/upload-release-asset@v1
@@ -43,6 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.new_release_upload_url }}
-          asset_path: build/DAGMod-${{ needs.release.outputs.new_version }}.zip
-          asset_name: DAGMod-${{ needs.release.outputs.new_version }}.zip
-          asset_content_type: application/zip 
+          asset_path: build/DAGMod-${{ needs.release.outputs.new_release_version }}.zip
+          asset_name: DAGMod-${{ needs.release.outputs.new_release_version }}.zip
+          asset_content_type: application/zip
