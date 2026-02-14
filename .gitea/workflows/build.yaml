@@ -32,7 +32,6 @@ jobs:
 
   sync-wiki:
     runs-on: ubuntu-latest
-    # Only run if files in the docs folder were changed
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -41,25 +40,27 @@ jobs:
 
       - name: Sync Docs to Wiki
         run: |
-          # Define Wiki URL (using the internal Gitea token for auth)
-          WIKI_URL="${{ github.server_url }}/${{ github.repository }}.wiki.git"
-          
-          # Setup Git identity
+          # 1. Setup Git identity
           git config --global user.email "runner@truenas.local"
           git config --global user.name "Wiki Sync Bot"
           
-          # Clone the Wiki repo
-          git clone http://token:${{ secrets.GITHUB_TOKEN }}@192.168.10.15:30008/${{ github.repository }}.wiki.git wiki_repo
+          # 2. Clone using the Authorization Header
+          # We use -c to pass the token in the http header safely
+          git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
           
-          # Copy files from /docs to wiki_repo (overwriting old versions)
+          # 3. Copy files from /docs to wiki_repo root
+          # This ensures they show up on the Wiki sidebar
           cp -R docs/* wiki_repo/
           
-          # Push changes back to Wiki
+          # 4. Push changes back
           cd wiki_repo
           git add .
+          
           if git diff --staged --quiet; then
             echo "No changes to wiki."
           else
             git commit -m "Auto-sync from docs folder: ${{ github.sha }}"
-            git push origin master
+            # Use the same header-based auth for the push
+            git -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" push origin master
           fi
