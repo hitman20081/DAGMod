@@ -11,14 +11,19 @@ jobs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Important: Semantic release needs full history to calculate versions
       - name: Semantic Release
         id: semantic
         uses: https://github.com/go-semantic-release/action@v1
         with:
           gitea-token: ${{ secrets.GITHUB_TOKEN }}
+          # ADD THESE THREE LINES:
+          provider: gitea
+          gitea-base-url: http://192.168.10.15:30008/
           allow-initial-development-versions: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This line is critical
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   package:
     needs: release
