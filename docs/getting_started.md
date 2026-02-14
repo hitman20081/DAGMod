@@ -67,7 +67,7 @@ Now that you're familiar with the basics, dive deeper into the world of DAGMod:
 *   **[Quests](./quests.md)**: A comprehensive guide to the quest system, tiers, and race-specific storylines.
 *   **[Items Overview](./items/overview.md)**: A complete item catalog including ability items and consumables.
 *   **[Bosses & Dungeons](./bosses_dungeons.md)**: Learn about boss mechanics, loot, and dungeon generation.
-*   **[Merchants](./merchants.md)**: All 8 merchant NPCs and their rotating trade inventories.
+*   **[Merchants](./merchants.md)**: All 13 merchant NPCs and their trade inventories.
 *   **[Party System](./party.md)**: Multiplayer party commands, XP sharing, and party quests.
 *   **[Dimensions](./dimensions.md)**: Bone Realm, Dragon Realm, and custom dimension portals.
 

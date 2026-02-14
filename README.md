@@ -21,7 +21,7 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 *   **🎒 Collect Epic Loot**: Craft and discover over **50 custom items**, including 6 themed armor sets, 9 unique weapons, powerful consumables, and magical wands. Bone Dungeon chests feature a **3-tier enchanted book system** with 15+ custom enchantments.
 
-*   **🏪 Trade with Merchants**: Visit **8 unique merchant NPCs** — from the Armorer and Enchantsmith to the Mystery Merchant and Voodoo Illusioner. Each has a **rotating premium inventory** that cycles every 72 hours, so check back often for rare deals.
+*   **🏪 Trade with Merchants**: Visit **13 unique merchant NPCs** — from the Armorer and Enchantsmith to the Baker, Blacksmith, Jeweler, and Alchemist. Eight merchants feature **rotating premium inventories** that cycle every 72 hours, while five offer specialized static trades for food, ores, gems, brewing supplies, and general goods.
 
 *   **👥 Team Up with Friends**: Form **parties of up to 5 players** for cooperative play. Share XP within range, earn party size bonuses, and take on **party quests** with scaling difficulty from Easy to Legendary.
 

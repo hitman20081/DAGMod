@@ -171,6 +171,17 @@ public class QuestBlock extends Block {
             return; // Exit early to go to turn-in
         }
 
+        // Check for quest book upgrade availability
+        if (playerData.canUpgradeQuestBook()) {
+            QuestData.QuestBookTier nextTier = playerData.getNextQuestBookTier();
+            player.sendMessage(Text.literal("⭐ Quest Book Upgrade Available!").formatted(Formatting.GOLD), false);
+            player.sendMessage(Text.literal("   Upgrade to: " + nextTier.getDisplayName()).formatted(Formatting.YELLOW), false);
+            player.sendMessage(Text.literal("   Right-click to upgrade!").formatted(Formatting.GREEN), false);
+            player.sendMessage(Text.literal("==================="), false);
+            playerMenuState.put(playerId, MenuState.UPGRADE_MENU);
+            return;
+        }
+
         // If no completed quests, show other options
         player.sendMessage(Text.literal("Right-click again to:"), false);
 
@@ -404,24 +415,27 @@ public class QuestBlock extends Block {
             return;
         }
 
+        QuestData.QuestBookTier currentTier = playerData.getQuestBookTier();
         QuestData.QuestBookTier nextTier = playerData.getNextQuestBookTier();
 
-        player.sendMessage(Text.literal("=== Quest Book Upgrade ==="), false);
-        player.sendMessage(Text.literal("Current: " + playerData.getQuestBookTier().getDisplayName()), false);
-        player.sendMessage(Text.literal("Upgrade to: " + nextTier.getDisplayName()), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("New benefits:"), false);
-        player.sendMessage(Text.literal("• Max quest slots: " + nextTier.getMaxActiveQuests()), false);
-        player.sendMessage(Text.literal("• Access to: " + nextTier.getAllowedDifficulties()), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click to UPGRADE!"), false);
-
-        // Perform upgrade
+        // Perform the upgrade
         playerData.setQuestBookTier(nextTier);
-        player.sendMessage(Text.literal("✓ Quest book upgraded to: " + nextTier.getDisplayName()), false);
 
-// Give the physical book item
+        player.sendMessage(Text.literal("=== Quest Book Upgrade ===").formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(Text.literal("✓ Quest book upgraded!").formatted(Formatting.GREEN, Formatting.BOLD), false);
+        player.sendMessage(Text.literal("  " + currentTier.getDisplayName() + " → " + nextTier.getDisplayName()).formatted(Formatting.YELLOW), false);
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(Text.literal("New benefits:").formatted(Formatting.AQUA), false);
+        player.sendMessage(Text.literal("  • Max quest slots: " + nextTier.getMaxActiveQuests()), false);
+        player.sendMessage(Text.literal("  • Access to: " + nextTier.getAllowedDifficulties()), false);
+        player.sendMessage(Text.literal(""), false);
+
+        // Give the physical book item
         QuestUtils.giveQuestBookForTier(player, nextTier);
+
+        player.sendMessage(Text.literal("Check your inventory for your new quest book!").formatted(Formatting.GREEN), false);
+        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
 
         playerMenuState.put(playerId, MenuState.MAIN_MENU);
     }

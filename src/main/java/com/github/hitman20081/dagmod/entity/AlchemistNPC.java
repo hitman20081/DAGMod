@@ -27,139 +27,147 @@ import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 
 import java.util.OptionalInt;
 
-public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
+public class AlchemistNPC extends PathAwareEntity implements Merchant {
 
     private PlayerEntity customer;
     private TradeOfferList offers;
 
-    public VillageMerchantNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public AlchemistNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
         this.offers = new TradeOfferList();
 
-        // ===== LIGHTING & BASICS =====
+        // ===== BREWING EQUIPMENT =====
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 4),
+                java.util.Optional.empty(),
+                new ItemStack(Items.BREWING_STAND),
+                6, 8, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 2),
+                java.util.Optional.empty(),
+                new ItemStack(Items.CAULDRON),
+                8, 5, 0.05F
+        ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 1),
                 java.util.Optional.empty(),
-                new ItemStack(Items.TORCH, 16),
+                new ItemStack(Items.GLASS_BOTTLE, 6),
                 24, 3, 0.05F
+        ));
+
+        // ===== ESSENTIAL BREWING INGREDIENTS =====
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 4),
+                java.util.Optional.empty(),
+                new ItemStack(Items.BLAZE_ROD, 2),
+                12, 8, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.LANTERN, 4),
+                new ItemStack(Items.BLAZE_POWDER, 4),
                 16, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(Items.CAMPFIRE, 2),
-                12, 5, 0.05F
+                new ItemStack(Items.NETHER_WART, 4),
+                16, 5, 0.05F
         ));
 
-        // ===== HOME & SHELTER =====
+        // ===== POTION MODIFIERS =====
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.RED_BED),
-                12, 5, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.GLASS, 16),
+                new ItemStack(Items.REDSTONE, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.CHEST, 2),
+                new ItemStack(Items.GLOWSTONE_DUST, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
+                new TradedItem(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(Items.CRAFTING_TABLE),
-                12, 5, 0.05F
-        ));
-
-        // ===== TOOLS & UTILITY =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.BUCKET),
+                new ItemStack(Items.GUNPOWDER, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.COMPASS),
-                8, 8, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
-                java.util.Optional.empty(),
-                new ItemStack(Items.CLOCK),
-                8, 8, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 6),
-                java.util.Optional.empty(),
-                new ItemStack(Items.SPYGLASS),
+                new ItemStack(Items.DRAGON_BREATH, 2),
                 6, 10, 0.05F
         ));
 
-        // ===== TRAVEL & EXPLORATION =====
+        // ===== POTION EFFECT INGREDIENTS =====
         this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
+                new TradedItem(Items.EMERALD, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.MAP),
-                12, 5, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
-                java.util.Optional.empty(),
-                new ItemStack(Items.LEAD, 2),
-                12, 5, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 8),
-                java.util.Optional.empty(),
-                new ItemStack(Items.SADDLE),
-                4, 10, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 10),
-                java.util.Optional.empty(),
-                new ItemStack(Items.NAME_TAG),
-                6, 10, 0.05F
-        ));
-
-        // ===== FARMING SUPPLIES =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 1),
-                java.util.Optional.empty(),
-                new ItemStack(Items.BONE_MEAL, 8),
-                24, 3, 0.05F
+                new ItemStack(Items.SUGAR, 8),
+                16, 3, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.HAY_BLOCK, 4),
+                new ItemStack(Items.GLISTERING_MELON_SLICE, 4),
+                12, 5, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 2),
+                java.util.Optional.empty(),
+                new ItemStack(Items.SPIDER_EYE, 4),
                 16, 5, 0.05F
         ));
-
-        // ===== DYES & DECORATIONS =====
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(Items.PAINTING, 3),
+                new ItemStack(Items.FERMENTED_SPIDER_EYE, 2),
+                12, 5, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 3),
+                java.util.Optional.empty(),
+                new ItemStack(Items.MAGMA_CREAM, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.FLOWER_POT, 4),
+                new ItemStack(Items.GHAST_TEAR, 2),
+                8, 8, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 2),
+                java.util.Optional.empty(),
+                new ItemStack(Items.RABBIT_FOOT, 2),
+                10, 5, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 3),
+                java.util.Optional.empty(),
+                new ItemStack(Items.PHANTOM_MEMBRANE, 4),
+                10, 5, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 2),
+                java.util.Optional.empty(),
+                new ItemStack(Items.GOLDEN_CARROT, 4),
                 12, 5, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 2),
+                java.util.Optional.empty(),
+                new ItemStack(Items.PUFFERFISH, 2),
+                12, 5, 0.05F
+        ));
+        this.offers.add(new TradeOffer(
+                new TradedItem(Items.EMERALD, 3),
+                java.util.Optional.empty(),
+                new ItemStack(Items.TURTLE_SCUTE, 2),
+                8, 8, 0.05F
         ));
     }
 
@@ -189,8 +197,8 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
 
                 if (player instanceof ServerPlayerEntity serverPlayer) {
                     serverPlayer.sendMessage(
-                            Text.literal("<Village Merchant> ").styled(s -> s.withColor(net.minecraft.util.Formatting.GOLD))
-                                    .append(Text.literal("Welcome to our village! I've got a bit of everything.").styled(s -> s.withColor(net.minecraft.util.Formatting.YELLOW))),
+                            Text.literal("<Alchemist> ").styled(s -> s.withColor(net.minecraft.util.Formatting.GOLD))
+                                    .append(Text.literal("Potions, reagents, and the secrets of transmutation. What do you need?").styled(s -> s.withColor(net.minecraft.util.Formatting.YELLOW))),
                             false
                     );
                 }
@@ -228,7 +236,7 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("entity.dagmod.village_merchant_npc");
+        return Text.translatable("entity.dagmod.alchemist_npc");
     }
 
     public boolean hasCustomer() {
@@ -263,7 +271,7 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
     public void trade(TradeOffer offer) {
         offer.use();
         this.getEntityWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
-                SoundEvents.ENTITY_VILLAGER_YES, this.getSoundCategory(), 1.0F, 1.0F);
+                SoundEvents.BLOCK_BREWING_STAND_BREW, this.getSoundCategory(), 1.0F, 1.0F);
     }
 
     @Override
@@ -286,7 +294,7 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
 
     @Override
     public SoundEvent getYesSound() {
-        return SoundEvents.ENTITY_VILLAGER_YES;
+        return SoundEvents.BLOCK_BREWING_STAND_BREW;
     }
 
     @Override

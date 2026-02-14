@@ -240,28 +240,6 @@ public class MinerNPC extends PathAwareEntity implements Merchant {
                 6, 8, 0.05F
         ));
 
-        // ===== PROCESSED GEMS =====
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 8),
-                Optional.of(new TradedItem(ModItems.RAW_RUBY, 2)),
-                new ItemStack(ModItems.RUBY, 1),
-                4, 12, 0.05F
-        ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 8),
-                Optional.of(new TradedItem(ModItems.RAW_SAPPHIRE, 2)),
-                new ItemStack(ModItems.SAPPHIRE, 1),
-                4, 12, 0.05F
-        ));
-
-        // ===== GEM CUTTER TOOL =====
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 10),
-                Optional.of(new TradedItem(Items.IRON_INGOT, 4)),
-                new ItemStack(ModItems.GEM_CUTTER_TOOL),
-                2, 15, 0.05F
-        ));
-
         // ===== SPECIAL - Buy ores from players =====
         // Player sells coal
         this.staticOffers.add(new TradeOffer(

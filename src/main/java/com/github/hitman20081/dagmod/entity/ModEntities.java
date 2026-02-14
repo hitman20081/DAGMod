@@ -115,6 +115,38 @@ public class ModEntities {
                     .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "cute_villager_npc")))
     );
 
+    public static final EntityType<BakerNPC> BAKER_NPC = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "baker_npc"),
+            EntityType.Builder.create(BakerNPC::new, SpawnGroup.CREATURE)
+                    .dimensions(0.6f, 1.95f)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "baker_npc")))
+    );
+
+    public static final EntityType<JewelerNPC> JEWELER_NPC = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "jeweler_npc"),
+            EntityType.Builder.create(JewelerNPC::new, SpawnGroup.CREATURE)
+                    .dimensions(0.6f, 1.95f)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "jeweler_npc")))
+    );
+
+    public static final EntityType<AlchemistNPC> ALCHEMIST_NPC = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "alchemist_npc"),
+            EntityType.Builder.create(AlchemistNPC::new, SpawnGroup.CREATURE)
+                    .dimensions(0.6f, 1.95f)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "alchemist_npc")))
+    );
+
+    public static final EntityType<BlacksmithNPC> BLACKSMITH_NPC = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "blacksmith_npc"),
+            EntityType.Builder.create(BlacksmithNPC::new, SpawnGroup.CREATURE)
+                    .dimensions(0.6f, 1.95f)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "blacksmith_npc")))
+    );
+
     // Dragon Entities
     public static final EntityType<DragonGuardianEntity> DRAGON_GUARDIAN = Registry.register(
             Registries.ENTITY_TYPE,
@@ -153,6 +185,10 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(VOODOO_ILLUSIONER_NPC, VoodooIllusionerNPC.createMobAttributes());
         FabricDefaultAttributeRegistry.register(ARMORER_NPC, ArmorerNPC.createMobAttributes());
         FabricDefaultAttributeRegistry.register(CUTE_VILLAGER_NPC, CuteVillagerNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(BAKER_NPC, BakerNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(ALCHEMIST_NPC, AlchemistNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(JEWELER_NPC, JewelerNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(BLACKSMITH_NPC, BlacksmithNPC.createMobAttributes());
 
         // Register dragon entity attributes
         FabricDefaultAttributeRegistry.register(DRAGON_GUARDIAN, DragonGuardianEntity.createDragonGuardianAttributes());

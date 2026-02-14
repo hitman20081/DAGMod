@@ -5,6 +5,53 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.5-beta] - 2026-02-13
+
+### Added
+
+**5 New Merchant NPCs (13 Total)**:
+- **Baker NPC**: Food merchant selling bread, cookies, pumpkin pie, cake, golden apples, golden carrots, cooked beef, and cooked porkchop. Uses campfire crackling sounds. Summon: `/summon dagmod:baker_npc`
+- **Blacksmith NPC**: Ore buyer and repair materials merchant. Buys 9 vanilla raw ores (iron, gold, copper, coal, redstone, lapis, diamond, quartz, amethyst) and 8 mod raw ores (mythril, ruby, sapphire, citrine, tanzanite, topaz, zircon, pink garnet) for emeralds. Sells repair materials (anvils, iron ingots, diamonds, mythril ingots). Uses anvil sound. Summon: `/summon dagmod:blacksmith_npc`
+- **Jeweler NPC**: Gem specialist that buys 7 processed mod gems (Ruby, Sapphire, Citrine, Tanzanite, Topaz, Zircon, Pink Garnet) and 2 vanilla gems (Diamond, Amethyst) for emeralds. Sells Gem Cutter tool, Citrine Powder, and the premium Silmaril. Uses amethyst chime sounds. Summon: `/summon dagmod:jeweler_npc`
+- **Alchemist NPC**: Brewing and potion ingredients supplier with 21 trades covering brewing equipment (brewing stand, cauldron, glass bottles), essential ingredients (blaze rods, blaze powder, nether wart), potion modifiers (redstone, glowstone, gunpowder, dragon's breath), and all 11 potion effect ingredients. Uses brewing stand sounds. Summon: `/summon dagmod:alchemist_npc`
+- **Village Merchant NPC** (upgraded): Previously a non-functional stub with only dialogue. Now a full General Store merchant with 19 trades across 6 categories: lighting (torches, lanterns, campfires), home supplies (beds, glass, chests, crafting tables), tools (buckets, compass, clock, spyglass), travel (maps, leads, saddles, name tags), farming (bone meal, hay bales), and decorations (paintings, flower pots)
+
+**Files Added** (8 new files):
+- `entity/BakerNPC.java` - Baker merchant entity
+- `entity/BlacksmithNPC.java` - Blacksmith merchant entity
+- `entity/JewelerNPC.java` - Jeweler merchant entity
+- `entity/AlchemistNPC.java` - Alchemist merchant entity
+- `entity/client/BakerNPCRenderer.java` - Baker renderer
+- `entity/client/BlacksmithNPCRenderer.java` - Blacksmith renderer
+- `entity/client/JewelerNPCRenderer.java` - Jeweler renderer
+- `entity/client/AlchemistNPCRenderer.java` - Alchemist renderer
+
+### Fixed
+
+**Quest Progression Bugs (4 Fixes)**:
+- **Fix 1**: Changed `master_crafter` quest difficulty from MASTER to EXPERT in QuestRegistry.java, removing circular dependency where the quest required the tier it was supposed to unlock
+- **Fix 2**: Wired up the UPGRADE_MENU option in QuestBlock.java so players can actually access quest book upgrades from the main menu
+- **Fix 3**: Changed 30 occurrences of `setRequiredClass()` to `setRequiredRace()` for Elf, Human, and Orc race-specific quests in QuestRegistry.java, making them visible to players of the correct race
+- **Fix 4**: Lowered MASTER quest tier threshold from 30 to 25 completed quests in QuestData.java, matching the documented level gate
+
+### Changed
+
+**Merchant Trade Overlap Cleanup**:
+- **Voodoo Illusioner**: Removed 7 brewing/ingredient trades that now belong to the Alchemist (blaze rods, ghast tears, phantom membrane, fermented spider eye, brewing stand, glass bottles, nether wart). Retains dark/occult specialty: ender pearls, echo shards, wither roses, skulls, rebirth potions, reset crystals, rogue items, shadow weapons
+- **Miner**: Removed processed gem trades (Ruby, Sapphire) and Gem Cutter tool from static offers — these now belong to the Jeweler. Miner retains raw gem trades only
+- **Miner Rotating Trades**: Changed all 3 rotation sets from selling processed gems to selling raw gems. Trades now cost only emeralds (removed raw gem input requirement). Updated rotation descriptions to include "Raw" prefix
+
+**Files Modified** (7 existing files):
+- `entity/ModEntities.java` - Registered 4 new entity types + attributes (Baker, Blacksmith, Jeweler, Alchemist)
+- `DagModClient.java` - Registered 4 new entity renderers
+- `entity/VillageMerchantNPC.java` - Complete rewrite: now implements Merchant interface with 19 trades
+- `entity/VoodooIllusionerNPC.java` - Removed 7 overlapping brewing trades
+- `entity/MinerNPC.java` - Removed processed gem trades and gem cutter
+- `trade/RotatingTradeRegistry.java` - Changed Miner rotating trades to raw gems, updated descriptions
+- `assets/dagmod/lang/en_us.json` - Added translation keys for 4 new NPCs
+
+---
+
 ## [1.6.5-beta] - 2026-02-11
 
 ### Fixed
@@ -108,13 +155,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Rotating Trade System**:
 - Merchant NPCs now have rotating premium trades that cycle every 72 hours (real-world time)
-- All 8 merchants have unique rotating stock:
+- 8 merchants have unique rotating stock:
   - **Armorer**: Premium armor sets (Dragonscale, Inferno, Crystalforge, Nature's Guard, Shadow, Frostbound, Solarweave, Stormcaller)
   - **Mystery Merchant**: Weapon categories (Shadow, Dragon, Elemental, Epic weapons)
   - **Enchantsmith**: High-tier enchanted books (Combat, Utility, Bow, Special enchants)
   - **Voodoo Illusioner**: Rare items (Rebirth potions, Reset crystals, Shadow weapons)
   - **Trophy Dealer**: Boss trophies (Dragon, Wither, End treasures)
-  - **Miner**: Rare processed gems (Ruby, Sapphire, specialty gems)
+  - **Miner**: Raw gem collections (Ruby, Sapphire, specialty gems)
   - **Hunter**: Premium equipment (Horse armor, tracking items, exotic arrows)
   - **Lumberjack**: Special items (Frostbite Axe, rare saplings, Nether wood)
 - Static trades remain always available for currency building

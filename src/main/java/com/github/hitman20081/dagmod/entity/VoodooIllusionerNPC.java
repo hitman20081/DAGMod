@@ -53,33 +53,12 @@ public class VoodooIllusionerNPC extends PathAwareEntity implements Merchant {
                 new ItemStack(Items.ENDER_PEARL, 2),
                 8, 6, 0.05F
         ));
-        // Blaze Rods
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
-                Optional.empty(),
-                new ItemStack(Items.BLAZE_ROD, 2),
-                10, 5, 0.05F
-        ));
-        // Ghast Tears
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 6),
-                Optional.empty(),
-                new ItemStack(Items.GHAST_TEAR, 1),
-                6, 10, 0.05F
-        ));
         // Echo Shards
         this.staticOffers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 8),
                 Optional.empty(),
                 new ItemStack(Items.ECHO_SHARD, 2),
                 4, 12, 0.05F
-        ));
-        // Phantom Membrane
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
-                Optional.empty(),
-                new ItemStack(Items.PHANTOM_MEMBRANE, 2),
-                8, 6, 0.05F
         ));
         // Wither Rose
         this.staticOffers.add(new TradeOffer(
@@ -88,42 +67,12 @@ public class VoodooIllusionerNPC extends PathAwareEntity implements Merchant {
                 new ItemStack(Items.WITHER_ROSE, 1),
                 4, 12, 0.05F
         ));
-        // Fermented Spider Eye
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                Optional.of(new TradedItem(Items.SPIDER_EYE, 1)),
-                new ItemStack(Items.FERMENTED_SPIDER_EYE, 2),
-                10, 4, 0.05F
-        ));
         // Skulls
         this.staticOffers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 12),
                 Optional.empty(),
                 new ItemStack(Items.SKELETON_SKULL, 1),
                 4, 15, 0.05F
-        ));
-
-        // ===== POTIONS & BREWING =====
-        // Brewing Stand
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 6),
-                Optional.of(new TradedItem(Items.BLAZE_ROD, 1)),
-                new ItemStack(Items.BREWING_STAND),
-                4, 8, 0.05F
-        ));
-        // Glass Bottles
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 1),
-                Optional.empty(),
-                new ItemStack(Items.GLASS_BOTTLE, 8),
-                16, 2, 0.05F
-        ));
-        // Nether Wart
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                Optional.empty(),
-                new ItemStack(Items.NETHER_WART, 4),
-                12, 4, 0.05F
         ));
 
         // ===== REBIRTH POTIONS =====

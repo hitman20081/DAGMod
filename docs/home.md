@@ -27,6 +27,25 @@ Current Version v1.6.5-beta (February 2026)
 
 ## 🎮 What's New in v1.6.5-beta
 
+### Merchant NPC Expansion (8 → 13 Merchants!)
+
+🏪 **5 New Merchant NPCs** added to the world:
+- **Baker** - Food merchant selling bread, cookies, pies, cakes, golden apples, and cooked meats
+- **Blacksmith** - Buys ALL raw ores for emeralds and sells repair materials (anvils, iron, diamonds, mythril)
+- **Jeweler** - Buys processed gems for emeralds, sells Gem Cutter, Citrine Powder, and the premium Silmaril
+- **Alchemist** - One-stop shop for ALL brewing ingredients: equipment, modifiers, and all 11 effect ingredients
+- **Village Merchant** - Upgraded to a full General Store with 19 trades across 6 categories
+
+🔧 **Merchant Trade Cleanup** - Removed overlap between merchants:
+- Voodoo Illusioner no longer sells brewing ingredients (now Alchemist's domain)
+- Miner no longer sells processed gems (now Jeweler's domain), only raw gems
+
+### Quest Progression Fixes
+- Fixed `master_crafter` quest circular dependency blocking Master Tome unlock
+- Fixed 30 race-specific quests being invisible (wrong method call)
+- Wired up Quest Book upgrade menu in Quest Block
+- Lowered Master tier threshold from 30 to 25 completed quests
+
 ### Enchanted Book & Loot Fixes
 - Bone dungeon chests now correctly drop **tiered enchanted books** (common, uncommon, rare)
 - All datapacks consolidated from `dag00x`/`dag01x` namespaces to unified **`dagmod` namespace**
@@ -55,7 +74,7 @@ Current Version v1.6.5-beta (February 2026)
 - **Enchantsmith**: Combat, Utility, Bow, and Special enchantment rotations
 - **Voodoo Illusioner**: Rebirth potions, reset crystals, shadow weapons
 - **Trophy Dealer**: Dragon, Wither, and End boss trophies
-- **Miner**: Rare processed gem collections
+- **Miner**: Raw gem collections (Ruby, Sapphire, Citrine, Tanzanite, Topaz, Zircon, Pink Garnet)
 - **Hunter**: Premium horse armor and tracking equipment
 - **Lumberjack**: Frostbite Axe, rare saplings, Nether wood
 
@@ -175,10 +194,11 @@ Face the Bone Realm Boss hierarchy
 - Enhanced consumables Shadow Blend, Fortune Dust, Cooldown Elixir
 
 ### 🛒 Merchant System
-- 8 unique merchant NPCs (Armorer, Mystery Merchant, Enchantsmith, and more)
+- 13 unique merchant NPCs with distinct specialties
+- **Original 8** with rotating premium trades: Armorer, Mystery Merchant, Enchantsmith, Voodoo Illusioner, Luxury Merchant, Miner, Hunter, Lumberjack
+- **5 new specialized merchants**: Baker (food), Blacksmith (ore buying/repair), Jeweler (gems), Alchemist (brewing), Village Merchant (general store)
 - Rotating premium trade inventories cycling every 72 hours
 - Merchant dialogue with unique greetings and stock hints
-- Static trades always available alongside rotating premium items
 
 ### 👥 Party System
 - Form groups of up to 5 players with shared XP and party chat

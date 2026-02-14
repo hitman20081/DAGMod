@@ -22,6 +22,10 @@ import com.github.hitman20081.dagmod.entity.client.HunterNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.VoodooIllusionerNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.ArmorerNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.CuteVillagerNPCRenderer;
+import com.github.hitman20081.dagmod.entity.client.BakerNPCRenderer;
+import com.github.hitman20081.dagmod.entity.client.AlchemistNPCRenderer;
+import com.github.hitman20081.dagmod.entity.client.BlacksmithNPCRenderer;
+import com.github.hitman20081.dagmod.entity.client.JewelerNPCRenderer;
 import com.github.hitman20081.dagmod.class_system.mana.ManaNetworking;
 import com.github.hitman20081.dagmod.class_system.mana.client.ClientManaData;
 import com.github.hitman20081.dagmod.class_system.mana.client.ManaHudRenderer;
@@ -148,6 +152,18 @@ public class DagModClient implements ClientModInitializer {
 
         // Register Cute Villager renderer
         EntityRendererFactories.register(ModEntities.CUTE_VILLAGER_NPC, CuteVillagerNPCRenderer::new);
+
+        // Register Baker renderer
+        EntityRendererFactories.register(ModEntities.BAKER_NPC, BakerNPCRenderer::new);
+
+        // Register Alchemist renderer
+        EntityRendererFactories.register(ModEntities.ALCHEMIST_NPC, AlchemistNPCRenderer::new);
+
+        // Register Blacksmith renderer
+        EntityRendererFactories.register(ModEntities.BLACKSMITH_NPC, BlacksmithNPCRenderer::new);
+
+        // Register Jeweler renderer
+        EntityRendererFactories.register(ModEntities.JEWELER_NPC, JewelerNPCRenderer::new);
 
         // Register Dragon Guardian renderer
         EntityRendererFactories.register(ModEntities.DRAGON_GUARDIAN, DragonGuardianRenderer::new);

@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.6.0-beta
-**Last Updated**: 2025-12-23
+**Current Version**: v1.6.5-beta
+**Last Updated**: 2026-02-13
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -122,12 +122,21 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - Custom renderers
 
 - ✅ **Merchant NPC Rotating Trade System** (v1.6.0)
-  - 8 merchant NPCs with unique inventories (Armorer, Mystery Merchant, Enchantsmith, Voodoo Illusioner, Trophy Dealer, Miner, Hunter, Lumberjack)
+  - 8 merchant NPCs with rotating inventories (Armorer, Mystery Merchant, Enchantsmith, Voodoo Illusioner, Trophy Dealer, Miner, Hunter, Lumberjack)
   - Static trades always available for currency building
   - Premium rotating trades that cycle every 72 hours (real-world time)
   - Rotation persists across server restarts via NBT storage
   - Configurable rotation interval (12h-168h range)
   - Merchant dialogue system with greetings and rotation hints
+
+- ✅ **Expanded Merchant Roster** (v1.6.5)
+  - 5 new specialized merchant NPCs (13 total): Baker, Blacksmith, Jeweler, Alchemist, Village Merchant
+  - Baker: Food and baked goods (8 trades)
+  - Blacksmith: Buys all raw ores for emeralds, sells repair materials (21 trades)
+  - Jeweler: Buys processed gems, sells gem tools and Silmaril (12 trades)
+  - Alchemist: All brewing equipment and potion ingredients (21 trades)
+  - Village Merchant: General store with everyday supplies (19 trades)
+  - Merchant trade overlap cleanup for clear specialization
 
 ### **QoL Features**
 - ✅ **Ship Travel System** (`ShipTravelManager`)
@@ -439,11 +448,11 @@ Priority: **VERY LOW**
 ### **Future World Features**
 Priority: **LOW**
 
-- ❌ **NPC Vendors**
-  - Quest givers scattered in world
-  - Shops and traders
-  - Reputation-locked vendors
-  - Wandering vendors
+- 🟡 **NPC Vendors** (Partially complete)
+  - ✅ 13 merchant NPCs with trading (v1.6.0-v1.6.5)
+  - ✅ Quest giver NPC (Innkeeper Garrick, v1.5.0)
+  - ❌ Reputation-locked vendors
+  - ❌ Wandering vendors
 
 - ❌ **Mining Expeditions**
   - Deep-dive mining events
@@ -495,7 +504,7 @@ Priority: **LOW**
 | Quality of Life | 6 | 2 (Travel, Graves) | 0 | 4 |
 | Progression | 4 | 1 (Achievements) | 0 | 3 |
 | Cosmetic | 4 | 0 | 0 | 4 |
-| NPC/World | 4 | 1 (Garrick) | 0 | 3 |
+| NPC/World | 4 | 2 (Garrick, 13 Merchants) | 0 | 2 |
 
 ---
 
@@ -507,6 +516,8 @@ Priority: **LOW**
 - ✅ **v1.5.1-beta** (Jan 2025) - Patch: Quest reward fixes, backward compatibility
 - ✅ **v1.5.2-beta** (Jan 2025) - CRITICAL: Quest persistence, memory leaks, thread safety
 - ✅ **v1.5.3-beta** (Dec 2025) - CRITICAL: Progression reset fix, new world data leakage fix, quest level 20 blocker fix
+- ✅ **v1.6.0-beta** (Dec 2025-Feb 2026) - Rotating trade system, enhanced consumables, Dragon Realm, custom enchantments
+- ✅ **v1.6.5-beta** (Feb 2026) - 5 new merchant NPCs (13 total), quest progression fixes, loot table fixes
 
 ### **Short-term** - Next 3-6 months
 - 🎯 **v1.6.0** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
@@ -574,7 +585,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2025-12-01
+**Last Updated**: 2026-02-13
 **Maintained By**: hitman20081
-**Current Version**: v1.5.3-beta
+**Current Version**: v1.6.5-beta
 **License**: See LICENSE file

@@ -27,139 +27,67 @@ import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 
 import java.util.OptionalInt;
 
-public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
+public class BakerNPC extends PathAwareEntity implements Merchant {
 
     private PlayerEntity customer;
     private TradeOfferList offers;
 
-    public VillageMerchantNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public BakerNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
         this.offers = new TradeOfferList();
 
-        // ===== LIGHTING & BASICS =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 1),
-                java.util.Optional.empty(),
-                new ItemStack(Items.TORCH, 16),
-                24, 3, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.LANTERN, 4),
-                16, 5, 0.05F
-        ));
+        // ===== BAKED GOODS =====
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(Items.CAMPFIRE, 2),
-                12, 5, 0.05F
-        ));
-
-        // ===== HOME & SHELTER =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.RED_BED),
-                12, 5, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.GLASS, 16),
-                16, 5, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.CHEST, 2),
+                new ItemStack(Items.BREAD, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.CRAFTING_TABLE),
-                12, 5, 0.05F
-        ));
-
-        // ===== TOOLS & UTILITY =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
-                java.util.Optional.empty(),
-                new ItemStack(Items.BUCKET),
+                new ItemStack(Items.COOKIE, 16),
                 12, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
+                new TradedItem(Items.EMERALD, 5),
                 java.util.Optional.empty(),
-                new ItemStack(Items.COMPASS),
-                8, 8, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
-                java.util.Optional.empty(),
-                new ItemStack(Items.CLOCK),
-                8, 8, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 6),
-                java.util.Optional.empty(),
-                new ItemStack(Items.SPYGLASS),
-                6, 10, 0.05F
-        ));
-
-        // ===== TRAVEL & EXPLORATION =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
-                java.util.Optional.empty(),
-                new ItemStack(Items.MAP),
-                12, 5, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
-                java.util.Optional.empty(),
-                new ItemStack(Items.LEAD, 2),
-                12, 5, 0.05F
+                new ItemStack(Items.PUMPKIN_PIE, 4),
+                10, 8, 0.05F
         ));
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 8),
                 java.util.Optional.empty(),
-                new ItemStack(Items.SADDLE),
-                4, 10, 0.05F
-        ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 10),
-                java.util.Optional.empty(),
-                new ItemStack(Items.NAME_TAG),
+                new ItemStack(Items.CAKE),
                 6, 10, 0.05F
         ));
 
-        // ===== FARMING SUPPLIES =====
+        // ===== PREMIUM FOODS =====
         this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 1),
+                new TradedItem(Items.EMERALD, 12),
                 java.util.Optional.empty(),
-                new ItemStack(Items.BONE_MEAL, 8),
-                24, 3, 0.05F
+                new ItemStack(Items.GOLDEN_APPLE, 2),
+                4, 15, 0.05F
         ));
         this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 2),
+                new TradedItem(Items.EMERALD, 6),
                 java.util.Optional.empty(),
-                new ItemStack(Items.HAY_BLOCK, 4),
-                16, 5, 0.05F
+                new ItemStack(Items.GOLDEN_CARROT, 8),
+                8, 8, 0.05F
         ));
 
-        // ===== DYES & DECORATIONS =====
+        // ===== COOKED MEATS =====
         this.offers.add(new TradeOffer(
                 new TradedItem(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(Items.PAINTING, 3),
-                12, 5, 0.05F
+                new ItemStack(Items.COOKED_BEEF, 8),
+                16, 5, 0.05F
         ));
         this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
+                new TradedItem(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(Items.FLOWER_POT, 4),
-                12, 5, 0.05F
+                new ItemStack(Items.COOKED_PORKCHOP, 8),
+                16, 5, 0.05F
         ));
     }
 
@@ -189,8 +117,8 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
 
                 if (player instanceof ServerPlayerEntity serverPlayer) {
                     serverPlayer.sendMessage(
-                            Text.literal("<Village Merchant> ").styled(s -> s.withColor(net.minecraft.util.Formatting.GOLD))
-                                    .append(Text.literal("Welcome to our village! I've got a bit of everything.").styled(s -> s.withColor(net.minecraft.util.Formatting.YELLOW))),
+                            Text.literal("<Baker> ").styled(s -> s.withColor(net.minecraft.util.Formatting.GOLD))
+                                    .append(Text.literal("Fresh from the oven! Take a look at what I've got today.").styled(s -> s.withColor(net.minecraft.util.Formatting.YELLOW))),
                             false
                     );
                 }
@@ -228,7 +156,7 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("entity.dagmod.village_merchant_npc");
+        return Text.translatable("entity.dagmod.baker_npc");
     }
 
     public boolean hasCustomer() {
@@ -257,6 +185,7 @@ public class VillageMerchantNPC extends PathAwareEntity implements Merchant {
 
     @Override
     public void setOffersFromServer(TradeOfferList offers) {
+        // Baker has static offers
     }
 
     @Override

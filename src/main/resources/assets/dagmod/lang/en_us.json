@@ -354,6 +354,10 @@
   "entity.dagmod.hunter_npc": "Hunter",
   "entity.dagmod.luxury_merchant_npc": "Luxury Merchant",
   "entity.dagmod.trophy_dealer_npc": "Trophy Dealer",
+  "entity.dagmod.baker_npc": "Baker",
+  "entity.dagmod.alchemist_npc": "Alchemist",
+  "entity.dagmod.blacksmith_npc": "Blacksmith",
+  "entity.dagmod.jeweler_npc": "Jeweler",
 
   "_comment_dragons": "=== DRAGON ENTITIES ===",
   "entity.dagmod.dragon_guardian": "Dragon Guardian",

@@ -1,10 +1,10 @@
-# DAGMod Testing Checklist - v1.5.4
+# DAGMod Testing Checklist - v1.6.5
 
-**Version**: v1.5.4-beta
+**Version**: v1.6.5-beta
 **Test Date**: _____________
 **Tester**: _____________
 **Minecraft Version**: 1.21.11
-**Fabric Loader**: 0.18.1
+**Fabric Loader**: 0.18.4
 
 ---
 
@@ -365,22 +365,99 @@
 
 ---
 
+## 🛒 **Merchant NPCs (v1.6.5)**
+
+### **Test 41: Baker NPC**
+- ⬜ Run `/summon dagmod:baker_npc`
+- ⬜ **EXPECTED**: Baker spawns with baker.png skin
+- ⬜ Right-click Baker to open trade screen
+- ⬜ **EXPECTED**: 8 food trades visible (bread, cookies, pie, cake, golden apples, golden carrots, cooked beef, cooked porkchop)
+- ⬜ Purchase an item
+- ⬜ **EXPECTED**: Trade completes, campfire crackling sound plays
+- ⬜ Verify Baker is invulnerable and cannot despawn
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 42: Blacksmith NPC**
+- ⬜ Run `/summon dagmod:blacksmith_npc`
+- ⬜ **EXPECTED**: Blacksmith spawns with blacksmith.png skin
+- ⬜ Right-click to open trade screen
+- ⬜ **EXPECTED**: Ore-buying trades visible (raw iron, gold, copper, coal, etc. for emeralds)
+- ⬜ **EXPECTED**: Repair material trades visible (anvil, iron ingots, diamonds, mythril ingots)
+- ⬜ Sell raw iron to Blacksmith
+- ⬜ **EXPECTED**: Trade completes, anvil sound plays
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 43: Jeweler NPC**
+- ⬜ Run `/summon dagmod:jeweler_npc`
+- ⬜ **EXPECTED**: Jeweler spawns with jeweler.png skin
+- ⬜ Right-click to open trade screen
+- ⬜ **EXPECTED**: Gem-buying trades visible (ruby, sapphire, etc. for emeralds)
+- ⬜ **EXPECTED**: Gem product trades visible (Gem Cutter, Citrine Powder, Silmaril)
+- ⬜ Sell a processed gem to Jeweler
+- ⬜ **EXPECTED**: Trade completes, amethyst chime sound plays
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 44: Alchemist NPC**
+- ⬜ Run `/summon dagmod:alchemist_npc`
+- ⬜ **EXPECTED**: Alchemist spawns with alchemist.png skin
+- ⬜ Right-click to open trade screen
+- ⬜ **EXPECTED**: 21 trades visible covering equipment, ingredients, modifiers, and effect ingredients
+- ⬜ **EXPECTED**: Blaze Rods available for purchase
+- ⬜ Purchase an item
+- ⬜ **EXPECTED**: Trade completes, brewing stand sound plays
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 45: Village Merchant NPC**
+- ⬜ Run `/summon dagmod:village_merchant_npc`
+- ⬜ **EXPECTED**: Village Merchant spawns, trade screen opens on right-click
+- ⬜ **EXPECTED**: 19 trades visible across categories (lighting, home, tools, travel, farming, decorations)
+- ⬜ Purchase an item
+- ⬜ **EXPECTED**: Trade completes successfully
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 46: Miner Trade Cleanup**
+- ⬜ Summon Miner NPC (`/summon dagmod:miner_npc`)
+- ⬜ Open trade screen
+- ⬜ **EXPECTED**: NO processed gems (Ruby, Sapphire) in trades — only raw gems
+- ⬜ **EXPECTED**: NO Gem Cutter tool in trades
+- ⬜ **EXPECTED**: Raw gem trades still present
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 47: Voodoo Illusioner Trade Cleanup**
+- ⬜ Summon Voodoo Illusioner NPC (`/summon dagmod:voodoo_illusioner_npc`)
+- ⬜ Open trade screen
+- ⬜ **EXPECTED**: NO brewing ingredients (blaze rods, ghast tears, nether wart, etc.)
+- ⬜ **EXPECTED**: Dark items still present (ender pearls, echo shards, wither roses, skulls)
+- ⬜ **EXPECTED**: Rogue items and shadow weapons still present
+- **Status**: ⬜ Pass / ⬜ Fail
+
+### **Test 48: Existing Merchants Still Work**
+- ⬜ Test Armorer NPC - trades open, rotating stock works
+- ⬜ Test Mystery Merchant NPC - trades open, rotating stock works
+- ⬜ Test Enchantsmith NPC - trades open
+- ⬜ Test Hunter NPC - trades open
+- ⬜ Test Lumberjack NPC - trades open
+- ⬜ **EXPECTED**: All existing merchants function correctly
+- **Status**: ⬜ Pass / ⬜ Fail
+
+---
+
 ## 🌐 **Multiplayer Testing**
 
-### **Test 41: Multiple Players - Quest System**
+### **Test 49: Multiple Players - Quest System**
 - ⬜ Player 1 and Player 2 both unlock quest system with Garrick
 - ⬜ **EXPECTED**: Each player tracks separately
 - ⬜ **RESULT**: _____
 - **Status**: ⬜ Pass / ⬜ Fail
 
-### **Test 42: Multiple Players - Health Persistence**
+### **Test 50: Multiple Players - Health Persistence**
 - ⬜ Both players level up
 - ⬜ Both players die
 - ⬜ **EXPECTED**: Both players keep their extra hearts
 - ⬜ **RESULT**: _____
 - **Status**: ⬜ Pass / ⬜ Fail
 
-### **Test 43: Server Performance**
+### **Test 51: Server Performance**
 - ⬜ Test with 2-4 players active
 - ⬜ **EXPECTED**: No lag, smooth gameplay
 - ⬜ **RESULT**: _____
@@ -401,6 +478,7 @@
 - ⬜ Test 16: Unlock Persistence
 - ⬜ Test 17-22: Party System
 - ⬜ Test 23-27: Quest System
+- ⬜ Test 41-48: Merchant NPCs (v1.6.5)
 
 ### **Medium Priority Tests (Nice to Pass)**
 - ⬜ Test 28-31: Race/Class System
@@ -408,7 +486,7 @@
 - ⬜ Test 35-40: Commands
 
 ### **Low Priority Tests (Optional)**
-- ⬜ Test 41-43: Multiplayer
+- ⬜ Test 49-51: Multiplayer
 
 ---
 
@@ -442,7 +520,7 @@
 
 ## ✅ **Final Sign-Off**
 
-- **Total Tests**: 43
+- **Total Tests**: 51
 - **Tests Passed**: _____
 - **Tests Failed**: _____
 - **Tests Skipped**: _____

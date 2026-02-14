@@ -158,7 +158,7 @@ public class QuestData {
         return switch (targetTier) {
             case APPRENTICE -> totalQuestsCompleted >= 5;
             case EXPERT -> totalQuestsCompleted >= 15 && hasCompletedQuestsOfDifficulty(Quest.QuestDifficulty.APPRENTICE, 3);
-            case MASTER -> totalQuestsCompleted >= 30 && hasCompletedQuestsOfDifficulty(Quest.QuestDifficulty.EXPERT, 2);
+            case MASTER -> totalQuestsCompleted >= 25 && hasCompletedQuestsOfDifficulty(Quest.QuestDifficulty.EXPERT, 2);
             default -> false;
         };
     }

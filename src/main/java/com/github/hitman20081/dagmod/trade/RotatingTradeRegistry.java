@@ -547,57 +547,57 @@ public class RotatingTradeRegistry {
     private static void initializeMinerTrades() {
         List<List<TradeOffer>> rotations = new ArrayList<>();
 
-        // Rotation 0: Rare Gems Set 1
+        // Rotation 0: Raw Gems Set 1 (Ruby & Sapphire)
         rotations.add(Arrays.asList(
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 12),
-                        Optional.of(new TradedItem(ModItems.RAW_RUBY, 4)),
-                        new ItemStack(ModItems.RUBY, 2),
-                        2, 15, 0.05F
+                        new TradedItem(Items.EMERALD, 6),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_RUBY, 4),
+                        4, 10, 0.05F
                 ),
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 12),
-                        Optional.of(new TradedItem(ModItems.RAW_SAPPHIRE, 4)),
-                        new ItemStack(ModItems.SAPPHIRE, 2),
-                        2, 15, 0.05F
+                        new TradedItem(Items.EMERALD, 6),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_SAPPHIRE, 4),
+                        4, 10, 0.05F
                 )
         ));
 
-        // Rotation 1: Rare Gems Set 2
+        // Rotation 1: Raw Gems Set 2 (Citrine & Tanzanite)
         rotations.add(Arrays.asList(
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 10),
-                        Optional.of(new TradedItem(ModItems.RAW_CITRINE, 4)),
-                        new ItemStack(ModItems.CITRINE, 2),
-                        2, 12, 0.05F
+                        new TradedItem(Items.EMERALD, 5),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_CITRINE, 4),
+                        4, 8, 0.05F
                 ),
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 14),
-                        Optional.of(new TradedItem(ModItems.RAW_TANZANITE, 4)),
-                        new ItemStack(ModItems.TANZANITE, 2),
-                        2, 18, 0.05F
+                        new TradedItem(Items.EMERALD, 7),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_TANZANITE, 4),
+                        4, 12, 0.05F
                 )
         ));
 
-        // Rotation 2: Rare Gems Set 3
+        // Rotation 2: Raw Gems Set 3 (Topaz, Zircon & Pink Garnet)
         rotations.add(Arrays.asList(
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 10),
-                        Optional.of(new TradedItem(ModItems.RAW_TOPAZ, 4)),
-                        new ItemStack(ModItems.TOPAZ, 2),
-                        2, 12, 0.05F
+                        new TradedItem(Items.EMERALD, 5),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_TOPAZ, 4),
+                        4, 8, 0.05F
                 ),
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 12),
-                        Optional.of(new TradedItem(ModItems.RAW_ZIRCON, 4)),
-                        new ItemStack(ModItems.ZIRCON, 2),
-                        2, 15, 0.05F
+                        new TradedItem(Items.EMERALD, 6),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_ZIRCON, 4),
+                        4, 10, 0.05F
                 ),
                 new TradeOffer(
-                        new TradedItem(Items.EMERALD, 12),
-                        Optional.of(new TradedItem(ModItems.RAW_PINK_GARNET, 4)),
-                        new ItemStack(ModItems.PINK_GARNET, 2),
-                        2, 15, 0.05F
+                        new TradedItem(Items.EMERALD, 6),
+                        Optional.empty(),
+                        new ItemStack(ModItems.RAW_PINK_GARNET, 4),
+                        4, 10, 0.05F
                 )
         ));
 
@@ -759,7 +759,7 @@ public class RotatingTradeRegistry {
                 String[] trophyDescs = {"Dragon trophies", "Wither trophies", "End treasures", "Boss trophies"};
                 return trophyDescs[rotationIndex % trophyDescs.length];
             case MINER:
-                String[] minerDescs = {"Ruby & Sapphire", "Citrine & Tanzanite", "Topaz, Zircon & Pink Garnet"};
+                String[] minerDescs = {"Raw Ruby & Sapphire", "Raw Citrine & Tanzanite", "Raw Topaz, Zircon & Pink Garnet"};
                 return minerDescs[rotationIndex % minerDescs.length];
             case HUNTER:
                 String[] hunterDescs = {"Premium horse gear", "Tracking items", "Exotic arrows"};
