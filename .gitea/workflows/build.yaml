@@ -39,4 +39,4 @@ jobs:
           upload_url: ${{ needs.release.outputs.new_release_upload_url }}
           asset_path: build/DAGMod-${{ needs.release.outputs.new_version }}.zip
           asset_name: DAGMod-${{ needs.release.outputs.new_version }}.zip
-          asset_content_type: application/zip
+          asset_content_type: application/zip 
