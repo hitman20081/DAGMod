@@ -12,13 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Important: Semantic release needs full history to calculate versions
+          fetch-depth: 0 # Required for version calculation
       - name: Semantic Release
         id: semantic
         uses: https://github.com/go-semantic-release/action@v1
         with:
           gitea-token: ${{ secrets.GITHUB_TOKEN }}
-          # ADD THESE THREE LINES:
+          # ADD THESE TWO LINES:
           provider: gitea
           gitea-base-url: http://192.168.10.15:30008/
           allow-initial-development-versions: true
