@@ -5,6 +5,39 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.6-beta] - 2026-02-14
+
+### Added
+
+**Java-Based Death Recovery (Grave) System**:
+- Complete replacement of the non-functional datapack grave marker system with a robust Java implementation
+- On death, all non-soulbound items are captured, a **Lodestone** grave block is placed at the death location, and grave data persists to disk
+- Players right-click the grave block to recover all items (dropped as item entities around the player)
+- **Owner** can collect immediately; **other players** can loot after 5 minutes (with countdown message)
+- If `keepInventory` is true, no grave is created (vanilla behavior preserved)
+- **One grave per player** — dying again before collecting drops old items at the old grave location, then creates a new grave
+- Soulbound items still return to the player on respawn (existing behavior, unchanged)
+- Grave coordinates displayed in chat on death for easy navigation
+- Graves persist across server restarts via NBT files (`world/data/dagmod/graves/{uuid}.dat`)
+
+**New Files** (3 new files):
+- `grave/GraveData.java` - Grave data class with ItemStack codec serialization
+- `grave/GraveManager.java` - Singleton manager with concurrent position lookup, disk persistence, and grave lifecycle
+- `mixin/DeathGraveMixin.java` - Captures inventory on death (priority 1100, runs after SoulBoundMixin)
+
+### Changed
+
+**Files Modified** (3 existing files):
+- `DagMod.java` - Added GraveManager lifecycle hooks (SERVER_STARTING/STOPPING) and UseBlockCallback for grave interaction
+- `dagmod.mixins.json` - Registered DeathGraveMixin
+- `gradle.properties` - Updated version to 1.6.6-beta
+
+### Removed
+
+- Deleted old datapack grave functions (`data/dagmod/function/graves/`) — 4 unused mcfunction files replaced by Java implementation
+
+---
+
 ## [1.6.5-beta] - 2026-02-13
 
 ### Added

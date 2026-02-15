@@ -21,7 +21,22 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 50 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.6.5-beta (February 2026)
+Current Version v1.6.6-beta (February 2026)
+
+---
+
+## 🎮 What's New in v1.6.6-beta
+
+### Death Recovery (Grave) System
+
+- **Grave blocks** now appear at your death location as a **Lodestone**, storing all your non-soulbound items
+- Right-click the grave to recover your items — coordinates are shown in chat when you die
+- Other players can loot your grave after **5 minutes**; you can collect immediately
+- Dying again before collecting drops old items at the old grave location, then creates a new grave
+- Graves persist across server restarts — your items are safe even if the server goes down
+- Fully replaces the old non-functional datapack grave system
+- Works alongside Soul Bound enchantment (soulbound items still return on respawn)
+- Respects `keepInventory` gamerule — no grave is created when enabled
 
 ---
 

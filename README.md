@@ -1,5 +1,5 @@
 # DAGMod: A Fantasy RPG Experience in Minecraft
-**v1.6.5-beta for Minecraft 1.21.11 (Fabric)**
+**v1.6.6-beta for Minecraft 1.21.11 (Fabric)**
 
 DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique race and class, master powerful abilities, level up through a dynamic quest system, and conquer procedurally generated dungeons filled with custom bosses.
 
@@ -39,7 +39,7 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 ## 📚 Learn More
 
-*   **[Full Wiki & Guides](docs/home.md)**: For detailed information on classes, abilities, quests, and all other features.
+*   **[Full Wiki & Guides](docs/Home.md)**: For detailed information on classes, abilities, quests, and all other features.
 *   **[Development Roadmap](ROADMAP.md)**: See what features are planned for future updates.
 *   **[Version History](CHANGELOG.md)**: See a detailed log of all changes.
 

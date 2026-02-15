@@ -47,6 +47,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
@@ -75,6 +76,7 @@ import com.github.hitman20081.dagmod.party.quest.PartyQuestManager;
 import com.github.hitman20081.dagmod.party.command.PartyQuestCommand;
 import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
 import com.github.hitman20081.dagmod.enchantment.SoulBoundStorage;
+import com.github.hitman20081.dagmod.grave.GraveManager;
 import com.github.hitman20081.dagmod.trade.RotatingTradeManager;
 
 import java.io.IOException;
@@ -113,11 +115,15 @@ public class DagMod implements ModInitializer {
 
             // Initialize rotating trade manager
             RotatingTradeManager.getInstance().initialize(server);
+
+            // Initialize grave system
+            GraveManager.getInstance().initialize(server);
         });
 
         // Save rotating trade state on server stop
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             RotatingTradeManager.getInstance().shutdown();
+            GraveManager.getInstance().shutdown();
         });
 
         BoneRealmRegistry.register(); // Register Bone realm
@@ -484,6 +490,24 @@ public class DagMod implements ModInitializer {
             CooldownManager.clearPlayerCooldowns(playerId);
 
             LOGGER.info("Successfully saved and cleaned up data for: " + player.getName().getString());
+        });
+
+        // Register grave right-click interaction
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (world.isClient()) return net.minecraft.util.ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity serverPlayer)) return net.minecraft.util.ActionResult.PASS;
+
+            BlockPos clickedPos = hitResult.getBlockPos();
+            if (!world.getBlockState(clickedPos).isOf(net.minecraft.block.Blocks.LODESTONE)) {
+                return net.minecraft.util.ActionResult.PASS;
+            }
+
+            boolean handled = GraveManager.getInstance().collectGrave(serverPlayer, clickedPos);
+            if (handled) {
+                return net.minecraft.util.ActionResult.SUCCESS;
+            }
+
+            return net.minecraft.util.ActionResult.PASS;
         });
 
         FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {

@@ -14,7 +14,8 @@
       "ShatterproofMixin",
       "ShatterproofDamageMixin",
       "ShatterproofMiningMixin",
-      "SoulBoundMixin"
+      "SoulBoundMixin",
+      "DeathGraveMixin"
 	],
   "client": [
     "ChestRenderStateMixin",

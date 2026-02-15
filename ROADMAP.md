@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.6.5-beta
-**Last Updated**: 2026-02-13
+**Current Version**: v1.6.6-beta
+**Last Updated**: 2026-02-14
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -144,10 +144,12 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - Destination-based teleportation
   - Ship Helm block (v1.4.5)
 
-- ✅ **Death Recovery System** (Datapack-based)
-  - Grave markers via datapack functions
-  - Item recovery system
-  - Death location tracking
+- ✅ **Death Recovery System** (Java-based, v1.6.6)
+  - Lodestone grave blocks placed at death location
+  - All non-soulbound items stored in grave, persisted to disk
+  - Right-click grave to recover items; 5-minute loot delay for non-owners
+  - One grave per player with automatic old-grave cleanup
+  - Replaces old non-functional datapack grave system
 
 - ✅ **Enhanced Consumables** (v1.6.0)
   - Lifesteal System (Vampire Dust) - 10% healing from damage dealt
@@ -518,6 +520,7 @@ Priority: **LOW**
 - ✅ **v1.5.3-beta** (Dec 2025) - CRITICAL: Progression reset fix, new world data leakage fix, quest level 20 blocker fix
 - ✅ **v1.6.0-beta** (Dec 2025-Feb 2026) - Rotating trade system, enhanced consumables, Dragon Realm, custom enchantments
 - ✅ **v1.6.5-beta** (Feb 2026) - 5 new merchant NPCs (13 total), quest progression fixes, loot table fixes
+- ✅ **v1.6.6-beta** (Feb 2026) - Java-based death recovery (grave) system, replaces datapack graves
 
 ### **Short-term** - Next 3-6 months
 - 🎯 **v1.6.0** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
@@ -585,7 +588,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-02-13
+**Last Updated**: 2026-02-14
 **Maintained By**: hitman20081
-**Current Version**: v1.6.5-beta
+**Current Version**: v1.6.6-beta
 **License**: See LICENSE file

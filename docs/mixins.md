@@ -54,7 +54,11 @@ All mixins are registered in `src/main/resources/dagmod.mixins.json`.
 
 ### SoulBoundMixin
 **Target:** `ServerPlayerEntity`
-**Purpose:** Implements the Soul Bound enchantment. Injects at the `onDeath` method HEAD to scan the player's inventory for items with `dagmod:soul_bound`, removes them before they drop, and stores them in `SoulBoundStorage`. Items are returned on respawn via the `AFTER_RESPAWN` event handler in `DagMod.java`.
+**Purpose:** Implements the Soul Bound enchantment. Injects at the `onDeath` method HEAD (default priority) to scan the player's inventory for items with `dagmod:soul_bound`, removes them before they drop, and stores them in `SoulBoundStorage`. Items are returned on respawn via the `AFTER_RESPAWN` event handler in `DagMod.java`.
+
+### DeathGraveMixin
+**Target:** `ServerPlayerEntity` (priority 1100)
+**Purpose:** Implements the death recovery (grave) system. Injects at `onDeath` HEAD after SoulBoundMixin (which runs at default priority) has already removed soulbound items. Captures all remaining non-empty inventory items with their slot indices, clears the inventory so vanilla `dropAll()` drops nothing, then calls `GraveManager.createGrave()` to place a Lodestone grave block at the death location and persist the items to disk. Skips entirely if `keepInventory` gamerule is enabled.
 
 ---
 
