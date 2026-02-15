@@ -1,0 +1,91 @@
+name: Build and Package Mod
+on:
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Clean Zip
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
+          mkdir -p build
+          zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*" ".github/*" "*.md"
+          echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Upload Zip to Gitea Release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ env.FINAL_VERSION }}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
+          curl -X 'POST' \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
+
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync and Flatten Docs to Wiki
+        run: |
+          git config --global user.email "runner@truenas.local"
+          git config --global user.name "Wiki Sync Bot"
+          
+          # Clone the wiki
+          git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
+          
+          # Clear old files so deleted docs are removed from Wiki
+          rm -rf wiki_repo/*.md
+          
+          # Find all .md files, rename them by path, and move to wiki root
+          cd docs
+          find . -name "*.md" -type f | while read file; do
+            # Remove leading ./ and .md
+            rel_path="${file#./}"
+            base_name="${rel_path%.md}"
+            
+            # Replace slashes with dashes (e.g., classes/overview -> classes-overview)
+            new_name=$(echo "$base_name" | tr '/' '-')
+            
+            # Copy to wiki repo as a flat file
+            cp "$file" "../wiki_repo/${new_name}.md"
+          done
+          cd ..
+
+          # FIX: Gitea requires exactly 'Home.md' or 'home.md' to auto-load.
+          # Our script likely named it 'Home.md' (if it was in the root of /docs).
+          # If it was elsewhere, we force the move.
+          if [ -f "wiki_repo/Home.md" ]; then
+            echo "Home.md found and ready."
+          elif [ -f "wiki_repo/docs-Home.md" ]; then
+            mv wiki_repo/docs-Home.md wiki_repo/Home.md
+          fi
+
+          # Same for Sidebar
+          if [ -f "wiki_repo/_Sidebar.md" ]; then
+            echo "Sidebar ready."
+          elif [ -f "wiki_repo/docs-_Sidebar.md" ]; then
+            mv wiki_repo/docs-_Sidebar.md wiki_repo/_Sidebar.md
+          fi
+
+          cd wiki_repo
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Auto-flattened wiki sync: ${{ github.sha }}"
+            git -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" push origin master
+          fi
