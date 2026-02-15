@@ -274,11 +274,22 @@ public class DagMod implements ModInitializer {
 
         // Apply class abilities when player respawns (including after death)
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            // Restore Soul Bound enchanted items
+            // Restore Soul Bound enchanted items to original slots
             java.util.List<ItemStack> soulItems = SoulBoundStorage.retrieve(newPlayer.getUuid());
+            java.util.List<Integer> soulSlots = SoulBoundStorage.retrieveSlots(newPlayer.getUuid());
             if (soulItems != null) {
-                for (ItemStack item : soulItems) {
-                    newPlayer.giveItemStack(item);
+                for (int i = 0; i < soulItems.size(); i++) {
+                    ItemStack item = soulItems.get(i);
+                    if (soulSlots != null && i < soulSlots.size()) {
+                        int slot = soulSlots.get(i);
+                        if (newPlayer.getInventory().getStack(slot).isEmpty()) {
+                            newPlayer.getInventory().setStack(slot, item);
+                        } else {
+                            newPlayer.giveItemStack(item);
+                        }
+                    } else {
+                        newPlayer.giveItemStack(item);
+                    }
                 }
                 newPlayer.sendMessage(Text.literal("Your Soul Bound items have been preserved!")
                         .formatted(Formatting.LIGHT_PURPLE), false);
