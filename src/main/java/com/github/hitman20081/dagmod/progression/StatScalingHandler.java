@@ -28,7 +28,7 @@ public class StatScalingHandler {
         double attackBonus = calculateAttackBonus(level);
         double armorBonus = calculateArmorBonus(level);
 
-        // Apply HP bonus (+1 HP per level)
+        // Apply HP bonus (+1 heart every 10 levels)
         if (hpBonus > 0) {
             var hpModifier = new EntityAttributeModifier(
                     HP_MODIFIER_ID,
@@ -97,10 +97,10 @@ public class StatScalingHandler {
 
     /**
      * Calculate HP bonus from level
-     * +1 HP per level (max +49 HP at level 50)
+     * +1 heart (2 HP) every 10 levels → 30 hearts at level 200
      */
     private static int calculateHPBonus(int level) {
-        return Math.max(0, level - 1); // Level 1 = 0 bonus, Level 50 = 49 bonus
+        return (level / 10) * 2; // Level 10 = +2 HP, Level 100 = +20 HP, Level 200 = +40 HP
     }
 
     /**

@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.6.6-beta
-**Last Updated**: 2026-02-14
+**Current Version**: v1.7.0
+**Last Updated**: 2026-02-16
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -521,10 +521,11 @@ Priority: **LOW**
 - ✅ **v1.6.0-beta** (Dec 2025-Feb 2026) - Rotating trade system, enhanced consumables, Dragon Realm, custom enchantments
 - ✅ **v1.6.5-beta** (Feb 2026) - 5 new merchant NPCs (13 total), quest progression fixes, loot table fixes
 - ✅ **v1.6.6-beta** (Feb 2026) - Java-based death recovery (grave) system, replaces datapack graves
+- ✅ **v1.7.0** (Feb 2026) - Level cap 50→200, heart scaling rework (+1 heart/10 levels)
 
 ### **Short-term** - Next 3-6 months
-- 🎯 **v1.6.0** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
-- 🎯 **v1.7.0** (Minor) - New spell scrolls and crafting system
+- 🎯 **v1.7.1** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
+- 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.8.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.9.0** (Minor) - Custom race/class enchantments
 
@@ -588,7 +589,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-02-14
+**Last Updated**: 2026-02-16
 **Maintained By**: hitman20081
-**Current Version**: v1.6.6-beta
+**Current Version**: v1.7.0
 **License**: See LICENSE file

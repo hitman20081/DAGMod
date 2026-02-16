@@ -43,7 +43,8 @@ public class DragonSpawner {
     private static final int SPAWN_ATTEMPT_INTERVAL = 600; // 30 seconds (20 ticks/sec * 30)
     private static final int SPAWN_CHECK_RADIUS = 80; // Check 80 block radius from spawn attempt
     private static final int MIN_DRAGON_DISTANCE = 256; // Minimum 256 blocks between dragons
-    private static final double SPAWN_CHANCE = 1.0; // 100% chance per attempt
+    private static final double SPAWN_CHANCE = 0.25; // 25% chance per attempt
+    private static final int MAX_WILD_DRAGONS = 8; // Maximum wild dragons in the overworld
 
     // Track spawned dragon locations to prevent overcrowding
     private static final Set<ChunkPos> dragonChunks = new HashSet<>();
@@ -59,8 +60,14 @@ public class DragonSpawner {
             return;
         }
 
-        // Random chance check - very rare
+        // Random chance check
         if (random.nextDouble() > SPAWN_CHANCE) {
+            return;
+        }
+
+        // Global cap: count all wild dragons currently loaded in the world
+        int currentDragons = world.getEntitiesByType(ModEntities.WILD_DRAGON, dragon -> true).size();
+        if (currentDragons >= MAX_WILD_DRAGONS) {
             return;
         }
 
@@ -177,15 +184,68 @@ public class DragonSpawner {
         DagMod.LOGGER.info("Spawned Red Dragon for quest at {}", pos);
     }
 
+    private static final int MAX_REALM_DRAGONS = 5; // Max ambient red dragons in Dragon Realm
+    private static final int REALM_SPAWN_RADIUS = 120; // Spawn within 120 blocks of a player
+    private static final double REALM_SPAWN_CHANCE = 0.15; // 15% chance per attempt
+
     /**
-     * Placeholder method for spawning dragons in the Dragon Realm.
-     * This will need to be called from a custom tick handler for that dimension.
-     * @param world The world of the Dragon Realm.
+     * Attempt to spawn ambient Red DragonGuardianEntity in the Dragon Realm.
+     * Called periodically from server tick alongside overworld spawner.
      */
     public static void trySpawnDragonInDragonRealm(ServerWorld world) {
-        // TODO: Implement Dragon Realm spawning logic.
-        // This could be similar to the overworld spawner, but with different constraints
-        // and likely only spawning the RED dragon variant.
+        // Only spawn in the Dragon Realm
+        if (world.getRegistryKey() != com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmTeleporter.DRAGON_REALM) {
+            return;
+        }
+
+        if (world.getPlayers().isEmpty()) {
+            return;
+        }
+
+        if (random.nextDouble() > REALM_SPAWN_CHANCE) {
+            return;
+        }
+
+        // Count all DragonGuardianEntity in the realm (includes boss + ambient)
+        int currentDragons = world.getEntitiesByType(ModEntities.DRAGON_GUARDIAN, dragon -> true).size();
+        if (currentDragons >= MAX_REALM_DRAGONS) {
+            return;
+        }
+
+        // Pick a random player as spawn center
+        var players = world.getPlayers();
+        var randomPlayer = players.get(random.nextInt(players.size()));
+        BlockPos playerPos = randomPlayer.getBlockPos();
+
+        // Find a spawn location away from the player (40-120 blocks)
+        for (int attempt = 0; attempt < 20; attempt++) {
+            int offsetX = (40 + random.nextInt(REALM_SPAWN_RADIUS - 40)) * (random.nextBoolean() ? 1 : -1);
+            int offsetZ = (40 + random.nextInt(REALM_SPAWN_RADIUS - 40)) * (random.nextBoolean() ? 1 : -1);
+            BlockPos searchPos = playerPos.add(offsetX, 0, offsetZ);
+
+            BlockPos surfacePos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, searchPos);
+            BlockPos spawnPos = surfacePos.up(8); // Spawn in the air
+
+            // Check for clear space
+            if (!world.getBlockState(spawnPos).isAir()) {
+                continue;
+            }
+
+            DragonGuardianEntity dragon = ModEntities.DRAGON_GUARDIAN.create(world, SpawnReason.NATURAL);
+            if (dragon == null) {
+                return;
+            }
+
+            dragon.refreshPositionAndAngles(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, random.nextFloat() * 360f, 0f);
+            dragon.setVariant(DragonGuardianEntity.DragonVariant.RED);
+            dragon.initialize(world, world.getLocalDifficulty(spawnPos), SpawnReason.NATURAL, null);
+
+            if (world.spawnEntity(dragon)) {
+                DagMod.LOGGER.info("Ambient RED Dragon spawned in Dragon Realm at {} near player {}",
+                        spawnPos, randomPlayer.getName().getString());
+            }
+            return;
+        }
     }
 
     /**

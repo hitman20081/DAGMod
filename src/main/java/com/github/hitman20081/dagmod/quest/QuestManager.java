@@ -188,8 +188,8 @@ public class QuestManager {
             return false;
         }
 
-        // Check active quest limit
-        if (playerData.getActiveQuests().size() >= getMaxActiveQuests(playerData)) {
+        // Check active quest limit (uses quest book tier)
+        if (playerData.getActiveQuests().size() >= playerData.getMaxActiveQuests()) {
             player.sendMessage(Text.literal("You have too many active quests! Complete some first."), false);
             return false;
         }
@@ -334,14 +334,26 @@ public class QuestManager {
         return true;
     }
 
-    // Get max active quests based on player progress
-    private int getMaxActiveQuests(QuestData playerData) {
-        int completedQuests = playerData.getCompletedQuestIds().size();
+    /**
+     * Abandon an active quest (removes it without completing)
+     */
+    public boolean abandonQuest(PlayerEntity player, String questId) {
+        QuestData playerData = getPlayerData(player);
+        Quest quest = playerData.getActiveQuest(questId);
 
-        if (completedQuests >= 20) return 7; // Master tier
-        if (completedQuests >= 10) return 5; // Expert tier
-        if (completedQuests >= 5) return 3;  // Apprentice tier
-        return 2; // Novice tier
+        if (quest == null) {
+            player.sendMessage(Text.literal("You don't have that quest active.").formatted(net.minecraft.util.Formatting.RED), false);
+            return false;
+        }
+
+        playerData.removeActiveQuest(questId);
+
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            savePlayerQuestData(serverPlayer);
+        }
+
+        player.sendMessage(Text.literal("Quest abandoned: " + quest.getName()).formatted(net.minecraft.util.Formatting.YELLOW), false);
+        return true;
     }
 
     // Copy a quest for a player (so each player has their own progress)

@@ -34,7 +34,7 @@ public class ProgressionTestCommand {
                 .then(CommandManager.literal("reset")
                         .executes(ProgressionTestCommand::executeReset))
                 .then(CommandManager.literal("setlevel")
-                        .then(CommandManager.argument("level", IntegerArgumentType.integer(1, 50))
+                        .then(CommandManager.argument("level", IntegerArgumentType.integer(1, 200))
                                 .executes(ProgressionTestCommand::executeSetLevel)))
                 .then(CommandManager.literal("curve")
                         .executes(ProgressionTestCommand::executeCurve))
@@ -139,19 +139,19 @@ public class ProgressionTestCommand {
         source.sendFeedback(() -> Text.literal("§6=== XP Curve (Every 5 Levels) ==="), false);
 
         int totalXP = 0;
-        for (int level = 1; level <= 50; level++) {
+        for (int level = 1; level <= 200; level++) {
             int xpForLevel = PlayerProgressionData.calculateXPForLevel(level);
             totalXP += xpForLevel;
 
-            if (level == 1 || level % 5 == 0 || level == 50) {
-                String formatted = String.format("§eLv%2d: §f%,7d XP §7(Total: %,d)",
+            if (level == 1 || level % 10 == 0 || level == 200) {
+                String formatted = String.format("§eLv%3d: §f%,7d XP §7(Total: %,d)",
                         level, xpForLevel, totalXP);
                 final String message = formatted;
                 source.sendFeedback(() -> Text.literal(message), false);
             }
         }
 
-        int totalToMax = PlayerProgressionData.calculateTotalXPForLevel(50);
+        int totalToMax = PlayerProgressionData.calculateTotalXPForLevel(200);
         source.sendFeedback(() -> Text.literal(String.format("§6Total to max: §f%,d XP", totalToMax)), false);
 
         return 1;

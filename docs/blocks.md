@@ -105,6 +105,33 @@ The Job Board is a wall-mounted block that provides access to JOB and DAILY cate
 
 ---
 
+## Hall Respawn Block
+
+The Hall Respawn Block sets the player's vanilla spawn point at the Hall of Champions. It works the same way as beds and respawn anchors — when you die without another spawn point set, you respawn near this block.
+
+**How It Works:**
+1. Right-click the block with an empty hand
+2. Your spawn point is set to a random safe position 5-10 blocks from the block
+3. Confirmation message: "Respawn point set at the Hall of Champions!" (gold text)
+4. Level-up sound plays and totem particles appear
+
+**Behavior:**
+- Uses Minecraft's built-in spawn point system (`setSpawnPoint()`)
+- Sleeping in a bed will override the Hall spawn point (normal vanilla behavior)
+- If your bed is destroyed, you'll need to revisit the Hall and click the block again
+- Multiple players can use the same block — each gets a unique random spawn offset
+
+**Block Properties:**
+
+| Property | Value |
+|----------|-------|
+| Strength | 50.0 (nearly indestructible) |
+| Blast Resistance | 1200 |
+| Luminance | 12 (glows) |
+| Tool Required | Yes |
+
+---
+
 ## Block Locations
 
 All custom blocks are found in the **Hall of Champions**, a structure that serves as the central hub for character creation and quest management.
@@ -115,3 +142,4 @@ All custom blocks are found in the **Hall of Champions**, a structure that serve
 | Class Selection Altar | Hall of Champions - Class wing |
 | Quest Block | Hall of Champions - Main hall |
 | Job Board | Hall of Champions - Wall-mounted near quest area |
+| Hall Respawn Block | Hall of Champions - Central area |

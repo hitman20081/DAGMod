@@ -5,6 +5,82 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-02-16
+
+### Changed
+
+**Progression System Rework**:
+- Level cap increased from 50 to **200**
+- XP multiplier reduced from 1.15 to **1.05** per level (gentler curve for 200 levels)
+- Heart scaling reworked: +1 heart (2 HP) every 10 levels instead of +1 HP per level
+  - Level 10: 11 hearts, Level 50: 15 hearts, Level 100: 20 hearts, Level 200: 30 hearts
+- Attack bonus unchanged: +1 every 5 levels (+40 at level 200)
+- Armor bonus unchanged: +1 every 10 levels (+20 at level 200)
+- `/testprogression setlevel` now accepts levels up to 200
+- `/testprogression curve` displays every 10 levels up to 200
+
+---
+
+## [1.6.6-beta] - 2026-02-15
+
+### Added
+
+**Hall of Champions Respawn Block**:
+- New interactive block (`hall_respawn_block`) that sets the player's vanilla spawn point at the Hall of Champions
+- Right-click to activate — uses Minecraft's built-in `setSpawnPoint()` API (same system as beds and respawn anchors)
+- Spawns player at a random safe position 5-10 blocks from the block to avoid stacking
+- Visual feedback: gold confirmation message, level-up sound, and totem particles
+- Block properties: strength 50.0, blast resistance 1200, luminance 12, requires tool to break
+- 3-texture model: unique top, bottom, and side textures
+- Registered in the Functional creative tab
+
+**Ambient Red Dragons in Dragon Realm**:
+- Red-variant `DragonGuardianEntity` mobs now spawn naturally throughout the Dragon Realm as ambient threats
+- Population cap of 5 red dragons per Dragon Realm instance
+- 15% spawn chance per cycle, spawning 40-120 blocks from players
+- Separate from the Dragon Guardian boss (which spawns at the arena on a 30-minute timer)
+
+**New Files** (5 new files):
+- `block/HallRespawnBlock.java` - Hall respawn block with safe random position finder
+- `assets/dagmod/blockstates/hall_respawn_block.json` - Block state definition
+- `assets/dagmod/models/block/hall_respawn_block.json` - Block model with 3 textures
+- `assets/dagmod/models/item/hall_respawn_block.json` - Item model
+- `assets/dagmod/textures/block/hall_respawn_block*.png` - 3 block textures (top, bottom, sides)
+
+### Changed
+
+**Dragon Guardian Respawn Timer Overhaul**:
+- Fixed timer manager creating a new instance every server tick (now properly cached as singleton)
+- Graduated announcement schedule: every 5 minutes → every minute for last 5 → 30 seconds → 10-second countdown
+- Final 10-second countdown uses bold red formatting for visibility
+- 30-minute respawn timer after boss death
+
+**Dragon Spawning Balance**:
+- Wild Dragon (overworld) spawn chance reduced from 100% to 25% per cycle
+- Wild Dragon population cap added: maximum 8 in the overworld
+- Dragon entity LOAD/SAVE logging changed from `info` to `debug` level to reduce log spam
+
+**Respawn System**:
+- Removed old custom Hall of Champions teleport-on-respawn logic from `AFTER_RESPAWN` handler
+- Hall respawn is now handled entirely by vanilla spawn point system via the new Respawn Block
+- Soulbound item restoration and stat reapplication remain unchanged
+
+**Files Modified** (6 existing files):
+- `DagMod.java` - Removed old Hall teleport code from AFTER_RESPAWN, added Dragon Realm ambient spawning to tick loop
+- `block/ModBlocks.java` - Registered HALL_RESPAWN_BLOCK with creative tab entry
+- `entity/DragonSpawner.java` - Added population caps, reduced spawn chance, added `trySpawnDragonInDragonRealm()`
+- `entity/DragonGuardianEntity.java` - Changed LOAD/SAVE logging to debug level
+- `entity/WildDragonEntity.java` - Changed LOAD/SAVE logging to debug level
+- `dragon_realm/boss/DragonRespawnTimer.java` - Updated announcement intervals and formatting
+
+### Fixed
+
+- **Dragon Guardian respawn timer spam**: Timer manager was re-loading from disk every tick, resetting announcement tracking and causing messages to fire every tick instead of at intervals
+- **Excessive dragon spawning**: 100% spawn chance with no population cap caused hundreds of dragons to accumulate, causing lag
+- **Respawn block position**: Spawn point is set in the air above the block (not inside it) to prevent vanilla from clearing the spawn as "obstructed"
+
+---
+
 ## [1.6.6-beta] - 2026-02-14
 
 ### Added

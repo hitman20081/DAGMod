@@ -30,6 +30,7 @@ public class DragonRespawnTimerManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("DAGMod-DragonRespawnTimer");
     private static MinecraftServer server;
+    private static DragonRespawnTimerManager instance;
 
     // Storage paths
     private static final String DATA_ROOT = "data/dagmod";
@@ -42,11 +43,14 @@ public class DragonRespawnTimerManager {
     }
 
     /**
-     * Get or create instance for the server
+     * Get or create instance for the server (cached singleton)
      */
     public static DragonRespawnTimerManager get(MinecraftServer minecraftServer) {
-        server = minecraftServer;
-        return loadFromFile();
+        if (instance == null || server != minecraftServer) {
+            server = minecraftServer;
+            instance = loadFromFile();
+        }
+        return instance;
     }
 
     /**

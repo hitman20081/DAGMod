@@ -19,9 +19,9 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 ## What is DAGMod
 
-Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 50 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
+Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.6.6-beta (February 2026)
+Current Version v1.7.0 (February 2026)
 
 ---
 

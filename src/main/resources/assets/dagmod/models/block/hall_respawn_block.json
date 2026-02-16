@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "dagmod:block/hall_respawn_block",
+    "down": "dagmod:block/hall_respawn_block_bottom",
+    "up": "dagmod:block/hall_respawn_block_top",
+    "north": "dagmod:block/hall_respawn_block",
+    "south": "dagmod:block/hall_respawn_block",
+    "east": "dagmod:block/hall_respawn_block",
+    "west": "dagmod:block/hall_respawn_block"
+  }
+}

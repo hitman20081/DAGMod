@@ -6,23 +6,23 @@ This document details the progression system in DAGMod, including leveling, expe
 
 ## Leveling
 
-**Level Cap:** 50
+**Level Cap:** 200
 
-DAGMod uses an exponential XP curve designed for approximately 20 hours of gameplay to reach max level.
+DAGMod uses an exponential XP curve with a gentle 5% multiplier, designed for extended but reachable progression.
 
-**XP Formula:** `100 * 1.15^(level - 2)`
+**XP Formula:** `100 * 1.05^(level - 2)`
 
 | Level | XP Required | Cumulative XP |
 |-------|------------|---------------|
 | 1 -> 2 | 100 | 100 |
-| 5 -> 6 | ~152 | ~702 |
-| 10 -> 11 | ~306 | ~2,028 |
-| 20 -> 21 | ~1,237 | ~10,388 |
-| 30 -> 31 | ~5,009 | ~47,580 |
-| 40 -> 41 | ~20,274 | ~202,250 |
-| 49 -> 50 | ~48,000 | ~500,000 |
+| 10 -> 11 | ~155 | ~1,258 |
+| 20 -> 21 | ~253 | ~3,307 |
+| 50 -> 51 | ~1,005 | ~18,279 |
+| 100 -> 101 | ~11,467 | ~218,364 |
+| 150 -> 151 | ~130,880 | ~2,615,609 |
+| 199 -> 200 | ~1,193,913 | ~24,070,261 |
 
-**Total XP to Max Level:** ~500,000 XP
+**Total XP to Max Level:** ~24,070,000 XP
 
 **Level-Up Effects:**
 - Message displaying stat bonuses gained
@@ -104,16 +104,17 @@ Humans receive **+25% XP** from all sources, applied before XP is added to the p
 
 Players gain permanent stat bonuses as they level up:
 
-| Stat | Rate | Max Bonus (Level 50) |
-|------|------|---------------------|
-| Health (HP) | +1 per level | +49 HP |
-| Attack Damage | +1 every 5 levels | +10 |
-| Armor | +1 every 10 levels | +5 |
+| Stat | Rate | Max Bonus (Level 200) |
+|------|------|----------------------|
+| Health (HP) | +1 heart (2 HP) every 10 levels | +40 HP (30 total hearts) |
+| Attack Damage | +1 every 5 levels | +40 |
+| Armor | +1 every 10 levels | +20 |
 
 **Examples:**
-- Level 10: +9 HP, +2 Attack, +1 Armor
-- Level 25: +24 HP, +5 Attack, +2 Armor
-- Level 50: +49 HP, +10 Attack, +5 Armor
+- Level 10: +2 HP (11 hearts), +2 Attack, +1 Armor
+- Level 50: +10 HP (15 hearts), +10 Attack, +5 Armor
+- Level 100: +20 HP (20 hearts), +20 Attack, +10 Armor
+- Level 200: +40 HP (30 hearts), +40 Attack, +20 Armor
 
 ---
 
@@ -146,7 +147,7 @@ Players must reach the required level AND have the appropriate quest book tier t
 | Command | Description |
 |---------|-------------|
 | `/testprogression 500` | Add 500 XP |
-| `/testprogression setlevel 25` | Set level to 25 |
+| `/testprogression setlevel 100` | Set level to 100 |
 | `/testprogression reset` | Reset all progression |
 | `/testprogression info` | Show current stats |
 | `/info` | Show player info including level |

@@ -101,23 +101,26 @@ The Dragon Guardian is a flying boss that spawns when a player first enters the 
 - King's Scale (1, always - boss exclusive)
 
 **Respawn:**
-- After death, a respawn timer begins
-- The boss will not respawn while the timer is active
-- Re-entering the dimension after the timer expires triggers a new spawn
+- 30-minute respawn timer starts on death
+- Graduated announcements: every 5 minutes, then every minute for the last 5, then 30 seconds, then a 10-second countdown (bold red)
+- Boss respawns automatically when the timer expires (no re-entry required)
 
 ### Dragon Variants
 
-In addition to the Dragon Guardian boss, dragon entities appear in several variants:
+The Dragon Realm features both the Dragon Guardian boss and ambient red dragon threats:
 
-| Variant | Color | Location |
-|---------|-------|----------|
-| Red | Dark Red | Dragon Realm (boss variant) |
-| Ice | Aqua | Overworld cold biomes |
-| Lava | Gold | Overworld hot biomes |
-| Earth | Green | Overworld mountain biomes |
-| Wind | White | Overworld mountain peaks |
+| Variant | Color | Location | Spawning |
+|---------|-------|----------|----------|
+| Red (Ambient) | Dark Red | Dragon Realm (roaming) | Natural, max 5 per realm |
+| Red (Boss) | Dark Red | Dragon Realm (arena at 0, 64, 0) | 30-minute respawn timer |
+| Ice | Aqua | Overworld cold biomes | Natural, max 8 total wild |
+| Lava | Gold | Overworld hot biomes | Natural, max 8 total wild |
+| Earth | Green | Overworld mountain biomes | Natural, max 8 total wild |
+| Wind | White | Overworld mountain peaks | Natural, max 8 total wild |
 
-Wild dragons can be tamed as baby/juvenile dragons using raw meat (96 pieces) or Dragon Hearts (33% chance each).
+**Ambient Red Dragons:** Red-variant dragons spawn throughout the Dragon Realm as ambient threats (15% chance per cycle, cap of 5). These are separate from the Dragon Guardian boss and provide ongoing danger while exploring.
+
+**Wild Dragons (Overworld):** Spawn with a 25% chance per cycle, capped at 8 total across the overworld. Can be tamed as baby/juvenile dragons using raw meat (96 pieces) or Dragon Hearts (33% chance each).
 
 ---
 

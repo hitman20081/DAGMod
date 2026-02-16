@@ -1310,7 +1310,7 @@ public class WildDragonEntity extends HostileEntity {
             writeView.putString("OwnerUUID", this.getOwnerUuid().get().toString());
         }
 
-        DagMod.LOGGER.info("[SAVE] Saving Wild {} Dragon (variant: {}, tamed: {}, growth: {}, abandoned: {})",
+        DagMod.LOGGER.debug("[SAVE] Saving Wild {} Dragon (variant: {}, tamed: {}, growth: {}, abandoned: {})",
             this.getVariant().name(), this.getVariant().ordinal(), this.isTamed(), this.getGrowthStage().name(), this.dataTracker.get(IS_ABANDONED));
     }
 
@@ -1326,7 +1326,7 @@ public class WildDragonEntity extends HostileEntity {
         if (variantOrdinal >= 0 && variantOrdinal < DragonGuardianEntity.DragonVariant.values().length) {
             DragonGuardianEntity.DragonVariant loadedVariant = DragonGuardianEntity.DragonVariant.values()[variantOrdinal];
             this.setVariant(loadedVariant);
-            DagMod.LOGGER.info("[LOAD] Loaded Wild {} Dragon (variant ordinal: {})",
+            DagMod.LOGGER.debug("[LOAD] Loaded Wild {} Dragon (variant ordinal: {})",
                 loadedVariant.name(), variantOrdinal);
         } else {
             DagMod.LOGGER.warn("[LOAD] Invalid variant ordinal {}, defaulting to RED", variantOrdinal);
@@ -1357,7 +1357,7 @@ public class WildDragonEntity extends HostileEntity {
             }
         }
 
-        DagMod.LOGGER.info("[LOAD] Loaded Wild Dragon taming state: tamed={}, growth={}, owner={}, abandoned={}",
+        DagMod.LOGGER.debug("[LOAD] Loaded Wild Dragon taming state: tamed={}, growth={}, owner={}, abandoned={}",
             this.isTamed(), this.getGrowthStage().name(), this.getOwnerUuid().isPresent(), this.dataTracker.get(IS_ABANDONED));
     }
 

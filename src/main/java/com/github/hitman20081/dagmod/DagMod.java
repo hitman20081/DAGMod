@@ -303,33 +303,8 @@ public class DagMod implements ModInitializer {
                 StatScalingHandler.applyLevelStats(newPlayer, progressionData.getCurrentLevel());
             }
 
-            BlockPos hallPos = PlayerDataManager.loadHallLocation(newPlayer.getEntityWorld().getServer());
-
-            if (hallPos != null) {
-                // Schedule teleport for 5 ticks later (0.25 seconds)
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(250); // Wait 250ms
-                        newPlayer.getEntityWorld().getServer().execute(() -> {
-                            LOGGER.info("Executing delayed Hall teleport to: " + hallPos);
-                            newPlayer.teleport(
-                                    hallPos.getX() + 0.5,
-                                    hallPos.getY() + 1.0,
-                                    hallPos.getZ() + 0.5,
-                                    true
-                            );
-
-                            newPlayer.sendMessage(
-                                    Text.literal("You have respawned at the Hall of Champions")
-                                            .formatted(Formatting.GOLD),
-                                    false
-                            );
-                        });
-                    } catch (InterruptedException e) {
-                        LOGGER.error("Hall teleport interrupted", e);
-                    }
-                }).start();
-            }
+            // Hall of Champions respawn is now handled by vanilla spawn point system
+            // (set via HallRespawnBlock interaction)
         });
 
         // Load player data when entity loads (login, respawn, dimension change)
@@ -432,12 +407,13 @@ public class DagMod implements ModInitializer {
             // Tick rotating trade manager for rotation checks
             RotatingTradeManager.getInstance().tick();
 
-            // Wild Dragon Spawning
+            // Wild Dragon Spawning (Overworld + Dragon Realm)
             tickCounter++;
             if (tickCounter >= DragonSpawner.getSpawnInterval()) {
                 tickCounter = 0;
                 for (ServerWorld world : server.getWorlds()) {
                     DragonSpawner.trySpawnDragon(world);
+                    DragonSpawner.trySpawnDragonInDragonRealm(world);
                 }
             }
 

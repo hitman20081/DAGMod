@@ -8,18 +8,18 @@ import java.util.UUID;
  *
  * XP Curve Design:
  * - Level 1→2: 100 XP
- * - Each level requires ~15% more XP than previous
- * - Level 49→50: ~48,000 XP
- * - Total XP to reach level 50: ~500,000 XP
- * - Designed for ~20 hours of gameplay
+ * - Each level requires ~5% more XP than previous
+ * - Level 199→200: ~1,900 XP
+ * - Total XP to reach level 200: ~175,000 XP
+ * - Designed for extended but reachable progression
  */
 public class PlayerProgressionData {
 
     // Constants
-    public static final int MAX_LEVEL = 50;
+    public static final int MAX_LEVEL = 200;
     public static final int MIN_LEVEL = 1;
     private static final int BASE_XP_REQUIREMENT = 100;
-    private static final double XP_MULTIPLIER = 1.15;
+    private static final double XP_MULTIPLIER = 1.05;
 
     // Player identifier
     private final UUID playerUUID;

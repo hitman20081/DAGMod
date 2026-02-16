@@ -1177,7 +1177,7 @@ public class DragonGuardianEntity extends HostileEntity {
             writeView.putString("OwnerUUID", this.getOwnerUuid().get().toString());
         }
 
-        DagMod.LOGGER.info("[SAVE] Saving {} Dragon (variant ordinal: {}, tamed: {}, growth: {})",
+        DagMod.LOGGER.debug("[SAVE] Saving {} Dragon (variant ordinal: {}, tamed: {}, growth: {})",
             this.getVariant().name(), this.getVariant().ordinal(), this.isTamed(), this.getGrowthStage().name());
     }
 
@@ -1194,7 +1194,7 @@ public class DragonGuardianEntity extends HostileEntity {
         if (variantOrdinal >= 0 && variantOrdinal < DragonVariant.values().length) {
             DragonVariant loadedVariant = DragonVariant.values()[variantOrdinal];
             this.setVariant(loadedVariant);
-            DagMod.LOGGER.info("[LOAD] Loaded {} Dragon (variant ordinal: {})",
+            DagMod.LOGGER.debug("[LOAD] Loaded {} Dragon (variant ordinal: {})",
                 loadedVariant.name(), variantOrdinal);
         } else {
             DagMod.LOGGER.warn("[LOAD] Invalid variant ordinal {}, defaulting to RED", variantOrdinal);
@@ -1226,7 +1226,7 @@ public class DragonGuardianEntity extends HostileEntity {
             }
         }
 
-        DagMod.LOGGER.info("[LOAD] Loaded dragon taming state: tamed={}, growth={}, owner={}",
+        DagMod.LOGGER.debug("[LOAD] Loaded dragon taming state: tamed={}, growth={}, owner={}",
             this.isTamed(), this.getGrowthStage().name(), this.getOwnerUuid().isPresent());
     }
 

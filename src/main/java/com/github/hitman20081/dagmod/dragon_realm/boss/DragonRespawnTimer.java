@@ -24,13 +24,28 @@ public class DragonRespawnTimer {
     public static final long MAX_RESPAWN_DELAY = 1728000;   // 1 day maximum
 
     // Announcement intervals (in ticks before respawn)
+    // Every 5 minutes, then every minute for last 5, then 30s, then 10s countdown
     private static final long[] ANNOUNCEMENT_INTERVALS = {
+        30000,  // 25 minutes
         24000,  // 20 minutes
+        18000,  // 15 minutes
         12000,  // 10 minutes
         6000,   // 5 minutes
+        4800,   // 4 minutes
+        3600,   // 3 minutes
+        2400,   // 2 minutes
         1200,   // 1 minute
         600,    // 30 seconds
-        200     // 10 seconds
+        200,    // 10 seconds
+        180,    // 9 seconds
+        160,    // 8 seconds
+        140,    // 7 seconds
+        120,    // 6 seconds
+        100,    // 5 seconds
+        80,     // 4 seconds
+        60,     // 3 seconds
+        40,     // 2 seconds
+        20      // 1 second
     };
 
     // Timer state
@@ -135,14 +150,24 @@ public class DragonRespawnTimer {
      * Announce time remaining
      */
     private void announceTimeRemaining(ServerWorld world, long ticksRemaining) {
-        Text message = Text.literal("Dragon Guardian respawning in ")
-                .formatted(Formatting.YELLOW)
-                .append(Text.literal(formatTime(ticksRemaining))
-                        .formatted(Formatting.GOLD))
-                .append(Text.literal("!")
-                        .formatted(Formatting.YELLOW));
+        long totalSeconds = ticksRemaining / 20;
 
-        broadcastToDragonRealm(world, message);
+        if (totalSeconds <= 10) {
+            // Final countdown: bold red numbers
+            Text message = Text.literal("Dragon Guardian respawning in ")
+                    .formatted(Formatting.RED, Formatting.BOLD)
+                    .append(Text.literal(totalSeconds + "...")
+                            .formatted(Formatting.GOLD, Formatting.BOLD));
+            broadcastToDragonRealm(world, message);
+        } else {
+            Text message = Text.literal("Dragon Guardian respawning in ")
+                    .formatted(Formatting.YELLOW)
+                    .append(Text.literal(formatTime(ticksRemaining))
+                            .formatted(Formatting.GOLD))
+                    .append(Text.literal("!")
+                            .formatted(Formatting.YELLOW));
+            broadcastToDragonRealm(world, message);
+        }
     }
 
     /**

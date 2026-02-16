@@ -112,8 +112,15 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
   - **Roar:** Intimidation display applying Slowness to all players within 10 blocks. 20-second cooldown.
   - **Melee Attack:** Flying melee strikes when close.
 - **Drops:** Dragon Scale (3-7), Dragon Bone (2-4), Dragon Skin (1-2), Dragon Heart (1), King's Scale (1, boss exclusive).
-- **Respawn:** Timer starts on death. Boss will not respawn until the timer expires and a player enters the dimension.
+- **Respawn Timer:** 30-minute timer starts on death. Graduated announcements:
+  - Every 5 minutes (25m, 20m, 15m, 10m, 5m remaining)
+  - Every minute for the last 5 minutes
+  - 30-second warning
+  - 10-second countdown (bold red text)
+  - Boss respawns automatically when timer expires
 - **Immune to fall damage.** Cannot despawn.
+
+**Ambient Red Dragons:** In addition to the boss, red-variant dragons roam the Dragon Realm as ambient threats (max 5, 15% spawn chance per cycle). These are weaker than the Dragon Guardian boss and provide ongoing danger while exploring the dimension.
 
 For more information on the Dragon Realm dimension, see [Dimensions](./dimensions.md).
 

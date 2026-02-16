@@ -273,6 +273,15 @@ public class ModBlocks {
 
     // ===== LOCKED CHESTS =====
 
+    // Hall of Champions Respawn Block
+    public static final Block HALL_RESPAWN_BLOCK = register("hall_respawn_block",
+            new HallRespawnBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "hall_respawn_block")))
+                    .strength(50.0f, 1200.0f)
+                    .sounds(BlockSoundGroup.STONE)
+                    .requiresTool()
+                    .luminance(state -> 12)));
+
     public static final Block IRON_CHEST = register("iron_chest",
             new IronChestBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "iron_chest")))
@@ -349,6 +358,10 @@ public class ModBlocks {
                     itemGroup.add(GEM_POLISHING_STATION);
                     itemGroup.add(GEM_INFUSING_STATION);
                 });
+
+        // Hall Respawn Block - Add to Functional group
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+                .register((itemGroup) -> itemGroup.add(HALL_RESPAWN_BLOCK));
 
         // Locked Chests - Add to Functional group
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
