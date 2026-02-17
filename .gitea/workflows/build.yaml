@@ -43,17 +43,17 @@ jobs:
           # 1. Setup Git identity
           git config --global user.email "runner@truenas.local"
           git config --global user.name "Wiki Sync Bot"
-          
+
           # 2. Clone the wiki repo
           git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
-          
+
           # 3. Wipe old files to ensure a clean sync (removes deleted pages)
           rm -rf wiki_repo/*.md
-          
+
           # 4. Copy your now-flat docs directly to the wiki root
           cp docs/*.md wiki_repo/
-          
+
           # 5. Push changes
           cd wiki_repo
           git add .
