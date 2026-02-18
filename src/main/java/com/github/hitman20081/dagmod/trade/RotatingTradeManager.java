@@ -158,6 +158,29 @@ public class RotatingTradeManager {
     }
 
     /**
+     * Force an immediate rotation of all merchant trades.
+     */
+    public void forceRotation() {
+        for (MerchantType type : MerchantType.values()) {
+            int maxRotations = RotatingTradeRegistry.getRotationCount(type);
+            if (maxRotations > 0) {
+                MerchantRotationState state = merchantStates.get(type);
+                state.advanceRotation(maxRotations);
+            }
+        }
+        lastRotationTime = System.currentTimeMillis();
+        saveState();
+        DagMod.LOGGER.info("Forced trade rotation for all merchants");
+    }
+
+    /**
+     * Get merchant states map (for debug display).
+     */
+    public Map<MerchantType, MerchantRotationState> getMerchantStates() {
+        return merchantStates;
+    }
+
+    /**
      * Save the current state to disk.
      * Called on SERVER_STOPPING and after rotations.
      */

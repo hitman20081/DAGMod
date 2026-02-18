@@ -180,6 +180,18 @@ public class GraveManager {
         return true;
     }
 
+    public GraveData getGraveForPlayer(UUID playerId) {
+        return graves.get(playerId);
+    }
+
+    public long getLootDelayTicks() {
+        return LOOT_DELAY_TICKS;
+    }
+
+    public long getCurrentTick() {
+        return server != null ? server.getOverworld().getTime() : 0;
+    }
+
     public boolean hasGraveAt(BlockPos pos, Identifier dimension) {
         return positionLookup.containsKey(positionKey(dimension, pos));
     }
