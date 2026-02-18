@@ -10,3 +10,4 @@
 * [Getting Started](getting_started)
 * [Progression](progression)
 * [Quests](quests)
+* [Commands](commands)

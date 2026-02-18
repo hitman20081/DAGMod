@@ -60,12 +60,12 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
 
 Now that you're familiar with the basics, dive deeper into the world of DAGMod:
 
-*   **[Races Overview](./races/overview.md)**: Detailed information about each race and their bonuses.
-*   **[Classes Overview](./classes/overview.md)**: Class abilities, playstyles, and all available abilities.
+*   **[Races Overview](./races-overview.md)**: Detailed information about each race and their bonuses.
+*   **[Classes Overview](./classes-overview.md)**: Class abilities, playstyles, and all available abilities.
 *   **[Synergies](./synergies.md)**: All race-class combination bonuses.
 *   **[Progression](./progression.md)**: The complete leveling guide, XP sources, and stat bonuses.
 *   **[Quests](./quests.md)**: A comprehensive guide to the quest system, tiers, and race-specific storylines.
-*   **[Items Overview](./items/overview.md)**: A complete item catalog including ability items and consumables.
+*   **[Items Overview](./items-overview.md)**: A complete item catalog including ability items and consumables.
 *   **[Bosses & Dungeons](./bosses_dungeons.md)**: Learn about boss mechanics, loot, and dungeon generation.
 *   **[Merchants](./merchants.md)**: All 13 merchant NPCs and their trade inventories.
 *   **[Party System](./party.md)**: Multiplayer party commands, XP sharing, and party quests.

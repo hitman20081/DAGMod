@@ -328,6 +328,6 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 
 ## Related Guides
 
-- [Items Overview](./items/overview.md) - Complete item catalog
+- [Items Overview](./items-overview.md) - Complete item catalog
 - [Bosses & Dungeons](./bosses_dungeons.md) - Boss loot that complements merchant gear
 - [Getting Started](./getting_started.md) - Finding the Hall of Champions

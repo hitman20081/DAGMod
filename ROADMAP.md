@@ -42,12 +42,15 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - Class-specific items and mechanics
 
 - ✅ **Progression System**
-  - 50 levels with exponential XP scaling
+  - 200 levels with gentle exponential XP scaling (1.05x per level)
   - Multiple XP sources (mining, combat, quests, farming, fishing)
-  - Stat bonuses every 10 levels (+1 HP, +0.5 Attack, +1 Armor)
+  - +1 heart (2 HP) every 10 levels (30 hearts at level 200)
+  - +1 attack every 5 levels (+40 at level 200)
+  - +1 armor every 10 levels (+20 at level 200)
   - Visual XP bar HUD
   - Level requirements for quest tiers
   - **Fixed in v1.4.5**: Health/stats persistence on death
+  - **Reworked in v1.7.0**: Level cap 50→200, heart scaling rework
 
 - ✅ **Quest System**
   - 64+ quests across multiple categories (MAIN, SIDE, CLASS, JOB)
@@ -162,11 +165,11 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 
 ## 🟡 **Partially Implemented Features**
 
-### **Daily Quests** (Target: v1.8.0)
+### **Daily Quests** (Target: v1.9.0)
 - 🟡 **Framework exists** - Job Board has DAILY category support
 - ❌ **Implementation needed** - Daily quest rotation, reset timers, reward scaling
 
-### **Custom Enchantments** (Target: v1.9.0)
+### **Custom Enchantments** (Target: v1.10.0)
 - 🟡 **Framework exists** - `/data/dag009/enchantment/` directory with basic examples
 - ❌ **Implementation needed** - Race/class-specific enchantments, discovery system
 
@@ -174,7 +177,7 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 
 ## ❌ **Planned Features**
 
-### **v1.7.0 - Spells & Crafting**
+### **v1.8.0 - Spells & Crafting**
 Priority: **MEDIUM**
 
 - ❌ **5-7 New Spell Scrolls**
@@ -191,7 +194,7 @@ Priority: **MEDIUM**
   - Rare ingredient requirements
   - Crafting station integration
 
-### **v1.8.0 - Daily Quests**
+### **v1.9.0 - Daily Quests**
 Priority: **MEDIUM**
 
 - ❌ **Daily Quest System**
@@ -201,7 +204,7 @@ Priority: **MEDIUM**
   - Daily quest completion tracking
   - Streak bonuses for consecutive days
 
-### **v1.9.0 - Custom Enchantments**
+### **v1.10.0 - Custom Enchantments**
 Priority: **MEDIUM**
 
 - ❌ **Race-Specific Enchantments**
@@ -524,10 +527,10 @@ Priority: **LOW**
 - ✅ **v1.7.0** (Feb 2026) - Level cap 50→200, heart scaling rework (+1 heart/10 levels)
 
 ### **Short-term** - Next 3-6 months
-- 🎯 **v1.7.1** (Minor) - Enhanced consumable effects (lifesteal, dodge, spell mods)
+- 🎯 **v1.7.1** (Patch) - Enhanced consumable effects (lifesteal, dodge, spell mods)
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
-- 🎯 **v1.8.0** (Minor) - Daily quest system with rotation
-- 🎯 **v1.9.0** (Minor) - Custom race/class enchantments
+- 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
+- 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
 
 ### **Medium-term** - 6-12 months
 - 🎯 **v2.0.0** (Major) - Dungeon bosses, race quest expansions, removes beta tag
@@ -557,7 +560,7 @@ Following **SemVer 2.0.0** format: `MAJOR.MINOR.PATCH-beta`
 - New features added in backwards-compatible manner
 - New content (spells, enchantments, quests, systems)
 - Feature enhancements
-- Examples: v1.6.0 (consumables), v1.7.0 (spells), v2.1.0 (guilds)
+- Examples: v1.6.0 (consumables), v1.7.0 (progression rework), v1.8.0 (spells), v2.1.0 (guilds)
 
 **PATCH version** (0.0.z):
 - Backwards-compatible bug fixes ONLY

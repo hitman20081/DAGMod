@@ -4,12 +4,12 @@ Choose your heritage wisely - your race selection is permanent and defines your 
 
 ## Race Overview
 
-| Race | Health | Special Traits | Best For | Details |
-|------|--------|----------------|----------|---------|
-| Human | 20 HP (10 hearts) | +25% XP gain, balanced | All playstyles, fast progression | [Human Details](<./HUMAN.md>) |
-| Dwarf | 22 HP (11 hearts) | Mining specialist, underground resilience | Resource gathering, cave exploration | [Dwarf Details](<./DWARF.md>) |
-| Elf | 20 HP (10 hearts) | Swift movement, nature affinity | Exploration, speed, forest combat | [Elf Details](<./ELF.md>) |
-| Orc | 26 HP (13 hearts) | Melee powerhouse, hunting expert | Combat, meat farming | [Orc Details](<./ORC.md>) |
+| Race | Health | Special Traits | Best For | Details                       |
+|------|--------|----------------|----------|-------------------------------|
+| Human | 20 HP (10 hearts) | +25% XP gain, balanced | All playstyles, fast progression | [Human Details](<./races-human.md>) |
+| Dwarf | 22 HP (11 hearts) | Mining specialist, underground resilience | Resource gathering, cave exploration | [Dwarf Details](<./races-dwarf.md>) |
+| Elf | 20 HP (10 hearts) | Swift movement, nature affinity | Exploration, speed, forest combat | [Elf Details](<./races-elf.md>)     |
+| Orc | 26 HP (13 hearts) | Melee powerhouse, hunting expert | Combat, meat farming | [Orc Details](<./races-orc.md>)     |
 
 ---
 
@@ -114,8 +114,8 @@ Before choosing your race, consider which class you'll select:
 - Orc Rogue (Massive backstab damage) - BEST burst damage
 - Human Rogue (Jump boost mobility)
 
-See the [Synergies](link) page for complete details on all 9 race-class combinations!
+See the [Synergies](<./synergies.md>) page for complete details on all 9 race-class combinations!
 
 ---
 
-**Next Steps:** Once you've chosen your race, visit the [Classes](link) page to select your class and unlock powerful synergies!
+**Next Steps:** Once you've chosen your race, visit the [Classes](<./classes-overview.md>) page to select your class and unlock powerful synergies!

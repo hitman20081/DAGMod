@@ -8,9 +8,9 @@ Master your destiny by choosing one of three powerful classes. Each class offers
 
 | Class | Health | Playstyle | Abilities | Best For | Details |
 |-------|--------|-----------|-----------|----------|---------|
-| Warrior | 28 HP (14 hearts) | Melee Tank | 6 total abilities | Front-line combat, survivability | [Warrior Details](<./WARRIOR.md>) |
-| Mage | 22 HP (11 hearts) | Magic Caster | 4 abilities + wands + scrolls | Support, ranged attacks, utility | [Mage Details](<./MAGE.md>) |
-| Rogue | 24 HP (12 hearts) | Agile Assassin | 7 total abilities (dual system) | Hit-and-run, burst damage, stealth | [Rogue Details](<./ROGUE.md>) |
+| Warrior | 28 HP (14 hearts) | Melee Tank | 6 total abilities | Front-line combat, survivability | [Warrior Details](<./classes-warrior.md>) |
+| Mage | 22 HP (11 hearts) | Magic Caster | 4 abilities + wands + scrolls | Support, ranged attacks, utility | [Mage Details](<./classes-mage.md>) |
+| Rogue | 24 HP (12 hearts) | Agile Assassin | 7 total abilities (dual system) | Hit-and-run, burst damage, stealth | [Rogue Details](<./classes-rogue.md>) |
 
 ---
 
@@ -103,8 +103,8 @@ All classes can benefit from the **15 consumable powders** added in v1.5.0-beta:
 - **Fortune Dust:** Tracks 10 blocks mined with Fortune III bonus
 - **Cooldown Elixir** (Warrior): Reduces all Warrior ability cooldowns by 30 seconds
 
-Plus 12 more consumables! See [Items](link) page for complete list.
+Plus 12 more consumables! See [Items](<./items-overview.md>) page for complete list.
 
 ---
 
-**Next Steps:** Review [Synergies](link) to see what special abilities your race-class combination unlocks! Then check [Items](link) to see all ability items and how to obtain them.
+**Next Steps:** Review [Synergies](<./synergies.md>) to see what special abilities your race-class combination unlocks! Then check [Items](<./items-overview.md>) to see all ability items and how to obtain them.

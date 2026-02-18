@@ -38,7 +38,7 @@ The Bone Realm features a tiered boss system (see [Bosses & Dungeons](./bosses_d
 
 ### Bone Dungeon Loot
 
-Bone Dungeons generate with three types of loot rooms (see [Boss & Dungeon Loot](./items/boss_dungeon_loot.md) for exact contents):
+Bone Dungeons generate with three types of loot rooms (see [Boss & Dungeon Loot](./items-boss_dungeon_loot.md) for exact contents):
 - **Regular Rooms** - Food, diamonds, emeralds, iron, tiered enchanted books
 - **Portal Rooms** - Ender pearls, obsidian, ender eyes, diamonds
 - **Treasure Rooms** - Same as regular rooms plus enchanted diamond armor and weapons
@@ -154,6 +154,6 @@ These dimensions provide varied environments for exploration and are accessible 
 ## Related Guides
 
 - [Bosses & Dungeons](./bosses_dungeons.md) - Full boss stats and strategies
-- [Boss & Dungeon Loot](./items/boss_dungeon_loot.md) - Complete loot tables
+- [Boss & Dungeon Loot](./items-boss_dungeon_loot.md) - Complete loot tables
 - [Party System](./party.md) - Team up for dimension bosses
 - [Getting Started](./getting_started.md) - Finding your first dungeon

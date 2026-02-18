@@ -40,7 +40,7 @@
 | Dragon Heart | 1 (always) | Rare crafting material, used for taming baby dragons |
 | King's Scale | 1 (always) | Boss-exclusive rare material |
 
-The Dragon Guardian spawns in the Dragon Realm dimension. See [Dimensions](../dimensions.md) for portal construction details.
+The Dragon Guardian spawns in the Dragon Realm dimension. See [Dimensions](./dimensions.md) for portal construction details.
 
 ---
 
@@ -123,4 +123,4 @@ The best loot in bone dungeons. Contains the same base pool as regular rooms (wi
 
 ---
 
-**Acquisition:** Explore Bone Dungeons (generate naturally underground). See [Dimensions](../dimensions.md) for information on the Bone Realm.
+**Acquisition:** Explore Bone Dungeons (generate naturally underground). See [Dimensions](./dimensions.md) for information on the Bone Realm.

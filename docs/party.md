@@ -160,6 +160,6 @@ When in a party, the HUD displays party information:
 ## Related Guides
 
 - [Synergies](./synergies.md) - Team composition recommendations
-- [Classes](./classes/overview.md) - Class roles for party play
+- [Classes](./classes-overview.md) - Class roles for party play
 - [Quests](./quests.md) - Individual quest system
 - [Bosses & Dungeons](./bosses_dungeons.md) - Group boss encounters

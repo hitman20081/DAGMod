@@ -327,7 +327,7 @@ Synergies are checked periodically (approximately every 1 second based on game t
 - Have cooldowns (15-120 seconds)
 - Powerful effects you control
 - Examples: Battle Shout, Arcane Missiles, Blink Strike
-- See [Classes](./classes/overview.md) page for all 17 new abilities!
+- See [Classes](./classes-overview.md) page for all 17 new abilities!
 
 **You have BOTH synergies and class abilities** working together!
 
@@ -416,4 +416,4 @@ A: No, only 9 combinations have unique synergies. Dwarf Rogue, Elf Warrior, and 
 
 ---
 
-**Next Steps:** Ready to begin? Review [Installation](./installation.md) to get started, check out [Classes](./classes/overview.md) for all 17 new abilities, or visit [Quests](./quests.md) to see what adventures await!
+**Next Steps:** Ready to begin? Review [Installation](./installation.md) to get started, check out [Classes](./classes-overview.md) for all 17 new abilities, or visit [Quests](./quests.md) to see what adventures await!

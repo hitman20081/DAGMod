@@ -4,16 +4,12 @@ DAGMod features 17 powerful ability items that grant classes devastating active 
 
 ### ⚔️ Warrior Ability Items (6)
 
-[See Warrior Abilities](<./WARRIOR_ABILITIES.md>)
+[See Warrior Abilities](<./items-class_abilities-warrior_abilities.md>)
 
 ### 🔮 Mage Ability Items (4)
 
-[See Mage Abilities](<./MAGE_ABILITIES.md>)
+[See Mage Abilities](<./items-class_abilities-mage_abilities.md>)
 
-### 🗡️ Rogue Cooldown-Based Ability Items (4)
+### 🗡️ Rogue Ability Items (7)
 
-[See Rogue Abilities](<./ROGUE_ABILITIES.md>)
-
-## Rogue Ability Tome (Energy System)
-
-[See Rogue Abilities](<./ROGUE_ABILITIES.md>)
+[See Rogue Abilities](<./items-class_abilities-rogue_abilities.md>)
