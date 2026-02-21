@@ -46,9 +46,9 @@ jobs:
           # Clean up old folder if it exists from a failed run
           rm -rf wiki_repo
           
-          git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          # Inside the sync-wiki job
+          git clone -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" \
             "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
-
           rm -rf wiki_repo/*.md
           cp docs/*.md wiki_repo/
 
