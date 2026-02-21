@@ -43,20 +43,14 @@ jobs:
         run: |
           git config --global user.email "runner@truenas.local"
           git config --global user.name "Wiki Sync Bot"
-          
-          # Remove any existing folder to prevent "already exists" errors
           rm -rf wiki_repo
           
-          # Clone using your WIKI_TOKEN
           git clone -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" \
             "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
 
-          # Only copy if docs exist, otherwise don't fail the build
           if [ -d "docs" ]; then
             rm -rf wiki_repo/*.md
             cp docs/*.md wiki_repo/
-          else
-            echo "No docs directory found, skipping file copy."
           fi
 
           cd wiki_repo
@@ -65,5 +59,6 @@ jobs:
             echo "No changes to wiki."
           else
             git commit -m "Flat Wiki Sync: ${{ github.sha }}"
-            git -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" push origin master
+            # CHANGED FROM MASTER TO MAIN BELOW
+            git -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" push origin main
           fi
