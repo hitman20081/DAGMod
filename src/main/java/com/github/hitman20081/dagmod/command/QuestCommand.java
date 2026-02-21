@@ -43,7 +43,10 @@ public class QuestCommand {
         // Increment index and return to browse mode
         Integer currentIndex = QuestBlock.playerSelectedIndex.get(playerId);
         if (currentIndex != null) {
-            QuestBlock.playerSelectedIndex.put(playerId, currentIndex + 1);
+            int nextIndex = currentIndex + 1;
+            // showBrowseQuests handles out-of-bounds by returning to main menu,
+            // so just let it increment naturally
+            QuestBlock.playerSelectedIndex.put(playerId, nextIndex);
             QuestBlock.playerMenuState.put(playerId, QuestBlock.MenuState.BROWSE_QUESTS);
             player.sendMessage(Text.literal("Skipping to next quest...").formatted(Formatting.YELLOW), false);
             player.sendMessage(Text.literal("Right-click the Quest Block to continue browsing.").formatted(Formatting.GRAY), false);

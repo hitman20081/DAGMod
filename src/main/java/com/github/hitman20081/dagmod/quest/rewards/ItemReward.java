@@ -5,6 +5,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -13,15 +15,16 @@ public class ItemReward extends QuestReward {
     private final int amount;
 
     public ItemReward(Item item, int amount) {
-        super(RewardType.ITEM, createDescription(item, amount));
+        super(RewardType.ITEM, amount + "x " + Registries.ITEM.getId(item).getPath().replace('_', ' '));
         this.item = item;
         this.amount = amount;
     }
 
-    // Create description text for the reward
-    private static String createDescription(Item item, int amount) {
-        String itemName = item.getName().getString();
-        return amount + " " + itemName + (amount > 1 ? "s" : "");
+    // Build a Text with the translatable item name so the client resolves it
+    private MutableText buildRewardText() {
+        MutableText text = Text.literal(amount + "x ");
+        text.append(item.getName());
+        return text;
     }
 
     @Override
@@ -97,9 +100,18 @@ public class ItemReward extends QuestReward {
         return new ItemReward(item, 1);
     }
 
-    // Override the success message to be more specific
     @Override
-    protected net.minecraft.text.Text createSuccessMessage() {
-        return net.minecraft.text.Text.literal("Quest reward received: " + description);
+    public Text getDisplayText() {
+        return Text.literal("• ").append(buildRewardText());
+    }
+
+    @Override
+    protected Text createSuccessMessage() {
+        return Text.literal("Quest reward received: ").append(buildRewardText());
+    }
+
+    @Override
+    protected Text createFailureMessage() {
+        return Text.literal("Could not receive: ").append(buildRewardText()).append(" (inventory full?)");
     }
 }

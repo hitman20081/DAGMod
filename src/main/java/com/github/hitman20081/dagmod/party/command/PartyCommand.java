@@ -4,6 +4,7 @@ import com.github.hitman20081.dagmod.party.PartyManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -78,7 +79,7 @@ public class PartyCommand {
             }
 
             PartyManager.getInstance().invitePlayer(player, target);
-        } catch (Exception e) {
+        } catch (CommandSyntaxException e) {
             player.sendMessage(Text.literal("Player not found!").formatted(Formatting.RED), false);
             return 0;
         }
@@ -109,7 +110,7 @@ public class PartyCommand {
         try {
             ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
             PartyManager.getInstance().kickPlayer(player, target);
-        } catch (Exception e) {
+        } catch (CommandSyntaxException e) {
             player.sendMessage(Text.literal("Player not found!").formatted(Formatting.RED), false);
             return 0;
         }

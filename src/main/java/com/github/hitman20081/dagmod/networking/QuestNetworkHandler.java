@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class QuestNetworkHandler {
@@ -19,50 +20,61 @@ public class QuestNetworkHandler {
         // Build active quest info list
         List<QuestSyncPacket.QuestInfo> activeQuestInfos = new ArrayList<>();
 
-        for (Quest quest : playerData.getActiveQuests()) {
-            List<String> objectiveDescs = new ArrayList<>();
-            int completedObjectives = 0;
+        Collection<Quest> activeQuests = playerData.getActiveQuests();
+        if (activeQuests != null) {
+            for (Quest quest : activeQuests) {
+                List<String> objectiveDescs = new ArrayList<>();
+                int completedObjectives = 0;
 
-            for (QuestObjective obj : quest.getObjectives()) {
-                objectiveDescs.add(obj.getDisplayText().getString());
-                if (obj.isCompleted()) {
-                    completedObjectives++;
+                List<QuestObjective> objectives = quest.getObjectives();
+                if (objectives != null) {
+                    for (QuestObjective obj : objectives) {
+                        objectiveDescs.add(obj.getDisplayText().getString());
+                        if (obj.isCompleted()) {
+                            completedObjectives++;
+                        }
+                    }
                 }
-            }
 
-            activeQuestInfos.add(new QuestSyncPacket.QuestInfo(
-                    quest.getId(),
-                    quest.getName(),
-                    quest.getDescription(),
-                    quest.getDifficulty(),
-                    completedObjectives,
-                    quest.getObjectives().size(),
-                    quest.isCompleted(),
-                    objectiveDescs
-            ));
+                activeQuestInfos.add(new QuestSyncPacket.QuestInfo(
+                        quest.getId(),
+                        quest.getName(),
+                        quest.getDescription(),
+                        quest.getDifficulty(),
+                        completedObjectives,
+                        objectives != null ? objectives.size() : 0,
+                        quest.isCompleted(),
+                        objectiveDescs
+                ));
+            }
         }
 
-        // NEW: Build available quest info list
+        // Build available quest info list
         List<QuestSyncPacket.QuestInfo> availableQuestInfos = new ArrayList<>();
         List<Quest> availableQuests = manager.getAvailableQuests(player);
 
-        for (Quest quest : availableQuests) {
-            List<String> objectiveDescs = new ArrayList<>();
+        if (availableQuests != null) {
+            for (Quest quest : availableQuests) {
+                List<String> objectiveDescs = new ArrayList<>();
 
-            for (QuestObjective obj : quest.getObjectives()) {
-                objectiveDescs.add(obj.getDisplayText().getString());
+                List<QuestObjective> objectives = quest.getObjectives();
+                if (objectives != null) {
+                    for (QuestObjective obj : objectives) {
+                        objectiveDescs.add(obj.getDisplayText().getString());
+                    }
+                }
+
+                availableQuestInfos.add(new QuestSyncPacket.QuestInfo(
+                        quest.getId(),
+                        quest.getName(),
+                        quest.getDescription(),
+                        quest.getDifficulty(),
+                        0,
+                        objectives != null ? objectives.size() : 0,
+                        false,
+                        objectiveDescs
+                ));
             }
-
-            availableQuestInfos.add(new QuestSyncPacket.QuestInfo(
-                    quest.getId(),
-                    quest.getName(),
-                    quest.getDescription(),
-                    quest.getDifficulty(),
-                    0,  // Not started yet, so 0 objectives complete
-                    quest.getObjectives().size(),
-                    false,  // Not completed
-                    objectiveDescs
-            ));
         }
 
         // Send sync packet with both active and available quests

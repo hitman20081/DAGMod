@@ -89,7 +89,7 @@ public class CooldownCommand {
                         })
                 )
                 .then(CommandManager.literal("clear")
-                        // TODO: Re-add OP permission check using Fabric Permissions API
+                        .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                         .executes(context -> {
                             ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                             String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());

@@ -1,6 +1,8 @@
 package com.github.hitman20081.dagmod.quest.objectives;
 
 import com.github.hitman20081.dagmod.quest.QuestObjective;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,19 +42,24 @@ public class CollectObjective extends QuestObjective {
         return currentProgress > oldProgress;
     }
 
-    // Count specific item in player's inventory
+    // Count specific item in player's inventory (skips enchanted items)
     private int countItemInInventory(PlayerEntity player, Item targetItem) {
         int count = 0;
 
         // Check main inventory
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
-            if (!stack.isEmpty() && stack.getItem() == targetItem) {
+            if (!stack.isEmpty() && stack.getItem() == targetItem && !hasEnchantments(stack)) {
                 count += stack.getCount();
             }
         }
 
         return count;
+    }
+
+    private static boolean hasEnchantments(ItemStack stack) {
+        ItemEnchantmentsComponent enchantments = stack.get(DataComponentTypes.ENCHANTMENTS);
+        return enchantments != null && !enchantments.isEmpty();
     }
 
     // Method to consume items when quest is turned in
@@ -67,7 +74,7 @@ public class CollectObjective extends QuestObjective {
         // Remove items from inventory
         for (int i = 0; i < player.getInventory().size() && itemsToRemove > 0; i++) {
             ItemStack stack = player.getInventory().getStack(i);
-            if (!stack.isEmpty() && stack.getItem() == targetItem) {
+            if (!stack.isEmpty() && stack.getItem() == targetItem && !hasEnchantments(stack)) {
                 int removeFromStack = Math.min(itemsToRemove, stack.getCount());
                 stack.decrement(removeFromStack);
                 itemsToRemove -= removeFromStack;

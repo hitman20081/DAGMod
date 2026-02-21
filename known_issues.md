@@ -7,46 +7,12 @@
 
 ## Open Issues
 
-### 1. Missing Permission Checks on Admin Commands (HIGH)
-
-**Location**: Multiple command files
-**Status**: Open
-
-All admin/debug commands lack OP permission checks. Any player can execute:
-- `/testprogression setlevel 200` — instantly reach max level
-- `/resetclass <player>` — reset another player's class
-- `/dragonrespawn reset/cancel` — manipulate boss timers
-- `/merchant rotate` — force trade rotations
-- `/resource mana/energy set` — set resource values
-- `/cooldown clear` — clear all cooldowns
-
-Every command file has a `// TODO: Re-add OP permission check using Fabric Permissions API` comment. This was removed during a refactor and never re-added.
-
-**Impact**: Progression system, economy, and class balance completely bypassable on multiplayer servers.
-
 ### 2. TagCollectObjective Reliability (MEDIUM)
 
 **Location**: `quest/objectives/TagCollectObjective.java`
 **Status**: Open (documented since v1.5.1)
 
 The `consumeItems()` method can fail to properly consume items when tags contain multiple item types or items are spread across inventory slots. Prefer `CollectObjective` (specific items) for new quests.
-
-### 3. QuestBlock State Race Conditions (MEDIUM)
-
-**Location**: `block/QuestBlock.java`
-**Status**: Open
-
-QuestBlock uses `HashMap` (not `ConcurrentHashMap`) for player state tracking (`playerMenuState`, `playerAvailableQuests`, `playerSelectedIndex`). This can cause:
-- `ConcurrentModificationException` on busy servers
-- Null dereference in `showConfirmAccept()` when `playerSelectedIndex.get()` returns null (unboxing NPE)
-- Unbounded index increment in `/quest skip` (no max bounds check)
-
-### 4. Null Safety in Quest Network Handler (MEDIUM)
-
-**Location**: `networking/QuestNetworkHandler.java`
-**Status**: Open
-
-No null checks on quest objects during iteration in `handleQuestRequest()`. Corrupted quest data files can cause NPE during packet construction.
 
 ### 5. Hard-Coded Magic Numbers (LOW)
 
@@ -61,15 +27,6 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 - Level requirements for quest tiers (8 values)
 - Race bonus percentages (mining, gathering, hunting, XP)
 - Grave loot delay (5 minutes)
-
-### 6. Missing Input Validation (LOW)
-
-**Location**: Command handlers and packet codecs
-**Status**: Open
-
-- Quest IDs not validated for format/length in `/quest abandon` and `/partyquest start`
-- Mana/Energy packet codecs don't validate bounds (NaN, Infinity, negative values)
-- PartyCommand uses catch-all `Exception` instead of `CommandSyntaxException`
 
 ### 7. Consumable TODO Items (LOW)
 
@@ -88,6 +45,12 @@ Several consumables use vanilla status effects as placeholders for their intende
 ---
 
 ## Fixed Issues
+
+### Fixed in v1.7.1
+- Permission checks added to all admin/debug commands (`.requires(hasPermissionLevel(2))`)
+- QuestBlock race conditions: HashMap → ConcurrentHashMap, null guards in `showConfirmAccept()`
+- Null safety in QuestNetworkHandler: guard `getObjectives()` and `getActiveQuests()` against null
+- PartyCommand: catch-all `Exception` → `CommandSyntaxException` in invite/kick handlers
 
 ### Fixed in v1.7.0
 - Level cap increased from 50 to 200 with heart scaling rework

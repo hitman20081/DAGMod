@@ -6,6 +6,7 @@ import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestChain;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
+import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import net.minecraft.registry.tag.ItemTags;
@@ -274,8 +275,8 @@ public class QuestRegistry {
                 .setDescription("Gather a tribute worthy of the Mountain Kings of old.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Dwarf")
-                .addObjective(new CollectObjective(Items.DIAMOND_ORE, 16))
-                .addObjective(new CollectObjective(Items.EMERALD_ORE, 8))
+                .addObjective(new MultiItemCollectObjective("Diamond Ore", 16, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
+                .addObjective(new MultiItemCollectObjective("Emerald Ore", 8, Items.EMERALD_ORE, Items.DEEPSLATE_EMERALD_ORE))
                 .addObjective(new CollectObjective(Items.GOLD_BLOCK, 4))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 2))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 1))
@@ -1478,9 +1479,9 @@ public class QuestRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("Venture into the depths to gather precious resources.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
-                .addObjective(new CollectObjective(Items.IRON_ORE, 20))
-                .addObjective(new CollectObjective(Items.GOLD_ORE, 8))
-                .addObjective(new CollectObjective(Items.DIAMOND_ORE, 3))
+                .addObjective(new MultiItemCollectObjective("Iron Ore", 20, Items.IRON_ORE, Items.DEEPSLATE_IRON_ORE))
+                .addObjective(new MultiItemCollectObjective("Gold Ore", 8, Items.GOLD_ORE, Items.DEEPSLATE_GOLD_ORE))
+                .addObjective(new MultiItemCollectObjective("Diamond Ore", 3, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_BOOK, 1))
                 .addReward(XpReward.expert());

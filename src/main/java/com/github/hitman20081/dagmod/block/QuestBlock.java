@@ -21,16 +21,16 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class QuestBlock extends Block {
 
     // Track what menu state each player is in
-    public static final Map<UUID, MenuState> playerMenuState = new HashMap<>();
-    private static final Map<UUID, List<Quest>> playerAvailableQuests = new HashMap<>();
-    private static final Map<UUID, List<Quest>> playerCompletedQuests = new HashMap<>();
-    public static final Map<UUID, Integer> playerSelectedIndex = new HashMap<>();
+    public static final Map<UUID, MenuState> playerMenuState = new ConcurrentHashMap<>();
+    private static final Map<UUID, List<Quest>> playerAvailableQuests = new ConcurrentHashMap<>();
+    private static final Map<UUID, List<Quest>> playerCompletedQuests = new ConcurrentHashMap<>();
+    public static final Map<UUID, Integer> playerSelectedIndex = new ConcurrentHashMap<>();
 
     public enum MenuState {
         MAIN_MENU,
@@ -275,9 +275,9 @@ public class QuestBlock extends Block {
     private void showConfirmAccept(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
         UUID playerId = player.getUuid();
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
-        int selectedIndex = playerSelectedIndex.get(playerId);
+        int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
-        if (selectedIndex < 0 || selectedIndex >= availableQuests.size()) {
+        if (availableQuests == null || availableQuests.isEmpty() || selectedIndex < 0 || selectedIndex >= availableQuests.size()) {
             player.sendMessage(Text.literal("Invalid quest selection. Returning to menu."), false);
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;

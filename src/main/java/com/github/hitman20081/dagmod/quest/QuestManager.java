@@ -3,6 +3,7 @@ package com.github.hitman20081.dagmod.quest;
 import com.github.hitman20081.dagmod.progression.LevelRequirements;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
+import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.QuestUtils;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import net.minecraft.entity.EntityType;
@@ -226,6 +227,7 @@ public class QuestManager {
             for (QuestObjective objective : quest.getObjectives()) {
                 // Always update collect objectives (they need to track current inventory state)
                 boolean isCollectObjective = (objective instanceof CollectObjective) ||
+                                            (objective instanceof MultiItemCollectObjective) ||
                                             (objective instanceof TagCollectObjective);
 
                 if (!objective.isCompleted() || isCollectObjective) {
@@ -287,6 +289,13 @@ public class QuestManager {
         for (QuestObjective objective : quest.getObjectives()) {
             if (objective instanceof CollectObjective collectObj) {
                 if (!collectObj.consumeItems(player)) {
+                    player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
+                    player.sendMessage(Text.literal("Quest requires items to be present at turn-in.").formatted(net.minecraft.util.Formatting.GRAY), false);
+                    return false;
+                }
+                player.sendMessage(Text.literal("✓ Consumed quest items").formatted(net.minecraft.util.Formatting.GRAY), false);
+            } else if (objective instanceof MultiItemCollectObjective multiCollectObj) {
+                if (!multiCollectObj.consumeItems(player)) {
                     player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
                     player.sendMessage(Text.literal("Quest requires items to be present at turn-in.").formatted(net.minecraft.util.Formatting.GRAY), false);
                     return false;

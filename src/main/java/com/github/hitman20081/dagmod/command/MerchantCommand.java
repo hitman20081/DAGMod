@@ -16,7 +16,7 @@ public class MerchantCommand {
                                 CommandRegistryAccess registryAccess,
                                 CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("merchant")
-                // TODO: Re-add OP permission check using Fabric Permissions API
+                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                 .then(CommandManager.literal("status")
                         .executes(context -> {
                             ServerPlayerEntity player = context.getSource().getPlayerOrThrow();

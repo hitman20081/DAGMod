@@ -1,6 +1,8 @@
 package com.github.hitman20081.dagmod.quest.objectives;
 
 import com.github.hitman20081.dagmod.quest.QuestObjective;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -58,12 +60,17 @@ public class TagCollectObjective extends QuestObjective {
         // Check main inventory
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
-            if (!stack.isEmpty() && stack.isIn(itemTag)) {
+            if (!stack.isEmpty() && stack.isIn(itemTag) && !hasEnchantments(stack)) {
                 count += stack.getCount();
             }
         }
 
         return count;
+    }
+
+    private static boolean hasEnchantments(ItemStack stack) {
+        ItemEnchantmentsComponent enchantments = stack.get(DataComponentTypes.ENCHANTMENTS);
+        return enchantments != null && !enchantments.isEmpty();
     }
 
     // Method to consume items when quest is turned in
@@ -77,7 +84,7 @@ public class TagCollectObjective extends QuestObjective {
 
         for (int i = 0; i < player.getInventory().size() && itemsToRemove > 0; i++) {
             ItemStack stack = player.getInventory().getStack(i);
-            if (!stack.isEmpty() && stack.isIn(itemTag)) {
+            if (!stack.isEmpty() && stack.isIn(itemTag) && !hasEnchantments(stack)) {
                 int removeFromStack = Math.min(itemsToRemove, stack.getCount());
                 stack.decrement(removeFromStack);
                 itemsToRemove -= removeFromStack;

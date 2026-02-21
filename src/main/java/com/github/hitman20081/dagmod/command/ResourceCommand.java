@@ -39,7 +39,7 @@ public class ResourceCommand {
                             return 1;
                         })
                         .then(CommandManager.literal("set")
-                                // TODO: Re-add OP permission check using Fabric Permissions API
+                                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                                 .then(CommandManager.argument("amount", IntegerArgumentType.integer(0, 100))
                                         .executes(context -> {
                                             ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
@@ -83,7 +83,7 @@ public class ResourceCommand {
                             return 1;
                         })
                         .then(CommandManager.literal("set")
-                                // TODO: Re-add OP permission check using Fabric Permissions API
+                                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                                 .then(CommandManager.argument("amount", IntegerArgumentType.integer(0, 100))
                                         .executes(context -> {
                                             ServerPlayerEntity player = context.getSource().getPlayerOrThrow();

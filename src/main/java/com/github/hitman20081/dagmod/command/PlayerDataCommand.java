@@ -27,7 +27,7 @@ public class PlayerDataCommand {
                             return 1;
                         })
                         .then(CommandManager.argument("player", StringArgumentType.word())
-                                // TODO: Re-add OP permission check using Fabric Permissions API
+                                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                                 .executes(context -> {
                                     ServerPlayerEntity source = context.getSource().getPlayerOrThrow();
                                     String targetName = StringArgumentType.getString(context, "player");

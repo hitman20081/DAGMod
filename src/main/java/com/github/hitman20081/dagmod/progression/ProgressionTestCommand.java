@@ -21,14 +21,14 @@ public class ProgressionTestCommand {
                                 CommandManager.RegistrationEnvironment environment) {
 
         dispatcher.register(CommandManager.literal("testprogression")
-                // TODO: Re-add OP permission check using Fabric Permissions API
+                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                 .then(CommandManager.argument("xp", IntegerArgumentType.integer(0))
                         .executes(ProgressionTestCommand::executeAddXP))
                 .executes(ProgressionTestCommand::executeInfo)
         );
 
         dispatcher.register(CommandManager.literal("testprogression")
-                // TODO: Re-add OP permission check using Fabric Permissions API
+                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
                 .then(CommandManager.literal("info")
                         .executes(ProgressionTestCommand::executeInfo))
                 .then(CommandManager.literal("reset")
