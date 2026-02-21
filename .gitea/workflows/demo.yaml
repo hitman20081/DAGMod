@@ -1,9 +1,0 @@
-name: Gitea Actions Demo
-run-name: ${{ github.actor }} is testing Gitea Actions
-on: [push]
-jobs:
-  Explore-Gitea-Actions:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Successfully running on my Proxmox LXC!"
-      - run: docker ps
