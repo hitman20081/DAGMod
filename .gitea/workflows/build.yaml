@@ -22,11 +22,11 @@ jobs:
           JAR_PATH=$(ls build/libs/*.jar | grep -vE "sources|dev|api" | head -n 1)
           VERSION=${GITHUB_REF#refs/tags/}
           RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/$VERSION" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
+            -H "Authorization: token ${{ secrets.WIKI_TOKEN }}" | jq '.id')
           
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.WIKI_TOKEN }}" \
             -H "Content-Type: application/java-archive" \
             -F "attachment=@$JAR_PATH"
 
@@ -38,19 +38,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      # This now uses your newly created WIKI_TOKEN secret
       - name: Sync Docs to Wiki
         run: |
           git config --global user.email "runner@truenas.local"
           git config --global user.name "Wiki Sync Bot"
-          
-          # Clean up old folder if it exists from a failed run
           rm -rf wiki_repo
           
-          # Inside the sync-wiki job
           git clone -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" \
             "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
+
           rm -rf wiki_repo/*.md
-          cp docs/*.md wiki_repo/
+          cp docs/*.md wiki_repo/ || echo "No docs found"
 
           cd wiki_repo
           git add .
@@ -58,5 +57,5 @@ jobs:
             echo "No changes to wiki."
           else
             git commit -m "Flat Wiki Sync: ${{ github.sha }}"
-            git -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" push origin master
+            git -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" push origin master
           fi
