@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I I",
+    "GSG",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:amethyst_cluster",
+    "G": "minecraft:amethyst_shard",
+    "S": "minecraft:diamond_sword"
+  },
+  "result": {
+    "id": "dagmod:crystal_katana",
+    "count": 1
+  }
+}

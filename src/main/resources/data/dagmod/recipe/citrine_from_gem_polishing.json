@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:raw_citrine",
+  "result": {
+    "id": "dagmod:citrine",
+    "count": 2
+  }
+}

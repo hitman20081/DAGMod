@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:emerald_powder",
+    "minecraft:netherite_scrap",
+    "minecraft:blaze_rod"
+  ],
+  "result": {
+    "id": "dagmod:titan_strength",
+    "components": {
+      "minecraft:item_model": "dagmod:titan_strength"
+    },
+    "count": 2
+  }
+}

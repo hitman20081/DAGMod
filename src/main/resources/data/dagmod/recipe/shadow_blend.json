@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:echo_dust",
+    "minecraft:coal",
+    "minecraft:fermented_spider_eye"
+  ],
+  "result": {
+    "id": "dagmod:shadow_blend",
+    "components": {
+      "minecraft:item_model": "dagmod:shadow_blend"
+    },
+    "count": 3
+  }
+}

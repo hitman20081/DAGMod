@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:raw_pink_garnet",
+  "result": {
+    "id": "dagmod:pink_garnet",
+    "count": 2
+  }
+}

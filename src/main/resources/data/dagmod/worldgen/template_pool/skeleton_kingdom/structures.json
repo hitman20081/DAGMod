@@ -1,0 +1,208 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:empty_pool_element"
+      },
+      "weight": 7
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/barracks",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 4
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/chamber_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 4
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/chamber_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 4
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/chamber_3",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 4
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/sauna_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 4
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/small_statue",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 4
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/large_ruin_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/tall_ruin_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/tall_ruin_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/tall_ruin_3",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/tall_ruin_4",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:list_pool_element",
+        "elements": [
+          {
+            "element_type": "minecraft:single_pool_element",
+            "location": "dagmod:skeleton_kingdom/structures/camp_1",
+            "processors": "dagmod:skeleton_kingdom_generic_degradation",
+            "projection": "rigid"
+          },
+          {
+            "element_type": "minecraft:single_pool_element",
+            "location": "dagmod:skeleton_kingdom/structures/camp_2",
+            "processors": "dagmod:skeleton_kingdom_generic_degradation",
+            "projection": "rigid"
+          },
+          {
+            "element_type": "minecraft:single_pool_element",
+            "location": "dagmod:skeleton_kingdom/structures/camp_3",
+            "processors": "dagmod:skeleton_kingdom_generic_degradation",
+            "projection": "rigid"
+          }
+        ],
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/medium_ruin_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/medium_ruin_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/small_ruin_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/small_ruin_2",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/large_pillar_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/structures/medium_pillar_1",
+        "processors": "dagmod:skeleton_kingdom_generic_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:list_pool_element",
+        "elements": [
+          {
+            "element_type": "minecraft:single_pool_element",
+            "location": "dagmod:skeleton_kingdom/structures/ice_box_1",
+            "processors": {
+              "processors": []
+            },
+            "projection": "rigid"
+          }
+        ],
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

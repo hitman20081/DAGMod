@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:diamond_powder",
+    "dagmod:emerald_powder",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "dagmod:cooldown_elixir",
+    "components": {
+      "minecraft:item_model": "dagmod:cooldown_elixir"
+    },
+    "count": 2
+  }
+}

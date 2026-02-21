@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_infusing",
+  "ingredient": "minecraft:diamond",
+  "result": {
+    "id": "dagmod:diamond_powder",
+    "count": 2
+  }
+}

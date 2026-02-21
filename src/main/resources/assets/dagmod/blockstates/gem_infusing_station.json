@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dagmod:block/gem_infusing_station"
+    }
+  }
+}

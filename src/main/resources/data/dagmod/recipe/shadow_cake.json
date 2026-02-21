@@ -1,0 +1,96 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:milk_bucket",
+    "B": "minecraft:sugar",
+    "C": "minecraft:wheat",
+    "E": "minecraft:egg",
+    "D": "minecraft:cocoa_beans"
+  },
+  "pattern": [
+    "DAD",
+    "BEB",
+    "CCC"
+  ],
+  "result": {
+    "components": {
+      "minecraft:consumable": {
+        "consume_seconds": 0.9,
+        "animation": "eat",
+        "sound": "minecraft:entity.generic.eat",
+        "on_consume_effects": [
+          {
+            "type": "minecraft:apply_effects",
+            "effects": [
+              {
+                "id": "minecraft:darkness",
+                "amplifier": 0,
+                "duration": 320,
+                "ambient": false,
+                "show_particles": false,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:speed",
+                "amplifier": 4,
+                "duration": 320,
+                "ambient": false,
+                "show_particles": false,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:water_breathing",
+                "amplifier": 0,
+                "duration": 320,
+                "ambient": false,
+                "show_particles": false,
+                "show_icon": true
+              },
+              {
+                "id": "minecraft:slow_falling",
+                "amplifier": 0,
+                "duration": 320,
+                "ambient": false,
+                "show_particles": false,
+                "show_icon": true
+              }
+            ],
+            "probability": 1
+          }
+        ]
+      },
+      "minecraft:item_name": "{\"text\":\"Shadow Cake\",\"color\":\"#886a9e\"}",
+      "minecraft:food": {
+        "nutrition": 0,
+        "saturation": 0,
+        "can_always_eat": true
+      },
+      "minecraft:death_protection": {
+        "death_effects": [
+          {
+            "type": "minecraft:apply_effects",
+            "effects": [
+              {
+                "id": "minecraft:instant_health",
+                "amplifier": 1,
+                "duration": 48,
+                "ambient": false,
+                "show_particles": true,
+                "show_icon": true
+              }
+            ],
+            "probability": 1
+          }
+        ]
+      },
+      "minecraft:lore": [
+        "{\"text\":\"Don't step into the light\",\"color\":\"#886a9e\"}",
+        "{\"text\":\"Keeps you from dying\",\"color\":\"#886a9e\"}"
+      ],
+      "minecraft:max_stack_size": 64
+    },
+    "count": 8,
+    "id": "minecraft:cake"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:raw_ruby",
+  "result": {
+    "id": "dagmod:ruby",
+    "count": 2
+  }
+}

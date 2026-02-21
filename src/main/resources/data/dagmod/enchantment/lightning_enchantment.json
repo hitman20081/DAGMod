@@ -1,0 +1,61 @@
+{
+  "description": "Lightning",
+  "supported_items": "#minecraft:enchantable/trident",
+  "weight": 3,
+  "max_level": 1,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 1
+  },
+  "max_cost": {
+    "base": 1,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 0,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "effect": {
+          "type": "minecraft:damage_entity",
+          "damage_type": "minecraft:lightning_bolt",
+          "min_damage": 5,
+          "max_damage": 10
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
+      },
+      {
+        "effect": {
+          "type": "minecraft:spawn_particles",
+          "particle": {
+            "type": "minecraft:electric_spark"
+          },
+          "horizontal_position": {
+            "type": "entity_position",
+            "offset": 0,
+            "scale": 1
+          },
+          "vertical_position": {
+            "type": "entity_position",
+            "offset": 0.5,
+            "scale": 1
+          },
+          "horizontal_velocity": {
+            "base": 0.2,
+            "movement_scale": 0
+          },
+          "vertical_velocity": {
+            "base": 0.2,
+            "movement_scale": 0
+          },
+          "speed": 0.5
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
+      }
+    ]
+  }
+}

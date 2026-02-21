@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tanzanite",
+  "ingredients": [
+    "minecraft:crying_obsidian",
+    "dagmod:dragon_heart"
+  ],
+  "result": {
+    "id": "dagmod:obsidian_portal_frame",
+    "components": {}
+  }
+}

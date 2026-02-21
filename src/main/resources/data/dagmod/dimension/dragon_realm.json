@@ -1,0 +1,11 @@
+{
+  "type": "dagmod:dragon_realm",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "dagmod:dragon_realm",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "dagmod:burnt_lands"
+    }
+  }
+}

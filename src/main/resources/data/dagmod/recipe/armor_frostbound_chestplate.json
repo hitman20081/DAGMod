@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/chest_armor",
+    "R": "minecraft:wind_charge",
+    "E": "minecraft:packed_ice"
+  },
+  "result": {
+    "id": "dagmod:frostbound_chestplate",
+    "count": 1
+  }
+}

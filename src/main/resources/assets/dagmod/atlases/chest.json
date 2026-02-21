@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "type": "directory",
+      "prefix": "entity/chest/",
+      "source": "entity/chest"
+    },
+    {
+      "type": "single",
+      "resource": "dagmod:entity/chest/iron",
+      "sprite": "dagmod:entity/chest/iron"
+    }
+  ]
+}

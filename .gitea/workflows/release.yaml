@@ -1,0 +1,28 @@
+name: Auto-Release Description
+on:
+  push:
+    tags:
+      - 'v*' # Triggers when you push a tag like v1.7.0
+
+jobs:
+  generate-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        id: changelog
+        uses: https://github.com/mikepenz/release-changelog-builder-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Gitea Release
+        uses: https://github.com/softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.changelog.outputs.changelog }}
+          prerelease: true # Keeps it marked as Beta
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,18 @@
+{
+  "categories": [
+    {
+      "title": "🚀 New Features",
+      "labels": ["feature", "feat"]
+    },
+    {
+      "title": "🔧 Fixes & Improvements",
+      "labels": ["fix", "improvement"]
+    },
+    {
+      "title": "📜 Documentation",
+      "labels": ["docs"]
+    }
+  ],
+  "template": "# DAGMod ${{ env.RELEASE_VERSION }}\n\n${{ CHANGELOG }}\n\n--- \n*Generated automatically by Gitea Actions*",
+  "prerelease": true
+}

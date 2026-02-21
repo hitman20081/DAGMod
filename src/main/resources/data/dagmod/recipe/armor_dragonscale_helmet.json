@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "minecraft:netherite_helmet",
+    "R": "minecraft:dragon_breath",
+    "E": "minecraft:crying_obsidian"
+  },
+  "result": {
+    "id": "dagmod:dragonscale_helmet",
+    "count": 1
+  }
+}

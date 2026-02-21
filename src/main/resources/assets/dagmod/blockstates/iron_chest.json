@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "dagmod:block/iron_chest"
+    },
+    "facing=south": {
+      "model": "dagmod:block/iron_chest",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "dagmod:block/iron_chest",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "dagmod:block/iron_chest",
+      "y": 90
+    }
+  }
+}

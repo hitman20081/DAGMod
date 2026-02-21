@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "dagmod:block/pink_garnet_ore"
+  }
+}

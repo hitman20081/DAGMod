@@ -1,0 +1,65 @@
+name: Build and Package Mod
+on:
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Clean Zip
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
+          mkdir -p build
+          zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*" ".github/*" "*.md"
+          echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Upload Zip to Gitea Release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ env.FINAL_VERSION }}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
+          curl -X 'POST' \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
+
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync Docs to Wiki
+        run: |
+          # 1. Setup Git identity
+          git config --global user.email "runner@truenas.local"
+          git config --global user.name "Wiki Sync Bot"
+
+          # 2. Clone the wiki repo
+          git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
+
+          # 3. Wipe old files to ensure a clean sync (removes deleted pages)
+          rm -rf wiki_repo/*.md
+
+          # 4. Copy your now-flat docs directly to the wiki root
+          cp docs/*.md wiki_repo/
+
+          # 5. Push changes
+          cd wiki_repo
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to wiki."
+          else
+            git commit -m "Flat Wiki Sync: ${{ github.sha }}"
+            git -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" push origin master
+          fi

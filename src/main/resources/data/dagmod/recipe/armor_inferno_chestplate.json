@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "minecraft:iron_chestplate",
+    "R": "minecraft:fire_charge",
+    "E": "minecraft:blaze_powder"
+  },
+  "result": {
+    "id": "dagmod:inferno_chestplate",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/head_armor",
+    "R": "minecraft:wind_charge",
+    "E": "minecraft:breeze_rod"
+  },
+  "result": {
+    "id": "dagmod:stormcaller_helmet",
+    "count": 1
+  }
+}

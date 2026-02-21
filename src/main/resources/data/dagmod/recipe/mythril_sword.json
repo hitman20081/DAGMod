@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " M ",
+    " M ",
+    " S "
+  ],
+  "key": {
+    "M": "dagmod:mythril_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "dagmod:mythril_sword",
+    "count": 1
+  }
+}

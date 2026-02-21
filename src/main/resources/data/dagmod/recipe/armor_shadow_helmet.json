@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "A": "#minecraft:enchantable/head_armor",
+    "R": "minecraft:ender_pearl",
+    "E": "minecraft:purpur_block"
+  },
+  "result": {
+    "id": "dagmod:shadow_helmet",
+    "count": 1
+  }
+}

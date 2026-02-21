@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dagmod:block/bone_realm_locked_chest"
+    }
+  }
+}

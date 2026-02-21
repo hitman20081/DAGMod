@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:blaze_rod",
+    "dagmod:amethyst_powder",
+    "minecraft:paper",
+    "minecraft:paper"
+  ],
+  "result": {
+    "id": "dagmod:apprentice_wand",
+    "components": {
+      "minecraft:item_model": "dagmod:apprentice_wand"
+    },
+    "count": 1
+  }
+}

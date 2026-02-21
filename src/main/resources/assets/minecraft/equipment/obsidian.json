@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:obsidian_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:obsidian_armor"
+      }
+    ]
+  }
+}

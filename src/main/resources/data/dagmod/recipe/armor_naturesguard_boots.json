@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RAR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:enchanted_golden_apple",
+    "E": "minecraft:golden_carrot",
+    "A": "minecraft:leather_boots"
+  },
+  "result": {
+    "id": "dagmod:naturesguard_boots",
+    "count": 1
+  }
+}

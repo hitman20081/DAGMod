@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " NE",
+    " BN",
+    "B  "
+  ],
+  "key": {
+    "B": "minecraft:bone",
+    "N": "minecraft:nether_star",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "dagmod:necrotic_key",
+    "count": 1
+  }
+}

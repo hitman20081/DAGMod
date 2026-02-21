@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:frostbound_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:frostbound_armor"
+      }
+    ]
+  }
+}

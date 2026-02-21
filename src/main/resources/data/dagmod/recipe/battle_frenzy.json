@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:diamond_powder",
+    "minecraft:redstone",
+    "minecraft:blaze_powder"
+  ],
+  "result": {
+    "id": "dagmod:battle_frenzy",
+    "components": {
+      "minecraft:item_model": "dagmod:battle_frenzy"
+    },
+    "count": 2
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERE",
+    "RLR",
+    "ERE"
+  ],
+  "key": {
+    "R": "minecraft:amethyst_cluster",
+    "E": "minecraft:quartz",
+    "L": "minecraft:diamond_boots"
+  },
+  "result": {
+    "id": "dagmod:crystalforge_boots",
+    "count": 1
+  }
+}

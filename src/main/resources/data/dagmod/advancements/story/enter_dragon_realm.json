@@ -1,0 +1,33 @@
+{
+  "parent": "dagmod:story/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:blackstone"
+    },
+    "title": {
+      "text": "A Realm of Ash",
+      "color": "gray"
+    },
+    "description": {
+      "text": "The air is thick with soot and the ghosts of a forgotten war. What happened here?",
+      "color": "dark_purple"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "entered_dragon_realm": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "dagmod:dragon_realm"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "entered_dragon_realm"
+    ]
+  ]
+}

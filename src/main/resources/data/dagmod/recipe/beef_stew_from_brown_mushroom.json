@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "beef_stew",
+  "ingredients": [
+    "minecraft:baked_potato",
+    "minecraft:cooked_beef",
+    "minecraft:bowl",
+    "minecraft:carrot",
+    "minecraft:brown_mushroom"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dagmod:beef_stew"
+  }
+}

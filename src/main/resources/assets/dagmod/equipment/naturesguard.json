@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:naturesguard_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:naturesguard_armor"
+      }
+    ]
+  }
+}

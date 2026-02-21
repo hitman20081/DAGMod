@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "dagmod:crystalforge_armor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "dagmod:crystalforge_armor"
+      }
+    ]
+  }
+}

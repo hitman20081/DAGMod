@@ -1,0 +1,9 @@
+[
+    {
+      "function": "minecraft:set_name",
+      "name": {
+        "text": "Chest Key"
+      },
+      "target": "item_name"
+    }
+  ]

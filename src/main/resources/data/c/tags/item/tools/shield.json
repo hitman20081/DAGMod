@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "dagmod:inferno_shield",
+    "dagmod:shadow_shield",
+    "dagmod:crystal_shield",
+    "dagmod:dragonbone_shield",
+    "dagmod:frost_shield",
+    "dagmod:nature_shield",
+    "dagmod:solar_shield",
+    "dagmod:stormguard_shield",
+    "dagmod:celestial_shield"
+  ]
+}

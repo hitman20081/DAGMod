@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "dagmod:amethyst_powder",
+    "dagmod:echo_dust",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "dagmod:mana_crystal",
+    "components": {
+      "minecraft:item_model": "dagmod:mana_crystal"
+    },
+    "count": 3
+  }
+}

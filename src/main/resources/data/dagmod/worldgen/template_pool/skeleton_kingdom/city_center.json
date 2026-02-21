@@ -1,0 +1,32 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/city_center_1",
+        "processors": "dagmod:skeleton_kingdom_start_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/city_center_2",
+        "processors": "dagmod:skeleton_kingdom_start_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "dagmod:skeleton_kingdom/city_center/city_center_3",
+        "processors": "dagmod:skeleton_kingdom_start_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

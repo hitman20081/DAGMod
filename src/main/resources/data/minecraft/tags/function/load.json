@@ -1,0 +1,7 @@
+{
+    "values": [
+        "starterplatform:load",
+        "dagmod:load",
+        "seasons:load"
+    ]
+}

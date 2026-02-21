@@ -1,0 +1,29 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "com.github.hitman20081.dagmod.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+      "MageStatusEffectMixin",
+      "RogueDamageMixin",
+      "RaceMiningMixin",
+      "RaceHuntingMixin",
+      "HumanExperienceMixin",
+      "LivingEntityMixin",
+      "ShieldBlockingMixin",
+      "ShatterproofMixin",
+      "ShatterproofDamageMixin",
+      "ShatterproofMiningMixin",
+      "SoulBoundMixin",
+      "DeathGraveMixin"
+	],
+  "client": [
+    "ChestRenderStateMixin",
+    "LockedChestTextureMixin$ChestRendererMixin",
+    "LockedChestTextureMixin$TexturedRenderLayersMixin",
+    "client.ShieldRendererMixin"
+  ],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
