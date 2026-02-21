@@ -11,24 +11,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create Clean Zip
+      # This step actually runs the Minecraft mod compilation
+      - name: Build with Gradle
         run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          if [[ "$VERSION" == refs/heads/* ]]; then VERSION="dev-${GITHUB_SHA::7}"; fi
-          mkdir -p build
-          zip -r "build/DAGMod-$VERSION.zip" . -x ".gitea/*" ".git/*" ".github/*" "*.md"
-          echo "FINAL_VERSION=$VERSION" >> $GITHUB_ENV
+          chmod +x gradlew
+          ./gradlew build
 
-      - name: Upload Zip to Gitea Release
+      - name: Upload Mod Jar to Release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ env.FINAL_VERSION }}" \
+          # Finds the compiled mod file, ignoring -sources or -dev jars
+          JAR_PATH=$(ls build/libs/*.jar | grep -vE "sources|dev|api" | head -n 1)
+          VERSION=${GITHUB_REF#refs/tags/}
+          
+          # Fetches the Release ID for the tag (e.g., v1.7.0)
+          RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/$VERSION" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
+          
+          # Uploads the actual JAR file to the release assets
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: multipart/form-data" \
-            -F "attachment=@build/DAGMod-${{ env.FINAL_VERSION }}.zip"
+            -H "Content-Type: application/java-archive" \
+            -F "attachment=@$JAR_PATH"
 
   sync-wiki:
     runs-on: ubuntu-latest
