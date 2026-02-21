@@ -11,7 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # This step actually runs the Minecraft mod compilation
       - name: Build with Gradle
         run: |
           chmod +x gradlew
@@ -20,15 +19,11 @@ jobs:
       - name: Upload Mod Jar to Release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          # Finds the compiled mod file, ignoring -sources or -dev jars
           JAR_PATH=$(ls build/libs/*.jar | grep -vE "sources|dev|api" | head -n 1)
           VERSION=${GITHUB_REF#refs/tags/}
-          
-          # Fetches the Release ID for the tag (e.g., v1.7.0)
           RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/$VERSION" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
           
-          # Uploads the actual JAR file to the release assets
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -45,21 +40,18 @@ jobs:
 
       - name: Sync Docs to Wiki
         run: |
-          # 1. Setup Git identity
           git config --global user.email "runner@truenas.local"
           git config --global user.name "Wiki Sync Bot"
-
-          # 2. Clone the wiki repo
+          
+          # Clean up old folder if it exists from a failed run
+          rm -rf wiki_repo
+          
           git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
 
-          # 3. Wipe old files to ensure a clean sync (removes deleted pages)
           rm -rf wiki_repo/*.md
-
-          # 4. Copy your now-flat docs directly to the wiki root
           cp docs/*.md wiki_repo/
 
-          # 5. Push changes
           cd wiki_repo
           git add .
           if git diff --staged --quiet; then
