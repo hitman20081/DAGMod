@@ -359,27 +359,27 @@ public class ModItems {
             new Item.Settings().fireproof());
 
     public static final Item CHICKEN_STEW = register("chicken_stew", Item::new, new Item.Settings().food(ModFoodComponents.CHICKEN_STEW));
-    public static final Item BEEF_STEW = register("beef_stew", Item::new, new Item.Settings().food(ModFoodComponents.BEEF_STEW));
-    public static final Item MYSTIC_STEW = register("mystic_stew", Item::new, new Item.Settings().food(ModFoodComponents.MYSTIC_STEW));
-    public static final Item CANDIED_APPLE = register("candied_apple", Item::new, new Item.Settings().food(ModFoodComponents.CANDIED_APPLE));
-    public static final Item CRIMSON_SOUP = register("crimson_soup", Item::new, new Item.Settings().food(ModFoodComponents.CRIMSON_SOUP));
-    public static final Item DRAGONFRUIT_TART = register("dragonfruit_tart", Item::new, new Item.Settings().food(ModFoodComponents.DRAGONFRUIT_TART));
-    public static final Item ELVEN_BREAD = register("elven_bread", Item::new, new Item.Settings().food(ModFoodComponents.ELVEN_BREAD));
-    public static final Item ETHEREAL_COOKIES = register("ethereal_cookies", Item::new, new Item.Settings().food(ModFoodComponents.ETHEREAL_COOKIES));
-    public static final Item FROSTBERRY_PIE = register("frostberry_pie", Item::new, new Item.Settings().food(ModFoodComponents.FROSTBERRY_PIE));
-    public static final Item GLOWBERRY_JAM = register("glowberry_jam", Item::new, new Item.Settings().food(ModFoodComponents.GLOWBERRY_JAM));
-    public static final Item GOLDEN_APPLE_STRUDEL = register("golden_apple_strudel", Item::new, new Item.Settings().food(ModFoodComponents.GOLDEN_APPLE_STRUDEL));
-    public static final Item HONEY_BREAD = register("honey_bread", Item::new, new Item.Settings().food(ModFoodComponents.HONEY_BREAD));
-    public static final Item MOLTEN_CHILI = register("molten_chili", Item::new, new Item.Settings().food(ModFoodComponents.MOLTEN_CHILI));
-    public static final Item NETHER_SALAD = register("nether_salad", Item::new, new Item.Settings().food(ModFoodComponents.NETHER_SALAD));
-    public static final Item PHOENIX_ROAST = register("phoenix_roast", Item::new, new Item.Settings().food(ModFoodComponents.PHOENIX_ROAST));
-    public static final Item PUMPKIN_PARFAIT = register("pumpkin_parfait", Item::new, new Item.Settings().food(ModFoodComponents.PUMPKIN_PARFAIT));
-    public static final Item SAVORY_BEEF_ROAST = register("savory_beef_roast", Item::new, new Item.Settings().food(ModFoodComponents.SAVORY_BEEF_ROAST));
-    public static final Item SHADOW_CAKE = register("shadow_cake", Item::new, new Item.Settings().food(ModFoodComponents.SHADOW_CAKE));
-    public static final Item SPICED_RABBIT = register("spiced_rabbit", Item::new, new Item.Settings().food(ModFoodComponents.SPICED_RABBIT));
-    public static final Item STARFRUIT_SMOOTHIE = register("starfruit_smoothie", Item::new, new Item.Settings().food(ModFoodComponents.STARFRUIT_SMOOTHIE));
-    public static final Item STORMFISH_FILLET = register("stormfish_fillet", Item::new, new Item.Settings().food(ModFoodComponents.STORMFISH_FILLET));
-    public static final Item VOID_TRUFFLES = register("void_truffles", Item::new, new Item.Settings().food(ModFoodComponents.VOID_TRUFFLES));
+    public static final Item BEEF_STEW = register("beef_stew", Item::new, new Item.Settings().food(ModFoodComponents.BEEF_STEW_FOOD, ModFoodComponents.BEEF_STEW_CONSUMABLE));
+    public static final Item MYSTIC_STEW = register("mystic_stew", Item::new, new Item.Settings().food(ModFoodComponents.MYSTIC_STEW_FOOD, ModFoodComponents.MYSTIC_STEW_CONSUMABLE));
+    public static final Item CANDIED_APPLE = register("candied_apple", Item::new, new Item.Settings().food(ModFoodComponents.CANDIED_APPLE_FOOD, ModFoodComponents.CANDIED_APPLE_CONSUMABLE));
+    public static final Item CRIMSON_SOUP = register("crimson_soup", Item::new, new Item.Settings().food(ModFoodComponents.CRIMSON_SOUP_FOOD, ModFoodComponents.CRIMSON_SOUP_CONSUMABLE));
+    public static final Item DRAGONFRUIT_TART = register("dragonfruit_tart", Item::new, new Item.Settings().food(ModFoodComponents.DRAGONFRUIT_TART_FOOD, ModFoodComponents.DRAGONFRUIT_TART_CONSUMABLE));
+    public static final Item ELVEN_BREAD = register("elven_bread", Item::new, new Item.Settings().food(ModFoodComponents.ELVEN_BREAD_FOOD, ModFoodComponents.ELVEN_BREAD_CONSUMABLE));
+    public static final Item ETHEREAL_COOKIES = register("ethereal_cookies", Item::new, new Item.Settings().food(ModFoodComponents.ETHEREAL_COOKIES_FOOD, ModFoodComponents.ETHEREAL_COOKIES_CONSUMABLE));
+    public static final Item FROSTBERRY_PIE = register("frostberry_pie", Item::new, new Item.Settings().food(ModFoodComponents.FROSTBERRY_PIE_FOOD, ModFoodComponents.FROSTBERRY_PIE_CONSUMABLE));
+    public static final Item GLOWBERRY_JAM = register("glowberry_jam", Item::new, new Item.Settings().food(ModFoodComponents.GLOWBERRY_JAM_FOOD, ModFoodComponents.GLOWBERRY_JAM_CONSUMABLE));
+    public static final Item GOLDEN_APPLE_STRUDEL = register("golden_apple_strudel", Item::new, new Item.Settings().food(ModFoodComponents.GOLDEN_APPLE_STRUDEL_FOOD, ModFoodComponents.GOLDEN_APPLE_STRUDEL_CONSUMABLE));
+    public static final Item HONEY_BREAD = register("honey_bread", Item::new, new Item.Settings().food(ModFoodComponents.HONEY_BREAD_FOOD, ModFoodComponents.HONEY_BREAD_CONSUMABLE));
+    public static final Item MOLTEN_CHILI = register("molten_chili", Item::new, new Item.Settings().food(ModFoodComponents.MOLTEN_CHILI_FOOD, ModFoodComponents.MOLTEN_CHILI_CONSUMABLE));
+    public static final Item NETHER_SALAD = register("nether_salad", Item::new, new Item.Settings().food(ModFoodComponents.NETHER_SALAD_FOOD, ModFoodComponents.NETHER_SALAD_CONSUMABLE));
+    public static final Item PHOENIX_ROAST = register("phoenix_roast", Item::new, new Item.Settings().food(ModFoodComponents.PHOENIX_ROAST_FOOD, ModFoodComponents.PHOENIX_ROAST_CONSUMABLE));
+    public static final Item PUMPKIN_PARFAIT = register("pumpkin_parfait", Item::new, new Item.Settings().food(ModFoodComponents.PUMPKIN_PARFAIT_FOOD, ModFoodComponents.PUMPKIN_PARFAIT_CONSUMABLE));
+    public static final Item SAVORY_BEEF_ROAST = register("savory_beef_roast", Item::new, new Item.Settings().food(ModFoodComponents.SAVORY_BEEF_ROAST_FOOD, ModFoodComponents.SAVORY_BEEF_ROAST_CONSUMABLE));
+    public static final Item SHADOW_CAKE = register("shadow_cake", Item::new, new Item.Settings().food(ModFoodComponents.SHADOW_CAKE_FOOD, ModFoodComponents.SHADOW_CAKE_CONSUMABLE));
+    public static final Item SPICED_RABBIT = register("spiced_rabbit", Item::new, new Item.Settings().food(ModFoodComponents.SPICED_RABBIT_FOOD, ModFoodComponents.SPICED_RABBIT_CONSUMABLE));
+    public static final Item STARFRUIT_SMOOTHIE = register("starfruit_smoothie", Item::new, new Item.Settings().food(ModFoodComponents.STARFRUIT_SMOOTHIE_FOOD, ModFoodComponents.STARFRUIT_SMOOTHIE_CONSUMABLE));
+    public static final Item STORMFISH_FILLET = register("stormfish_fillet", Item::new, new Item.Settings().food(ModFoodComponents.STORMFISH_FILLET_FOOD, ModFoodComponents.STORMFISH_FILLET_CONSUMABLE));
+    public static final Item VOID_TRUFFLES = register("void_truffles", Item::new, new Item.Settings().food(ModFoodComponents.VOID_TRUFFLES_FOOD, ModFoodComponents.VOID_TRUFFLES_CONSUMABLE));
 
 
     // Quest Books with actual functionality
