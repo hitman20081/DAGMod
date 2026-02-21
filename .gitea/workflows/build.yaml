@@ -32,13 +32,13 @@ jobs:
 
   sync-wiki:
     runs-on: ubuntu-latest
+    needs: package
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # This now uses your newly created WIKI_TOKEN secret
       - name: Sync Docs to Wiki
         run: |
           git config --global user.email "runner@truenas.local"
