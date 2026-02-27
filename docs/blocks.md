@@ -132,6 +132,40 @@ The Hall Respawn Block sets the player's vanilla spawn point at the Hall of Cham
 
 ---
 
+## Gem Ores
+
+DAGMod adds 6 custom gem ores that generate naturally in the Overworld. Each ore drops a raw gem when mined, which can be smelted into a polished gem. Ores follow a tiered rarity system — common ores spawn higher and in larger veins, while rare ores are found only in the deepest layers.
+
+**Note:** Gem ores only appear in **newly generated chunks**. Previously explored areas will not contain custom ores.
+
+### Ore Distribution
+
+| Ore | Vein Size | Veins/Chunk | Y Range | Variants |
+|-----|-----------|-------------|---------|----------|
+| Citrine Ore | 8 | 7 | -16 to 64 | Stone + Deepslate |
+| Ruby Ore | 6 | 5 | -64 to 32 | Stone + Deepslate |
+| Sapphire Ore | 6 | 5 | -64 to 32 | Stone + Deepslate |
+| Tanzanite Ore | 5 | 4 | -64 to 16 | Stone + Deepslate |
+| Zircon Ore | 5 | 4 | -64 to 16 | Stone + Deepslate |
+| Pink Garnet Ore | 4 | 3 | -64 to -16 | Deepslate only |
+
+### Rarity Tiers
+
+- **Common** — Citrine: Found from upper caves down to mid-depth. Good starter gem.
+- **Uncommon** — Ruby, Sapphire: Found below Y=32, extending into deepslate layers.
+- **Rare** — Tanzanite, Zircon: Deep mining required (below Y=16). Smaller veins.
+- **Very Rare** — Pink Garnet: Deepslate-only, found exclusively below Y=-16 in the deepest layers.
+
+### Gem Processing
+
+Each ore drops a **raw gem** (e.g., Raw Citrine) when mined. Smelt raw gems in a furnace or blast furnace to obtain polished gems (e.g., Citrine). Polished gems are used as crafting materials for advanced items and equipment.
+
+### Mythril Ore
+
+Mythril ore does **not** spawn in the Overworld. It is exclusive to the **Dragon Realm** dimension (see [Dimensions](./dimensions.md)).
+
+---
+
 ## Block Locations
 
 All custom blocks are found in the **Hall of Champions**, a structure that serves as the central hub for character creation and quest management.

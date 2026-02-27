@@ -1,0 +1,51 @@
+{
+  "name": "dagmod:bone_dungeon/corridors",
+  "fallback": "dagmod:bone_dungeon/terminator",
+  "elements": [
+    {
+      "weight": 40,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_hallway",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 18,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_corner_left",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 18,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_corner_right",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_crossway",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_stairway",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

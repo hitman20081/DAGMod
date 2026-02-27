@@ -1,6 +1,6 @@
-# DAGMod Testing Checklist - v1.7.0
+# DAGMod Testing Checklist - v1.7.1
 
-**Version**: v1.7.0
+**Version**: v1.7.1
 **Test Date**: _____________
 **Tester**: _____________
 **Minecraft Version**: 1.21.11

@@ -1,0 +1,15 @@
+{
+  "name": "dagmod:bone_dungeon/portal_wing",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_portal_room",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

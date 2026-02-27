@@ -6,13 +6,13 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "dagmod:multi_exclusion_random_spread",
     "salt": 1938475620,
     "spacing": 28,
-    "separation": 10
-  },
-  "exclusion_zone": {
-    "other_set": "dagmod:hall_spawn",
-    "chunk_count": 15
+    "separation": 10,
+    "exclusion_zones": [
+      { "other_set": "dagmod:hall_spawn",      "chunk_count": 15 },
+      { "other_set": "dagmod:bone_dungeon_set","chunk_count": 12 }
+    ]
   }
 }

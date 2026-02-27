@@ -6,14 +6,14 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "dagmod:multi_exclusion_random_spread",
     "salt": 1649512346,
     "spacing": 36,
     "separation": 16,
-    "locate_offset": [0, 0, 0]
-  },
-  "exclusion_zone": {
-    "other_set": "dagmod:village_npc_set",
-    "chunk_count": 8
+    "exclusion_zones": [
+      { "other_set": "dagmod:hall_spawn",      "chunk_count": 16 },
+      { "other_set": "dagmod:village_npc_set", "chunk_count": 10 },
+      { "other_set": "dagmod:bone_dungeon_set","chunk_count": 15 }
+    ]
   }
 }

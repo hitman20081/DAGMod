@@ -152,6 +152,12 @@ public class DagMod implements ModInitializer {
 
         ModBlocks.initialize();
 
+        // Register custom structure placement types (must be before world creation)
+        com.github.hitman20081.dagmod.world.ModStructurePlacements.register();
+
+        // Register ore generation in overworld
+        com.github.hitman20081.dagmod.world.ModOreGeneration.register();
+
         // Register block entities
         com.github.hitman20081.dagmod.block.entity.ModBlockEntities.registerBlockEntities();
 

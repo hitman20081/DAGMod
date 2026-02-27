@@ -18,8 +18,13 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "components": {
-                      "minecraft:enchantments": {}
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantments": "minecraft:silk_touch",
+                          "levels": { "min": 1 }
+                        }
+                      ]
                     }
                   }
                 }

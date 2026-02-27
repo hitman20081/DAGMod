@@ -456,6 +456,10 @@ public class ModItems {
     public static final Item HALL_LOCATOR = register("hall_locator",
             HallLocatorItem::new, new Item.Settings().maxCount(1).rarity(Rarity.RARE));
 
+    // Bone Dungeon Locator
+    public static final Item BONE_DUNGEON_LOCATOR = register("bone_dungeon_locator",
+            BoneDungeonLocatorItem::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
+
     // Mage Spell Scrolls
     public static final Item HEAL_SCROLL = register("heal_scroll",
             settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.HEAL),
@@ -1012,8 +1016,10 @@ public class ModItems {
 
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
-                .register((itemGroup) ->
-                        itemGroup.add(ModItems.HALL_LOCATOR));
+                .register((itemGroup) -> {
+                        itemGroup.add(ModItems.HALL_LOCATOR);
+                        itemGroup.add(ModItems.BONE_DUNGEON_LOCATOR);
+                });
 
         // Add to Tools group
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)

@@ -5,6 +5,51 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.2] - 2026-02-27
+
+### Fixed
+
+**Bone Dungeon Generation**:
+- Fixed portal room never spawning — root cause was a self-referential jigsaw block: the portal room entrance had `Target Name: dagmod:portal_entry` (matching its own `Name`), causing silent placement failure. Changed to `Target Name: dagmod:corridor_exit` to correctly match boss room exit blocks
+- Fixed stairway U-shape generation — back-to-back stairways created U-shaped paths because the second stairway's entrance is at the top, so its exit immediately ascended again. Removed stairway from the `main` template pool so stairway exits connect to rooms, hallways, or corners instead
+- Fixed crossways forming square patterns — crossway weight reduced from 20 to 4 in the `corridors` pool. With three exits each, the old 25% chance caused exponential branching that produced clusters of interconnected crossways
+
+### Changed
+
+**Bone Dungeon Improvements**:
+- Increased boss crossway (`crossway_boss`) spawn reliability — weight raised from 2 to 6 in the `main` pool
+- Added `no_water` structure processor to all dungeon pieces — replaces any water and kelp within the structure footprint with air at world generation time, preventing flooded rooms
+- Restricted bone dungeon spawn biomes to **desert, badlands, wooded badlands, and eroded badlands** — these biomes suppress underground aquifer generation, eliminating water intrusion at dungeon depth
+- Changed structure step from `surface_structures` to `underground_structures` — more appropriate for an underground jigsaw dungeon
+- Split template pools into `corridors` (used by crossway exits) and `main` (used by hallway/corner exits) — allows independent weight tuning for each pool tier
+
+### Added
+
+- Added translation key for `bone_dungeon_locator` item: `"item.dagmod.bone_dungeon_locator": "Bone Dungeon Locator"`
+
+### Notes
+- Bone dungeons now only generate in desert and badlands biomes — existing worlds must explore new chunks to encounter them
+
+---
+
+## [1.7.1] - 2026-02-23
+
+### Added
+
+**Gem Ore Worldgen**:
+- 6 custom gem ores now generate naturally in the Overworld: Citrine, Ruby, Sapphire, Tanzanite, Zircon, and Pink Garnet
+- Each ore has stone and deepslate variants (Pink Garnet is deepslate-only)
+- Ores follow a tiered rarity system with varying vein sizes, spawn rates, and Y-ranges
+- Citrine (common, Y -16 to 64), Ruby/Sapphire (uncommon, Y -64 to 32), Tanzanite/Zircon (rare, Y -64 to 16), Pink Garnet (very rare, Y -64 to -16)
+- Mythril ore remains exclusive to the Dragon Realm
+- Added configured_feature and placed_feature JSON for all 6 ores
+- Added `ModOreGeneration` class using Fabric's `BiomeModifications` API
+
+### Notes
+- Gem ores only appear in newly generated chunks
+
+---
+
 ## [1.7.0] - 2026-02-16
 
 ### Changed

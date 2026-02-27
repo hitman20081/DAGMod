@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.0
-**Last Updated**: 2026-02-16
+**Current Version**: v1.7.1
+**Last Updated**: 2026-02-23
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -525,9 +525,10 @@ Priority: **LOW**
 - ✅ **v1.6.5-beta** (Feb 2026) - 5 new merchant NPCs (13 total), quest progression fixes, loot table fixes
 - ✅ **v1.6.6-beta** (Feb 2026) - Java-based death recovery (grave) system, replaces datapack graves
 - ✅ **v1.7.0** (Feb 2026) - Level cap 50→200, heart scaling rework (+1 heart/10 levels)
+- ✅ **v1.7.1** (Feb 2026) - Gem ore worldgen in Overworld (6 custom ores with tiered rarity)
 
 ### **Short-term** - Next 3-6 months
-- 🎯 **v1.7.1** (Patch) - Enhanced consumable effects (lifesteal, dodge, spell mods)
+- 🎯 **v1.7.2** (Patch) - Enhanced consumable effects (lifesteal, dodge, spell mods)
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
@@ -592,7 +593,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-02-16
+**Last Updated**: 2026-02-23
 **Maintained By**: hitman20081
-**Current Version**: v1.7.0
+**Current Version**: v1.7.1
 **License**: See LICENSE file

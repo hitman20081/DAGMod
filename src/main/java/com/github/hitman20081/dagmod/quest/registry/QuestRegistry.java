@@ -78,6 +78,9 @@ public class QuestRegistry {
         manager.registerQuest(createChallengeTheWitherQuest());
         manager.registerQuest(createWarlordQuest());
 
+        // ========== DUNGEON DISCOVERY QUESTS ==========
+        manager.registerQuest(createRumoursOfTheBoneKingQuest());
+
         // ========== CLASS-SPECIFIC QUESTS ==========
 
         // Warrior Quests - NEW ABILITY CHAIN
@@ -1631,6 +1634,22 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.WHEAT, 32))
                 .addReward(new ItemReward(Items.EMERALD, 2))
                 .addReward(new ItemReward(Items.BREAD, 8))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createRumoursOfTheBoneKingQuest() {
+        return new Quest("rumours_of_the_bone_king")
+                .setName("Rumours of the Bone King")
+                .setCategory(Quest.QuestCategory.SIDE)
+                .setDescription("Travellers speak of ancient bone-filled ruins buried deep in the earth. " +
+                    "The skeletons that roam the surface are but echoes of something far worse below. " +
+                    "Slay enough of them to earn a chart that marks the entrance to the nearest dungeon.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(KillObjective.skeletons(20))
+                .addObjective(new CollectObjective(Items.BONE, 10))
+                .addReward(new ItemReward(ModItems.BONE_DUNGEON_LOCATOR, 1))
+                .addReward(new ItemReward(Items.IRON_SWORD, 1))
+                .addReward(new ItemReward(Items.TORCH, 32))
                 .addReward(XpReward.novice());
     }
 

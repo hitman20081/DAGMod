@@ -2,7 +2,7 @@
 
 DAGMod features over 100 custom items that enhance your RPG experience. From selection tokens to fantasy foods, quest books to magical scrolls, powerful class ability items to custom armor sets, discover the complete catalog of items available in your adventure.
 
-**Current Version:** v1.6.5-beta
+**Current Version:** v1.7.1
 
 ---
 
@@ -52,6 +52,11 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 - Bone Dungeon chest loot
 - Enchanted books
 - Rare materials
+
+**Mining:**
+- Gem ores (Citrine, Ruby, Sapphire, Tanzanite, Zircon, Pink Garnet)
+- Raw gems from ore blocks, smelted into polished gems
+- Found at varying depths in the Overworld (see [Blocks - Gem Ores](./blocks.md#gem-ores))
 
 **Crafting:**
 - Hall Locator

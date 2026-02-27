@@ -2,9 +2,9 @@
   "type": "minecraft:jigsaw",
   "start_pool": "dagmod:bone_dungeon/entryway_pool",
   "size": 20,
-  "max_distance_from_center": 80,
+  "max_distance_from_center": 116,
   "biomes": "#minecraft:has_structure/bone_dungeon",
-  "step": "surface_structures",
+  "step": "underground_structures",
   "spawn_overrides": {},
   "terrain_adaptation": "beard_thin",
   "start_height": {

@@ -342,6 +342,7 @@
   "item.dagmod.elf_token": "Elven Heritage Token",
   "item.dagmod.orc_token": "Orcish Heritage Token",
   "item.dagmod.hall_locator": "Hall Locator",
+  "item.dagmod.bone_dungeon_locator": "Bone Dungeon Locator",
 
   "_comment_npcs": "=== NPC ENTITIES ===",
   "entity.dagmod.simple_npc": "Villager",

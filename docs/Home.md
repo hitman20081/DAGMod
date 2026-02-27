@@ -17,7 +17,21 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.7.0 (February 2026)
+Current Version v1.7.2 (February 2026)
+
+---
+
+## 🎮 What's New in v1.7.2
+
+### Bone Dungeon Overhaul
+
+🏚️ **Bone Dungeon generation has been significantly improved:**
+- **Portal rooms now spawn correctly** — fixed a silent generation failure caused by a self-referential jigsaw block Target Name
+- **No more stairway U-shapes** — stairways no longer connect back-to-back, so dungeon paths flow naturally
+- **No more crossway clusters** — crossway spawn weight reduced to prevent exponential branching and square formation patterns
+- **Water-free dungeons** — all structure pieces now include a processor that removes water and kelp at generation time
+- **Desert & badlands only** — dungeons now generate exclusively in dry biomes (desert, badlands, wooded badlands, eroded badlands) to eliminate aquifer water intrusion
+- **Boss crossway more common** — boss room chain spawn rate increased for more consistent boss encounter availability
 
 ---
 
@@ -162,11 +176,11 @@ Discover 9 unique race-class combinations with special abilities
 - Orc Warriors enter Berserker rage when low on health
 - And 6 more powerful synergies!
 
-### 📊 Progression System (Levels 1-50)
+### 📊 Progression System (Levels 1-200)
 - Gain XP from mining, combat, quests, and gathering
-- Earn stat bonuses as you level: +1 HP per level, +1 attack every 5 levels, +1 armor every 10 levels
+- Earn stat bonuses as you level: +1 heart every 10 levels, +1 attack every 5 levels, +1 armor every 10 levels
 - Visual progression HUD showing XP and level
-- Total of +49 HP, +10 attack, and +5 armor at level 50!
+- Total of +20 hearts, +40 attack, and +20 armor at level 200!
 
 ### 📜 Quest System
 Progress through an epic quest system
@@ -182,10 +196,11 @@ Progress through an epic quest system
 
 ### 🏰 Bone Dungeons
 Explore procedurally generated underground dungeons
-- Jigsaw-based generation - every dungeon is unique
-- 10 structure pieces including treasure rooms and portal rooms
-- Custom loot tables with enchanted gear, diamonds, and rare items
-- Natural terrain integration
+- Jigsaw-based generation — every dungeon is unique
+- 10 structure pieces: hallways, corners, crossways, stairways, rooms, treasure room, and portal room
+- Custom loot tables with tiered enchanted books, diamonds, and rare items
+- Generates in desert and badlands biomes — guaranteed dry, water-free dungeons
+- Boss crossway leads to the Skeleton King encounter and a portal to the Bone Realm
 
 ### 👑 Boss System
 Face the Bone Realm Boss hierarchy

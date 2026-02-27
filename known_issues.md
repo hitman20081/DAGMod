@@ -1,11 +1,41 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-02-18
-**Version**: v1.7.0
+**Last Updated**: 2026-02-27
+**Version**: v1.7.2
 
 ---
 
 ## Open Issues
+
+### 8. Block-Attached Entity at Invalid Position (LOW)
+
+**Location**: Vanilla Minecraft worldgen (`BlockPos` / `class_2338` in production jar)
+**Status**: Open — cosmetic/harmless, no gameplay impact
+
+During chunk generation, repeated log warnings appear:
+
+```
+[Server thread/WARN]: Block-attached entity at invalid position BlockPos{x=..., y=-55, z=...}
+```
+
+**Observed pattern**:
+- Three consecutive X positions followed by one at Z+4, Y-1 (e.g. X=-147,-146,-145 then X=-141 at Y=-56)
+- Y range: y=-55 to y=-57 (deepslate layer, above bedrock)
+- Same Z coordinates (e.g. z=14, z=18) appear across different world seeds with different X offsets
+- Errors repeat each time the affected chunks are regenerated/re-entered
+
+**Investigation findings**:
+- Affected chunk NBT shows `block_entities: 0 entries` — no stored block entity data
+- No entity data found in the `entities/` region folder for affected chunks
+- No Ancient City or special structure present at reported coordinates — just solid blocks
+- Errors are logged by vanilla Minecraft code, not DAGMod code
+- Attempted fixes: `/setblock` to reset blocks (temporary), excluding `minecraft:deep_dark` from ore generation in `ModOreGeneration.java` — neither resolved the issue
+
+**Working theory**: A worldgen interaction (possibly ore feature placement, jigsaw structure, or biome decoration) triggers a temporary invalid block entity state that vanilla detects and warns about. The entity is never actually stored, so the error is self-resolving.
+
+**Next steps**: Capture a full stack trace from the warning to identify the exact vanilla callsite and what feature is running at that position during worldgen.
+
+---
 
 ### 2. TagCollectObjective Reliability (MEDIUM)
 
@@ -45,6 +75,12 @@ Several consumables use vanilla status effects as placeholders for their intende
 ---
 
 ## Fixed Issues
+
+### Fixed in v1.7.2
+- Bone dungeon portal room never spawning (self-referential jigsaw `Target Name` bug)
+- Stairway U-shape generation (stairway removed from `main` pool)
+- Crossway over-spawning / square cluster formation (weight reduced 20→4 in `corridors` pool)
+- Water flooding dungeon rooms (added `no_water` structure processor to all pieces; restricted biomes to desert/badlands)
 
 ### Fixed in v1.7.1
 - Permission checks added to all admin/debug commands (`.requires(hasPermissionLevel(2))`)
