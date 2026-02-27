@@ -1,28 +1,29 @@
-name: Auto-Release Description
+name: Upload Release Asset
 on:
   push:
     tags:
-      - 'v*' # Triggers when you push a tag like v1.7.0
+      - 'v*'
 
 jobs:
-  generate-release:
+  upload:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Generate Changelog
-        id: changelog
-        uses: https://github.com/mikepenz/release-changelog-builder-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Gitea Release
-        uses: https://github.com/softprops/action-gh-release@v1
-        with:
-          body: ${{ steps.changelog.outputs.changelog }}
-          prerelease: true # Keeps it marked as Beta
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Mod Jar
+        run: |
+          # 1. Find the compiled jar
+          JAR_PATH=$(ls build/libs/*.jar | grep -vE "sources|dev|api" | head -n 1)
+          VERSION=${GITHUB_REF#refs/tags/}
+          
+          # 2. Get the Release ID from your Gitea API
+          RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/$VERSION" \
+            -H "Authorization: token ${{ secrets.WIKI_TOKEN }}" | jq '.id')
+          
+          # 3. Upload the asset directly
+          curl -X 'POST' \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
+            -H "Authorization: token ${{ secrets.WIKI_TOKEN }}" \
+            -H "Content-Type: application/java-archive" \
+            -F "attachment=@$JAR_PATH"

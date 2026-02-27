@@ -1,7 +1,7 @@
 name: Build and Package Mod
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     tags: [ 'v*' ]
 
 jobs:
@@ -11,7 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # This step actually runs the Minecraft mod compilation
       - name: Build with Gradle
         run: |
           chmod +x gradlew
@@ -20,23 +19,20 @@ jobs:
       - name: Upload Mod Jar to Release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          # Finds the compiled mod file, ignoring -sources or -dev jars
           JAR_PATH=$(ls build/libs/*.jar | grep -vE "sources|dev|api" | head -n 1)
           VERSION=${GITHUB_REF#refs/tags/}
-          
-          # Fetches the Release ID for the tag (e.g., v1.7.0)
           RELEASE_ID=$(curl -s "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/tags/$VERSION" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
-          
-          # Uploads the actual JAR file to the release assets
+            -H "Authorization: token ${{ secrets.WIKI_TOKEN }}" | jq '.id')
+
           curl -X 'POST' \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN e}}" \
+            -H "Authorization: token ${{ secrets.WIKI_TOKEN }}" \
             -H "Content-Type: application/java-archive" \
             -F "attachment=@$JAR_PATH"
 
   sync-wiki:
     runs-on: ubuntu-latest
+    needs: package
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -45,26 +41,24 @@ jobs:
 
       - name: Sync Docs to Wiki
         run: |
-          # 1. Setup Git identity
           git config --global user.email "runner@truenas.local"
           git config --global user.name "Wiki Sync Bot"
-
-          # 2. Clone the wiki repo
-          git clone -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          rm -rf wiki_repo
+          
+          git clone -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" \
             "${{ github.server_url }}/${{ github.repository }}.wiki.git" wiki_repo
 
-          # 3. Wipe old files to ensure a clean sync (removes deleted pages)
-          rm -rf wiki_repo/*.md
+          if [ -d "docs" ]; then
+            rm -rf wiki_repo/*.md
+            cp docs/*.md wiki_repo/
+          fi
 
-          # 4. Copy your now-flat docs directly to the wiki root
-          cp docs/*.md wiki_repo/
-
-          # 5. Push changes
           cd wiki_repo
           git add .
           if git diff --staged --quiet; then
             echo "No changes to wiki."
           else
             git commit -m "Flat Wiki Sync: ${{ github.sha }}"
-            git -c http.extraheader="Authorization: token ${{ secrets.GITHUB_TOKEN }}" push origin master
+            # CHANGED FROM MASTER TO MAIN BELOW
+            git -c http.extraheader="Authorization: token ${{ secrets.WIKI_TOKEN }}" push origin main
           fi
