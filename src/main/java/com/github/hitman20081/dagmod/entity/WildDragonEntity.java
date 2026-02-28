@@ -755,6 +755,13 @@ public class WildDragonEntity extends HostileEntity {
         }
     }
 
+    /**
+     * Subclasses can override this to guarantee a Dragon Heart drop on death.
+     */
+    protected boolean alwaysDropHeart() {
+        return false;
+    }
+
     public static DefaultAttributeContainer.Builder createWildDragonAttributes() {
         return HostileEntity.createHostileAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 40.0)           // 40 HP (vs boss 200 HP)
@@ -1183,8 +1190,8 @@ public class WildDragonEntity extends HostileEntity {
             ItemEntity skinEntity = new ItemEntity(serverWorld, this.getX(), this.getY(), this.getZ(), skinStack);
             serverWorld.spawnEntity(skinEntity);
 
-            // 50% chance to drop Dragon Heart
-            if (this.random.nextBoolean()) {
+            // Drop Dragon Heart: guaranteed for quest-specific subclasses, 50% otherwise
+            if (this.alwaysDropHeart() || this.random.nextBoolean()) {
                 ItemStack heartStack = new ItemStack(ModItems.DRAGON_HEART, 1);
                 ItemEntity heartEntity = new ItemEntity(serverWorld, this.getX(), this.getY(), this.getZ(), heartStack);
                 serverWorld.spawnEntity(heartEntity);
@@ -1192,6 +1199,11 @@ public class WildDragonEntity extends HostileEntity {
 
             // Remove this dragon's location from spawn tracking
             DragonSpawner.removeDragonLocation(this.getBlockPos());
+
+            // Start respawn cooldown — only for natural wild dragons, not quest subclasses
+            if (this.getClass() == WildDragonEntity.class) {
+                DragonSpawner.recordDragonDeath(serverWorld.getTime());
+            }
         }
     }
 

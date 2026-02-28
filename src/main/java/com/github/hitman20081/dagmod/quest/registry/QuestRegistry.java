@@ -1,5 +1,7 @@
 package com.github.hitman20081.dagmod.quest.registry;
 
+import com.github.hitman20081.dagmod.dragon_realm.DragonRealmRegistry;
+import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestManager;
@@ -11,9 +13,11 @@ import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import net.minecraft.registry.tag.ItemTags;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
+import com.github.hitman20081.dagmod.quest.rewards.UnlockReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 public class QuestRegistry {
 
@@ -80,6 +84,7 @@ public class QuestRegistry {
 
         // ========== DUNGEON DISCOVERY QUESTS ==========
         manager.registerQuest(createRumoursOfTheBoneKingQuest());
+        manager.registerQuest(createRedDragonFuryQuest());
 
         // ========== CLASS-SPECIFIC QUESTS ==========
 
@@ -1651,6 +1656,25 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.IRON_SWORD, 1))
                 .addReward(new ItemReward(Items.TORCH, 32))
                 .addReward(XpReward.novice());
+    }
+
+    private static Quest createRedDragonFuryQuest() {
+        return new Quest("red_dragon_fury")
+                .setName("The Red Dragon's Fury")
+                .setCategory(Quest.QuestCategory.SIDE)
+                .setDescription("A village on the outskirts has been terrorised by a Red Dragon — buildings burned, " +
+                    "livestock taken, and survivors scattered. The beast must be slain before it strikes again. " +
+                    "Hunt it down, claim its heart and scales, then forge the Dragon Key to unlock the portal " +
+                    "at the Hall of Champions and enter the Dragon Realm.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .addObjective(new KillObjective(ModEntities.RED_DRAGON, 1))
+                .addObjective(new CollectObjective(ModItems.DRAGON_HEART, 1))
+                .addObjective(new CollectObjective(ModItems.DRAGON_SCALE, 3))
+                .addObjective(new CollectObjective(ModItems.DRAGON_BONE, 2))
+                .addReward(new ItemReward(DragonRealmRegistry.DRAGON_KEY, 1))
+                .addReward(new UnlockReward(Identifier.of("dagmod", "dragon_key"), "Dragon Key"))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
+                .addReward(XpReward.expert());
     }
 
     private static Quest createMineIronJob() {

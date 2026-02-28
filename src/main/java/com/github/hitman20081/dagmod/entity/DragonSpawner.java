@@ -43,12 +43,16 @@ public class DragonSpawner {
     private static final int SPAWN_ATTEMPT_INTERVAL = 600; // 30 seconds (20 ticks/sec * 30)
     private static final int SPAWN_CHECK_RADIUS = 80; // Check 80 block radius from spawn attempt
     private static final int MIN_DRAGON_DISTANCE = 256; // Minimum 256 blocks between dragons
-    private static final double SPAWN_CHANCE = 0.25; // 25% chance per attempt
+    private static final double INITIAL_SPAWN_CHANCE = 0.75; // 75% chance — fast initial/post-cooldown spawn (~40s avg)
+    private static final int RESPAWN_COOLDOWN_TICKS = 12000; // 10 minutes after a dragon is killed
     private static final int MAX_WILD_DRAGONS = 8; // Maximum wild dragons in the overworld
 
     // Track spawned dragon locations to prevent overcrowding
     private static final Set<ChunkPos> dragonChunks = new HashSet<>();
     private static final Random random = new Random();
+
+    // -1 means no death recorded this session (use fast initial spawn)
+    private static long lastDragonDeathTime = -1L;
 
     /**
      * Attempt to spawn a dragon in the world
@@ -60,8 +64,18 @@ public class DragonSpawner {
             return;
         }
 
-        // Random chance check
-        if (random.nextDouble() > SPAWN_CHANCE) {
+        // Enforce 10-minute respawn cooldown after a wild dragon death
+        if (lastDragonDeathTime >= 0) {
+            long elapsed = world.getTime() - lastDragonDeathTime;
+            if (elapsed < RESPAWN_COOLDOWN_TICKS) {
+                return; // Still cooling down
+            }
+            // Cooldown expired — reset so the next attempt uses the fast spawn chance
+            lastDragonDeathTime = -1L;
+        }
+
+        // Fast spawn chance: quick on server start or after cooldown expires
+        if (random.nextDouble() > INITIAL_SPAWN_CHANCE) {
             return;
         }
 
@@ -543,6 +557,15 @@ public class DragonSpawner {
         ChunkPos chunkPos = new ChunkPos(pos);
         dragonChunks.remove(chunkPos);
         DagMod.LOGGER.debug("Dragon location removed at chunk {}", chunkPos);
+    }
+
+    /**
+     * Called when a natural wild dragon dies. Starts the 10-minute respawn cooldown.
+     * Not triggered by quest-specific subclasses (e.g. RedDragonEntity).
+     */
+    public static void recordDragonDeath(long worldTime) {
+        lastDragonDeathTime = worldTime;
+        DagMod.LOGGER.info("Wild Dragon died — respawn cooldown started ({} minutes)", RESPAWN_COOLDOWN_TICKS / 1200);
     }
 
     /**
