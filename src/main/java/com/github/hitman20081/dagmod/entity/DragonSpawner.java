@@ -183,20 +183,6 @@ public class DragonSpawner {
         }
     }
 
-    /**
-     * Spawns a Red Dragon for a quest.
-     * This method can be called from your quest logic.
-     * @param world The world to spawn the dragon in.
-     * @param pos The position to spawn the dragon at.
-     */
-    public static void spawnRedDragonForQuest(ServerWorld world, BlockPos pos) {
-        WildDragonEntity dragon = new WildDragonEntity(ModEntities.WILD_DRAGON, world);
-        dragon.refreshPositionAndAngles(pos, 0.0f, 0.0f);
-        dragon.setVariant(DragonGuardianEntity.DragonVariant.RED);
-        dragon.initialize(world, world.getLocalDifficulty(pos), SpawnReason.EVENT, null);
-        world.spawnEntity(dragon);
-        DagMod.LOGGER.info("Spawned Red Dragon for quest at {}", pos);
-    }
 
     private static final int MAX_REALM_DRAGONS = 5; // Max ambient red dragons in Dragon Realm
     private static final int REALM_SPAWN_RADIUS = 120; // Spawn within 120 blocks of a player
