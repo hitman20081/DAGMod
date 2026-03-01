@@ -5,6 +5,36 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.3] - 2026-02-28
+
+### Added
+
+**Red Dragon Quest Entity**:
+- Added `RedDragonEntity` — a quest-exclusive dragon that only spawns when the `red_dragon_fury` quest is accepted; never appears via natural world generation (`SpawnRestriction` blocks it)
+- Spawns 100–200 blocks from the player with a chat warning on quest acceptance
+- Always drops Dragon Heart on death (guaranteed, vs. 50% chance for wild dragons)
+- Cannot be tamed; kill objective for `red_dragon_fury` now tracks this entity specifically instead of any wild dragon
+- Added `RedDragonRenderer` reusing `DragonGuardianModel` with the red dragon texture
+
+**Recipe Unlock System**:
+- Implemented `UnlockReward` quest reward type — unlocks a crafting recipe in the player's recipe book on quest turn-in
+- `red_dragon_fury` turn-in now unlocks the Dragon Key crafting recipe
+- Dragon Key crafting recipe simplified and added to `data/dagmod/recipe/dragon_key.json`
+
+### Changed
+
+**Gem Ore Mining Tiers**:
+- Gem ores (Citrine, Ruby, Sapphire, Tanzanite, Zircon, Pink Garnet — standard and deepslate variants) now require an **iron pickaxe** as the minimum tool, down from diamond
+- Gem storage blocks and raw gem blocks follow the same iron-tier minimum
+- Mythril ore, mythril block, and raw mythril block remain diamond-tier
+
+**Wild Dragon Spawn Timing**:
+- Initial spawn (server start / no prior deaths): 75% chance per 30-second check (~40 second average for first dragon)
+- After a wild dragon is killed: 10-minute hard respawn cooldown before a new dragon can spawn
+- Quest-specific `RedDragonEntity` deaths do not trigger the wild dragon respawn cooldown
+
+---
+
 ## [1.7.2] - 2026-02-27
 
 ### Fixed
