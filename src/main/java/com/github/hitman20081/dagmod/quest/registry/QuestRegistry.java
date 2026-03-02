@@ -12,6 +12,7 @@ import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import net.minecraft.registry.tag.ItemTags;
+import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.UnlockReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
@@ -685,8 +686,9 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.EMERALD, 32))
                 .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
                 .addObjective(new CollectObjective(Items.DIAMOND, 8))
-                .addReward(new ItemReward(Items.EMERALD_BLOCK, 2))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 4))
                 .addReward(XpReward.expert())
                 .addPrerequisite("world_traveler");
