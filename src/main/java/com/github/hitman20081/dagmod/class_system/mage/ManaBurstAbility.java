@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
+import com.github.hitman20081.dagmod.event.SpellModifierHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -12,6 +13,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Box;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * MANA BURST - Mage Ability
@@ -20,7 +22,7 @@ import java.util.List;
  *
  * Effects:
  * - Release explosive burst of mana in 7 block radius
- * - Deals 10 damage (5 hearts) to all enemies
+ * - Deals 10 damage (5 hearts) to all enemies (20 when Overcharged)
  * - Knocks back enemies significantly
  * - Pure magic damage (ignores armor)
  *
@@ -38,11 +40,26 @@ public class ManaBurstAbility {
         }
 
         ServerWorld world = serverPlayer.getEntityWorld();
+        UUID uuid = serverPlayer.getUuid();
 
-        // Start cooldown
-        MageCooldownManager.startCooldown(player, MageAbility.MANA_BURST);
+        boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
+        float power = SpellModifierHandler.consumeOvercharge(uuid);
 
-        // Find all entities in radius
+        boolean result = activateInternal(serverPlayer, world, true, power);
+        if (result && hasEcho) {
+            world.getServer().execute(() -> activateInternal(serverPlayer, world, false, power));
+        }
+        return result;
+    }
+
+    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+                                            boolean applyModifiers, float powerMultiplier) {
+        float damage = DAMAGE * powerMultiplier;
+
+        if (applyModifiers) {
+            MageCooldownManager.startCooldown(player, MageAbility.MANA_BURST);
+        }
+
         Box searchBox = Box.of(
                 player.getEntityPos(),
                 RADIUS * 2,
@@ -59,33 +76,28 @@ public class ManaBurstAbility {
         int hitCount = 0;
 
         for (LivingEntity entity : nearbyEntities) {
-            // Check distance
             double distance = player.squaredDistanceTo(entity);
             if (distance <= RADIUS * RADIUS) {
 
-                // Deal magic damage (generic damage ignores armor)
-                entity.damage(world, world.getDamageSources().magic(), DAMAGE);
+                entity.damage(world, world.getDamageSources().magic(), damage);
 
-                // Knockback away from player
                 double dx = entity.getX() - player.getX();
                 double dy = entity.getY() - player.getY();
                 double dz = entity.getZ() - player.getZ();
                 double distance3d = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
                 if (distance3d > 0) {
-                    // Normalize and apply knockback
                     dx /= distance3d;
                     dy /= distance3d;
                     dz /= distance3d;
 
                     entity.setVelocity(
                             dx * KNOCKBACK_STRENGTH,
-                            0.5, // Upward launch
+                            0.5,
                             dz * KNOCKBACK_STRENGTH
                     );
                 }
 
-                // Hit particles
                 world.spawnParticles(
                         ParticleTypes.ENCHANTED_HIT,
                         entity.getX(),
@@ -99,8 +111,6 @@ public class ManaBurstAbility {
                 hitCount++;
             }
         }
-
-        // VISUAL: Massive explosion effect
 
         // Shockwave rings
         for (int ring = 0; ring < 3; ring++) {
@@ -121,7 +131,6 @@ public class ManaBurstAbility {
             }
         }
 
-        // Central explosion
         world.spawnParticles(
                 ParticleTypes.EXPLOSION_EMITTER,
                 player.getX(),
@@ -132,7 +141,6 @@ public class ManaBurstAbility {
                 0
         );
 
-        // Sparkles
         world.spawnParticles(
                 ParticleTypes.ENCHANT,
                 player.getX(),
@@ -153,7 +161,6 @@ public class ManaBurstAbility {
                 0.3
         );
 
-        // SOUND: Explosion + magic
         world.playSound(
                 null,
                 player.getX(),
@@ -162,7 +169,7 @@ public class ManaBurstAbility {
                 SoundEvents.ENTITY_GENERIC_EXPLODE,
                 SoundCategory.PLAYERS,
                 1.0f,
-                1.5f // High pitch for magical feel
+                1.5f
         );
 
         world.playSound(
@@ -174,15 +181,14 @@ public class ManaBurstAbility {
                 0.8f
         );
 
-        // FEEDBACK
         if (hitCount > 0) {
-            serverPlayer.sendMessage(
+            player.sendMessage(
                     Text.literal("💥 Mana Burst! Hit " + hitCount + " enemies!")
                             .formatted(Formatting.BLUE, Formatting.BOLD),
                     true
             );
         } else {
-            serverPlayer.sendMessage(
+            player.sendMessage(
                     Text.literal("💥 Mana Burst! No enemies nearby.")
                             .formatted(Formatting.YELLOW),
                     true
