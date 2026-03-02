@@ -5,6 +5,44 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.4] - 2026-03-01
+
+### Added
+
+**Real Consumable Mechanics** (replaces all placeholder status effects):
+
+- **Vampire Dust** — 10% lifesteal for 20 seconds. Each successful hit heals the attacker for 10% of damage dealt, capped at 2.5 hearts per hit. Implemented via `LifestealMixin` (`@Inject RETURN` on `LivingEntity.damage`)
+- **Phantom Dust** — 50% dodge chance for 15 seconds. Each incoming hit rolls against the chance; successful dodges show "Dodged!" in the action bar with smoke particles. Implemented via `DodgeMixin` (`@Inject HEAD`, cancellable)
+- **Perfect Dodge** (Rogue only) — 100% dodge chance for 10 seconds. Same mechanic as Phantom Dust at guaranteed rate
+- **Last Stand Powder** — Prevents one lethal hit; heals to 50% max HP with totem particles and sound. Void damage (`OUT_OF_WORLD`) now also triggers Last Stand — the player is teleported to the nearest solid block surface at their X/Z instead of dying. Implemented via `LastStandMixin`
+- **Time Distortion** — Speed II on self for 10 seconds + Slowness IV on all living entities within 10 blocks
+- **Spell Echo** (Mage only) — Next mage spell casts twice; the echo re-cast skips the cooldown
+- **Overcharge Dust** (Mage only) — Next mage spell has 2× power: Arcane Missiles fires 10, Mana Burst deals 20 damage, Time Warp lasts 16 seconds, Arcane Barrier grants 40 absorption HP
+
+**New Event Handlers** (4 files in `event/`):
+- `VampireDustHandler` — UUID → expiry tick map for lifesteal tracking
+- `DodgeHandler` — UUID → chance + expiry maps for dodge tracking
+- `LastStandHandler` — UUID set for one-shot death prevention
+- `SpellModifierHandler` — UUID sets for Spell Echo and Overcharge flags; `consumeOvercharge()` returns `2.0f` or `1.0f`
+
+**New Mixins** (3 files in `mixin/`):
+- `LifestealMixin` — `@Inject RETURN` on `LivingEntity.damage`; heals attacker on confirmed hit
+- `DodgeMixin` — `@Inject HEAD` cancellable on `LivingEntity.damage`; rolls dodge and cancels damage
+- `LastStandMixin` — `@Inject HEAD` cancellable on `LivingEntity.damage`; intercepts lethal hits and void damage
+
+### Changed
+
+**Mage Ability Refactor** — All 4 mage abilities refactored to support spell modifiers:
+- `ArcaneMissilesAbility`, `ManaBurstAbility`, `TimeWarpAbility`, `ArcaneBarrierAbility` each gained a private `activateInternal(player, world, applyModifiers, powerMultiplier)` method
+- Public `activate()` reads and consumes SpellModifierHandler flags, then calls `activateInternal`; if Spell Echo was active, schedules an echo re-cast via `world.getServer().execute()` with `applyModifiers=false` (no cooldown)
+- ArcaneBarrier feedback message now reports the actual number of absorption hearts granted (scales with Overcharge)
+
+### Fixed
+
+**Grave void death** — `GraveManager.createGrave()` now detects when the player's death Y is below `world.getBottomY()` (void kill plane) and snaps the grave search origin to the heightmap surface at the same X/Z. Previously, void deaths placed an inaccessible Lodestone grave in the void.
+
+---
+
 ## [1.7.3] - 2026-02-28
 
 ### Added

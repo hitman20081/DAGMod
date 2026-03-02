@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.3
-**Last Updated**: 2026-02-28
+**Current Version**: v1.7.4
+**Last Updated**: 2026-03-01
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -154,12 +154,12 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - One grave per player with automatic old-grave cleanup
   - Replaces old non-functional datapack grave system
 
-- ✅ **Enhanced Consumables** (v1.6.0)
-  - Lifesteal System (Vampire Dust) - 10% healing from damage dealt
-  - Dodge/Evasion System (Phantom Dust 50%, Perfect Dodge 100%)
-  - Spell Modification System (Spell Echo doubles spells, Overcharge 2x power/range)
-  - Death Prevention System (Last Stand Powder auto-revive at 50% HP)
-  - Time Distortion AoE (Speed II for player, Slowness IV for nearby enemies)
+- ✅ **Enhanced Consumables** (fully implemented v1.7.4)
+  - Lifesteal System (Vampire Dust) — 10% lifesteal via mixin, capped at 2.5 hearts/hit
+  - Dodge/Evasion System (Phantom Dust 50%, Perfect Dodge 100%) — per-hit roll via mixin
+  - Spell Modification System (Spell Echo casts twice, Overcharge 2× power) — integrated into all 4 mage abilities
+  - Death Prevention System (Last Stand Powder) — intercepts lethal hits + void death with surface teleport
+  - Time Distortion AoE — Speed II self + Slowness IV on enemies within 10 blocks
 
 ---
 
@@ -503,7 +503,7 @@ Priority: **LOW**
 |-----------------|-----------|-------------|-------------|---------|
 | Social/Multiplayer | 6 | 1 (Party) | 0 | 5 (Guilds, etc.) |
 | Endgame Systems | 5 | 0 | 0 | 5 (Raids, Prestige, etc.) |
-| Consumables | 5 | 0 | 5 (placeholders) | 0 |
+| Consumables | 5 | 5 | 0 | 0 |
 | RPG Enhancement | 7 | 0 | 0 | 7 |
 | Crafting/Economy | 5 | 0 | 0 | 5 |
 | Quality of Life | 6 | 2 (Travel, Graves) | 0 | 4 |
@@ -530,7 +530,7 @@ Priority: **LOW**
 - ✅ **v1.7.3** (Feb 2026) - Red Dragon quest entity, gem ore mining tiers (iron pickaxe), dragon spawn timing rework, Dragon Key recipe unlock system
 
 ### **Short-term** - Next 3-6 months
-- 🎯 **v1.7.4** (Patch) - Enhanced consumable effects (lifesteal, dodge, spell mods)
+- ✅ **v1.7.4** (Mar 2026) - Real consumable mechanics (lifesteal, dodge, spell mods, last stand + void rescue, grave void fix)
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
@@ -595,7 +595,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-02-28
+**Last Updated**: 2026-03-01
 **Maintained By**: hitman20081
-**Current Version**: v1.7.3
+**Current Version**: v1.7.4
 **License**: See LICENSE file
