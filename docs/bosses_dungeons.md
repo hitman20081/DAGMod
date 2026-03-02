@@ -95,10 +95,10 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 
 | Stat | Value |
 |------|-------|
-| Health | 200 HP |
+| Health | 300 HP |
 | Attack Damage | 12.0 |
 | Armor | 12.0 |
-| Armor Toughness | 4.0 |
+| Armor Toughness | 10.0 |
 | Flying Speed | 0.4 |
 | Knockback Resistance | 80% |
 | Detection Range | 48 blocks |

@@ -41,6 +41,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Grave void death** — `GraveManager.createGrave()` now detects when the player's death Y is below `world.getBottomY()` (void kill plane) and snaps the grave search origin to the heightmap surface at the same X/Z. Previously, void deaths placed an inaccessible Lodestone grave in the void.
 
+**Master Trader quest rewards** — Blank enchanted books replaced with real `EnchantedBookReward` instances (Mending I + Looting III). The Emerald Block ×2 return reward replaced with Totem of Undying ×1. Root cause: `ItemReward(Items.ENCHANTED_BOOK)` creates a book with no enchantment data; new `EnchantedBookReward` class builds the stack with `DataComponentTypes.STORED_ENCHANTMENTS`.
+
+### Balance
+
+**Dragon stat buffs** — Both dragon types made significantly tankier to extend fights against well-geared players:
+- Wild Dragon: HP 40 → 80, Armor Toughness 0 → 6
+- Dragon Guardian (boss): HP 200 → 300, Armor Toughness 4 → 10
+- Higher toughness specifically reduces armor bypass from high-damage enchanted weapons (e.g. Savage III)
+
+**Dragonscale armor recipe rework** — Replaced vanilla End items with thematic mod dragon drops:
+- `minecraft:crying_obsidian` → `dagmod:dragon_skin` (×4 per piece)
+- `minecraft:dragon_breath` → `dagmod:dragon_scale` (×4 per piece)
+- Each piece now requires: 4 Dragon Scale + 4 Dragon Skin + 1 Netherite armor base
+
 ---
 
 ## [1.7.3] - 2026-02-28
