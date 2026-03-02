@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "ERE",
-    "RSR",
-    "ERE"
+    "BKB",
+    "KSK",
+    "BKB"
   ],
   "key": {
-    "E": "minecraft:crying_obsidian",
-    "R": "minecraft:dragon_breath",
+    "B": "dagmod:dragon_bone",
+    "K": "dagmod:dragon_skin",
     "S": "minecraft:shield"
   },
   "result": {
