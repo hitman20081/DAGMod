@@ -55,6 +55,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `minecraft:dragon_breath` → `dagmod:dragon_scale` (×4 per piece)
 - Each piece now requires: 4 Dragon Scale + 4 Dragon Skin + 1 Netherite armor base
 
+**Dragonscale Sword recipe rework** — Replaced `dragon_breath` + `dragon_head` with mod drops:
+- Now requires: Dragon Scale (×5, body) + Dragon Bone (×2, handle) + Netherite Sword (base)
+
+**Dragonbone Shield recipe rework** — Replaced `crying_obsidian` + `dragon_breath` with mod drops:
+- Now requires: Dragon Bone (×4, frame) + Dragon Skin (×4, facing) + Shield (base)
+
 ---
 
 ## [1.7.3] - 2026-02-28
