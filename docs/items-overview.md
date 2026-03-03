@@ -8,19 +8,19 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 
 ## Item Categories
 
-- [Selection Tokens](<./SELECTION_TOKENS.md>)
-- [Quest Books](<./QUEST_BOOKS.md>)
-- [Tomes & Information Items](<./TOMES_INFO.md>)
-- [Class Ability Items](<./CLASS_ABILITIES/OVERVIEW.md>)
-- [Consumable Powders](<./CONSUMABLES.md>)
-- [Armor Sets](<./ARMOR_SETS.md>)
-- [Weapons & Shields](<./WEAPONS_SHIELDS.md>)
-- [Custom Enchantments](<./ENCHANTMENTS.md>)
-- [Fantasy Foods](<./FANTASY_FOODS.md>)
-- [Boss & Dungeon Loot](<./BOSS_DUNGEON_LOOT.md>)
-- [Crafting Materials](<./CRAFTING_MATERIALS.md>)
-- [Utility Items](<./UTILITY.md>)
-- [Mage Equipment](<./MAGE_EQUIPMENT.md>)
+- [Selection Tokens](<./items-selection_tokens.md>)
+- [Quest Books](<./items-quest_books.md>)
+- [Tomes & Information Items](<./items-tomes_info.md>)
+- [Class Ability Items](<./items-class_abilities-overview.md>)
+- [Consumable Powders](<./items-consumables.md>)
+- [Armor Sets](<./items-armor_sets.md>)
+- [Weapons & Shields](<./items-weapons_shields.md>)
+- [Custom Enchantments](<./items-enchantments.md>)
+- [Fantasy Foods](<./items-fantasy_foods.md>)
+- [Boss & Dungeon Loot](<./items-boss_dungeon_loot.md>)
+- [Crafting Materials](<./items-crafting_materials.md>)
+- [Utility Items](<./items-utility.md>)
+- [Mage Equipment](<./items-mage_equipment.md>)
 
 ---
 
@@ -144,4 +144,4 @@ A: Items follow standard Minecraft death rules. Items with the Soul Bound enchan
 A: As of v1.5.0-beta, spell scrolls cannot be crafted. Obtain through Mage quests.
 
 **Q: How do armor set bonuses work?**
-A: Armor sets provide progressive bonuses. A 2-piece bonus activates when two pieces of the same set are worn, and a more powerful 4-piece bonus activates when a full set is worn. These bonuses are detailed in the [Armor Sets](<./ARMOR_SETS.md>) section.
+A: Armor sets provide progressive bonuses. A 2-piece bonus activates when two pieces of the same set are worn, and a more powerful 4-piece bonus activates when a full set is worn. These bonuses are detailed in the [Armor Sets](<./items-armor_sets.md>) section.
