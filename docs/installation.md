@@ -2,11 +2,11 @@
 
 Get started with DAGMod by following this comprehensive installation guide. Whether you're playing singleplayer or setting up a server, this guide will help you install and configure the mod properly.
 
-**Current Version:** v1.6.5-beta (February 2026)
+**Current Version:** v1.7.4 (March 2026)
 
 ---
 
-## What's New in v1.6.5-beta
+## What's New in v1.7.4
 
 - ✅ **Enchanted Book Loot Fix** - Bone dungeon chests now correctly drop enchanted books in 3 tiers (common, uncommon, rare)
 - ✅ **Namespace Migration** - All datapacks consolidated from `dag00x`/`dag01x` namespaces to unified `dagmod` namespace
@@ -70,7 +70,7 @@ Choose the installation method that best fits your needs:
 2. Go to "Installations"
 3. Click "New Installation"
 4. Select version: **fabric-loader-0.18.4-1.21.11**
-5. Name it "DAGMod v1.6.5-beta"
+5. Name it "DAGMod v1.7.4"
 6. Click "Create"
 
 ### Step 2: Install Fabric API
@@ -87,7 +87,7 @@ Choose the installation method that best fits your needs:
 
 ### Step 3: Install DAGMod
 
-1. Download **DAGMod v1.6.5-beta** from:
+1. Download **DAGMod v1.7.4** from:
    - [GitHub Releases](https://github.com/hitman20081/DAGMod/releases)
    - [Modrinth](https://modrinth.com/mod/dag-mod)
    - [CurseForge](https://curseforge.com/minecraft/mc-mods/dag-mod) [Not available yet] 
@@ -97,7 +97,7 @@ Choose the installation method that best fits your needs:
 ### Step 4: Launch Minecraft
 
 1. Open the Minecraft Launcher
-2. Select the **Fabric Loader 1.21.11** profile (or "DAGMod v1.6.5-beta" if you named it)
+2. Select the **Fabric Loader 1.21.11** profile (or "DAGMod v1.7.4" if you named it)
 3. Click "Play"
 4. Wait for Minecraft to load
 5. Check the main menu - you should see "X mods loaded" in the bottom-left
@@ -147,7 +147,7 @@ Choose the installation method that best fits your needs:
 
 ### Step 3: Install DAGMod
 
-1. Download **DAGMod v1.6.5-beta**
+1. Download **DAGMod v1.7.4**
 2. Place it in the `mods` folder (alongside Fabric API)
 
 ### Step 4: Configure Server
@@ -185,7 +185,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 ### Step 6: Connect to Your Server
 
-1. Start Minecraft with the same mods (Fabric API + DAGMod v1.6.5-beta)
+1. Start Minecraft with the same mods (Fabric API + DAGMod v1.7.4)
 2. Go to "Multiplayer"
 3. Click "Add Server"
 4. Enter server address (e.g., `localhost` or your server IP)
@@ -201,7 +201,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **In-Game Verification:**
 1. Press F3 to open debug screen
 2. Check right side for mod list
-3. DAGMod v1.6.5-beta should appear in the list
+3. DAGMod v1.7.4 should appear in the list
 
 **Command Verification:**
 1. Type `/dagmod` in chat
@@ -227,7 +227,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 - **Solution:** Verify all mods are for the correct Minecraft version
 - Check Fabric Loader version 0.18.4
 - Check Fabric API version 0.141.1+1.21.11
-- Check DAGMod is v1.6.5-beta
+- Check DAGMod is v1.7.4
 
 **Issue: Mods not loading**
 - **Cause:** Incorrect folder or wrong Minecraft version
@@ -257,7 +257,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **Issue: Client can't connect to server**
 - **Cause:** Version mismatch between client and server
 - **Solution:**
-  - Ensure both client and server have DAGMod v1.6.5-beta
+  - Ensure both client and server have DAGMod v1.7.4
   - Ensure both have same Fabric API version
   - Check server is running and accessible
 
@@ -271,7 +271,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
    - Navigate to `.minecraft/saves`
    - Copy your world folders to a safe location
 2. **Remove old DAGMod version** from mods folder
-3. **Download DAGMod v1.6.5-beta** (or newer)
+3. **Download DAGMod v1.7.4** (or newer)
 4. **Place new `.jar` in mods folder**
 5. **Launch Minecraft**
 6. **Load your world** - progress should be preserved
@@ -283,7 +283,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
    - Especially backup the `world` folder
 2. **Stop the server**
 3. **Remove old DAGMod `.jar`** from mods folder
-4. **Add new DAGMod v1.6.5-beta `.jar`** to mods folder
+4. **Add new DAGMod v1.7.4 `.jar`** to mods folder
 5. **Start the server**
 6. **Verify update:** Check console logs for version number
 
@@ -293,7 +293,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 ## Configuration
 
-### Current Configuration (v1.6.5-beta)
+### Current Configuration (v1.7.4)
 
 
 DAGMod configuration options:
@@ -428,7 +428,7 @@ If you encounter issues not covered in this guide:
 2. **Search for similar problems** - someone may have solved it
 3. **Create a new issue** with:
    - Minecraft version
-   - DAGMod version (v1.6.5-beta)
+   - DAGMod version (v1.7.4)
    - Fabric Loader version
    - Fabric API version
    - Full error log (from `.minecraft/logs/latest.log`)
@@ -482,7 +482,7 @@ A: No. Quest progress, race/class selections, level/XP, and player data persist 
 **Q: How much RAM should I allocate?**
 A: Minimum 4GB, recommended 6-8GB for smooth performance with all DAGMod features (dungeons, bosses, abilities, etc.).
 
-**Q: What's new in v1.6.5-beta?**
+**Q: What's new in v1.7.4?**
 A: Enchanted book loot fix for bone dungeon chests (now drops in 3 tiers), namespace migration consolidating all datapacks under `dagmod`, tiered dungeon loot, and updated Fabric Loader (0.18.4) and Fabric API (0.141.1+1.21.11). v1.6.0-beta added the merchant rotating trade system with 8 NPCs.
 
 ---

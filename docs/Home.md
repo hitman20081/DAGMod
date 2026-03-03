@@ -17,7 +17,28 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.7.2 (February 2026)
+Current Version v1.7.4 (March 2026)
+
+---
+
+## 🎮 What's New in v1.7.4
+
+### Real Consumable Mechanics
+- **Vampire Dust** — 10% lifesteal for 20 seconds
+- **Phantom Dust** — 50% dodge chance for 15 seconds
+- **Perfect Dodge** (Rogue only) — 100% dodge chance for 10 seconds
+- **Last Stand Powder** — Blocks one lethal hit; heals to 50% HP. Void deaths now teleport you to the surface instead of killing
+- **Time Distortion** — Speed II on self + Slowness IV on all nearby enemies
+- **Spell Echo** (Mage only) — Next spell casts twice
+- **Overcharge Dust** (Mage only) — Next spell has 2× power
+
+### Balance & Recipe Rework
+- **Dragon armor, sword, and shield recipes** now use mod dragon drops (`dragon_scale`, `dragon_skin`, `dragon_bone`) instead of vanilla End items
+- **Dragon toughness buff** — Wild Dragon HP 40→80, toughness 0→6; Dragon Guardian HP 200→300, toughness 4→10
+- **Master Trader quest** — Rewards now give real enchanted books (Mending I + Looting III) and a Totem of Undying
+
+### Fixes
+- Void deaths no longer place inaccessible graves in the void — grave snaps to surface
 
 ---
 
