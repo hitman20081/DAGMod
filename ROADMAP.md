@@ -530,7 +530,7 @@ Priority: **LOW**
 - ✅ **v1.7.3** (Feb 2026) - Red Dragon quest entity, gem ore mining tiers (iron pickaxe), dragon spawn timing rework, Dragon Key recipe unlock system
 
 ### **Short-term** - Next 3-6 months
-- ✅ **v1.7.4** (Mar 2026) - Real consumable mechanics (lifesteal, dodge, spell mods, last stand + void rescue, grave void fix)
+- ✅ **v1.7.4** (Mar 2026) - Real consumable mechanics (lifesteal, dodge, spell mods, last stand + void rescue, grave void fix), dragon recipe rework (all dragon gear now uses mod drops), dragon stat buffs (HP + toughness), Master Trader quest fix (real enchanted book rewards)
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
@@ -595,7 +595,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-03-01
+**Last Updated**: 2026-03-03
 **Maintained By**: hitman20081
 **Current Version**: v1.7.4
 **License**: See LICENSE file
