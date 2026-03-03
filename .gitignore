@@ -28,6 +28,11 @@ bin/
 
 *.DS_Store
 
+# windows reserved device names surfaced by Git Bash/MSYS2
+
+nul
+mappings/
+
 # fabric
 
 run/
