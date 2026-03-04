@@ -1,6 +1,6 @@
 # Boss & Dungeon Loot
 
-### Boss System Loot (v1.6.5-beta)
+### Boss System Loot
 
 **Skeleton King Hierarchy:**
 
@@ -28,7 +28,7 @@
 
 ---
 
-### Dragon Guardian Loot (v1.6.5-beta)
+### Dragon Guardian Loot
 
 **Dragon Guardian** (Dragon Realm Boss - 200 HP):
 
@@ -44,7 +44,7 @@ The Dragon Guardian spawns in the Dragon Realm dimension. See [Dimensions](./dim
 
 ---
 
-### Bone Dungeon Loot (v1.6.5-beta)
+### Bone Dungeon Loot
 
 Bone Dungeons contain three types of loot rooms, each with distinct loot tables. All rooms feature a **3-tier enchanted book system**.
 
