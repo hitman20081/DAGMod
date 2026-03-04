@@ -101,9 +101,9 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 
 ## Related Guides
 
-- [Merchants](../merchants.md) - All 8 merchant NPCs and their rotating inventories
-- [Party System](../party.md) - Party quests and shared rewards
-- [Dimensions](../dimensions.md) - Dimension-specific loot and gear
+- [Merchants](./merchants.md) - All 8 merchant NPCs and their rotating inventories
+- [Party System](./party.md) - Party quests and shared rewards
+- [Dimensions](./dimensions.md) - Dimension-specific loot and gear
 
 ---
 
