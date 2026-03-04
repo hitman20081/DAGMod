@@ -4,12 +4,12 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 ## Navigation
 
-* [Classes](classes-overview)
-* [Items](items-overview)
-* [Races](races-overview)
-* [Bosses & Dungeons](bosses_dungeons)
-* [Merchants](merchants)
-* [Getting Started](getting_started)
+* [Classes](classes-overview.md)
+* [Items](items-overview.md)
+* [Races](races-overview.md)
+* [Bosses & Dungeons](bosses_dungeons.md)
+* [Merchants](merchants.md)
+* [Getting Started](getting_started.md)
 
 ---
 
@@ -268,4 +268,4 @@ Face the Bone Realm Boss hierarchy
 
 ## Getting Started
 
-Ready to begin your adventure? Read the [Getting Started Guide](/getting_started) for your first steps in DAGMod!
+Ready to begin your adventure? Read the [Getting Started Guide](/getting_started.md) for your first steps in DAGMod!
