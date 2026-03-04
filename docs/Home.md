@@ -268,4 +268,4 @@ Face the Bone Realm Boss hierarchy
 
 ## Getting Started
 
-Ready to begin your adventure? Read the [Getting Started Guide](/getting_started.md) for your first steps in DAGMod!
+Ready to begin your adventure? Read the [Getting Started Guide](./getting_started.md) for your first steps in DAGMod!
