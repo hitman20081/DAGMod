@@ -3,37 +3,46 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 40,
+      "weight": 25,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_hallway",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 25,
+      "weight": 12,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_corner_left",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 25,
+      "weight": 12,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_corner_right",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 15,
+      "weight": 5,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_crossway",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 6,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_crossway_boss",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -41,62 +50,35 @@
     {
       "weight": 10,
       "element": {
-        "location": "dagmod:bone_dungeon/bone_dungeon_stairway",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 5,
-      "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_room1",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 5,
+      "weight": 10,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_room2",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 5,
+      "weight": 10,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_room3",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 2,
+      "weight": 3,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_treasure_room",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 2,
-      "element": {
-        "location": "dagmod:bone_dungeon/bone_dungeon_portal_room",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "location": "dagmod:bone_dungeon/bone_dungeon_wall_endcap",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

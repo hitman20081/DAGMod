@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
-import net.minecraft.entity.Entity;
+import com.github.hitman20081.dagmod.event.SpellModifierHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -15,6 +15,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Box;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * TIME WARP - Mage Ability
@@ -23,9 +24,9 @@ import java.util.List;
  *
  * Effects:
  * - Slows all enemies in 10 block radius
- * - Slowness IV (80% slower) for 8 seconds
- * - Weakness II for 8 seconds
- * - Mining Fatigue III for 8 seconds
+ * - Slowness IV (80% slower) for 8 seconds (16s when Overcharged)
+ * - Weakness II for the same duration
+ * - Mining Fatigue III for the same duration
  * - Does not affect allies or yourself
  *
  * Visual: Cyan/light blue particles + eerie sound
@@ -41,11 +42,26 @@ public class TimeWarpAbility {
         }
 
         ServerWorld world = serverPlayer.getEntityWorld();
+        UUID uuid = serverPlayer.getUuid();
 
-        // Start cooldown
-        MageCooldownManager.startCooldown(player, MageAbility.TIME_WARP);
+        boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
+        float power = SpellModifierHandler.consumeOvercharge(uuid);
 
-        // Find all entities in radius
+        boolean result = activateInternal(serverPlayer, world, true, power);
+        if (result && hasEcho) {
+            world.getServer().execute(() -> activateInternal(serverPlayer, world, false, power));
+        }
+        return result;
+    }
+
+    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+                                            boolean applyModifiers, float powerMultiplier) {
+        int durationTicks = Math.round(DURATION_TICKS * powerMultiplier);
+
+        if (applyModifiers) {
+            MageCooldownManager.startCooldown(player, MageAbility.TIME_WARP);
+        }
+
         Box searchBox = Box.of(
                 player.getEntityPos(),
                 RADIUS * 2,
@@ -62,15 +78,13 @@ public class TimeWarpAbility {
         int affectedCount = 0;
 
         for (LivingEntity entity : nearbyEntities) {
-            // Check distance
             double distance = player.squaredDistanceTo(entity);
             if (distance <= RADIUS * RADIUS) {
 
-                // Apply time slow effects
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SLOWNESS,
-                        DURATION_TICKS,
-                        3, // Slowness IV (80% slower)
+                        durationTicks,
+                        3, // Slowness IV
                         false,
                         true,
                         true
@@ -78,7 +92,7 @@ public class TimeWarpAbility {
 
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.WEAKNESS,
-                        DURATION_TICKS,
+                        durationTicks,
                         1, // Weakness II
                         false,
                         true,
@@ -87,14 +101,13 @@ public class TimeWarpAbility {
 
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.MINING_FATIGUE,
-                        DURATION_TICKS,
+                        durationTicks,
                         2, // Mining Fatigue III
                         false,
                         true,
                         true
                 ));
 
-                // Particles around affected entity
                 world.spawnParticles(
                         ParticleTypes.SOUL,
                         entity.getX(),
@@ -109,7 +122,6 @@ public class TimeWarpAbility {
             }
         }
 
-        // VISUAL: Expanding time warp effect
         for (int i = 0; i < 60; i++) {
             double angle = i * Math.PI * 2 / 60;
             double x = player.getX() + Math.cos(angle) * RADIUS;
@@ -125,7 +137,6 @@ public class TimeWarpAbility {
             );
         }
 
-        // Center portal effect
         world.spawnParticles(
                 ParticleTypes.PORTAL,
                 player.getX(),
@@ -136,14 +147,13 @@ public class TimeWarpAbility {
                 0.5
         );
 
-        // SOUND: Time distortion
         world.playSound(
                 null,
                 player.getBlockPos(),
                 SoundEvents.BLOCK_PORTAL_TRIGGER,
                 SoundCategory.PLAYERS,
                 1.0f,
-                0.5f // Low pitch for eerie effect
+                0.5f
         );
 
         world.playSound(
@@ -155,15 +165,14 @@ public class TimeWarpAbility {
                 0.7f
         );
 
-        // FEEDBACK
         if (affectedCount > 0) {
-            serverPlayer.sendMessage(
+            player.sendMessage(
                     Text.literal("⏰ Time Warp! Slowed " + affectedCount + " enemies!")
                             .formatted(Formatting.AQUA, Formatting.BOLD),
                     true
             );
         } else {
-            serverPlayer.sendMessage(
+            player.sendMessage(
                     Text.literal("⏰ Time Warp! No enemies nearby.")
                             .formatted(Formatting.YELLOW),
                     true

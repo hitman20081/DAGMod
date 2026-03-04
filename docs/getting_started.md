@@ -26,7 +26,7 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
     *   Your chosen race and class combine to unlock unique **synergy bonuses**. Review these to understand your character's strengths.
 6.  **Begin Your Journey:**
     *   Start gaining XP through mining, combat, and exploration.
-    *   Progress through 50 levels, earning stat bonuses every 10 levels.
+    *   Progress through 200 levels, earning stat bonuses every 10 levels.
     *   Visit **Merchant NPCs** in the Hall of Champions to trade for gear and supplies.
     *   In multiplayer, form a **Party** with `/party create <name>` for shared XP and group quests.
 7.  **Begin Questing (Garrick Quests):**

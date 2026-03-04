@@ -5,6 +5,139 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.4] - 2026-03-01
+
+### Added
+
+**Real Consumable Mechanics** (replaces all placeholder status effects):
+
+- **Vampire Dust** — 10% lifesteal for 20 seconds. Each successful hit heals the attacker for 10% of damage dealt, capped at 2.5 hearts per hit. Implemented via `LifestealMixin` (`@Inject RETURN` on `LivingEntity.damage`)
+- **Phantom Dust** — 50% dodge chance for 15 seconds. Each incoming hit rolls against the chance; successful dodges show "Dodged!" in the action bar with smoke particles. Implemented via `DodgeMixin` (`@Inject HEAD`, cancellable)
+- **Perfect Dodge** (Rogue only) — 100% dodge chance for 10 seconds. Same mechanic as Phantom Dust at guaranteed rate
+- **Last Stand Powder** — Prevents one lethal hit; heals to 50% max HP with totem particles and sound. Void damage (`OUT_OF_WORLD`) now also triggers Last Stand — the player is teleported to the nearest solid block surface at their X/Z instead of dying. Implemented via `LastStandMixin`
+- **Time Distortion** — Speed II on self for 10 seconds + Slowness IV on all living entities within 10 blocks
+- **Spell Echo** (Mage only) — Next mage spell casts twice; the echo re-cast skips the cooldown
+- **Overcharge Dust** (Mage only) — Next mage spell has 2× power: Arcane Missiles fires 10, Mana Burst deals 20 damage, Time Warp lasts 16 seconds, Arcane Barrier grants 40 absorption HP
+
+**New Event Handlers** (4 files in `event/`):
+- `VampireDustHandler` — UUID → expiry tick map for lifesteal tracking
+- `DodgeHandler` — UUID → chance + expiry maps for dodge tracking
+- `LastStandHandler` — UUID set for one-shot death prevention
+- `SpellModifierHandler` — UUID sets for Spell Echo and Overcharge flags; `consumeOvercharge()` returns `2.0f` or `1.0f`
+
+**New Mixins** (3 files in `mixin/`):
+- `LifestealMixin` — `@Inject RETURN` on `LivingEntity.damage`; heals attacker on confirmed hit
+- `DodgeMixin` — `@Inject HEAD` cancellable on `LivingEntity.damage`; rolls dodge and cancels damage
+- `LastStandMixin` — `@Inject HEAD` cancellable on `LivingEntity.damage`; intercepts lethal hits and void damage
+
+### Changed
+
+**Mage Ability Refactor** — All 4 mage abilities refactored to support spell modifiers:
+- `ArcaneMissilesAbility`, `ManaBurstAbility`, `TimeWarpAbility`, `ArcaneBarrierAbility` each gained a private `activateInternal(player, world, applyModifiers, powerMultiplier)` method
+- Public `activate()` reads and consumes SpellModifierHandler flags, then calls `activateInternal`; if Spell Echo was active, schedules an echo re-cast via `world.getServer().execute()` with `applyModifiers=false` (no cooldown)
+- ArcaneBarrier feedback message now reports the actual number of absorption hearts granted (scales with Overcharge)
+
+### Fixed
+
+**Grave void death** — `GraveManager.createGrave()` now detects when the player's death Y is below `world.getBottomY()` (void kill plane) and snaps the grave search origin to the heightmap surface at the same X/Z. Previously, void deaths placed an inaccessible Lodestone grave in the void.
+
+**Master Trader quest rewards** — Blank enchanted books replaced with real `EnchantedBookReward` instances (Mending I + Looting III). The Emerald Block ×2 return reward replaced with Totem of Undying ×1. Root cause: `ItemReward(Items.ENCHANTED_BOOK)` creates a book with no enchantment data; new `EnchantedBookReward` class builds the stack with `DataComponentTypes.STORED_ENCHANTMENTS`.
+
+### Balance
+
+**Dragon stat buffs** — Both dragon types made significantly tankier to extend fights against well-geared players:
+- Wild Dragon: HP 40 → 80, Armor Toughness 0 → 6
+- Dragon Guardian (boss): HP 200 → 300, Armor Toughness 4 → 10
+- Higher toughness specifically reduces armor bypass from high-damage enchanted weapons (e.g. Savage III)
+
+**Dragonscale armor recipe rework** — Replaced vanilla End items with thematic mod dragon drops:
+- `minecraft:crying_obsidian` → `dagmod:dragon_skin` (×4 per piece)
+- `minecraft:dragon_breath` → `dagmod:dragon_scale` (×4 per piece)
+- Each piece now requires: 4 Dragon Scale + 4 Dragon Skin + 1 Netherite armor base
+
+**Dragonscale Sword recipe rework** — Replaced `dragon_breath` + `dragon_head` with mod drops:
+- Now requires: Dragon Scale (×5, body) + Dragon Bone (×2, handle) + Netherite Sword (base)
+
+**Dragonbone Shield recipe rework** — Replaced `crying_obsidian` + `dragon_breath` with mod drops:
+- Now requires: Dragon Bone (×4, frame) + Dragon Skin (×4, facing) + Shield (base)
+
+---
+
+## [1.7.3] - 2026-02-28
+
+### Added
+
+**Red Dragon Quest Entity**:
+- Added `RedDragonEntity` — a quest-exclusive dragon that only spawns when the `red_dragon_fury` quest is accepted; never appears via natural world generation (`SpawnRestriction` blocks it)
+- Spawns 100–200 blocks from the player with a chat warning on quest acceptance
+- Always drops Dragon Heart on death (guaranteed, vs. 50% chance for wild dragons)
+- Cannot be tamed; kill objective for `red_dragon_fury` now tracks this entity specifically instead of any wild dragon
+- Added `RedDragonRenderer` reusing `DragonGuardianModel` with the red dragon texture
+
+**Recipe Unlock System**:
+- Implemented `UnlockReward` quest reward type — unlocks a crafting recipe in the player's recipe book on quest turn-in
+- `red_dragon_fury` turn-in now unlocks the Dragon Key crafting recipe
+- Dragon Key crafting recipe simplified and added to `data/dagmod/recipe/dragon_key.json`
+
+### Changed
+
+**Gem Ore Mining Tiers**:
+- Gem ores (Citrine, Ruby, Sapphire, Tanzanite, Zircon, Pink Garnet — standard and deepslate variants) now require an **iron pickaxe** as the minimum tool, down from diamond
+- Gem storage blocks and raw gem blocks follow the same iron-tier minimum
+- Mythril ore, mythril block, and raw mythril block remain diamond-tier
+
+**Wild Dragon Spawn Timing**:
+- Initial spawn (server start / no prior deaths): 75% chance per 30-second check (~40 second average for first dragon)
+- After a wild dragon is killed: 10-minute hard respawn cooldown before a new dragon can spawn
+- Quest-specific `RedDragonEntity` deaths do not trigger the wild dragon respawn cooldown
+
+---
+
+## [1.7.2] - 2026-02-27
+
+### Fixed
+
+**Bone Dungeon Generation**:
+- Fixed portal room never spawning — root cause was a self-referential jigsaw block: the portal room entrance had `Target Name: dagmod:portal_entry` (matching its own `Name`), causing silent placement failure. Changed to `Target Name: dagmod:corridor_exit` to correctly match boss room exit blocks
+- Fixed stairway U-shape generation — back-to-back stairways created U-shaped paths because the second stairway's entrance is at the top, so its exit immediately ascended again. Removed stairway from the `main` template pool so stairway exits connect to rooms, hallways, or corners instead
+- Fixed crossways forming square patterns — crossway weight reduced from 20 to 4 in the `corridors` pool. With three exits each, the old 25% chance caused exponential branching that produced clusters of interconnected crossways
+
+### Changed
+
+**Bone Dungeon Improvements**:
+- Increased boss crossway (`crossway_boss`) spawn reliability — weight raised from 2 to 6 in the `main` pool
+- Added `no_water` structure processor to all dungeon pieces — replaces any water and kelp within the structure footprint with air at world generation time, preventing flooded rooms
+- Restricted bone dungeon spawn biomes to **desert, badlands, wooded badlands, and eroded badlands** — these biomes suppress underground aquifer generation, eliminating water intrusion at dungeon depth
+- Changed structure step from `surface_structures` to `underground_structures` — more appropriate for an underground jigsaw dungeon
+- Split template pools into `corridors` (used by crossway exits) and `main` (used by hallway/corner exits) — allows independent weight tuning for each pool tier
+
+### Added
+
+- Added translation key for `bone_dungeon_locator` item: `"item.dagmod.bone_dungeon_locator": "Bone Dungeon Locator"`
+
+### Notes
+- Bone dungeons now only generate in desert and badlands biomes — existing worlds must explore new chunks to encounter them
+
+---
+
+## [1.7.1] - 2026-02-23
+
+### Added
+
+**Gem Ore Worldgen**:
+- 6 custom gem ores now generate naturally in the Overworld: Citrine, Ruby, Sapphire, Tanzanite, Zircon, and Pink Garnet
+- Each ore has stone and deepslate variants (Pink Garnet is deepslate-only)
+- Ores follow a tiered rarity system with varying vein sizes, spawn rates, and Y-ranges
+- Citrine (common, Y -16 to 64), Ruby/Sapphire (uncommon, Y -64 to 32), Tanzanite/Zircon (rare, Y -64 to 16), Pink Garnet (very rare, Y -64 to -16)
+- Mythril ore remains exclusive to the Dragon Realm
+- Added configured_feature and placed_feature JSON for all 6 ores
+- Added `ModOreGeneration` class using Fabric's `BiomeModifications` API
+
+### Notes
+- Gem ores only appear in newly generated chunks
+
+---
+
 ## [1.7.0] - 2026-02-16
 
 ### Changed

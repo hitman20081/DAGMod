@@ -6,7 +6,7 @@
       "weight": 1,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_entryway",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

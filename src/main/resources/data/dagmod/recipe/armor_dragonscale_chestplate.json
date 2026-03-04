@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "ERE",
-    "RAR",
-    "ERE"
+    "SKS",
+    "KAK",
+    "SKS"
   ],
   "key": {
     "A": "minecraft:netherite_chestplate",
-    "R": "minecraft:dragon_breath",
-    "E": "minecraft:crying_obsidian"
+    "K": "dagmod:dragon_scale",
+    "S": "dagmod:dragon_skin"
   },
   "result": {
     "id": "dagmod:dragonscale_chestplate",

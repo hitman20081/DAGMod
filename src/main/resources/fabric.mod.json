@@ -25,6 +25,7 @@
 			"com.github.hitman20081.dagmod.DagModClient"
 		]
 	},
+	"accessWidener": "dagmod.accesswidener",
 	"mixins": [
 		"dagmod.mixins.json"
 	],

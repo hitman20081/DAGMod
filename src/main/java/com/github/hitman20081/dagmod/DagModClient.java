@@ -12,6 +12,7 @@ import com.github.hitman20081.dagmod.entity.client.SimpleNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.InnkeeperGarrickRenderer;
 import com.github.hitman20081.dagmod.entity.client.DragonGuardianRenderer;
 import com.github.hitman20081.dagmod.entity.client.WildDragonRenderer;
+import com.github.hitman20081.dagmod.entity.client.RedDragonRenderer;
 import com.github.hitman20081.dagmod.entity.client.MysteryMerchantRenderer;
 import com.github.hitman20081.dagmod.entity.client.MinerNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.LumberjackNPCRenderer;
@@ -170,6 +171,9 @@ public class DagModClient implements ClientModInitializer {
 
         // Register Wild Dragon renderer
         EntityRendererFactories.register(ModEntities.WILD_DRAGON, WildDragonRenderer::new);
+
+        // Register Red Dragon renderer (quest-exclusive variant)
+        EntityRendererFactories.register(ModEntities.RED_DRAGON, RedDragonRenderer::new);
 
         System.out.println("Entity renderers registered!");
     }

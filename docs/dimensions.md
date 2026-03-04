@@ -2,7 +2,7 @@
 
 DAGMod adds custom dimensions with unique biomes, portals, and content. The Bone Realm and Dragon Realm are the primary adventure dimensions, each with boss encounters and exclusive loot.
 
-**Current Version:** v1.6.5-beta
+**Current Version:** v1.7.2
 
 ---
 

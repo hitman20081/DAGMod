@@ -164,6 +164,14 @@ public class ModEntities {
                     .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "wild_dragon")))
     );
 
+    public static final EntityType<RedDragonEntity> RED_DRAGON = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(DagMod.MOD_ID, "red_dragon"),
+            EntityType.Builder.create(RedDragonEntity::new, SpawnGroup.MONSTER)
+                    .dimensions(2.5f, 1.5f)
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "red_dragon")))
+    );
+
     // Dragon Egg Block Entity
     public static final BlockEntityType<DragonEggBlockEntity> DRAGON_EGG_BLOCK_ENTITY = Registry.register(
             Registries.BLOCK_ENTITY_TYPE,
@@ -193,10 +201,19 @@ public class ModEntities {
         // Register dragon entity attributes
         FabricDefaultAttributeRegistry.register(DRAGON_GUARDIAN, DragonGuardianEntity.createDragonGuardianAttributes());
         FabricDefaultAttributeRegistry.register(WILD_DRAGON, WildDragonEntity.createWildDragonAttributes());
+        FabricDefaultAttributeRegistry.register(RED_DRAGON, WildDragonEntity.createWildDragonAttributes());
 
         // Block natural spawning of Dragon Guardian - it should only spawn via DragonGuardianSpawner
         SpawnRestriction.register(
                 DRAGON_GUARDIAN,
+                SpawnLocationTypes.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                (type, world, spawnReason, pos, random) -> false
+        );
+
+        // Block natural spawning of Red Dragon - it only spawns via quest acceptance
+        SpawnRestriction.register(
+                RED_DRAGON,
                 SpawnLocationTypes.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 (type, world, spawnReason, pos, random) -> false

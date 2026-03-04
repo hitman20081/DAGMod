@@ -3,10 +3,19 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 1,
+      "weight": 4,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_wall_endcap",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "dagmod:bone_dungeon/bone_dungeon_stairway_boss",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -15,7 +24,7 @@
       "weight": 1,
       "element": {
         "location": "minecraft:empty",
-        "processors": "minecraft:empty",
+        "processors": "dagmod:no_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

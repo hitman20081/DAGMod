@@ -1,6 +1,8 @@
 package com.github.hitman20081.dagmod.block;
 
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
+import com.github.hitman20081.dagmod.entity.ModEntities;
+import com.github.hitman20081.dagmod.entity.RedDragonEntity;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestChain;
 import com.github.hitman20081.dagmod.quest.QuestData;
@@ -10,12 +12,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -295,6 +299,11 @@ public class QuestBlock extends Block {
         if (questManager.startQuest(player, questToAccept.getId())) {
             player.sendMessage(Text.literal("✓ Quest accepted: " + questToAccept.getName()), false);
             player.sendMessage(Text.literal("Check your active quests to track progress!"), false);
+
+            // Spawn quest-specific entities on acceptance
+            if (questToAccept.getId().equals("red_dragon_fury")) {
+                spawnRedDragon(player);
+            }
         } else {
             player.sendMessage(Text.literal("✗ Failed to accept quest!"), false);
         }
@@ -510,6 +519,30 @@ public class QuestBlock extends Block {
         );
         player.sendMessage(
             Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
+            false
+        );
+    }
+
+    /**
+     * Spawns a Red Dragon 100–200 blocks away from the player when the red_dragon_fury quest is accepted.
+     */
+    private void spawnRedDragon(ServerPlayerEntity player) {
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+
+        double angle = world.random.nextDouble() * 2 * Math.PI;
+        double distance = 100 + world.random.nextInt(101); // 100–200 blocks
+        int spawnX = (int) (player.getX() + Math.cos(angle) * distance);
+        int spawnZ = (int) (player.getZ() + Math.sin(angle) * distance);
+        int spawnY = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, spawnX, spawnZ) + 10;
+
+        RedDragonEntity dragon = new RedDragonEntity(ModEntities.RED_DRAGON, world);
+        dragon.refreshPositionAndAngles(spawnX, spawnY, spawnZ, world.random.nextFloat() * 360, 0);
+        dragon.setTarget(player);
+        world.spawnEntity(dragon);
+
+        player.sendMessage(
+            Text.literal("[!] A Red Dragon has been spotted nearby! Hunt it down.")
+                .formatted(Formatting.RED, Formatting.BOLD),
             false
         );
     }

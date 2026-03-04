@@ -2,15 +2,18 @@ package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
+import com.github.hitman20081.dagmod.event.DodgeHandler;
 import com.github.hitman20081.dagmod.event.FortuneDustHandler;
+import com.github.hitman20081.dagmod.event.LastStandHandler;
 import com.github.hitman20081.dagmod.event.ShadowBlendHandler;
+import com.github.hitman20081.dagmod.event.SpellModifierHandler;
+import com.github.hitman20081.dagmod.event.VampireDustHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -20,7 +23,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ConsumableItem extends Item {
     private final ConsumableType type;
@@ -70,18 +76,14 @@ public class ConsumableItem extends Item {
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
         String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
 
-        // Apply consumable effect
         boolean success = applyEffect(world, serverPlayer, playerClass);
 
         if (success) {
-            // Consume the item
             stack.decrement(1);
 
-            // Play sound
             world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_LEVELUP,
                     SoundCategory.PLAYERS, 0.5f, 1.5f);
 
-            // Spawn particles
             if (world instanceof ServerWorld serverWorld) {
                 spawnParticles(serverWorld, player);
             }
@@ -100,7 +102,6 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // Restore 50 mana
                 com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
                         com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
                 manaData.addMana(50);
@@ -115,7 +116,6 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // Restore 50 energy using the public method
                 com.github.hitman20081.dagmod.class_system.rogue.EnergyManager.addEnergy(player, 50);
                 player.sendMessage(Text.literal("⚡ Restored 50 Energy! ⚡")
                         .formatted(Formatting.DARK_PURPLE), true);
@@ -128,28 +128,23 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-
-                // Reduce all cooldowns by 30 seconds (600 ticks)
                 CooldownManager.reduceAllCooldowns(player, 600);
-
                 player.sendMessage(Text.literal("⏰ Cooldown reduction active! ⏰")
                         .formatted(Formatting.GOLD), true);
                 return true;
             }
 
             case VAMPIRE_DUST -> {
-                // Give lifesteal effect (custom effect or use absorption + regeneration)
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 400, 1)); // 20s Regen II
-                // TODO: Implement actual lifesteal mechanic in future
+                if (!(world instanceof ServerWorld serverWorld)) return false;
+                VampireDustHandler.activate(player.getUuid(), serverWorld.getTime());
                 player.sendMessage(Text.literal("🩸 Vampire Dust active for 20 seconds! 🩸")
                         .formatted(Formatting.RED), true);
                 return true;
             }
 
             case PHANTOM_DUST -> {
-                // 50% dodge chance - implement via custom effect or resistance
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 300, 2)); // 15s Resistance III
-                // TODO: Implement actual dodge mechanic in future
+                if (!(world instanceof ServerWorld serverWorld)) return false;
+                DodgeHandler.activate(player.getUuid(), 0.5f, serverWorld.getTime(), 300);
                 player.sendMessage(Text.literal("👻 Phantom Dust active for 15 seconds! 👻")
                         .formatted(Formatting.GRAY), true);
                 return true;
@@ -161,7 +156,7 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // TODO: Implement spell doubling mechanic
+                SpellModifierHandler.activateSpellEcho(player.getUuid());
                 player.sendMessage(Text.literal("✨ Next spell will cast twice! ✨")
                         .formatted(Formatting.LIGHT_PURPLE), true);
                 return true;
@@ -173,10 +168,9 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // Battle frenzy effects - SIMPLIFIED
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 300, 1)); // 15s Strength II
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 300, 1)); // 15s Speed II
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 300, 2)); // 15s Haste III
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 300, 1));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 300, 1));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 300, 2));
                 player.sendMessage(Text.literal("⚔ Battle Frenzy active for 15 seconds! ⚔")
                         .formatted(Formatting.DARK_RED), true);
                 return true;
@@ -188,48 +182,49 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // Invisibility until attack
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 6000, 0)); // 5 minutes
-
-                // Mark that Shadow Blend is active
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 6000, 0));
                 ShadowBlendHandler.activateShadowBlend(player.getUuid());
-
                 player.sendMessage(Text.literal("🌑 Shadow Blend active! 🌑")
                         .formatted(Formatting.DARK_GRAY), true);
                 return true;
             }
 
             case FORTUNE_DUST -> {
-                // Fortune III on next 10 blocks
                 FortuneDustHandler.activateFortuneDust(player.getUuid(), 10);
-
                 player.sendMessage(Text.literal("💎 Fortune Dust active for next 10 blocks! 💎")
                         .formatted(Formatting.GREEN), true);
                 return true;
             }
 
             case FEATHERFALL_POWDER -> {
-                // No fall damage for 60 seconds
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 1200, 0)); // 60s
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 1200, 0));
                 player.sendMessage(Text.literal("🪶 Featherfall active for 60 seconds! 🪶")
                         .formatted(Formatting.WHITE), true);
                 return true;
             }
 
             case LAST_STAND_POWDER -> {
-                // Auto-revive - requires custom implementation
-                // TODO: Implement totem-like revive mechanic
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 3)); // 60s Absorption IV
-                player.sendMessage(Text.literal("✝ Last Stand active for 60 seconds! ✝")
+                LastStandHandler.activate(player.getUuid());
+                player.sendMessage(Text.literal("✝ Last Stand ready! You will survive one lethal hit! ✝")
                         .formatted(Formatting.YELLOW), true);
                 return true;
             }
 
             case TIME_DISTORTION -> {
-                // Slow motion effect
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 4)); // 10s Speed V
-                // TODO: Add slow motion effect to nearby entities
-                player.sendMessage(Text.literal("⏱ Time Distortion active for 10 seconds! ⏱")
+                if (!(world instanceof ServerWorld serverWorld)) return false;
+                // Speed II for self
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 1));
+                // Slowness IV on nearby enemies within 10 blocks
+                Box searchBox = Box.of(player.getEntityPos(), 20, 20, 20);
+                List<LivingEntity> nearbyEnemies = serverWorld.getEntitiesByClass(
+                        LivingEntity.class,
+                        searchBox,
+                        e -> e != player && e.isAlive() && player.squaredDistanceTo(e) <= 100
+                );
+                for (LivingEntity enemy : nearbyEnemies) {
+                    enemy.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 3));
+                }
+                player.sendMessage(Text.literal("⏱ Time Distortion! Slowed " + nearbyEnemies.size() + " nearby enemies!")
                         .formatted(Formatting.DARK_AQUA), true);
                 return true;
             }
@@ -240,7 +235,7 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // TODO: Implement 2x spell power for next spell
+                SpellModifierHandler.activateOvercharge(player.getUuid());
                 player.sendMessage(Text.literal("⚡ Next spell has 2x power! ⚡")
                         .formatted(Formatting.BLUE), true);
                 return true;
@@ -252,8 +247,7 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // +100% melee damage
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 400, 4)); // 20s Strength V
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 400, 4));
                 player.sendMessage(Text.literal("💪 Titan's Strength active for 20 seconds! 💪")
                         .formatted(Formatting.DARK_RED), true);
                 return true;
@@ -265,9 +259,8 @@ public class ConsumableItem extends Item {
                             .formatted(Formatting.RED), true);
                     return false;
                 }
-                // 100% dodge
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 200, 4)); // 10s Resistance V
-                // TODO: Implement actual 100% dodge mechanic
+                if (!(world instanceof ServerWorld serverWorld)) return false;
+                DodgeHandler.activate(player.getUuid(), 1.0f, serverWorld.getTime(), 200);
                 player.sendMessage(Text.literal("⚡ Perfect Dodge active for 10 seconds! ⚡")
                         .formatted(Formatting.WHITE), true);
                 return true;

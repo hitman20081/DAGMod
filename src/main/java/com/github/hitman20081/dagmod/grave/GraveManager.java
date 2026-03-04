@@ -70,6 +70,13 @@ public class GraveManager {
         Identifier dimension = world.getRegistryKey().getValue();
         long currentTick = server.getOverworld().getTime();
 
+        // If the player died in the void, snap the search origin to the surface
+        if (deathPos.getY() < world.getBottomY()) {
+            int surfaceY = world.getTopY(net.minecraft.world.Heightmap.Type.MOTION_BLOCKING, deathPos.getX(), deathPos.getZ());
+            deathPos = new BlockPos(deathPos.getX(), Math.max(surfaceY, world.getBottomY() + 1), deathPos.getZ());
+            DagMod.LOGGER.info("Grave system: void death detected for {}, snapping grave origin to surface Y={}", playerName, deathPos.getY());
+        }
+
         // Find a suitable position for the grave
         BlockPos gravePos = findGravePosition(world, deathPos);
 

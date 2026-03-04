@@ -1,11 +1,41 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-02-18
-**Version**: v1.7.0
+**Last Updated**: 2026-03-03
+**Version**: v1.7.4
 
 ---
 
 ## Open Issues
+
+### 8. Block-Attached Entity at Invalid Position (LOW)
+
+**Location**: Vanilla Minecraft worldgen (`BlockPos` / `class_2338` in production jar)
+**Status**: Open — cosmetic/harmless, no gameplay impact
+
+During chunk generation, repeated log warnings appear:
+
+```
+[Server thread/WARN]: Block-attached entity at invalid position BlockPos{x=..., y=-55, z=...}
+```
+
+**Observed pattern**:
+- Three consecutive X positions followed by one at Z+4, Y-1 (e.g. X=-147,-146,-145 then X=-141 at Y=-56)
+- Y range: y=-55 to y=-57 (deepslate layer, above bedrock)
+- Same Z coordinates (e.g. z=14, z=18) appear across different world seeds with different X offsets
+- Errors repeat each time the affected chunks are regenerated/re-entered
+
+**Investigation findings**:
+- Affected chunk NBT shows `block_entities: 0 entries` — no stored block entity data
+- No entity data found in the `entities/` region folder for affected chunks
+- No Ancient City or special structure present at reported coordinates — just solid blocks
+- Errors are logged by vanilla Minecraft code, not DAGMod code
+- Attempted fixes: `/setblock` to reset blocks (temporary), excluding `minecraft:deep_dark` from ore generation in `ModOreGeneration.java` — neither resolved the issue
+
+**Working theory**: A worldgen interaction (possibly ore feature placement, jigsaw structure, or biome decoration) triggers a temporary invalid block entity state that vanilla detects and warns about. The entity is never actually stored, so the error is self-resolving.
+
+**Next steps**: Capture a full stack trace from the warning to identify the exact vanilla callsite and what feature is running at that position during worldgen.
+
+---
 
 ### 2. TagCollectObjective Reliability (MEDIUM)
 
@@ -28,23 +58,17 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 - Race bonus percentages (mining, gathering, hunting, XP)
 - Grave loot delay (5 minutes)
 
-### 7. Consumable TODO Items (LOW)
-
-**Location**: `item/ConsumableItem.java`
-**Status**: Open — items work with placeholder effects
-
-Several consumables use vanilla status effects as placeholders for their intended custom mechanics:
-- **Spell Echo** — displays message only (TODO: spell doubling)
-- **Overcharge Dust** — displays message only (TODO: 2x spell power)
-- **Vampire Dust** — gives Regen II (TODO: actual lifesteal)
-- **Phantom Dust** — gives Resistance III (TODO: dodge mechanic)
-- **Perfect Dodge** — gives Resistance V (TODO: 100% dodge)
-- **Last Stand Powder** — gives Absorption IV (TODO: totem-like revive)
-- **Time Distortion** — gives Speed V (TODO: slow nearby enemies)
-
----
 
 ## Fixed Issues
+
+### Fixed in v1.7.4
+- All consumables fully implemented with custom mechanics (lifesteal, dodge, void rescue, spell doubling, 2× spell power) — no longer placeholder status effects
+
+### Fixed in v1.7.2
+- Bone dungeon portal room never spawning (self-referential jigsaw `Target Name` bug)
+- Stairway U-shape generation (stairway removed from `main` pool)
+- Crossway over-spawning / square cluster formation (weight reduced 20→4 in `corridors` pool)
+- Water flooding dungeon rooms (added `no_water` structure processor to all pieces; restricted biomes to desert/badlands)
 
 ### Fixed in v1.7.1
 - Permission checks added to all admin/debug commands (`.requires(hasPermissionLevel(2))`)

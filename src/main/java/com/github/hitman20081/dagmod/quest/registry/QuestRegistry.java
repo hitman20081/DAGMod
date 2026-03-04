@@ -1,5 +1,7 @@
 package com.github.hitman20081.dagmod.quest.registry;
 
+import com.github.hitman20081.dagmod.dragon_realm.DragonRealmRegistry;
+import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestManager;
@@ -10,10 +12,13 @@ import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import net.minecraft.registry.tag.ItemTags;
+import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
+import com.github.hitman20081.dagmod.quest.rewards.UnlockReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 public class QuestRegistry {
 
@@ -77,6 +82,10 @@ public class QuestRegistry {
         manager.registerQuest(createConquerTheNetherQuest());
         manager.registerQuest(createChallengeTheWitherQuest());
         manager.registerQuest(createWarlordQuest());
+
+        // ========== DUNGEON DISCOVERY QUESTS ==========
+        manager.registerQuest(createRumoursOfTheBoneKingQuest());
+        manager.registerQuest(createRedDragonFuryQuest());
 
         // ========== CLASS-SPECIFIC QUESTS ==========
 
@@ -677,8 +686,9 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.EMERALD, 32))
                 .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
                 .addObjective(new CollectObjective(Items.DIAMOND, 8))
-                .addReward(new ItemReward(Items.EMERALD_BLOCK, 2))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 4))
                 .addReward(XpReward.expert())
                 .addPrerequisite("world_traveler");
@@ -1632,6 +1642,41 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.EMERALD, 2))
                 .addReward(new ItemReward(Items.BREAD, 8))
                 .addReward(XpReward.novice());
+    }
+
+    private static Quest createRumoursOfTheBoneKingQuest() {
+        return new Quest("rumours_of_the_bone_king")
+                .setName("Rumours of the Bone King")
+                .setCategory(Quest.QuestCategory.SIDE)
+                .setDescription("Travellers speak of ancient bone-filled ruins buried deep in the earth. " +
+                    "The skeletons that roam the surface are but echoes of something far worse below. " +
+                    "Slay enough of them to earn a chart that marks the entrance to the nearest dungeon.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(KillObjective.skeletons(20))
+                .addObjective(new CollectObjective(Items.BONE, 10))
+                .addReward(new ItemReward(ModItems.BONE_DUNGEON_LOCATOR, 1))
+                .addReward(new ItemReward(Items.IRON_SWORD, 1))
+                .addReward(new ItemReward(Items.TORCH, 32))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createRedDragonFuryQuest() {
+        return new Quest("red_dragon_fury")
+                .setName("The Red Dragon's Fury")
+                .setCategory(Quest.QuestCategory.SIDE)
+                .setDescription("A village on the outskirts has been terrorised by a Red Dragon — buildings burned, " +
+                    "livestock taken, and survivors scattered. The beast must be slain before it strikes again. " +
+                    "Hunt it down, claim its heart and scales, then forge the Dragon Key to unlock the portal " +
+                    "at the Hall of Champions and enter the Dragon Realm.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .addObjective(new KillObjective(ModEntities.RED_DRAGON, 1))
+                .addObjective(new CollectObjective(ModItems.DRAGON_HEART, 1))
+                .addObjective(new CollectObjective(ModItems.DRAGON_SCALE, 3))
+                .addObjective(new CollectObjective(ModItems.DRAGON_BONE, 2))
+                .addReward(new ItemReward(DragonRealmRegistry.DRAGON_KEY, 1))
+                .addReward(new UnlockReward(Identifier.of("dagmod", "dragon_key"), "Dragon Key"))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
+                .addReward(XpReward.expert());
     }
 
     private static Quest createMineIronJob() {

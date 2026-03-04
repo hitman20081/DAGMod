@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
+import com.github.hitman20081.dagmod.event.SpellModifierHandler;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +12,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.UUID;
+
 /**
  * ARCANE BARRIER - Mage Ability
  *
@@ -18,10 +21,9 @@ import net.minecraft.util.Formatting;
  *
  * Effects:
  * - Creates magical barrier around caster
- * - +10 absorption hearts (20 HP shield)
+ * - +10 absorption hearts (20 HP shield), doubled to 40 HP when Overcharged
  * - Resistance II (40% damage reduction) for 10 seconds
  * - Fire Resistance for 10 seconds
- * - Reflects projectiles (Thorns-like effect)
  *
  * Visual: Magenta/purple barrier particles
  */
@@ -36,14 +38,28 @@ public class ArcaneBarrierAbility {
         }
 
         ServerWorld world = serverPlayer.getEntityWorld();
+        UUID uuid = serverPlayer.getUuid();
 
-        // Start cooldown
-        MageCooldownManager.startCooldown(player, MageAbility.ARCANE_BARRIER);
+        boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
+        float power = SpellModifierHandler.consumeOvercharge(uuid);
 
-        // ABSORPTION SHIELD
-        player.setAbsorptionAmount(player.getAbsorptionAmount() + ABSORPTION_AMOUNT);
+        boolean result = activateInternal(serverPlayer, world, true, power);
+        if (result && hasEcho) {
+            world.getServer().execute(() -> activateInternal(serverPlayer, world, false, power));
+        }
+        return result;
+    }
 
-        // RESISTANCE II (40% damage reduction)
+    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+                                            boolean applyModifiers, float powerMultiplier) {
+        float absorptionAmount = ABSORPTION_AMOUNT * powerMultiplier;
+
+        if (applyModifiers) {
+            MageCooldownManager.startCooldown(player, MageAbility.ARCANE_BARRIER);
+        }
+
+        player.setAbsorptionAmount(player.getAbsorptionAmount() + absorptionAmount);
+
         player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.RESISTANCE,
                 DURATION_TICKS,
@@ -53,7 +69,6 @@ public class ArcaneBarrierAbility {
                 true
         ));
 
-        // FIRE RESISTANCE
         player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.FIRE_RESISTANCE,
                 DURATION_TICKS,
@@ -63,7 +78,6 @@ public class ArcaneBarrierAbility {
                 true
         ));
 
-        // THORNS-like effect (reflects damage)
         player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.INSTANT_HEALTH,
                 DURATION_TICKS,
@@ -72,8 +86,6 @@ public class ArcaneBarrierAbility {
                 true,
                 true
         ));
-
-        // VISUAL: Barrier formation
 
         // Outer sphere
         for (int i = 0; i < 50; i++) {
@@ -94,7 +106,6 @@ public class ArcaneBarrierAbility {
             );
         }
 
-        // Inner glow
         world.spawnParticles(
                 ParticleTypes.ENCHANT,
                 player.getX(),
@@ -105,7 +116,6 @@ public class ArcaneBarrierAbility {
                 0.1
         );
 
-        // Flash effect
         world.spawnParticles(
                 ParticleTypes.END_ROD,
                 player.getX(),
@@ -116,12 +126,9 @@ public class ArcaneBarrierAbility {
                 0.15
         );
 
-        // Continuous barrier effect (spawned over time)
         for (int t = 0; t < DURATION_TICKS; t += 10) {
-            final int tick = t;
             world.getServer().execute(() -> {
                 if (player.isAlive()) {
-                    // Barrier particles around player
                     for (int i = 0; i < 3; i++) {
                         double angle = Math.random() * Math.PI * 2;
                         double radius = 1.5;
@@ -141,7 +148,6 @@ public class ArcaneBarrierAbility {
             });
         }
 
-        // SOUND: Magical barrier
         world.playSound(
                 null,
                 player.getBlockPos(),
@@ -160,15 +166,15 @@ public class ArcaneBarrierAbility {
                 0.8f
         );
 
-        // FEEDBACK
-        serverPlayer.sendMessage(
+        int heartsGranted = Math.round(absorptionAmount / 2);
+        player.sendMessage(
                 Text.literal("🛡 Arcane Barrier activated!")
                         .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
                 true
         );
 
-        serverPlayer.sendMessage(
-                Text.literal("Protected for 10 seconds with 10 absorption hearts!")
+        player.sendMessage(
+                Text.literal("Protected for 10 seconds with " + heartsGranted + " absorption hearts!")
                         .formatted(Formatting.DARK_PURPLE),
                 false
         );

@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
-import net.minecraft.entity.Entity;
+import com.github.hitman20081.dagmod.event.SpellModifierHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ShulkerBulletEntity;
@@ -14,6 +14,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Box;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * ARCANE MISSILES - Mage Ability
@@ -21,7 +22,7 @@ import java.util.List;
  * Cooldown: 20 seconds
  *
  * Effects:
- * - Fires 5 homing arcane missiles
+ * - Fires 5 homing arcane missiles (10 when Overcharged)
  * - Each missile deals 3 damage (1.5 hearts)
  * - Missiles automatically seek nearest enemy
  * - Total: 15 damage (7.5 hearts) if all hit
@@ -40,11 +41,26 @@ public class ArcaneMissilesAbility {
         }
 
         ServerWorld world = serverPlayer.getEntityWorld();
+        UUID uuid = serverPlayer.getUuid();
 
-        // Start cooldown
-        MageCooldownManager.startCooldown(player, MageAbility.ARCANE_MISSILES);
+        boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
+        float power = SpellModifierHandler.consumeOvercharge(uuid);
 
-        // Find nearest enemy
+        boolean result = activateInternal(serverPlayer, world, true, power);
+        if (result && hasEcho) {
+            world.getServer().execute(() -> activateInternal(serverPlayer, world, false, power));
+        }
+        return result;
+    }
+
+    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+                                            boolean applyModifiers, float powerMultiplier) {
+        int missileCount = Math.round(MISSILE_COUNT * powerMultiplier);
+
+        if (applyModifiers) {
+            MageCooldownManager.startCooldown(player, MageAbility.ARCANE_MISSILES);
+        }
+
         Box searchBox = Box.of(
                 player.getEntityPos(),
                 SEARCH_RADIUS * 2,
@@ -64,16 +80,12 @@ public class ArcaneMissilesAbility {
                             .formatted(Formatting.YELLOW),
                     true
             );
-            // Still use cooldown, but warn player
         }
 
-        // Fire missiles with delay
-        for (int i = 0; i < MISSILE_COUNT; i++) {
+        for (int i = 0; i < missileCount; i++) {
             final int missileIndex = i;
 
-            // Delay each missile by 2 ticks (0.1 seconds)
             world.getServer().execute(() -> {
-                // Recheck for targets each time
                 List<LivingEntity> currentTargets = world.getEntitiesByClass(
                         LivingEntity.class,
                         searchBox,
@@ -87,7 +99,6 @@ public class ArcaneMissilesAbility {
             });
         }
 
-        // SOUND: Arcane whoosh
         world.playSound(
                 null,
                 player.getBlockPos(),
@@ -97,8 +108,7 @@ public class ArcaneMissilesAbility {
                 1.5f
         );
 
-        // FEEDBACK
-        serverPlayer.sendMessage(
+        player.sendMessage(
                 Text.literal("✦ Arcane Missiles launched! ✦")
                         .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
                 true
@@ -108,11 +118,9 @@ public class ArcaneMissilesAbility {
     }
 
     private static void fireMissile(ServerWorld world, PlayerEntity player, LivingEntity target, int index) {
-        // Create shulker bullet (homing projectile)
         ShulkerBulletEntity missile = new ShulkerBulletEntity(world, player, target, null);
 
-        // Position missile in front of player with slight offset
-        double angle = (index - 2) * 0.3; // Spread missiles
+        double angle = (index - 2) * 0.3;
         double offsetX = Math.sin(angle) * 0.5;
         double offsetZ = Math.cos(angle) * 0.5;
 
@@ -124,7 +132,6 @@ public class ArcaneMissilesAbility {
 
         world.spawnEntity(missile);
 
-        // VISUAL: Purple particles
         world.spawnParticles(
                 ParticleTypes.ENCHANT,
                 missile.getX(),
@@ -145,7 +152,6 @@ public class ArcaneMissilesAbility {
                 0.05
         );
 
-        // SOUND: Missile launch
         world.playSound(
                 null,
                 missile.getBlockPos(),

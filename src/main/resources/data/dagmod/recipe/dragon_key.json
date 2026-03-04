@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " DH",
+    " BD",
+    "B"
+  ],
+  "key": {
+    "B": "dagmod:dragon_bone",
+    "D": "dagmod:dragon_scale",
+    "H": "dagmod:dragon_heart"
+  },
+  "result": {
+    "id": "dagmod:dragon_key",
+    "components": {},
+    "count": 1
+  }
+}

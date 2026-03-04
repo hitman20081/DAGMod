@@ -15,7 +15,10 @@
       "ShatterproofDamageMixin",
       "ShatterproofMiningMixin",
       "SoulBoundMixin",
-      "DeathGraveMixin"
+      "DeathGraveMixin",
+      "LifestealMixin",
+      "DodgeMixin",
+      "LastStandMixin"
 	],
   "client": [
     "ChestRenderStateMixin",

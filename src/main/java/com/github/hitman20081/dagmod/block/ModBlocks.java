@@ -12,7 +12,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import net.minecraft.block.ExperienceDroppingBlock;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
 
 public class ModBlocks {
 
@@ -82,35 +84,35 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.STONE)));
 
     public static final Block CITRINE_ORE = register("citrine_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "citrine_ore")))
                     .strength(3.0f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.STONE)));
 
     public static final Block RUBY_ORE = register("ruby_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "ruby_ore")))
                     .strength(3.0f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.STONE)));
 
     public static final Block SAPPHIRE_ORE = register("sapphire_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "sapphire_ore")))
                     .strength(3.0f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.STONE)));
 
     public static final Block TANZANITE_ORE = register("tanzanite_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "tanzanite_ore")))
                     .strength(3.0f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.STONE)));
 
     public static final Block ZIRCON_ORE = register("zircon_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "zircon_ore")))
                     .strength(3.0f, 3.0f)
                     .requiresTool()
@@ -118,42 +120,42 @@ public class ModBlocks {
 
     // Deepslate Ore Variants
     public static final Block DEEPSLATE_CITRINE_ORE = register("deepslate_citrine_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_citrine_ore")))
                     .strength(4.5f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.DEEPSLATE)));
 
     public static final Block DEEPSLATE_RUBY_ORE = register("deepslate_ruby_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_ruby_ore")))
                     .strength(4.5f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.DEEPSLATE)));
 
     public static final Block DEEPSLATE_SAPPHIRE_ORE = register("deepslate_sapphire_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_sapphire_ore")))
                     .strength(4.5f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.DEEPSLATE)));
 
     public static final Block DEEPSLATE_TANZANITE_ORE = register("deepslate_tanzanite_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_tanzanite_ore")))
                     .strength(4.5f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.DEEPSLATE)));
 
     public static final Block DEEPSLATE_ZIRCON_ORE = register("deepslate_zircon_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_zircon_ore")))
                     .strength(4.5f, 3.0f)
                     .requiresTool()
                     .sounds(BlockSoundGroup.DEEPSLATE)));
 
     public static final Block PINK_GARNET_DEEPSLATE_ORE = register("pink_garnet_deepslate_ore",
-            new Block(AbstractBlock.Settings.create()
+            new ExperienceDroppingBlock(UniformIntProvider.create(5, 9), AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "pink_garnet_deepslate_ore")))
                     .strength(4.5f, 3.0f)
                     .requiresTool()

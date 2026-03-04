@@ -1,0 +1,4 @@
+accessWidener v2 named
+
+# Make ExclusionZone.shouldExclude accessible so we can check multiple zones from our custom placement
+accessible method net/minecraft/world/gen/chunk/placement/StructurePlacement$ExclusionZone shouldExclude (Lnet/minecraft/world/gen/chunk/placement/StructurePlacementCalculator;II)Z

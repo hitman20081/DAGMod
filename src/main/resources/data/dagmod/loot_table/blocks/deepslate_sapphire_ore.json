@@ -18,8 +18,13 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "components": {
-                      "minecraft:enchantments": {}
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantments": "minecraft:silk_touch",
+                          "levels": { "min": 1 }
+                        }
+                      ]
                     }
                   }
                 }
@@ -38,7 +43,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "dagmod:sapphire"
+              "name": "dagmod:raw_sapphire"
             }
           ]
         }

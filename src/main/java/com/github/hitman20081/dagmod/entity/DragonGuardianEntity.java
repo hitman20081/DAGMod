@@ -698,12 +698,12 @@ public class DragonGuardianEntity extends HostileEntity {
 
     public static DefaultAttributeContainer.Builder createDragonGuardianAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 200.0)          // 200 HP
+                .add(EntityAttributes.MAX_HEALTH, 300.0)          // 300 HP (up from 200)
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.18)       // Base speed
                 .add(EntityAttributes.FLYING_SPEED, 0.4)          // Flying speed
                 .add(EntityAttributes.ATTACK_DAMAGE, 12.0)        // Strong attacks
                 .add(EntityAttributes.ARMOR, 12.0)                // Moderate armor
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 4.0)       // Some toughness
+                .add(EntityAttributes.ARMOR_TOUGHNESS, 10.0)      // High toughness counters heavy hits (up from 4)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.8)  // Hard to knock back
                 .add(EntityAttributes.FOLLOW_RANGE, 48.0)         // Larger range for flying
                 .add(EntityAttributes.ATTACK_KNOCKBACK, 1.0)      // Strong knockback
