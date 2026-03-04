@@ -58,23 +58,11 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 - Race bonus percentages (mining, gathering, hunting, XP)
 - Grave loot delay (5 minutes)
 
-### 7. Consumable TODO Items (LOW)
-
-**Location**: `item/ConsumableItem.java`
-**Status**: Open — items work with placeholder effects
-
-Several consumables use vanilla status effects as placeholders for their intended custom mechanics:
-- **Spell Echo** — displays message only (TODO: spell doubling)
-- **Overcharge Dust** — displays message only (TODO: 2x spell power)
-- **Vampire Dust** — gives Regen II (TODO: actual lifesteal)
-- **Phantom Dust** — gives Resistance III (TODO: dodge mechanic)
-- **Perfect Dodge** — gives Resistance V (TODO: 100% dodge)
-- **Last Stand Powder** — gives Absorption IV (TODO: totem-like revive)
-- **Time Distortion** — gives Speed V (TODO: slow nearby enemies)
-
----
 
 ## Fixed Issues
+
+### Fixed in v1.7.4
+- All consumables fully implemented with custom mechanics (lifesteal, dodge, void rescue, spell doubling, 2× spell power) — no longer placeholder status effects
 
 ### Fixed in v1.7.2
 - Bone dungeon portal room never spawning (self-referential jigsaw `Target Name` bug)
