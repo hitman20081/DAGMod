@@ -371,8 +371,18 @@ public class ModBlocks {
                     itemGroup.add(IRON_CHEST);
                 });
 
+        // Boss Spawn Trigger - Add to Operator Utilities tab
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.OPERATOR)
+                .register((itemGroup) -> itemGroup.add(BOSS_SPAWN_TRIGGER));
+
         DagMod.LOGGER.info("Registering blocks for " + DagMod.MOD_ID);
     }
 
-
+    // Boss spawn trigger — indestructible, no collision, hidden in boss room NBTs
+    public static final Block BOSS_SPAWN_TRIGGER = register("boss_spawn_trigger",
+            new BossSpawnTriggerBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "boss_spawn_trigger")))
+                    .strength(-1.0f, 3600000.0f)
+                    .noCollision()
+                    .nonOpaque()));
 }

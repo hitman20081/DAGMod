@@ -5,6 +5,29 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.5] - 2026-03-06
+
+### Added
+
+- Skeleton Lord now spawns automatically when a survival player enters the bone dungeon boss room (proximity-based trigger block, 12-block radius detection)
+- Boss Spawn Trigger block — custom marker block placed in boss room NBT structure to trigger Skeleton Lord spawning
+- Necrotic Key added as guaranteed drop to Bone Realm locked chest loot table
+- Hall of Champions locator now shows exact coordinates and distance directly in chat; includes `/locate` command note if locator is lost
+
+### Changed
+
+- Bone Realm portal destination Y set to 128 so return portals generate at surface level instead of deep underground
+- Bone Realm portal search range expanded to ±256 Y to prevent duplicate overworld portals when returning from the Bone Realm
+
+### Fixed
+
+- Dragon Key recipe error: "Invalid pattern: each row must be the same width" (third row was 1 character instead of 3)
+- Bone Realm portal creating a duplicate overworld portal on return when the dimension height difference exceeded ±20 blocks
+
+### Migration
+
+- **Bone Realm portals**: Delete any existing Bone Realm portals and re-enter to regenerate them at the correct height
+
 ## [1.7.4] - 2026-03-01
 
 ### Added

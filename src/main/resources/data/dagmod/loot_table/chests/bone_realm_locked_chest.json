@@ -258,6 +258,25 @@
         "max": 10,
         "min": 5
       }
+    },
+    {
+      "bonus_rolls": 0,
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:necrotic_key",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:constant",
+                "value": 1
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

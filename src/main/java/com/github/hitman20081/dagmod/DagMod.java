@@ -147,6 +147,9 @@ public class DagMod implements ModInitializer {
         // Register boss death handler
         BossDeathEventHandler.register();
 
+        // Register boss room proximity spawn handler (Skeleton Lord)
+        com.github.hitman20081.dagmod.bone_realm.BossRoomSpawnHandler.register();
+
         // Register tutorial mob kill tracking
         registerTutorialMobKillTracking();
 
@@ -155,7 +158,10 @@ public class DagMod implements ModInitializer {
         // Register custom structure placement types (must be before world creation)
         com.github.hitman20081.dagmod.world.ModStructurePlacements.register();
 
-        // Register ore generation in overworld
+        // Set world spawn near Hall of Champions on first world load
+        com.github.hitman20081.dagmod.world.HallSpawnInitializer.register();
+
+// Register ore generation in overworld
         com.github.hitman20081.dagmod.world.ModOreGeneration.register();
 
         // Register block entities

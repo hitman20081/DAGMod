@@ -82,10 +82,10 @@ public class BoneRealmTeleporter {
      * Calculate destination position based on source world
      */
     private static BlockPos getDestinationPos(BlockPos sourcePos, ServerWorld sourceWorld, ServerWorld destWorld) {
-        // If going from Overworld to Bone Realm, use 1:1 coordinates
-        // This maintains portal linking
+        // If going from Overworld to Bone Realm, use same X/Z but fix Y to 64
+        // so the portal generates near surface level rather than deep underground
         if (sourceWorld.getRegistryKey() == OVERWORLD && destWorld.getRegistryKey() == BONE_REALM) {
-            return sourcePos;
+            return new BlockPos(sourcePos.getX(), 128, sourcePos.getZ());
         }
 
         // If returning from Bone Realm to Overworld, use same coordinates
@@ -116,7 +116,7 @@ public class BoneRealmTeleporter {
     private static BlockPos findNearbyPortal(ServerWorld world, BlockPos center, int radius) {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
-                for (int y = -20; y <= 20; y++) {
+                for (int y = -256; y <= 256; y++) {
                     BlockPos checkPos = center.add(x, y, z);
 
                     // Check if this is a portal block

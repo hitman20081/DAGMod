@@ -4,7 +4,7 @@
     {
       "weight": 1,
       "element": {
-        "location": "dagmod:spawn/hall_of_champions",
+        "location": "dagmod:hall_of_champions/hall_of_champions_lw",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
