@@ -8,26 +8,40 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.7.5 — Bone Realm Polish & Boss Room Spawning
-**Released:** 2026-03-06
+## v1.7.6 — Hall of Champions Merchants
+**Released:** 2026-03-09
 
 ---
 
-## What's New in v1.7.5
+## What's New in v1.7.6
 
-### Skeleton Lord Boss Spawning
+### Hall of Champions Merchants
 
-The Skeleton Lord now spawns automatically when a survival player enters the bone dungeon boss room — no command blocks required. A custom Boss Spawn Trigger block placed in the boss room NBT detects player proximity (12-block radius) and spawns the Skeleton Lord with a wither spawn sound and soul fire particles. The trigger block is removed after firing so the boss only spawns once per room.
+Nine merchant NPCs now live inside the Hall of Champions, giving players a dedicated trading hub accessible from early game.
 
-### Necrotic Key in Bone Realm Chest
+| Merchant | Speciality |
+|---|---|
+| Alchemist | Potions, consumables, alchemical supplies |
+| Armorer | Armor sets and defensive equipment |
+| Enchantsmith | Enchanted gear and enchanting materials |
+| Jeweler | Gems, gem-crafted items, and jewelry |
+| Miner | Ores, mining supplies, raw materials |
+| Lumberjack | Wood, tools, forestry goods |
+| Voodoo Illusioner | Dark/mystical items and curiosities |
+| Mystery Merchant | Rotating mid-tier weapons and rare equipment |
+| Trophy Dealer | High-end boss drops and collectibles |
 
-The Necrotic Key is now a guaranteed drop in the Bone Realm locked chest, giving players a reliable way to obtain it after defeating the Skeleton Lord.
+### Rotating Trade System
 
-### Hall of Champions Locator Improved
+Several merchants (including the Mystery Merchant and Trophy Dealer) rotate their inventory on a configurable timer — default every 72 hours, adjustable between 12 and 168 hours. Each merchant type rotates independently, so there's always a reason to check back.
 
-The Hall of Champions locator now works like the Bone Dungeon locator — it searches asynchronously and displays the exact coordinates and distance directly in chat. No more telling players to type a command.
+### Merchant Dialogue
 
-> *Lost your locator? Use: `/locate structure dagmod:hall_of_champions`*
+Merchants greet players with context-aware messages when opening their trade screen.
+
+### `/merchant` Admin Commands
+
+Server operators can use `/merchant status` to inspect the current rotation state and time until next rotation, or `/merchant rotate` to force an immediate rotation for testing.
 
 ---
 
@@ -39,11 +53,7 @@ No balance changes this release.
 
 ## Bug Fixes
 
-**Dragon Key recipe** — Fixed "Invalid pattern: each row must be the same width" error. The third row of the recipe was 1 character instead of 3.
-
-**Bone Realm portal height** — Portals now generate at surface level (~Y=110) instead of deep underground. The destination Y is now set to 128 before ground-searching, so the portal lands on actual terrain.
-
-**Duplicate overworld portal on return** — Returning through the Bone Realm portal no longer creates a second overworld portal. The search range was expanded from ±20 to ±256 blocks vertically so the original portal is always found regardless of height differences between dimensions.
+No bug fixes this release.
 
 ---
 
@@ -63,12 +73,12 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.7.5 `.jar`
+3. Install the v1.7.6 `.jar`
 4. Launch Minecraft
 
 ### Migration Notes
 
-**Bone Realm portals**: Delete any existing Bone Realm portals and re-enter to regenerate them at the correct height. Old portals created before this update will remain where they are.
+No migration steps required for this update.
 
 ---
 
@@ -92,5 +102,6 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 | Version | Summary |
 |---|---|
+| v1.7.5 | Skeleton Lord auto-spawning, Necrotic Key loot, Hall of Champions locator improvements, Bone Realm portal height fixes |
 | v1.7.4 | Real consumables, dragon stat & recipe overhaul, grave void death fix |
 | v1.5.3-beta | Quest progression circular dependency fix |

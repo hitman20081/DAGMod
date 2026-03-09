@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.4
-**Last Updated**: 2026-03-01
+**Current Version**: v1.7.6
+**Last Updated**: 2026-03-09
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -89,6 +89,7 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - Surface structure with Race & Class Selection Altars
   - Hall Locator item for navigation
   - Respawn point integration
+  - Nine merchant NPCs inside the hall: Alchemist, Armorer, Enchantsmith, Jeweler, Miner, Lumberjack, Voodoo Illusioner, Mystery Merchant, Trophy Dealer — added v1.7.6
 
 ### **Items & Equipment**
 - ✅ **50+ Custom Items**
@@ -329,6 +330,28 @@ Priority: **LOW** (Long-term - inspired by Trinkets mod)
   - Jewelry upgrade paths
   - Combine with gem socket system for enhanced customization
 
+### **vTBD - The Labyrinth**
+Priority: **MEDIUM**
+
+- ❌ **Story Hook**
+  - Player is sent on a search and retrieve quest (e.g. "Search the Ruins for a lost artifact")
+  - Upon finding the artifact, the Dark Mage ambushes the player and teleports them into the Labyrinth
+  - Sets up a mystery/revenge arc — escape the Labyrinth, hunt down the Dark Mage
+
+- ❌ **Dark Mage Boss**
+  - New hostile mob — triggers the ambush and teleport on quest completion
+  - Custom combat mechanics and spellcasting behaviour
+  - Defeating the Dark Mage is the only way to escape the Labyrinth
+
+- ❌ **Labyrinth Dimension**
+  - New custom dimension — a sprawling, procedurally generated maze
+  - Player arrives with no warning — survival and navigation are immediate challenges
+  - Navigate through the labyrinth to locate the Dark Mage's lair
+  - Custom loot, traps, and hazards throughout
+  - Escape portal opens upon defeating the Dark Mage
+
+---
+
 ### **v3.0.0 - Endgame Expansion**
 Priority: **VERY LOW** (Long-term vision - Major expansion)
 
@@ -531,6 +554,8 @@ Priority: **LOW**
 
 ### **Short-term** - Next 3-6 months
 - ✅ **v1.7.4** (Mar 2026) - Real consumable mechanics (lifesteal, dodge, spell mods, last stand + void rescue, grave void fix), dragon recipe rework (all dragon gear now uses mod drops), dragon stat buffs (HP + toughness), Master Trader quest fix (real enchanted book rewards)
+- ✅ **v1.7.5** (Mar 2026) - Skeleton Lord auto-spawning in boss room, Boss Spawn Trigger block, Necrotic Key in loot table, Hall of Champions locator chat coordinates, Bone Realm portal height fixes
+- ✅ **v1.7.6** (Mar 2026) - Hall of Champions merchants (9 NPCs: Alchemist, Armorer, Enchantsmith, Jeweler, Miner, Lumberjack, Voodoo Illusioner, Mystery Merchant, Trophy Dealer), rotating trade system per-merchant, merchant dialogue, `/merchant` admin commands
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
@@ -542,6 +567,7 @@ Priority: **LOW**
 - 🎯 **v2.3.0** (Minor) - Jewelry and trinkets system
 
 ### **Long-term** - 12+ months
+- 🎯 **vTBD** - The Labyrinth dimension & Dark Mage boss
 - 🎯 **v3.0.0** (Major) - Endgame expansion (raids, prestige, seasonal events)
 - 🎯 Future major expansions as needed
 
@@ -595,7 +621,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-03-03
+**Last Updated**: 2026-03-06
 **Maintained By**: hitman20081
-**Current Version**: v1.7.4
+**Current Version**: v1.7.5
 **License**: See LICENSE file

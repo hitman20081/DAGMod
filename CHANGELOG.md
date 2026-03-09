@@ -5,6 +5,26 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.6] - 2026-03-09
+
+### Added
+
+- **Hall of Champions Merchants** — Nine merchant NPCs now spawn inside the Hall of Champions structure:
+  - **Alchemist** — Potions, consumables, and alchemical supplies
+  - **Armorer** — Armor sets and defensive equipment
+  - **Enchantsmith** — Enchanted gear and enchanting materials
+  - **Jeweler** — Gems, gem-crafted items, and jewelry
+  - **Miner** — Ores, mining supplies, and raw materials
+  - **Lumberjack** — Wood, tools, and forestry goods
+  - **Voodoo Illusioner** — Dark/mystical items and curiosities
+  - **Mystery Merchant** — Rotating mid-tier weapons and rare equipment (Mythril Sword, Gilded Rapier, and more)
+  - **Trophy Dealer (Luxury Merchant)** — High-end boss drops and collectibles (Dragon Heart, rare drops) purchased with diamonds/rare currencies
+- **Rotating Trade System** — Several merchants (Mystery Merchant, Trophy Dealer, and others) rotate their inventories on a configurable timer (default 72 hours, range 12–168 hours). Each merchant type independently cycles through a pool of trade sets registered in `RotatingTradeRegistry`
+- **Merchant Dialogue** — NPCs greet the player with context-aware chat messages on interaction (`MerchantDialogue`)
+- **`/merchant status`** command (OP only) — Shows current rotation index per merchant type and time until next rotation
+- **`/merchant rotate`** command (OP only) — Forces an immediate trade rotation for testing/administration
+- **`TradeConfig`** — Server-configurable rotation interval; clamped to 12–168 hours
+
 ## [1.7.5] - 2026-03-06
 
 ### Added
