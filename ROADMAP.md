@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.6
-**Last Updated**: 2026-03-09
+**Current Version**: v1.7.7
+**Last Updated**: 2026-03-27
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -171,7 +171,7 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 - ❌ **Implementation needed** - Daily quest rotation, reset timers, reward scaling
 
 ### **Custom Enchantments** (Target: v1.10.0)
-- 🟡 **Framework exists** - `/data/dag009/enchantment/` directory with basic examples
+- 🟡 **Framework exists** - `/data/dag/enchantment/` directory with basic examples
 - ❌ **Implementation needed** - Race/class-specific enchantments, discovery system
 
 ---
@@ -556,6 +556,7 @@ Priority: **LOW**
 - ✅ **v1.7.4** (Mar 2026) - Real consumable mechanics (lifesteal, dodge, spell mods, last stand + void rescue, grave void fix), dragon recipe rework (all dragon gear now uses mod drops), dragon stat buffs (HP + toughness), Master Trader quest fix (real enchanted book rewards)
 - ✅ **v1.7.5** (Mar 2026) - Skeleton Lord auto-spawning in boss room, Boss Spawn Trigger block, Necrotic Key in loot table, Hall of Champions locator chat coordinates, Bone Realm portal height fixes
 - ✅ **v1.7.6** (Mar 2026) - Hall of Champions merchants (9 NPCs: Alchemist, Armorer, Enchantsmith, Jeweler, Miner, Lumberjack, Voodoo Illusioner, Mystery Merchant, Trophy Dealer), rotating trade system per-merchant, merchant dialogue, `/merchant` admin commands
+- ✅ **v1.7.7** (Mar 2026) - Class quest chains rebuilt (all 3 classes, 5 quests each, level-gated 10/25/50/75/100), per-quest level requirement system, enchanted book reward fixes, Ender Dragon quest objectives removed, race quest polish, WildDragonEntity crash fixes
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
@@ -621,7 +622,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-03-06
+**Last Updated**: 2026-03-27
 **Maintained By**: hitman20081
-**Current Version**: v1.7.5
+**Current Version**: v1.7.7
 **License**: See LICENSE file

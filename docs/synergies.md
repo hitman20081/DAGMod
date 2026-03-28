@@ -2,10 +2,6 @@
 
 When race and class combine, something extraordinary happens. Race-class combinations can unlock unique synergy abilities that go beyond the sum of their parts. These synergies define your character's specialty and playstyle.
 
-**Current Version:** v1.7.1
-
----
-
 ## What Are Synergies?
 
 Synergies are **special passive bonuses** that activate when you combine a specific race with a specific class. They stack with your base race and class bonuses, creating powerful specialized builds.
@@ -162,7 +158,7 @@ Fast, mobile Warrior with extended reach. The movement speed makes you highly mo
 
 **Best For:** Mobile tank builds, forest dwellers
 
-**Strategy:** Use speed to position optimally, extended reach to hit from safer distance. Build bases in forests for wood/leaf gathering bonuses. The Guardian of the Wilds quest chain rewards Elytra for ultimate mobility.
+**Strategy:** Use speed to position optimally, extended reach to hit from safer distance. Build bases in forests for wood/leaf gathering bonuses. The Guardian of the Wilds quest chain provides excellent gear for your journey.
 
 ---
 

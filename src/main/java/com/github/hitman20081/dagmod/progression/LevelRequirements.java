@@ -17,9 +17,9 @@ public class LevelRequirements {
     public static final int RACE_QUEST_TIER_5 = 40;  // End-game
 
     // Quest difficulty level requirements
-    public static final int APPRENTICE_QUESTS = 5;
-    public static final int EXPERT_QUESTS = 15;
-    public static final int MASTER_QUESTS = 25;
+    public static final int APPRENTICE_QUESTS = 10;
+    public static final int EXPERT_QUESTS = 25;
+    public static final int MASTER_QUESTS = 50;
 
     /**
      * Check if player meets level requirement for a quest
@@ -44,10 +44,14 @@ public class LevelRequirements {
      * @return Minimum level required
      */
     public static int getRequiredLevelForQuest(Quest quest) {
-        // Check quest difficulty first
+        // Per-quest override takes priority over difficulty-based default
+        if (quest.getMinLevel() >= 1) {
+            return quest.getMinLevel();
+        }
+
         switch (quest.getDifficulty()) {
             case NOVICE -> {
-                return 1; // No level requirement
+                return 1;
             }
             case APPRENTICE -> {
                 return APPRENTICE_QUESTS;

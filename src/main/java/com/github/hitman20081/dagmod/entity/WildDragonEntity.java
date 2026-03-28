@@ -1508,8 +1508,8 @@ public class WildDragonEntity extends HostileEntity {
             int timeSinceAttacked = owner.getLastAttackedTime();
 
             return timeSinceAttacked != this.lastAttackedTime &&
-                   dragon.canTarget(attacker) &&
-                   attacker != null;
+                   attacker != null &&
+                   dragon.canTarget(attacker);
         }
 
         @Override
@@ -1550,8 +1550,8 @@ public class WildDragonEntity extends HostileEntity {
             int timeSinceAttacked = owner.getLastAttackTime();
 
             return timeSinceAttacked != this.lastAttackTime &&
-                   dragon.canTarget(target) &&
-                   target != null;
+                   target != null &&
+                   dragon.canTarget(target);
         }
 
         @Override

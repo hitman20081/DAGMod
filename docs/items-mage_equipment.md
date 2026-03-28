@@ -16,7 +16,7 @@ Single-use scrolls that cast powerful spells.
 **Acquisition:**
 - Mage-specific quest rewards
 - Quest chain completion
-- Cannot be crafted (as of v1.5.0-beta)
+- Cannot be crafted
 
 **Usage:**
 - Right-click to cast spell

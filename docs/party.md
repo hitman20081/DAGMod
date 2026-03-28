@@ -2,10 +2,6 @@
 
 DAGMod's party system allows up to 5 players to team up for shared XP, party chat, and cooperative quests. Parties provide XP bonuses that scale with group size and enable group-oriented content.
 
-**Current Version:** v1.7.1
-
----
-
 ## Party Basics
 
 | Feature | Details |

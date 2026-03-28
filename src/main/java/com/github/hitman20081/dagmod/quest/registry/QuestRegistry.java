@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.quest.registry;
 
+import com.github.hitman20081.dagmod.bone_realm.entity.BoneRealmEntityRegistry;
 import com.github.hitman20081.dagmod.dragon_realm.DragonRealmRegistry;
 import com.github.hitman20081.dagmod.entity.ModEntities;
 import com.github.hitman20081.dagmod.item.ModItems;
@@ -87,22 +88,7 @@ public class QuestRegistry {
         manager.registerQuest(createRumoursOfTheBoneKingQuest());
         manager.registerQuest(createRedDragonFuryQuest());
 
-        // ========== CLASS-SPECIFIC QUESTS ==========
-
-        // Warrior Quests - NEW ABILITY CHAIN
-        manager.registerQuest(createTrialOfFuryQuest());
-        manager.registerQuest(createCallToArmsQuest());
-        manager.registerQuest(createShieldBearersTrialQuest());
-
-        // Mage Quests - NEW SPELL SCROLL CHAIN
-        manager.registerQuest(createApprenticeScrollsQuest());
-        manager.registerQuest(createAdeptScrollsQuest());
-        manager.registerQuest(createMasterScrollsQuest());
-
-        // Rogue Quests - NEW ABILITY TOME CHAIN
-        manager.registerQuest(createShadowsCallingQuest());
-        manager.registerQuest(createPhantomHunterQuest());
-        manager.registerQuest(createEchoesOfTheDeepQuest());
+        // Class quest registration is handled inside registerQuestChains()
 
         // ========== CHAIN QUESTS ==========
         // Adventurer's Path Chain
@@ -254,7 +240,7 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.DEEPSLATE_IRON_ORE, 8))
                 .addObjective(new CollectObjective(Items.DEEPSLATE_GOLD_ORE, 4))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
-                .addReward(new ItemReward(Items.TORCH, 64))
+                .addReward(new ItemReward(Items.DIAMOND, 4))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("dwarf_apprentice");
@@ -306,7 +292,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 64))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 3))
                 .addReward(new ItemReward(Items.EMERALD_BLOCK, 1))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("efficiency"), 4))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 2))
                 .addReward(XpReward.expert())
                 .addPrerequisite("mountain_kings_tribute");
     }
@@ -352,10 +339,11 @@ public class QuestRegistry {
                 .setDescription("Inscribe ancient dwarven runes into your masterwork equipment.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Dwarf")
-                .addObjective(new CollectObjective(Items.ENCHANTED_BOOK, 5))
                 .addObjective(new CollectObjective(Items.LAPIS_BLOCK, 8))
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 32))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 3))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("silk_touch"), 1))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 20))
                 .addReward(new ItemReward(Items.DIAMOND, 10))
                 .addReward(XpReward.master())
@@ -467,10 +455,10 @@ public class QuestRegistry {
                 .setRequiredRace("Elf")
                 .addObjective(new KillObjective(EntityType.SKELETON, 20))
                 .addObjective(new CollectObjective(Items.BONE, 32))
-                .addObjective(new CollectObjective(Items.ARROW, 64))
+                .addObjective(new CollectObjective(Items.FLINT, 48))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.ARROW, 128))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("power"), 3))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("roots_run_deep");
     }
@@ -521,7 +509,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.SPECTRAL_ARROW, 64))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("infinity"), 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("flame"), 1))
                 .addReward(XpReward.expert())
                 .addPrerequisite("whispers_of_leaves");
     }
@@ -587,9 +576,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.EMERALD_BLOCK, 8))
                 .addObjective(new CollectObjective(Items.DIAMOND_BLOCK, 16))
                 .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 8))
-                .addReward(new ItemReward(Items.ELYTRA, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 16))
-                .addReward(new ItemReward(Items.NETHER_STAR, 1))
+                .addReward(new ItemReward(Items.NETHER_STAR, 2))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 3))
                 .addReward(XpReward.master())
                 .addPrerequisite("moonlit_ritual");
@@ -706,7 +694,9 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.ANVIL, 1))
                 .addObjective(new CollectObjective(Items.BOOKSHELF, 16))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 16))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 3))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
                 .addReward(new ItemReward(Items.DIAMOND, 8))
                 .addReward(XpReward.expert())
                 .addPrerequisite("master_trader");
@@ -720,7 +710,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Human")
                 .addObjective(new CollectObjective(Items.NETHERRACK, 64))
-                .addObjective(new CollectObjective(Items.END_STONE, 32))
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 4))
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 16))
                 .addReward(new ItemReward(Items.ENDER_PEARL, 16))
                 .addReward(new ItemReward(Items.BLAZE_ROD, 8))
@@ -758,7 +748,10 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.IRON_BLOCK, 16))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 4))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 2))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 4))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("protection"), 4))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("thorns"), 3))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("feather_falling"), 4))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("sharpness"), 5))
                 .addReward(XpReward.master())
                 .addPrerequisite("heros_journey");
     }
@@ -770,7 +763,7 @@ public class QuestRegistry {
                 .setDescription("Achieve true mastery. Demonstrate expertise in combat, crafting, and exploration.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Human")
-                .addObjective(new KillObjective(EntityType.ENDER_DRAGON, 1))
+                .addObjective(new KillObjective(ModEntities.WILD_DRAGON, 1))
                 .addObjective(new CollectObjective(Items.NETHERITE_BLOCK, 2))
                 .addObjective(new CollectObjective(Items.ELYTRA, 1))
                 .addReward(new ItemReward(Items.NETHERITE_SWORD, 1))
@@ -873,7 +866,7 @@ public class QuestRegistry {
                 .addObjective(new KillObjective(EntityType.RAVAGER, 1))
                 .addObjective(new CollectObjective(Items.BEEF, 16))
                 .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("sharpness"), 3))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("prove_your_strength");
@@ -908,7 +901,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 32))
                 .addReward(new ItemReward(Items.DIAMOND_AXE, 1))
                 .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("smite"), 4))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fire_aspect"), 2))
                 .addReward(XpReward.expert())
                 .addPrerequisite("raid_leader");
     }
@@ -987,14 +981,14 @@ public class QuestRegistry {
                 .setDescription("You have conquered all challenges. Claim your place as Warlord, the ultimate warrior.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Orc")
-                .addObjective(new KillObjective(EntityType.ENDER_DRAGON, 1))
+                .addObjective(new KillObjective(BoneRealmEntityRegistry.SKELETON_LORD, 1))
                 .addObjective(new CollectObjective(Items.NETHER_STAR, 2))
                 .addObjective(new CollectObjective(Items.NETHERITE_BLOCK, 4))
                 .addReward(new ItemReward(Items.NETHERITE_AXE, 1))
                 .addReward(new ItemReward(Items.NETHERITE_PICKAXE, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 16))
                 .addReward(new ItemReward(Items.NETHER_STAR, 2))
-                .addReward(new ItemReward(Items.DRAGON_EGG, 1))
+                .addReward(new ItemReward(Items.NETHERITE_SWORD, 1))
                 .addReward(XpReward.master())
                 .addPrerequisite("challenge_the_wither");
     }
@@ -1030,134 +1024,247 @@ public class QuestRegistry {
         return new Quest("trial_of_fury")
                 .setName("Trial of Fury")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("Awaken the berserker within. Prove your warrior spirit by defeating enemies in honorable combat.")
+                .setDescription("Awaken the berserker within. Cut down your enemies and claim the Rage Totem — your first taste of true warrior power.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setMinLevel(10)
                 .setRequiredClass("Warrior")
-                .addObjective(KillObjective.zombies(10))
-                .addObjective(KillObjective.skeletons(5))
-                .addObjective(new CollectObjective(Items.IRON_INGOT, 8))
+                .addObjective(KillObjective.zombies(15))
+                .addObjective(KillObjective.skeletons(10))
+                .addObjective(new CollectObjective(Items.IRON_INGOT, 16))
                 .addReward(new ItemReward(ModItems.RAGE_TOTEM, 1))
                 .addReward(new ItemReward(Items.IRON_SWORD, 1))
+                .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.novice());
     }
 
-    private static Quest createCallToArmsQuest() {
-        return new Quest("call_to_arms")
-                .setName("Call to Arms")
+    private static Quest createBattleHardenedQuest() {
+        return new Quest("battle_hardened")
+                .setName("Battle Hardened")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("A true warrior rallies allies to battle. Gather the materials to forge a legendary war horn.")
+                .setDescription("A warrior who cannot rally is a warrior who dies alone. Prove yourself in harder combat and earn the Battle Standard.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setMinLevel(25)
                 .setRequiredClass("Warrior")
-                .addObjective(new KillObjective(EntityType.PILLAGER, 8))
+                .addObjective(new KillObjective(EntityType.PILLAGER, 12))
+                .addObjective(new KillObjective(EntityType.VINDICATOR, 6))
                 .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
-                .addObjective(new CollectObjective(Items.IRON_BLOCK, 3))
-                .addReward(new ItemReward(ModItems.WAR_HORN, 1))
-                .addReward(new ItemReward(Items.SHIELD, 1))
-                .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
+                .addObjective(new CollectObjective(Items.IRON_BLOCK, 4))
+                .addReward(new ItemReward(ModItems.BATTLE_STANDARD, 1))
+                .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
+                .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("trial_of_fury");
     }
 
-    private static Quest createShieldBearersTrialQuest() {
-        return new Quest("shield_bearers_trial")
-                .setName("Shield Bearer's Trial")
+    private static Quest createWhirlwindMasteryQuest() {
+        return new Quest("whirlwind_mastery")
+                .setName("Whirlwind Mastery")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("Master the ancient technique of Shield Bash. Face powerful foes and emerge victorious. Complete the Warrior quest chain for legendary rewards!")
-                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setDescription("Single targets are for lesser fighters. Tear through entire hordes and claim the Whirlwind Axe.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(50)
                 .setRequiredClass("Warrior")
-                .addObjective(new KillObjective(EntityType.VINDICATOR, 6))
-                .addObjective(new KillObjective(EntityType.RAVAGER, 2))
-                .addObjective(new CollectObjective(Items.DIAMOND, 8))
-                .addReward(new ItemReward(Items.SHIELD, 1))
+                .addObjective(new KillObjective(EntityType.BLAZE, 10))
+                .addObjective(new KillObjective(EntityType.WITHER_SKELETON, 8))
+                .addObjective(new CollectObjective(Items.DIAMOND, 16))
+                .addObjective(new CollectObjective(Items.NETHERITE_SCRAP, 4))
+                .addReward(new ItemReward(ModItems.WHIRLWIND_AXE, 1))
                 .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addReward(new ItemReward(Items.DIAMOND_LEGGINGS, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
                 .addReward(XpReward.expert())
-                .addPrerequisite("call_to_arms");
+                .addPrerequisite("battle_hardened");
+    }
+
+    private static Quest createIronSkinTrialQuest() {
+        return new Quest("iron_skin_trial")
+                .setName("Iron Skin Trial")
+                .setCategory(Quest.QuestCategory.CLASS)
+                .setDescription("Survive the unsurvivable. Endure the harshest battles and forge the Iron Talisman from the wreckage.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(75)
+                .setRequiredClass("Warrior")
+                .addObjective(new KillObjective(EntityType.PIGLIN_BRUTE, 8))
+                .addObjective(new CollectObjective(Items.ANCIENT_DEBRIS, 8))
+                .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 4))
+                .addReward(new ItemReward(ModItems.IRON_TALISMAN, 1))
+                .addReward(new ItemReward(Items.NETHERITE_HELMET, 1))
+                .addReward(new ItemReward(Items.NETHERITE_BOOTS, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5))
+                .addReward(XpReward.expert())
+                .addPrerequisite("whirlwind_mastery");
+    }
+
+    private static Quest createWarCryQuest() {
+        return new Quest("war_cry")
+                .setName("War Cry")
+                .setCategory(Quest.QuestCategory.CLASS)
+                .setDescription("A true berserker does not fight alone — they inspire fear in enemies and courage in allies. Slay the mightiest foes and claim the War Horn.")
+                .setDifficulty(Quest.QuestDifficulty.MASTER)
+                .setMinLevel(100)
+                .setRequiredClass("Warrior")
+                .addObjective(new KillObjective(ModEntities.WILD_DRAGON, 1))
+                .addObjective(new KillObjective(BoneRealmEntityRegistry.SKELETON_LORD, 1))
+                .addObjective(new CollectObjective(Items.NETHERITE_BLOCK, 4))
+                .addReward(new ItemReward(ModItems.WAR_HORN, 1))
+                .addReward(new ItemReward(Items.NETHERITE_CHESTPLATE, 1))
+                .addReward(new ItemReward(Items.NETHERITE_LEGGINGS, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 8))
+                .addReward(XpReward.master())
+                .addPrerequisite("iron_skin_trial");
     }
 
     private static void registerWarriorQuestChain(QuestManager manager) {
+        manager.registerQuest(createTrialOfFuryQuest());
+        manager.registerQuest(createBattleHardenedQuest());
+        manager.registerQuest(createWhirlwindMasteryQuest());
+        manager.registerQuest(createIronSkinTrialQuest());
+        manager.registerQuest(createWarCryQuest());
+
         QuestChain warriorChain = new QuestChain(
                 "path_of_the_berserker",
                 "Path of the Berserker",
-                "Master the three pillars of warrior combat: Rage, Rally, and Shield. Become an unstoppable force on the battlefield.",
+                "Six abilities. Five trials. One berserker. Master rage, endurance, and destruction to become an unstoppable force on the battlefield.",
                 QuestData.QuestBookTier.NOVICE,
                 null
         )
                 .addQuest("trial_of_fury")
-                .addQuest("call_to_arms")
-                .addQuest("shield_bearers_trial")
+                .addQuest("battle_hardened")
+                .addQuest("whirlwind_mastery")
+                .addQuest("iron_skin_trial")
+                .addQuest("war_cry")
                 .addChainReward(new ItemReward(Items.NETHERITE_SWORD, 1))
-                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5));
+                .addChainReward(new ItemReward(Items.NETHERITE_AXE, 1))
+                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 10));
 
         manager.registerQuestChain(warriorChain);
     }
 
     // ========== MAGE CLASS QUESTS ==========
 
-    private static Quest createApprenticeScrollsQuest() {
-        return new Quest("apprentice_scrolls")
-                .setName("Apprentice's Scrolls")
+    private static Quest createArcaneMissilesQuest() {
+        return new Quest("arcane_missiles_unlock")
+                .setName("First Spark")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("Begin your magical journey. Gather components to create basic spell scrolls.")
+                .setDescription("Every archmage begins with a single spark. Gather the components to channel your first arcane ability.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setMinLevel(10)
                 .setRequiredClass("Mage")
                 .addObjective(new CollectObjective(Items.PAPER, 16))
-                .addObjective(new CollectObjective(Items.GLOWSTONE_DUST, 8))
-                .addObjective(new CollectObjective(Items.REDSTONE, 16))
+                .addObjective(new CollectObjective(Items.GLOWSTONE_DUST, 16))
+                .addObjective(new CollectObjective(Items.REDSTONE, 32))
+                .addReward(new ItemReward(ModItems.ARCANE_ORB, 1))
                 .addReward(new ItemReward(ModItems.HEAL_SCROLL, 4))
                 .addReward(new ItemReward(ModItems.ABSORPTION_SCROLL, 3))
                 .addReward(new ItemReward(ModItems.MANA_SHIELD_SCROLL, 3))
                 .addReward(XpReward.novice());
     }
 
-    private static Quest createAdeptScrollsQuest() {
-        return new Quest("adept_scrolls")
-                .setName("Adept's Scrolls")
+    private static Quest createTemporalMasteryQuest() {
+        return new Quest("temporal_mastery")
+                .setName("Temporal Mastery")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("Your magical prowess grows. Gather rare materials to craft more powerful spell scrolls.")
+                .setDescription("Time bends to the will of a true mage. Gather components from the most volatile corners of the world to forge a Temporal Crystal.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setMinLevel(25)
                 .setRequiredClass("Mage")
-                .addObjective(new CollectObjective(Items.BLAZE_POWDER, 8))
-                .addObjective(new CollectObjective(Items.ENDER_PEARL, 6))
-                .addObjective(new CollectObjective(Items.GHAST_TEAR, 2))
+                .addObjective(new CollectObjective(Items.BLAZE_POWDER, 16))
+                .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
+                .addObjective(new CollectObjective(Items.GHAST_TEAR, 4))
+                .addReward(new ItemReward(ModItems.TEMPORAL_CRYSTAL, 1))
                 .addReward(new ItemReward(ModItems.FIREBALL_SCROLL, 4))
                 .addReward(new ItemReward(ModItems.TELEPORT_SCROLL, 3))
-                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 8))
+                .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
+                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 16))
                 .addReward(XpReward.apprentice())
-                .addPrerequisite("apprentice_scrolls");
+                .addPrerequisite("arcane_missiles_unlock");
     }
 
-    private static Quest createMasterScrollsQuest() {
-        return new Quest("master_scrolls")
-                .setName("Master's Scrolls")
+    private static Quest createManaBurstQuest() {
+        return new Quest("mana_burst_unlock")
+                .setName("Surge of Power")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("Unlock the most devastating spells. Gather powerful components to achieve arcane mastery.")
+                .setDescription("The arcane arts demand sacrifice. Channel rare materials into a Mana Catalyst capable of leveling everything around you.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(50)
                 .setRequiredClass("Mage")
-                .addObjective(new CollectObjective(Items.WITHER_SKELETON_SKULL, 1))
-                .addObjective(new CollectObjective(Items.ENDER_EYE, 4))
+                .addObjective(new CollectObjective(Items.AMETHYST_SHARD, 32))
+                .addObjective(new CollectObjective(Items.ENDER_EYE, 8))
                 .addObjective(new CollectObjective(Items.LAPIS_BLOCK, 8))
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 4))
+                .addReward(new ItemReward(ModItems.MANA_CATALYST, 1))
                 .addReward(new ItemReward(ModItems.LIGHTNING_SCROLL, 4))
                 .addReward(new ItemReward(ModItems.FROST_NOVA_SCROLL, 4))
+                .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
                 .addReward(XpReward.expert())
-                .addPrerequisite("adept_scrolls");
+                .addPrerequisite("temporal_mastery");
+    }
+
+    private static Quest createArcaneBarrierQuest() {
+        return new Quest("arcane_barrier_unlock")
+                .setName("Archmage's Aegis")
+                .setCategory(Quest.QuestCategory.CLASS)
+                .setDescription("You have conquered offense and control. Now forge the ultimate defense — an Arcane Barrier that reflects the world's attacks back upon itself.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(75)
+                .setRequiredClass("Mage")
+                .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 4))
+                .addObjective(new CollectObjective(Items.DIAMOND_BLOCK, 4))
+                .addObjective(new CollectObjective(Items.EXPERIENCE_BOTTLE, 64))
+                .addReward(new ItemReward(ModItems.BARRIER_CHARM, 1))
+                .addReward(new ItemReward(ModItems.MANA_SHIELD_SCROLL, 5))
+                .addReward(new ItemReward(Items.NETHERITE_HELMET, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5))
+                .addReward(XpReward.expert())
+                .addPrerequisite("mana_burst_unlock");
+    }
+
+    private static Quest createArchmageTrial() {
+        return new Quest("archmage_trial")
+                .setName("The Archmage's Trial")
+                .setCategory(Quest.QuestCategory.CLASS)
+                .setDescription("Theory without application is nothing. Channel every ability you have mastered and prove your power against the mightiest of foes. This is what separates an archmage from a scholar.")
+                .setDifficulty(Quest.QuestDifficulty.MASTER)
+                .setMinLevel(100)
+                .setRequiredClass("Mage")
+                .addObjective(new KillObjective(BoneRealmEntityRegistry.SKELETON_LORD, 1))
+                .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 4))
+                .addObjective(new CollectObjective(Items.DIAMOND_BLOCK, 2))
+                .addReward(new ItemReward(Items.NETHERITE_CHESTPLATE, 1))
+                .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 32))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 8))
+                .addReward(XpReward.master())
+                .addPrerequisite("arcane_barrier_unlock");
     }
 
     private static void registerMageQuestChain(QuestManager manager) {
+        manager.registerQuest(createArcaneMissilesQuest());
+        manager.registerQuest(createTemporalMasteryQuest());
+        manager.registerQuest(createManaBurstQuest());
+        manager.registerQuest(createArcaneBarrierQuest());
+        manager.registerQuest(createArchmageTrial());
+
         QuestChain mageChain = new QuestChain(
                 "path_of_the_archmage",
                 "Path of the Archmage",
-                "Master the arcane arts through gathering rare components. Unlock all spell scrolls and become an Archmage.",
+                "Four abilities. Five trials. Master missiles, time, destruction, and defense — then prove it all in combat to become a true Archmage.",
                 QuestData.QuestBookTier.NOVICE,
                 null
         )
-                .addQuest("apprentice_scrolls")
-                .addQuest("adept_scrolls")
-                .addQuest("master_scrolls")
-                .addChainReward(new ItemReward(Items.ENCHANTED_BOOK, 5))
-                .addChainReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 32));
+                .addQuest("arcane_missiles_unlock")
+                .addQuest("temporal_mastery")
+                .addQuest("mana_burst_unlock")
+                .addQuest("arcane_barrier_unlock")
+                .addQuest("archmage_trial")
+                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
+                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
+                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("power"), 5))
+                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
+                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("silk_touch"), 1))
+                .addChainReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 64))
+                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 10));
 
         manager.registerQuestChain(mageChain);
     }
@@ -1168,66 +1275,117 @@ public class QuestRegistry {
         return new Quest("shadows_calling")
                 .setName("Shadow's Calling")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("The path of stealth begins in darkness. Gather components for your first shadowy tools.")
+                .setDescription("The shadows have chosen you. Hunt creatures of darkness and claim your Rogue Ability Tome — the gateway to the energy system and three deadly stealth abilities.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setMinLevel(10)
                 .setRequiredClass("Rogue")
-                .addObjective(new KillObjective(EntityType.SPIDER, 10))
-                .addObjective(new KillObjective(EntityType.CAVE_SPIDER, 5))
-                .addObjective(new CollectObjective(Items.GUNPOWDER, 3))
-                .addReward(new ItemReward(Items.BOW, 1))
-                .addReward(new ItemReward(Items.ARROW, 64))
-                .addReward(new ItemReward(Items.CHAINMAIL_BOOTS, 1))
+                .addObjective(new KillObjective(EntityType.SPIDER, 15))
+                .addObjective(new KillObjective(EntityType.CAVE_SPIDER, 8))
+                .addObjective(new CollectObjective(Items.GUNPOWDER, 8))
+                .addReward(new ItemReward(ModItems.ROGUE_ABILITY_TOME, 1))
+                .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
                 .addReward(XpReward.novice());
     }
 
-    private static Quest createPhantomHunterQuest() {
-        return new Quest("phantom_hunter")
-                .setName("Phantom Hunter")
+    private static Quest createBlinkStrikeQuest() {
+        return new Quest("blink_strike_unlock")
+                .setName("Step Between Shadows")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("To master stealth, you must learn from creatures of the night sky. Hunt phantoms and claim their essence.")
+                .setDescription("A rogue who cannot close distance is already dead. Hunt creatures of the night and forge the Void Blade.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setMinLevel(25)
                 .setRequiredClass("Rogue")
-                .addObjective(new KillObjective(EntityType.PHANTOM, 4))
-                .addObjective(new CollectObjective(Items.PHANTOM_MEMBRANE, 2))
-                .addObjective(new CollectObjective(Items.ENDER_PEARL, 2))
-                .addReward(new ItemReward(Items.GOLDEN_APPLE, 2))
-                .addReward(new ItemReward(Items.ARROW, 32))
+                .addObjective(new KillObjective(EntityType.PHANTOM, 6))
+                .addObjective(new CollectObjective(Items.PHANTOM_MEMBRANE, 4))
+                .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
+                .addReward(new ItemReward(ModItems.VOID_BLADE, 1))
+                .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("shadows_calling");
     }
 
-    private static Quest createEchoesOfTheDeepQuest() {
-        return new Quest("echoes_of_the_deep")
-                .setName("Echoes of the Deep")
+    private static Quest createPoisonStrikeQuest() {
+        return new Quest("poison_strike_unlock")
+                .setName("Toxin and Shadow")
                 .setCategory(Quest.QuestCategory.CLASS)
-                .setDescription("Venture into the ancient cities to claim the Echo Shard - the final component for your Rogue Ability Tome. Complete the Rogue quest chain to walk in shadows!")
-                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
+                .setDescription("Every assassin needs poison. Gather rare toxins from the deepest places and brew the Poison Vial.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(50)
                 .setRequiredClass("Rogue")
-                .addObjective(new CollectObjective(Items.ECHO_SHARD, 1))
-                .addObjective(new CollectObjective(Items.BOOK, 1))
-                .addObjective(new KillObjective(EntityType.ENDERMAN, 3))
-                .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 2))
+                .addObjective(new KillObjective(EntityType.ENDERMAN, 8))
+                .addObjective(new CollectObjective(Items.ECHO_SHARD, 4))
+                .addObjective(new CollectObjective(Items.SPIDER_EYE, 16))
+                .addObjective(new CollectObjective(Items.FERMENTED_SPIDER_EYE, 8))
+                .addReward(new ItemReward(ModItems.POISON_VIAL, 1))
+                .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
+                .addReward(new ItemReward(Items.DIAMOND_LEGGINGS, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 3))
                 .addReward(XpReward.expert())
-                .addPrerequisite("phantom_hunter");
+                .addPrerequisite("blink_strike_unlock");
+    }
+
+    private static Quest createAssassinateQuest() {
+        return new Quest("assassinate_unlock")
+                .setName("The Perfect Kill")
+                .setCategory(Quest.QuestCategory.CLASS)
+                .setDescription("One strike from behind. One kill. Gather the components to craft the Assassin's Mark and perfect the art of the kill.")
+                .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(75)
+                .setRequiredClass("Rogue")
+                .addObjective(new KillObjective(EntityType.PILLAGER, 15))
+                .addObjective(new KillObjective(EntityType.EVOKER, 3))
+                .addObjective(new CollectObjective(Items.DIAMOND, 16))
+                .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 2))
+                .addReward(new ItemReward(ModItems.ASSASSINS_MARK, 1))
+                .addReward(new ItemReward(Items.NETHERITE_HELMET, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5))
+                .addReward(XpReward.expert())
+                .addPrerequisite("poison_strike_unlock");
+    }
+
+    private static Quest createVanishQuest() {
+        return new Quest("vanish_unlock")
+                .setName("Into the Dark")
+                .setCategory(Quest.QuestCategory.CLASS)
+                .setDescription("The greatest rogues are never seen. Prove your mastery by eliminating the most dangerous targets and claim the Vanish Cloak — your ultimate escape.")
+                .setDifficulty(Quest.QuestDifficulty.MASTER)
+                .setMinLevel(100)
+                .setRequiredClass("Rogue")
+                .addObjective(new KillObjective(ModEntities.WILD_DRAGON, 1))
+                .addObjective(new CollectObjective(Items.NETHERITE_BLOCK, 2))
+                .addObjective(new CollectObjective(Items.ENCHANTED_GOLDEN_APPLE, 4))
+                .addReward(new ItemReward(ModItems.VANISH_CLOAK, 1))
+                .addReward(new ItemReward(Items.NETHERITE_LEGGINGS, 1))
+                .addReward(new ItemReward(Items.NETHERITE_BOOTS, 1))
+                .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 8))
+                .addReward(XpReward.master())
+                .addPrerequisite("assassinate_unlock");
     }
 
     private static void registerRogueQuestChain(QuestManager manager) {
+        manager.registerQuest(createShadowsCallingQuest());
+        manager.registerQuest(createBlinkStrikeQuest());
+        manager.registerQuest(createPoisonStrikeQuest());
+        manager.registerQuest(createAssassinateQuest());
+        manager.registerQuest(createVanishQuest());
+
         QuestChain rogueChain = new QuestChain(
                 "path_of_shadows",
                 "Path of Shadows",
-                "Walk in darkness, strike from the shadows. Gather rare components to forge your Rogue Ability Tome and unlock devastating stealth techniques.",
+                "Five abilities. Five trials. Master stealth, poison, teleportation, assassination, and vanishing to become the ultimate shadow.",
                 QuestData.QuestBookTier.NOVICE,
                 null
         )
                 .addQuest("shadows_calling")
-                .addQuest("phantom_hunter")
-                .addQuest("echoes_of_the_deep")
-                .addChainReward(new ItemReward(Items.DIAMOND_SWORD, 1))
-                .addChainReward(new ItemReward(Items.BOW, 1))
-                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5));
+                .addQuest("blink_strike_unlock")
+                .addQuest("poison_strike_unlock")
+                .addQuest("assassinate_unlock")
+                .addQuest("vanish_unlock")
+                .addChainReward(new ItemReward(Items.NETHERITE_SWORD, 1))
+                .addChainReward(new ItemReward(Items.NETHERITE_CHESTPLATE, 1))
+                .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 10));
 
         manager.registerQuestChain(rogueChain);
     }
@@ -1493,7 +1651,7 @@ public class QuestRegistry {
                 .addObjective(new MultiItemCollectObjective("Gold Ore", 8, Items.GOLD_ORE, Items.DEEPSLATE_GOLD_ORE))
                 .addObjective(new MultiItemCollectObjective("Diamond Ore", 3, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
-                .addReward(new ItemReward(Items.ENCHANTED_BOOK, 1))
+                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 3))
                 .addReward(XpReward.expert());
     }
 
@@ -1560,7 +1718,6 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.BLAZE_ROD, 8))
                 .addObjective(new CollectObjective(Items.ENDER_PEARL, 12))
                 // Ritual components
-                .addObjective(new CollectObjective(Items.ENCHANTED_BOOK, 3))
                 .addObjective(new CollectObjective(Items.EXPERIENCE_BOTTLE, 10))
                 // Rewards
                 .addReward(new ItemReward(ModItems.POTION_OF_CLASS_REBIRTH, 1))
@@ -1587,13 +1744,9 @@ public class QuestRegistry {
                 // Must complete both previous reset quests first
                 .addPrerequisite("identity_crisis")
                 .addPrerequisite("path_of_destiny")
-                // Ultimate boss challenges
-                .addObjective(new KillObjective(EntityType.WITHER, 1))
-                .addObjective(new KillObjective(EntityType.ENDER_DRAGON, 1))
-                // Legendary materials
-                .addObjective(new CollectObjective(Items.DRAGON_EGG, 1))
-                .addObjective(new CollectObjective(Items.NETHER_STAR, 3))
-                .addObjective(new CollectObjective(Items.ELYTRA, 1))
+                // DAGMod boss challenges
+                .addObjective(new KillObjective(ModEntities.WILD_DRAGON, 1))
+                .addObjective(new KillObjective(BoneRealmEntityRegistry.SKELETON_LORD, 1))
                 // Rare ritual components
                 .addObjective(new CollectObjective(Items.ECHO_SHARD, 8))
                 .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 4))

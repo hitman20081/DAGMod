@@ -2,11 +2,6 @@
 
 Complete quests to progress through DAGMod's tiered quest system, earning powerful rewards and unlocking new challenges. From humble beginnings as a Novice to legendary Master rank, your journey is filled with adventure, including epic race-specific storylines!
 
-**Current Version:** v1.7.4
-**Total Quests:** 64 (including 40 race-specific quests)
-
-**⚠️ Important Update (v1.5.3-beta):** Quest progression blocker at level 20 has been fixed! Players can no longer get stuck unable to unlock Expert Quest Book. The circular dependency in quest book upgrade system has been resolved, and Quest Block now shows which chain unlocks the next tier.
-
 ---
 
 ## Quest System Overview
@@ -17,7 +12,7 @@ Quests in DAGMod provide structured goals and meaningful rewards as you progress
 
 - **4 difficulty tiers** - Novice → Apprentice → Expert → Master
 - **64 total quests** - Including 40 epic race-specific quests
-- **Level requirements** - Unlock higher tiers at levels 5, 15, and 25
+- **Level requirements** - Unlock higher tiers at levels 10, 25, and 50
 - **Massive XP rewards** - 200 to 2500 XP per quest
 - **Progressive difficulty** - Unlock higher tiers by completing lower ones
 - **Persistent progress** - Quest completion saves across sessions
@@ -40,7 +35,7 @@ Quests in DAGMod provide structured goals and meaningful rewards as you progress
 
 You must progress through tiers in order, unlocking each new tier as you level up:
 
-**Novice (Level 1)** → **Apprentice (Level 5)** → **Expert (Level 15)** → **Master (Level 25)**
+**Novice (Level 1)** → **Apprentice (Level 10)** → **Expert (Level 25)** → **Master (Level 50)**
 
 Each tier has its own set of quests with increasing difficulty and rewards. You cannot accept higher-tier quests until you've reached the required level.
 
@@ -49,9 +44,9 @@ Each tier has its own set of quests with increasing difficulty and rewards. You 
 | Tier | Level Required | XP Reward per Quest | Difficulty |
 |------|----------------|---------------------|------------|
 | Novice | Level 1 | 200 XP | Tutorial/Beginner |
-| Apprentice | Level 5 | 500 XP | Easy |
-| Expert | Level 15 | 1500 XP | Hard |
-| Master | Level 25 | 2500 XP | Very Hard |
+| Apprentice | Level 10 | 500 XP | Easy |
+| Expert | Level 25 | 1500 XP | Hard |
+| Master | Level 50 | 2500 XP | Very Hard |
 
 **Note:** These are standard quest rewards. Race-specific quest chain rewards match these values for their respective tiers.
 
@@ -59,9 +54,9 @@ Each tier has its own set of quests with increasing difficulty and rewards. You 
 
 Quests are **level-gated** to ensure proper progression:
 - **Novice quests:** Available at level 1 (start of game)
-- **Apprentice quests:** Unlock at level 5
-- **Expert quests:** Unlock at level 15
-- **Master quests:** Unlock at level 25
+- **Apprentice quests:** Unlock at level 10
+- **Expert quests:** Unlock at level 25
+- **Master quests:** Unlock at level 50
 
 If you try to accept a quest above your level, you'll receive a clear message indicating the level requirement.
 
@@ -187,7 +182,7 @@ Start as a young Seedling learning the ways of the forest. Become a protector of
 - Archery equipment
 - Forest protection gear
 - **Final Rewards:**
-  - **Elytra** (flight capability!)
+  - **Nether Stars** ×2
   - **Totems of Undying** (death protection)
   - Nature-themed legendary items
   - Forest Lord title and ultimate nature mastery
@@ -219,6 +214,7 @@ Begin as a humble Wanderer seeking your place in the world. Prove yourself throu
 - Versatile tools
 - **Final Rewards:**
   - Full Netherite armor set
+  - Elytra
   - Dragon Egg
   - Legendary status items
   - Recognition as a master of all trades
@@ -250,8 +246,8 @@ Start as a lowly Grunt proving your worth through combat. Rise through the warri
 - Warrior armor progressively
 - **Final Rewards:**
   - Full Netherite combat gear with combat enchantments
-  - Boss trophies (Wither skull, Dragon head)
-  - Dragon Egg
+  - Nether Stars ×2
+  - Netherite Sword
   - Warlord title and legendary warrior recognition
 
 **Total XP:** ~11,700 XP from all 10 quests
@@ -287,7 +283,7 @@ General quests are designed to complement the race-specific quest chains and pro
 
 **XP Comparison:**
 - Mining diamond ore: 25 XP
-- Killing Ender Dragon: 2000 XP
+- Killing a boss: 500–2000 XP
 - Completing Master tier quest: 2500 XP
 
 Quests are one of the best sources of XP in the game!
@@ -314,7 +310,7 @@ Quests are one of the best sources of XP in the game!
 **Master Tier:**
 - Legendary items
 - Netherite equipment
-- Unique rewards (Elytra, Dragon Egg, Nether Star)
+- Unique rewards (Nether Stars, boss trophies)
 - Boss trophies
 - Special titles
 
@@ -322,9 +318,9 @@ Quests are one of the best sources of XP in the game!
 
 Each race chain provides themed rewards:
 - **Dwarf:** Smithing focus - Netherite gear, Nether Star, crafting items
-- **Elf:** Nature/mobility - Elytra, Totems of Undying, nature items
-- **Human:** Versatility - Complete Netherite set, Dragon Egg, balanced items
-- **Orc:** Combat - Netherite combat gear, Dragon Egg, boss trophies
+- **Elf:** Nature/mobility - Nether Stars, Totems of Undying, nature items
+- **Human:** Versatility - Complete Netherite set, Elytra, Dragon Egg, balanced items
+- **Orc:** Combat - Netherite combat gear, Nether Stars, Netherite Sword
 
 ---
 
@@ -452,7 +448,7 @@ Some quests are designed specifically for certain classes or races. These quests
 **Best XP Sources:**
 1. **Master Quests:** 2500 XP each (highest)
 2. **Expert Quests:** 1500 XP each
-3. **Boss Fights:** Ender Dragon (2000 XP), Wither (1500 XP)
+3. **Boss Fights:** Wild Dragon, Skeleton Lord (500–2000 XP)
 4. **Apprentice Quests:** 500 XP each
 5. **Novice Quests:** 200 XP each
 
@@ -479,7 +475,7 @@ A: You'll need to gather the items again. Items must be in your inventory when c
 A: No, only direct player kills count toward quest progress.
 
 **Q: Can I skip quest tiers?**
-A: No, you must meet level requirements. Novice (1) → Apprentice (5) → Expert (15) → Master (25).
+A: No, you must meet level requirements. Novice (1) → Apprentice (10) → Expert (25) → Master (50).
 
 **Q: Can I do quest chains for races other than my own?**
 A: No, you can only complete the quest chain for your selected race.
@@ -496,20 +492,18 @@ A: Yes, there are class-specific quests (categorized as 'CLASS') in addition to 
 
 ### Quests + Leveling System
 
-Quests are **fully integrated** with DAGMod's level 1-50 progression system:
+Quests are **fully integrated** with DAGMod's level 1-200 progression system:
 
 **Level Gates:**
-- Must reach levels 5, 15, and 25 to unlock quest tiers
+- Must reach levels 10, 25, and 50 to unlock quest tiers
 - Quest XP contributes to leveling (200-2500 XP per quest)
 - Complete race chain while progressing through levels
 
 **Optimal Progression:**
-- Levels 1-5: Novice quests + mining/combat
-- Levels 5-10: Apprentice quests + gathering
-- Levels 10-15: Continue Apprentice, prepare for Expert
-- Levels 15-20: Expert quests + race chain
-- Levels 20-25: Continue Expert, prepare for Master
-- Levels 25-50: Master quests + complete race chain
+- Levels 1-10: Novice quests + mining/combat
+- Levels 10-25: Apprentice quests + gathering
+- Levels 25-50: Expert quests + race chain
+- Levels 50+: Master quests + complete race chain
 
 **Stat Synergy:**
 - Every 10 levels: +1 heart, +0.5 attack, +1 armor

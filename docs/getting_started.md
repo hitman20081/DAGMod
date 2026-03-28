@@ -37,7 +37,7 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
     *   Complete quest objectives (gathering items, defeating mobs, exploration).
     *   Return to a Quest Block to claim rewards.
 8.  **Progress Through Tiers:**
-    *   Complete quests to unlock higher difficulties (Apprentice at Level 5, Expert at Level 15, Master at Level 25).
+    *   Complete quests to unlock higher difficulties (Apprentice at Level 10, Expert at Level 25, Master at Level 50).
     *   Embark on your **race-specific epic quest chain** (10 quests per race).
 9.  **Explore Dungeons:**
     *   Search for **Bone Dungeons** generating underground for challenging encounters and valuable loot.

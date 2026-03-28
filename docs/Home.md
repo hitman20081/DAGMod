@@ -17,157 +17,27 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.7.4 (March 2026)
+Current Version v1.7.7 (March 2026)
 
 ---
 
-## 🎮 What's New in v1.7.4
+## What's New in v1.7.7
 
-### Real Consumable Mechanics
-- **Vampire Dust** — 10% lifesteal for 20 seconds
-- **Phantom Dust** — 50% dodge chance for 15 seconds
-- **Perfect Dodge** (Rogue only) — 100% dodge chance for 10 seconds
-- **Last Stand Powder** — Blocks one lethal hit; heals to 50% HP. Void deaths now teleport you to the surface instead of killing
-- **Time Distortion** — Speed II on self + Slowness IV on all nearby enemies
-- **Spell Echo** (Mage only) — Next spell casts twice
-- **Overcharge Dust** (Mage only) — Next spell has 2× power
+### Class Quest Chains Rebuilt
+All three class chains expanded from 3 quests to 5, level-gated at **10 / 25 / 50 / 75 / 100**. Each quest rewards a dedicated class ability item:
+- **Warrior** — Trial of Fury → Battle Hardened → Whirlwind Mastery → Iron Skin Trial → War Cry
+- **Mage** — First Spark → Temporal Mastery → Surge of Power → Archmage's Aegis → The Archmage's Trial
+- **Rogue** — Shadow's Calling → Step Between Shadows → Toxin and Shadow → The Perfect Kill → Into the Dark
 
-### Balance & Recipe Rework
-- **Dragon armor, sword, and shield recipes** now use mod dragon drops (`dragon_scale`, `dragon_skin`, `dragon_bone`) instead of vanilla End items
-- **Dragon toughness buff** — Wild Dragon HP 40→80, toughness 0→6; Dragon Guardian HP 200→300, toughness 4→10
-- **Master Trader quest** — Rewards now give real enchanted books (Mending I + Looting III) and a Totem of Undying
+### Quest Fixes
+- Enchanted book rewards replaced with real enchantments throughout all quest chains
+- Kill Ender Dragon objectives removed; replaced with DAGMod boss kills
+- End-dimension collect objectives removed
 
-### Fixes
-- Void deaths no longer place inaccessible graves in the void — grave snaps to surface
+### Bug Fixes
+- Fixed two server crash bugs in tamed Wild Dragon AI (null target in `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal`)
 
----
-
-## 🎮 What's New in v1.7.2
-
-### Bone Dungeon Overhaul
-
-🏚️ **Bone Dungeon generation has been significantly improved:**
-- **Portal rooms now spawn correctly** — fixed a silent generation failure caused by a self-referential jigsaw block Target Name
-- **No more stairway U-shapes** — stairways no longer connect back-to-back, so dungeon paths flow naturally
-- **No more crossway clusters** — crossway spawn weight reduced to prevent exponential branching and square formation patterns
-- **Water-free dungeons** — all structure pieces now include a processor that removes water and kelp at generation time
-- **Desert & badlands only** — dungeons now generate exclusively in dry biomes (desert, badlands, wooded badlands, eroded badlands) to eliminate aquifer water intrusion
-- **Boss crossway more common** — boss room chain spawn rate increased for more consistent boss encounter availability
-
----
-
-## 🎮 What's New in v1.6.6-beta
-
-### Death Recovery (Grave) System
-
-- **Grave blocks** now appear at your death location as a **Lodestone**, storing all your non-soulbound items
-- Right-click the grave to recover your items — coordinates are shown in chat when you die
-- Other players can loot your grave after **5 minutes**; you can collect immediately
-- Dying again before collecting drops old items at the old grave location, then creates a new grave
-- Graves persist across server restarts — your items are safe even if the server goes down
-- Fully replaces the old non-functional datapack grave system
-- Works alongside Soul Bound enchantment (soulbound items still return on respawn)
-- Respects `keepInventory` gamerule — no grave is created when enabled
-
----
-
-## 🎮 What's New in v1.6.5-beta
-
-### Merchant NPC Expansion (8 → 13 Merchants!)
-
-🏪 **5 New Merchant NPCs** added to the world:
-- **Baker** - Food merchant selling bread, cookies, pies, cakes, golden apples, and cooked meats
-- **Blacksmith** - Buys ALL raw ores for emeralds and sells repair materials (anvils, iron, diamonds, mythril)
-- **Jeweler** - Buys processed gems for emeralds, sells Gem Cutter, Citrine Powder, and the premium Silmaril
-- **Alchemist** - One-stop shop for ALL brewing ingredients: equipment, modifiers, and all 11 effect ingredients
-- **Village Merchant** - Upgraded to a full General Store with 19 trades across 6 categories
-
-🔧 **Merchant Trade Cleanup** - Removed overlap between merchants:
-- Voodoo Illusioner no longer sells brewing ingredients (now Alchemist's domain)
-- Miner no longer sells processed gems (now Jeweler's domain), only raw gems
-
-### Quest Progression Fixes
-- Fixed `master_crafter` quest circular dependency blocking Master Tome unlock
-- Fixed 30 race-specific quests being invisible (wrong method call)
-- Wired up Quest Book upgrade menu in Quest Block
-- Lowered Master tier threshold from 30 to 25 completed quests
-
-### Enchanted Book & Loot Fixes
-- Bone dungeon chests now correctly drop **tiered enchanted books** (common, uncommon, rare)
-- All datapacks consolidated from `dag00x`/`dag01x` namespaces to unified **`dagmod` namespace**
-- Treasure rooms, portal rooms, and regular rooms have **distinct loot tables**
-- Updated to **Fabric Loader 0.18.4** and **Fabric API 0.141.1+1.21.11**
-
----
-
-## 🎮 What's New in v1.6.0-beta
-
-### Merchant Rotating Trade System!
-
-🛒 **Dynamic Merchant Inventories** - All 8 merchant NPCs now feature rotating premium trades
-- Premium items cycle every 72 hours (real-world time)
-- Static trades always available for currency building
-- Each merchant has 3-8 unique rotation sets
-
-💬 **Merchant Dialogue** - NPCs now speak when you trade!
-- Unique greetings per merchant type
-- Occasional hints about current rotating stock
-- Adds personality and immersion to trading
-
-**Rotating Stock by Merchant**:
-- **Armorer**: Dragonscale, Inferno, Crystalforge, and 5 more premium armor sets
-- **Mystery Merchant**: Shadow, Dragon, Elemental, and Epic weapon collections
-- **Enchantsmith**: Combat, Utility, Bow, and Special enchantment rotations
-- **Voodoo Illusioner**: Rebirth potions, reset crystals, shadow weapons
-- **Trophy Dealer**: Dragon, Wither, and End boss trophies
-- **Miner**: Raw gem collections (Ruby, Sapphire, Citrine, Tanzanite, Topaz, Zircon, Pink Garnet)
-- **Hunter**: Premium horse armor and tracking equipment
-- **Lumberjack**: Frostbite Axe, rare saplings, Nether wood
-
----
-
-## Previous Updates
-
-### v1.5.4-beta - Minecraft Version Update
-
-✅ **Updated to Minecraft 1.21.11** - Final obfuscated version before mappings change
-✅ **Updated Fabric Loader to 0.18.4** - Latest stable loader
-✅ **Updated Fabric API to 0.141.1+1.21.11** - Compatible with 1.21.11
-
-### v1.5.3-beta - Critical Quest Fix
-
-### Critical Quest Progression Fix!
-
-✅ **Quest Progression Blocker Fixed** - Players can no longer get stuck at level 20 unable to progress
-✅ **Quest Book Upgrade Info** - Quest Block now shows which chain unlocks the next quest book tier
-✅ **Circular Dependency Resolved** - Final chain quests no longer require the tier they unlock
-
-v1.5.3-beta fixes the game-breaking quest progression wall and improves quest information display!
-
----
-
-## Features from v1.4.4-beta - 11 New Class Abilities!
-
-### 11 New Class Abilities!
-
-⚔️ Warriors - 3 New Abilities (5 Total)
-- Battle Standard Massive self-healing (6 hearts) + Strength II + Regeneration II
-- Whirlwind Axe 360° spin attack hitting all enemies in 5 block radius
-- Iron Talisman Transform into an unstoppable tank with Resistance III
-
-🔮 Mages - 4 New Abilities
-- Arcane Orb Fire 5 homing magic missiles that auto-track enemies
-- Temporal Crystal Slow all enemies in 10 block radius with time manipulation
-- Mana Catalyst Massive 8 block radius magical explosion
-- Barrier Charm Conjure 10 absorption hearts for protection
-
-🗡️ Rogues - 4 New Cooldown-Based Abilities (7 Total)
-- Void Blade Teleport behind enemies for surprise attacks
-- Vanish Cloak Complete invisibility + speed boost + blind nearby enemies
-- Poison Vial Deadly Poison IV with debuffs
-- Assassin's Mark Manual backstab dealing 20 damage from behind
-
-Rogues now have TWO ability systems Energy-based (Tome) + Cooldown-based (Items) for ultimate versatility!
+See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 
 ---
 
@@ -212,7 +82,7 @@ Progress through an epic quest system
   - Guardian of the Wilds (Elf)
   - Jack of All Trades (Human)
   - Path of the Warlord (Orc)
-- Level gates unlock higher tiers (5, 15, 25)
+- Level gates unlock higher tiers (10, 25, 50)
 - Massive XP rewards 200-2500 XP per quest
 
 ### 🏰 Bone Dungeons
@@ -232,7 +102,7 @@ Face the Bone Realm Boss hierarchy
 - Locked treasure chests with epic loot!
 
 ### ⚡ Custom Abilities & Items
-- 11 new class ability items with cooldowns (v1.4.4-beta)
+- Class ability items with cooldowns
 - 15 consumable powders with class-specific effects
 - Rogue energy system with 3 abilities (Smoke Bomb, Poison Dagger, Shadow Step)
 - 11 custom armor sets (6 with progressive set bonuses)

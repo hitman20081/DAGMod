@@ -8,52 +8,50 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.7.6 — Hall of Champions Merchants
-**Released:** 2026-03-09
+## v1.7.7 — Quest System Overhaul & Dragon Crash Fix
+**Released:** 2026-03-27
 
 ---
 
-## What's New in v1.7.6
+## What's New in v1.7.7
 
-### Hall of Champions Merchants
+### Class Quest Chains Rebuilt
 
-Nine merchant NPCs now live inside the Hall of Champions, giving players a dedicated trading hub accessible from early game.
+All three class chains have been expanded from 3 quests to 5, with precise level gates at **10 / 25 / 50 / 75 / 100**. Each quest rewards a dedicated class ability item:
 
-| Merchant | Speciality |
-|---|---|
-| Alchemist | Potions, consumables, alchemical supplies |
-| Armorer | Armor sets and defensive equipment |
-| Enchantsmith | Enchanted gear and enchanting materials |
-| Jeweler | Gems, gem-crafted items, and jewelry |
-| Miner | Ores, mining supplies, raw materials |
-| Lumberjack | Wood, tools, forestry goods |
-| Voodoo Illusioner | Dark/mystical items and curiosities |
-| Mystery Merchant | Rotating mid-tier weapons and rare equipment |
-| Trophy Dealer | High-end boss drops and collectibles |
+**Warrior** — Trial of Fury → Battle Hardened → Whirlwind Mastery → Iron Skin Trial → War Cry
 
-### Rotating Trade System
+**Mage** — First Spark → Temporal Mastery → Surge of Power → Archmage's Aegis → The Archmage's Trial
 
-Several merchants (including the Mystery Merchant and Trophy Dealer) rotate their inventory on a configurable timer — default every 72 hours, adjustable between 12 and 168 hours. Each merchant type rotates independently, so there's always a reason to check back.
+**Rogue** — Shadow's Calling → Step Between Shadows → Toxin and Shadow → The Perfect Kill → Into the Dark
 
-### Merchant Dialogue
+### Per-Quest Level Requirements
 
-Merchants greet players with context-aware messages when opening their trade screen.
+The quest system now supports per-quest level overrides. Individual quests can specify an exact minimum level independent of their difficulty tier, enabling precise level-gating across all quest chains.
 
-### `/merchant` Admin Commands
+### Warrior Class Tip
 
-Server operators can use `/merchant status` to inspect the current rotation state and time until next rotation, or `/merchant rotate` to force an immediate rotation for testing.
+Players who select the Warrior class now receive a Shield Bash tip on selection, explaining how to activate the ability.
 
 ---
 
 ## Balance Changes
 
-No balance changes this release.
+- **Ender Dragon objectives removed** — All Kill Ender Dragon objectives replaced with DAGMod boss kills (Wild Dragon, Skeleton Lord)
+- **END-dimension collect objectives removed** — Objectives requiring End travel removed and replaced with obtainable alternatives
+- **Race quest polish** — Four race quest rewards and objectives adjusted for theme and quality:
+  - Dwarf "Deep Delving": TORCH×64 replaced with DIAMOND×4
+  - Elf "Bowmaster's Trial": Collect ARROW×64 objective replaced with FLINT×48
+  - Elf "Forest Lord": ELYTRA reward removed; NETHER_STAR reward bumped to ×2
+  - Orc "Warlord": DRAGON_EGG reward replaced with NETHERITE_SWORD
 
 ---
 
 ## Bug Fixes
 
-No bug fixes this release.
+- **Tamed dragon server crash** — Fixed two `NullPointerException` crashes in `WildDragonEntity` where `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal` both called `canTarget()` before null-checking the target
+- **Enchanted book rewards** — All generic blank enchanted book rewards replaced with real enchantments (Fortune III, Mending + Unbreaking III, Power V + Looting III, etc.)
+- **Enchanted book collect objectives** — Quests requiring blank enchanted book turn-ins had those objectives removed and replaced with appropriate alternatives
 
 ---
 
@@ -73,7 +71,7 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.7.6 `.jar`
+3. Install the v1.7.7 `.jar`
 4. Launch Minecraft
 
 ### Migration Notes
@@ -102,6 +100,7 @@ No migration steps required for this update.
 
 | Version | Summary |
 |---|---|
+| v1.7.6 | Hall of Champions merchants with rotating trade system |
 | v1.7.5 | Skeleton Lord auto-spawning, Necrotic Key loot, Hall of Champions locator improvements, Bone Realm portal height fixes |
 | v1.7.4 | Real consumables, dragon stat & recipe overhaul, grave void death fix |
 | v1.5.3-beta | Quest progression circular dependency fix |

@@ -125,9 +125,9 @@ Certain quest tiers are locked behind level requirements:
 | Level | Unlock |
 |-------|--------|
 | 1 | Novice quests available |
-| 5 | Apprentice quests unlocked |
-| 15 | Expert quests unlocked |
-| 25 | Master quests unlocked |
+| 10 | Apprentice quests unlocked |
+| 25 | Expert quests unlocked |
+| 50 | Master quests unlocked |
 
 Players must reach the required level AND have the appropriate quest book tier to access higher-difficulty quests.
 

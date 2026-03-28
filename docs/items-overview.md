@@ -2,10 +2,6 @@
 
 DAGMod features over 100 custom items that enhance your RPG experience. From selection tokens to fantasy foods, quest books to magical scrolls, powerful class ability items to custom armor sets, discover the complete catalog of items available in your adventure.
 
-**Current Version:** v1.7.4
-
----
-
 ## Item Categories
 
 - [Selection Tokens](<./items-selection_tokens.md>)
@@ -107,28 +103,6 @@ DAGMod features over 100 custom items that enhance your RPG experience. From sel
 
 ---
 
-## Known Issues (v1.6.5-beta)
-
-Some consumable powders use placeholder effects:
-- Vampire Dust: Uses Regeneration (lifesteal planned)
-- Phantom Dust / Perfect Dodge: Uses Resistance (dodge system planned)
-- Spell Echo / Overcharge Dust: Not fully functional (spell system integration needed)
-- Last Stand Powder: Uses Absorption (death prevention planned)
-- Time Distortion: Only affects player (AoE planned)
-
----
-
-## Future Item Plans
-
-**Consumable System Completion:**
-- Vampire Dust: True lifesteal mechanic
-- Phantom Dust / Perfect Dodge: Actual dodge system
-- Spell Echo / Overcharge Dust: Spell modification
-- Last Stand Powder: Death prevention system
-- Time Distortion: AoE slow effect
-
----
-
 ## Frequently Asked Questions
 
 **Q: How do I get the 17 new class ability items?**
@@ -141,7 +115,7 @@ A: Most items can be traded except selection tokens and bound items.
 A: Items follow standard Minecraft death rules. Items with the Soul Bound enchantment are preserved across death. Class ability items without Soul Bound are lost on death.
 
 **Q: Can I craft spell scrolls?**
-A: As of v1.5.0-beta, spell scrolls cannot be crafted. Obtain through Mage quests.
+A: Spell scrolls cannot be crafted. Obtain them through Mage quest rewards.
 
 **Q: How do armor set bonuses work?**
 A: Armor sets provide progressive bonuses. A 2-piece bonus activates when two pieces of the same set are worn, and a more powerful 4-piece bonus activates when a full set is worn. These bonuses are detailed in the [Armor Sets](<./items-armor_sets.md>) section.

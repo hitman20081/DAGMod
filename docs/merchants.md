@@ -2,10 +2,6 @@
 
 DAGMod features **13 unique merchant NPCs**, each specializing in different types of gear and supplies. Merchants offer both permanent static trades and some feature rotating premium inventories that cycle on a real-world timer.
 
-**Current Version:** v1.7.1
-
----
-
 ## Merchant System Overview
 
 ### How Merchants Work

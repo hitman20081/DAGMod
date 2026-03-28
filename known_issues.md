@@ -1,7 +1,7 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-03-09
-**Version**: v1.7.6
+**Last Updated**: 2026-03-27
+**Version**: v1.7.8
 
 ---
 
@@ -60,6 +60,13 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 
 
 ## Fixed Issues
+
+### Fixed in v1.7.7
+- `WildDragonEntity` server crash — NPE in `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal` when `canTarget()` was called before null-checking the target
+- All blank enchanted book rewards replaced with real enchantments via `EnchantedBookReward`
+- Enchanted book collect objectives removed from quests (Rune of Power, Path of Destiny)
+- All Kill Ender Dragon objectives removed; replaced with DAGMod boss kills
+- END-dimension collect objectives removed from all quests
 
 ### Fixed in v1.7.4
 - All consumables fully implemented with custom mechanics (lifesteal, dodge, void rescue, spell doubling, 2× spell power) — no longer placeholder status effects

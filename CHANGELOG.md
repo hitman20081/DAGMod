@@ -5,6 +5,30 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.7] - 2026-03-27
+
+### Added
+
+- **Class quest chains rebuilt** — All three class chains (Warrior, Mage, Rogue) expanded from 3 quests to 5, now level-gated at 10 / 25 / 50 / 75 / 100. Each quest in the chain rewards a specific class ability item
+- **Per-quest level requirement system** — `Quest` now supports a `minLevel` override so individual quests can specify exact level gates independent of their difficulty tier
+
+### Changed
+
+- **Ender Dragon objectives removed** — All `KillObjective(EntityType.ENDER_DRAGON)` replaced with DAGMod boss kills (Wild Dragon, Skeleton Lord)
+- **END-dimension collect objectives removed** — Objectives requiring End travel removed; `BridgeBuilder` END_STONE×32 replaced with ECHO_SHARD×4
+- **Enchanted book rewards** — All generic blank enchanted book rewards replaced with `EnchantedBookReward` instances carrying real enchantments (Fortune III, Mending + Unbreaking III, Power V + Looting III, etc.)
+- **Enchanted book collect objectives removed** — Quests requiring blank enchanted book turn-ins (Rune of Power, Path of Destiny) had those objectives replaced with appropriate alternatives
+- **Warrior class selection tip** — Players who select Warrior now receive a Shield Bash tip message on class selection
+- **Race quest polish:**
+  - Dwarf "Deep Delving": TORCH×64 reward replaced with DIAMOND×4
+  - Elf "Bowmaster's Trial": ARROW×64 collect objective replaced with FLINT×48
+  - Elf "Forest Lord": ELYTRA reward removed; NETHER_STAR reward increased to ×2
+  - Orc "Warlord": DRAGON_EGG reward replaced with NETHERITE_SWORD
+
+### Fixed
+
+- **WildDragonEntity crash** — Fixed two `NullPointerException` server crashes in `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal` where `canTarget()` was called before null-checking the target
+
 ## [1.7.6] - 2026-03-09
 
 ### Added

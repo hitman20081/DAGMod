@@ -24,6 +24,9 @@ public class Quest {
     // NEW: Quest category
     private QuestCategory category = QuestCategory.SIDE; // Default to SIDE
 
+    // Per-quest level requirement override (-1 = use difficulty-based default)
+    private int minLevel = -1;
+
     // Quest category types
     public enum QuestCategory {
         MAIN,       // Main story/progression quests
@@ -189,6 +192,15 @@ public class Quest {
         return requiredClass != null;
     }
 
+    public Quest setMinLevel(int level) {
+        this.minLevel = level;
+        return this;
+    }
+
+    public int getMinLevel() {
+        return minLevel;
+    }
+
     // NEW: Category methods
     public Quest setCategory(QuestCategory category) {
         this.category = category;
@@ -216,6 +228,7 @@ public class Quest {
         copy.requiredClass = this.requiredClass;
         copy.requiredRace = this.requiredRace;
         copy.category = this.category;
+        copy.minLevel = this.minLevel;
 
         // Deep copy prerequisites
         copy.prerequisites = new ArrayList<>(this.prerequisites);

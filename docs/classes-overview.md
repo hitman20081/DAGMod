@@ -2,8 +2,6 @@
 
 Master your destiny by choosing one of three powerful classes. Each class offers unique abilities, playstyles, and combat approaches. Combined with your race, classes unlock powerful synergies that define your role in the world.
 
-**Current Version:** v1.7.1 features 17 class abilities bringing devastating power to all three classes!
-
 ## Class Overview
 
 | Class | Health | Playstyle | Abilities | Best For | Details |
@@ -96,7 +94,7 @@ Before choosing your class, review your race selection! Certain race-class combi
 
 ## Consumable Items
 
-All classes can benefit from the **15 consumable powders** added in v1.5.0-beta:
+All classes can benefit from the **15 consumable powders**:
 
 **Class-Specific Consumables:**
 - **Shadow Blend** (Rogue): Invisibility for up to 5 minutes (breaks on attack)

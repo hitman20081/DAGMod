@@ -68,6 +68,12 @@ public class ClassAbilityManager {
 
         // Heal to full health after gaining max health
         player.setHealth(player.getMaxHealth());
+
+        // Tip: inform the player about Shield Bash
+        player.sendMessage(
+                net.minecraft.text.Text.literal("§6[Warrior] §7Tip: §fEquip a Shield and right-click to activate §6Shield Bash§f — dash forward, deal damage, and knock back enemies!"),
+                false
+        );
     }
 
     private static void applyMageAbilities(ServerPlayerEntity player) {
