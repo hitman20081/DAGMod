@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "dagmod:skeleton_throne_room",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "salt": 14357645,
+    "distance": 32,
+    "spread": 3,
+    "count": 1,
+    "preferred_biomes": "#dagmod:has_structure/skeleton_throne_room"
+  }
+}

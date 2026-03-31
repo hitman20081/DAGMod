@@ -8,50 +8,63 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.7.7 — Quest System Overhaul & Dragon Crash Fix
-**Released:** 2026-03-27
+## v1.7.8 — Skeleton King Boss Encounter & Boss Rebalance
+**Released:** 2026-03-31
 
 ---
 
-## What's New in v1.7.7
+## What's New in v1.7.8
 
-### Class Quest Chains Rebuilt
+### Skeleton King Boss Encounter
 
-All three class chains have been expanded from 3 quests to 5, with precise level gates at **10 / 25 / 50 / 75 / 100**. Each quest rewards a dedicated class ability item:
+The Skeleton King now has a full boss encounter system:
 
-**Warrior** — Trial of Fury → Battle Hardened → Whirlwind Mastery → Iron Skin Trial → War Cry
+- **Proximity trigger** — A custom spawn trigger block in the throne room detects nearby survival players (12-block radius) and spawns the King automatically
+- **Room sealing** — On spawn, all level-0 light blocks within a 70×30×70 area of the throne are replaced with barrier blocks, locking players inside the throne room for the duration of the fight
+- **Room unsealing** — Barrier blocks are removed on the King's death
 
-**Mage** — First Spark → Temporal Mastery → Surge of Power → Archmage's Aegis → The Archmage's Trial
+### Skeleton Throne Room Structure
 
-**Rogue** — Shadow's Calling → Step Between Shadows → Toxin and Shadow → The Perfect Kill → Into the Dark
+A new Jigsaw structure spawns once in the Bone Realm dimension using `concentric_rings` placement. It consists of three NBT pieces: the throne room, a hallway, and a teleport room.
 
-### Per-Quest Level Requirements
+### King's Recall Stone
 
-The quest system now supports per-quest level overrides. Individual quests can specify an exact minimum level independent of their difficulty tier, enabling precise level-gating across all quest chains.
+On the Skeleton King's death, every player within 25 blocks receives a King's Recall Stone. Right-clicking the stone teleports the player directly to the overworld at the equivalent X/Z coordinates above ground — no portal is created. The stone is consumed on use.
 
-### Warrior Class Tip
+### One Chest Per Player
 
-Players who select the Warrior class now receive a Shield Bash tip on selection, explaining how to activate the ability.
+On the King's death, each nearby player (within 25 blocks) receives one Skeleton King Chest Key, and one locked chest spawns per player in a centred row near the death position.
+
+### Seasons Datapack
+
+A four-season cycle system is now bundled with the mod. Each season lasts 20 Minecraft days (configurable) and affects crop growth rates, weather patterns, temperature, player status effects, and animal behaviour. See admin commands via `/function seasons:commands/help`.
 
 ---
 
 ## Balance Changes
 
-- **Ender Dragon objectives removed** — All Kill Ender Dragon objectives replaced with DAGMod boss kills (Wild Dragon, Skeleton Lord)
-- **END-dimension collect objectives removed** — Objectives requiring End travel removed and replaced with obtainable alternatives
-- **Race quest polish** — Four race quest rewards and objectives adjusted for theme and quality:
-  - Dwarf "Deep Delving": TORCH×64 replaced with DIAMOND×4
-  - Elf "Bowmaster's Trial": Collect ARROW×64 objective replaced with FLINT×48
-  - Elf "Forest Lord": ELYTRA reward removed; NETHER_STAR reward bumped to ×2
-  - Orc "Warlord": DRAGON_EGG reward replaced with NETHERITE_SWORD
+All bosses were critically undertuned and have been significantly buffed:
+
+| Boss | HP | Attack | Armor | Toughness |
+|---|---|---|---|---|
+| Skeleton Summoner | 30 → **120** | 4 → **6** | 8 → **10** | 2 → **3** |
+| Skeleton Lord | 45 → **200** | 6 → **10** | 15 → **18** | 4 → **6** |
+| Skeleton King | 60 → **300** | 8 → **13** | 20 → **22** | 5 → **8** |
+| Wild Dragon | 80 → **160** | 7 → **10** | 2 → **6** | 6 → **8** |
+| Dragon Guardian | 300 → **400** | 12 → **16** | 12 → **16** | 10 → **12** |
+
+The Skeleton King is now on par with the Dragon Guardian as a proper end-game boss fight.
 
 ---
 
 ## Bug Fixes
 
-- **Tamed dragon server crash** — Fixed two `NullPointerException` crashes in `WildDragonEntity` where `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal` both called `canTarget()` before null-checking the target
-- **Enchanted book rewards** — All generic blank enchanted book rewards replaced with real enchantments (Fortune III, Mending + Unbreaking III, Power V + Looting III, etc.)
-- **Enchanted book collect objectives** — Quests requiring blank enchanted book turn-ins had those objectives removed and replaced with appropriate alternatives
+- **Barrier seal not reaching doorways** — Seal scan range expanded from ±20/±4 to ±35/±15 blocks; previous range missed doorways placed 30+ blocks from the trigger
+- **Recall Stone teleporting below bedrock** — Destination chunk is now force-generated before querying the heightmap; fallback to Y=64 if chunk returns world bottom
+- **Locked chests relocking on world reload** — `LockedBoneChestBlockEntity` now persists the `unlocked` flag via `writeData`/`readData`; chests stay open after logging out
+- **Seasons toggle commands always enabling** — Race condition fixed; all three toggle functions now use a temp variable to snapshot state before modifying it
+- **Seasons help listing a non-existent command** — Removed `/function seasons:commands/set_speed` (file never existed)
+- **Seasons setup not initialising display toggle** — `setup.mcfunction` now sets `#enable_display` to 1 on initialisation
 
 ---
 
@@ -71,12 +84,13 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.7.7 `.jar`
+3. Install the v1.7.8 `.jar`
 4. Launch Minecraft
 
 ### Migration Notes
 
-No migration steps required for this update.
+- **Skeleton Throne Room** — The structure uses `concentric_rings` placement and will only spawn in newly generated areas of the Bone Realm. Existing worlds will need to explore new chunks in the Bone Realm to find it, or use `/locate structure dagmod:skeleton_throne_room`
+- **Boss health increases** — Any currently spawned boss entities will retain their old health values until they are killed and respawned
 
 ---
 
@@ -100,6 +114,7 @@ No migration steps required for this update.
 
 | Version | Summary |
 |---|---|
+| v1.7.7 | Quest system overhaul, class chain expansion to 5 quests, dragon crash fix |
 | v1.7.6 | Hall of Champions merchants with rotating trade system |
 | v1.7.5 | Skeleton Lord auto-spawning, Necrotic Key loot, Hall of Champions locator improvements, Bone Realm portal height fixes |
 | v1.7.4 | Real consumables, dragon stat & recipe overhaul, grave void death fix |

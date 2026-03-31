@@ -79,12 +79,12 @@ public class SkeletonSummonerEntity extends SkeletonEntity {
 
     public static DefaultAttributeContainer.Builder createSkeletonSummonerAttributes() {
         return SkeletonEntity.createAbstractSkeletonAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 30.0)
+                .add(EntityAttributes.MAX_HEALTH, 120.0)
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.26)
-                .add(EntityAttributes.ATTACK_DAMAGE, 4.0)
-                .add(EntityAttributes.ARMOR, 8.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 2.0)
-                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.3)
+                .add(EntityAttributes.ATTACK_DAMAGE, 6.0)
+                .add(EntityAttributes.ARMOR, 10.0)
+                .add(EntityAttributes.ARMOR_TOUGHNESS, 3.0)
+                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.5)
                 .add(EntityAttributes.FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.SCALE, 1.1);
     }

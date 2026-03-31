@@ -27,10 +27,14 @@ The Bone Realm uses the `dagmod:ossuary_depths` biome, featuring:
 
 The Bone Realm features a tiered boss system (see [Bosses & Dungeons](./bosses_dungeons.md) for full details):
 
-1. **Skeleton King** (Epic Boss) - 60 HP, netherite armor, summons Skeleton Lords
-2. **Skeleton Lord** (Mini-Boss) - 45 HP, diamond armor, summons Skeleton Summoners
-3. **Skeleton Summoner** (Elite) - 30 HP, summons Bonelings
+1. **Skeleton King** (Epic Boss) - 300 HP, netherite armor, throne room encounter with sealed exit
+2. **Skeleton Lord** (Mini-Boss) - 200 HP, diamond armor, summons Skeleton Summoners
+3. **Skeleton Summoner** (Elite) - 120 HP, summons Bonelings
 4. **Boneling** (Minion) - 12 HP, fast swarm mob, self-destructs after 3 minutes
+
+### Skeleton Throne Room
+
+A unique structure that spawns once per world in the Bone Realm. Locate it with `/locate structure dagmod:skeleton_throne_room`. The Skeleton King spawns automatically when a survival player enters the throne room, and the exits seal until the King is defeated.
 
 ### Bone Dungeon Loot
 
@@ -66,10 +70,10 @@ The Dragon Guardian is a flying boss that spawns when a player first enters the 
 
 | Stat | Value |
 |------|-------|
-| Health | 200 HP (100 hearts) |
-| Attack Damage | 12.0 |
-| Armor | 12.0 |
-| Armor Toughness | 4.0 |
+| Health | 400 HP (200 hearts) |
+| Attack Damage | 16.0 |
+| Armor | 16.0 |
+| Armor Toughness | 12.0 |
 | Flying Speed | 0.4 |
 | Knockback Resistance | 80% |
 | Detection Range | 48 blocks |

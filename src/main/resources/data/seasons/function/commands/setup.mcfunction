@@ -22,6 +22,7 @@ scoreboard players set #season_length seasons_config 20
 scoreboard players set #enable_weather seasons_config 1
 scoreboard players set #enable_growth seasons_config 1
 scoreboard players set #enable_temperature seasons_config 1
+scoreboard players set #enable_display seasons_config 1
 
 tellraw @s ["",{"text":"[Seasons] ","color":"gold","bold":true},{"text":"Setup complete! Current season set to Spring.","color":"green"}]
 

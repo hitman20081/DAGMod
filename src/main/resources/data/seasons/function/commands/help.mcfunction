@@ -9,6 +9,5 @@ tellraw @s ["",{"text":"• Toggle Growth: ","color":"gray"},{"text":"/function 
 tellraw @s ["",{"text":"• Toggle Display: ","color":"gray"},{"text":"/function seasons:commands/toggle_display","color":"yellow"}]
 tellraw @s ["",{"text":"• Show Status: ","color":"gray"},{"text":"/function seasons:commands/status","color":"yellow"}]
 tellraw @s ["",{"text":"• Set Season Length: ","color":"gray"},{"text":"/scoreboard players set #season_length seasons_config <days>","color":"yellow"}]
-tellraw @s ["",{"text":"• Set Speed: ","color":"gray"},{"text":"/function seasons:commands/set_speed","color":"yellow"}]
 tellraw @s ["",{"text":"","color":"gray"}]
 tellraw @s ["",{"text":"If you get scoreboard errors, run the setup command first!","color":"dark_gray","italic":true}]

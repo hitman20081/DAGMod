@@ -17,25 +17,25 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.7.7 (March 2026)
+Current Version v1.7.8 (March 2026)
 
 ---
 
-## What's New in v1.7.7
+## What's New in v1.7.8
 
-### Class Quest Chains Rebuilt
-All three class chains expanded from 3 quests to 5, level-gated at **10 / 25 / 50 / 75 / 100**. Each quest rewards a dedicated class ability item:
-- **Warrior** — Trial of Fury → Battle Hardened → Whirlwind Mastery → Iron Skin Trial → War Cry
-- **Mage** — First Spark → Temporal Mastery → Surge of Power → Archmage's Aegis → The Archmage's Trial
-- **Rogue** — Shadow's Calling → Step Between Shadows → Toxin and Shadow → The Perfect Kill → Into the Dark
+### Skeleton King Boss Encounter
+The Skeleton King now has a full boss encounter system in the new **Skeleton Throne Room** structure:
+- Auto-spawns when a survival player enters the throne room (12-block proximity trigger)
+- Exits seal with barrier blocks for the duration of the fight
+- Every nearby player receives a **King's Recall Stone** (instant overworld teleport) and a chest key on death
+- One locked chest per player spawns on King death
 
-### Quest Fixes
-- Enchanted book rewards replaced with real enchantments throughout all quest chains
-- Kill Ender Dragon objectives removed; replaced with DAGMod boss kills
-- End-dimension collect objectives removed
+### Boss Rebalance
+All bosses significantly buffed — Skeleton King is now on par with the Dragon Guardian:
+- Skeleton King: 60 → **300 HP**, Dragon Guardian: 300 → **400 HP**
 
-### Bug Fixes
-- Fixed two server crash bugs in tamed Wild Dragon AI (null target in `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal`)
+### Seasons System
+A four-season cycle (Spring/Summer/Fall/Winter) now runs in-world, affecting crop growth, weather, temperature, and player effects each season.
 
 See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 
@@ -95,8 +95,8 @@ Explore procedurally generated underground dungeons
 
 ### 👑 Boss System
 Face the Bone Realm Boss hierarchy
-- Skeleton King (Epic Boss) - 60 HP, netherite armor, summons minions
-- Skeleton Lord (Mini-Boss) - 40 HP, summons elite mobs
+- Skeleton King (Epic Boss) - 300 HP, sealed throne room encounter, netherite armor
+- Skeleton Lord (Mini-Boss) - 200 HP, summons elite mobs
 - Skeleton Summoner (Elite) - Summons weak minions
 - Boneling (Minion) - Weak fodder
 - Locked treasure chests with epic loot!
@@ -125,7 +125,7 @@ Face the Bone Realm Boss hierarchy
 
 ### 🌐 Custom Dimensions
 - **Bone Realm** - Undead dimension with boss hierarchy and procedural dungeons
-- **Dragon Realm** - Volcanic dimension with Dragon Guardian boss (200 HP flying boss)
+- **Dragon Realm** - Volcanic dimension with Dragon Guardian boss (400 HP flying boss)
 - 6 additional themed dimensions (Badlands, Crimson Forest, Deep Dark, Pale Garden, Snowy Plains, Swamp)
 
 ### 🌍 Custom Content

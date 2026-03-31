@@ -1,6 +1,9 @@
 package com.github.hitman20081.dagmod.bone_realm.entity;
 
+import com.github.hitman20081.dagmod.bone_realm.BossRoomSpawnHandler;
 import com.github.hitman20081.dagmod.bone_realm.chest.BossChestSpawner;
+import com.github.hitman20081.dagmod.item.ModItems;
+import net.minecraft.item.ItemStack;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -86,11 +89,11 @@ public class SkeletonKingEntity extends SkeletonEntity {
 
     public static DefaultAttributeContainer.Builder createSkeletonKingAttributes() {
         return SkeletonEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 60.0)
+                .add(EntityAttributes.MAX_HEALTH, 300.0)
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.3)
-                .add(EntityAttributes.ATTACK_DAMAGE, 8.0)
-                .add(EntityAttributes.ARMOR, 20.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 5.0)
+                .add(EntityAttributes.ATTACK_DAMAGE, 13.0)
+                .add(EntityAttributes.ARMOR, 22.0)
+                .add(EntityAttributes.ARMOR_TOUGHNESS, 8.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 48.0)
                 .add(EntityAttributes.ATTACK_KNOCKBACK, 0.45)
@@ -128,6 +131,23 @@ public class SkeletonKingEntity extends SkeletonEntity {
                 killer = (PlayerEntity) damageSource.getAttacker();
             }
             BossChestSpawner.onBossDeath(this, killer, this.getEntityWorld());
+
+            // Unseal the room: remove barrier blocks placed when the King spawned
+            net.minecraft.server.world.ServerWorld serverWorld =
+                    (net.minecraft.server.world.ServerWorld) this.getEntityWorld();
+            BossRoomSpawnHandler.unsealRoom(serverWorld, this.getBlockPos());
+
+            // Give every player inside the throne room a Kings Recall Stone
+            net.minecraft.util.math.BlockPos deathPos = this.getBlockPos();
+            for (net.minecraft.server.network.ServerPlayerEntity nearbyPlayer : serverWorld.getPlayers()) {
+                if (nearbyPlayer.getBlockPos().isWithinDistance(deathPos, 25)) {
+                    ItemStack stone = new ItemStack(ModItems.KINGS_RECALL_STONE);
+                    if (!nearbyPlayer.getInventory().insertStack(stone)) {
+                        // Inventory full — drop at their feet so they don't miss it
+                        nearbyPlayer.dropItem(stone, false);
+                    }
+                }
+            }
         }
     }
 

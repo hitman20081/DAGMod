@@ -371,9 +371,12 @@ public class ModBlocks {
                     itemGroup.add(IRON_CHEST);
                 });
 
-        // Boss Spawn Trigger - Add to Operator Utilities tab
+        // Boss Spawn Triggers - Add to Operator Utilities tab
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.OPERATOR)
-                .register((itemGroup) -> itemGroup.add(BOSS_SPAWN_TRIGGER));
+                .register((itemGroup) -> {
+                    itemGroup.add(BOSS_SPAWN_TRIGGER);
+                    itemGroup.add(SKELETON_KING_SPAWN_TRIGGER);
+                });
 
         DagMod.LOGGER.info("Registering blocks for " + DagMod.MOD_ID);
     }
@@ -382,6 +385,14 @@ public class ModBlocks {
     public static final Block BOSS_SPAWN_TRIGGER = register("boss_spawn_trigger",
             new BossSpawnTriggerBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "boss_spawn_trigger")))
+                    .strength(-1.0f, 3600000.0f)
+                    .noCollision()
+                    .nonOpaque()));
+
+    // Skeleton King spawn trigger — indestructible, no collision, hidden in boss room NBTs
+    public static final Block SKELETON_KING_SPAWN_TRIGGER = register("skeleton_king_spawn_trigger",
+            new BossSpawnTriggerBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "skeleton_king_spawn_trigger")))
                     .strength(-1.0f, 3600000.0f)
                     .noCollision()
                     .nonOpaque()));

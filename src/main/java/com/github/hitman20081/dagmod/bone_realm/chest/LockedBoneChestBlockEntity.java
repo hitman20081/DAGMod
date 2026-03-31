@@ -3,6 +3,8 @@ package com.github.hitman20081.dagmod.bone_realm.chest;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -26,6 +28,18 @@ public class LockedBoneChestBlockEntity extends ChestBlockEntity {
     public void unlock() {
         this.unlocked = true;
         this.markDirty();
+    }
+
+    @Override
+    protected void writeData(WriteView view) {
+        super.writeData(view);
+        view.putBoolean("Unlocked", this.unlocked);
+    }
+
+    @Override
+    protected void readData(ReadView view) {
+        super.readData(view);
+        this.unlocked = view.getBoolean("Unlocked", false);
     }
 
     @Override

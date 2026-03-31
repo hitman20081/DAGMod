@@ -246,6 +246,11 @@ public class ModItems {
             settings -> new Item(settings.armor(ModArmorMaterials.OBSIDIAN, EquipmentType.BOOTS)),
             new Item.Settings().fireproof());
 
+    // Bone Realm
+    public static final Item KINGS_RECALL_STONE = register("kings_recall_stone",
+            KingsRecallStoneItem::new,
+            new Item.Settings().maxCount(1).rarity(Rarity.EPIC));
+
     // Dragon Materials
     public static final Item DRAGON_SCALE = register("dragon_scale", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE).fireproof());
     public static final Item DRAGON_BONE = register("dragon_bone", Item::new, new Item.Settings().maxCount(64).rarity(Rarity.RARE).fireproof());

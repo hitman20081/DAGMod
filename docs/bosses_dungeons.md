@@ -7,14 +7,14 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 ## Bosses
 
 ### Skeleton King
-**Role:** Top-tier Bone Realm boss
+**Role:** Top-tier Bone Realm boss — on par with the Dragon Guardian in difficulty
 
 | Stat | Value |
 |------|-------|
-| Health | 60 HP |
-| Attack Damage | 8.0 |
-| Armor | 20.0 |
-| Armor Toughness | 5.0 |
+| Health | 300 HP |
+| Attack Damage | 13.0 |
+| Armor | 22.0 |
+| Armor Toughness | 8.0 |
 | Movement Speed | 0.3 |
 | Detection Range | 48 blocks |
 | Knockback Resistance | 100% (immune) |
@@ -24,7 +24,9 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 - **Boss Bar:** Purple, notched. Sky darkens while the boss is active.
 - **Equipment:** Full named Netherite armor set ("Crown of the Bone Sovereign", "Regalia of the Death Lord", "Royal Bone Greaves", "Sovereign's Marrow Treads") + Netherite sword. Equipment does not drop.
 - **Behavior:** Uses standard Skeleton AI (ranged bow + melee combat). Cannot despawn.
-- **On Death:** Spawns a locked boss chest with epic loot.
+- **Spawn:** Triggered automatically when a survival player enters the Skeleton Throne Room (12-block proximity to the trigger block on the throne).
+- **Room Seal:** On spawn, the throne room doorways are sealed with barrier blocks, locking all players inside for the duration of the fight.
+- **On Death:** Barrier blocks are removed. Every player within 25 blocks receives one **King's Recall Stone** and one **Skeleton King Chest Key**. One locked chest spawns per nearby player.
 
 ---
 
@@ -33,10 +35,10 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 
 | Stat | Value |
 |------|-------|
-| Health | 45 HP |
-| Attack Damage | 6.0 |
-| Armor | 15.0 |
-| Armor Toughness | 4.0 |
+| Health | 200 HP |
+| Attack Damage | 10.0 |
+| Armor | 18.0 |
+| Armor Toughness | 6.0 |
 | Movement Speed | 0.28 |
 | Detection Range | 40 blocks |
 | Knockback Resistance | 100% (immune) |
@@ -55,13 +57,13 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 
 | Stat | Value |
 |------|-------|
-| Health | 30 HP |
-| Attack Damage | 4.0 |
-| Armor | 8.0 |
-| Armor Toughness | 2.0 |
+| Health | 120 HP |
+| Attack Damage | 6.0 |
+| Armor | 10.0 |
+| Armor Toughness | 3.0 |
 | Movement Speed | 0.26 |
 | Detection Range | 32 blocks |
-| Knockback Resistance | 30% |
+| Knockback Resistance | 50% |
 | Size | 1.1x |
 | XP on Kill | 25 |
 
@@ -95,10 +97,10 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 
 | Stat | Value |
 |------|-------|
-| Health | 300 HP |
-| Attack Damage | 12.0 |
-| Armor | 12.0 |
-| Armor Toughness | 10.0 |
+| Health | 400 HP |
+| Attack Damage | 16.0 |
+| Armor | 16.0 |
+| Armor Toughness | 12.0 |
 | Flying Speed | 0.4 |
 | Knockback Resistance | 80% |
 | Detection Range | 48 blocks |
@@ -140,6 +142,7 @@ The Bone Realm boss hierarchy creates escalating encounters:
 - Area-of-effect abilities (Whirlwind, Mana Burst) are excellent for clearing Bonelings
 - Rogues can use backstab damage on bosses for high burst
 - Warriors should use Battle Standard for sustain during long fights
+- **Skeleton King:** The room seals on spawn — you cannot leave until the King is dead. Ensure your party is ready before triggering the fight. On death, you receive a King's Recall Stone to teleport back to the overworld.
 
 **Dragon Guardian Tips:**
 - Ranged attacks are essential against a flying boss
@@ -151,6 +154,27 @@ The Bone Realm boss hierarchy creates escalating encounters:
 ---
 
 ## Dungeons
+
+### Skeleton Throne Room
+
+A dedicated boss structure that spawns once per Bone Realm world using `concentric_rings` placement.
+
+**Generation:**
+- Spawns exclusively in the `dagmod:ossuary_depths` biome (Bone Realm)
+- Guaranteed single spawn per world
+- Locate with `/locate structure dagmod:skeleton_throne_room`
+
+**Layout (3 Jigsaw pieces):**
+- **Throne Room** — 35×35 main arena with the Skeleton King spawn trigger on the throne
+- **Hallway** — Connecting corridor between the throne room and teleport room
+- **Teleport Room** — Exit chamber for post-boss travel
+
+**Features:**
+- Proximity trigger on the throne automatically spawns the Skeleton King when a survival player enters (12-block radius)
+- Doorways seal with barrier blocks for the duration of the fight
+- One locked chest per player spawns on King death, along with a King's Recall Stone per player
+
+---
 
 ### Bone Dungeons
 

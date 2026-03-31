@@ -97,11 +97,11 @@ public class SkeletonLordEntity extends SkeletonEntity {
 
     public static DefaultAttributeContainer.Builder createSkeletonLordAttributes() {
         return SkeletonEntity.createAbstractSkeletonAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 45.0)
+                .add(EntityAttributes.MAX_HEALTH, 200.0)
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.28)
-                .add(EntityAttributes.ATTACK_DAMAGE, 6.0)
-                .add(EntityAttributes.ARMOR, 15.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 4.0)
+                .add(EntityAttributes.ATTACK_DAMAGE, 10.0)
+                .add(EntityAttributes.ARMOR, 18.0)
+                .add(EntityAttributes.ARMOR_TOUGHNESS, 6.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 40.0)
                 .add(EntityAttributes.ATTACK_KNOCKBACK, 0.25)

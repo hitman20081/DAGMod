@@ -764,13 +764,13 @@ public class WildDragonEntity extends HostileEntity {
 
     public static DefaultAttributeContainer.Builder createWildDragonAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 80.0)           // 80 HP (up from 40)
+                .add(EntityAttributes.MAX_HEALTH, 160.0)          // 160 HP
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.18)       // Base speed
                 .add(EntityAttributes.FLYING_SPEED, 0.35)         // Flying speed (slightly slower than boss)
-                .add(EntityAttributes.ATTACK_DAMAGE, 7.0)         // Moderate attacks (vs boss 12.0)
-                .add(EntityAttributes.ARMOR, 2.0)                 // Light armor (vs boss 12.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 6.0)       // Toughness counters heavy hits (up from 0)
-                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.3)  // Lower resistance (vs boss 0.8)
+                .add(EntityAttributes.ATTACK_DAMAGE, 10.0)        // Moderate attacks (vs boss 16.0)
+                .add(EntityAttributes.ARMOR, 6.0)                 // Light armor (vs boss 16.0)
+                .add(EntityAttributes.ARMOR_TOUGHNESS, 8.0)       // Toughness counters heavy hits
+                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.5)  // Lower resistance (vs boss 0.8)
                 .add(EntityAttributes.FOLLOW_RANGE, 40.0)         // Slightly lower range
                 .add(EntityAttributes.ATTACK_KNOCKBACK, 0.5)      // Moderate knockback (vs boss 1.0)
                 .add(EntityAttributes.SCALE, 0.4);                // 40% size (vs boss 60%)

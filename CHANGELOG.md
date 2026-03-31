@@ -5,6 +5,36 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.8] - 2026-03-31
+
+### Added
+
+- **Skeleton King boss encounter** — Full throne room boss fight: proximity-triggered spawn block, barrier-sealed room on spawn (unsealed on death), boss room scales with party size
+- **Skeleton Throne Room structure** — Jigsaw structure (3 NBTs: throne room, hallway, teleport room) spawning once in the Bone Realm via `concentric_rings` placement
+- **King's Recall Stone** — Consumable item given to all players within 25 blocks of the Skeleton King's death; right-click teleports directly to overworld at equivalent X/Z above ground (no portal created)
+- **One chest per nearby player** — On King death, one locked chest and one key are granted per player within 25 blocks; chests spawn in a centred row near the death position
+- **`NotInStructurePlacementModifier`** — Custom placement modifier (`dagmod:not_in_structure`) prevents basalt columns from generating inside any structure's bounding box in the Bone Realm
+- **Seasons datapack** — Four-season cycle system (Spring/Summer/Fall/Winter) bundled with the mod; each season affects crop growth, weather, temperature, player effects, and animal behaviour
+
+### Changed
+
+- **Boss health & combat stats significantly increased** — All bosses were critically undertuned; Skeleton King is now on par with Dragon Guardian:
+  - Skeleton Summoner: 30 → 120 HP, 4 → 6 atk, 8 → 10 armor
+  - Skeleton Lord: 45 → 200 HP, 6 → 10 atk, 15 → 18 armor
+  - Skeleton King: 60 → 300 HP, 8 → 13 atk, 20 → 22 armor, 5 → 8 toughness
+  - Wild Dragon: 80 → 160 HP, 7 → 10 atk, 2 → 6 armor, 6 → 8 toughness
+  - Dragon Guardian: 300 → 400 HP, 12 → 16 atk, 12 → 16 armor, 10 → 12 toughness
+- **King's Recall Stone teleportation** — Replaced portal-based teleport with direct `TeleportTarget` transfer; forces destination chunk generation before querying heightmap to prevent spawning below bedrock
+- **Locked chest persistence** — `LockedBoneChestBlockEntity` now saves the `unlocked` flag via `writeData`/`readData`; chests no longer relock after world reload
+
+### Fixed
+
+- **Barrier seal not reaching doorways** — `sealRoom` scan range expanded from ±20/±4 to ±35/±15 blocks; previous range missed doorway light blocks placed 30+ blocks from the trigger
+- **Recall Stone teleport below bedrock** — Destination chunk is now force-generated before heightmap query; fallback to Y=64 if heightmap still returns world bottom
+- **Seasons toggle commands always enabling** — Race condition where sequential scoreboard writes caused all toggles to always end at 1; fixed using a temp variable to capture state before modifying
+- **Seasons help listing dead command** — Removed `/function seasons:commands/set_speed` reference (file never existed)
+- **Seasons setup missing display init** — `setup.mcfunction` now initialises `#enable_display` to 1 alongside other config values
+
 ## [1.7.7] - 2026-03-27
 
 ### Added
