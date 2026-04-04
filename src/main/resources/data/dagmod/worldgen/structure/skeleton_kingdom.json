@@ -41,7 +41,7 @@
   "start_height": {
     "absolute": 0
   },
-  "start_jigsaw_name": "minecraft:city_anchor",
+  "start_jigsaw_name": "dagmod:city_anchor",
   "start_pool": "dagmod:skeleton_kingdom/city_center",
   "step": "top_layer_modification",
   "terrain_adaptation": "beard_box",

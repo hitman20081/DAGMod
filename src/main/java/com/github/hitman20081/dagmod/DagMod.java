@@ -18,6 +18,7 @@ import com.github.hitman20081.dagmod.command.LocateDragonCommand;
 import com.github.hitman20081.dagmod.command.LocateWildDragonCommand;
 import com.github.hitman20081.dagmod.command.MerchantCommand;
 import com.github.hitman20081.dagmod.command.PlayerDataCommand;
+import com.github.hitman20081.dagmod.command.SeasonsCommand;
 import com.github.hitman20081.dagmod.command.QuestCommand;
 import com.github.hitman20081.dagmod.command.ResourceCommand;
 import com.github.hitman20081.dagmod.command.SynergyCommand;
@@ -248,6 +249,7 @@ public class DagMod implements ModInitializer {
             CooldownCommand.register(dispatcher, registryAccess, environment);
             SynergyCommand.register(dispatcher, registryAccess, environment);
             PlayerDataCommand.register(dispatcher, registryAccess, environment);
+            SeasonsCommand.register(dispatcher, registryAccess, environment);
 
             // Ship Travel Command
             dispatcher.register(net.minecraft.server.command.CommandManager.literal("travel")

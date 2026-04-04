@@ -10,4 +10,5 @@
 * [Getting Started](getting_started)
 * [Progression](progression)
 * [Quests](quests)
+* [Seasons](seasons)
 * [Commands](commands)

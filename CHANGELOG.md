@@ -5,6 +5,26 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.9] - 2026-04-04
+
+### Added
+
+- **`/seasons` command** — New interactive Java command for server operators; displays a clickable setup menu to configure the seasons system before it starts. Subcommands: `setup`, `start`, `reset`, `length <7|14|20|28>`, `weather <on|off>`, `growth <on|off>`, `temperature <on|off>`, `display <on|off>`. Requires operator (GAMEMASTERS) permission
+- **Seasons first-run notice** — On server load, all players are notified if the seasons system has not yet been configured; operators are directed to `/seasons` to open the setup menu
+- **Skeleton Kingdom structure chain** — Three new jigsaw template pools added (`entry_room`, `hallway`, `throne_room`); city_center_1 now connects through: city center → entry room → hallway → throne room
+
+### Changed
+
+- **Seasons requires manual activation** — Seasons no longer auto-start on world load; a server operator must run `/seasons` and click **[ ▶ START SEASONS ]** to activate. Gives operators full control over configuration before seasons go live
+- **Seasons settings persist across restarts** — Season length, feature toggles, and initialized state are no longer reset on server restart; all config values preserved in scoreboard.dat
+
+### Fixed
+
+- **Skeleton Kingdom jigsaw anchor mismatch** — `start_jigsaw_name` corrected from `minecraft:city_anchor` to `dagmod:city_anchor`; structure now generates without "No starting jigsaw found" error
+- **Skeleton Kingdom pool referencing missing NBTs** — city_center_2 and city_center_3 removed from the city_center pool (files never existed); only city_center_1 is now referenced
+
+---
+
 ## [1.7.8] - 2026-03-31
 
 ### Added

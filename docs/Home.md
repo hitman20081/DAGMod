@@ -17,25 +17,23 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.7.8 (March 2026)
+Current Version v1.7.9 (April 2026)
 
 ---
 
-## What's New in v1.7.8
+## What's New in v1.7.9
 
-### Skeleton King Boss Encounter
-The Skeleton King now has a full boss encounter system in the new **Skeleton Throne Room** structure:
-- Auto-spawns when a survival player enters the throne room (12-block proximity trigger)
-- Exits seal with barrier blocks for the duration of the fight
-- Every nearby player receives a **King's Recall Stone** (instant overworld teleport) and a chest key on death
-- One locked chest per player spawns on King death
+### Seasons Setup System
+The seasons system now requires manual operator setup before it activates:
+- Server operators run `/seasons` to open an interactive clickable configuration menu
+- Configure season length (7, 14, 20, or 28 days), and toggle weather effects, crop growth, temperature, and season display independently
+- Settings persist across server restarts — no more resetting to defaults on reload
+- On first load, all players see a notice directing operators to `/seasons` to configure
 
-### Boss Rebalance
-All bosses significantly buffed — Skeleton King is now on par with the Dragon Guardian:
-- Skeleton King: 60 → **300 HP**, Dragon Guardian: 300 → **400 HP**
-
-### Seasons System
-A four-season cycle (Spring/Summer/Fall/Winter) now runs in-world, affecting crop growth, weather, temperature, and player effects each season.
+### Skeleton Kingdom Structure Chain
+The Skeleton Kingdom jigsaw structure now generates a full connected sequence:
+- **City Center** → **Entry Room** → **Hallway** → **Throne Room**
+- Fixed jigsaw anchor mismatch that previously caused the entire structure to fail generation
 
 See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 
