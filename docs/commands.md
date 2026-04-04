@@ -129,3 +129,19 @@ These commands are intended for server operators and testing.
 | Command | Description |
 |---------|-------------|
 | `/summon_garrick` | Summon Innkeeper Garrick at your location |
+
+### Seasons
+
+| Command | Description |
+|---------|-------------|
+| `/seasons` | Open the interactive seasons configuration menu |
+| `/seasons setup` | Show current seasons configuration status |
+| `/seasons start` | Start the seasons cycle (marks system as configured) |
+| `/seasons reset` | Reset the current season back to Spring Day 1 |
+| `/seasons length <7\|14\|20\|28>` | Set the number of Minecraft days per season |
+| `/seasons weather <on\|off>` | Toggle weather effects from seasons |
+| `/seasons growth <on\|off>` | Toggle crop growth rate changes from seasons |
+| `/seasons temperature <on\|off>` | Toggle temperature status effects from seasons |
+| `/seasons display <on\|off>` | Toggle the season display in chat |
+
+All `/seasons` subcommands require operator permissions (level 2+).

@@ -8,63 +8,38 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.7.8 — Skeleton King Boss Encounter & Boss Rebalance
-**Released:** 2026-03-31
+## v1.7.9 — Seasons Setup System & Skeleton Kingdom Structure Chain
+**Released:** 2026-04-02
 
 ---
 
-## What's New in v1.7.8
+## What's New in v1.7.9
 
-### Skeleton King Boss Encounter
+### Seasons Setup System
 
-The Skeleton King now has a full boss encounter system:
+The seasons system now requires manual operator setup before it activates:
 
-- **Proximity trigger** — A custom spawn trigger block in the throne room detects nearby survival players (12-block radius) and spawns the King automatically
-- **Room sealing** — On spawn, all level-0 light blocks within a 70×30×70 area of the throne are replaced with barrier blocks, locking players inside the throne room for the duration of the fight
-- **Room unsealing** — Barrier blocks are removed on the King's death
+- Server operators run `/seasons` to open an interactive clickable configuration menu
+- Configure season length (7, 14, 20, or 28 days) and toggle weather effects, crop growth, temperature, and season display independently
+- Settings persist across server restarts — no more resetting to defaults on reload
+- On first load, all players see a notice directing operators to `/seasons` to configure
+- All configuration changes take effect immediately and refresh the menu automatically
 
-### Skeleton Throne Room Structure
+### Skeleton Kingdom Structure Chain
 
-A new Jigsaw structure spawns once in the Bone Realm dimension using `concentric_rings` placement. It consists of three NBT pieces: the throne room, a hallway, and a teleport room.
+The Skeleton Kingdom jigsaw structure now generates a full connected sequence:
 
-### King's Recall Stone
-
-On the Skeleton King's death, every player within 25 blocks receives a King's Recall Stone. Right-clicking the stone teleports the player directly to the overworld at the equivalent X/Z coordinates above ground — no portal is created. The stone is consumed on use.
-
-### One Chest Per Player
-
-On the King's death, each nearby player (within 25 blocks) receives one Skeleton King Chest Key, and one locked chest spawns per player in a centred row near the death position.
-
-### Seasons Datapack
-
-A four-season cycle system is now bundled with the mod. Each season lasts 20 Minecraft days (configurable) and affects crop growth rates, weather patterns, temperature, player status effects, and animal behaviour. See admin commands via `/function seasons:commands/help`.
-
----
-
-## Balance Changes
-
-All bosses were critically undertuned and have been significantly buffed:
-
-| Boss | HP | Attack | Armor | Toughness |
-|---|---|---|---|---|
-| Skeleton Summoner | 30 → **120** | 4 → **6** | 8 → **10** | 2 → **3** |
-| Skeleton Lord | 45 → **200** | 6 → **10** | 15 → **18** | 4 → **6** |
-| Skeleton King | 60 → **300** | 8 → **13** | 20 → **22** | 5 → **8** |
-| Wild Dragon | 80 → **160** | 7 → **10** | 2 → **6** | 6 → **8** |
-| Dragon Guardian | 300 → **400** | 12 → **16** | 12 → **16** | 10 → **12** |
-
-The Skeleton King is now on par with the Dragon Guardian as a proper end-game boss fight.
+- **City Center** → **Entry Room** → **Hallway** → **Throne Room**
+- Fixed jigsaw anchor mismatch (`minecraft:city_anchor` → `dagmod:city_anchor`) that previously caused the entire structure to fail generation
+- Three new template pool JSONs added: `entry_room`, `hallway`, `throne_room`
 
 ---
 
 ## Bug Fixes
 
-- **Barrier seal not reaching doorways** — Seal scan range expanded from ±20/±4 to ±35/±15 blocks; previous range missed doorways placed 30+ blocks from the trigger
-- **Recall Stone teleporting below bedrock** — Destination chunk is now force-generated before querying the heightmap; fallback to Y=64 if chunk returns world bottom
-- **Locked chests relocking on world reload** — `LockedBoneChestBlockEntity` now persists the `unlocked` flag via `writeData`/`readData`; chests stay open after logging out
-- **Seasons toggle commands always enabling** — Race condition fixed; all three toggle functions now use a temp variable to snapshot state before modifying it
-- **Seasons help listing a non-existent command** — Removed `/function seasons:commands/set_speed` (file never existed)
-- **Seasons setup not initialising display toggle** — `setup.mcfunction` now sets `#enable_display` to 1 on initialisation
+- **Seasons settings resetting on restart** — `load.mcfunction` previously overwrote all config on every load; now uses `unless score` guards to preserve saved settings
+- **Skeleton Kingdom failing to generate** — `start_jigsaw_name` in `skeleton_kingdom.json` didn't match the jigsaw block name in the city center NBT; corrected to `dagmod:city_anchor`
+- **City center referencing non-existent NBTs** — Removed `city_center_2` and `city_center_3` from the city center pool (files never existed)
 
 ---
 
@@ -84,13 +59,13 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.7.8 `.jar`
+3. Install the v1.7.9 `.jar`
 4. Launch Minecraft
 
 ### Migration Notes
 
-- **Skeleton Throne Room** — The structure uses `concentric_rings` placement and will only spawn in newly generated areas of the Bone Realm. Existing worlds will need to explore new chunks in the Bone Realm to find it, or use `/locate structure dagmod:skeleton_throne_room`
-- **Boss health increases** — Any currently spawned boss entities will retain their old health values until they are killed and respawned
+- **Seasons** — Seasons will not auto-start on existing worlds. A server operator must run `/seasons` and click **Start Seasons** to activate the system. Previous unconfigured worlds will show a notice to all players on load.
+- **Skeleton Kingdom** — The structure fix only applies to newly generated chunks. Existing worlds can use `/locate structure dagmod:skeleton_kingdom` to find a newly generated instance.
 
 ---
 
@@ -114,6 +89,7 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 | Version | Summary |
 |---|---|
+| v1.7.8 | Skeleton King boss encounter, boss rebalance, seasons datapack |
 | v1.7.7 | Quest system overhaul, class chain expansion to 5 quests, dragon crash fix |
 | v1.7.6 | Hall of Champions merchants with rotating trade system |
 | v1.7.5 | Skeleton Lord auto-spawning, Necrotic Key loot, Hall of Champions locator improvements, Bone Realm portal height fixes |

@@ -1,16 +1,34 @@
 # Configuration Options
 
-DAGMod does not currently have a configuration file system. All values are hard-coded in the source.
+DAGMod does not have a general configuration file system. Most values are hard-coded in the source, with the exception of the Seasons system which has full in-game configuration.
 
 ---
 
-## Current Behavior
+## Seasons Configuration
 
-All game values (XP rates, ability cooldowns, stat bonuses, merchant rotation timers, etc.) are set directly in the Java source code. There are no configuration files for players or server administrators to modify.
+The Seasons system is the only subsystem with live, persistent configuration. All settings are changed via the `/seasons` command and persist across server restarts.
+
+### Setup
+
+On first load, all players receive a notice that seasons are not yet configured. A server operator must run `/seasons` to open the interactive setup menu.
+
+### Options
+
+| Setting | Default | Options | Command |
+|---------|---------|---------|---------|
+| Season Length | 20 days | 7, 14, 20, 28 Minecraft days | `/seasons length <value>` |
+| Weather Effects | On | On / Off | `/seasons weather <on\|off>` |
+| Crop Growth | On | On / Off | `/seasons growth <on\|off>` |
+| Temperature Effects | On | On / Off | `/seasons temperature <on\|off>` |
+| Season Display | On | On / Off | `/seasons display <on\|off>` |
+
+### Persistence
+
+Settings are stored in scoreboard objectives (`seasons_config`) and survive server restarts. The `#seasons_initialized` score tracks whether setup has been completed — when set to 1, the season cycle starts automatically on server load.
 
 ---
 
-## Server Administration
+## Other Server Administration
 
 Server administrators can use the following commands to adjust player state:
 
