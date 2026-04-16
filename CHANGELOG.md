@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Dynamic held-item lighting** — Players holding a torch, lantern, or other light-emitting item now illuminate their surroundings without placing a block. Self-contained implementation (no external library). Each source has independent peak brightness (level) and reach (radius): Lantern/Sea Lantern/Shroomlight/Campfire/Glowstone at full radius 15; Torch at 14; End Rod at 12; Lava Bucket at 12; Soul variants at 10; Blaze Rod at 8; Fire Charge at 10; Glow Berries at 5; Redstone Torch/Glowstone Dust at 5/4. Brightness falls off smoothly to zero at the radius edge; both hands checked, brighter wins
 - **19 Job Board quests** — Job Board now has a full roster across all accessible tiers. New quests added:
   - *NOVICE (6 new):* Chop Wood (any logs ×32), Catch Fish (cod ×10), Hunt Spiders (×10), Gather Wool (any wool ×16), Collect Sand (×32), Skeleton Patrol (×15)
   - *APPRENTICE (5 new):* Mine Coal (×32), Hunt Creepers (×8), Collect Leather (×16), Mine Raw Gold (×8), Gather Pumpkins (×16)
