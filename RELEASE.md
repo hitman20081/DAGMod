@@ -8,12 +8,28 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.7.10 — Quest System Overhaul & Job Board Expansion
+## v1.7.10 — Quest System Overhaul, Job Board Expansion & Dynamic Lighting
 **Released:** 2026-04-13
 
 ---
 
 ## What's New in v1.7.10
+
+### Dynamic Held-Item Lighting
+
+No more stopping to place torches every few steps. Hold any light-emitting item and it illuminates the area around you in real time:
+
+- **Torch** — radius 14 blocks
+- **Lantern / Sea Lantern / Shroomlight / Jack o'Lantern / Campfire / Glowstone / Nether Star** — radius 15 blocks (full range)
+- **Lava Bucket / End Rod** — radius 12 blocks
+- **Soul Torch / Soul Lantern / Soul Campfire** — radius 10 blocks (dim blue glow)
+- **Blaze Rod / Fire Charge** — radius 8 / 10 blocks
+- **Glow Berries** — radius 5 blocks
+- **Redstone Torch / Glowstone Dust** — radius 5 / 4 blocks
+
+Both main hand and off hand are checked; whichever is brighter wins. Brightness falls off smoothly to zero at the edge of the radius. Self-contained — no external mod required.
+
+---
 
 ### Quest Book Upgrade System Rework
 
