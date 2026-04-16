@@ -4,9 +4,6 @@ import com.github.hitman20081.dagmod.bone_realm.BoneRealmRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-
-import java.util.List;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -39,52 +36,10 @@ public class BossChestSpawner {
         BlockPos deathPos = boss.getBlockPos();
 
         // Determine which boss died and spawn appropriate chest
-        if (boss instanceof com.github.hitman20081.dagmod.bone_realm.entity.SkeletonKingEntity) {
-            spawnSkeletonKingChest(serverWorld, deathPos, killer);
-        } else if (boss instanceof com.github.hitman20081.dagmod.bone_realm.entity.SkeletonLordEntity) {
+        if (boss instanceof com.github.hitman20081.dagmod.bone_realm.entity.SkeletonLordEntity) {
             spawnBoneRealmChest(serverWorld, deathPos, killer);
         }
         // Add more boss types as needed
-    }
-
-    /**
-     * Spawns one Skeleton King chest per nearby player.
-     * Each nearby player within 25 blocks receives a key.
-     * Chests are placed in a row 3 blocks behind the king's death position.
-     */
-    private static void spawnSkeletonKingChest(ServerWorld world, BlockPos pos, PlayerEntity killer) {
-        List<ServerPlayerEntity> nearbyPlayers = world.getPlayers().stream()
-                .filter(p -> p.getBlockPos().isWithinDistance(pos, 25))
-                .toList();
-
-        if (nearbyPlayers.isEmpty()) return;
-
-        // Give a key to every nearby player
-        for (ServerPlayerEntity player : nearbyPlayers) {
-            ItemStack key = new ItemStack(BoneRealmRegistry.SKELETON_KING_KEY);
-            if (!player.getInventory().insertStack(key)) {
-                player.dropItem(key, false);
-            }
-            player.sendMessage(
-                    Text.literal("✦ The Skeleton King's Key has been granted! ✦")
-                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
-                    false
-            );
-        }
-
-        // Spawn one chest per nearby player in a centred row, 3 blocks north of death pos
-        int count = nearbyPlayers.size();
-        for (int i = 0; i < count; i++) {
-            int xOffset = (i * 2) - (count - 1); // centres the row: e.g. -2, 0, +2 for 3 players
-            BlockPos chestBase = pos.add(xOffset, 0, 3);
-            BlockPos chestPos = findSafeChestPosition(world, chestBase);
-            spawnChestWithEffects(
-                    world,
-                    chestPos,
-                    BoneRealmChestRegistry.SKELETON_KING_CHEST,
-                    "dagmod:chests/skeleton_king_chest"
-            );
-        }
     }
 
     /**

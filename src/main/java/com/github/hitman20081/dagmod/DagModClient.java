@@ -30,6 +30,7 @@ import com.github.hitman20081.dagmod.entity.client.JewelerNPCRenderer;
 import com.github.hitman20081.dagmod.class_system.mana.ManaNetworking;
 import com.github.hitman20081.dagmod.class_system.mana.client.ClientManaData;
 import com.github.hitman20081.dagmod.class_system.mana.client.ManaHudRenderer;
+import com.github.hitman20081.dagmod.client.DynamicLightManager;
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.progression.client.ClientProgressionData;
 import com.github.hitman20081.dagmod.progression.client.ProgressionHUD;
@@ -37,8 +38,10 @@ import com.github.hitman20081.dagmod.progression.client.ToggleProgressionHUDComm
 import com.github.hitman20081.dagmod.quest.ClientQuestData;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactories;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
@@ -79,6 +82,51 @@ public class DagModClient implements ClientModInitializer {
         // Register Mana HUD renderer
         HudRenderCallback.EVENT.register(new ManaHudRenderer());
         System.out.println("Mana system registered!");
+
+        // Register dynamic held-item lighting
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            ClientPlayerEntity player = client.player;
+            if (player == null) {
+                DynamicLightManager.clear();
+                return;
+            }
+
+            net.minecraft.item.Item mainItem = player.getMainHandStack().getItem();
+            net.minecraft.item.Item offItem  = player.getOffHandStack().getItem();
+            int mainLevel = DynamicLightManager.getLightLevelForItem(mainItem);
+            int offLevel  = DynamicLightManager.getLightLevelForItem(offItem);
+
+            // Dominant hand: whichever is brighter; use its radius
+            net.minecraft.item.Item dominant = (mainLevel >= offLevel) ? mainItem : offItem;
+            int newLevel  = Math.max(mainLevel, offLevel);
+            int newRadius = DynamicLightManager.getRadiusForItem(dominant);
+
+            net.minecraft.util.math.BlockPos playerPos = player.getBlockPos();
+
+            // Schedule chunk rebuilds so terrain also updates, not just entities
+            if (DynamicLightManager.needsChunkRebuild(playerPos, newRadius) && client.worldRenderer != null) {
+                net.minecraft.util.math.BlockPos oldPos    = DynamicLightManager.getLastRebuildPos();
+                int                              oldRadius = DynamicLightManager.getLastRebuildRadius();
+                // Clear old area so it reverts once the player moves away
+                if (oldRadius > 0) {
+                    client.worldRenderer.scheduleBlockRenders(
+                        oldPos.getX() - oldRadius, oldPos.getY() - oldRadius, oldPos.getZ() - oldRadius,
+                        oldPos.getX() + oldRadius, oldPos.getY() + oldRadius, oldPos.getZ() + oldRadius
+                    );
+                }
+                // Mark new area for rebuild with boosted light
+                if (newRadius > 0) {
+                    client.worldRenderer.scheduleBlockRenders(
+                        playerPos.getX() - newRadius, playerPos.getY() - newRadius, playerPos.getZ() - newRadius,
+                        playerPos.getX() + newRadius, playerPos.getY() + newRadius, playerPos.getZ() + newRadius
+                    );
+                }
+                DynamicLightManager.setLastRebuildState(playerPos, newRadius);
+            }
+
+            DynamicLightManager.updatePlayerLight(playerPos, newLevel, newRadius);
+        });
+        System.out.println("Dynamic lighting registered!");
 
         // Register entity model layers
         EntityModelLayerRegistry.registerModelLayer(DragonGuardianModel.LAYER_LOCATION, DragonGuardianModel::getTexturedModelData);

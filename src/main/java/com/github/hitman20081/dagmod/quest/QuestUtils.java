@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.quest;
 
 import com.github.hitman20081.dagmod.item.ModItems;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -20,6 +21,31 @@ public class QuestUtils {
         player.giveItemStack(newBook);
         player.sendMessage(Text.literal("You received: " + tier.getDisplayName() + "!")
                 .formatted(Formatting.GOLD).formatted(Formatting.BOLD), false);
+    }
+
+    /**
+     * Remove the old tier's quest book from inventory and give the new one.
+     * Called on chain-based upgrades so the player doesn't accumulate old books.
+     */
+    public static void swapQuestBook(ServerPlayerEntity player, QuestData.QuestBookTier oldTier, QuestData.QuestBookTier newTier) {
+        // Remove old book
+        Item oldBook = switch (oldTier) {
+            case NOVICE -> ModItems.NOVICE_QUEST_BOOK;
+            case APPRENTICE -> ModItems.APPRENTICE_QUEST_BOOK;
+            case EXPERT -> ModItems.EXPERT_QUEST_BOOK;
+            case MASTER -> ModItems.MASTER_QUEST_TOME;
+        };
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (!stack.isEmpty() && stack.getItem() == oldBook) {
+                player.getInventory().removeStack(i, 1);
+                break;
+            }
+        }
+        player.getInventory().markDirty();
+
+        // Give new book
+        giveQuestBookForTier(player, newTier);
     }
 
     public static ItemStack createWelcomeBook() {

@@ -1,9 +1,8 @@
 package com.github.hitman20081.dagmod.bone_realm.entity;
 
+import com.github.hitman20081.dagmod.bone_realm.BoneRealmRegistry;
 import com.github.hitman20081.dagmod.bone_realm.BossRoomSpawnHandler;
-import com.github.hitman20081.dagmod.bone_realm.chest.BossChestSpawner;
 import com.github.hitman20081.dagmod.item.ModItems;
-import net.minecraft.item.ItemStack;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -13,13 +12,14 @@ import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -126,24 +126,31 @@ public class SkeletonKingEntity extends SkeletonEntity {
         this.bossBar.clearPlayers();
 
         if (!this.getEntityWorld().isClient()) {
-            PlayerEntity killer = null;
-            if (damageSource.getAttacker() instanceof PlayerEntity) {
-                killer = (PlayerEntity) damageSource.getAttacker();
-            }
-            BossChestSpawner.onBossDeath(this, killer, this.getEntityWorld());
+            ServerWorld serverWorld = (ServerWorld) this.getEntityWorld();
 
-            // Unseal the room: remove barrier blocks placed when the King spawned
-            net.minecraft.server.world.ServerWorld serverWorld =
-                    (net.minecraft.server.world.ServerWorld) this.getEntityWorld();
+            // Unseal the throne room
             BossRoomSpawnHandler.unsealRoom(serverWorld, this.getBlockPos());
 
-            // Give every player inside the throne room a Kings Recall Stone
-            net.minecraft.util.math.BlockPos deathPos = this.getBlockPos();
-            for (net.minecraft.server.network.ServerPlayerEntity nearbyPlayer : serverWorld.getPlayers()) {
+            // Give rewards to every player within 25 blocks
+            BlockPos deathPos = this.getBlockPos();
+            for (ServerPlayerEntity nearbyPlayer : serverWorld.getPlayers()) {
                 if (nearbyPlayer.getBlockPos().isWithinDistance(deathPos, 25)) {
+                    // Two keys — players choose which pre-placed chests to open
+                    for (int i = 0; i < 2; i++) {
+                        ItemStack key = new ItemStack(BoneRealmRegistry.SKELETON_KING_KEY);
+                        if (!nearbyPlayer.getInventory().insertStack(key)) {
+                            nearbyPlayer.dropItem(key, false);
+                        }
+                    }
+                    nearbyPlayer.sendMessage(
+                            Text.literal("✦ You received 2 Skeleton King's Keys! ✦")
+                                    .formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                            false
+                    );
+
+                    // Recall Stone
                     ItemStack stone = new ItemStack(ModItems.KINGS_RECALL_STONE);
                     if (!nearbyPlayer.getInventory().insertStack(stone)) {
-                        // Inventory full — drop at their feet so they don't miss it
                         nearbyPlayer.dropItem(stone, false);
                     }
                 }

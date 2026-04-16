@@ -40,6 +40,19 @@ public class LockedBoneChestBlockEntity extends ChestBlockEntity {
     protected void readData(ReadView view) {
         super.readData(view);
         this.unlocked = view.getBoolean("Unlocked", false);
+        // Pre-placed structure chests are saved without a LootTable tag.
+        // Auto-assign it here so they populate correctly on first open.
+        // Only applies to unopened chests — once unlocked, vanilla clears the loot
+        // table and stores items in inventory slots instead.
+        if (chestType == LockedBoneChestBlock.LockedChestType.SKELETON_KING && !this.unlocked) {
+            this.setLootTable(
+                net.minecraft.registry.RegistryKey.of(
+                    net.minecraft.registry.RegistryKeys.LOOT_TABLE,
+                    net.minecraft.util.Identifier.of("dagmod", "chests/skeleton_king_chest")
+                ),
+                this.pos.asLong()
+            );
+        }
     }
 
     @Override

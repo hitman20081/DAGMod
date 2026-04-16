@@ -86,11 +86,14 @@ public class TagCollectObjective extends QuestObjective {
             ItemStack stack = player.getInventory().getStack(i);
             if (!stack.isEmpty() && stack.isIn(itemTag) && !hasEnchantments(stack)) {
                 int removeFromStack = Math.min(itemsToRemove, stack.getCount());
-                stack.decrement(removeFromStack);
+                // Use removeStack instead of stack.decrement() so the inventory slot is
+                // properly cleared and markDirty() is called to sync the change to the client
+                player.getInventory().removeStack(i, removeFromStack);
                 itemsToRemove -= removeFromStack;
             }
         }
 
+        player.getInventory().markDirty();
         return itemsToRemove == 0;
     }
 

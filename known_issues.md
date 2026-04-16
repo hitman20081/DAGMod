@@ -1,7 +1,7 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-04-02
-**Version**: v1.7.9
+**Last Updated**: 2026-04-13
+**Version**: v1.7.10
 
 ---
 
@@ -37,12 +37,6 @@ During chunk generation, repeated log warnings appear:
 
 ---
 
-### 2. TagCollectObjective Reliability (MEDIUM)
-
-**Location**: `quest/objectives/TagCollectObjective.java`
-**Status**: Open (documented since v1.5.1)
-
-The `consumeItems()` method can fail to properly consume items when tags contain multiple item types or items are spread across inventory slots. Prefer `CollectObjective` (specific items) for new quests.
 
 ### 5. Hard-Coded Magic Numbers (LOW)
 
@@ -60,6 +54,9 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 
 
 ## Fixed Issues
+
+### Fixed in v1.7.10
+- `TagCollectObjective` and `CollectObjective` item consumption — `consumeItems()` was calling `stack.decrement()` directly on the `ItemStack` object, which never triggered `markDirty()` on the inventory. Items were removed server-side but the client was never synced, causing items to appear unconsumed. Fixed by replacing `stack.decrement()` with `player.getInventory().removeStack(i, amount)` and adding an explicit `markDirty()` call after the loop in both classes
 
 ### Fixed in v1.7.7
 - `WildDragonEntity` server crash — NPE in `AttackWithOwnerGoal` and `TrackOwnerAttackerGoal` when `canTarget()` was called before null-checking the target

@@ -76,11 +76,12 @@ public class CollectObjective extends QuestObjective {
             ItemStack stack = player.getInventory().getStack(i);
             if (!stack.isEmpty() && stack.getItem() == targetItem && !hasEnchantments(stack)) {
                 int removeFromStack = Math.min(itemsToRemove, stack.getCount());
-                stack.decrement(removeFromStack);
+                player.getInventory().removeStack(i, removeFromStack);
                 itemsToRemove -= removeFromStack;
             }
         }
 
+        player.getInventory().markDirty();
         return itemsToRemove == 0; // Returns true if all items were successfully removed
     }
 

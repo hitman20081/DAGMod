@@ -94,9 +94,6 @@ public class QuestData {
         questCompletionTimes.put(quest.getId(), System.currentTimeMillis());
         totalQuestsCompleted++;
 
-        // Check for quest book upgrade
-        checkQuestBookUpgrade();
-
         // ADD THESE LINES:
         // Award XP based on quest difficulty
         XPEventHandler.onQuestCompleted(player, quest.getDifficulty().name());
@@ -139,9 +136,9 @@ public class QuestData {
         return activeQuests.size() < getMaxActiveQuests();
     }
 
-    // Check if player can upgrade their quest book
+    // Upgrade is handled exclusively via quest chain completion (QuestManager.checkChainCompletion)
     public boolean canUpgradeQuestBook() {
-        return getNextQuestBookTier() != null && meetsUpgradeRequirements(getNextQuestBookTier());
+        return false;
     }
 
     public QuestBookTier getNextQuestBookTier() {
@@ -152,31 +149,6 @@ public class QuestData {
             case MASTER -> { return null; } // Max tier
         }
         return null;
-    }
-
-    private boolean meetsUpgradeRequirements(QuestBookTier targetTier) {
-        return switch (targetTier) {
-            case APPRENTICE -> totalQuestsCompleted >= 5;
-            case EXPERT -> totalQuestsCompleted >= 15 && hasCompletedQuestsOfDifficulty(Quest.QuestDifficulty.APPRENTICE, 3);
-            case MASTER -> totalQuestsCompleted >= 25 && hasCompletedQuestsOfDifficulty(Quest.QuestDifficulty.EXPERT, 2);
-            default -> false;
-        };
-    }
-
-    // Check if player has completed enough quests of a specific difficulty
-    private boolean hasCompletedQuestsOfDifficulty(Quest.QuestDifficulty difficulty, int required) {
-        // This would need quest difficulty tracking - for now, assume requirements are met
-        // In a full implementation, you'd track quest difficulties when completing them
-        return totalQuestsCompleted >= required * 2; // Rough estimate
-    }
-
-    // Automatic quest book upgrade check
-    private void checkQuestBookUpgrade() {
-        QuestBookTier nextTier = getNextQuestBookTier();
-        if (nextTier != null && meetsUpgradeRequirements(nextTier)) {
-            // Don't auto-upgrade - let player choose when to upgrade
-            // This prevents losing access to lower-tier quests if they want them
-        }
     }
 
     // Get quest statistics
