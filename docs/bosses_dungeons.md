@@ -26,7 +26,7 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 - **Behavior:** Uses standard Skeleton AI (ranged bow + melee combat). Cannot despawn.
 - **Spawn:** Triggered automatically when a survival player enters the Skeleton Throne Room (12-block proximity to the trigger block on the throne).
 - **Room Seal:** On spawn, the throne room doorways are sealed with barrier blocks, locking all players inside for the duration of the fight.
-- **On Death:** Barrier blocks are removed. Every player within 25 blocks receives one **King's Recall Stone** and one **Skeleton King Chest Key**. One locked chest spawns per nearby player.
+- **On Death:** Barrier blocks are removed. Every player within 25 blocks receives one **King's Recall Stone** and **two Skeleton King Chest Keys**. Multiple locked chests are pre-placed throughout the throne room — players use their keys to choose which chests to open.
 
 ---
 

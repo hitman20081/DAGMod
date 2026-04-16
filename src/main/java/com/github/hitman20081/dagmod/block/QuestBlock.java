@@ -41,8 +41,7 @@ public class QuestBlock extends Block {
         BROWSE_QUESTS,      // NEW: Browse without accepting
         CONFIRM_ACCEPT,     // NEW: Confirm before accepting
         ACTIVE_QUESTS,
-        TURN_IN_QUESTS,
-        UPGRADE_MENU
+        TURN_IN_QUESTS
     }
 
     public QuestBlock(Settings settings) {
@@ -138,7 +137,6 @@ public class QuestBlock extends Block {
                 case CONFIRM_ACCEPT -> showConfirmAccept(serverPlayer, questManager, playerData);
                 case ACTIVE_QUESTS -> showActiveQuests(serverPlayer, questManager, playerData);
                 case TURN_IN_QUESTS -> showTurnInQuests(serverPlayer, questManager, playerData);
-                case UPGRADE_MENU -> showUpgradeMenu(serverPlayer, questManager, playerData);
             }
         }
         return ActionResult.SUCCESS;
@@ -173,17 +171,6 @@ public class QuestBlock extends Block {
             playerCompletedQuests.put(playerId, completedQuests);
             playerSelectedIndex.put(playerId, 0);
             return; // Exit early to go to turn-in
-        }
-
-        // Check for quest book upgrade availability
-        if (playerData.canUpgradeQuestBook()) {
-            QuestData.QuestBookTier nextTier = playerData.getNextQuestBookTier();
-            player.sendMessage(Text.literal("⭐ Quest Book Upgrade Available!").formatted(Formatting.GOLD), false);
-            player.sendMessage(Text.literal("   Upgrade to: " + nextTier.getDisplayName()).formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("   Right-click to upgrade!").formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("==================="), false);
-            playerMenuState.put(playerId, MenuState.UPGRADE_MENU);
-            return;
         }
 
         // If no completed quests, show other options
@@ -415,40 +402,6 @@ public class QuestBlock extends Block {
         }
     }
 
-    private void showUpgradeMenu(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
-
-        if (!playerData.canUpgradeQuestBook()) {
-            player.sendMessage(Text.literal("Quest book upgrade not available yet."), false);
-            playerMenuState.put(playerId, MenuState.MAIN_MENU);
-            return;
-        }
-
-        QuestData.QuestBookTier currentTier = playerData.getQuestBookTier();
-        QuestData.QuestBookTier nextTier = playerData.getNextQuestBookTier();
-
-        // Perform the upgrade
-        playerData.setQuestBookTier(nextTier);
-
-        player.sendMessage(Text.literal("=== Quest Book Upgrade ===").formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("✓ Quest book upgraded!").formatted(Formatting.GREEN, Formatting.BOLD), false);
-        player.sendMessage(Text.literal("  " + currentTier.getDisplayName() + " → " + nextTier.getDisplayName()).formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("New benefits:").formatted(Formatting.AQUA), false);
-        player.sendMessage(Text.literal("  • Max quest slots: " + nextTier.getMaxActiveQuests()), false);
-        player.sendMessage(Text.literal("  • Access to: " + nextTier.getAllowedDifficulties()), false);
-        player.sendMessage(Text.literal(""), false);
-
-        // Give the physical book item
-        QuestUtils.giveQuestBookForTier(player, nextTier);
-
-        player.sendMessage(Text.literal("Check your inventory for your new quest book!").formatted(Formatting.GREEN), false);
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
-
-        playerMenuState.put(playerId, MenuState.MAIN_MENU);
-    }
-
     /**
      * Combine 3 Quest Notes into a Novice Quest Book
      */
@@ -479,9 +432,10 @@ public class QuestBlock extends Block {
             if (stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_FIRST_NOTE ||
                 stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE ||
                 stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_THIRD_NOTE) {
-                stack.decrement(1);
+                player.getInventory().removeStack(i, 1);
             }
         }
+        player.getInventory().markDirty();
 
         // Give Novice Quest Book
         player.giveItemStack(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK));
@@ -495,28 +449,29 @@ public class QuestBlock extends Block {
             Text.literal("Congratulations! You've completed Garrick's tutorial!").formatted(Formatting.YELLOW),
             false
         );
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(
-            Text.literal("You can now:").formatted(Formatting.WHITE),
-            false
-        );
-        player.sendMessage(
-            Text.literal("  • Accept quests from Quest Blocks and Job Boards").formatted(Formatting.GRAY),
-            false
-        );
-        player.sendMessage(
-            Text.literal("  • Track your progress in your Quest Book").formatted(Formatting.GRAY),
-            false
-        );
-        player.sendMessage(
-            Text.literal("  • Turn in completed quests for rewards").formatted(Formatting.GRAY),
-            false
-        );
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(
-            Text.literal("Right-click this Quest Block again to start questing!").formatted(Formatting.AQUA, Formatting.BOLD),
-            false
-        );
+
+        // Auto-start Garrick's Welcome as the first chain quest
+        QuestManager questManager = QuestManager.getInstance();
+        boolean questStarted = questManager.startQuest(player, "garricks_special_brew");
+        if (questStarted) {
+            questManager.savePlayerQuestData(player);
+            player.sendMessage(Text.literal(""), false);
+            player.sendMessage(
+                Text.literal("📜 First quest assigned: Garrick's Welcome").formatted(Formatting.AQUA),
+                false
+            );
+            player.sendMessage(
+                Text.literal("   Right-click this Quest Block to track your progress.").formatted(Formatting.GRAY),
+                false
+            );
+        } else {
+            player.sendMessage(Text.literal(""), false);
+            player.sendMessage(
+                Text.literal("Right-click this Quest Block again to start questing!").formatted(Formatting.AQUA, Formatting.BOLD),
+                false
+            );
+        }
+
         player.sendMessage(
             Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
             false

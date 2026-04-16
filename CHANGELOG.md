@@ -5,6 +5,41 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.10] - 2026-04-13
+
+### Added
+
+- **19 Job Board quests** — Job Board now has a full roster across all accessible tiers. New quests added:
+  - *NOVICE (6 new):* Chop Wood (any logs ×32), Catch Fish (cod ×10), Hunt Spiders (×10), Gather Wool (any wool ×16), Collect Sand (×32), Skeleton Patrol (×15)
+  - *APPRENTICE (5 new):* Mine Coal (×32), Hunt Creepers (×8), Collect Leather (×16), Mine Raw Gold (×8), Gather Pumpkins (×16)
+  - *EXPERT (4 new):* Hunt Endermen (×5), Mine Diamonds (×4), Hunt Blazes (×5), Collect Obsidian (×16)
+- **`JobRegistry.java`** — Job quests extracted from `QuestRegistry` into a dedicated `JobRegistry` class. `QuestRegistry` now delegates all job registration to `JobRegistry.registerJobs()`. Prepares for v1.9.0 daily quest system
+
+### Changed
+
+- **Early-game quests now accept any local wood/saplings** — Six quests previously requiring specific biome-locked items converted to tag-based objectives
+  - `the_beginning` (re-enabled): any logs ×5 (was Oak Log ×5, quest had been disabled)
+  - `wanderer` (Human): any logs ×16 (was Oak Log ×16)
+  - `seedling` (Elf): any saplings ×64 (was Oak ×32 + Birch ×16 + Spruce ×16)
+  - `roots_run_deep` (Elf): any logs ×128 (was Oak ×64 + Dark Oak ×32 + Jungle ×32)
+  - `village_founder`: any planks ×64 (was Oak Planks ×64)
+  - `village_builder`: any planks ×32 (was Oak Planks ×32)
+- **Quest book upgrade now swaps physical items** — On chain completion, `QuestUtils.swapQuestBook()` removes the old tier book from inventory before giving the new one. Players no longer accumulate outdated books
+- **`garricks_special_brew` auto-starts on Quest Block note combine** — When a player combines all 3 Garrick's Notes into a Novice Quest Book at the Quest Block, `garricks_special_brew` is now automatically started as their first active quest. Players are told their first quest has been assigned
+- **Adventurer's Path chain prerequisites enforced** — `the_beginning` now requires `garricks_special_brew`; `equip_yourself` now requires `the_beginning` (was `garricks_special_brew`). Chain order is now fully sequential and cannot be bypassed
+- **Skeleton King chest rewards reworked** — Chests no longer spawn dynamically on the King's death. Multiple locked chests are pre-placed throughout the Skeleton Throne Room; players choose which to open using their keys
+- **Skeleton King keys increased to 2 per player** — Every player within 25 blocks of the King's death now receives 2 Skeleton King Chest Keys instead of 1, to match the pre-placed chest count
+
+### Fixed
+
+- **Pre-placed throne room chests always empty** — `LockedBoneChestBlockEntity` now auto-assigns the `dagmod:chests/skeleton_king_chest` loot table on load for any unopened `SKELETON_KING` chest that was saved without one. Chests that have already been opened are unaffected
+- **Quest item consumption not syncing to client** — `consumeItems()` in `TagCollectObjective`, `CollectObjective`, and `InnkeeperGarrickNPC` was calling `stack.decrement()` directly on the `ItemStack`, which never triggered `markDirty()`. Fixed by replacing with `player.getInventory().removeStack(i, amount)` and explicit `markDirty()` calls; same fix applied to note removal in `QuestBlock.combineNotesIntoQuestBook()`
+- **Quest book upgrade conflict resolved** — Two competing upgrade paths existed: a threshold-based path in `QuestBlock`/`QuestData` (5/15/25 quests) and the correct chain-based path in `QuestManager.checkChainCompletion()`. Removed `showUpgradeMenu()`, `meetsUpgradeRequirements()`, and the threshold stubs; `canUpgradeQuestBook()` now returns `false`. Quest chain completion is the sole upgrade gate
+- **`the_beginning` quest missing from Adventurer's Path chain** — `the_beginning` was re-enabled but not added to the `adventurer_path` chain definition. Now correctly sequenced: `garricks_special_brew` → `the_beginning` → `equip_yourself` → `ready_for_adventure`
+- **Garrick tutorial Task 1 locked to Oak Logs** — `InnkeeperGarrickNPC` was checking specifically for `Items.OAK_LOG`; now checks against `ItemTags.LOGS` so any wood type satisfies the task
+
+---
+
 ## [1.7.9] - 2026-04-04
 
 ### Added

@@ -138,7 +138,7 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
         player.sendMessage(Text.literal("📋 TASK 1: PROVE YOUR RESOURCEFULNESS").formatted(Formatting.GOLD, Formatting.BOLD), false);
         player.sendMessage(Text.literal("   I need wood for the inn's fireplace.").formatted(Formatting.YELLOW), false);
         player.sendMessage(Text.empty(), false);
-        player.sendMessage(Text.literal("   ➤ Gather 10 Oak Logs").formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("   ➤ Gather 10 logs (any wood type)").formatted(Formatting.GRAY), false);
         player.sendMessage(Text.literal("   ➤ Bring them back to me").formatted(Formatting.GRAY), false);
         player.sendMessage(Text.empty(), false);
         player.sendMessage(Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY), false);
@@ -157,27 +157,28 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
             return;
         }
 
-        // Check if player has 10 oak logs
-        int oakLogCount = 0;
+        // Check if player has 10 logs of any type
+        int logCount = 0;
         for (int i = 0; i < player.getInventory().size(); i++) {
             net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
-            if (stack.getItem() == net.minecraft.item.Items.OAK_LOG) {
-                oakLogCount += stack.getCount();
+            if (stack.isIn(net.minecraft.registry.tag.ItemTags.LOGS)) {
+                logCount += stack.getCount();
             }
         }
 
-        if (oakLogCount >= 10) {
+        if (logCount >= 10) {
             // Task complete!
-            // Remove 10 oak logs
+            // Remove 10 logs
             int toRemove = 10;
             for (int i = 0; i < player.getInventory().size() && toRemove > 0; i++) {
                 net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
-                if (stack.getItem() == net.minecraft.item.Items.OAK_LOG) {
+                if (stack.isIn(net.minecraft.registry.tag.ItemTags.LOGS)) {
                     int removeFromStack = Math.min(toRemove, stack.getCount());
-                    stack.decrement(removeFromStack);
+                    player.getInventory().removeStack(i, removeFromStack);
                     toRemove -= removeFromStack;
                 }
             }
+            player.getInventory().markDirty();
 
             // Mark complete and give note
             PlayerDataManager.markTask1Complete(player);
@@ -197,10 +198,10 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
             sendDialogue(player, "Still gathering those logs? Take your time!", Formatting.YELLOW);
             player.sendMessage(Text.empty(), false);
             player.sendMessage(Text.literal("📋 TASK 1 REMINDER:").formatted(Formatting.GOLD), false);
-            player.sendMessage(Text.literal("   ➤ Bring me 10 Oak Logs").formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.literal("   ➤ Current progress: " + oakLogCount + "/10").formatted(Formatting.GRAY), false);
+            player.sendMessage(Text.literal("   ➤ Bring me 10 logs (any wood type)").formatted(Formatting.GRAY), false);
+            player.sendMessage(Text.literal("   ➤ Current progress: " + logCount + "/10").formatted(Formatting.GRAY), false);
             player.sendMessage(Text.empty(), false);
-            sendDialogue(player, "Oak trees are common in forests. Keep looking!", Formatting.WHITE);
+            sendDialogue(player, "Any tree will do — chop whatever is nearby!", Formatting.WHITE);
         }
     }
 
@@ -294,7 +295,8 @@ public class InnkeeperGarrickNPC extends PathAwareEntity {
             for (int i = 0; i < player.getInventory().size(); i++) {
                 net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
                 if (stack.getItem() == net.minecraft.item.Items.IRON_INGOT) {
-                    stack.decrement(1);
+                    player.getInventory().removeStack(i, 1);
+                    player.getInventory().markDirty();
                     break;
                 }
             }

@@ -24,7 +24,8 @@
     "ChestRenderStateMixin",
     "LockedChestTextureMixin$ChestRendererMixin",
     "LockedChestTextureMixin$TexturedRenderLayersMixin",
-    "client.ShieldRendererMixin"
+    "client.ShieldRendererMixin",
+    "client.DynamicLightMixin"
   ],
 	"injectors": {
 		"defaultRequire": 1

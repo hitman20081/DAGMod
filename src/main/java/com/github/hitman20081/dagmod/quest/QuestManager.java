@@ -85,11 +85,12 @@ public class QuestManager {
                     // Auto-upgrade quest book tier if applicable
                     if (chain.getRewardTier() != null &&
                             playerData.getQuestBookTier().getTier() < chain.getRewardTier().getTier()) {
+                        QuestData.QuestBookTier oldTier = playerData.getQuestBookTier();
                         playerData.setQuestBookTier(chain.getRewardTier());
                         player.sendMessage(Text.literal("Quest Book upgraded to: " + chain.getRewardTier().getDisplayName()), false);
 
-                        // Give the physical book item - ADD THIS LINE
-                        com.github.hitman20081.dagmod.quest.QuestUtils.giveQuestBookForTier((ServerPlayerEntity) player, chain.getRewardTier());
+                        // Swap the physical book: remove old, give new
+                        com.github.hitman20081.dagmod.quest.QuestUtils.swapQuestBook((ServerPlayerEntity) player, oldTier, chain.getRewardTier());
                     }
 
                     // Start next chain automatically if it exists

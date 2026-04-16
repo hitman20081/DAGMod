@@ -92,7 +92,7 @@ public class QuestRegistry {
 
         // ========== CHAIN QUESTS ==========
         // Adventurer's Path Chain
-        // REMOVED: createTheBeginningQuest() - buggy log collection
+        manager.registerQuest(createTheBeginningQuest());
         manager.registerQuest(createEquipYourselfQuest());
         manager.registerQuest(createReadyForAdventureQuest());
 
@@ -114,9 +114,6 @@ public class QuestRegistry {
         manager.registerQuest(createNightWatchQuest());
         manager.registerQuest(createBountyHunterQuest());
 
-        // Additional quests
-        manager.registerQuest(createDeepMinerQuest());
-
         // Reset System Quests
         manager.registerQuest(createIdentityCrisisQuest());
         manager.registerQuest(createPathOfDestinyQuest());
@@ -126,10 +123,7 @@ public class QuestRegistry {
         manager.registerQuest(createGarricksSpecialBrewQuest());
 
         // ========== JOB BOARD QUESTS ==========
-        manager.registerQuest(createGatherCobblestoneJob());
-        manager.registerQuest(createHuntZombiesJob());
-        manager.registerQuest(createCollectWheatJob());
-        manager.registerQuest(createMineIronJob());
+        JobRegistry.registerJobs(manager);
     }
 
     private static void registerQuestChains(QuestManager manager) {
@@ -142,8 +136,9 @@ public class QuestRegistry {
                 QuestData.QuestBookTier.APPRENTICE
         )
                 .addQuest("garricks_special_brew")  // FIRST - Tutorial quest at the inn
-                .addQuest("equip_yourself")         // SECOND - Gather materials
-                .addQuest("ready_for_adventure")    // THIRD - Advanced preparation
+                .addQuest("the_beginning")          // SECOND - First steps into the world
+                .addQuest("equip_yourself")         // THIRD - Gather materials
+                .addQuest("ready_for_adventure")    // FOURTH - Advanced preparation
                 .addChainReward(new ItemReward(Items.IRON_SWORD, 1))
                 .addChainReward(new ItemReward(Items.EMERALD, 5))
                 .addChainReward(XpReward.apprentice());
@@ -419,9 +414,7 @@ public class QuestRegistry {
                 .setDescription("Every great forest begins with a single seed. Plant the foundations of a thriving woodland.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredRace("Elf")
-                .addObjective(new CollectObjective(Items.OAK_SAPLING, 32))
-                .addObjective(new CollectObjective(Items.BIRCH_SAPLING, 16))
-                .addObjective(new CollectObjective(Items.SPRUCE_SAPLING, 16))
+                .addObjective(new TagCollectObjective(ItemTags.SAPLINGS, 64, "any saplings"))
                 .addReward(new ItemReward(Items.BONE_MEAL, 32))
                 .addReward(new ItemReward(ModItems.ELVEN_BREAD, 4))
                 .addReward(new ItemReward(ModItems.GLOWBERRY_JAM, 3))
@@ -436,9 +429,7 @@ public class QuestRegistry {
                 .setDescription("The ancient trees remember. Gather wood from the eldest groves.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredRace("Elf")
-                .addObjective(new CollectObjective(Items.OAK_LOG, 64))
-                .addObjective(new CollectObjective(Items.DARK_OAK_LOG, 32))
-                .addObjective(new CollectObjective(Items.JUNGLE_LOG, 32))
+                .addObjective(new TagCollectObjective(ItemTags.LOGS, 128, "any logs"))
                 .addReward(new ItemReward(Items.DIAMOND_AXE, 1))
                 .addReward(new ItemReward(Items.APPLE, 16))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
@@ -619,7 +610,7 @@ public class QuestRegistry {
                 .setRequiredRace("Human")
                 .addObjective(new CollectObjective(Items.BREAD, 16))
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 32))
-                .addObjective(new CollectObjective(Items.OAK_LOG, 16))
+                .addObjective(new TagCollectObjective(ItemTags.LOGS, 16, "any logs"))
                 .addReward(new ItemReward(Items.IRON_SWORD, 1))
                 .addReward(new ItemReward(Items.IRON_PICKAXE, 1))
                 .addReward(new ItemReward(ModItems.MYSTIC_STEW, 3))
@@ -1419,12 +1410,13 @@ public class QuestRegistry {
         return new Quest("the_beginning")
                 .setName("The Beginning")
                 .setCategory(Quest.QuestCategory.MAIN)
-                .setDescription("Gather oak wood for basic tools.")
+                .setDescription("Gather wood for basic tools. Any type of log will do.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new CollectObjective(Items.OAK_LOG, 5))
+                .addObjective(new TagCollectObjective(ItemTags.LOGS, 5, "any logs"))
                 .addReward(new ItemReward(Items.WOODEN_AXE, 1))
                 .addReward(new ItemReward(Items.STICK, 4))
-                .addReward(XpReward.novice());
+                .addReward(XpReward.novice())
+                .addPrerequisite("garricks_special_brew");
     }
 
     private static Quest createEquipYourselfQuest() {
@@ -1439,7 +1431,7 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.IRON_PICKAXE, 1))
                 .addReward(new ItemReward(Items.IRON_AXE, 1))
                 .addReward(XpReward.novice())
-                .addPrerequisite("garricks_special_brew");
+                .addPrerequisite("the_beginning");
     }
 
     private static Quest createReadyForAdventureQuest() {
@@ -1467,7 +1459,7 @@ public class QuestRegistry {
                 .setDescription("Start building the foundation of a great village.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 128))
-                .addObjective(new CollectObjective(Items.OAK_PLANKS, 64))
+                .addObjective(new TagCollectObjective(ItemTags.PLANKS, 64, "any planks"))
                 .addReward(new ItemReward(Items.EMERALD, 5))
                 .addReward(XpReward.apprentice());
     }
@@ -1479,7 +1471,7 @@ public class QuestRegistry {
                 .setDescription("The village is expanding! Help construct new buildings.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 64))
-                .addObjective(new CollectObjective(Items.OAK_PLANKS, 32))
+                .addObjective(new TagCollectObjective(ItemTags.PLANKS, 32, "any planks"))
                 .addObjective(new CollectObjective(Items.GLASS, 16))
                 .addReward(new ItemReward(Items.IRON_AXE, 1))
                 .addReward(new ItemReward(Items.EMERALD, 3))
@@ -1641,20 +1633,6 @@ public class QuestRegistry {
 
     // ========== ADDITIONAL QUESTS ==========
 
-    private static Quest createDeepMinerQuest() {
-        return new Quest("deep_miner")
-                .setName("Deep Miner")
-                .setCategory(Quest.QuestCategory.JOB)
-                .setDescription("Venture into the depths to gather precious resources.")
-                .setDifficulty(Quest.QuestDifficulty.EXPERT)
-                .addObjective(new MultiItemCollectObjective("Iron Ore", 20, Items.IRON_ORE, Items.DEEPSLATE_IRON_ORE))
-                .addObjective(new MultiItemCollectObjective("Gold Ore", 8, Items.GOLD_ORE, Items.DEEPSLATE_GOLD_ORE))
-                .addObjective(new MultiItemCollectObjective("Diamond Ore", 3, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
-                .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 3))
-                .addReward(XpReward.expert());
-    }
-
     /**
      * IDENTITY CRISIS - Level 25+ Expert Quest
      * Rewards: Potion of Racial Rebirth (free race reset)
@@ -1761,42 +1739,6 @@ public class QuestRegistry {
                 .addReward(XpReward.master());
     }
 
-    // ========== JOB BOARD QUESTS ==========
-
-    private static Quest createGatherCobblestoneJob() {
-        return new Quest("gather_cobblestone")
-                .setName("Gather Cobblestone")
-                .setCategory(Quest.QuestCategory.JOB)
-                .setDescription("The town needs building materials. Gather cobblestone.")
-                .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new CollectObjective(Items.COBBLESTONE, 64))
-                .addReward(new ItemReward(Items.EMERALD, 2))
-                .addReward(XpReward.novice());
-    }
-
-    private static Quest createHuntZombiesJob() {
-        return new Quest("hunt_zombies")
-                .setName("Hunt Zombies")
-                .setCategory(Quest.QuestCategory.JOB)
-                .setDescription("Clear out the undead threats near town.")
-                .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(KillObjective.zombies(10))
-                .addReward(new ItemReward(Items.EMERALD, 3))
-                .addReward(XpReward.novice());
-    }
-
-    private static Quest createCollectWheatJob() {
-        return new Quest("collect_wheat")
-                .setName("Collect Wheat")
-                .setCategory(Quest.QuestCategory.JOB)
-                .setDescription("The baker needs wheat for bread.")
-                .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addObjective(new CollectObjective(Items.WHEAT, 32))
-                .addReward(new ItemReward(Items.EMERALD, 2))
-                .addReward(new ItemReward(Items.BREAD, 8))
-                .addReward(XpReward.novice());
-    }
-
     private static Quest createRumoursOfTheBoneKingQuest() {
         return new Quest("rumours_of_the_bone_king")
                 .setName("Rumours of the Bone King")
@@ -1831,18 +1773,5 @@ public class QuestRegistry {
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .addReward(XpReward.expert());
     }
-
-    private static Quest createMineIronJob() {
-        return new Quest("mine_iron")
-                .setName("Mine Raw Iron")
-                .setCategory(Quest.QuestCategory.JOB)
-                .setDescription("The blacksmith needs raw iron.")
-                .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
-                .addObjective(new CollectObjective(Items.RAW_IRON, 16))
-                .addReward(new ItemReward(Items.EMERALD, 4))
-                .addReward(XpReward.apprentice());
-    }
-
-
 
 }

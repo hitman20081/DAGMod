@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.7
-**Last Updated**: 2026-03-27
+**Current Version**: v1.7.10
+**Last Updated**: 2026-04-11
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -21,7 +21,7 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 - `1.5.0-beta` → New features (Garrick NPC, quest gating)
 - `1.5.1-beta` → Bug fixes for v1.5.0 (no new features)
 - `1.6.0-beta` → New features (enhanced consumables)
-- `2.0.0` → Major release (removes beta tag, major milestone)
+- `2.0.0` → Major release (major content milestone)
 
 ---
 
@@ -220,18 +220,39 @@ Priority: **MEDIUM**
   - Rogue: Shadow Step (chance to dodge on hit)
 
 ### **v2.0.0 - Major Feature Release**
-Priority: **MEDIUM** (Major milestone - removes beta tag)
+Priority: **MEDIUM**
 
-- ❌ **Boss Encounters in Bone Dungeons**
-  - Mini-bosses in special dungeon rooms
-  - Unique mechanics per boss
-  - Enhanced loot tables
-  - Boss key fragments for final boss unlock
+- ❌ **Additional Boss Encounters in Bone Dungeons**
+  - ✅ Skeleton Lord (mini-boss) — added v1.7.5
+  - ✅ Skeleton King (boss) — added v1.7.8/v1.7.9
+  - ❌ Additional mini-bosses in special dungeon rooms
+  - ❌ Enhanced loot tables for new bosses
+  - ❌ Boss key fragments for final boss unlock
 
 - ❌ **Race Quest Chain Expansions**
   - Additional quest chains for each race
   - Race-specific storylines
   - Legendary race rewards
+
+- ❌ **Bounty System**
+  - Bounty Hunter NPC in the Hall of Champions (accept and turn-in bounties)
+  - Dynamically generated bounties — up to 7 days before reset, not daily
+  - First-come-first-served claim system; locked to claiming player for up to 7 days
+  - Bounty tiers:
+    - **Common** — Named elite mobs, dungeon mini-bosses
+    - **Rare** — Skeleton King, Dragon Guardian and equivalent bosses
+    - **Legendary** — Major endgame bosses
+    - **Seasonal** — Limited time event targets
+  - Bounty-exclusive rewards: Bounty Tokens, Trophy Items, Hunter's Gear, Title unlocks
+  - Bounty Tokens spent at a dedicated Bounty Vendor NPC
+  - Ties into Title System — bounty completions unlock Hunter titles
+
+- ❌ **Coin Currency System**
+  - 4 coin tiers: Copper → Silver → Gold → Platinum (100:1 ratio each)
+  - Foundation for v2.2.0 Economy & Trading content
+  - Merchant NPCs accept coins alongside/instead of emeralds
+  - Bounty rewards pay out in coins + unique items
+  - Bounty Tokens serve as a separate prestige currency
 
 - ❌ **Major Polish Pass**
   - Performance optimization
@@ -242,6 +263,8 @@ Priority: **MEDIUM** (Major milestone - removes beta tag)
 ### **v2.1.0 - Guild System**
 Priority: **LOW** (Long-term)
 
+> See full design document in the [Guild System Design](#guild-system-design) section below.
+
 - ❌ **Guild Creation & Management**
   - Create/join/leave guilds
   - Guild ranks and permissions
@@ -251,7 +274,7 @@ Priority: **LOW** (Long-term)
 - ❌ **Guild Progression**
   - Guild levels and XP
   - Guild perks unlock system
-  - Guild quests (shared objectives)
+  - Guild quests — all exclusive to Bleakwind, all require full guild cooperation (no solo completion)
   - Guild reputation
 
 - ❌ **Guild Features**
@@ -259,6 +282,60 @@ Priority: **LOW** (Long-term)
   - Guild halls/headquarters
   - Guild vs Guild events
   - Guild leaderboards
+
+### **v2.1.5 - The Pale Abyss**
+Priority: **LOW** (Long-term)
+
+> See full design document in the [Pale Abyss Design](#pale-abyss-design) section below.
+
+- ❌ **Pale Abyss Dimension**
+  - Two-layer design: Pale Garden surface (pale oak forest, eerie and quiet) → deep cavern system below
+  - Surface layer becomes increasingly webbed and corrupted the deeper players explore
+  - Massive cavern system at the base housing the Spider Queen's lair
+  - Level gate: ~Level 50-70 (between Bone Realm and Unholy Realm)
+  - Portal located in the Hall of Champions
+
+- ❌ **Pale Abyss Portal Key**
+  - Craftable key using overworld and Pale Abyss materials only (no Bone Realm tie-in)
+  - Poison Sac — quest reward from intro quest chain (harvested from overworld spiders)
+  - Pale Silk — rare drop in overworld cave biomes
+  - Venom Crystal — early Pale Abyss exploration drop
+  - Additional Pale Abyss harvested materials (TBD)
+
+- ❌ **Introduction Quest Chain**
+  - **"Strange Webs"** — Investigate unusual webbing in cave biomes; encounter a Pale Stalker that has migrated to the overworld
+  - **"The Source"** — Kill overworld spiders and collect Poison Sacs (quest item only, not a random drop)
+  - **"Something Bigger"** — A dangerous encounter hints at something much larger lurking elsewhere
+  - **"The Pale Gate"** — Craft the portal key and open the Pale Abyss portal
+
+- ❌ **Mob Hierarchy**
+  - **Cave Crawler** — Fast, weak minion; dangerous in swarms
+  - **Pale Stalker** — Camouflages against pale oak trees on the surface layer
+  - **Venom Weaver** — Ranged web-slinger; slows and poisons players
+  - **Brood Warden** — Renamed current Spider Queen mob; lays hatching eggs; roams surface and upper caves
+  - **The Spider Queen** — Massive boss in the deepest cavern chamber; multi-phase fight
+
+- ❌ **Spider Queen Boss Fight**
+  - **Phase 1** — Cavern floor combat; summons Brood Wardens and Cave Crawlers
+  - **Phase 2** (below 60% health) — Retreats to cavern ceiling; drops web traps and egg sacs; players must dodge falling hazards while dealing damage
+  - **Phase 3** (below 30% health) — Full enrage; returns to floor; faster movement, increased damage, web AoE roots all players
+
+- ❌ **Exclusive Harvested Materials**
+  - No metal ore — all materials harvested from mobs, giving the dimension a unique biological crafting identity
+  - **Chitin Fragment** — Common; dropped by Cave Crawlers
+  - **Pale Silk** — Common; Pale Stalkers and environment webs
+  - **Venom Sac** — Mid-tier; dropped by Venom Weavers
+  - **Carapace Plate** — Mid-tier; dropped by Brood Wardens
+  - **Compound Eye** — Rare; dropped by Brood Wardens
+  - **Queen's Fang** — Legendary; Spider Queen only
+  - **Queen's Silk** — Legendary; Spider Queen only
+
+- ❌ **Biological Crafting System**
+  - **Chitin Armor Set** — Chitin Fragments + Carapace Plates; lightweight, high evasion bonuses
+  - **Venom Weapons** — Venom Sac coating; apply poison on hit
+  - **Queen's Silk Armor** — Legendary tier; unique set bonuses
+  - **Compound Eye Trinket** — Ties into jewelry system; grants enhanced detection abilities
+  - **Queen's Fang Dagger** — Legendary weapon; guaranteed poison + bonus damage
 
 ### **v2.2.0 - Economy & Trading**
 Priority: **LOW** (Long-term)
@@ -329,6 +406,76 @@ Priority: **LOW** (Long-term - inspired by Trinkets mod)
   - Boss-specific legendary jewelry drops
   - Jewelry upgrade paths
   - Combine with gem socket system for enhanced customization
+
+### **vTBD - The Unholy Realm**
+Priority: **VERY LOW** (Long-term — targeted near v3.0.0–v4.0.0)
+
+> See full design document in the [Unholy Realm Design](#unholy-realm-design) section below.
+> **Note**: The Paladin class (4th class) will release alongside this update — not before.
+
+- ❌ **Unholy Realm Dimension**
+  - Dark corrupted dimension — cracked terrain, dead twisted trees, pools of dark liquid
+  - Purplish-black sky with no natural light
+  - Ambient Wither and Weakness effects without protection
+  - Desecrated temple and collapsed cathedral structures throughout
+  - Level gate: ~Level 80-100 (significantly higher than Bone Realm)
+
+- ❌ **Unholy Sigil (Portal Key)**
+  - Craftable item required to open the portal at the Hall of Champions
+  - Recipe requires materials from multiple progression layers:
+    - Skeleton King drop (Bone Realm cleared)
+    - Dragon Heart (Dragon Realm cleared)
+    - Cursed Soul Shard (rare overworld drop)
+    - Blessed Ingot (crafted from Unholy Realm materials + gold)
+  - Portal located permanently in the Hall of Champions
+
+- ❌ **Unholy Mob Hierarchy**
+  - **Shade** — Fast, weak minion; dangerous in swarms
+  - **Unholy Priest** — Support elite; heals nearby Unholy mobs
+  - **Cursed Knight** — Tanky melee elite; applies Wither on hit
+  - **Lich Lord** — Mini-boss; spellcaster that summons Shades, has phase mechanic
+  - **The Archlich** — Final boss; invulnerable until all Phylacteries destroyed
+  - All Unholy mobs share traits: hurt by Holy effects, resistant to Poison and Weakness, emit passive debuff auras
+
+- ❌ **Phylactery Shrine System**
+  - 5-6 Phylactery Shrines scattered across the Unholy Realm
+  - The Archlich regenerates health while any Phylactery remains intact — cannot be damaged
+  - Each Shrine is uniquely designed and guarded:
+    - **Shrine of Souls** — Guarded by a Lich Lord; surrounded by Shade swarms
+    - **Shrine of Wrath** — Guarded by 3 Cursed Knights; Wither aura, ranged attacks disabled
+    - **Shrine of Ruin** — Unholy Priest keeps regenerating the Shrine's health
+    - **Shrine of Decay** — Lich Lord guarded by lingering damage zone
+    - **Shrine of Oblivion** — The Archlich watches but cannot intervene; pure navigation challenge
+  - Destroying each Shrine triggers a realm-wide announcement
+  - Archlich grows more aggressive with each Shrine destroyed — spawning Shade waves as punishment
+  - Once all Shrines are destroyed, the Archlich becomes vulnerable and the final fight begins
+
+- ❌ **Exclusive Materials**
+  - **Soulsteel** — Unholy Realm metal (equivalent to Mythril); passive Wither effect on weapons
+  - **Voidstone** — Common crafting material
+  - **Cursed Amethyst** — Mid-tier; used in potions and enchanting
+  - **Soulfire Crystal** — Rare; used in top-tier Holy weapons
+  - **Phylactery Shard** — Drops from Lich Lords; used to craft the Phylactery Locator
+
+- ❌ **Holy Enchantments**
+  - **Holy Wrath** — Bonus damage against all Unholy mobs (Smite equivalent)
+  - **Consecrated** — Chance to apply Holy Burn on hit (damage over time vs Unholy only)
+  - **Purifying Strike** — Reduces Unholy mob healing (counters Priest aura)
+  - **Blessed** — Passive aura that weakens nearby Unholy mobs' damage output
+  - **Soulbane** — Extra damage specifically to Liches (rare, high-tier)
+
+- ❌ **Holy Potions & Consumables**
+  - **Holy Water Flask** — Splash potion; damages all Unholy mobs in radius
+  - **Purified Light Potion** — Stronger splash; damages and slows Unholy mobs
+  - **Consecrated Oil** — Weapon coating; next few hits deal bonus Holy damage
+  - **Blessed Incense** — Thrown lingering cloud; Unholy mobs take damage while inside
+  - **Vial of Sacred Flame** — Ignites Unholy mobs with Holy Fire (bypasses fire resistance)
+  - All Holy potions require Unholy Realm materials to craft
+
+- ❌ **Guild Mission Integration**
+  - Unholy Realm content available as high-tier guild missions
+  - Archlich encounter naturally suited to full guild groups
+  - Phylactery Shrine system rewards coordinated multi-player strategies
 
 ### **vTBD - The Labyrinth**
 Priority: **MEDIUM**
@@ -514,6 +661,346 @@ Priority: **LOW**
 
 ---
 
+## 📋 **Design Documents**
+
+### Guild System Design
+
+#### Overview
+The Guild System is a permanent endgame gameplay mechanic tied to the Bleakwind dimension. Once a player reaches a sufficient level, they gain access to guild quests that offer significantly better rewards than standard content. All guild quests are designed to require full guild cooperation — no quest can be completed solo, and parties are not a substitute for guilds.
+
+---
+
+#### Core Concepts
+
+**Guilds vs Parties — Key Distinction**
+
+| | Party | Guild |
+|---|---|---|
+| Duration | Temporary | Permanent |
+| Purpose | General grouping | Endgame progression |
+| Quest Access | Normal quests only | Guild-exclusive quests |
+| Location | Anywhere | Bleakwind (guild quests) |
+| Significance | Convenience mechanic | Endgame identity |
+
+**Guilds**
+- Permanent player organizations — a long-term commitment, not a temporary grouping
+- Represent endgame identity and progression
+- Unlock access to Bleakwind guild quests upon joining
+- Require players to fully commit to participate in guild content
+- Designed around coordinated, multi-player effort where teamwork is built into quest design, not optional
+
+**Parties**
+- Temporary groupings for general gameplay convenience
+- **NOT** interchangeable with Guilds — must be clearly distinguished in UI and mechanics
+- Do not grant access to guild quests under any circumstance
+- Can be formed and disbanded freely with no lasting consequence
+- No endgame significance
+
+---
+
+#### Bleakwind Dimension
+
+**Role in the Guild System**
+- Bleakwind is a custom generated dimension within the Minecraft world
+- Serves as the **dedicated and exclusive realm** for all guild quests
+- Accessible only after a player has leveled up sufficiently and joined a guild
+- Reinforces the endgame nature of the guild system
+- Acts as a natural social hub where guild activity is concentrated
+
+**Why Lock Guild Quests to Bleakwind?**
+Restricting guild quests to Bleakwind gives the dimension a clear, purposeful identity. Players who have not reached the required level or have not joined a guild do not operate there at a guild level. This makes Bleakwind feel **earned and significant** — a destination players work toward, not a wall they hit.
+
+---
+
+#### Guild Quest Rules
+- All guild quests take place **exclusively in Bleakwind** — no exceptions
+- **No guild quest can be completed solo** — cooperation is a hard requirement by design
+- Quests must be built around requiring multiple roles or coordinated effort (not just "bring a friend")
+- Guild quests should feel like **events**, not routine tasks
+- Guild quests offer superior rewards compared to standard or party-based content
+
+---
+
+#### Design Goals
+- Clearly distinguish guilds from parties in both mechanics and player perception
+- Make Bleakwind feel like a destination players genuinely work toward
+- Encourage permanent social structures over temporary groupings
+- Ensure the cooperative requirement feels organic, not forced
+- Position the guild system as the true endgame loop of DAGMod
+
+---
+
+#### Open Questions / To Be Decided
+- [ ] Minimum and maximum guild size
+- [ ] Guild quest tier structure (difficulty tiers, reward scaling)
+- [ ] How players create or join a guild (application system, invite-only, open join?)
+- [ ] Guild ranking or internal progression system (officer roles, ranks, etc.)
+- [ ] Consequences for leaving or being kicked from a guild
+- [ ] Whether guilds can compete against each other in Bleakwind (GvG events)
+- [ ] Whether Bleakwind has non-guild content or is exclusively a guild realm
+
+---
+
+### Pale Abyss Design
+
+#### Overview
+The Pale Abyss is a mid-level dimension accessible via a portal in the Hall of Champions. It features a two-layer design — a Pale Garden-style surface of corrupted pale oak forest that descends into massive cavern systems below. The current oversized Spider Queen mob is renamed to the Brood Warden and repositioned as a mid-tier elite. The actual Spider Queen boss is significantly larger and lives in the deepest cavern chamber. All dimension materials are harvested from mobs rather than mined as ores, giving it a unique biological crafting identity.
+
+---
+
+#### Access & Level Gate
+- Portal permanently located in the **Hall of Champions**
+- Opened using a craftable portal key requiring overworld + Pale Abyss materials only
+- Recommended level gate: **~Level 50-70**
+- Sits between the Bone Realm and Unholy Realm in the progression ladder
+- No Bone Realm or Dragon Realm materials required for the portal key
+
+---
+
+#### Portal Key Crafting
+| Component | Source |
+|---|---|
+| Poison Sac | Quest reward — harvested from overworld spiders via intro quest chain |
+| Pale Silk | Rare drop in overworld cave biomes |
+| Venom Crystal | Early Pale Abyss exploration drop |
+| Additional harvested materials | TBD |
+
+---
+
+#### Introduction Quest Chain
+- **"Strange Webs"** — Investigate unusual webbing in cave biomes; encounter a Pale Stalker that has migrated to the overworld
+- **"The Source"** — Kill overworld spiders and collect Poison Sacs (quest item only, not a random drop)
+- **"Something Bigger"** — A dangerous encounter hints at something much larger lurking elsewhere
+- **"The Pale Gate"** — Craft the portal key and open the Pale Abyss portal
+
+---
+
+#### Dimension Design
+- **Surface Layer** — Pale Garden aesthetic; pale oak forest, eerie and quiet. Increasingly webbed and corrupted as players explore deeper. Pale Stalkers and Cave Crawlers roam here
+- **Cavern Layer** — Massive underground cave networks; near-zero visibility; bioluminescent spider eggs provide the only light. Brood Wardens and Venom Weavers inhabit this layer
+- **Queen's Lair** — The deepest chamber; the Spider Queen's arena
+
+---
+
+#### Mob Hierarchy
+
+| Tier | Mob | Role |
+|---|---|---|
+| Minion | Cave Crawler | Fast, weak; dangerous in swarms |
+| Minion | Pale Stalker | Camouflages against pale oak trees on the surface layer |
+| Elite | Venom Weaver | Ranged web-slinger; slows and poisons players |
+| Elite | Brood Warden | Renamed current Spider Queen; lays hatching eggs; roams surface and upper caves |
+| Boss | The Spider Queen | Massive; lives in deepest cavern chamber; multi-phase fight |
+
+**Note**: The current oversized Spider Queen mob is renamed to **Brood Warden** and repositioned as a mid-tier elite. The actual Spider Queen boss is significantly larger and lives exclusively in the deepest cavern.
+
+---
+
+#### Spider Queen Boss Fight
+- **Phase 1** — Cavern floor combat; summons Brood Wardens and Cave Crawlers
+- **Phase 2** (below 60% health) — Retreats to cavern ceiling; drops web traps and egg sacs; players must dodge falling hazards while dealing damage
+- **Phase 3** (below 30% health) — Full enrage; returns to floor; faster movement, increased damage, web AoE temporarily roots all players
+
+---
+
+#### Exclusive Harvested Materials
+
+| Material | Source | Tier |
+|---|---|---|
+| Chitin Fragment | Cave Crawlers | Common |
+| Pale Silk | Pale Stalkers + environment webs | Common |
+| Venom Sac | Venom Weavers | Mid-tier |
+| Carapace Plate | Brood Wardens | Mid-tier |
+| Compound Eye | Brood Wardens (rare) | Rare |
+| Queen's Fang | Spider Queen only | Legendary |
+| Queen's Silk | Spider Queen only | Legendary |
+
+---
+
+#### Biological Crafting System
+All Pale Abyss gear is crafted from harvested mob parts — no metal ore.
+
+| Item | Materials | Notes |
+|---|---|---|
+| Chitin Armor Set | Chitin Fragments + Carapace Plates | Lightweight; high evasion bonuses |
+| Venom Weapons | Venom Sac coating | Apply poison on hit |
+| Queen's Silk Armor | Queen's Silk | Legendary tier; unique set bonuses |
+| Compound Eye Trinket | Compound Eye | Ties into jewelry system; enhanced detection |
+| Queen's Fang Dagger | Queen's Fang | Legendary; guaranteed poison + bonus damage |
+
+---
+
+#### Open Questions / To Be Decided
+- [ ] Exact portal key recipe and final material names
+- [ ] Full Brood Warden stats and abilities post-rename
+- [ ] Whether Pale Stalker spawns in the overworld naturally or only in the dimension
+- [ ] Respawn timer for the Spider Queen after defeat
+- [ ] Whether the Compound Eye trinket ties directly into the v2.3.0 Jewelry system
+
+---
+
+### Unholy Realm Design
+
+#### Overview
+The Unholy Realm is a high-level endgame dimension accessible via a portal in the Hall of Champions, opened using the craftable Unholy Sigil. It is home to a hierarchy of Unholy mobs culminating in the Archlich — an invulnerable boss that cannot be defeated until players destroy all Phylactery Shrines scattered across the realm. The content is designed for groups and can serve as high-tier guild mission content, though it is not guild-exclusive.
+
+---
+
+#### Access & Level Gate
+- Portal is permanently located in the **Hall of Champions**
+- Opened using the **Unholy Sigil** — a craftable key requiring materials from multiple progression layers
+- Recommended level gate: **~Level 80-100** (significantly higher than the Bone Realm)
+- Players must have cleared both the Bone Realm and Dragon Realm to craft the Sigil
+
+---
+
+#### Unholy Sigil Crafting
+The Unholy Sigil requires items from every major content layer, ensuring it is a true endgame crafting milestone:
+
+| Component | Source |
+|---|---|
+| Skeleton King drop | Bone Realm — proves Bone Realm cleared |
+| Dragon Heart | Dragon Realm — proves Dragon Realm cleared |
+| Cursed Soul Shard | Rare overworld drop from dark structures |
+| Blessed Ingot | Crafted from Unholy Realm materials + gold |
+
+---
+
+#### Atmosphere & World Design
+- Dark, corrupted dimension — cracked terrain, dead twisted trees, pools of dark liquid
+- Purplish-black sky with no natural light
+- Ambient **Wither** and **Weakness** effects applied to players without Holy protection
+- Structures resemble desecrated temples and collapsed cathedrals
+- The realm should feel *wrong* — corrupted, decaying, like reality itself is breaking down
+
+---
+
+#### Mob Hierarchy
+
+| Tier | Mob | Role |
+|---|---|---|
+| Minion | Shade | Fast, weak; dangerous in swarms |
+| Elite | Unholy Priest | Heals nearby Unholy mobs; priority target |
+| Elite | Cursed Knight | Tanky melee; applies Wither on hit |
+| Mini-boss | Lich Lord | Spellcaster; summons Shades; phase mechanic; drops Phylactery Shards |
+| Final Boss | The Archlich | Invulnerable until all Phylacteries destroyed; multi-phase fight |
+
+**Shared Unholy Mob Traits**
+- Hurt by Holy/Light-based effects and Holy enchantments
+- Resistant to Poison and Weakness
+- Emit passive debuff auras to nearby players
+- Drop Unholy-specific crafting materials
+
+---
+
+#### Phylactery Shrine System
+The Archlich is **completely invulnerable** and regenerates health while any Phylactery Shrine remains intact. Players must locate and destroy all 5 Shrines before the Archlich becomes vulnerable.
+
+**Shrine Design**
+
+| Shrine | Guardian | Unique Hazard |
+|---|---|---|
+| Shrine of Souls | Lich Lord | Surrounded by constant Shade swarms |
+| Shrine of Wrath | Cursed Knight ×3 | Wither aura; ranged attacks disabled in zone |
+| Shrine of Ruin | Unholy Priest + minions | Priest actively regenerates the Shrine's health |
+| Shrine of Decay | Lich Lord | Surrounded by lingering Holy-damage zone (ironic — players must push through it) |
+| Shrine of Oblivion | The Archlich watches but cannot act | Pure navigation/puzzle challenge; builds dread |
+
+**Shrine Destruction Flow**
+- Destroying a Shrine triggers a **realm-wide announcement** visible to all players
+- Each destruction makes the Archlich progressively more aggressive — spawning Shade punishment waves
+- Once all 5 Shrines are destroyed, the Archlich becomes vulnerable and descends for the final fight
+
+---
+
+#### The Archlich Boss Fight
+- **Phase 1**: Standard spellcasting and Shade summoning
+- **Phase 2** (below 50% health): Gains new abilities — Soul Drain, mass Wither pulse, faster casting
+- **Phase 3** (below 25% health): Enrage — dramatically increased speed, damage, and spawn rate
+- Defeating the Archlich drops top-tier Unholy Realm loot and a realm-wide victory announcement
+
+---
+
+#### Exclusive Materials
+
+| Material | Tier | Primary Use |
+|---|---|---|
+| Voidstone | Common | Basic Unholy Realm recipes |
+| Cursed Amethyst | Mid-tier | Holy potions and enchanting |
+| Soulsteel | Metal (Mythril equivalent) | High-tier gear; passive Wither effect on weapons |
+| Soulfire Crystal | Rare | Top-tier Holy weapons |
+| Phylactery Shard | Boss drop (Lich Lord) | Craft Phylactery Locator (future use / lore item) |
+
+---
+
+#### Holy Enchantments
+
+| Enchantment | Effect |
+|---|---|
+| Holy Wrath | Bonus damage against all Unholy mobs (Smite equivalent) |
+| Consecrated | Chance to apply Holy Burn on hit — damage over time vs Unholy only |
+| Purifying Strike | Reduces Unholy mob healing — counters Priest aura |
+| Blessed | Passive aura that weakens nearby Unholy mobs' damage output |
+| Soulbane | Extra damage specifically against Liches — rare, high-tier |
+
+---
+
+#### Holy Potions & Consumables
+
+| Item | Type | Effect |
+|---|---|---|
+| Holy Water Flask | Splash potion | Damages all Unholy mobs in radius |
+| Purified Light Potion | Splash potion | Damages and slows Unholy mobs |
+| Consecrated Oil | Weapon coating | Next few hits deal bonus Holy damage |
+| Blessed Incense | Thrown lingering | Cloud damages Unholy mobs standing inside |
+| Vial of Sacred Flame | Thrown | Ignites Unholy mobs with Holy Fire — bypasses fire resistance |
+
+All Holy potions require Unholy Realm materials to craft, ensuring players must venture in to get better tools against it.
+
+---
+
+#### Paladin Class Integration
+The Paladin is the 4th class and will **release alongside the Unholy Realm update — not before**. This ensures the class has immediate meaningful content from day one. Paladins receive passive bonus damage against all Unholy mobs and are the most effective class in the Unholy Realm, without being the only class that can go there.
+
+**Paladin Abilities**
+
+| Ability | Effect |
+|---|---|
+| Holy Strike | Melee attack dealing bonus Holy damage; extra damage vs Unholy |
+| Divine Shield | Brief invulnerability; reflects a portion of damage |
+| Consecrate | Blesses ground beneath the Paladin; damages Unholy mobs standing on it |
+| Lay on Hands | Powerful single-target heal on a long cooldown |
+| Aura of Light | Passive aura that weakens nearby Unholy mobs' damage output |
+
+**Paladin Race Synergies**
+
+| Race | Synergy Name | Effect |
+|---|---|---|
+| Human | Devout Champion | Enhanced healing output; Divine Shield duration increased |
+| Dwarf | Ironclad Devotion | Bonus armor while abilities active; Consecrate slows enemies |
+| Elf | Radiant Sentinel | Extended aura range; Holy Strike briefly blinds Unholy mobs |
+| Orc | Wrathful Consecration | Holy Strike deals bonus damage; reduced support effectiveness |
+
+---
+
+#### Guild Mission Integration
+- Unholy Realm content is available as high-tier guild missions in Bleakwind
+- The Archlich encounter naturally rewards coordinated multi-player strategies
+- The Phylactery Shrine system allows groups to split up and tackle Shrines simultaneously
+
+---
+
+#### Open Questions / To Be Decided
+- [ ] Exact level gate (80, 90, or 100?)
+- [ ] Number of Phylactery Shrines (confirmed ~5, exact count TBD)
+- [ ] Unholy Sigil exact crafting recipe and material names
+- [ ] Soulsteel gear stats and set bonuses
+- [ ] Whether the Paladin class is available before the Unholy Realm opens (likely yes)
+- [ ] Archlich respawn timer after defeat
+- [ ] Whether Holy potions can be used outside the Unholy Realm
+
+---
+
 ## 🚫 **Scrapped/Deprecated Features**
 
 *(None currently - all planned features remain on roadmap)*
@@ -551,25 +1038,29 @@ Priority: **LOW**
 - ✅ **v1.7.1** (Feb 2026) - Gem ore worldgen in Overworld (6 custom ores with tiered rarity)
 - ✅ **v1.7.2** (Feb 2026) - Bone dungeon overhaul, gem ore worldgen, NPC merchant structures
 - ✅ **v1.7.3** (Feb 2026) - Red Dragon quest entity, gem ore mining tiers (iron pickaxe), dragon spawn timing rework, Dragon Key recipe unlock system
-
-### **Short-term** - Next 3-6 months
 - ✅ **v1.7.4** (Mar 2026) - Real consumable mechanics (lifesteal, dodge, spell mods, last stand + void rescue, grave void fix), dragon recipe rework (all dragon gear now uses mod drops), dragon stat buffs (HP + toughness), Master Trader quest fix (real enchanted book rewards)
 - ✅ **v1.7.5** (Mar 2026) - Skeleton Lord auto-spawning in boss room, Boss Spawn Trigger block, Necrotic Key in loot table, Hall of Champions locator chat coordinates, Bone Realm portal height fixes
 - ✅ **v1.7.6** (Mar 2026) - Hall of Champions merchants (9 NPCs: Alchemist, Armorer, Enchantsmith, Jeweler, Miner, Lumberjack, Voodoo Illusioner, Mystery Merchant, Trophy Dealer), rotating trade system per-merchant, merchant dialogue, `/merchant` admin commands
 - ✅ **v1.7.7** (Mar 2026) - Class quest chains rebuilt (all 3 classes, 5 quests each, level-gated 10/25/50/75/100), per-quest level requirement system, enchanted book reward fixes, Ender Dragon quest objectives removed, race quest polish, WildDragonEntity crash fixes
+- ✅ **v1.7.8** (Mar 2026) - Skeleton King boss encounter (throne room fight, barrier-sealed room, party-scaled), Skeleton Throne Room structure, King's Recall Stone, per-player chest rewards on King death, Seasons datapack (Spring/Summer/Fall/Winter cycle), boss stat overhaul (Summoner 30→120 HP, Lord 45→200 HP, King 60→300 HP, Dragon Guardian 300→400 HP)
+- ✅ **v1.7.9** (Apr 2026) - `/seasons` command with interactive setup menu, seasons first-run notice on server load, seasons now require manual operator activation, season settings persist across restarts, Skeleton Kingdom structure chain (entry room → hallway → throne room jigsaw), jigsaw anchor and pool reference fixes
+
+### **Short-term** - Next 3-6 months
 - 🎯 **v1.8.0** (Minor) - New spell scrolls and crafting system
 - 🎯 **v1.9.0** (Minor) - Daily quest system with rotation
 - 🎯 **v1.10.0** (Minor) - Custom race/class enchantments
 
 ### **Medium-term** - 6-12 months
-- 🎯 **v2.0.0** (Major) - Dungeon bosses, race quest expansions, removes beta tag
+- 🎯 **v2.0.0** (Major) - Additional dungeon bosses, race quest expansions, Bounty System, Coin Currency
 - 🎯 **v2.1.0** (Minor) - Guild system foundation
+- 🎯 **v2.1.5** (Minor) - The Pale Abyss dimension, Spider Queen rework, biological crafting system
 - 🎯 **v2.2.0** (Minor) - Economy, trading, and gem socket system
 - 🎯 **v2.3.0** (Minor) - Jewelry and trinkets system
 
 ### **Long-term** - 12+ months
 - 🎯 **vTBD** - The Labyrinth dimension & Dark Mage boss
 - 🎯 **v3.0.0** (Major) - Endgame expansion (raids, prestige, seasonal events)
+- 🎯 **vTBD** - The Unholy Realm + Paladin class (4th class) — targeted near v3.0.0–v4.0.0
 - 🎯 Future major expansions as needed
 
 ---
@@ -582,7 +1073,7 @@ Following **SemVer 2.0.0** format: `MAJOR.MINOR.PATCH-beta`
 
 **MAJOR version** (x.0.0):
 - Incompatible API changes or breaking changes
-- Major milestones (e.g., v2.0.0 removes beta tag)
+- Major milestones (e.g., v2.0.0)
 - Game-changing features that fundamentally alter gameplay
 - Major expansions (e.g., v3.0.0 endgame expansion)
 
@@ -622,7 +1113,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-03-27
+**Last Updated**: 2026-04-11
 **Maintained By**: hitman20081
-**Current Version**: v1.7.7
+**Current Version**: v1.7.10
 **License**: See LICENSE file
