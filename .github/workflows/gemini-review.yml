@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Get changed files
         id: changed
@@ -26,12 +27,9 @@ jobs:
           PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/dagmod/.local/bin:/home/dagmod/.npm-global/bin
 
       - name: Push Beads issues to GitHub
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "hitman20081"
           git config user.email "deadactiongaming@gmail.com"
-          git remote set-url origin https://hitman20081:${PAT_TOKEN}@github.com/hitman20081/DAGMod.git
           git add .beads/
           git diff --staged --quiet || git commit -m "Beads: agent review issues from Gemini [skip ci]"
           git push origin dev
