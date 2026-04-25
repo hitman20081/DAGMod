@@ -25,7 +25,7 @@ jobs:
           git pull origin dev
           gemini -p "You are a code reviewer for DAGMod, a Minecraft RPG mod. Review the following changed files for: 1) Code quality and bugs, 2) Architecture and dependency issues, 3) Any issues that could affect existing systems. Changed files: ${{ steps.changed.outputs.files }}. After review, create Beads issues for any problems found using the bd command. Format each issue clearly." --yolo
         env:
-          PATH: ${{ env.PATH }}:/home/dagmod/.local/bin
+          PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/dagmod/.local/bin:/home/dagmod/.npm-global/bin
 
       - name: Push Beads issues to GitHub
         run: |
