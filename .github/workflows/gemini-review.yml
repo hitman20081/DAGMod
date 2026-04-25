@@ -29,7 +29,6 @@ jobs:
         run: |
           git config user.name "hitman20081"
           git config user.email "deadactiongaming@gmail.com"
-          git remote set-url origin https://hitman20081:${{ secrets.PAT_TOKEN }}@github.com/hitman20081/DAGMod.git
           git add .beads/
           git diff --staged --quiet || git commit -m "Beads: agent review issues from Gemini [skip ci]"
           git push origin dev
