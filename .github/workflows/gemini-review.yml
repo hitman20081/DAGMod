@@ -1,0 +1,37 @@
+name: Gemini Code Review
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  review:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed
+        run: |
+          echo "files=$(git diff --name-only HEAD~1 HEAD | tr '\n' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Run Gemini Review
+        run: |
+          cd /home/dagmod/DAGMod
+          git pull origin dev
+          gemini -p "You are a code reviewer for DAGMod, a Minecraft RPG mod. Review the following changed files for: 1) Code quality and bugs, 2) Architecture and dependency issues, 3) Any issues that could affect existing systems. Changed files: ${{ steps.changed.outputs.files }}. After review, create Beads issues for any problems found using the bd command. Format each issue clearly." --yolo
+        env:
+          PATH: ${{ env.PATH }}:/home/dagmod/.local/bin
+
+      - name: Push Beads issues to GitHub
+        run: |
+          cd /home/dagmod/DAGMod
+          git config user.name "hitman20081"
+          git config user.email "deadactiongaming@gmail.com"
+          git add .beads/
+          git diff --staged --quiet || git commit -m "Beads: agent review issues from Gemini [skip ci]"
+          git push origin dev

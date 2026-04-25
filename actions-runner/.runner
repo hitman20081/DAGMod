@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 2,
+  "agentName": "dagmod-agent",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus15.actions.githubusercontent.com/6Glojsp4WIuA7NoCoY6uH81ad8Yt5QaevsEIEpsT82LaHy1Psv/",
+  "gitHubUrl": "https://github.com/hitman20081/DAGMod",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}

@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "hitman20081/DAGMod",
+  "pipelineDirectory": "DAGMod",
+  "workspaceDirectory": "DAGMod/DAGMod",
+  "repositories": {
+    "hitman20081/DAGMod": {
+      "repositoryPath": "DAGMod/DAGMod",
+      "lastRunOn": "04/25/2026 16:20:51 +00:00"
+    }
+  },
+  "lastRunOn": "04/25/2026 16:20:51 +00:00"
+}
