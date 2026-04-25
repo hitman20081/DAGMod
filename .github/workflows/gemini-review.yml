@@ -17,19 +17,16 @@ jobs:
       - name: Get changed files
         id: changed
         run: |
-          echo "files=$(git diff --name-only HEAD~1 HEAD | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Run Gemini Review
         run: |
-          cd /home/dagmod/DAGMod
-          git pull origin dev
           gemini -p "You are a code reviewer for DAGMod, a Minecraft RPG mod. Review the following changed files for: 1) Code quality and bugs, 2) Architecture and dependency issues, 3) Any issues that could affect existing systems. Changed files: ${{ steps.changed.outputs.files }}. After review, create Beads issues for any problems found using the bd command. Format each issue clearly." --yolo
         env:
           PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/dagmod/.local/bin:/home/dagmod/.npm-global/bin
 
       - name: Push Beads issues to GitHub
         run: |
-          cd /home/dagmod/DAGMod
           git config user.name "hitman20081"
           git config user.email "deadactiongaming@gmail.com"
           git add .beads/
