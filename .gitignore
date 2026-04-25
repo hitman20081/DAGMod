@@ -52,3 +52,4 @@ replay_*.log
 /CLAUDE.md
 /.claude/
 /RELEASE_INSTRUCTIONS.md
+actions-runner/
