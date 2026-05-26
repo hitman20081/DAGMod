@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class ShatterproofDamageMixin {
 
     @ModifyVariable(
-            method = "damage",
+            method = "hurtServer",
             at = @At("HEAD"),
             ordinal = 0,
             argsOnly = true

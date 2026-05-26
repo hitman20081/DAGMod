@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public interface DynamicLightMixin {
 
     @Inject(
-        method = "getLightLevel(Lnet/minecraft/world/LightLayer;Lnet/minecraft/util/math/BlockPos;)I",
+        method = "getBrightness(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I",
         at = @At("RETURN"),
         cancellable = true
     )

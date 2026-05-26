@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public class DodgeMixin {
 
-    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
     private void onDamageHead(ServerLevel world, DamageSource source, float amount,
                               CallbackInfoReturnable<Boolean> cir) {
         if (!((Object) this instanceof ServerPlayer player)) return;

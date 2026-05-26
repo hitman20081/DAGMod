@@ -27,7 +27,7 @@ import java.util.Map;
 @Mixin(value = ServerPlayer.class, priority = 900)
 public class DeathGraveMixin {
 
-    @Inject(method = "onDeath", at = @At("HEAD"))
+    @Inject(method = "die", at = @At("HEAD"))
     private void captureInventoryForGrave(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
         ServerLevel world = (ServerLevel) player.level();

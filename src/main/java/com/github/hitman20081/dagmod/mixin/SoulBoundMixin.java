@@ -21,7 +21,7 @@ import java.util.List;
 @Mixin(ServerPlayer.class)
 public class SoulBoundMixin {
 
-    @Inject(method = "onDeath", at = @At("HEAD"))
+    @Inject(method = "die", at = @At("HEAD"))
     private void saveSoulBoundItems(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
         List<ItemStack> saved = new ArrayList<>();

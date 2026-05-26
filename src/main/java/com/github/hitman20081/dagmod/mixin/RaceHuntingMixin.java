@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class RaceHuntingMixin {
 
     @Inject(
-            method = "onDeath",
+            method = "die",
             at = @At("HEAD")
     )
     private void onEntityDeath(DamageSource damageSource, CallbackInfo ci) {

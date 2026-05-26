@@ -90,7 +90,7 @@ package com.github.hitman20081.dagmod.progression;
  *
  * Award XP from mob kills (in a mixin or event handler):
  *
- * @Inject(method = "onDeath", at = @At("HEAD"))
+ * @Inject(method = "die", at = @At("HEAD"))
  * private void onMobDeath(DamageSource source, CallbackInfo ci) {
  *     if (source.getEntity() instanceof ServerPlayer player) {
  *         LivingEntity entity = (LivingEntity)(Object)this;

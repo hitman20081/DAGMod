@@ -1,6 +1,5 @@
 package com.github.hitman20081.dagmod.party.quest;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.*;
@@ -43,8 +42,8 @@ public class PartyQuestRegistry {
                         "Kill 20 Skeletons"
                 ))
                 .xpReward(1000)
-                .reward(new PartyQuestReward(new ItemStack(Items.DIAMOND), 3))
-                .reward(new PartyQuestReward(new ItemStack(Items.GOLDEN_APPLE), 1))
+                .reward(new PartyQuestReward(Items.DIAMOND, 3))
+                .reward(new PartyQuestReward(Items.GOLDEN_APPLE, 1))
                 .build()
         );
 
@@ -68,8 +67,8 @@ public class PartyQuestRegistry {
                         "Defeat the Skeleton King"
                 ))
                 .xpReward(2500)
-                .reward(new PartyQuestReward(new ItemStack(Items.DIAMOND), 5))
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHERITE_SCRAP), 1))
+                .reward(new PartyQuestReward(Items.DIAMOND, 5))
+                .reward(new PartyQuestReward(Items.NETHERITE_SCRAP, 1))
                 .build()
         );
     }
@@ -91,7 +90,7 @@ public class PartyQuestRegistry {
                         "Kill 30 Zombies"
                 ))
                 .xpReward(800)
-                .reward(new PartyQuestReward(new ItemStack(Items.IRON_INGOT), 10))
+                .reward(new PartyQuestReward(Items.IRON_INGOT, 10))
                 .build()
         );
 
@@ -115,8 +114,8 @@ public class PartyQuestRegistry {
                         "Kill 25 Skeletons"
                 ))
                 .xpReward(1500)
-                .reward(new PartyQuestReward(new ItemStack(Items.GOLD_INGOT), 15))
-                .reward(new PartyQuestReward(new ItemStack(Items.ENCHANTED_BOOK), 1))
+                .reward(new PartyQuestReward(Items.GOLD_INGOT, 15))
+                .reward(new PartyQuestReward(Items.ENCHANTED_BOOK, 1))
                 .build()
         );
 
@@ -134,8 +133,8 @@ public class PartyQuestRegistry {
                 ))
                 .timeLimit(15) // 15 minutes
                 .xpReward(3000)
-                .reward(new PartyQuestReward(new ItemStack(Items.DIAMOND), 8))
-                .reward(new PartyQuestReward(new ItemStack(Items.GOLDEN_APPLE), 3))
+                .reward(new PartyQuestReward(Items.DIAMOND, 8))
+                .reward(new PartyQuestReward(Items.GOLDEN_APPLE, 3))
                 .build()
         );
     }
@@ -164,7 +163,7 @@ public class PartyQuestRegistry {
                         "Mine 16 Gold Ore"
                 ))
                 .xpReward(1200)
-                .reward(new PartyQuestReward(new ItemStack(Items.DIAMOND_PICKAXE), 1))
+                .reward(new PartyQuestReward(Items.DIAMOND_PICKAXE, 1))
                 .build()
         );
 
@@ -188,7 +187,7 @@ public class PartyQuestRegistry {
                         "Collect 5 Emeralds"
                 ))
                 .xpReward(2000)
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHERITE_INGOT), 1))
+                .reward(new PartyQuestReward(Items.NETHERITE_INGOT, 1))
                 .build()
         );
     }
@@ -211,9 +210,9 @@ public class PartyQuestRegistry {
                         "Defeat the Skeleton King"
                 ))
                 .xpReward(5000)
-                .reward(new PartyQuestReward(new ItemStack(Items.DIAMOND), 10))
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHERITE_INGOT), 2))
-                .reward(new PartyQuestReward(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), 2))
+                .reward(new PartyQuestReward(Items.DIAMOND, 10))
+                .reward(new PartyQuestReward(Items.NETHERITE_INGOT, 2))
+                .reward(new PartyQuestReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .build()
         );
 
@@ -230,8 +229,8 @@ public class PartyQuestRegistry {
                         "Defeat the Wither"
                 ))
                 .xpReward(10000)
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHER_STAR), 1))
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHERITE_INGOT), 5))
+                .reward(new PartyQuestReward(Items.NETHER_STAR, 1))
+                .reward(new PartyQuestReward(Items.NETHERITE_INGOT, 5))
                 .build()
         );
 
@@ -248,9 +247,9 @@ public class PartyQuestRegistry {
                         "Defeat the Ender Dragon"
                 ))
                 .xpReward(15000)
-                .reward(new PartyQuestReward(new ItemStack(Items.ELYTRA), 1))
-                .reward(new PartyQuestReward(new ItemStack(Items.DRAGON_HEAD), 1))
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHERITE_INGOT), 10))
+                .reward(new PartyQuestReward(Items.ELYTRA, 1))
+                .reward(new PartyQuestReward(Items.DRAGON_HEAD, 1))
+                .reward(new PartyQuestReward(Items.NETHERITE_INGOT, 10))
                 .build()
         );
     }
@@ -273,8 +272,8 @@ public class PartyQuestRegistry {
                 ))
                 .timeLimit(10) // 10 minutes
                 .xpReward(4000)
-                .reward(new PartyQuestReward(new ItemStack(Items.DIAMOND), 8))
-                .reward(new PartyQuestReward(new ItemStack(Items.GOLDEN_APPLE), 5))
+                .reward(new PartyQuestReward(Items.DIAMOND, 8))
+                .reward(new PartyQuestReward(Items.GOLDEN_APPLE, 5))
                 .build()
         );
 
@@ -292,8 +291,8 @@ public class PartyQuestRegistry {
                 ))
                 .timeLimit(20)
                 .xpReward(8000)
-                .reward(new PartyQuestReward(new ItemStack(Items.NETHERITE_INGOT), 3))
-                .reward(new PartyQuestReward(new ItemStack(Items.TOTEM_OF_UNDYING), 1))
+                .reward(new PartyQuestReward(Items.NETHERITE_INGOT, 3))
+                .reward(new PartyQuestReward(Items.TOTEM_OF_UNDYING, 1))
                 .build()
         );
     }

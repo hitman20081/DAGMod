@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public class LifestealMixin {
 
-    @Inject(method = "damage", at = @At("RETURN"))
+    @Inject(method = "hurtServer", at = @At("RETURN"))
     private void onDamageReturn(ServerLevel world, DamageSource source, float amount,
                                 CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue() != Boolean.TRUE) return;

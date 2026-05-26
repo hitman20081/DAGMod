@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HumanExperienceMixin {
 
     @Shadow
-    public abstract void addExperience(int experience);
+    public abstract void giveExperiencePoints(int experience);
 
     @Inject(
-            method = "addExperience",
+            method = "giveExperiencePoints",
             at = @At("HEAD"),
             cancellable = true
     )

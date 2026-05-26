@@ -16,6 +16,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.resources.Identifier;
 
+import java.util.function.Function;
+
 /**
  * Registry for Locked Bone Chests
  */
@@ -32,9 +34,9 @@ public class BoneRealmChestRegistry {
         // Register Skeleton King Chest
         SKELETON_KING_CHEST = registerChestBlock(
                 "skeleton_king_chest",
-                new LockedBoneChestBlock(
+                key -> new LockedBoneChestBlock(
                         BlockBehaviour.Properties.of()
-                                
+                                .setId(key)
                                 .strength(50.0f, 1200.0f)
                                 .requiresCorrectToolForDrops()
                                 .sound(SoundType.BONE_BLOCK)
@@ -47,9 +49,9 @@ public class BoneRealmChestRegistry {
         // Register Bone Realm Locked Chest
         BONE_REALM_LOCKED_CHEST = registerChestBlock(
                 "bone_realm_locked_chest",
-                new LockedBoneChestBlock(
+                key -> new LockedBoneChestBlock(
                         BlockBehaviour.Properties.of()
-                                
+                                .setId(key)
                                 .strength(5.0f, 6.0f)
                                 .requiresCorrectToolForDrops()
                                 .sound(SoundType.WOOD)
@@ -81,12 +83,12 @@ public class BoneRealmChestRegistry {
         addToCreativeTabs();
     }
 
-    private static Block registerChestBlock(String id, Block block, boolean createItem) {
+    private static Block registerChestBlock(String id, Function<ResourceKey<Block>, Block> factory, boolean createItem) {
         Identifier identifier = Identifier.fromNamespaceAndPath(DagMod.MOD_ID, id);
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, identifier);
 
         // Register block
-        Block registered = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+        Block registered = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(blockKey));
 
         // Register BlockItem if requested
         if (createItem) {

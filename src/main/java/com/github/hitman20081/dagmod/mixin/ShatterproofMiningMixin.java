@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Player.class)
 public class ShatterproofMiningMixin {
 
-    @Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
     private void dagmod$shatterproofToolDebuff(BlockState state, CallbackInfoReturnable<Float> cir) {
         Player player = (Player) (Object) this;
         ItemStack tool = player.getMainHandItem();

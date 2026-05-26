@@ -21,8 +21,9 @@ public class CollectObjective extends QuestObjective {
     }
 
     private static String createDescription(Item item, int amount) {
-        String itemName = item.getName(new ItemStack(item)).getString();
-        return "Collect " + amount + " " + itemName;
+        String descId = item.getDescriptionId(); // e.g. "item.dagmod.ruby"
+        String name = descId.substring(descId.lastIndexOf('.') + 1).replace('_', ' ');
+        return "Collect " + amount + " " + name;
     }
 
     @Override

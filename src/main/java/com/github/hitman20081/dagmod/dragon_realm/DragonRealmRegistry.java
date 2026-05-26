@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Rarity;
 
+import java.util.function.Function;
+
 /**
  * Central registry for all Dragon Realm dimension content
  * Handles blocks, items, and creative tab integration
@@ -31,8 +33,9 @@ public class DragonRealmRegistry {
      */
     public static final Block OBSIDIAN_PORTAL_FRAME = registerBlock(
             "obsidian_portal_frame",
-            new ObsidianPortalFrameBlock(
+            key -> new ObsidianPortalFrameBlock(
                     BlockBehaviour.Properties.of()
+                            .setId(key)
                             .strength(50.0f, 1200.0f)
                             .requiresCorrectToolForDrops()
                             .lightLevel(state -> 8)
@@ -46,8 +49,9 @@ public class DragonRealmRegistry {
      */
     public static final Block DRAGON_REALM_PORTAL = registerBlock(
             "dragon_realm_portal",
-            new DragonRealmPortalBlock(
+            key -> new DragonRealmPortalBlock(
                     BlockBehaviour.Properties.of()
+                            .setId(key)
                             .strength(-1.0f)
                             .noCollision()
                             .lightLevel(state -> 15)
@@ -63,11 +67,7 @@ public class DragonRealmRegistry {
      */
     public static final Item DRAGON_KEY = registerItem(
             "dragon_key",
-            new DragonKeyItem(new Item.Properties()
-                    
-                    .stacksTo(1)
-                    .rarity(Rarity.EPIC)
-            )
+            key -> new DragonKeyItem(new Item.Properties().setId(key).stacksTo(1).rarity(Rarity.EPIC))
     );
 
     /**
@@ -87,15 +87,10 @@ public class DragonRealmRegistry {
     /**
      * Register a block and its corresponding item
      */
-    private static Block registerBlock(String name, Block block) {
-        // Register the block itself
-        Block registeredBlock = Registry.register(
-                BuiltInRegistries.BLOCK,
-                Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name),
-                block
-        );
+    private static Block registerBlock(String name, Function<ResourceKey<Block>, Block> factory) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(blockKey));
 
-        // Register the block's item form
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
         Registry.register(
                 BuiltInRegistries.ITEM,
@@ -109,12 +104,9 @@ public class DragonRealmRegistry {
     /**
      * Register an item
      */
-    private static Item registerItem(String name, Item item) {
-        return Registry.register(
-                BuiltInRegistries.ITEM,
-                Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name),
-                item
-        );
+    private static Item registerItem(String name, Function<ResourceKey<Item>, Item> factory) {
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
+        return Registry.register(BuiltInRegistries.ITEM, itemKey, factory.apply(itemKey));
     }
 
     /**

@@ -23,7 +23,7 @@ public abstract class ShatterproofMixin {
     @Shadow
     public abstract int getMaxDamage();
 
-    @ModifyVariable(method = "setDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    @ModifyVariable(method = "setDamageValue", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private int preventBreak(int damage) {
         ItemStack self = (ItemStack) (Object) this;
         if (damage >= getMaxDamage()) {
