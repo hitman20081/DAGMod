@@ -3,22 +3,22 @@ package com.github.hitman20081.dagmod.block;
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
 import com.github.hitman20081.dagmod.item.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,120 +29,120 @@ public class RaceSelectionAltarBlock extends Block {
     // Store player races in memory
     private static final Map<UUID, String> playerRaces = new HashMap<>();
 
-    public RaceSelectionAltarBlock(Settings settings) {
+    public RaceSelectionAltarBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos,
-                                 PlayerEntity player, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos,
+                                 Player player, BlockHitResult hit) {
 
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
         // Save Hall location on first interaction
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            PlayerDataManager.saveHallLocation(player.getEntityWorld().getServer(), pos);
+        if (player instanceof ServerPlayer serverPlayer) {
+            PlayerDataManager.saveHallLocation(player.level().getServer(), pos);
         }
 
-        UUID playerId = player.getUuid();
-        ItemStack heldItem = player.getStackInHand(Hand.MAIN_HAND);
+        UUID playerId = player.getUUID();
+        ItemStack heldItem = player.getMainHandItem();
 
         // ===== RESET OPTIONS =====
 
         // Check for Race Reset Crystal
-        if (heldItem.isOf(ModItems.RACE_RESET_CRYSTAL)) {
+        if (heldItem.getItem() == ModItems.RACE_RESET_CRYSTAL) {
             return handleRaceReset(player, heldItem, pos, world, "crystal");
         }
 
         // Check for Racial Rebirth Potion
-        if (heldItem.isOf(ModItems.POTION_OF_RACIAL_REBIRTH)) {
+        if (heldItem.getItem() == ModItems.POTION_OF_RACIAL_REBIRTH) {
             return handleRaceReset(player, heldItem, pos, world, "potion");
         }
 
         // Check for Character Reset Crystal (resets BOTH race and class)
-        if (heldItem.isOf(ModItems.CHARACTER_RESET_CRYSTAL)) {
+        if (heldItem.getItem() == ModItems.CHARACTER_RESET_CRYSTAL) {
             return handleCharacterReset(player, heldItem, pos, world, "crystal");
         }
 
         // Check for Total Rebirth Potion (resets BOTH race and class)
-        if (heldItem.isOf(ModItems.POTION_OF_TOTAL_REBIRTH)) {
+        if (heldItem.getItem() == ModItems.POTION_OF_TOTAL_REBIRTH) {
             return handleCharacterReset(player, heldItem, pos, world, "potion");
         }
 
         // Check if player already has a race
         if (playerRaces.containsKey(playerId)) {
             String playerRace = playerRaces.get(playerId);
-            player.sendMessage(Text.literal("You are already a " + playerRace + "!")
-                    .formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("Your heritage cannot be changed.")
-                    .formatted(Formatting.GRAY), false);
-            return ActionResult.SUCCESS;
+            player.sendSystemMessage(Component.literal("You are already a " + playerRace + "!")
+                    .withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.literal("Your heritage cannot be changed.")
+                    .withStyle(ChatFormatting.GRAY));
+            return InteractionResult.SUCCESS;
         }
 
         // Handle race token selection
-        if (heldItem.isOf(ModItems.HUMAN_TOKEN)) {
-            selectRace(player, world, pos, "Human", Formatting.WHITE);
-            heldItem.decrement(1);
-            return ActionResult.SUCCESS;
-        } else if (heldItem.isOf(ModItems.DWARF_TOKEN)) {
-            selectRace(player, world, pos, "Dwarf", Formatting.GOLD);
-            heldItem.decrement(1);
-            return ActionResult.SUCCESS;
-        } else if (heldItem.isOf(ModItems.ELF_TOKEN)) {
-            selectRace(player, world, pos, "Elf", Formatting.GREEN);
-            heldItem.decrement(1);
-            return ActionResult.SUCCESS;
-        } else if (heldItem.isOf(ModItems.ORC_TOKEN)) {
-            selectRace(player, world, pos, "Orc", Formatting.DARK_RED);
-            heldItem.decrement(1);
-            return ActionResult.SUCCESS;
+        if (heldItem.getItem() == ModItems.HUMAN_TOKEN) {
+            selectRace(player, world, pos, "Human", ChatFormatting.WHITE);
+            heldItem.shrink(1);
+            return InteractionResult.SUCCESS;
+        } else if (heldItem.getItem() == ModItems.DWARF_TOKEN) {
+            selectRace(player, world, pos, "Dwarf", ChatFormatting.GOLD);
+            heldItem.shrink(1);
+            return InteractionResult.SUCCESS;
+        } else if (heldItem.getItem() == ModItems.ELF_TOKEN) {
+            selectRace(player, world, pos, "Elf", ChatFormatting.GREEN);
+            heldItem.shrink(1);
+            return InteractionResult.SUCCESS;
+        } else if (heldItem.getItem() == ModItems.ORC_TOKEN) {
+            selectRace(player, world, pos, "Orc", ChatFormatting.DARK_RED);
+            heldItem.shrink(1);
+            return InteractionResult.SUCCESS;
         }
 
         // If no token held, give them the race tome
         if (heldItem.isEmpty() || !isRaceToken(heldItem)) {
             ItemStack tome = new ItemStack(ModItems.RACE_SELECTION_TOME);
-            player.giveItemStack(tome);
+            player.addItem(tome);
 
             // Give all race tokens
-            player.giveItemStack(new ItemStack(ModItems.HUMAN_TOKEN));
-            player.giveItemStack(new ItemStack(ModItems.DWARF_TOKEN));
-            player.giveItemStack(new ItemStack(ModItems.ELF_TOKEN));
-            player.giveItemStack(new ItemStack(ModItems.ORC_TOKEN));
+            player.addItem(new ItemStack(ModItems.HUMAN_TOKEN));
+            player.addItem(new ItemStack(ModItems.DWARF_TOKEN));
+            player.addItem(new ItemStack(ModItems.ELF_TOKEN));
+            player.addItem(new ItemStack(ModItems.ORC_TOKEN));
 
-            player.sendMessage(Text.literal("═══════════════════════════════")
-                    .formatted(Formatting.GOLD), false);
-            player.sendMessage(Text.literal("You have been given the Race Selection Tome!")
-                    .formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("Read it to learn about each race.")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.literal("═══════════════════════════════")
-                    .formatted(Formatting.GOLD), false);
+            player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                    .withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.literal("You have been given the Race Selection Tome!")
+                    .withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.literal("Read it to learn about each race.")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                    .withStyle(ChatFormatting.GOLD));
 
             // Particle effect
-            if (world instanceof ServerWorld serverWorld) {
-                serverWorld.spawnParticles(ParticleTypes.ENCHANT,
+            if (world instanceof ServerLevel serverWorld) {
+                serverWorld.sendParticles(ParticleTypes.ENCHANT,
                         pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                         20, 0.5, 0.5, 0.5, 0.1);
             }
 
-            world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
-                    SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE,
+                    SoundSource.BLOCKS, 1.0f, 1.0f);
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    private void selectRace(PlayerEntity player, World world, BlockPos pos,
-                            String raceName, Formatting color) {
-        UUID playerId = player.getUuid();
+    private void selectRace(Player player, Level world, BlockPos pos,
+                            String raceName, ChatFormatting color) {
+        UUID playerId = player.getUUID();
 
         // Store race in memory
         playerRaces.put(playerId, raceName);
 
         // Save to NBT
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             PlayerDataManager.savePlayerData(serverPlayer);
         }
 
@@ -153,66 +153,66 @@ public class RaceSelectionAltarBlock extends Block {
         removeRaceTome(player);
 
         // Apply race abilities immediately if server-side player
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             RaceAbilityManager.applyRaceAbilities(serverPlayer);
         }
 
         // Send messages
-        player.sendMessage(Text.empty(), false);
-        player.sendMessage(Text.literal("═══════════════════════════════")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("RACE SELECTED: " + raceName.toUpperCase())
-                .formatted(color).formatted(Formatting.BOLD), false);
-        player.sendMessage(Text.literal("═══════════════════════════════")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("Your heritage awakens...")
-                .formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.empty(), false);
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("RACE SELECTED: " + raceName.toUpperCase())
+                .withStyle(color).withStyle(ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Your heritage awakens...")
+                .withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.empty());
 
         // Initialize race-specific items
         initializeRace(player, raceName);
 
         // Celebration effects
-        if (world instanceof ServerWorld serverWorld) {
-            serverWorld.spawnParticles(ParticleTypes.ENCHANT,
+        if (world instanceof ServerLevel serverWorld) {
+            serverWorld.sendParticles(ParticleTypes.ENCHANT,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     50, 1.0, 1.0, 1.0, 0.2);
-            serverWorld.spawnParticles(ParticleTypes.HAPPY_VILLAGER,
+            serverWorld.sendParticles(ParticleTypes.HAPPY_VILLAGER,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     30, 0.8, 0.8, 0.8, 0.1);
         }
 
-        world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_LEVELUP,
-                SoundCategory.PLAYERS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.PLAYER_LEVELUP,
+                SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
-    private void removeUnusedTokens(PlayerEntity player, String selectedRace) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+    private void removeUnusedTokens(Player player, String selectedRace) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
 
-            if (!selectedRace.equals("Human") && stack.isOf(ModItems.HUMAN_TOKEN)) {
-                player.getInventory().removeStack(i);
-            } else if (!selectedRace.equals("Dwarf") && stack.isOf(ModItems.DWARF_TOKEN)) {
-                player.getInventory().removeStack(i);
-            } else if (!selectedRace.equals("Elf") && stack.isOf(ModItems.ELF_TOKEN)) {
-                player.getInventory().removeStack(i);
-            } else if (!selectedRace.equals("Orc") && stack.isOf(ModItems.ORC_TOKEN)) {
-                player.getInventory().removeStack(i);
+            if (!selectedRace.equals("Human") && stack.getItem() == ModItems.HUMAN_TOKEN) {
+                player.getInventory().removeItemNoUpdate(i);
+            } else if (!selectedRace.equals("Dwarf") && stack.getItem() == ModItems.DWARF_TOKEN) {
+                player.getInventory().removeItemNoUpdate(i);
+            } else if (!selectedRace.equals("Elf") && stack.getItem() == ModItems.ELF_TOKEN) {
+                player.getInventory().removeItemNoUpdate(i);
+            } else if (!selectedRace.equals("Orc") && stack.getItem() == ModItems.ORC_TOKEN) {
+                player.getInventory().removeItemNoUpdate(i);
             }
         }
     }
 
-    private void removeRaceTome(PlayerEntity player) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.isOf(ModItems.RACE_SELECTION_TOME)) {
-                player.getInventory().removeStack(i);
+    private void removeRaceTome(Player player) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.getItem() == ModItems.RACE_SELECTION_TOME) {
+                player.getInventory().removeItemNoUpdate(i);
                 break; // Only remove one
             }
         }
     }
 
-    private void initializeRace(PlayerEntity player, String raceName) {
+    private void initializeRace(Player player, String raceName) {
         switch (raceName.toLowerCase()) {
             case "human" -> initializeHuman(player);
             case "dwarf" -> initializeDwarf(player);
@@ -221,102 +221,102 @@ public class RaceSelectionAltarBlock extends Block {
         }
     }
 
-    private void initializeHuman(PlayerEntity player) {
+    private void initializeHuman(Player player) {
         // Humans are balanced - give basic tools with standard mining capabilities
-        ItemStack pickaxe = new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
-        ItemStack axe = new ItemStack(net.minecraft.item.Items.IRON_AXE);
-        ItemStack fishingRod = new ItemStack(net.minecraft.item.Items.FISHING_ROD);
+        ItemStack pickaxe = new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
+        ItemStack axe = new ItemStack(net.minecraft.world.item.Items.IRON_AXE);
+        ItemStack fishingRod = new ItemStack(net.minecraft.world.item.Items.FISHING_ROD);
 
-        player.giveItemStack(pickaxe);
-        player.giveItemStack(axe);
-        player.giveItemStack(fishingRod);
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.BREAD, 8));
+        player.addItem(pickaxe);
+        player.addItem(axe);
+        player.addItem(fishingRod);
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.BREAD, 8));
 
-        player.sendMessage(Text.literal("⚖ Human abilities unlocked!")
-                .formatted(Formatting.WHITE), false);
-        player.sendMessage(Text.literal("Jack of all trades, master of none.")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("+25% experience gain from all sources!")
-                .formatted(Formatting.GREEN), false);
+        player.sendSystemMessage(Component.literal("⚖ Human abilities unlocked!")
+                .withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.literal("Jack of all trades, master of none.")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("+25% experience gain from all sources!")
+                .withStyle(ChatFormatting.GREEN));
     }
 
-    private void initializeDwarf(PlayerEntity player) {
+    private void initializeDwarf(Player player) {
         // Dwarves get enhanced pickaxes with access to rare ores
-        ItemStack dwarfPickaxe1 = new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
-        dwarfPickaxe1.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Dwarven Mining Pick").formatted(Formatting.GOLD));
+        ItemStack dwarfPickaxe1 = new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
+        dwarfPickaxe1.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Dwarven Mining Pick").withStyle(ChatFormatting.GOLD));
 
-        ItemStack dwarfPickaxe2 = new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
-        dwarfPickaxe2.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Dwarven Mining Pick").formatted(Formatting.GOLD));
+        ItemStack dwarfPickaxe2 = new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
+        dwarfPickaxe2.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Dwarven Mining Pick").withStyle(ChatFormatting.GOLD));
 
-        player.giveItemStack(dwarfPickaxe1);
-        player.giveItemStack(dwarfPickaxe2);
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.TORCH, 32));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_BEEF, 8));
+        player.addItem(dwarfPickaxe1);
+        player.addItem(dwarfPickaxe2);
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.TORCH, 32));
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.COOKED_BEEF, 8));
 
-        player.sendMessage(Text.literal("⛏ Dwarf abilities unlocked!")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("Masters of stone and metal!")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Mining speed increased by 20%!")
-                .formatted(Formatting.GREEN), false);
+        player.sendSystemMessage(Component.literal("⛏ Dwarf abilities unlocked!")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Masters of stone and metal!")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Mining speed increased by 20%!")
+                .withStyle(ChatFormatting.GREEN));
     }
 
-    private void initializeElf(PlayerEntity player) {
+    private void initializeElf(Player player) {
         // Elves get enhanced axes and nature tools
-        ItemStack elfAxe1 = new ItemStack(net.minecraft.item.Items.IRON_AXE);
-        elfAxe1.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Elven Woodland Axe").formatted(Formatting.GREEN));
+        ItemStack elfAxe1 = new ItemStack(net.minecraft.world.item.Items.IRON_AXE);
+        elfAxe1.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Elven Woodland Axe").withStyle(ChatFormatting.GREEN));
 
-        ItemStack elfAxe2 = new ItemStack(net.minecraft.item.Items.IRON_AXE);
-        elfAxe2.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Elven Woodland Axe").formatted(Formatting.GREEN));
+        ItemStack elfAxe2 = new ItemStack(net.minecraft.world.item.Items.IRON_AXE);
+        elfAxe2.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Elven Woodland Axe").withStyle(ChatFormatting.GREEN));
 
-        ItemStack elfBow = new ItemStack(net.minecraft.item.Items.BOW);
-        elfBow.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Elven Hunting Bow").formatted(Formatting.GREEN));
+        ItemStack elfBow = new ItemStack(net.minecraft.world.item.Items.BOW);
+        elfBow.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Elven Hunting Bow").withStyle(ChatFormatting.GREEN));
 
-        player.giveItemStack(elfAxe1);
-        player.giveItemStack(elfAxe2);
-        player.giveItemStack(elfBow);
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.ARROW, 16));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.APPLE, 8));
+        player.addItem(elfAxe1);
+        player.addItem(elfAxe2);
+        player.addItem(elfBow);
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.ARROW, 16));
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.APPLE, 8));
 
-        player.sendMessage(Text.literal("🌿 Elf abilities unlocked!")
-                .formatted(Formatting.GREEN), false);
-        player.sendMessage(Text.literal("One with nature and the forest!")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Enhanced woodcutting and mobility!")
-                .formatted(Formatting.GREEN), false);
+        player.sendSystemMessage(Component.literal("🌿 Elf abilities unlocked!")
+                .withStyle(ChatFormatting.GREEN));
+        player.sendSystemMessage(Component.literal("One with nature and the forest!")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Enhanced woodcutting and mobility!")
+                .withStyle(ChatFormatting.GREEN));
     }
 
-    private void initializeOrc(PlayerEntity player) {
+    private void initializeOrc(Player player) {
         // Orcs get combat and hunting tools
-        ItemStack orcSword = new ItemStack(net.minecraft.item.Items.IRON_SWORD);
-        orcSword.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Orcish War Blade").formatted(Formatting.DARK_RED));
+        ItemStack orcSword = new ItemStack(net.minecraft.world.item.Items.IRON_SWORD);
+        orcSword.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Orcish War Blade").withStyle(ChatFormatting.DARK_RED));
 
-        ItemStack orcBow = new ItemStack(net.minecraft.item.Items.BOW);
-        orcBow.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Orcish Hunter's Bow").formatted(Formatting.DARK_RED));
+        ItemStack orcBow = new ItemStack(net.minecraft.world.item.Items.BOW);
+        orcBow.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Orcish Hunter's Bow").withStyle(ChatFormatting.DARK_RED));
 
-        ItemStack fishingRod = new ItemStack(net.minecraft.item.Items.FISHING_ROD);
-        fishingRod.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Orcish Fishing Spear").formatted(Formatting.DARK_RED));
+        ItemStack fishingRod = new ItemStack(net.minecraft.world.item.Items.FISHING_ROD);
+        fishingRod.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Orcish Fishing Spear").withStyle(ChatFormatting.DARK_RED));
 
-        player.giveItemStack(orcSword);
-        player.giveItemStack(fishingRod);
-        player.giveItemStack(orcBow);
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.ARROW, 16));
-        player.giveItemStack(new ItemStack(net.minecraft.item.Items.COOKED_PORKCHOP, 8));
+        player.addItem(orcSword);
+        player.addItem(fishingRod);
+        player.addItem(orcBow);
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.ARROW, 16));
+        player.addItem(new ItemStack(net.minecraft.world.item.Items.COOKED_PORKCHOP, 8));
 
-        player.sendMessage(Text.literal("💪 Orc abilities unlocked!")
-                .formatted(Formatting.DARK_RED), false);
-        player.sendMessage(Text.literal("Fierce hunters and warriors!")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Enhanced combat and hunting prowess!")
-                .formatted(Formatting.GREEN), false);
+        player.sendSystemMessage(Component.literal("💪 Orc abilities unlocked!")
+                .withStyle(ChatFormatting.DARK_RED));
+        player.sendSystemMessage(Component.literal("Fierce hunters and warriors!")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Enhanced combat and hunting prowess!")
+                .withStyle(ChatFormatting.GREEN));
     }
 
     // ===== RESET HANDLER METHODS =====
@@ -324,14 +324,14 @@ public class RaceSelectionAltarBlock extends Block {
     /**
      * Handle race reset (Race Reset Crystal or Racial Rebirth Potion)
      */
-    private ActionResult handleRaceReset(PlayerEntity player, ItemStack item,
-                                         BlockPos pos, World world, String resetType) {
-        UUID playerId = player.getUuid();
+    private InteractionResult handleRaceReset(Player player, ItemStack item,
+                                         BlockPos pos, Level world, String resetType) {
+        UUID playerId = player.getUUID();
 
         if (!playerRaces.containsKey(playerId)) {
-            player.sendMessage(Text.literal("You don't have a race to reset!")
-                    .formatted(Formatting.RED), false);
-            return ActionResult.FAIL;
+            player.sendSystemMessage(Component.literal("You don't have a race to reset!")
+                    .withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
         }
 
         String oldRace = playerRaces.get(playerId);
@@ -339,59 +339,59 @@ public class RaceSelectionAltarBlock extends Block {
 
         // Consume the item
         if (item != null) {
-            item.decrement(1);
+            item.shrink(1);
         }
 
         // Give race tokens back
-        player.giveItemStack(new ItemStack(ModItems.HUMAN_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.DWARF_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.ELF_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.ORC_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.RACE_SELECTION_TOME));
+        player.addItem(new ItemStack(ModItems.HUMAN_TOKEN));
+        player.addItem(new ItemStack(ModItems.DWARF_TOKEN));
+        player.addItem(new ItemStack(ModItems.ELF_TOKEN));
+        player.addItem(new ItemStack(ModItems.ORC_TOKEN));
+        player.addItem(new ItemStack(ModItems.RACE_SELECTION_TOME));
 
-        player.sendMessage(Text.empty(), false);
-        player.sendMessage(Text.literal("═══════════════════════════════")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("RACE RESET SUCCESSFUL")
-                .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
-        player.sendMessage(Text.literal("═══════════════════════════════")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("You are no longer a " + oldRace)
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Your heritage has been cleansed.")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Choose your new path!")
-                .formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.empty(), false);
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("RACE RESET SUCCESSFUL")
+                .withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("You are no longer a " + oldRace)
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Your heritage has been cleansed.")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Choose your new path!")
+                .withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.empty());
 
         // Visual effects
-        if (world instanceof ServerWorld serverWorld) {
-            serverWorld.spawnParticles(ParticleTypes.PORTAL,
+        if (world instanceof ServerLevel serverWorld) {
+            serverWorld.sendParticles(ParticleTypes.PORTAL,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     50, 0.5, 0.5, 0.5, 0.5);
-            serverWorld.spawnParticles(ParticleTypes.SOUL,
+            serverWorld.sendParticles(ParticleTypes.SOUL,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     30, 0.5, 0.5, 0.5, 0.1);
         }
 
-        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE,
-                SoundCategory.BLOCKS, 1.0f, 0.8f);
+        world.playSound(null, pos, SoundEvents.BEACON_DEACTIVATE,
+                SoundSource.BLOCKS, 1.0f, 0.8f);
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     /**
      * Handle character reset (Character Reset Crystal or Total Rebirth Potion)
      * Resets BOTH race and class
      */
-    private ActionResult handleCharacterReset(PlayerEntity player, ItemStack item,
-                                              BlockPos pos, World world, String resetType) {
-        UUID playerId = player.getUuid();
+    private InteractionResult handleCharacterReset(Player player, ItemStack item,
+                                              BlockPos pos, Level world, String resetType) {
+        UUID playerId = player.getUUID();
 
         if (!playerRaces.containsKey(playerId)) {
-            player.sendMessage(Text.literal("You don't have a race to reset!")
-                    .formatted(Formatting.RED), false);
-            return ActionResult.FAIL;
+            player.sendSystemMessage(Component.literal("You don't have a race to reset!")
+                    .withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
         }
 
         String oldRace = playerRaces.get(playerId);
@@ -403,60 +403,60 @@ public class RaceSelectionAltarBlock extends Block {
 
         // Consume the item
         if (item != null) {
-            item.decrement(1);
+            item.shrink(1);
         }
 
         // Give both race and class tokens back
-        player.giveItemStack(new ItemStack(ModItems.HUMAN_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.DWARF_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.ELF_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.ORC_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.RACE_SELECTION_TOME));
+        player.addItem(new ItemStack(ModItems.HUMAN_TOKEN));
+        player.addItem(new ItemStack(ModItems.DWARF_TOKEN));
+        player.addItem(new ItemStack(ModItems.ELF_TOKEN));
+        player.addItem(new ItemStack(ModItems.ORC_TOKEN));
+        player.addItem(new ItemStack(ModItems.RACE_SELECTION_TOME));
 
-        player.giveItemStack(new ItemStack(ModItems.WARRIOR_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.MAGE_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.ROGUE_TOKEN));
-        player.giveItemStack(new ItemStack(ModItems.CLASS_SELECTION_TOME));
+        player.addItem(new ItemStack(ModItems.WARRIOR_TOKEN));
+        player.addItem(new ItemStack(ModItems.MAGE_TOKEN));
+        player.addItem(new ItemStack(ModItems.ROGUE_TOKEN));
+        player.addItem(new ItemStack(ModItems.CLASS_SELECTION_TOME));
 
-        player.sendMessage(Text.empty(), false);
-        player.sendMessage(Text.literal("═══════════════════════════════")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("CHARACTER RESET SUCCESSFUL")
-                .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
-        player.sendMessage(Text.literal("═══════════════════════════════")
-                .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("Race: " + oldRace + " → Not Selected")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Class: " + oldClass + " → Not Selected")
-                .formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Visit both altars to forge a new identity!")
-                .formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.empty(), false);
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("CHARACTER RESET SUCCESSFUL")
+                .withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                .withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Race: " + oldRace + " → Not Selected")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Class: " + oldClass + " → Not Selected")
+                .withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Visit both altars to forge a new identity!")
+                .withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.empty());
 
         // Visual effects
-        if (world instanceof ServerWorld serverWorld) {
-            serverWorld.spawnParticles(ParticleTypes.PORTAL,
+        if (world instanceof ServerLevel serverWorld) {
+            serverWorld.sendParticles(ParticleTypes.PORTAL,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     60, 0.5, 0.5, 0.5, 0.5);
-            serverWorld.spawnParticles(ParticleTypes.END_ROD,
+            serverWorld.sendParticles(ParticleTypes.END_ROD,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     40, 0.5, 0.5, 0.5, 0.1);
-            serverWorld.spawnParticles(ParticleTypes.SOUL,
+            serverWorld.sendParticles(ParticleTypes.SOUL,
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     30, 0.5, 0.5, 0.5, 0.1);
         }
 
-        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_POWER_SELECT,
-                SoundCategory.BLOCKS, 1.0f, 0.6f);
+        world.playSound(null, pos, SoundEvents.BEACON_POWER_SELECT,
+                SoundSource.BLOCKS, 1.0f, 0.6f);
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     private boolean isRaceToken(ItemStack stack) {
-        return stack.isOf(ModItems.HUMAN_TOKEN) ||
-                stack.isOf(ModItems.DWARF_TOKEN) ||
-                stack.isOf(ModItems.ELF_TOKEN) ||
-                stack.isOf(ModItems.ORC_TOKEN);
+        return stack.getItem() == ModItems.HUMAN_TOKEN ||
+                stack.getItem() == ModItems.DWARF_TOKEN ||
+                stack.getItem() == ModItems.ELF_TOKEN ||
+                stack.getItem() == ModItems.ORC_TOKEN;
     }
 
     public static String getPlayerRace(UUID playerId) {

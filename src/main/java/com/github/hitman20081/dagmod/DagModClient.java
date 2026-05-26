@@ -40,13 +40,14 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.entity.EntityRendererFactories;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.render.block.entity.ChestBlockEntityRenderer;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
+import net.minecraft.resources.Identifier;
 
 public class DagModClient implements ClientModInitializer {
     @Override
@@ -80,47 +81,34 @@ public class DagModClient implements ClientModInitializer {
         );
 
         // Register Mana HUD renderer
-        HudRenderCallback.EVENT.register(new ManaHudRenderer());
+        HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "mana_hud"), new ManaHudRenderer()::onHudRender);
         System.out.println("Mana system registered!");
 
         // Register dynamic held-item lighting
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            ClientPlayerEntity player = client.player;
+            LocalPlayer player = client.player;
             if (player == null) {
                 DynamicLightManager.clear();
                 return;
             }
 
-            net.minecraft.item.Item mainItem = player.getMainHandStack().getItem();
-            net.minecraft.item.Item offItem  = player.getOffHandStack().getItem();
+            net.minecraft.world.item.Item mainItem = player.getMainHandItem().getItem();
+            net.minecraft.world.item.Item offItem  = player.getOffhandItem().getItem();
             int mainLevel = DynamicLightManager.getLightLevelForItem(mainItem);
             int offLevel  = DynamicLightManager.getLightLevelForItem(offItem);
 
             // Dominant hand: whichever is brighter; use its radius
-            net.minecraft.item.Item dominant = (mainLevel >= offLevel) ? mainItem : offItem;
+            net.minecraft.world.item.Item dominant = (mainLevel >= offLevel) ? mainItem : offItem;
             int newLevel  = Math.max(mainLevel, offLevel);
             int newRadius = DynamicLightManager.getRadiusForItem(dominant);
 
-            net.minecraft.util.math.BlockPos playerPos = player.getBlockPos();
+            net.minecraft.core.BlockPos playerPos = player.blockPosition();
 
             // Schedule chunk rebuilds so terrain also updates, not just entities
-            if (DynamicLightManager.needsChunkRebuild(playerPos, newRadius) && client.worldRenderer != null) {
-                net.minecraft.util.math.BlockPos oldPos    = DynamicLightManager.getLastRebuildPos();
+            if (DynamicLightManager.needsChunkRebuild(playerPos, newRadius) && client.levelRenderer != null) {
+                net.minecraft.core.BlockPos oldPos    = DynamicLightManager.getLastRebuildPos();
                 int                              oldRadius = DynamicLightManager.getLastRebuildRadius();
-                // Clear old area so it reverts once the player moves away
-                if (oldRadius > 0) {
-                    client.worldRenderer.scheduleBlockRenders(
-                        oldPos.getX() - oldRadius, oldPos.getY() - oldRadius, oldPos.getZ() - oldRadius,
-                        oldPos.getX() + oldRadius, oldPos.getY() + oldRadius, oldPos.getZ() + oldRadius
-                    );
-                }
-                // Mark new area for rebuild with boosted light
-                if (newRadius > 0) {
-                    client.worldRenderer.scheduleBlockRenders(
-                        playerPos.getX() - newRadius, playerPos.getY() - newRadius, playerPos.getZ() - newRadius,
-                        playerPos.getX() + newRadius, playerPos.getY() + newRadius, playerPos.getZ() + newRadius
-                    );
-                }
+                // scheduleBlockRenders removed in MC 26.x
                 DynamicLightManager.setLastRebuildState(playerPos, newRadius);
             }
 
@@ -129,7 +117,7 @@ public class DagModClient implements ClientModInitializer {
         System.out.println("Dynamic lighting registered!");
 
         // Register entity model layers
-        EntityModelLayerRegistry.registerModelLayer(DragonGuardianModel.LAYER_LOCATION, DragonGuardianModel::getTexturedModelData);
+        ModelLayerRegistry.registerModelLayer(DragonGuardianModel.LAYER_LOCATION, DragonGuardianModel::getTexturedModelData);
 
         // Register entity renderers
         registerEntityRenderers();
@@ -144,15 +132,15 @@ public class DagModClient implements ClientModInitializer {
     }
 
     private void registerScreens() {
-        net.minecraft.client.gui.screen.ingame.HandledScreens.register(
+        net.minecraft.client.gui.screens.MenuScreens.register(
                 com.github.hitman20081.dagmod.screen.ModScreenHandlers.GEM_POLISHING_STATION_SCREEN_HANDLER,
                 com.github.hitman20081.dagmod.screen.GemPolishingStationScreen::new
         );
-        net.minecraft.client.gui.screen.ingame.HandledScreens.register(
+        net.minecraft.client.gui.screens.MenuScreens.register(
                 com.github.hitman20081.dagmod.screen.ModScreenHandlers.GEM_INFUSING_STATION_SCREEN_HANDLER,
                 com.github.hitman20081.dagmod.screen.GemInfusingStationScreen::new
         );
-        net.minecraft.client.gui.screen.ingame.HandledScreens.register(
+        net.minecraft.client.gui.screens.MenuScreens.register(
                 com.github.hitman20081.dagmod.screen.ModScreenHandlers.GEM_CUTTING_STATION_SCREEN_HANDLER,
                 com.github.hitman20081.dagmod.screen.GemCuttingStationScreen::new
         );
@@ -161,81 +149,81 @@ public class DagModClient implements ClientModInitializer {
     }
 
     private void registerEntityRenderers() {
-        EntityRendererFactories.register(BoneRealmEntityRegistry.SKELETON_KING, SkeletonKingRenderer::new);
-        EntityRendererFactories.register(BoneRealmEntityRegistry.SKELETON_LORD, SkeletonLordRenderer::new);
-        EntityRendererFactories.register(BoneRealmEntityRegistry.BONELING, BonelingRenderer::new);
-        EntityRendererFactories.register(BoneRealmEntityRegistry.SKELETON_SUMMONER, SkeletonSummonerRenderer::new);
+        EntityRenderers.register(BoneRealmEntityRegistry.SKELETON_KING, SkeletonKingRenderer::new);
+        EntityRenderers.register(BoneRealmEntityRegistry.SKELETON_LORD, SkeletonLordRenderer::new);
+        EntityRenderers.register(BoneRealmEntityRegistry.BONELING, BonelingRenderer::new);
+        EntityRenderers.register(BoneRealmEntityRegistry.SKELETON_SUMMONER, SkeletonSummonerRenderer::new);
 
         // Register SimpleNPC renderer
-        EntityRendererFactories.register(ModEntities.SIMPLE_NPC, SimpleNPCRenderer::new);
+        EntityRenderers.register(ModEntities.SIMPLE_NPC, SimpleNPCRenderer::new);
 
         // Register Innkeeper Garrick renderer
-        EntityRendererFactories.register(ModEntities.INNKEEPER_GARRICK, InnkeeperGarrickRenderer::new);
+        EntityRenderers.register(ModEntities.INNKEEPER_GARRICK, InnkeeperGarrickRenderer::new);
 
         // Register Mystery Merchant renderer
-        EntityRendererFactories.register(ModEntities.MYSTERY_MERCHANT_NPC, MysteryMerchantRenderer::new);
+        EntityRenderers.register(ModEntities.MYSTERY_MERCHANT_NPC, MysteryMerchantRenderer::new);
 
         // Register Miner renderer
-        EntityRendererFactories.register(ModEntities.MINER_NPC, MinerNPCRenderer::new);
+        EntityRenderers.register(ModEntities.MINER_NPC, MinerNPCRenderer::new);
 
         // Register Lumberjack renderer
-        EntityRendererFactories.register(ModEntities.LUMBERJACK_NPC, LumberjackNPCRenderer::new);
+        EntityRenderers.register(ModEntities.LUMBERJACK_NPC, LumberjackNPCRenderer::new);
 
         // Register Enchantsmith renderer
-        EntityRendererFactories.register(ModEntities.ENCHANTSMITH_NPC, EnchantsmithNPCRenderer::new);
+        EntityRenderers.register(ModEntities.ENCHANTSMITH_NPC, EnchantsmithNPCRenderer::new);
 
         // Register Luxury Merchant renderer
-        EntityRendererFactories.register(ModEntities.LUXURY_MERCHANT_NPC, LuxuryMerchantNPCRenderer::new);
+        EntityRenderers.register(ModEntities.LUXURY_MERCHANT_NPC, LuxuryMerchantNPCRenderer::new);
 
         // Register Village Merchant renderer
-        EntityRendererFactories.register(ModEntities.VILLAGE_MERCHANT_NPC, VillageMerchantNPCRenderer::new);
+        EntityRenderers.register(ModEntities.VILLAGE_MERCHANT_NPC, VillageMerchantNPCRenderer::new);
 
         // Register Hunter renderer
-        EntityRendererFactories.register(ModEntities.HUNTER_NPC, HunterNPCRenderer::new);
+        EntityRenderers.register(ModEntities.HUNTER_NPC, HunterNPCRenderer::new);
 
         // Register Voodoo Illusioner renderer
-        EntityRendererFactories.register(ModEntities.VOODOO_ILLUSIONER_NPC, VoodooIllusionerNPCRenderer::new);
+        EntityRenderers.register(ModEntities.VOODOO_ILLUSIONER_NPC, VoodooIllusionerNPCRenderer::new);
 
         // Register Armorer renderer
-        EntityRendererFactories.register(ModEntities.ARMORER_NPC, ArmorerNPCRenderer::new);
+        EntityRenderers.register(ModEntities.ARMORER_NPC, ArmorerNPCRenderer::new);
 
         // Register Cute Villager renderer
-        EntityRendererFactories.register(ModEntities.CUTE_VILLAGER_NPC, CuteVillagerNPCRenderer::new);
+        EntityRenderers.register(ModEntities.CUTE_VILLAGER_NPC, CuteVillagerNPCRenderer::new);
 
         // Register Baker renderer
-        EntityRendererFactories.register(ModEntities.BAKER_NPC, BakerNPCRenderer::new);
+        EntityRenderers.register(ModEntities.BAKER_NPC, BakerNPCRenderer::new);
 
         // Register Alchemist renderer
-        EntityRendererFactories.register(ModEntities.ALCHEMIST_NPC, AlchemistNPCRenderer::new);
+        EntityRenderers.register(ModEntities.ALCHEMIST_NPC, AlchemistNPCRenderer::new);
 
         // Register Blacksmith renderer
-        EntityRendererFactories.register(ModEntities.BLACKSMITH_NPC, BlacksmithNPCRenderer::new);
+        EntityRenderers.register(ModEntities.BLACKSMITH_NPC, BlacksmithNPCRenderer::new);
 
         // Register Jeweler renderer
-        EntityRendererFactories.register(ModEntities.JEWELER_NPC, JewelerNPCRenderer::new);
+        EntityRenderers.register(ModEntities.JEWELER_NPC, JewelerNPCRenderer::new);
 
         // Register Dragon Guardian renderer
-        EntityRendererFactories.register(ModEntities.DRAGON_GUARDIAN, DragonGuardianRenderer::new);
+        EntityRenderers.register(ModEntities.DRAGON_GUARDIAN, DragonGuardianRenderer::new);
 
         // Register Wild Dragon renderer
-        EntityRendererFactories.register(ModEntities.WILD_DRAGON, WildDragonRenderer::new);
+        EntityRenderers.register(ModEntities.WILD_DRAGON, WildDragonRenderer::new);
 
         // Register Red Dragon renderer (quest-exclusive variant)
-        EntityRendererFactories.register(ModEntities.RED_DRAGON, RedDragonRenderer::new);
+        EntityRenderers.register(ModEntities.RED_DRAGON, RedDragonRenderer::new);
 
         System.out.println("Entity renderers registered!");
     }
 
     private void registerBlockEntityRenderers() {
-        BlockEntityRendererFactories.register(
+        BlockEntityRenderers.register(
                 BoneRealmChestRegistry.LOCKED_BONE_CHEST_ENTITY,
-                ChestBlockEntityRenderer::new
+                ChestRenderer::new
         );
 
         // Iron Chest renderer
-        BlockEntityRendererFactories.register(
+        BlockEntityRenderers.register(
                 com.github.hitman20081.dagmod.block.entity.ModBlockEntities.IRON_CHEST,
-                ChestBlockEntityRenderer::new
+                ChestRenderer::new
         );
 
         System.out.println("Block entity renderers registered!");

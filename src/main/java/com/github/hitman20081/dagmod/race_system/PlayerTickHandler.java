@@ -1,7 +1,7 @@
 package com.github.hitman20081.dagmod.race_system;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 public class PlayerTickHandler {
 
@@ -17,7 +17,7 @@ public class PlayerTickHandler {
                 tickCounter = 0;
 
                 // Apply synergy bonuses to all online players
-                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                     RaceClassSynergyManager.applySynergyBonuses(player);
                 }
             }

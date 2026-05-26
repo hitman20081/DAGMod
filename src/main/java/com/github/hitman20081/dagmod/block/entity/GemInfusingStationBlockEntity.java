@@ -3,41 +3,41 @@ package com.github.hitman20081.dagmod.block.entity;
 import com.github.hitman20081.dagmod.recipe.GemInfusingRecipe;
 import com.github.hitman20081.dagmod.recipe.ModRecipes;
 import com.github.hitman20081.dagmod.screen.GemInfusingStationScreenHandler;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class GemInfusingStationBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+public class GemInfusingStationBlockEntity extends BlockEntity implements ExtendedMenuProvider<BlockPos>, ImplementedInventory {
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(3, ItemStack.EMPTY);
 
     public static final int CATALYST_SLOT = 0;  // Catalyst/fuel slot (left side)
     public static final int INPUT_SLOT = 1;     // Input slot (right top)
     public static final int OUTPUT_SLOT = 2;    // Output slot (right bottom)
 
-    protected final PropertyDelegate propertyDelegate;
+    protected final ContainerData propertyDelegate;
     private int progress = 0;
     private int maxProgress = 72;
 
     public GemInfusingStationBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GEM_INFUSING_STATION, pos, state);
-        this.propertyDelegate = new PropertyDelegate() {
+        this.propertyDelegate = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -56,50 +56,50 @@ public class GemInfusingStationBlockEntity extends BlockEntity implements Extend
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return 2;
             }
         };
     }
 
     @Override
-    public void markDirty() {
-        if (world != null) {
-            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+    public void setChanged() {
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
-        super.markDirty();
+        super.setChanged();
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getItems() {
         return inventory;
     }
 
     @Override
-    public BlockPos getScreenOpeningData(ServerPlayerEntity player) {
-        return this.pos;
+    public BlockPos getScreenOpeningData(ServerPlayer player) {
+        return this.worldPosition;
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.dagmod.gem_infusing_station");
+    public Component getDisplayName() {
+        return Component.translatable("block.dagmod.gem_infusing_station");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new GemInfusingStationScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public void tick(World world, BlockPos pos, BlockState state) {
-        if (world.isClient()) {
+    public void tick(Level world, BlockPos pos, BlockState state) {
+        if (world.isClientSide()) {
             return;
         }
 
         if (isOutputSlotEmptyOrReceivable()) {
             if (this.hasRecipe()) {
                 this.increaseCraftProgress();
-                markDirty(world, pos, state);
+                BlockEntity.setChanged(world, pos, state);
 
                 if (hasCraftingFinished()) {
                     this.craftItem();
@@ -110,11 +110,11 @@ public class GemInfusingStationBlockEntity extends BlockEntity implements Extend
             }
         } else {
             this.resetProgress();
-            markDirty(world, pos, state);
+            BlockEntity.setChanged(world, pos, state);
         }
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, GemInfusingStationBlockEntity blockEntity) {
+    public static void tick(Level world, BlockPos pos, BlockState state, GemInfusingStationBlockEntity blockEntity) {
         blockEntity.tick(world, pos, state);
     }
 
@@ -123,12 +123,12 @@ public class GemInfusingStationBlockEntity extends BlockEntity implements Extend
     }
 
     private void craftItem() {
-        Optional<RecipeEntry<GemInfusingRecipe>> recipe = getCurrentRecipe();
+        Optional<RecipeHolder<GemInfusingRecipe>> recipe = getCurrentRecipe();
 
-        this.removeStack(INPUT_SLOT, 1);
+        this.removeItem(INPUT_SLOT, 1);
 
-        this.setStack(OUTPUT_SLOT, new ItemStack(recipe.get().value().result().getItem(),
-                getStack(OUTPUT_SLOT).getCount() + recipe.get().value().result().getCount()));
+        this.setItem(OUTPUT_SLOT, new ItemStack(recipe.get().value().result().getItem(),
+                getItem(OUTPUT_SLOT).getCount() + recipe.get().value().result().getCount()));
     }
 
     private boolean hasCraftingFinished() {
@@ -140,35 +140,35 @@ public class GemInfusingStationBlockEntity extends BlockEntity implements Extend
     }
 
     private boolean hasRecipe() {
-        Optional<RecipeEntry<GemInfusingRecipe>> recipe = getCurrentRecipe();
+        Optional<RecipeHolder<GemInfusingRecipe>> recipe = getCurrentRecipe();
 
         return recipe.isPresent() && canInsertAmountIntoOutputSlot(recipe.get().value().result())
                 && canInsertItemIntoOutputSlot(recipe.get().value().result().getItem());
     }
 
-    private Optional<RecipeEntry<GemInfusingRecipe>> getCurrentRecipe() {
-        if (this.getWorld() == null || !(this.getWorld() instanceof ServerWorld)) {
+    private Optional<RecipeHolder<GemInfusingRecipe>> getCurrentRecipe() {
+        if (this.getLevel() == null || !(this.getLevel() instanceof ServerLevel)) {
             return Optional.empty();
         }
 
-        SingleStackRecipeInput input = new SingleStackRecipeInput(this.getStack(INPUT_SLOT));
-        return ((ServerWorld) this.getWorld()).getRecipeManager()
-                .getFirstMatch(ModRecipes.GEM_INFUSING_TYPE, input, this.getWorld());
+        CraftingInput input = CraftingInput.of(1, 1, java.util.List.of(this.getItem(INPUT_SLOT)));
+        return ((ServerLevel) this.getLevel()).getServer().getRecipeManager()
+                .getRecipeFor(ModRecipes.GEM_INFUSING_TYPE, input, this.getLevel());
     }
 
     private boolean canInsertItemIntoOutputSlot(Item item) {
-        return this.getStack(OUTPUT_SLOT).getItem() == item || this.getStack(OUTPUT_SLOT).isEmpty();
+        return this.getItem(OUTPUT_SLOT).getItem() == item || this.getItem(OUTPUT_SLOT).isEmpty();
     }
 
     private boolean canInsertAmountIntoOutputSlot(ItemStack result) {
-        ItemStack outputStack = this.getStack(OUTPUT_SLOT);
+        ItemStack outputStack = this.getItem(OUTPUT_SLOT);
         if (outputStack.isEmpty()) {
             return true; // Empty slot can always receive items
         }
-        return outputStack.getCount() + result.getCount() <= outputStack.getMaxCount();
+        return outputStack.getCount() + result.getCount() <= outputStack.getItem().getDefaultMaxStackSize();
     }
 
     private boolean isOutputSlotEmptyOrReceivable() {
-        return this.getStack(OUTPUT_SLOT).isEmpty() || this.getStack(OUTPUT_SLOT).getCount() < this.getStack(OUTPUT_SLOT).getMaxCount();
+        return this.getItem(OUTPUT_SLOT).isEmpty() || this.getItem(OUTPUT_SLOT).getCount() < this.getItem(OUTPUT_SLOT).getItem().getDefaultMaxStackSize();
     }
 }

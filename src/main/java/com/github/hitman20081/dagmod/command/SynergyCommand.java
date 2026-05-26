@@ -3,12 +3,13 @@ package com.github.hitman20081.dagmod.command;
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.util.RandomSource;
 
 public class SynergyCommand {
 
@@ -16,59 +17,59 @@ public class SynergyCommand {
             {"Dwarf", "Warrior", "Resistance underground"},
             {"Elf", "Rogue", "Invisibility in forests"},
             {"Orc", "Warrior", "Berserker rage at low health"},
-            {"Human", "Mage", "Random regeneration"},
+            {"Human", "Mage", "RandomSource regeneration"},
             {"Dwarf", "Mage", "Fire resistance"},
             {"Elf", "Mage", "Haste in forests"},
             {"Orc", "Rogue", "Enhanced backstabs"},
             {"Human", "Warrior", "Absorption on damage"},
-            {"Human", "Rogue", "Random jump boost"},
+            {"Human", "Rogue", "RandomSource jump boost"},
     };
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("synergy")
-                .then(CommandManager.literal("list")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
+        dispatcher.register(Commands.literal("synergy")
+                .then(Commands.literal("list")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ServerPlayer player = context.getSource().getPlayerOrException();
 
-                            player.sendMessage(Text.literal("=== All Race+Class Synergies ===")
-                                    .formatted(Formatting.GOLD, Formatting.BOLD), false);
+                            player.sendSystemMessage(Component.literal("=== All Race+Class Synergies ===")
+                                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
                             for (String[] synergy : SYNERGIES) {
-                                player.sendMessage(Text.literal("  " + synergy[0] + " " + synergy[1] + ": ")
-                                        .formatted(Formatting.AQUA)
-                                        .append(Text.literal(synergy[2])
-                                                .formatted(Formatting.WHITE)), false);
+                                player.sendSystemMessage(Component.literal("  " + synergy[0] + " " + synergy[1] + ": ")
+                                        .withStyle(ChatFormatting.AQUA)
+                                        .append(Component.literal(synergy[2])
+                                                .withStyle(ChatFormatting.WHITE)));
                             }
 
                             return 1;
                         })
                 )
-                .then(CommandManager.literal("check")
+                .then(Commands.literal("check")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                            String race = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
-                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            String race = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
-                            player.sendMessage(Text.literal("=== Your Synergy ===")
-                                    .formatted(Formatting.GOLD, Formatting.BOLD), false);
+                            player.sendSystemMessage(Component.literal("=== Your Synergy ===")
+                                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
                             if ("none".equals(race) || "none".equals(playerClass)) {
-                                player.sendMessage(Text.literal("You need both a race and class to have a synergy.")
-                                        .formatted(Formatting.GRAY), false);
+                                player.sendSystemMessage(Component.literal("You need both a race and class to have a synergy.")
+                                        .withStyle(ChatFormatting.GRAY));
                                 return 1;
                             }
 
                             String synergy = getSynergyDescription(race, playerClass);
                             if (synergy != null) {
-                                player.sendMessage(Text.literal(race + " " + playerClass + ": ")
-                                        .formatted(Formatting.AQUA)
-                                        .append(Text.literal(synergy)
-                                                .formatted(Formatting.YELLOW)), false);
+                                player.sendSystemMessage(Component.literal(race + " " + playerClass + ": ")
+                                        .withStyle(ChatFormatting.AQUA)
+                                        .append(Component.literal(synergy)
+                                                .withStyle(ChatFormatting.YELLOW)));
                             } else {
-                                player.sendMessage(Text.literal(race + " " + playerClass + " has no synergy bonus.")
-                                        .formatted(Formatting.GRAY), false);
+                                player.sendSystemMessage(Component.literal(race + " " + playerClass + " has no synergy bonus.")
+                                        .withStyle(ChatFormatting.GRAY));
                             }
 
                             return 1;

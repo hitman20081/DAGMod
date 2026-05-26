@@ -1,9 +1,9 @@
 package com.github.hitman20081.dagmod.dragon_realm.portal;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +23,14 @@ import java.util.List;
  */
 public class DragonPortalFrameDetector {
 
-    private final World world;
+    private final Level world;
     private final BlockPos clickedPos;
     private BlockPos bottomLeft;
     private Direction.Axis axis;
     private final int width = 7;
     private final int height = 7;
 
-    public DragonPortalFrameDetector(World world, BlockPos pos) {
+    public DragonPortalFrameDetector(Level world, BlockPos pos) {
         this.world = world;
         this.clickedPos = pos;
     }
@@ -67,22 +67,22 @@ public class DragonPortalFrameDetector {
         BlockPos current = start;
 
         // Go down to bottom
-        while (isObsidianFrame(current.down())) {
-            current = current.down();
+        while (isObsidianFrame(current.below())) {
+            current = current.below();
         }
 
         // Go left to edge based on axis
         // If axis is X, the frame extends along X (east-west), so we move north-south to find edge
         // If axis is Z, the frame extends along Z (north-south), so we move east-west to find edge
         Direction leftDir = testAxis == Direction.Axis.X ? Direction.NORTH : Direction.WEST;
-        while (isObsidianFrame(current.offset(leftDir))) {
-            current = current.offset(leftDir);
+        while (isObsidianFrame(current.relative(leftDir))) {
+            current = current.relative(leftDir);
         }
 
         // Check if this looks like a corner
         if (isObsidianFrame(current) &&
-                isObsidianFrame(current.up()) &&
-                isObsidianFrame(current.offset(leftDir.getOpposite()))) {
+                isObsidianFrame(current.above()) &&
+                isObsidianFrame(current.relative(leftDir.getOpposite()))) {
             return current;
         }
 
@@ -95,30 +95,30 @@ public class DragonPortalFrameDetector {
 
         // Check bottom edge
         for (int i = 0; i < width; i++) {
-            if (!isObsidianFrame(bottomLeft.offset(rightDir, i))) {
+            if (!isObsidianFrame(bottomLeft.relative(rightDir, i))) {
                 return false;
             }
         }
 
         // Check top edge
-        BlockPos topLeft = bottomLeft.up(height - 1);
+        BlockPos topLeft = bottomLeft.above(height - 1);
         for (int i = 0; i < width; i++) {
-            if (!isObsidianFrame(topLeft.offset(rightDir, i))) {
+            if (!isObsidianFrame(topLeft.relative(rightDir, i))) {
                 return false;
             }
         }
 
         // Check left edge
         for (int i = 0; i < height; i++) {
-            if (!isObsidianFrame(bottomLeft.up(i))) {
+            if (!isObsidianFrame(bottomLeft.above(i))) {
                 return false;
             }
         }
 
         // Check right edge
-        BlockPos bottomRight = bottomLeft.offset(rightDir, width - 1);
+        BlockPos bottomRight = bottomLeft.relative(rightDir, width - 1);
         for (int i = 0; i < height; i++) {
-            if (!isObsidianFrame(bottomRight.up(i))) {
+            if (!isObsidianFrame(bottomRight.above(i))) {
                 return false;
             }
         }
@@ -126,7 +126,7 @@ public class DragonPortalFrameDetector {
         // Check if interior 5x5 is empty (air blocks)
         for (int w = 1; w < width - 1; w++) {
             for (int h = 1; h < height - 1; h++) {
-                if (!world.getBlockState(bottomLeft.offset(rightDir, w).up(h)).isAir()) {
+                if (!world.getBlockState(bottomLeft.relative(rightDir, w).above(h)).isAir()) {
                     return false;
                 }
             }
@@ -142,11 +142,11 @@ public class DragonPortalFrameDetector {
     public List<BlockPos> getInteriorPositions() {
         List<BlockPos> positions = new ArrayList<>();
         Direction rightDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
-        BlockPos interiorBottomLeft = bottomLeft.offset(rightDir, 1).up(1);
+        BlockPos interiorBottomLeft = bottomLeft.relative(rightDir, 1).above(1);
 
         for (int w = 0; w < width - 2; w++) { // Interior width is 5
             for (int h = 0; h < height - 2; h++) { // Interior height is 5
-                positions.add(interiorBottomLeft.offset(rightDir, w).up(h));
+                positions.add(interiorBottomLeft.relative(rightDir, w).above(h));
             }
         }
         return positions;

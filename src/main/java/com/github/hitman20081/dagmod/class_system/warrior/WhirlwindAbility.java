@@ -1,17 +1,17 @@
 package com.github.hitman20081.dagmod.class_system.warrior;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -34,36 +34,36 @@ public class WhirlwindAbility {
     private static final float DAMAGE = 8.0f; // 4 hearts
     private static final double KNOCKBACK_STRENGTH = 0.8;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Start cooldown
         CooldownManager.startCooldown(player, WarriorAbility.WHIRLWIND);
 
         // Find all entities in radius
-        Box searchBox = Box.of(
-                player.getEntityPos(),
+        AABB searchBox = AABB.ofSize(
+                player.position(),
                 RADIUS * 2,
                 RADIUS * 2,
                 RADIUS * 2
         );
 
-        List<Entity> nearbyEntities = world.getOtherEntities(player, searchBox);
+        List<Entity> nearbyEntities = world.getEntities(player, searchBox);
         int hitCount = 0;
 
         for (Entity entity : nearbyEntities) {
             if (entity instanceof LivingEntity livingEntity) {
                 // Check distance
-                double distance = player.squaredDistanceTo(entity);
+                double distance = player.distanceToSqr(entity);
                 if (distance <= RADIUS * RADIUS) {
 
                     // Deal damage (generic damage source ignores armor)
-                    DamageSource damageSource = player.getDamageSources().playerAttack(serverPlayer);
-                    livingEntity.damage(world, damageSource, DAMAGE);
+                    DamageSource damageSource = player.damageSources().playerAttack(serverPlayer);
+                    livingEntity.hurt(damageSource, DAMAGE);
 
                     // Knockback
                     double dx = entity.getX() - player.getX();
@@ -74,7 +74,7 @@ public class WhirlwindAbility {
                         dx /= distance2d;
                         dz /= distance2d;
 
-                        entity.setVelocity(
+                        entity.setDeltaMovement(
                                 dx * KNOCKBACK_STRENGTH,
                                 0.3, // Upward knockback
                                 dz * KNOCKBACK_STRENGTH
@@ -93,7 +93,7 @@ public class WhirlwindAbility {
             double z = player.getZ() + Math.sin(angle) * RADIUS;
             double y = player.getY() + 0.5;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.SWEEP_ATTACK,
                     x, y, z,
                     1,
@@ -103,7 +103,7 @@ public class WhirlwindAbility {
         }
 
         // Additional cloud particles
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.CLOUD,
                 player.getX(), player.getY() + 0.5, player.getZ(),
                 20,
@@ -114,35 +114,31 @@ public class WhirlwindAbility {
         // SOUND: Swoosh
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.PLAYER_ATTACK_SWEEP,
+                SoundSource.PLAYERS,
                 1.0f,
                 0.8f
         );
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ENTITY_IRON_GOLEM_ATTACK,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.IRON_GOLEM_ATTACK,
+                SoundSource.PLAYERS,
                 0.5f,
                 1.5f
         );
 
         // FEEDBACK
         if (hitCount > 0) {
-            serverPlayer.sendMessage(
-                    Text.literal("🌪 Whirlwind! Hit " + hitCount + " enemies!")
-                            .formatted(Formatting.GOLD, Formatting.BOLD),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("🌪 Whirlwind! Hit " + hitCount + " enemies!")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         } else {
-            serverPlayer.sendMessage(
-                    Text.literal("🌪 Whirlwind! No enemies nearby.")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("🌪 Whirlwind! No enemies nearby.")
+                            .withStyle(ChatFormatting.YELLOW));
         }
 
         return true;

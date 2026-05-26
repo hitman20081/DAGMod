@@ -1,41 +1,39 @@
 package com.github.hitman20081.dagmod.race_system;
 
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 
 public class ElfGatheringHandler {
 
     /**
      * Gives Elves bonuses when woodcutting and foraging
      */
-    public static void handleElfGathering(ServerPlayerEntity player, BlockState state, BlockPos pos, ServerWorld world) {
-        String playerRace = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
+    public static void handleElfGathering(ServerPlayer player, BlockState state, BlockPos pos, ServerLevel world) {
+        String playerRace = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
 
         if (!"Elf".equals(playerRace)) {
             return;
         }
 
         Block block = state.getBlock();
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
 
         // 20% chance for bonus drops from wood
         if (isLog(block) && random.nextFloat() < 0.20f) {
             ItemStack bonusDrop = new ItemStack(block.asItem(), 1);
-            Block.dropStack(world, pos, bonusDrop);
-            player.sendMessage(
-                    Text.literal("🌿 Elven Woodcutting Bonus!").formatted(Formatting.GREEN),
-                    true
-            );
+            Block.popResource(world, pos, bonusDrop);
+            player.sendOverlayMessage(
+                    Component.literal("🌿 Elven Woodcutting Bonus!").withStyle(ChatFormatting.GREEN));
         }
 
         // 25% chance for bonus drops from leaves
@@ -46,7 +44,7 @@ public class ElfGatheringHandler {
             } else {
                 bonusDrop = new ItemStack(Items.APPLE, 1);
             }
-            Block.dropStack(world, pos, bonusDrop);
+            Block.popResource(world, pos, bonusDrop);
         }
     }
 

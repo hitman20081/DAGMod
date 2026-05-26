@@ -3,16 +3,17 @@ package com.github.hitman20081.dagmod.dragon_realm.boss;
 import com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmTeleporter;
 import com.github.hitman20081.dagmod.entity.DragonGuardianEntity;
 import com.github.hitman20081.dagmod.entity.ModEntities;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * - Spawns boss on first dimension entry
  * - Checks for existing boss before spawning
  * - Spawns at center arena (0, 64, 0)
- * - Random variant selection (RED, ICE, LAVA)
+ * - RandomSource variant selection (RED, ICE, LAVA)
  * - Global spawn announcements
  */
 public class DragonGuardianSpawner {
@@ -37,9 +38,9 @@ public class DragonGuardianSpawner {
      * Attempt to spawn Dragon Guardian when player enters Dragon Realm
      * Only spawns if no boss currently exists AND no active respawn timer
      */
-    public static void trySpawnBoss(ServerWorld dragonRealm, ServerPlayerEntity enteringPlayer) {
+    public static void trySpawnBoss(ServerLevel dragonRealm, ServerPlayer enteringPlayer) {
         // Only spawn in Dragon Realm dimension
-        if (dragonRealm.getRegistryKey() != DragonRealmTeleporter.DRAGON_REALM) {
+        if (dragonRealm.dimension() != DragonRealmTeleporter.DRAGON_REALM) {
             return;
         }
 
@@ -60,11 +61,11 @@ public class DragonGuardianSpawner {
     /**
      * Check if Dragon Guardian boss already exists in dimension
      */
-    public static boolean bossExists(ServerWorld world) {
+    public static boolean bossExists(ServerLevel world) {
         // Search for any DragonGuardianEntity in the dimension
-        List<DragonGuardianEntity> bosses = world.getEntitiesByClass(
+        List<DragonGuardianEntity> bosses = world.getEntitiesOfClass(
             DragonGuardianEntity.class,
-            new net.minecraft.util.math.Box(
+            new net.minecraft.world.phys.AABB(
                 ARENA_X - SEARCH_RADIUS,
                 0,
                 ARENA_Z - SEARCH_RADIUS,
@@ -82,9 +83,9 @@ public class DragonGuardianSpawner {
      * Spawn Dragon Guardian boss at arena center
      * Public for use by respawn timer
      */
-    public static void spawnBoss(ServerWorld world, ServerPlayerEntity triggeringPlayer) {
+    public static void spawnBoss(ServerLevel world, ServerPlayer triggeringPlayer) {
         // Create boss entity
-        DragonGuardianEntity boss = ModEntities.DRAGON_GUARDIAN.create(world, SpawnReason.TRIGGERED);
+        DragonGuardianEntity boss = ModEntities.DRAGON_GUARDIAN.create(world, EntitySpawnReason.TRIGGERED);
 
         if (boss == null) {
             System.err.println("Failed to create Dragon Guardian entity!");
@@ -96,7 +97,7 @@ public class DragonGuardianSpawner {
         int spawnY = surfaceY + 10; // Spawn 10 blocks above surface for flying start
 
         // Set position at arena center above surface
-        boss.refreshPositionAndAngles(
+        boss.snapTo(
             ARENA_X + 0.5,
             spawnY,
             ARENA_Z + 0.5,
@@ -108,7 +109,7 @@ public class DragonGuardianSpawner {
         boss.setBoss(true);
 
         // Spawn the boss
-        world.spawnEntity(boss);
+        world.addFreshEntity(boss);
 
         // Epic spawn effects
         BlockPos spawnPos = new BlockPos(ARENA_X, spawnY, ARENA_Z);
@@ -122,13 +123,13 @@ public class DragonGuardianSpawner {
      * Find surface level at given X/Z coordinates
      * Searches downward from high altitude to find solid ground
      */
-    private static int findSurfaceLevel(ServerWorld world, int x, int z) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable(x, 256, z);
+    private static int findSurfaceLevel(ServerLevel world, int x, int z) {
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(x, 256, z);
 
         // Search downward for solid ground from Y=256
         for (int y = 256; y >= 0; y--) {
             mutable.setY(y);
-            if (world.getBlockState(mutable).isSolidBlock(world, mutable)) {
+            if (world.getBlockState(mutable).isSolid()) {
                 return y + 1; // Return position above solid block
             }
         }
@@ -140,14 +141,14 @@ public class DragonGuardianSpawner {
     /**
      * Spawn dramatic particle effects and sounds
      */
-    private static void spawnEffects(ServerWorld world, BlockPos pos) {
+    private static void spawnEffects(ServerLevel world, BlockPos pos) {
         // Massive explosion of particles
         for (int i = 0; i < 100; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 10;
-            double offsetY = (world.random.nextDouble() - 0.5) * 10;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 10;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 10;
+            double offsetY = (world.getRandom().nextDouble() - 0.5) * 10;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 10;
 
-            world.spawnParticles(
+            world.sendParticles(
                 ParticleTypes.ENCHANT,
                 pos.getX() + offsetX,
                 pos.getY() + offsetY,
@@ -157,7 +158,7 @@ public class DragonGuardianSpawner {
                 0.1
             );
 
-            world.spawnParticles(
+            world.sendParticles(
                 ParticleTypes.END_ROD,
                 pos.getX() + offsetX,
                 pos.getY() + offsetY,
@@ -170,7 +171,7 @@ public class DragonGuardianSpawner {
 
         // Lightning effect particles
         for (int i = 0; i < 50; i++) {
-            world.spawnParticles(
+            world.sendParticles(
                 ParticleTypes.ELECTRIC_SPARK,
                 pos.getX(),
                 pos.getY() + i * 0.5,
@@ -187,8 +188,8 @@ public class DragonGuardianSpawner {
             pos.getX(),
             pos.getY(),
             pos.getZ(),
-            SoundEvents.ENTITY_ENDER_DRAGON_GROWL,
-            SoundCategory.HOSTILE,
+            SoundEvents.ENDER_DRAGON_GROWL,
+            SoundSource.HOSTILE,
             5.0f,
             0.8f
         );
@@ -198,8 +199,8 @@ public class DragonGuardianSpawner {
             pos.getX(),
             pos.getY(),
             pos.getZ(),
-            SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
-            SoundCategory.HOSTILE,
+            SoundEvents.LIGHTNING_BOLT_THUNDER,
+            SoundSource.HOSTILE,
             3.0f,
             1.2f
         );
@@ -209,7 +210,7 @@ public class DragonGuardianSpawner {
      * Announce boss spawn to all players in dimension
      * @param variant Dragon variant (null for generic "Dragon Guardian" boss)
      */
-    private static void announceSpawn(ServerWorld world, DragonGuardianEntity.DragonVariant variant) {
+    private static void announceSpawn(ServerLevel world, DragonGuardianEntity.DragonVariant variant) {
         // Get variant-specific title, or generic boss title if null
         String variantName;
         if (variant == null) {
@@ -225,24 +226,24 @@ public class DragonGuardianSpawner {
         }
 
         // Announcement messages
-        Text title = Text.literal("☆ " + variantName + " ☆")
-                .formatted(Formatting.DARK_PURPLE, Formatting.BOLD);
-        Text subtitle = Text.literal("has awakened in the Dragon Realm!")
-                .formatted(Formatting.GRAY, Formatting.ITALIC);
+        Component title = Component.literal("☆ " + variantName + " ☆")
+                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD);
+        Component subtitle = Component.literal("has awakened in the Dragon Realm!")
+                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
 
         // Send to all players in Dragon Realm
-        for (ServerPlayerEntity player : world.getPlayers()) {
-            player.sendMessage(title, false);
-            player.sendMessage(subtitle, false);
+        for (ServerPlayer player : world.players()) {
+            player.sendSystemMessage(title);
+            player.sendSystemMessage(subtitle);
         }
 
         // Also broadcast to Overworld (so all players know)
-        ServerWorld overworld = world.getServer().getWorld(World.OVERWORLD);
+        ServerLevel overworld = world.getServer().getLevel(Level.OVERWORLD);
         if (overworld != null) {
-            Text overworldMsg = Text.literal("The " + variantName + " has awakened!")
-                    .formatted(Formatting.LIGHT_PURPLE);
-            for (ServerPlayerEntity player : overworld.getPlayers()) {
-                player.sendMessage(overworldMsg, false);
+            Component overworldMsg = Component.literal("The " + variantName + " has awakened!")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE);
+            for (ServerPlayer player : overworld.players()) {
+                player.sendSystemMessage(overworldMsg);
             }
         }
     }
@@ -251,13 +252,13 @@ public class DragonGuardianSpawner {
      * Handle boss death - mark for respawn timer
      * Called by death event handler
      */
-    public static void onBossDeath(DragonGuardianEntity boss, ServerWorld world) {
+    public static void onBossDeath(DragonGuardianEntity boss, ServerLevel world) {
         // Dramatic death effects
-        BlockPos pos = boss.getBlockPos();
+        BlockPos pos = boss.blockPosition();
 
         // Explosion of particles
         for (int i = 0; i < 200; i++) {
-            world.spawnParticles(
+            world.sendParticles(
                 ParticleTypes.ENCHANT,
                 pos.getX(),
                 pos.getY() + 2,
@@ -274,18 +275,18 @@ public class DragonGuardianSpawner {
             pos.getX(),
             pos.getY(),
             pos.getZ(),
-            SoundEvents.ENTITY_ENDER_DRAGON_DEATH,
-            SoundCategory.HOSTILE,
+            SoundEvents.ENDER_DRAGON_DEATH,
+            SoundSource.HOSTILE,
             5.0f,
             1.0f
         );
 
         // Global death announcement
-        Text deathMsg = Text.literal("☆ The Dragon Guardian has been slain! ☆")
-                .formatted(Formatting.GOLD, Formatting.BOLD);
+        Component deathMsg = Component.literal("☆ The Dragon Guardian has been slain! ☆")
+                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
 
-        for (ServerPlayerEntity player : world.getServer().getPlayerManager().getPlayerList()) {
-            player.sendMessage(deathMsg, false);
+        for (ServerPlayer player : world.getServer().getPlayerList().getPlayers()) {
+            player.sendSystemMessage(deathMsg);
         }
 
         // Start respawn timer

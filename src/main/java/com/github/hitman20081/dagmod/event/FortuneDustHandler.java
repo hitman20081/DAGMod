@@ -1,55 +1,56 @@
 package com.github.hitman20081.dagmod.event;
 
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+
 import java.util.UUID;
 
 public class FortuneDustHandler {
 
     // Track remaining blocks for each player
     private static final Map<UUID, Integer> fortuneBlocksRemaining = new HashMap<>();
-    private static final Random random = new Random();
+    private static final RandomSource random = RandomSource.create();
 
     public static void register() {
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
-                UUID playerId = serverPlayer.getUuid();
+            if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+                UUID playerId = serverPlayer.getUUID();
 
                 if (fortuneBlocksRemaining.containsKey(playerId)) {
                     // Apply Fortune III bonus drops
-                    applyFortuneBonus((ServerWorld) world, state, pos, serverPlayer);
+                    applyFortuneBonus((ServerLevel) world, state, pos, serverPlayer);
 
                     int remaining = fortuneBlocksRemaining.get(playerId);
                     remaining--;
 
                     if (remaining <= 0) {
                         fortuneBlocksRemaining.remove(playerId);
-                        serverPlayer.sendMessage(Text.literal("💎 Fortune Dust expired! 💎")
-                                .formatted(Formatting.GREEN), true);
+                        serverPlayer.sendOverlayMessage(Component.literal("💎 Fortune Dust expired! 💎")
+                                .withStyle(ChatFormatting.GREEN));
                     } else {
                         fortuneBlocksRemaining.put(playerId, remaining);
-                        serverPlayer.sendMessage(Text.literal("💎 " + remaining + " blocks remaining 💎")
-                                .formatted(Formatting.GREEN), true);
+                        serverPlayer.sendOverlayMessage(Component.literal("💎 " + remaining + " blocks remaining 💎")
+                                .withStyle(ChatFormatting.GREEN));
                     }
                 }
             }
         });
     }
 
-    private static void applyFortuneBonus(ServerWorld world, BlockState state, BlockPos pos, ServerPlayerEntity player) {
+    private static void applyFortuneBonus(ServerLevel world, BlockState state, BlockPos pos, ServerPlayer player) {
         Block block = state.getBlock();
         ItemStack bonusDrop = ItemStack.EMPTY;
         int bonusAmount = 0;
@@ -81,7 +82,7 @@ public class FortuneDustHandler {
 
         // Drop the bonus items
         if (!bonusDrop.isEmpty()) {
-            Block.dropStack(world, pos, bonusDrop);
+            Block.popResource(world, pos, bonusDrop);
         }
     }
 

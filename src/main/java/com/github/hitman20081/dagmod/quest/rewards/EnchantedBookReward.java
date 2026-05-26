@@ -1,21 +1,22 @@
 package com.github.hitman20081.dagmod.quest.rewards;
 
 import com.github.hitman20081.dagmod.quest.QuestReward;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 
 /**
  * Gives a specific enchanted book (with enchantment component set) as a quest reward.
- * Use Identifier.ofVanilla("enchantment_name") for vanilla enchantments.
+ * Use Identifier.withDefaultNamespace("enchantment_name") for vanilla enchantments.
  */
 public class EnchantedBookReward extends QuestReward {
 
@@ -29,39 +30,39 @@ public class EnchantedBookReward extends QuestReward {
     }
 
     @Override
-    public boolean giveReward(PlayerEntity player, World world) {
+    public boolean giveReward(Player player, Level world) {
         ItemStack book = createBook(world);
         if (book.isEmpty()) return false;
 
-        if (!player.getInventory().insertStack(book)) {
-            player.dropItem(book, false);
+        if (!player.getInventory().add(book)) {
+            player.drop(book, false);
         }
-        player.sendMessage(createSuccessMessage(), false);
+        player.sendSystemMessage(createSuccessMessage());
         return true;
     }
 
     @Override
-    public boolean canGiveReward(PlayerEntity player) {
+    public boolean canGiveReward(Player player) {
         return true; // Books stack to 1; will drop on the ground if inventory is full
     }
 
     @Override
-    public Text getDisplayText() {
-        return Text.literal("• " + enchantmentId.getPath().replace('_', ' ') + " " + toRoman(level) + " (enchanted book)");
+    public Component getDisplayText() {
+        return Component.literal("• " + enchantmentId.getPath().replace('_', ' ') + " " + toRoman(level) + " (enchanted book)");
     }
 
-    private ItemStack createBook(World world) {
-        var registry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
-        RegistryEntry<Enchantment> entry = registry
-                .getEntry(enchantmentId)
+    private ItemStack createBook(Level world) {
+        var registry = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> entry = registry
+                .get(enchantmentId)
                 .orElse(null);
         if (entry == null) return ItemStack.EMPTY;
 
         ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-        ItemEnchantmentsComponent.Builder builder =
-                new ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT);
-        builder.add(entry, level);
-        book.set(DataComponentTypes.STORED_ENCHANTMENTS, builder.build());
+        ItemEnchantments.Mutable builder =
+                new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+        builder.set(entry, level);
+        book.set(DataComponents.STORED_ENCHANTMENTS, builder.toImmutable());
         return book;
     }
 

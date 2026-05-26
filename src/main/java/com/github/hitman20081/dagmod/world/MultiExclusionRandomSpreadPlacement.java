@@ -3,12 +3,13 @@ package com.github.hitman20081.dagmod.world;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement;
-import net.minecraft.world.gen.chunk.placement.SpreadType;
-import net.minecraft.world.gen.chunk.placement.StructurePlacement;
-import net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator;
-import net.minecraft.world.gen.chunk.placement.StructurePlacementType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
+import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,13 +45,13 @@ public class MultiExclusionRandomSpreadPlacement extends RandomSpreadStructurePl
     public static final MapCodec<MultiExclusionRandomSpreadPlacement> CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
             Codec.INT.fieldOf("salt")
-                .forGetter(p -> p.getSalt()),
+                .forGetter(p -> p.salt()),
             Codec.intRange(0, 4096).fieldOf("spacing")
-                .forGetter(p -> p.getSpacing()),
+                .forGetter(p -> p.spacing()),
             Codec.intRange(0, 4096).fieldOf("separation")
-                .forGetter(p -> p.getSeparation()),
-            SpreadType.CODEC.optionalFieldOf("spread_type", SpreadType.LINEAR)
-                .forGetter(p -> p.getSpreadType()),
+                .forGetter(p -> p.separation()),
+            RandomSpreadType.CODEC.optionalFieldOf("spread_type", RandomSpreadType.LINEAR)
+                .forGetter(p -> p.spreadType()),
             StructurePlacement.ExclusionZone.CODEC.listOf()
                 .optionalFieldOf("exclusion_zones", List.of())
                 .forGetter(p -> p.exclusionZones)
@@ -65,10 +66,10 @@ public class MultiExclusionRandomSpreadPlacement extends RandomSpreadStructurePl
             int salt,
             int spacing,
             int separation,
-            SpreadType spreadType,
+            RandomSpreadType spreadType,
             List<StructurePlacement.ExclusionZone> exclusionZones) {
         super(
-            BlockPos.ORIGIN,
+            BlockPos.ZERO,
             StructurePlacement.FrequencyReductionMethod.DEFAULT,
             1.0f,
             salt,
@@ -89,12 +90,12 @@ public class MultiExclusionRandomSpreadPlacement extends RandomSpreadStructurePl
      * evaluated as part of another set's exclusion check, so we skip our own zones.
      */
     @Override
-    protected boolean isStartChunk(StructurePlacementCalculator calculator, int chunkX, int chunkZ) {
+    protected boolean isPlacementChunk(ChunkGeneratorStructureState calculator, int chunkX, int chunkZ) {
         if (EXCLUSION_DEPTH.get() == 0) {
             EXCLUSION_DEPTH.set(1);
             try {
                 for (StructurePlacement.ExclusionZone zone : exclusionZones) {
-                    if (zone.shouldExclude(calculator, chunkX, chunkZ)) {
+                    if (isExcluded(zone, calculator, chunkX, chunkZ)) {
                         return false;
                     }
                 }
@@ -102,11 +103,24 @@ public class MultiExclusionRandomSpreadPlacement extends RandomSpreadStructurePl
                 EXCLUSION_DEPTH.set(0);
             }
         }
-        return super.isStartChunk(calculator, chunkX, chunkZ);
+        return super.isPlacementChunk(calculator, chunkX, chunkZ);
     }
 
     @Override
-    public StructurePlacementType<?> getType() {
+    public StructurePlacementType<?> type() {
         return ModStructurePlacements.MULTI_EXCLUSION_RANDOM_SPREAD;
+    }
+
+    /** Calls ExclusionZone.isPlacementForbidden via reflection (renamed/private in MC 26.x). */
+    private static boolean isExcluded(StructurePlacement.ExclusionZone zone,
+            ChunkGeneratorStructureState calculator, int chunkX, int chunkZ) {
+        try {
+            var m = StructurePlacement.ExclusionZone.class.getDeclaredMethod(
+                    "isPlacementForbidden", ChunkGeneratorStructureState.class, int.class, int.class);
+            m.setAccessible(true);
+            return (boolean) m.invoke(zone, calculator, chunkX, chunkZ);
+        } catch (ReflectiveOperationException e) {
+            return false;
+        }
     }
 }

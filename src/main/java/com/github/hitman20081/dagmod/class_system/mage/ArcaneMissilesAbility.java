@@ -1,17 +1,17 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
 import com.github.hitman20081.dagmod.event.SpellModifierHandler;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ShulkerBulletEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ShulkerBullet;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,13 +35,13 @@ public class ArcaneMissilesAbility {
     private static final float DAMAGE_PER_MISSILE = 3.0f;
     private static final double SEARCH_RADIUS = 20.0;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
-        UUID uuid = serverPlayer.getUuid();
+        ServerLevel world = serverPlayer.level();
+        UUID uuid = serverPlayer.getUUID();
 
         boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
         float power = SpellModifierHandler.consumeOvercharge(uuid);
@@ -53,7 +53,7 @@ public class ArcaneMissilesAbility {
         return result;
     }
 
-    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+    private static boolean activateInternal(ServerPlayer player, ServerLevel world,
                                             boolean applyModifiers, float powerMultiplier) {
         int missileCount = Math.round(MISSILE_COUNT * powerMultiplier);
 
@@ -61,35 +61,33 @@ public class ArcaneMissilesAbility {
             MageCooldownManager.startCooldown(player, MageAbility.ARCANE_MISSILES);
         }
 
-        Box searchBox = Box.of(
-                player.getEntityPos(),
+        AABB searchBox = AABB.ofSize(
+                player.position(),
                 SEARCH_RADIUS * 2,
                 SEARCH_RADIUS * 2,
                 SEARCH_RADIUS * 2
         );
 
-        List<LivingEntity> nearbyEntities = world.getEntitiesByClass(
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
-                entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
         );
 
         if (nearbyEntities.isEmpty()) {
-            player.sendMessage(
-                    Text.literal("No enemies in range!")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("No enemies in range!")
+                            .withStyle(ChatFormatting.YELLOW));
         }
 
         for (int i = 0; i < missileCount; i++) {
             final int missileIndex = i;
 
             world.getServer().execute(() -> {
-                List<LivingEntity> currentTargets = world.getEntitiesByClass(
+                List<LivingEntity> currentTargets = world.getEntitiesOfClass(
                         LivingEntity.class,
                         searchBox,
-                        entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                        entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
                 );
 
                 LivingEntity target = currentTargets.isEmpty() ? null :
@@ -101,38 +99,36 @@ public class ArcaneMissilesAbility {
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ENTITY_EVOKER_CAST_SPELL,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.EVOKER_CAST_SPELL,
+                SoundSource.PLAYERS,
                 1.0f,
                 1.5f
         );
 
-        player.sendMessage(
-                Text.literal("✦ Arcane Missiles launched! ✦")
-                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
-                true
-        );
+        player.sendOverlayMessage(
+                Component.literal("✦ Arcane Missiles launched! ✦")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
 
         return true;
     }
 
-    private static void fireMissile(ServerWorld world, PlayerEntity player, LivingEntity target, int index) {
-        ShulkerBulletEntity missile = new ShulkerBulletEntity(world, player, target, null);
+    private static void fireMissile(ServerLevel world, Player player, LivingEntity target, int index) {
+        ShulkerBullet missile = new ShulkerBullet(world, player, target, null);
 
         double angle = (index - 2) * 0.3;
         double offsetX = Math.sin(angle) * 0.5;
         double offsetZ = Math.cos(angle) * 0.5;
 
-        missile.setPosition(
+        missile.setPos(
                 player.getX() + offsetX,
                 player.getEyeY() - 0.1,
                 player.getZ() + offsetZ
         );
 
-        world.spawnEntity(missile);
+        world.addFreshEntity(missile);
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.ENCHANT,
                 missile.getX(),
                 missile.getY(),
@@ -142,7 +138,7 @@ public class ArcaneMissilesAbility {
                 0.1
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.WITCH,
                 missile.getX(),
                 missile.getY(),
@@ -154,9 +150,9 @@ public class ArcaneMissilesAbility {
 
         world.playSound(
                 null,
-                missile.getBlockPos(),
-                SoundEvents.ENTITY_SHULKER_SHOOT,
-                SoundCategory.PLAYERS,
+                missile.blockPosition(),
+                SoundEvents.SHULKER_SHOOT,
+                SoundSource.PLAYERS,
                 0.5f,
                 1.5f
         );

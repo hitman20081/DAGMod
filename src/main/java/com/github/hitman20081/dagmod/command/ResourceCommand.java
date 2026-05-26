@@ -7,47 +7,48 @@ import com.github.hitman20081.dagmod.class_system.mana.ManaNetworking;
 import com.github.hitman20081.dagmod.class_system.rogue.EnergyManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.server.permissions.Permissions;
 
 public class ResourceCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("resource")
-                .then(CommandManager.literal("mana")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
+        dispatcher.register(Commands.literal("resource")
+                .then(Commands.literal("mana")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
                             if (!"Mage".equals(playerClass)) {
-                                player.sendMessage(Text.literal("You are not a Mage.")
-                                        .formatted(Formatting.RED), false);
+                                player.sendSystemMessage(Component.literal("You are not a Mage.")
+                                        .withStyle(ChatFormatting.RED));
                                 return 1;
                             }
 
                             ManaData data = ManaManager.getManaData(player);
-                            player.sendMessage(Text.literal("Mana: ")
-                                    .formatted(Formatting.AQUA)
-                                    .append(Text.literal((int) data.getCurrentMana() + "/" + data.getMaxMana())
-                                            .formatted(Formatting.WHITE)), false);
+                            player.sendSystemMessage(Component.literal("Mana: ")
+                                    .withStyle(ChatFormatting.AQUA)
+                                    .append(Component.literal((int) data.getCurrentMana() + "/" + data.getMaxMana())
+                                            .withStyle(ChatFormatting.WHITE)));
                             return 1;
                         })
-                        .then(CommandManager.literal("set")
-                                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
-                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(0, 100))
+                        .then(Commands.literal("set")
+                                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                                .then(Commands.argument("amount", IntegerArgumentType.integer(0, 100))
                                         .executes(context -> {
-                                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                                            ServerPlayer player = context.getSource().getPlayerOrException();
+                                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
                                             if (!"Mage".equals(playerClass)) {
-                                                player.sendMessage(Text.literal("You are not a Mage.")
-                                                        .formatted(Formatting.RED), false);
+                                                player.sendSystemMessage(Component.literal("You are not a Mage.")
+                                                        .withStyle(ChatFormatting.RED));
                                                 return 1;
                                             }
 
@@ -56,50 +57,50 @@ public class ResourceCommand {
                                             data.setMana(amount);
                                             ManaNetworking.sendManaUpdate(player, data.getCurrentMana(), data.getMaxMana());
 
-                                            player.sendMessage(Text.literal("Mana set to " + amount + ".")
-                                                    .formatted(Formatting.GREEN), false);
+                                            player.sendSystemMessage(Component.literal("Mana set to " + amount + ".")
+                                                    .withStyle(ChatFormatting.GREEN));
                                             return 1;
                                         })
                                 )
                         )
                 )
-                .then(CommandManager.literal("energy")
+                .then(Commands.literal("energy")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
                             if (!"Rogue".equalsIgnoreCase(playerClass)) {
-                                player.sendMessage(Text.literal("You are not a Rogue.")
-                                        .formatted(Formatting.RED), false);
+                                player.sendSystemMessage(Component.literal("You are not a Rogue.")
+                                        .withStyle(ChatFormatting.RED));
                                 return 1;
                             }
 
                             int energy = EnergyManager.getEnergy(player);
                             int max = EnergyManager.getMaxEnergy();
-                            player.sendMessage(Text.literal("Energy: ")
-                                    .formatted(Formatting.GREEN)
-                                    .append(Text.literal(energy + "/" + max)
-                                            .formatted(Formatting.WHITE)), false);
+                            player.sendSystemMessage(Component.literal("Energy: ")
+                                    .withStyle(ChatFormatting.GREEN)
+                                    .append(Component.literal(energy + "/" + max)
+                                            .withStyle(ChatFormatting.WHITE)));
                             return 1;
                         })
-                        .then(CommandManager.literal("set")
-                                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
-                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(0, 100))
+                        .then(Commands.literal("set")
+                                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                                .then(Commands.argument("amount", IntegerArgumentType.integer(0, 100))
                                         .executes(context -> {
-                                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                                            ServerPlayer player = context.getSource().getPlayerOrException();
+                                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
                                             if (!"Rogue".equalsIgnoreCase(playerClass)) {
-                                                player.sendMessage(Text.literal("You are not a Rogue.")
-                                                        .formatted(Formatting.RED), false);
+                                                player.sendSystemMessage(Component.literal("You are not a Rogue.")
+                                                        .withStyle(ChatFormatting.RED));
                                                 return 1;
                                             }
 
                                             int amount = IntegerArgumentType.getInteger(context, "amount");
                                             EnergyManager.setEnergy(player, amount);
 
-                                            player.sendMessage(Text.literal("Energy set to " + amount + ".")
-                                                    .formatted(Formatting.GREEN), false);
+                                            player.sendSystemMessage(Component.literal("Energy set to " + amount + ".")
+                                                    .withStyle(ChatFormatting.GREEN));
                                             return 1;
                                         })
                                 )

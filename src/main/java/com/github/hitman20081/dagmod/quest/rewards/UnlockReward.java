@@ -2,14 +2,14 @@ package com.github.hitman20081.dagmod.quest.rewards;
 
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.quest.QuestReward;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +30,14 @@ public class UnlockReward extends QuestReward {
     }
 
     @Override
-    public boolean giveReward(PlayerEntity player, World world) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer) || !(world instanceof ServerWorld serverWorld)) {
+    public boolean giveReward(Player player, Level world) {
+        if (!(player instanceof ServerPlayer serverPlayer) || !(world instanceof ServerLevel serverWorld)) {
             return true; // client side — nothing to do
         }
 
-        List<RecipeEntry<?>> toUnlock = new ArrayList<>();
-        for (RecipeEntry<?> entry : serverWorld.getServer().getRecipeManager().values()) {
-            if (entry.id().getValue().equals(recipeId)) {
+        List<RecipeHolder<?>> toUnlock = new ArrayList<>();
+        for (RecipeHolder<?> entry : serverWorld.getServer().getRecipeManager().getRecipes()) {
+            if (entry.id().identifier().equals(recipeId)) {
                 toUnlock.add(entry);
                 break;
             }
@@ -48,25 +48,23 @@ public class UnlockReward extends QuestReward {
             return false;
         }
 
-        serverPlayer.unlockRecipes(toUnlock);
-        serverPlayer.sendMessage(
-            Text.literal("✦ Recipe Unlocked: ")
-                .formatted(Formatting.GOLD)
-                .append(Text.literal(displayName).formatted(Formatting.YELLOW)),
-            false
-        );
+        serverPlayer.awardRecipes(toUnlock);
+        serverPlayer.sendSystemMessage(
+            Component.literal("✦ Recipe Unlocked: ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(displayName).withStyle(ChatFormatting.YELLOW)));
         DagMod.LOGGER.info("Unlocked recipe '{}' for player {}", recipeId, player.getName().getString());
         return true;
     }
 
     @Override
-    public boolean canGiveReward(PlayerEntity player) {
+    public boolean canGiveReward(Player player) {
         return true; // Recipe unlocks never fail due to inventory space
     }
 
     @Override
-    public Text getDisplayText() {
-        return Text.literal("• Unlocks Recipe: ")
-                .append(Text.literal(displayName).formatted(Formatting.YELLOW));
+    public Component getDisplayText() {
+        return Component.literal("• Unlocks Recipe: ")
+                .append(Component.literal(displayName).withStyle(ChatFormatting.YELLOW));
     }
 }

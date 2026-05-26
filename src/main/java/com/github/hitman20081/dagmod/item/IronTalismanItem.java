@@ -4,14 +4,14 @@ import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
 import com.github.hitman20081.dagmod.class_system.warrior.IronSkinAbility;
 import com.github.hitman20081.dagmod.class_system.warrior.WarriorAbility;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 /**
  * Iron Talisman - Activates the Iron Skin ability for Warriors
@@ -25,47 +25,45 @@ import net.minecraft.world.World;
  * Cooldown: 120 seconds (2 minutes)
  */
 public class IronTalismanItem extends Item {
-    public IronTalismanItem(Settings settings) {
+    public IronTalismanItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getStackInHand(hand);
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
 
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
         // Check if player is a Warrior
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
         if (!"warrior".equalsIgnoreCase(playerClass)) {
-            player.sendMessage(
-                    Text.literal("⚔ Only Warriors can use Iron Skin!")
-                            .formatted(Formatting.RED),
-                    true
-            );
-            return ActionResult.FAIL;
+            player.sendOverlayMessage(
+                    Component.literal("⚔ Only Warriors can use Iron Skin!")
+                            .withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
         }
 
         // Check cooldown
         if (CooldownManager.isOnCooldown(player, WarriorAbility.IRON_SKIN)) {
             CooldownManager.sendCooldownMessage(player, WarriorAbility.IRON_SKIN);
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Activate Iron Skin
         boolean success = IronSkinAbility.activate(player);
 
         if (success) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ActionResult.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override
-    public boolean hasGlint(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return true; // Enchanted appearance
     }
 }

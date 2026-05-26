@@ -1,17 +1,17 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -34,19 +34,19 @@ public class VanishAbility {
     private static final int INVISIBILITY_DURATION = 8 * 20;
     private static final int BLIND_DURATION = 4 * 20;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Start cooldown
         RogueCooldownManager.startCooldown(player, RogueAbility.VANISH);
 
         // Grant invisibility and speed
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.INVISIBILITY,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.INVISIBILITY,
                 INVISIBILITY_DURATION,
                 0,
                 false,
@@ -54,8 +54,8 @@ public class VanishAbility {
                 true
         ));
 
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.SPEED,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.SPEED,
                 INVISIBILITY_DURATION,
                 1,
                 false,
@@ -64,25 +64,25 @@ public class VanishAbility {
         ));
 
         // Find and blind nearby enemies
-        Box searchBox = Box.of(
-                player.getEntityPos(),
+        AABB searchBox = AABB.ofSize(
+                player.position(),
                 BLIND_RADIUS * 2,
                 BLIND_RADIUS * 2,
                 BLIND_RADIUS * 2
         );
 
-        List<LivingEntity> nearbyEntities = world.getEntitiesByClass(
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
-                entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
         );
 
         int blindedCount = 0;
         for (LivingEntity entity : nearbyEntities) {
-            double distance = player.squaredDistanceTo(entity);
+            double distance = player.distanceToSqr(entity);
             if (distance <= BLIND_RADIUS * BLIND_RADIUS) {
-                entity.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.BLINDNESS,
+                entity.addEffect(new MobEffectInstance(
+                        MobEffects.BLINDNESS,
                         BLIND_DURATION,
                         0,
                         false,
@@ -90,8 +90,8 @@ public class VanishAbility {
                         true
                 ));
 
-                entity.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SLOWNESS,
+                entity.addEffect(new MobEffectInstance(
+                        MobEffects.SLOWNESS,
                         BLIND_DURATION,
                         0,
                         false,
@@ -109,7 +109,7 @@ public class VanishAbility {
             double offsetY = world.getRandom().nextDouble() * 3;
             double offsetZ = (world.getRandom().nextDouble() - 0.5) * 4;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.LARGE_SMOKE,
                     player.getX() + offsetX,
                     player.getY() + offsetY,
@@ -125,7 +125,7 @@ public class VanishAbility {
             double offsetY = world.getRandom().nextDouble() * 4;
             double offsetZ = (world.getRandom().nextDouble() - 0.5) * 6;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.SMOKE,
                     player.getX() + offsetX,
                     player.getY() + offsetY,
@@ -142,8 +142,8 @@ public class VanishAbility {
                 player.getX(),
                 player.getY(),
                 player.getZ(),
-                SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE,
-                SoundCategory.PLAYERS,
+                SoundEvents.GENERIC_EXTINGUISH_FIRE,
+                SoundSource.PLAYERS,
                 1.5f,
                 0.5f
         );
@@ -153,25 +153,21 @@ public class VanishAbility {
                 player.getX(),
                 player.getY(),
                 player.getZ(),
-                SoundEvents.ENTITY_TNT_PRIMED,
-                SoundCategory.PLAYERS,
+                SoundEvents.TNT_PRIMED,
+                SoundSource.PLAYERS,
                 0.5f,
                 2.0f
         );
 
         // FEEDBACK
         if (blindedCount > 0) {
-            serverPlayer.sendMessage(
-                    Text.literal("💨 Vanish! Blinded " + blindedCount + " enemies!")
-                            .formatted(Formatting.GRAY, Formatting.BOLD),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("💨 Vanish! Blinded " + blindedCount + " enemies!")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD));
         } else {
-            serverPlayer.sendMessage(
-                    Text.literal("💨 Vanish! Disappeared into shadows!")
-                            .formatted(Formatting.GRAY, Formatting.BOLD),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("💨 Vanish! Disappeared into shadows!")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD));
         }
 
         return true;

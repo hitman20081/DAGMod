@@ -1,8 +1,8 @@
 package com.github.hitman20081.dagmod.progression;
 
 import com.github.hitman20081.dagmod.quest.Quest;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
 /**
  * Manages level requirements for quests and content
@@ -27,7 +27,7 @@ public class LevelRequirements {
      * @param quest The quest to check
      * @return true if player's level is high enough
      */
-    public static boolean meetsLevelRequirement(ServerPlayerEntity player, Quest quest) {
+    public static boolean meetsLevelRequirement(ServerPlayer player, Quest quest) {
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
         if (data == null) {
             return false; // Data not loaded yet, deny access
@@ -89,7 +89,7 @@ public class LevelRequirements {
      * @param player The player
      * @param requiredLevel Level needed
      */
-    public static void sendLevelRequirementMessage(ServerPlayerEntity player, int requiredLevel) {
+    public static void sendLevelRequirementMessage(ServerPlayer player, int requiredLevel) {
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
         if (data == null) {
             return; // Data not loaded yet, skip message
@@ -97,12 +97,10 @@ public class LevelRequirements {
         int currentLevel = data.getCurrentLevel();
         int levelsNeeded = requiredLevel - currentLevel;
 
-        player.sendMessage(
-                Text.literal("§c⚠ Level " + requiredLevel + " required! " +
+        player.sendSystemMessage(
+                Component.literal("§c⚠ Level " + requiredLevel + " required! " +
                         "§7(You need " + levelsNeeded + " more level" +
-                        (levelsNeeded > 1 ? "s" : "") + ")"),
-                false
-        );
+                        (levelsNeeded > 1 ? "s" : "") + ")"));
     }
 
     /**
@@ -111,7 +109,7 @@ public class LevelRequirements {
      * @param requiredLevel Minimum level needed
      * @return true if player's level is high enough
      */
-    public static boolean canAccessContent(ServerPlayerEntity player, int requiredLevel) {
+    public static boolean canAccessContent(ServerPlayer player, int requiredLevel) {
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
         if (data == null) {
             return false; // Data not loaded yet, deny access

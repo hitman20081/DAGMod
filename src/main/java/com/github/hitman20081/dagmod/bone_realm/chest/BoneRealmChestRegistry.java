@@ -1,20 +1,20 @@
 package com.github.hitman20081.dagmod.bone_realm.chest;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.resources.Identifier;
 
 /**
  * Registry for Locked Bone Chests
@@ -33,13 +33,12 @@ public class BoneRealmChestRegistry {
         SKELETON_KING_CHEST = registerChestBlock(
                 "skeleton_king_chest",
                 new LockedBoneChestBlock(
-                        AbstractBlock.Settings.create()
-                                .registryKey(RegistryKey.of(RegistryKeys.BLOCK,
-                                        Identifier.of(DagMod.MOD_ID, "skeleton_king_chest")))
+                        BlockBehaviour.Properties.of()
+                                
                                 .strength(50.0f, 1200.0f)
-                                .requiresTool()
-                                .sounds(BlockSoundGroup.BONE)
-                                .luminance(state -> 10),
+                                .requiresCorrectToolForDrops()
+                                .sound(SoundType.BONE_BLOCK)
+                                .lightLevel(state -> 10),
                         LockedBoneChestBlock.LockedChestType.SKELETON_KING
                 ),
                 true
@@ -49,13 +48,12 @@ public class BoneRealmChestRegistry {
         BONE_REALM_LOCKED_CHEST = registerChestBlock(
                 "bone_realm_locked_chest",
                 new LockedBoneChestBlock(
-                        AbstractBlock.Settings.create()
-                                .registryKey(RegistryKey.of(RegistryKeys.BLOCK,
-                                        Identifier.of(DagMod.MOD_ID, "bone_realm_locked_chest")))
+                        BlockBehaviour.Properties.of()
+                                
                                 .strength(5.0f, 6.0f)
-                                .requiresTool()
-                                .sounds(BlockSoundGroup.WOOD)
-                                .luminance(state -> 5),
+                                .requiresCorrectToolForDrops()
+                                .sound(SoundType.WOOD)
+                                .lightLevel(state -> 5),
                         LockedBoneChestBlock.LockedChestType.BONE_REALM
                 ),
                 true
@@ -63,8 +61,8 @@ public class BoneRealmChestRegistry {
 
         // Register Block Entity Type
         LOCKED_BONE_CHEST_ENTITY = Registry.register(
-                Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(DagMod.MOD_ID, "locked_bone_chest"),
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "locked_bone_chest"),
                 FabricBlockEntityTypeBuilder.create(
                         (pos, state) -> {
                             Block block = state.getBlock();
@@ -84,26 +82,26 @@ public class BoneRealmChestRegistry {
     }
 
     private static Block registerChestBlock(String id, Block block, boolean createItem) {
-        Identifier identifier = Identifier.of(DagMod.MOD_ID, id);
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
+        Identifier identifier = Identifier.fromNamespaceAndPath(DagMod.MOD_ID, id);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, identifier);
 
         // Register block
-        Block registered = Registry.register(Registries.BLOCK, blockKey, block);
+        Block registered = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
 
         // Register BlockItem if requested
         if (createItem) {
-            RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, identifier);
-            Registry.register(Registries.ITEM, itemKey,
-                    new BlockItem(registered, new Item.Settings().registryKey(itemKey)));
+            ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, identifier);
+            Registry.register(BuiltInRegistries.ITEM, itemKey,
+                    new BlockItem(registered, new Item.Properties().setId(itemKey)));
         }
 
         return registered;
     }
 
     private static void addToCreativeTabs() {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(content -> {
-            content.add(SKELETON_KING_CHEST);
-            content.add(BONE_REALM_LOCKED_CHEST);
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(content -> {
+            content.accept(SKELETON_KING_CHEST);
+            content.accept(BONE_REALM_LOCKED_CHEST);
         });
     }
 }

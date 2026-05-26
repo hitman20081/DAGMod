@@ -1,7 +1,7 @@
 package com.github.hitman20081.dagmod.quest;
 
 import com.github.hitman20081.dagmod.progression.XPEventHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.*;
 
@@ -85,7 +85,7 @@ public class QuestData {
     }
 
     // Completed quest management
-    public void completeQuest(Quest quest, ServerPlayerEntity player) {
+    public void completeQuest(Quest quest, ServerPlayer player) {
         // Remove from active quests
         removeActiveQuest(quest.getId());
 

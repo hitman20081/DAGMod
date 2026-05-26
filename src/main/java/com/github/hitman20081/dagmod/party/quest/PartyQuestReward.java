@@ -1,9 +1,10 @@
 package com.github.hitman20081.dagmod.party.quest;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 
 /**
  * Represents a reward for completing a party quest
@@ -24,7 +25,7 @@ public class PartyQuestReward {
     // Helper constructor for creating rewards from item IDs
     public static PartyQuestReward fromId(String itemId, int count) {
         ItemStack stack = new ItemStack(
-                Registries.ITEM.get(Identifier.of(itemId))
+                BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId))
         );
         return new PartyQuestReward(stack, count);
     }
@@ -45,6 +46,6 @@ public class PartyQuestReward {
 
     @Override
     public String toString() {
-        return quantity + "x " + itemStack.getName().getString();
+        return quantity + "x " + itemStack.getHoverName().getString();
     }
 }

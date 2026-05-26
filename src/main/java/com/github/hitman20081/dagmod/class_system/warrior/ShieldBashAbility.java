@@ -1,20 +1,20 @@
 package com.github.hitman20081.dagmod.class_system.warrior;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -36,46 +36,43 @@ public class ShieldBashAbility {
     /**
      * Check if player is holding a shield
      */
-    public static boolean isHoldingShield(PlayerEntity player) {
-        return player.getMainHandStack().getItem() instanceof ShieldItem ||
-                player.getOffHandStack().getItem() instanceof ShieldItem;
+    public static boolean isHoldingShield(Player player) {
+        return player.getMainHandItem().getItem() instanceof ShieldItem ||
+                player.getOffhandItem().getItem() instanceof ShieldItem;
     }
 
     /**
      * Activate Shield Bash ability
      */
-    public static boolean activate(PlayerEntity player) {
-        if (!(player.getEntityWorld() instanceof ServerWorld serverWorld)) {
+    public static boolean activate(Player player) {
+        if (!(player.level() instanceof ServerLevel serverWorld)) {
             return false;
         }
 
         if (!isHoldingShield(player)) {
-            if (player instanceof ServerPlayerEntity serverPlayer) {
-                serverPlayer.sendMessage(
-                        Text.literal("⛨ Shield Bash requires a shield!")
-                                .formatted(Formatting.RED),
-                        true
-                );
+            if (player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.sendOverlayMessage(
+                        Component.literal("⛨ Shield Bash requires a shield!")
+                                .withStyle(ChatFormatting.RED));
             }
             return false;
         }
 
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+        ServerPlayer serverPlayer = (ServerPlayer) player;
 
         // Calculate dash direction
-        Vec3d lookVec = player.getRotationVec(1.0F);
-        Vec3d dashVec = lookVec.multiply(DASH_DISTANCE);
+        Vec3 lookVec = player.getViewVector(1.0F);
+        Vec3 dashVec = lookVec.scale(DASH_DISTANCE);
 
         // Store initial position for collision detection
-        Vec3d startPos = ((ServerPlayerEntity) player).getCommandSource().getPosition();
-        Vec3d endPos = startPos.add(dashVec);
+        Vec3 startPos = ((ServerPlayer) player).position();
+        Vec3 endPos = startPos.add(dashVec);
 
         // Apply dash velocity
-        player.setVelocity(dashVec.x, 0.2, dashVec.z); // Slight upward for clearance
+        player.setDeltaMovement(dashVec.x, 0.2, dashVec.z); // Slight upward for clearance
 
         // Make player briefly invulnerable during dash
         player.setInvulnerable(true);
-        player.timeUntilRegen = 0; // Reset regen timer
 
         // Schedule removal of invulnerability
         serverWorld.getServer().execute(() -> {
@@ -93,29 +90,29 @@ public class ShieldBashAbility {
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity livingEntity && entity != player) {
                 // Deal damage
-                livingEntity.damage(serverWorld, serverWorld.getDamageSources().playerAttack(player), DAMAGE);
+                livingEntity.hurt(serverWorld.damageSources().playerAttack(player), DAMAGE);
 
                 // Apply knockback
-                Vec3d knockbackVec = lookVec.multiply(KNOCKBACK_STRENGTH);
-                livingEntity.setVelocity(
-                        livingEntity.getVelocity().add(knockbackVec.x, 0.5, knockbackVec.z)
+                Vec3 knockbackVec = lookVec.scale(KNOCKBACK_STRENGTH);
+                livingEntity.setDeltaMovement(
+                        livingEntity.getDeltaMovement().add(knockbackVec.x, 0.5, knockbackVec.z)
                 );
 
                 // Apply stun (slowness)
-                StatusEffectInstance stun = new StatusEffectInstance(
-                        StatusEffects.SLOWNESS,
+                MobEffectInstance stun = new MobEffectInstance(
+                        MobEffects.SLOWNESS,
                         STUN_DURATION_TICKS,
                         1, // Slowness II
                         false,
                         true,
                         true
                 );
-                livingEntity.addStatusEffect(stun);
+                livingEntity.addEffect(stun);
 
                 hitCount++;
 
                 // Impact particles at entity location
-                spawnImpactParticles(serverWorld, livingEntity.getTrackedPosition().getPos());
+                spawnImpactParticles(serverWorld, livingEntity.position());
             }
         }
 
@@ -124,20 +121,18 @@ public class ShieldBashAbility {
 
         serverWorld.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ITEM_SHIELD_BLOCK.value(),
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.SHIELD_BLOCK.value(),
+                SoundSource.PLAYERS,
                 1.5F,
                 0.8F
         );
 
         // Feedback message
         if (hitCount > 0) {
-            serverPlayer.sendMessage(
-                    Text.literal("⛨ Shield Bash hit " + hitCount + " enemies!")
-                            .formatted(Formatting.AQUA),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("⛨ Shield Bash hit " + hitCount + " enemies!")
+                            .withStyle(ChatFormatting.AQUA));
         }
 
         // Start cooldown
@@ -149,11 +144,11 @@ public class ShieldBashAbility {
     /**
      * Find entities in the dash path
      */
-    private static List<Entity> findEntitiesInDashPath(ServerWorld world, PlayerEntity player, Vec3d start, Vec3d end) {
+    private static List<Entity> findEntitiesInDashPath(ServerLevel world, Player player, Vec3 start, Vec3 end) {
         // Create bounding box along the dash path
-        Box boundingBox = new Box(start, end).expand(1.5, 1.0, 1.5);
+        AABB boundingBox = new AABB(start, end).inflate(1.5, 1.0, 1.5);
 
-        return world.getOtherEntities(player, boundingBox, entity ->
+        return world.getEntities(player, boundingBox, entity ->
                 entity instanceof LivingEntity
         );
     }
@@ -161,14 +156,14 @@ public class ShieldBashAbility {
     /**
      * Spawn particles along the dash path
      */
-    private static void spawnDashParticles(ServerWorld world, PlayerEntity player, Vec3d start, Vec3d end) {
-        Vec3d direction = end.subtract(start).normalize();
+    private static void spawnDashParticles(ServerLevel world, Player player, Vec3 start, Vec3 end) {
+        Vec3 direction = end.subtract(start).normalize();
 
         for (double d = 0; d < DASH_DISTANCE; d += 0.5) {
-            Vec3d pos = start.add(direction.multiply(d));
+            Vec3 pos = start.add(direction.scale(d));
 
             // Cloud particles for dash trail
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.CLOUD,
                     pos.x, pos.y + 0.5, pos.z,
                     2,
@@ -177,7 +172,7 @@ public class ShieldBashAbility {
             );
 
             // Sweep attack particles
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.SWEEP_ATTACK,
                     pos.x, pos.y + 1.0, pos.z,
                     1,
@@ -190,9 +185,9 @@ public class ShieldBashAbility {
     /**
      * Spawn impact particles when hitting an entity
      */
-    private static void spawnImpactParticles(ServerWorld world, Vec3d pos) {
+    private static void spawnImpactParticles(ServerLevel world, Vec3 pos) {
         // Explosion particles
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.EXPLOSION,
                 pos.x, pos.y + 1.0, pos.z,
                 1,
@@ -202,11 +197,11 @@ public class ShieldBashAbility {
 
         // Crit particles
         for (int i = 0; i < 10; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 0.5;
-            double offsetY = world.random.nextDouble() * 1.0;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 0.5;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 0.5;
+            double offsetY = world.getRandom().nextDouble() * 1.0;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 0.5;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.CRIT,
                     pos.x + offsetX,
                     pos.y + offsetY,

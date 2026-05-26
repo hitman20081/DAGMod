@@ -1,13 +1,13 @@
 package com.github.hitman20081.dagmod.dragon_realm.portal;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 
 /**
  * Obsidian Portal Frame Block - Used to construct Dragon Realm portals
@@ -20,13 +20,13 @@ import net.minecraft.world.World;
  */
 public class ObsidianPortalFrameBlock extends Block {
 
-    public ObsidianPortalFrameBlock(Settings settings) {
+    public ObsidianPortalFrameBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        super.animateTick(state, world, pos, random);
 
         // Portal particles (glowing purple swirl effect)
         if (random.nextInt(10) == 0) {
@@ -34,7 +34,7 @@ public class ObsidianPortalFrameBlock extends Block {
             double y = pos.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.8;
             double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.8;
 
-            world.addParticleClient(
+            world.addParticle(
                     ParticleTypes.PORTAL,
                     x, y, z,
                     0.0,
@@ -49,7 +49,7 @@ public class ObsidianPortalFrameBlock extends Block {
             double y = pos.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.6;
             double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.6;
 
-            world.addParticleClient(
+            world.addParticle(
                     ParticleTypes.END_ROD,
                     x, y, z,
                     (random.nextDouble() - 0.5) * 0.02,
@@ -60,18 +60,18 @@ public class ObsidianPortalFrameBlock extends Block {
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        super.onBlockAdded(state, world, pos, oldState, notify);
+    protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onPlace(state, world, pos, oldState, notify);
 
         // Play resonant sound when placed
-        if (!world.isClient()) {
+        if (!world.isClientSide()) {
             world.playSound(
                     null,
                     pos.getX() + 0.5,
                     pos.getY() + 0.5,
                     pos.getZ() + 0.5,
-                    SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE,
-                    SoundCategory.BLOCKS,
+                    SoundEvents.RESPAWN_ANCHOR_CHARGE,
+                    SoundSource.BLOCKS,
                     0.6f,
                     0.9f
             );

@@ -1,16 +1,27 @@
 package com.github.hitman20081.dagmod.progression;
 
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.mob.*;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.illager.Evoker;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.illager.Vindicator;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 /**
  * Handles automatic XP rewards from gameplay events
@@ -24,7 +35,7 @@ public class XPEventHandler {
     public static void register() {
         // Block breaking (mining/gathering)
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
+            if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
                 onBlockBroken(serverPlayer, state.getBlock());
             }
         });
@@ -35,7 +46,7 @@ public class XPEventHandler {
     /**
      * Award XP for breaking blocks (mining/gathering)
      */
-    private static void onBlockBroken(ServerPlayerEntity player, Block block) {
+    private static void onBlockBroken(ServerPlayer player, Block block) {
         int xp = 0;
 
         // Ores (primary mining XP)
@@ -91,7 +102,7 @@ public class XPEventHandler {
      * Award XP for killing mobs
      * Call this from your mob death mixin/event
      */
-    public static void onMobKilled(ServerPlayerEntity player, LivingEntity killed) {
+    public static void onMobKilled(ServerPlayer player, LivingEntity killed) {
         int xp = calculateMobXP(killed);
 
         if (xp > 0) {
@@ -104,55 +115,55 @@ public class XPEventHandler {
      */
     private static int calculateMobXP(LivingEntity entity) {
         // Bosses
-        if (entity instanceof EnderDragonEntity) {
+        if (entity instanceof EnderDragon) {
             return 2000;
-        } else if (entity instanceof WitherEntity) {
+        } else if (entity instanceof WitherBoss) {
             return 1500;
-        } else if (entity instanceof WardenEntity) {
+        } else if (entity instanceof Warden) {
             return 1000;
-        } else if (entity instanceof ElderGuardianEntity) {
+        } else if (entity instanceof ElderGuardian) {
             return 500;
         }
 
         // Hostile mobs
-        else if (entity instanceof ZombieEntity || entity instanceof SkeletonEntity) {
+        else if (entity instanceof Zombie || entity instanceof Skeleton) {
             return 15;
-        } else if (entity instanceof CreeperEntity) {
+        } else if (entity instanceof Creeper) {
             return 18;
-        } else if (entity instanceof SpiderEntity) {
+        } else if (entity instanceof Spider) {
             return 12;
-        } else if (entity instanceof EndermanEntity) {
+        } else if (entity instanceof EnderMan) {
             return 25;
-        } else if (entity instanceof BlazeEntity) {
+        } else if (entity instanceof Blaze) {
             return 30;
-        } else if (entity instanceof WitherSkeletonEntity) {
+        } else if (entity instanceof WitherSkeleton) {
             return 35;
-        } else if (entity instanceof GhastEntity) {
+        } else if (entity instanceof Ghast) {
             return 28;
-        } else if (entity instanceof PhantomEntity) {
+        } else if (entity instanceof Phantom) {
             return 20;
-        } else if (entity instanceof ShulkerEntity) {
+        } else if (entity instanceof Shulker) {
             return 40;
-        } else if (entity instanceof GuardianEntity) {
+        } else if (entity instanceof Guardian) {
             return 25;
-        } else if (entity instanceof RavagerEntity) {
+        } else if (entity instanceof Ravager) {
             return 45;
-        } else if (entity instanceof PiglinBruteEntity) {
+        } else if (entity instanceof PiglinBrute) {
             return 35;
-        } else if (entity instanceof PiglinEntity) {
+        } else if (entity instanceof Piglin) {
             return 18;
-        } else if (entity instanceof ZoglinEntity) {
+        } else if (entity instanceof Zoglin) {
             return 30;
-        } else if (entity instanceof HoglinEntity) {
+        } else if (entity instanceof Hoglin) {
             return 22;
-        } else if (entity instanceof VindicatorEntity || entity instanceof EvokerEntity) {
+        } else if (entity instanceof Vindicator || entity instanceof Evoker) {
             return 30;
-        } else if (entity instanceof PillagerEntity || entity instanceof WitchEntity) {
+        } else if (entity instanceof Pillager || entity instanceof Witch) {
             return 20;
         }
 
         // Passive mobs (low/no XP to discourage farming)
-        else if (entity instanceof AnimalEntity) {
+        else if (entity instanceof Animal) {
             return 0; // No XP for killing passive animals
         }
 
@@ -163,7 +174,7 @@ public class XPEventHandler {
      * Award XP for quest completion
      * Call this from your quest system
      */
-    public static void onQuestCompleted(ServerPlayerEntity player, String difficulty) {
+    public static void onQuestCompleted(ServerPlayer player, String difficulty) {
         int xp = switch (difficulty.toUpperCase()) {
             case "NOVICE" -> 200;
             case "APPRENTICE" -> 500;

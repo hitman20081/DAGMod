@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.enchantment;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 

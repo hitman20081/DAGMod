@@ -1,11 +1,11 @@
 package com.github.hitman20081.dagmod.event;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,25 +18,25 @@ public class ShadowBlendHandler {
 
     public static void register() {
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
-                if (serverPlayer.hasStatusEffect(StatusEffects.INVISIBILITY)) {
-                    UUID playerId = serverPlayer.getUuid();
+            if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+                if (serverPlayer.hasEffect(MobEffects.INVISIBILITY)) {
+                    UUID playerId = serverPlayer.getUUID();
 
                     // Check if this player has Shadow Blend active
                     if (shadowBlendPlayers.contains(playerId)) {
                         // Remove invisibility
-                        serverPlayer.removeStatusEffect(StatusEffects.INVISIBILITY);
+                        serverPlayer.removeEffect(MobEffects.INVISIBILITY);
 
                         // Clear the flag
                         shadowBlendPlayers.remove(playerId);
 
                         // Notify player
-                        serverPlayer.sendMessage(Text.literal("🌑 Shadow Blend broken by attack! 🌑")
-                                .formatted(Formatting.DARK_GRAY), true);
+                        serverPlayer.sendOverlayMessage(Component.literal("🌑 Shadow Blend broken by attack! 🌑")
+                                .withStyle(ChatFormatting.DARK_GRAY));
                     }
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 

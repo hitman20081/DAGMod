@@ -6,11 +6,11 @@ import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.QuestUtils;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,14 +43,14 @@ public class QuestManager {
     }
 
     // Get player's quest data (create if doesn't exist)
-    public QuestData getPlayerData(PlayerEntity player) {
-        return playerQuestData.computeIfAbsent(player.getUuid(), uuid -> new QuestData(uuid));
+    public QuestData getPlayerData(Player player) {
+        return playerQuestData.computeIfAbsent(player.getUUID(), uuid -> new QuestData(uuid));
     }
     public void registerQuestChain(QuestChain chain) {
         questChains.put(chain.getChainId(), chain);
     }
 
-    public List<QuestChain> getAvailableChains(PlayerEntity player) {
+    public List<QuestChain> getAvailableChains(Player player) {
         QuestData playerData = getPlayerData(player);
         List<QuestChain> available = new ArrayList<>();
 
@@ -68,18 +68,18 @@ public class QuestManager {
         return available;
     }
 
-    public void checkChainCompletion(PlayerEntity player, String completedQuestId) {
+    public void checkChainCompletion(Player player, String completedQuestId) {
         QuestData playerData = getPlayerData(player);
 
         for (QuestChain chain : questChains.values()) {
             if (chain.getQuestIds().contains(completedQuestId)) {
                 if (chain.isChainCompleted(playerData)) {
                     // Chain completed! Give rewards and unlock tier
-                    player.sendMessage(Text.literal("*** QUEST CHAIN COMPLETED: " + chain.getChainName() + " ***"), false);
+                    player.sendOverlayMessage(Component.literal("*** QUEST CHAIN COMPLETED: " + chain.getChainName() + " ***"));
 
                     // Give chain completion rewards
                     for (QuestReward reward : chain.getChainCompletionRewards()) {
-                        reward.giveReward(player, player.getEntityWorld());
+                        reward.giveReward(player, player.level());
                     }
 
                     // Auto-upgrade quest book tier if applicable
@@ -87,10 +87,10 @@ public class QuestManager {
                             playerData.getQuestBookTier().getTier() < chain.getRewardTier().getTier()) {
                         QuestData.QuestBookTier oldTier = playerData.getQuestBookTier();
                         playerData.setQuestBookTier(chain.getRewardTier());
-                        player.sendMessage(Text.literal("Quest Book upgraded to: " + chain.getRewardTier().getDisplayName()), false);
+                        player.sendSystemMessage(Component.literal("Quest Book upgraded to: " + chain.getRewardTier().getDisplayName()));
 
                         // Swap the physical book: remove old, give new
-                        com.github.hitman20081.dagmod.quest.QuestUtils.swapQuestBook((ServerPlayerEntity) player, oldTier, chain.getRewardTier());
+                        com.github.hitman20081.dagmod.quest.QuestUtils.swapQuestBook((ServerPlayer) player, oldTier, chain.getRewardTier());
                     }
 
                     // Start next chain automatically if it exists
@@ -100,7 +100,7 @@ public class QuestManager {
         }
     }
 
-    private void startNextChainInSequence(PlayerEntity player, QuestChain completedChain) {
+    private void startNextChainInSequence(Player player, QuestChain completedChain) {
         // Look for chains that require the tier we just unlocked
         QuestData playerData = getPlayerData(player);
 
@@ -108,8 +108,8 @@ public class QuestManager {
             if (chain.getRequiredTier() == completedChain.getRewardTier()) {
                 String firstQuest = chain.getNextAvailableQuest(playerData);
                 if (firstQuest != null) {
-                    player.sendMessage(Text.literal("New quest chain unlocked: " + chain.getChainName()), false);
-                    player.sendMessage(Text.literal("Visit a Quest Block to begin!"), false);
+                    player.sendSystemMessage(Component.literal("New quest chain unlocked: " + chain.getChainName()));
+                    player.sendSystemMessage(Component.literal("Visit a Quest Block to begin!"));
                     break; // Only unlock one chain at a time
                 }
             }
@@ -125,7 +125,7 @@ public class QuestManager {
     }
 
 
-    public boolean canAcceptQuest(PlayerEntity player, Quest quest) {
+    public boolean canAcceptQuest(Player player, Quest quest) {
         if (!quest.hasPrerequisites()) {
             return true; // No prerequisites required
         }
@@ -144,7 +144,7 @@ public class QuestManager {
     }
 
     // ADD THIS METHOD:
-    public boolean canStartQuest(PlayerEntity player, Quest quest) {
+    public boolean canStartQuest(Player player, Quest quest) {
         QuestData playerData = getPlayerData(player);
 
         // Check if already completed
@@ -166,10 +166,10 @@ public class QuestManager {
     }
 
     // Check if player can start a quest
-    public boolean startQuest(PlayerEntity player, String questId) {
+    public boolean startQuest(Player player, String questId) {
         Quest quest = allQuests.get(questId);
         if (quest == null) {
-            player.sendMessage(Text.literal("Quest not found: " + questId), false);
+            player.sendSystemMessage(Component.literal("Quest not found: " + questId));
             return false;
         }
 
@@ -177,22 +177,22 @@ public class QuestManager {
 
         // Check if player's quest book tier allows this quest difficulty
         if (!playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
-            player.sendMessage(Text.literal("Your quest book tier doesn't allow " +
-                    quest.getDifficulty().getDisplayName() + " quests!"), false);
-            player.sendMessage(Text.literal("Upgrade your quest book to access this quest."), false);
+            player.sendSystemMessage(Component.literal("Your quest book tier doesn't allow " +
+                    quest.getDifficulty().getDisplayName() + " quests!"));
+            player.sendSystemMessage(Component.literal("Upgrade your quest book to access this quest."));
             return false;
         }
 
         // ADD THIS: Check level requirement
-        if (!LevelRequirements.meetsLevelRequirement((ServerPlayerEntity) player, quest)) {
+        if (!LevelRequirements.meetsLevelRequirement((ServerPlayer) player, quest)) {
             int requiredLevel = LevelRequirements.getRequiredLevelForQuest(quest);
-            LevelRequirements.sendLevelRequirementMessage((ServerPlayerEntity) player, requiredLevel);
+            LevelRequirements.sendLevelRequirementMessage((ServerPlayer) player, requiredLevel);
             return false;
         }
 
         // Check active quest limit (uses quest book tier)
         if (playerData.getActiveQuests().size() >= playerData.getMaxActiveQuests()) {
-            player.sendMessage(Text.literal("You have too many active quests! Complete some first."), false);
+            player.sendSystemMessage(Component.literal("You have too many active quests! Complete some first."));
             return false;
         }
 
@@ -204,16 +204,16 @@ public class QuestManager {
         playerData.addActiveQuest(playerQuest);
 
         // Save quest data immediately after accepting quest
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             savePlayerQuestData(serverPlayer);
         }
 
-        player.sendMessage(Text.literal("Quest started: " + quest.getName()), false);
+        player.sendSystemMessage(Component.literal("Quest started: " + quest.getName()));
         return true;
     }
 
     // Update quest progress (called periodically or on specific events)
-    public void updateQuestProgress(PlayerEntity player) {
+    public void updateQuestProgress(Player player) {
         QuestData playerData = getPlayerData(player);
 
         for (Quest quest : playerData.getActiveQuests()) {
@@ -242,36 +242,36 @@ public class QuestManager {
             // Check if quest is now complete
             if (quest.isCompleted() && quest.getStatus() == Quest.QuestStatus.ACTIVE) {
                 quest.setStatus(Quest.QuestStatus.COMPLETED);
-                player.sendMessage(Text.literal("Quest completed: " + quest.getName() + "! Return to turn it in."), false);
+                player.sendSystemMessage(Component.literal("Quest completed: " + quest.getName() + "! Return to turn it in."));
             }
 
             // Check if a COMPLETED quest is no longer complete (e.g., dropped collect items)
             if (!quest.isCompleted() && quest.getStatus() == Quest.QuestStatus.COMPLETED) {
                 quest.setStatus(Quest.QuestStatus.ACTIVE);
-                player.sendMessage(Text.literal("Quest no longer complete: " + quest.getName()).formatted(net.minecraft.util.Formatting.YELLOW), false);
-                player.sendMessage(Text.literal("(Collect quests require items at turn-in)").formatted(net.minecraft.util.Formatting.GRAY), false);
+                player.sendSystemMessage(Component.literal("Quest no longer complete: " + quest.getName()).withStyle(net.minecraft.ChatFormatting.YELLOW));
+                player.sendSystemMessage(Component.literal("(Collect quests require items at turn-in)").withStyle(net.minecraft.ChatFormatting.GRAY));
             }
 
             // Notify player of progress (optional, might be too spammy)
             // if (progressMade) {
-            //     player.sendMessage(Text.literal("Quest progress updated: " + quest.getName()), true);
+            //     player.sendSystemMessage(Component.literal("Quest progress updated: " + quest.getName()));
             // }
         }
     }
 
     // Turn in a completed quest
-    public boolean turnInQuest(PlayerEntity player, String questId) {
+    public boolean turnInQuest(Player player, String questId) {
         QuestData playerData = getPlayerData(player);
         Quest quest = playerData.getActiveQuest(questId);
 
         if (quest == null) {
-            player.sendMessage(Text.literal("You don't have that quest active."), false);
+            player.sendOverlayMessage(Component.literal("You don't have that quest active."));
             return false;
         }
 
         // Null safety check for quest objectives
         if (quest.getObjectives() == null) {
-            player.sendMessage(Text.literal("Quest data error - invalid objectives.").formatted(net.minecraft.util.Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("Quest data error - invalid objectives.").withStyle(net.minecraft.ChatFormatting.RED));
             com.github.hitman20081.dagmod.DagMod.LOGGER.error("Null objectives for quest: " + questId);
             return false;
         }
@@ -282,7 +282,7 @@ public class QuestManager {
         }
 
         if (!quest.isCompleted()) {
-            player.sendMessage(Text.literal("Quest objectives not completed yet!"), false);
+            player.sendSystemMessage(Component.literal("Quest objectives not completed yet!"));
             return false;
         }
 
@@ -290,51 +290,51 @@ public class QuestManager {
         for (QuestObjective objective : quest.getObjectives()) {
             if (objective instanceof CollectObjective collectObj) {
                 if (!collectObj.consumeItems(player)) {
-                    player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
-                    player.sendMessage(Text.literal("Quest requires items to be present at turn-in.").formatted(net.minecraft.util.Formatting.GRAY), false);
+                    player.sendSystemMessage(Component.literal("✗ You don't have the required items in your inventory!").withStyle(net.minecraft.ChatFormatting.RED));
+                    player.sendSystemMessage(Component.literal("Quest requires items to be present at turn-in.").withStyle(net.minecraft.ChatFormatting.GRAY));
                     return false;
                 }
-                player.sendMessage(Text.literal("✓ Consumed quest items").formatted(net.minecraft.util.Formatting.GRAY), false);
+                player.sendSystemMessage(Component.literal("✓ Consumed quest items").withStyle(net.minecraft.ChatFormatting.GRAY));
             } else if (objective instanceof MultiItemCollectObjective multiCollectObj) {
                 if (!multiCollectObj.consumeItems(player)) {
-                    player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
-                    player.sendMessage(Text.literal("Quest requires items to be present at turn-in.").formatted(net.minecraft.util.Formatting.GRAY), false);
+                    player.sendSystemMessage(Component.literal("✗ You don't have the required items in your inventory!").withStyle(net.minecraft.ChatFormatting.RED));
+                    player.sendSystemMessage(Component.literal("Quest requires items to be present at turn-in.").withStyle(net.minecraft.ChatFormatting.GRAY));
                     return false;
                 }
-                player.sendMessage(Text.literal("✓ Consumed quest items").formatted(net.minecraft.util.Formatting.GRAY), false);
+                player.sendSystemMessage(Component.literal("✓ Consumed quest items").withStyle(net.minecraft.ChatFormatting.GRAY));
             } else if (objective instanceof TagCollectObjective tagCollectObj) {
                 if (!tagCollectObj.consumeItems(player)) {
-                    player.sendMessage(Text.literal("✗ You don't have the required items in your inventory!").formatted(net.minecraft.util.Formatting.RED), false);
-                    player.sendMessage(Text.literal("Quest requires: " + tagCollectObj.getDescription()).formatted(net.minecraft.util.Formatting.GRAY), false);
+                    player.sendSystemMessage(Component.literal("✗ You don't have the required items in your inventory!").withStyle(net.minecraft.ChatFormatting.RED));
+                    player.sendSystemMessage(Component.literal("Quest requires: " + tagCollectObj.getDescription()).withStyle(net.minecraft.ChatFormatting.GRAY));
                     return false;
                 }
-                player.sendMessage(Text.literal("✓ Consumed " + tagCollectObj.getRequiredAmount() + " " + tagCollectObj.getDisplayName()).formatted(net.minecraft.util.Formatting.GRAY), false);
+                player.sendSystemMessage(Component.literal("✓ Consumed " + tagCollectObj.getRequiredAmount() + " " + tagCollectObj.getDisplayName()).withStyle(net.minecraft.ChatFormatting.GRAY));
             }
         }
 
         // Give rewards
         boolean allRewardsGiven = true;
         for (QuestReward reward : quest.getRewards()) {
-            if (!reward.giveReward(player, player.getEntityWorld())) {
+            if (!reward.giveReward(player, player.level())) {
                 allRewardsGiven = false;
             }
         }
 
         if (!allRewardsGiven) {
-            player.sendMessage(Text.literal("Some rewards could not be given (inventory full?)"), false);
+            player.sendSystemMessage(Component.literal("Some rewards could not be given (inventory full?)"));
         }
 
         // Mark quest as completed
         quest.setStatus(Quest.QuestStatus.TURNED_IN);
-        playerData.completeQuest(quest, (ServerPlayerEntity) player);
+        playerData.completeQuest(quest, (ServerPlayer) player);
         checkChainCompletion(player, quest.getId());
 
         // Save quest data immediately after completion
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             savePlayerQuestData(serverPlayer);
         }
 
-        player.sendMessage(Text.literal("Quest turned in: " + quest.getName()), false);
+        player.sendSystemMessage(Component.literal("Quest turned in: " + quest.getName()));
 
         // Start next quest in chain if exists
         if (quest.getNextQuestId() != null) {
@@ -347,22 +347,22 @@ public class QuestManager {
     /**
      * Abandon an active quest (removes it without completing)
      */
-    public boolean abandonQuest(PlayerEntity player, String questId) {
+    public boolean abandonQuest(Player player, String questId) {
         QuestData playerData = getPlayerData(player);
         Quest quest = playerData.getActiveQuest(questId);
 
         if (quest == null) {
-            player.sendMessage(Text.literal("You don't have that quest active.").formatted(net.minecraft.util.Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("You don't have that quest active.").withStyle(net.minecraft.ChatFormatting.RED));
             return false;
         }
 
         playerData.removeActiveQuest(questId);
 
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             savePlayerQuestData(serverPlayer);
         }
 
-        player.sendMessage(Text.literal("Quest abandoned: " + quest.getName()).formatted(net.minecraft.util.Formatting.YELLOW), false);
+        player.sendSystemMessage(Component.literal("Quest abandoned: " + quest.getName()).withStyle(net.minecraft.ChatFormatting.YELLOW));
         return true;
     }
 
@@ -371,7 +371,7 @@ public class QuestManager {
         // Use the Quest.copy() method which handles all objective types
         return original.copy();
     }
-    public void updateKillProgress(ServerPlayerEntity player, EntityType<?> killedEntityType) {
+    public void updateKillProgress(ServerPlayer player, EntityType<?> killedEntityType) {
         QuestData playerData = getPlayerData(player);
 
         for (Quest quest : playerData.getActiveQuests()) {
@@ -379,7 +379,7 @@ public class QuestManager {
                 if (objective instanceof KillObjective killObj) {
                     boolean progressMade = killObj.updateProgress(player, killedEntityType);
                     if (progressMade) {
-                        player.sendMessage(Text.literal("Quest progress: " + killObj.getDisplayText().getString()), true);
+                        player.sendSystemMessage(Component.literal("Quest progress: " + killObj.getDisplayText().getString()));
                     }
                 }
             }
@@ -387,19 +387,19 @@ public class QuestManager {
             // Check if quest is now complete
             if (quest.isCompleted() && quest.getStatus() == Quest.QuestStatus.ACTIVE) {
                 quest.setStatus(Quest.QuestStatus.COMPLETED);
-                player.sendMessage(Text.literal("Quest completed: " + quest.getName() + "! Return to turn it in."), false);
+                player.sendSystemMessage(Component.literal("Quest completed: " + quest.getName() + "! Return to turn it in."));
             }
         }
     }
 
     // Get all available quests for a player
-    public List<Quest> getAvailableQuests(PlayerEntity player) {
+    public List<Quest> getAvailableQuests(Player player) {
         QuestData playerData = getPlayerData(player);
         List<Quest> available = new ArrayList<>();
 
         // Get player's class and race
-        String playerClass = com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
-        String playerRace = com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
+        String playerClass = com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+        String playerRace = com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
 
         for (Quest quest : allQuests.values()) {
             // Check class requirement
@@ -413,7 +413,7 @@ public class QuestManager {
             }
 
             // ADD THIS: Check level requirement
-            if (!LevelRequirements.meetsLevelRequirement((ServerPlayerEntity) player, quest)) {
+            if (!LevelRequirements.meetsLevelRequirement((ServerPlayer) player, quest)) {
                 continue; // Skip quests player's level is too low for
             }
 
@@ -461,7 +461,7 @@ public class QuestManager {
     /**
      * Save player's quest data to disk
      */
-    public void savePlayerQuestData(ServerPlayerEntity player) {
+    public void savePlayerQuestData(ServerPlayer player) {
         QuestData questData = getPlayerData(player);
         QuestStorage.saveQuestData(player, questData);
     }
@@ -470,12 +470,12 @@ public class QuestManager {
      * Load player's quest data from disk
      * Called when player joins the server
      */
-    public void loadPlayerQuestData(ServerPlayerEntity player) {
+    public void loadPlayerQuestData(ServerPlayer player) {
         QuestData loadedData = QuestStorage.loadQuestData(player);
 
         if (loadedData != null) {
             // Replace the in-memory data with loaded data
-            playerQuestData.put(player.getUuid(), loadedData);
+            playerQuestData.put(player.getUUID(), loadedData);
         }
         // If null, player is new - keep the default QuestData created by getPlayerData()
     }

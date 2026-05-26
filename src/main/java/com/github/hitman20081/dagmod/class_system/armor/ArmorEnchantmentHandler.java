@@ -1,25 +1,26 @@
 package com.github.hitman20081.dagmod.class_system.armor;
 
 import com.github.hitman20081.dagmod.item.ModItems;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceKey;
 
 import java.util.*;
 
 public class ArmorEnchantmentHandler {
 
-    private record EnchantmentEntry(RegistryKey<Enchantment> enchantment, int level) {}
+    private record EnchantmentEntry(ResourceKey<Enchantment> enchantment, int level) {}
 
     private static final Map<Item, List<EnchantmentEntry>> ITEM_ENCHANTMENTS = new HashMap<>();
 
@@ -389,33 +390,33 @@ public class ArmorEnchantmentHandler {
             EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND
     };
 
-    public static void tick(ServerPlayerEntity player) {
+    public static void tick(ServerPlayer player) {
         for (EquipmentSlot slot : EQUIPMENT_SLOTS) {
-            ItemStack stack = player.getEquippedStack(slot);
+            ItemStack stack = player.getItemBySlot(slot);
             if (stack.isEmpty()) continue;
 
             List<EnchantmentEntry> entries = ITEM_ENCHANTMENTS.get(stack.getItem());
             if (entries == null) continue;
 
             // Check if already enchanted by us
-            NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+            CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if (nbt.getBoolean("dagmod_enchanted").orElse(false)) continue;
 
             // Apply enchantments
-            var enchReg = player.getEntityWorld().getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
-            ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(
-                    stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT));
+            var enchReg = player.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(
+                    stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY));
 
             for (EnchantmentEntry entry : entries) {
-                Optional<RegistryEntry.Reference<Enchantment>> enchEntry = enchReg.getOptional(entry.enchantment());
-                enchEntry.ifPresent(ref -> builder.add(ref, entry.level()));
+                Optional<Holder.Reference<Enchantment>> enchEntry = enchReg.get(entry.enchantment());
+                enchEntry.ifPresent(ref -> builder.set(ref, entry.level()));
             }
 
-            stack.set(DataComponentTypes.ENCHANTMENTS, builder.build());
+            stack.set(DataComponents.ENCHANTMENTS, builder.toImmutable());
 
             // Mark as enchanted
             nbt.putBoolean("dagmod_enchanted", true);
-            stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
         }
     }
 }

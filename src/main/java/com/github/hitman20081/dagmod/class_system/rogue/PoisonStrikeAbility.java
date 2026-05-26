@@ -1,21 +1,21 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.ClipContext;
 
 import java.util.List;
 
@@ -38,12 +38,12 @@ public class PoisonStrikeAbility {
     private static final int POISON_DURATION = 8 * 20; // 8 seconds
     private static final double MELEE_RANGE = 4.0;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Start cooldown
         RogueCooldownManager.startCooldown(player, RogueAbility.POISON_STRIKE);
@@ -52,17 +52,15 @@ public class PoisonStrikeAbility {
         LivingEntity target = findTarget(world, player);
 
         if (target == null) {
-            player.sendMessage(
-                    Text.literal("No target in range!")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("No target in range!")
+                            .withStyle(ChatFormatting.YELLOW));
             return true; // Still use cooldown
         }
 
         // Apply poison effects
-        target.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.POISON,
+        target.addEffect(new MobEffectInstance(
+                MobEffects.POISON,
                 POISON_DURATION,
                 3, // Poison IV (very deadly)
                 false,
@@ -70,8 +68,8 @@ public class PoisonStrikeAbility {
                 true
         ));
 
-        target.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.WEAKNESS,
+        target.addEffect(new MobEffectInstance(
+                MobEffects.WEAKNESS,
                 POISON_DURATION,
                 1, // Weakness II
                 false,
@@ -79,8 +77,8 @@ public class PoisonStrikeAbility {
                 true
         ));
 
-        target.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.SLOWNESS,
+        target.addEffect(new MobEffectInstance(
+                MobEffects.SLOWNESS,
                 POISON_DURATION,
                 0, // Slowness I
                 false,
@@ -89,7 +87,7 @@ public class PoisonStrikeAbility {
         ));
 
         // Deal initial damage
-        target.damage(world, world.getDamageSources().playerAttack(serverPlayer), 4.0f);
+        target.hurt(world.damageSources().playerAttack(serverPlayer), 4.0f);
 
         // VISUAL: Poison particles on target
         for (int i = 0; i < 50; i++) {
@@ -97,7 +95,7 @@ public class PoisonStrikeAbility {
             double offsetY = world.getRandom().nextDouble() * 2.0;
             double offsetZ = (world.getRandom().nextDouble() - 0.5) * 1.0;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.ITEM_SLIME,
                     target.getX() + offsetX,
                     target.getY() + offsetY,
@@ -109,7 +107,7 @@ public class PoisonStrikeAbility {
         }
 
         // Green poison cloud
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.SNEEZE,
                 target.getX(),
                 target.getY() + 1.0,
@@ -120,13 +118,13 @@ public class PoisonStrikeAbility {
         );
 
         // Weapon particles (from player to target)
-        Vec3d start = player.getEyePos();
-        Vec3d end = target.getEntityPos().add(0, target.getHeight() / 2, 0);
-        Vec3d direction = end.subtract(start).normalize();
+        Vec3 start = player.getEyePosition();
+        Vec3 end = target.position().add(0, target.getBbHeight() / 2, 0);
+        Vec3 direction = end.subtract(start).normalize();
 
         for (int i = 0; i < 10; i++) {
-            Vec3d particlePos = start.add(direction.multiply(i * 0.3));
-            world.spawnParticles(
+            Vec3 particlePos = start.add(direction.scale(i * 0.3));
+            world.sendParticles(
                     ParticleTypes.SNEEZE,
                     particlePos.x,
                     particlePos.y,
@@ -142,7 +140,7 @@ public class PoisonStrikeAbility {
             final int tick = t;
             world.getServer().execute(() -> {
                 if (target.isAlive()) {
-                    world.spawnParticles(
+                    world.sendParticles(
                             ParticleTypes.ITEM_SLIME,
                             target.getX(),
                             target.getY() + 1.0,
@@ -161,8 +159,8 @@ public class PoisonStrikeAbility {
                 target.getX(),
                 target.getY(),
                 target.getZ(),
-                SoundEvents.ITEM_BOTTLE_EMPTY,
-                SoundCategory.PLAYERS,
+                SoundEvents.BOTTLE_EMPTY,
+                SoundSource.PLAYERS,
                 1.0f,
                 0.7f
         );
@@ -172,41 +170,39 @@ public class PoisonStrikeAbility {
                 target.getX(),
                 target.getY(),
                 target.getZ(),
-                SoundEvents.ENTITY_SPIDER_HURT,
-                SoundCategory.PLAYERS,
+                SoundEvents.SPIDER_HURT,
+                SoundSource.PLAYERS,
                 0.8f,
                 1.5f
         );
 
         // FEEDBACK
-        serverPlayer.sendMessage(
-                Text.literal("☠ Poison Strike! " + target.getName().getString() + " is poisoned!")
-                        .formatted(Formatting.GREEN, Formatting.BOLD),
-                true
-        );
+        serverPlayer.sendOverlayMessage(
+                Component.literal("☠ Poison Strike! " + target.getName().getString() + " is poisoned!")
+                        .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 
         return true;
     }
 
-    private static LivingEntity findTarget(ServerWorld world, PlayerEntity player) {
+    private static LivingEntity findTarget(ServerLevel world, Player player) {
         // Raycast for entity
-        Vec3d start = player.getEyePos();
-        Vec3d lookVec = player.getRotationVec(1.0f);
-        Vec3d end = start.add(lookVec.multiply(MELEE_RANGE));
+        Vec3 start = player.getEyePosition();
+        Vec3 lookVec = player.getViewVector(1.0f);
+        Vec3 end = start.add(lookVec.scale(MELEE_RANGE));
 
-        HitResult hitResult = world.raycast(new RaycastContext(
+        HitResult hitResult = world.clip(new ClipContext(
                 start, end,
-                RaycastContext.ShapeType.OUTLINE,
-                RaycastContext.FluidHandling.NONE,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
                 player
         ));
 
         // Check for entities along raycast
-        Box searchBox = new Box(start, end).expand(1.0);
-        List<LivingEntity> entities = world.getEntitiesByClass(
+        AABB searchBox = new AABB(start, end).inflate(1.0);
+        List<LivingEntity> entities = world.getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
-                entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
         );
 
         // Find closest entity in crosshair
@@ -217,8 +213,8 @@ public class PoisonStrikeAbility {
             double distance = player.distanceTo(entity);
             if (distance < closestDistance) {
                 // Check if entity is in line of sight
-                Vec3d toEntity = entity.getEntityPos().subtract(start).normalize();
-                double dot = lookVec.dotProduct(toEntity);
+                Vec3 toEntity = entity.position().subtract(start).normalize();
+                double dot = lookVec.dot(toEntity);
                 if (dot > 0.9) { // Must be looking at target
                     closest = entity;
                     closestDistance = distance;

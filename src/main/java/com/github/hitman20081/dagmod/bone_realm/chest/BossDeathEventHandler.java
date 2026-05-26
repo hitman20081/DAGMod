@@ -1,10 +1,10 @@
 package com.github.hitman20081.dagmod.bone_realm.chest;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerLevel;
 
 /**
  * Handles boss death events to spawn treasure chests
@@ -26,7 +26,7 @@ public class BossDeathEventHandler {
      */
     private static void onEntityDeath(LivingEntity entity, DamageSource damageSource) {
         // Only process on server side
-        if (entity.getEntityWorld().isClient()) {
+        if (entity.level().isClientSide()) {
             return;
         }
 
@@ -36,12 +36,12 @@ public class BossDeathEventHandler {
         }
 
         // Get the killer if it was a player
-        PlayerEntity killer = null;
-        if (damageSource.getAttacker() instanceof PlayerEntity player) {
+        Player killer = null;
+        if (damageSource.getEntity() instanceof Player player) {
             killer = player;
         }
 
         // Spawn the chest
-        BossChestSpawner.onBossDeath(entity, killer, entity.getEntityWorld());
+        BossChestSpawner.onBossDeath(entity, killer, entity.level());
     }
 }

@@ -1,16 +1,16 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -32,12 +32,12 @@ public class AssassinateAbility {
     private static final float BACKSTAB_DAMAGE = 20.0f;
     private static final float FRONTSTAB_DAMAGE = 10.0f;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Start cooldown
         RogueCooldownManager.startCooldown(player, RogueAbility.ASSASSINATE);
@@ -46,11 +46,9 @@ public class AssassinateAbility {
         LivingEntity target = findMeleeTarget(player);
 
         if (target == null) {
-            player.sendMessage(
-                    Text.literal("No target in melee range!")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("No target in melee range!")
+                            .withStyle(ChatFormatting.YELLOW));
             return true;
         }
 
@@ -60,7 +58,7 @@ public class AssassinateAbility {
         float damage = isBackstab ? BACKSTAB_DAMAGE : FRONTSTAB_DAMAGE;
 
         // Deal damage
-        target.damage(world, world.getDamageSources().playerAttack(serverPlayer), damage);
+        target.hurt(world.damageSources().playerAttack(serverPlayer), damage);
 
         // VISUAL
         if (isBackstab) {
@@ -69,7 +67,7 @@ public class AssassinateAbility {
                 double offsetY = world.getRandom().nextDouble() * 2.0;
                 double offsetZ = (world.getRandom().nextDouble() - 0.5) * 1.5;
 
-                world.spawnParticles(
+                world.sendParticles(
                         ParticleTypes.DAMAGE_INDICATOR,
                         target.getX() + offsetX,
                         target.getY() + offsetY,
@@ -80,10 +78,10 @@ public class AssassinateAbility {
                 );
             }
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.CRIMSON_SPORE,
                     target.getX(),
-                    target.getY() + target.getHeight() / 2,
+                    target.getY() + target.getBbHeight() / 2,
                     target.getZ(),
                     40,
                     0.5, 0.5, 0.5,
@@ -96,7 +94,7 @@ public class AssassinateAbility {
                 double offsetY = world.getRandom().nextDouble() * 1.5;
                 double offsetZ = (world.getRandom().nextDouble() - 0.5) * 1.0;
 
-                world.spawnParticles(
+                world.sendParticles(
                         ParticleTypes.CRIT,
                         target.getX() + offsetX,
                         target.getY() + offsetY,
@@ -108,7 +106,7 @@ public class AssassinateAbility {
             }
         }
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.SWEEP_ATTACK,
                 target.getX(),
                 target.getY() + 1.0,
@@ -125,8 +123,8 @@ public class AssassinateAbility {
                     target.getX(),
                     target.getY(),
                     target.getZ(),
-                    SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
-                    SoundCategory.PLAYERS,
+                    SoundEvents.PLAYER_ATTACK_CRIT,
+                    SoundSource.PLAYERS,
                     1.5f,
                     0.8f
             );
@@ -136,8 +134,8 @@ public class AssassinateAbility {
                     target.getX(),
                     target.getY(),
                     target.getZ(),
-                    SoundEvents.ENTITY_PLAYER_ATTACK_STRONG,
-                    SoundCategory.PLAYERS,
+                    SoundEvents.PLAYER_ATTACK_STRONG,
+                    SoundSource.PLAYERS,
                     1.0f,
                     0.5f
             );
@@ -147,8 +145,8 @@ public class AssassinateAbility {
                     target.getX(),
                     target.getY(),
                     target.getZ(),
-                    SoundEvents.ENTITY_PLAYER_ATTACK_CRIT,
-                    SoundCategory.PLAYERS,
+                    SoundEvents.PLAYER_ATTACK_CRIT,
+                    SoundSource.PLAYERS,
                     1.0f,
                     1.0f
             );
@@ -156,45 +154,41 @@ public class AssassinateAbility {
 
         // FEEDBACK
         if (isBackstab) {
-            serverPlayer.sendMessage(
-                    Text.literal("🗡 ASSASSINATE! Critical strike on " + target.getName().getString() + "!")
-                            .formatted(Formatting.RED, Formatting.BOLD),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("🗡 ASSASSINATE! Critical strike on " + target.getName().getString() + "!")
+                            .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         } else {
-            serverPlayer.sendMessage(
-                    Text.literal("⚔ Strike! Hit " + target.getName().getString() + " from the front.")
-                            .formatted(Formatting.DARK_RED),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("⚔ Strike! Hit " + target.getName().getString() + " from the front.")
+                            .withStyle(ChatFormatting.DARK_RED));
         }
 
         return true;
     }
 
-    private static LivingEntity findMeleeTarget(PlayerEntity player) {
-        Box searchBox = Box.of(
-                player.getEyePos(),
+    private static LivingEntity findMeleeTarget(Player player) {
+        AABB searchBox = AABB.ofSize(
+                player.getEyePosition(),
                 MELEE_RANGE * 2,
                 MELEE_RANGE * 2,
                 MELEE_RANGE * 2
         );
 
-        List<LivingEntity> entities = player.getEntityWorld().getEntitiesByClass(
+        List<LivingEntity> entities = player.level().getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
-                entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
         );
 
         LivingEntity closest = null;
         double closestDistance = MELEE_RANGE;
-        Vec3d lookVec = player.getRotationVec(1.0f);
+        Vec3 lookVec = player.getViewVector(1.0f);
 
         for (LivingEntity entity : entities) {
             double distance = player.distanceTo(entity);
             if (distance < closestDistance) {
-                Vec3d toEntity = entity.getEntityPos().subtract(player.getEntityPos()).normalize();
-                double dot = lookVec.dotProduct(toEntity);
+                Vec3 toEntity = entity.position().subtract(player.position()).normalize();
+                double dot = lookVec.dot(toEntity);
                 if (dot > 0.7) {
                     closest = entity;
                     closestDistance = distance;
@@ -205,10 +199,10 @@ public class AssassinateAbility {
         return closest;
     }
 
-    private static boolean isAttackingFromBehind(PlayerEntity player, LivingEntity target) {
-        Vec3d targetLookVec = target.getRotationVec(1.0f);
-        Vec3d toPlayer = player.getEntityPos().subtract(target.getEntityPos()).normalize();
-        double dot = targetLookVec.dotProduct(toPlayer);
+    private static boolean isAttackingFromBehind(Player player, LivingEntity target) {
+        Vec3 targetLookVec = target.getViewVector(1.0f);
+        Vec3 toPlayer = player.position().subtract(target.position()).normalize();
+        double dot = targetLookVec.dot(toPlayer);
         return dot > 0;
     }
 }

@@ -1,89 +1,89 @@
 package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.block.ModBlocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ActionResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
 
 public class RaceSelectionTome extends Item {
 
-    public RaceSelectionTome(Settings settings) {
+    public RaceSelectionTome(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        if (!world.isClient()) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        if (!world.isClientSide()) {
             // Display race information
-            player.sendMessage(Text.literal("═══════════════════════════════")
-                    .formatted(Formatting.GOLD), false);
-            player.sendMessage(Text.literal("TOME OF ANCESTRAL HERITAGE")
-                    .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
-            player.sendMessage(Text.literal("═══════════════════════════════")
-                    .formatted(Formatting.GOLD), false);
-            player.sendMessage(Text.empty(), false);
+            player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                    .withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.literal("TOME OF ANCESTRAL HERITAGE")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                    .withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.empty());
 
             // Human
-            player.sendMessage(Text.literal("HUMAN - The Balanced")
-                    .formatted(Formatting.WHITE).formatted(Formatting.BOLD), false);
-            player.sendMessage(Text.literal("• Jack of all trades")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.literal("• Can gather all resources")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.literal("• No special bonuses or penalties")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.empty(), false);
+            player.sendSystemMessage(Component.literal("HUMAN - The Balanced")
+                    .withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("• Jack of all trades")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.literal("• Can gather all resources")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.literal("• No special bonuses or penalties")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.empty());
 
             // Dwarf
-            player.sendMessage(Text.literal("DWARF - The Miner")
-                    .formatted(Formatting.GOLD).formatted(Formatting.BOLD), false);
-            player.sendMessage(Text.literal("• +20% mining speed")
-                    .formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("• +1 heart (extra health)")
-                    .formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("• -5% movement speed")
-                    .formatted(Formatting.RED), false);
-            player.sendMessage(Text.literal("• Expert at mining rare ores")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.empty(), false);
+            player.sendSystemMessage(Component.literal("DWARF - The Miner")
+                    .withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("• +20% mining speed")
+                    .withStyle(ChatFormatting.GREEN));
+            player.sendSystemMessage(Component.literal("• +1 heart (extra health)")
+                    .withStyle(ChatFormatting.GREEN));
+            player.sendSystemMessage(Component.literal("• -5% movement speed")
+                    .withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.literal("• Expert at mining rare ores")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.empty());
 
             // Elf
-            player.sendMessage(Text.literal("ELF - The Ranger")
-                    .formatted(Formatting.GREEN).formatted(Formatting.BOLD), false);
-            player.sendMessage(Text.literal("• +15% movement speed")
-                    .formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("• +0.5 block reach")
-                    .formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("• Expert at woodcutting & hunting")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.empty(), false);
+            player.sendSystemMessage(Component.literal("ELF - The Ranger")
+                    .withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("• +15% movement speed")
+                    .withStyle(ChatFormatting.GREEN));
+            player.sendSystemMessage(Component.literal("• +0.5 block reach")
+                    .withStyle(ChatFormatting.GREEN));
+            player.sendSystemMessage(Component.literal("• Expert at woodcutting & hunting")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.empty());
 
             // Orc
-            player.sendMessage(Text.literal("ORC - The Warrior")
-                    .formatted(Formatting.DARK_RED).formatted(Formatting.BOLD), false);
-            player.sendMessage(Text.literal("• +15% melee attack damage")
-                    .formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("• +2 hearts (extra health)")
-                    .formatted(Formatting.GREEN), false);
-            player.sendMessage(Text.literal("• Expert at hunting & fishing")
-                    .formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.empty(), false);
+            player.sendSystemMessage(Component.literal("ORC - The Warrior")
+                    .withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("• +15% melee attack damage")
+                    .withStyle(ChatFormatting.GREEN));
+            player.sendSystemMessage(Component.literal("• +2 hearts (extra health)")
+                    .withStyle(ChatFormatting.GREEN));
+            player.sendSystemMessage(Component.literal("• Expert at hunting & fishing")
+                    .withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.empty());
 
-            player.sendMessage(Text.literal("═══════════════════════════════")
-                    .formatted(Formatting.GOLD), false);
-            player.sendMessage(Text.literal("Four heritage tokens are in your inventory.")
-                    .formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("Right-click the Altar of Heritage with your chosen token.")
-                    .formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("═══════════════════════════════")
-                    .formatted(Formatting.GOLD), false);
+            player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                    .withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.literal("Four heritage tokens are in your inventory.")
+                    .withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.literal("Right-click the Altar of Heritage with your chosen token.")
+                    .withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                    .withStyle(ChatFormatting.GOLD));
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

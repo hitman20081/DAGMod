@@ -2,29 +2,29 @@ package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.client.QuestBookClientHandler;
 import com.github.hitman20081.dagmod.quest.QuestData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 public class QuestBookItem extends Item {
     private final QuestData.QuestBookTier tier;
 
-    public QuestBookItem(Settings settings, QuestData.QuestBookTier tier) {
+    public QuestBookItem(Properties settings, QuestData.QuestBookTier tier) {
         super(settings);
         this.tier = tier;
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        if (world.isClient()) {
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
+        if (world.isClientSide()) {
             // Call client-side handler through a proxy
             QuestBookClientHandler.openQuestBook(tier);
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     public QuestData.QuestBookTier getTier() {
@@ -32,23 +32,23 @@ public class QuestBookItem extends Item {
     }
 
     @Override
-    public Text getName(ItemStack stack) {
-        return Text.literal(tier.getDisplayName());
+    public Component getName(ItemStack stack) {
+        return Component.literal(tier.getDisplayName());
     }
 
-    public static QuestBookItem createNovice(Settings settings) {
+    public static QuestBookItem createNovice(Properties settings) {
         return new QuestBookItem(settings, QuestData.QuestBookTier.NOVICE);
     }
 
-    public static QuestBookItem createApprentice(Settings settings) {
+    public static QuestBookItem createApprentice(Properties settings) {
         return new QuestBookItem(settings, QuestData.QuestBookTier.APPRENTICE);
     }
 
-    public static QuestBookItem createExpert(Settings settings) {
+    public static QuestBookItem createExpert(Properties settings) {
         return new QuestBookItem(settings, QuestData.QuestBookTier.EXPERT);
     }
 
-    public static QuestBookItem createMaster(Settings settings) {
+    public static QuestBookItem createMaster(Properties settings) {
         return new QuestBookItem(settings, QuestData.QuestBookTier.MASTER);
     }
 }

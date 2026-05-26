@@ -8,11 +8,11 @@ import com.github.hitman20081.dagmod.block.QuestBlock;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,25 +20,25 @@ import java.util.UUID;
 
 public class QuestCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("quest")
-                .then(CommandManager.literal("skip")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("quest")
+                .then(Commands.literal("skip")
                         .executes(QuestCommand::skipQuest))
-                .then(CommandManager.literal("list")
+                .then(Commands.literal("list")
                         .executes(QuestCommand::listQuests))
-                .then(CommandManager.literal("abandon")
-                        .then(CommandManager.argument("questId", StringArgumentType.string())
+                .then(Commands.literal("abandon")
+                        .then(Commands.argument("questId", StringArgumentType.string())
                                 .executes(QuestCommand::abandonQuest)))
-                .then(CommandManager.literal("abandonall")
+                .then(Commands.literal("abandonall")
                         .executes(QuestCommand::abandonAllQuests))
         );
     }
 
-    private static int skipQuest(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    private static int skipQuest(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
         if (player == null) return 0;
 
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getUUID();
 
         // Increment index and return to browse mode
         Integer currentIndex = QuestBlock.playerSelectedIndex.get(playerId);
@@ -48,17 +48,17 @@ public class QuestCommand {
             // so just let it increment naturally
             QuestBlock.playerSelectedIndex.put(playerId, nextIndex);
             QuestBlock.playerMenuState.put(playerId, QuestBlock.MenuState.BROWSE_QUESTS);
-            player.sendMessage(Text.literal("Skipping to next quest...").formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal("Right-click the Quest Block to continue browsing.").formatted(Formatting.GRAY), false);
+            player.sendSystemMessage(Component.literal("Skipping to next quest...").withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.literal("Right-click the Quest Block to continue browsing.").withStyle(ChatFormatting.GRAY));
         } else {
-            player.sendMessage(Text.literal("You're not currently browsing quests!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("You're not currently browsing quests!").withStyle(ChatFormatting.RED));
         }
 
         return 1;
     }
 
-    private static int listQuests(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    private static int listQuests(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
         if (player == null) return 0;
 
         QuestManager manager = QuestManager.getInstance();
@@ -69,44 +69,44 @@ public class QuestCommand {
 
         List<Quest> activeQuests = new ArrayList<>(playerData.getActiveQuests());
 
-        player.sendMessage(Text.literal("=== Active Quests (" + activeQuests.size() + "/" + playerData.getMaxActiveQuests() + ") ===").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal("=== Active Quests (" + activeQuests.size() + "/" + playerData.getMaxActiveQuests() + ") ===").withStyle(ChatFormatting.GOLD));
 
         if (activeQuests.isEmpty()) {
-            player.sendMessage(Text.literal("No active quests.").formatted(Formatting.GRAY), false);
+            player.sendSystemMessage(Component.literal("No active quests.").withStyle(ChatFormatting.GRAY));
         } else {
             for (Quest quest : activeQuests) {
                 boolean completed = quest.isCompleted();
-                Formatting nameColor = completed ? Formatting.GREEN : Formatting.WHITE;
+                ChatFormatting nameColor = completed ? ChatFormatting.GREEN : ChatFormatting.WHITE;
                 String status = completed ? " [COMPLETE]" : "";
 
-                player.sendMessage(Text.literal(""), false);
-                player.sendMessage(Text.literal(quest.getName() + " (" + quest.getDifficulty().name() + ")" + status)
-                        .formatted(nameColor), false);
-                player.sendMessage(Text.literal("  ID: " + quest.getId()).formatted(Formatting.DARK_GRAY), false);
+                player.sendSystemMessage(Component.literal(""));
+                player.sendSystemMessage(Component.literal(quest.getName() + " (" + quest.getDifficulty().name() + ")" + status)
+                        .withStyle(nameColor));
+                player.sendSystemMessage(Component.literal("  ID: " + quest.getId()).withStyle(ChatFormatting.DARK_GRAY));
 
                 if (quest.getObjectives() != null) {
                     for (QuestObjective obj : quest.getObjectives()) {
-                        Formatting objColor = obj.isCompleted() ? Formatting.GREEN : Formatting.RED;
-                        player.sendMessage(Text.literal("  " + (obj.isCompleted() ? "\u2713" : "\u2717") + " " +
+                        ChatFormatting objColor = obj.isCompleted() ? ChatFormatting.GREEN : ChatFormatting.RED;
+                        player.sendSystemMessage(Component.literal("  " + (obj.isCompleted() ? "\u2713" : "\u2717") + " " +
                                 obj.getDescription() + " (" + obj.getCurrentProgress() + "/" + obj.getRequiredProgress() + ")")
-                                .formatted(objColor), false);
+                                .withStyle(objColor));
                     }
                 } else {
-                    player.sendMessage(Text.literal("  [No objectives - quest data may be corrupted]").formatted(Formatting.RED), false);
+                    player.sendSystemMessage(Component.literal("  [No objectives - quest data may be corrupted]").withStyle(ChatFormatting.RED));
                 }
             }
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Completed: " + playerData.getTotalQuestsCompleted() + " | Tier: " + playerData.getQuestBookTier().getDisplayName()).formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("Use /quest abandon <questId> to drop a quest.").formatted(Formatting.DARK_GRAY), false);
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Completed: " + playerData.getTotalQuestsCompleted() + " | Tier: " + playerData.getQuestBookTier().getDisplayName()).withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("Use /quest abandon <questId> to drop a quest.").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.literal("===================").withStyle(ChatFormatting.GOLD));
 
         return 1;
     }
 
-    private static int abandonQuest(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    private static int abandonQuest(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
         if (player == null) return 0;
 
         String questId = StringArgumentType.getString(context, "questId");
@@ -116,8 +116,8 @@ public class QuestCommand {
         return 1;
     }
 
-    private static int abandonAllQuests(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    private static int abandonAllQuests(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
         if (player == null) return 0;
 
         QuestManager manager = QuestManager.getInstance();
@@ -129,7 +129,7 @@ public class QuestCommand {
         }
 
         if (questIds.isEmpty()) {
-            player.sendMessage(Text.literal("No active quests to abandon.").formatted(Formatting.GRAY), false);
+            player.sendSystemMessage(Component.literal("No active quests to abandon.").withStyle(ChatFormatting.GRAY));
             return 1;
         }
 
@@ -137,7 +137,7 @@ public class QuestCommand {
             manager.abandonQuest(player, questId);
         }
 
-        player.sendMessage(Text.literal("All " + questIds.size() + " active quests abandoned.").formatted(Formatting.YELLOW), false);
+        player.sendSystemMessage(Component.literal("All " + questIds.size() + " active quests abandoned.").withStyle(ChatFormatting.YELLOW));
         return 1;
     }
 }

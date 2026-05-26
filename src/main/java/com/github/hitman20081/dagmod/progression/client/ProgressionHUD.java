@@ -1,11 +1,12 @@
 package com.github.hitman20081.dagmod.progression.client;
 
 import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.network.chat.Component;
 
 /**
  * Renders the progression HUD on screen
@@ -61,23 +62,23 @@ public class ProgressionHUD {
      * Register the HUD renderer
      */
     public static void register() {
-        HudRenderCallback.EVENT.register(ProgressionHUD::render);
+        HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "progression_hud"), ProgressionHUD::render);
     }
 
     /**
      * Render the progression HUD
      */
-    private static void render(DrawContext context, RenderTickCounter tickCounter) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    private static void render(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
+        Minecraft client = Minecraft.getInstance();
 
-        if (client.options.hudHidden) return;
+        if (client.options.hideGui) return;
         if (client.player == null) return;
 
         PlayerProgressionData data = ClientProgressionData.getLocalPlayerData();
         if (data == null) return;
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int screenHeight = client.getWindow().getScaledHeight();
+        int screenWidth = client.getWindow().getGuiScaledWidth();
+        int screenHeight = client.getWindow().getGuiScaledHeight();
 
         // Calculate position based on setting
         int x, y;
@@ -117,7 +118,7 @@ public class ProgressionHUD {
     /**
      * Render centered style (for above hotbar)
      */
-    private static void renderCentered(DrawContext context, MinecraftClient client, int x, int y, PlayerProgressionData data) {
+    private static void renderCentered(GuiGraphicsExtractor context, Minecraft client, int x, int y, PlayerProgressionData data) {
         // Draw background if enabled
         if (backgroundEnabled) {
             context.fill(x - 2, y - 15, x + BAR_WIDTH + 2, y + BAR_HEIGHT + 2, currentBackgroundColor);
@@ -125,9 +126,9 @@ public class ProgressionHUD {
 
         // Level text (gold, left side)
         String levelText = "Level " + data.getCurrentLevel();
-        context.drawText(
-                client.textRenderer,
-                Text.literal(levelText),
+        context.text(
+                client.font,
+                Component.literal(levelText),
                 x,
                 y - 12,
                 COLOR_TEXT_LEVEL,
@@ -145,10 +146,10 @@ public class ProgressionHUD {
                     data.getProgressPercentage());
         }
 
-        int xpTextWidth = client.textRenderer.getWidth(xpText);
-        context.drawText(
-                client.textRenderer,
-                Text.literal(xpText),
+        int xpTextWidth = client.font.width(xpText);
+        context.text(
+                client.font,
+                Component.literal(xpText),
                 x + BAR_WIDTH - xpTextWidth,
                 y - 12,
                 COLOR_TEXT_XP,
@@ -161,7 +162,7 @@ public class ProgressionHUD {
     /**
      * Render compact style (for corners)
      */
-    private static void renderCompact(DrawContext context, MinecraftClient client, int x, int y, PlayerProgressionData data) {
+    private static void renderCompact(GuiGraphicsExtractor context, Minecraft client, int x, int y, PlayerProgressionData data) {
         // Calculate background size
         int bgWidth = BAR_WIDTH + 4;
         int bgHeight = 26;  // Reduced from 32
@@ -173,9 +174,9 @@ public class ProgressionHUD {
 
         // Level text (gold color)
         String levelText = "Level " + data.getCurrentLevel();
-        context.drawText(
-                client.textRenderer,
-                Text.literal(levelText),
+        context.text(
+                client.font,
+                Component.literal(levelText),
                 x + 2,
                 y + 2,
                 COLOR_TEXT_LEVEL,
@@ -193,9 +194,9 @@ public class ProgressionHUD {
                     data.getProgressPercentage());
         }
 
-        context.drawText(
-                client.textRenderer,
-                Text.literal(xpText),
+        context.text(
+                client.font,
+                Component.literal(xpText),
                 x + 2,
                 y + 12,
                 COLOR_TEXT_XP,
@@ -209,7 +210,7 @@ public class ProgressionHUD {
     /**
      * Helper method to draw a border
      */
-    private static void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+    private static void drawBorder(GuiGraphicsExtractor context, int x, int y, int width, int height, int color) {
         context.fill(x, y, x + width, y + 1, color); // Top
         context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
         context.fill(x, y, x + 1, y + height, color); // Left
@@ -219,7 +220,7 @@ public class ProgressionHUD {
     /**
      * Render the XP progress bar
      */
-    private static void renderXPBar(DrawContext context, int x, int y, PlayerProgressionData data) {
+    private static void renderXPBar(GuiGraphicsExtractor context, int x, int y, PlayerProgressionData data) {
         // Draw background
         context.fill(x, y, x + BAR_WIDTH, y + BAR_HEIGHT, COLOR_BAR_BACKGROUND);
 

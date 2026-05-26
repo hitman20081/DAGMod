@@ -1,10 +1,10 @@
 package com.github.hitman20081.dagmod.mixin;
 
 import com.github.hitman20081.dagmod.event.VampireDustHandler;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LifestealMixin {
 
     @Inject(method = "damage", at = @At("RETURN"))
-    private void onDamageReturn(ServerWorld world, DamageSource source, float amount,
+    private void onDamageReturn(ServerLevel world, DamageSource source, float amount,
                                 CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue() != Boolean.TRUE) return;
 
-        if (source.getAttacker() instanceof ServerPlayerEntity attacker) {
-            if (VampireDustHandler.isActive(attacker.getUuid(), world.getTime())) {
+        if (source.getEntity() instanceof ServerPlayer attacker) {
+            if (VampireDustHandler.isActive(attacker.getUUID(), world.getGameTime())) {
                 attacker.heal(Math.min(amount * 0.1f, 5.0f));
             }
         }

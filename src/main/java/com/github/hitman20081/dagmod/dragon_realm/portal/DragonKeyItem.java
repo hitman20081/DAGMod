@@ -1,19 +1,19 @@
 package com.github.hitman20081.dagmod.dragon_realm.portal;
 
 import com.github.hitman20081.dagmod.dragon_realm.DragonRealmRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -27,49 +27,43 @@ import java.util.List;
  */
 public class DragonKeyItem extends Item {
 
-    public DragonKeyItem(Settings settings) {
+    public DragonKeyItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getBlockPos();
-        PlayerEntity player = context.getPlayer();
+    public InteractionResult useOn(UseOnContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
 
         // Check if clicked on Obsidian Portal Frame
         if (!(world.getBlockState(pos).getBlock() instanceof ObsidianPortalFrameBlock)) {
-            if (player != null && !world.isClient()) {
-                player.sendMessage(
-                        Text.literal("The Dragon Key must be used on an Obsidian Portal Frame!")
-                                .formatted(Formatting.RED),
-                        true
-                );
+            if (player != null && !world.isClientSide()) {
+                player.sendOverlayMessage(
+                        Component.literal("The Dragon Key must be used on an Obsidian Portal Frame!")
+                                .withStyle(ChatFormatting.RED));
             }
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Server-side only for actual portal creation
-        if (!world.isClient()) {
-            ServerWorld serverWorld = (ServerWorld) world;
+        if (!world.isClientSide()) {
+            ServerLevel serverWorld = (ServerLevel) world;
 
             // Detect portal frame
             DragonPortalFrameDetector detector = new DragonPortalFrameDetector(world, pos);
 
             if (!detector.isValidFrame()) {
                 if (player != null) {
-                    player.sendMessage(
-                            Text.literal("Invalid portal frame! Must be a 7x7 frame of Obsidian Portal Frame blocks with a 5x5 opening.")
-                                    .formatted(Formatting.RED),
-                            true
-                    );
-                    player.sendMessage(
-                            Text.literal("Frame must be made entirely of Obsidian Portal Frame blocks.")
-                                    .formatted(Formatting.GRAY),
-                            true
-                    );
+                    player.sendOverlayMessage(
+                            Component.literal("Invalid portal frame! Must be a 7x7 frame of Obsidian Portal Frame blocks with a 5x5 opening.")
+                                    .withStyle(ChatFormatting.RED));
+                    player.sendOverlayMessage(
+                            Component.literal("Frame must be made entirely of Obsidian Portal Frame blocks.")
+                                    .withStyle(ChatFormatting.GRAY));
                 }
-                return ActionResult.FAIL;
+                return InteractionResult.FAIL;
             }
 
             // Valid frame found! Activate portal
@@ -77,20 +71,20 @@ public class DragonKeyItem extends Item {
 
             // Consume the key (single use)
             if (player != null && !player.isCreative()) {
-                context.getStack().decrement(1);
+                context.getItemInHand().shrink(1);
             }
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         // Client-side: just show we're attempting to use it
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     /**
      * Activates the portal by filling interior with portal blocks
      */
-    private void activatePortal(ServerWorld world, DragonPortalFrameDetector detector, PlayerEntity player) {
+    private void activatePortal(ServerLevel world, DragonPortalFrameDetector detector, Player player) {
         List<BlockPos> interiorPositions = detector.getInteriorPositions();
         Direction.Axis axis = detector.getAxis();
 
@@ -101,7 +95,7 @@ public class DragonKeyItem extends Item {
         // Check if portal block is registered
         if (DragonRealmRegistry.DRAGON_REALM_PORTAL == null) {
             if (player != null) {
-                player.sendMessage(Text.literal("ERROR: Portal block is not registered!").formatted(Formatting.RED), false);
+                player.sendSystemMessage(Component.literal("ERROR: Portal block is not registered!").withStyle(ChatFormatting.RED));
             }
             System.err.println("DragonRealmRegistry.DRAGON_REALM_PORTAL is NULL!");
             return;
@@ -112,26 +106,26 @@ public class DragonKeyItem extends Item {
         Direction.Axis portalAxis = (axis == Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X;
 
         for (BlockPos portalPos : interiorPositions) {
-            world.setBlockState(
+            world.setBlock(
                     portalPos,
-                    DragonRealmRegistry.DRAGON_REALM_PORTAL.getDefaultState()
-                            .with(DragonRealmPortalBlock.AXIS, portalAxis),
+                    DragonRealmRegistry.DRAGON_REALM_PORTAL.defaultBlockState()
+                            .setValue(DragonRealmPortalBlock.AXIS, portalAxis),
                     3 // Notify neighbors and clients
             );
         }
 
         // Visual and audio effects
-        BlockPos centerPos = detector.getBottomLeft().offset(
+        BlockPos centerPos = detector.getBottomLeft().relative(
                 axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST, 1
-        ).up(1);
+        ).above(1);
 
         // Epic particle burst
         for (int i = 0; i < 50; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 2;
-            double offsetY = (world.random.nextDouble() - 0.5) * 2;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 2;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 2;
+            double offsetY = (world.getRandom().nextDouble() - 0.5) * 2;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 2;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.ENCHANT,
                     centerPos.getX() + offsetX,
                     centerPos.getY() + offsetY,
@@ -141,7 +135,7 @@ public class DragonKeyItem extends Item {
                     0.05
             );
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.END_ROD,
                     centerPos.getX() + offsetX,
                     centerPos.getY() + offsetY,
@@ -158,8 +152,8 @@ public class DragonKeyItem extends Item {
                 centerPos.getX(),
                 centerPos.getY(),
                 centerPos.getZ(),
-                SoundEvents.BLOCK_PORTAL_TRIGGER,
-                SoundCategory.BLOCKS,
+                SoundEvents.PORTAL_TRIGGER,
+                SoundSource.BLOCKS,
                 1.0f,
                 0.8f
         );
@@ -169,29 +163,25 @@ public class DragonKeyItem extends Item {
                 centerPos.getX(),
                 centerPos.getY(),
                 centerPos.getZ(),
-                SoundEvents.BLOCK_END_PORTAL_SPAWN,
-                SoundCategory.BLOCKS,
+                SoundEvents.END_PORTAL_SPAWN,
+                SoundSource.BLOCKS,
                 0.8f,
                 1.2f
         );
 
         // Success message
         if (player != null) {
-            player.sendMessage(
-                    Text.literal("✦ The Dragon Realm portal has been opened! ✦")
-                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
-                    false
-            );
-            player.sendMessage(
-                    Text.literal("Step through to face the Dragon Guardian...")
-                            .formatted(Formatting.GRAY, Formatting.ITALIC),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("✦ The Dragon Realm portal has been opened! ✦")
+                            .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
+            player.sendSystemMessage(
+                    Component.literal("Step through to face the Dragon Guardian...")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
         }
     }
 
     @Override
-    public boolean hasGlint(net.minecraft.item.ItemStack stack) {
+    public boolean isFoil(net.minecraft.world.item.ItemStack stack) {
         // Make the key sparkle
         return true;
     }

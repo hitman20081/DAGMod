@@ -8,23 +8,23 @@ import com.github.hitman20081.dagmod.event.LastStandHandler;
 import com.github.hitman20081.dagmod.event.ShadowBlendHandler;
 import com.github.hitman20081.dagmod.event.SpellModifierHandler;
 import com.github.hitman20081.dagmod.event.VampireDustHandler;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -32,245 +32,245 @@ public class ConsumableItem extends Item {
     private final ConsumableType type;
 
     public enum ConsumableType {
-        MANA_CRYSTAL("Mana Crystal", Formatting.AQUA),
-        ENERGY_TONIC("Energy Tonic", Formatting.DARK_PURPLE),
-        COOLDOWN_ELIXIR("Cooldown Elixir", Formatting.GOLD),
-        VAMPIRE_DUST("Vampire Dust", Formatting.RED),
-        PHANTOM_DUST("Phantom Dust", Formatting.GRAY),
-        SPELL_ECHO("Spell Echo", Formatting.LIGHT_PURPLE),
-        BATTLE_FRENZY("Battle Frenzy", Formatting.DARK_RED),
-        SHADOW_BLEND("Shadow Blend", Formatting.DARK_GRAY),
-        FORTUNE_DUST("Fortune Dust", Formatting.GREEN),
-        FEATHERFALL_POWDER("Featherfall Powder", Formatting.WHITE),
-        LAST_STAND_POWDER("Last Stand Powder", Formatting.YELLOW),
-        TIME_DISTORTION("Time Distortion", Formatting.DARK_AQUA),
-        OVERCHARGE_DUST("Overcharge Dust", Formatting.BLUE),
-        TITAN_STRENGTH("Titan's Strength", Formatting.DARK_RED),
-        PERFECT_DODGE("Perfect Dodge", Formatting.WHITE);
+        MANA_CRYSTAL("Mana Crystal", ChatFormatting.AQUA),
+        ENERGY_TONIC("Energy Tonic", ChatFormatting.DARK_PURPLE),
+        COOLDOWN_ELIXIR("Cooldown Elixir", ChatFormatting.GOLD),
+        VAMPIRE_DUST("Vampire Dust", ChatFormatting.RED),
+        PHANTOM_DUST("Phantom Dust", ChatFormatting.GRAY),
+        SPELL_ECHO("Spell Echo", ChatFormatting.LIGHT_PURPLE),
+        BATTLE_FRENZY("Battle Frenzy", ChatFormatting.DARK_RED),
+        SHADOW_BLEND("Shadow Blend", ChatFormatting.DARK_GRAY),
+        FORTUNE_DUST("Fortune Dust", ChatFormatting.GREEN),
+        FEATHERFALL_POWDER("Featherfall Powder", ChatFormatting.WHITE),
+        LAST_STAND_POWDER("Last Stand Powder", ChatFormatting.YELLOW),
+        TIME_DISTORTION("Time Distortion", ChatFormatting.DARK_AQUA),
+        OVERCHARGE_DUST("Overcharge Dust", ChatFormatting.BLUE),
+        TITAN_STRENGTH("Titan's Strength", ChatFormatting.DARK_RED),
+        PERFECT_DODGE("Perfect Dodge", ChatFormatting.WHITE);
 
         private final String displayName;
-        private final Formatting color;
+        private final ChatFormatting color;
 
-        ConsumableType(String displayName, Formatting color) {
+        ConsumableType(String displayName, ChatFormatting color) {
             this.displayName = displayName;
             this.color = color;
         }
 
         public String getDisplayName() { return displayName; }
-        public Formatting getColor() { return color; }
+        public ChatFormatting getColor() { return color; }
     }
 
-    public ConsumableItem(Settings settings, ConsumableType type) {
+    public ConsumableItem(Properties settings, ConsumableType type) {
         super(settings);
         this.type = type;
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getStackInHand(hand);
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
 
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         boolean success = applyEffect(world, serverPlayer, playerClass);
 
         if (success) {
-            stack.decrement(1);
+            stack.shrink(1);
 
-            world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_LEVELUP,
-                    SoundCategory.PLAYERS, 0.5f, 1.5f);
+            world.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP,
+                    SoundSource.PLAYERS, 0.5f, 1.5f);
 
-            if (world instanceof ServerWorld serverWorld) {
+            if (world instanceof ServerLevel serverWorld) {
                 spawnParticles(serverWorld, player);
             }
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
     }
 
-    private boolean applyEffect(World world, ServerPlayerEntity player, String playerClass) {
+    private boolean applyEffect(Level world, ServerPlayer player, String playerClass) {
         switch (type) {
             case MANA_CRYSTAL -> {
                 if (!"Mage".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Mages can use Mana Crystals!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Mages can use Mana Crystals!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
                 com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
                         com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
                 manaData.addMana(50);
-                player.sendMessage(Text.literal("✦ Restored 50 Mana! ✦")
-                        .formatted(Formatting.AQUA), true);
+                player.sendOverlayMessage(Component.literal("✦ Restored 50 Mana! ✦")
+                        .withStyle(ChatFormatting.AQUA));
                 return true;
             }
 
             case ENERGY_TONIC -> {
                 if (!"Rogue".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Rogues can use Energy Tonics!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Rogues can use Energy Tonics!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
                 com.github.hitman20081.dagmod.class_system.rogue.EnergyManager.addEnergy(player, 50);
-                player.sendMessage(Text.literal("⚡ Restored 50 Energy! ⚡")
-                        .formatted(Formatting.DARK_PURPLE), true);
+                player.sendOverlayMessage(Component.literal("⚡ Restored 50 Energy! ⚡")
+                        .withStyle(ChatFormatting.DARK_PURPLE));
                 return true;
             }
 
             case COOLDOWN_ELIXIR -> {
                 if (!"Warrior".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Warriors can use Cooldown Elixirs!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Warriors can use Cooldown Elixirs!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
                 CooldownManager.reduceAllCooldowns(player, 600);
-                player.sendMessage(Text.literal("⏰ Cooldown reduction active! ⏰")
-                        .formatted(Formatting.GOLD), true);
+                player.sendOverlayMessage(Component.literal("⏰ Cooldown reduction active! ⏰")
+                        .withStyle(ChatFormatting.GOLD));
                 return true;
             }
 
             case VAMPIRE_DUST -> {
-                if (!(world instanceof ServerWorld serverWorld)) return false;
-                VampireDustHandler.activate(player.getUuid(), serverWorld.getTime());
-                player.sendMessage(Text.literal("🩸 Vampire Dust active for 20 seconds! 🩸")
-                        .formatted(Formatting.RED), true);
+                if (!(world instanceof ServerLevel serverWorld)) return false;
+                VampireDustHandler.activate(player.getUUID(), serverWorld.getGameTime());
+                player.sendOverlayMessage(Component.literal("🩸 Vampire Dust active for 20 seconds! 🩸")
+                        .withStyle(ChatFormatting.RED));
                 return true;
             }
 
             case PHANTOM_DUST -> {
-                if (!(world instanceof ServerWorld serverWorld)) return false;
-                DodgeHandler.activate(player.getUuid(), 0.5f, serverWorld.getTime(), 300);
-                player.sendMessage(Text.literal("👻 Phantom Dust active for 15 seconds! 👻")
-                        .formatted(Formatting.GRAY), true);
+                if (!(world instanceof ServerLevel serverWorld)) return false;
+                DodgeHandler.activate(player.getUUID(), 0.5f, serverWorld.getGameTime(), 300);
+                player.sendOverlayMessage(Component.literal("👻 Phantom Dust active for 15 seconds! 👻")
+                        .withStyle(ChatFormatting.GRAY));
                 return true;
             }
 
             case SPELL_ECHO -> {
                 if (!"Mage".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Mages can use Spell Echo!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Mages can use Spell Echo!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
-                SpellModifierHandler.activateSpellEcho(player.getUuid());
-                player.sendMessage(Text.literal("✨ Next spell will cast twice! ✨")
-                        .formatted(Formatting.LIGHT_PURPLE), true);
+                SpellModifierHandler.activateSpellEcho(player.getUUID());
+                player.sendOverlayMessage(Component.literal("✨ Next spell will cast twice! ✨")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 return true;
             }
 
             case BATTLE_FRENZY -> {
                 if (!"Warrior".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Warriors can use Battle Frenzy!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Warriors can use Battle Frenzy!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 300, 1));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 300, 1));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 300, 2));
-                player.sendMessage(Text.literal("⚔ Battle Frenzy active for 15 seconds! ⚔")
-                        .formatted(Formatting.DARK_RED), true);
+                player.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 300, 1));
+                player.addEffect(new MobEffectInstance(MobEffects.SPEED, 300, 1));
+                player.addEffect(new MobEffectInstance(MobEffects.HASTE, 300, 2));
+                player.sendOverlayMessage(Component.literal("⚔ Battle Frenzy active for 15 seconds! ⚔")
+                        .withStyle(ChatFormatting.DARK_RED));
                 return true;
             }
 
             case SHADOW_BLEND -> {
                 if (!"Rogue".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Rogues can use Shadow Blend!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Rogues can use Shadow Blend!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 6000, 0));
-                ShadowBlendHandler.activateShadowBlend(player.getUuid());
-                player.sendMessage(Text.literal("🌑 Shadow Blend active! 🌑")
-                        .formatted(Formatting.DARK_GRAY), true);
+                player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 6000, 0));
+                ShadowBlendHandler.activateShadowBlend(player.getUUID());
+                player.sendOverlayMessage(Component.literal("🌑 Shadow Blend active! 🌑")
+                        .withStyle(ChatFormatting.DARK_GRAY));
                 return true;
             }
 
             case FORTUNE_DUST -> {
-                FortuneDustHandler.activateFortuneDust(player.getUuid(), 10);
-                player.sendMessage(Text.literal("💎 Fortune Dust active for next 10 blocks! 💎")
-                        .formatted(Formatting.GREEN), true);
+                FortuneDustHandler.activateFortuneDust(player.getUUID(), 10);
+                player.sendOverlayMessage(Component.literal("💎 Fortune Dust active for next 10 blocks! 💎")
+                        .withStyle(ChatFormatting.GREEN));
                 return true;
             }
 
             case FEATHERFALL_POWDER -> {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 1200, 0));
-                player.sendMessage(Text.literal("🪶 Featherfall active for 60 seconds! 🪶")
-                        .formatted(Formatting.WHITE), true);
+                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 1200, 0));
+                player.sendOverlayMessage(Component.literal("🪶 Featherfall active for 60 seconds! 🪶")
+                        .withStyle(ChatFormatting.WHITE));
                 return true;
             }
 
             case LAST_STAND_POWDER -> {
-                LastStandHandler.activate(player.getUuid());
-                player.sendMessage(Text.literal("✝ Last Stand ready! You will survive one lethal hit! ✝")
-                        .formatted(Formatting.YELLOW), true);
+                LastStandHandler.activate(player.getUUID());
+                player.sendOverlayMessage(Component.literal("✝ Last Stand ready! You will survive one lethal hit! ✝")
+                        .withStyle(ChatFormatting.YELLOW));
                 return true;
             }
 
             case TIME_DISTORTION -> {
-                if (!(world instanceof ServerWorld serverWorld)) return false;
+                if (!(world instanceof ServerLevel serverWorld)) return false;
                 // Speed II for self
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 1));
+                player.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 1));
                 // Slowness IV on nearby enemies within 10 blocks
-                Box searchBox = Box.of(player.getEntityPos(), 20, 20, 20);
-                List<LivingEntity> nearbyEnemies = serverWorld.getEntitiesByClass(
+                AABB searchBox = AABB.ofSize(player.position(), 20, 20, 20);
+                List<LivingEntity> nearbyEnemies = serverWorld.getEntitiesOfClass(
                         LivingEntity.class,
                         searchBox,
-                        e -> e != player && e.isAlive() && player.squaredDistanceTo(e) <= 100
+                        e -> e != player && e.isAlive() && player.distanceToSqr(e) <= 100
                 );
                 for (LivingEntity enemy : nearbyEnemies) {
-                    enemy.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 3));
+                    enemy.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200, 3));
                 }
-                player.sendMessage(Text.literal("⏱ Time Distortion! Slowed " + nearbyEnemies.size() + " nearby enemies!")
-                        .formatted(Formatting.DARK_AQUA), true);
+                player.sendOverlayMessage(Component.literal("⏱ Time Distortion! Slowed " + nearbyEnemies.size() + " nearby enemies!")
+                        .withStyle(ChatFormatting.DARK_AQUA));
                 return true;
             }
 
             case OVERCHARGE_DUST -> {
                 if (!"Mage".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Mages can use Overcharge Dust!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Mages can use Overcharge Dust!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
-                SpellModifierHandler.activateOvercharge(player.getUuid());
-                player.sendMessage(Text.literal("⚡ Next spell has 2x power! ⚡")
-                        .formatted(Formatting.BLUE), true);
+                SpellModifierHandler.activateOvercharge(player.getUUID());
+                player.sendOverlayMessage(Component.literal("⚡ Next spell has 2x power! ⚡")
+                        .withStyle(ChatFormatting.BLUE));
                 return true;
             }
 
             case TITAN_STRENGTH -> {
                 if (!"Warrior".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Warriors can use Titan's Strength!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Warriors can use Titan's Strength!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 400, 4));
-                player.sendMessage(Text.literal("💪 Titan's Strength active for 20 seconds! 💪")
-                        .formatted(Formatting.DARK_RED), true);
+                player.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 400, 4));
+                player.sendOverlayMessage(Component.literal("💪 Titan's Strength active for 20 seconds! 💪")
+                        .withStyle(ChatFormatting.DARK_RED));
                 return true;
             }
 
             case PERFECT_DODGE -> {
                 if (!"Rogue".equals(playerClass)) {
-                    player.sendMessage(Text.literal("Only Rogues can use Perfect Dodge!")
-                            .formatted(Formatting.RED), true);
+                    player.sendOverlayMessage(Component.literal("Only Rogues can use Perfect Dodge!")
+                            .withStyle(ChatFormatting.RED));
                     return false;
                 }
-                if (!(world instanceof ServerWorld serverWorld)) return false;
-                DodgeHandler.activate(player.getUuid(), 1.0f, serverWorld.getTime(), 200);
-                player.sendMessage(Text.literal("⚡ Perfect Dodge active for 10 seconds! ⚡")
-                        .formatted(Formatting.WHITE), true);
+                if (!(world instanceof ServerLevel serverWorld)) return false;
+                DodgeHandler.activate(player.getUUID(), 1.0f, serverWorld.getGameTime(), 200);
+                player.sendOverlayMessage(Component.literal("⚡ Perfect Dodge active for 10 seconds! ⚡")
+                        .withStyle(ChatFormatting.WHITE));
                 return true;
             }
         }
         return false;
     }
 
-    private void spawnParticles(ServerWorld world, PlayerEntity player) {
-        net.minecraft.particle.ParticleEffect particle = switch (type) {
+    private void spawnParticles(ServerLevel world, Player player) {
+        net.minecraft.core.particles.ParticleOptions particle = switch (type) {
             case MANA_CRYSTAL, SPELL_ECHO, OVERCHARGE_DUST -> ParticleTypes.ENCHANT;
             case ENERGY_TONIC, PERFECT_DODGE -> ParticleTypes.ELECTRIC_SPARK;
             case VAMPIRE_DUST, TITAN_STRENGTH -> ParticleTypes.ANGRY_VILLAGER;
@@ -283,11 +283,11 @@ public class ConsumableItem extends Item {
         };
 
         for (int i = 0; i < 20; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 2;
-            double offsetY = world.random.nextDouble() * 2;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 2;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 2;
+            double offsetY = world.getRandom().nextDouble() * 2;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 2;
 
-            world.spawnParticles(particle,
+            world.sendParticles(particle,
                     player.getX() + offsetX,
                     player.getY() + offsetY,
                     player.getZ() + offsetZ,

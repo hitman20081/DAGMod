@@ -1,9 +1,9 @@
 package com.github.hitman20081.dagmod.bone_realm.portal;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +14,14 @@ import java.util.List;
  */
 public class BonePortalFrameDetector {
 
-    private final World world;
+    private final Level world;
     private final BlockPos clickedPos;
     private BlockPos bottomLeft;
     private Direction.Axis axis;
     private int width;
     private int height;
 
-    public BonePortalFrameDetector(World world, BlockPos pos) {
+    public BonePortalFrameDetector(Level world, BlockPos pos) {
         this.world = world;
         this.clickedPos = pos;
     }
@@ -62,22 +62,22 @@ public class BonePortalFrameDetector {
         BlockPos current = start;
 
         // Go down to bottom
-        while (isAncientBone(current.down())) {
-            current = current.down();
+        while (isAncientBone(current.below())) {
+            current = current.below();
         }
 
         // Go left to edge based on axis
         // If axis is X, the frame extends along X (east-west), so we move north-south to find edge
         // If axis is Z, the frame extends along Z (north-south), so we move east-west to find edge
         Direction leftDir = testAxis == Direction.Axis.X ? Direction.NORTH : Direction.WEST;
-        while (isAncientBone(current.offset(leftDir))) {
-            current = current.offset(leftDir);
+        while (isAncientBone(current.relative(leftDir))) {
+            current = current.relative(leftDir);
         }
 
         // Check if this looks like a corner
         if (isAncientBone(current) &&
-                isAncientBone(current.up()) &&
-                isAncientBone(current.offset(leftDir.getOpposite()))) {
+                isAncientBone(current.above()) &&
+                isAncientBone(current.relative(leftDir.getOpposite()))) {
             return current;
         }
 
@@ -90,30 +90,30 @@ public class BonePortalFrameDetector {
 
         // Check bottom edge
         for (int i = 0; i < width; i++) {
-            if (!isAncientBone(bottomLeft.offset(rightDir, i))) {
+            if (!isAncientBone(bottomLeft.relative(rightDir, i))) {
                 return false;
             }
         }
 
         // Check top edge
-        BlockPos topLeft = bottomLeft.up(height - 1);
+        BlockPos topLeft = bottomLeft.above(height - 1);
         for (int i = 0; i < width; i++) {
-            if (!isAncientBone(topLeft.offset(rightDir, i))) {
+            if (!isAncientBone(topLeft.relative(rightDir, i))) {
                 return false;
             }
         }
 
         // Check left edge
         for (int i = 0; i < height; i++) {
-            if (!isAncientBone(bottomLeft.up(i))) {
+            if (!isAncientBone(bottomLeft.above(i))) {
                 return false;
             }
         }
 
         // Check right edge
-        BlockPos bottomRight = bottomLeft.offset(rightDir, width - 1);
+        BlockPos bottomRight = bottomLeft.relative(rightDir, width - 1);
         for (int i = 0; i < height; i++) {
-            if (!isAncientBone(bottomRight.up(i))) {
+            if (!isAncientBone(bottomRight.above(i))) {
                 return false;
             }
         }
@@ -121,7 +121,7 @@ public class BonePortalFrameDetector {
         // Check interior is empty (air blocks)
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                BlockPos interiorPos = bottomLeft.offset(rightDir, x).up(y);
+                BlockPos interiorPos = bottomLeft.relative(rightDir, x).above(y);
                 if (!world.getBlockState(interiorPos).isAir()) {
                     return false;
                 }
@@ -140,7 +140,7 @@ public class BonePortalFrameDetector {
 
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                positions.add(bottomLeft.offset(rightDir, x).up(y));
+                positions.add(bottomLeft.relative(rightDir, x).above(y));
             }
         }
 

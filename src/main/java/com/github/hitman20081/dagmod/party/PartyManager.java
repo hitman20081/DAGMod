@@ -1,9 +1,9 @@
 package com.github.hitman20081.dagmod.party;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,12 +30,12 @@ public class PartyManager {
     }
 
     // Party creation
-    public PartyData createParty(ServerPlayerEntity leader) {
-        UUID playerId = leader.getUuid();
+    public PartyData createParty(ServerPlayer leader) {
+        UUID playerId = leader.getUUID();
 
         // Check if player is already in a party
         if (playerToParty.containsKey(playerId)) {
-            leader.sendMessage(Text.literal("You are already in a party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You are already in a party!").withStyle(ChatFormatting.RED));
             return null;
         }
 
@@ -43,20 +43,20 @@ public class PartyManager {
         parties.put(party.getPartyId(), party);
         playerToParty.put(playerId, party.getPartyId());
 
-        leader.sendMessage(Text.literal("Party created! You are the party leader.").formatted(Formatting.GREEN), false);
+        leader.sendSystemMessage(Component.literal("Party created! You are the party leader.").withStyle(ChatFormatting.GREEN));
 
         return party;
     }
 
     // Party invitation
-    public boolean invitePlayer(ServerPlayerEntity inviter, ServerPlayerEntity invitee) {
-        UUID inviterId = inviter.getUuid();
-        UUID inviteeId = invitee.getUuid();
+    public boolean invitePlayer(ServerPlayer inviter, ServerPlayer invitee) {
+        UUID inviterId = inviter.getUUID();
+        UUID inviteeId = invitee.getUUID();
 
         // Check if inviter is in a party
         UUID partyId = playerToParty.get(inviterId);
         if (partyId == null) {
-            inviter.sendMessage(Text.literal("You are not in a party! Use /party create first.").formatted(Formatting.RED), false);
+            inviter.sendSystemMessage(Component.literal("You are not in a party! Use /party create first.").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -67,19 +67,19 @@ public class PartyManager {
 
         // Check if inviter is the leader
         if (!party.isLeader(inviterId)) {
-            inviter.sendMessage(Text.literal("Only the party leader can invite players!").formatted(Formatting.RED), false);
+            inviter.sendSystemMessage(Component.literal("Only the party leader can invite players!").withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Check if party is full
         if (party.isFull()) {
-            inviter.sendMessage(Text.literal("Your party is full! (Max 5 players)").formatted(Formatting.RED), false);
+            inviter.sendSystemMessage(Component.literal("Your party is full! (Max 5 players)").withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Check if invitee is already in a party
         if (playerToParty.containsKey(inviteeId)) {
-            inviter.sendMessage(Text.literal(invitee.getName().getString() + " is already in a party!").formatted(Formatting.RED), false);
+            inviter.sendSystemMessage(Component.literal(invitee.getName().getString() + " is already in a party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -87,27 +87,27 @@ public class PartyManager {
         pendingInvites.computeIfAbsent(inviteeId, k -> new HashSet<>()).add(partyId);
 
         // Send messages
-        inviter.sendMessage(Text.literal("Party invitation sent to " + invitee.getName().getString()).formatted(Formatting.GREEN), false);
+        inviter.sendSystemMessage(Component.literal("Party invitation sent to " + invitee.getName().getString()).withStyle(ChatFormatting.GREEN));
 
-        Text inviteMessage = Text.literal(inviter.getName().getString() + " has invited you to their party! ")
-                .formatted(Formatting.AQUA)
-                .append(Text.literal("[ACCEPT]")
-                        .formatted(Formatting.GREEN, Formatting.UNDERLINE)
-                        .append(Text.literal(" Use /party accept")));
+        Component inviteMessage = Component.literal(inviter.getName().getString() + " has invited you to their party! ")
+                .withStyle(ChatFormatting.AQUA)
+                .append(Component.literal("[ACCEPT]")
+                        .withStyle(ChatFormatting.GREEN, ChatFormatting.UNDERLINE)
+                        .append(Component.literal(" Use /party accept")));
 
-        invitee.sendMessage(inviteMessage, false);
+        invitee.sendSystemMessage(inviteMessage);
 
         return true;
     }
 
     // Accept party invitation
-    public boolean acceptInvite(ServerPlayerEntity player) {
-        UUID playerId = player.getUuid();
+    public boolean acceptInvite(ServerPlayer player) {
+        UUID playerId = player.getUUID();
 
         // Check if player has pending invites
         Set<UUID> invites = pendingInvites.get(playerId);
         if (invites == null || invites.isEmpty()) {
-            player.sendMessage(Text.literal("You have no pending party invitations!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("You have no pending party invitations!").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -116,14 +116,14 @@ public class PartyManager {
         PartyData party = parties.get(partyId);
 
         if (party == null) {
-            player.sendMessage(Text.literal("That party no longer exists!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("That party no longer exists!").withStyle(ChatFormatting.RED));
             pendingInvites.remove(playerId);
             return false;
         }
 
         // Check if party is full
         if (party.isFull()) {
-            player.sendMessage(Text.literal("That party is now full!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("That party is now full!").withStyle(ChatFormatting.RED));
             pendingInvites.remove(playerId);
             return false;
         }
@@ -134,19 +134,19 @@ public class PartyManager {
         pendingInvites.remove(playerId);
 
         // Notify everyone
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        party.sendPartyMessage(world, Text.literal(player.getName().getString() + " has joined the party!").formatted(Formatting.GREEN));
+        ServerLevel world = (ServerLevel) player.level();
+        party.sendPartyMessage(world, Component.literal(player.getName().getString() + " has joined the party!").withStyle(ChatFormatting.GREEN));
 
         return true;
     }
 
     // Leave party
-    public boolean leaveParty(ServerPlayerEntity player) {
-        UUID playerId = player.getUuid();
+    public boolean leaveParty(ServerPlayer player) {
+        UUID playerId = player.getUUID();
         UUID partyId = playerToParty.get(playerId);
 
         if (partyId == null) {
-            player.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -155,7 +155,7 @@ public class PartyManager {
             return false;
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerLevel world = (ServerLevel) player.level();
 
         // If player is the leader, transfer leadership or disband
         if (party.isLeader(playerId)) {
@@ -172,11 +172,11 @@ public class PartyManager {
                     party.removeMember(playerId);
                     playerToParty.remove(playerId);
 
-                    party.sendPartyMessage(world, Text.literal(player.getName().getString() + " has left the party!").formatted(Formatting.YELLOW));
+                    party.sendPartyMessage(world, Component.literal(player.getName().getString() + " has left the party!").withStyle(ChatFormatting.YELLOW));
 
-                    ServerPlayerEntity newLeaderPlayer = world.getServer().getPlayerManager().getPlayer(newLeader);
+                    ServerPlayer newLeaderPlayer = world.getServer().getPlayerList().getPlayer(newLeader);
                     if (newLeaderPlayer != null) {
-                        party.sendPartyMessage(world, Text.literal(newLeaderPlayer.getName().getString() + " is now the party leader!").formatted(Formatting.GOLD));
+                        party.sendPartyMessage(world, Component.literal(newLeaderPlayer.getName().getString() + " is now the party leader!").withStyle(ChatFormatting.GOLD));
                     }
                 } else {
                     disbandParty(party, world);
@@ -189,21 +189,21 @@ public class PartyManager {
             party.removeMember(playerId);
             playerToParty.remove(playerId);
 
-            player.sendMessage(Text.literal("You have left the party.").formatted(Formatting.YELLOW), false);
-            party.sendPartyMessage(world, Text.literal(player.getName().getString() + " has left the party!").formatted(Formatting.YELLOW));
+            player.sendSystemMessage(Component.literal("You have left the party.").withStyle(ChatFormatting.YELLOW));
+            party.sendPartyMessage(world, Component.literal(player.getName().getString() + " has left the party!").withStyle(ChatFormatting.YELLOW));
         }
 
         return true;
     }
 
     // Kick player from party
-    public boolean kickPlayer(ServerPlayerEntity leader, ServerPlayerEntity target) {
-        UUID leaderId = leader.getUuid();
-        UUID targetId = target.getUuid();
+    public boolean kickPlayer(ServerPlayer leader, ServerPlayer target) {
+        UUID leaderId = leader.getUUID();
+        UUID targetId = target.getUUID();
         UUID partyId = playerToParty.get(leaderId);
 
         if (partyId == null) {
-            leader.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -213,17 +213,17 @@ public class PartyManager {
         }
 
         if (!party.isLeader(leaderId)) {
-            leader.sendMessage(Text.literal("Only the party leader can kick players!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("Only the party leader can kick players!").withStyle(ChatFormatting.RED));
             return false;
         }
 
         if (!party.isMember(targetId)) {
-            leader.sendMessage(Text.literal(target.getName().getString() + " is not in your party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal(target.getName().getString() + " is not in your party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
         if (leaderId.equals(targetId)) {
-            leader.sendMessage(Text.literal("You cannot kick yourself! Use /party disband or /party leave.").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You cannot kick yourself! Use /party disband or /party leave.").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -231,20 +231,20 @@ public class PartyManager {
         party.removeMember(targetId);
         playerToParty.remove(targetId);
 
-        ServerWorld world = (ServerWorld) leader.getEntityWorld();
-        target.sendMessage(Text.literal("You have been kicked from the party!").formatted(Formatting.RED), false);
-        party.sendPartyMessage(world, Text.literal(target.getName().getString() + " was kicked from the party!").formatted(Formatting.RED));
+        ServerLevel world = (ServerLevel) leader.level();
+        target.sendSystemMessage(Component.literal("You have been kicked from the party!").withStyle(ChatFormatting.RED));
+        party.sendPartyMessage(world, Component.literal(target.getName().getString() + " was kicked from the party!").withStyle(ChatFormatting.RED));
 
         return true;
     }
 
     // Disband party
-    public boolean disbandParty(ServerPlayerEntity leader) {
-        UUID leaderId = leader.getUuid();
+    public boolean disbandParty(ServerPlayer leader) {
+        UUID leaderId = leader.getUUID();
         UUID partyId = playerToParty.get(leaderId);
 
         if (partyId == null) {
-            leader.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -254,18 +254,18 @@ public class PartyManager {
         }
 
         if (!party.isLeader(leaderId)) {
-            leader.sendMessage(Text.literal("Only the party leader can disband the party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("Only the party leader can disband the party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
-        ServerWorld world = (ServerWorld) leader.getEntityWorld();
+        ServerLevel world = (ServerLevel) leader.level();
         disbandParty(party, world);
 
         return true;
     }
 
-    private void disbandParty(PartyData party, ServerWorld world) {
-        party.sendPartyMessage(world, Text.literal("The party has been disbanded!").formatted(Formatting.RED));
+    private void disbandParty(PartyData party, ServerLevel world) {
+        party.sendPartyMessage(world, Component.literal("The party has been disbanded!").withStyle(ChatFormatting.RED));
 
         // Remove all members from lookup
         for (UUID memberId : party.getMembers()) {
@@ -282,8 +282,8 @@ public class PartyManager {
         return partyId != null ? parties.get(partyId) : null;
     }
 
-    public PartyData getParty(ServerPlayerEntity player) {
-        return getParty(player.getUuid());
+    public PartyData getParty(ServerPlayer player) {
+        return getParty(player.getUUID());
     }
 
     // Check if player is in a party
@@ -291,34 +291,34 @@ public class PartyManager {
         return playerToParty.containsKey(playerId);
     }
 
-    public boolean isInParty(ServerPlayerEntity player) {
-        return isInParty(player.getUuid());
+    public boolean isInParty(ServerPlayer player) {
+        return isInParty(player.getUUID());
     }
 
     // Party chat
-    public void sendPartyChat(ServerPlayerEntity sender, String message) {
-        UUID playerId = sender.getUuid();
+    public void sendPartyChat(ServerPlayer sender, String message) {
+        UUID playerId = sender.getUUID();
         UUID partyId = playerToParty.get(playerId);
 
         if (partyId == null) {
-            sender.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            sender.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return;
         }
 
         PartyData party = parties.get(partyId);
         if (party != null) {
-            ServerWorld world = (ServerWorld) sender.getEntityWorld();
+            ServerLevel world = (ServerLevel) sender.level();
             party.sendPartyChat(world, sender, message);
         }
     }
 
     // List party members
-    public void listPartyMembers(ServerPlayerEntity player) {
-        UUID playerId = player.getUuid();
+    public void listPartyMembers(ServerPlayer player) {
+        UUID playerId = player.getUUID();
         UUID partyId = playerToParty.get(playerId);
 
         if (partyId == null) {
-            player.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -327,29 +327,27 @@ public class PartyManager {
             return;
         }
 
-        player.sendMessage(Text.literal("=== Party Members (" + party.getSize() + "/5) ===").formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("XP Bonus: +" + party.getXpBonusPercentage() + "%").formatted(Formatting.AQUA), false);
+        player.sendSystemMessage(Component.literal("=== Party Members (" + party.getSize() + "/5) ===").withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("XP Bonus: +" + party.getXpBonusPercentage() + "%").withStyle(ChatFormatting.AQUA));
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerLevel world = (ServerLevel) player.level();
         for (UUID memberId : party.getMembers()) {
-            ServerPlayerEntity member = world.getServer().getPlayerManager().getPlayer(memberId);
+            ServerPlayer member = world.getServer().getPlayerList().getPlayer(memberId);
             if (member != null) {
                 String prefix = party.isLeader(memberId) ? "★ " : "  ";
                 String status = "Online";
-                Formatting color = Formatting.GREEN;
+                ChatFormatting color = ChatFormatting.GREEN;
 
-                player.sendMessage(
-                        Text.literal(prefix + member.getName().getString() + " - " + status)
-                                .formatted(color),
-                        false
-                );
+                player.sendSystemMessage(
+                        Component.literal(prefix + member.getName().getString() + " - " + status)
+                                .withStyle(color));
             }
         }
     }
 
     // Handle player disconnect
-    public void handlePlayerDisconnect(ServerPlayerEntity player) {
-        UUID playerId = player.getUuid();
+    public void handlePlayerDisconnect(ServerPlayer player) {
+        UUID playerId = player.getUUID();
 
         // Remove pending invites
         pendingInvites.remove(playerId);
@@ -365,13 +363,13 @@ public class PartyManager {
             return;
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerLevel world = (ServerLevel) player.level();
 
         // Check if all members are offline
         boolean anyOnline = false;
         for (UUID memberId : party.getMembers()) {
             if (!memberId.equals(playerId)) {
-                ServerPlayerEntity member = world.getServer().getPlayerManager().getPlayer(memberId);
+                ServerPlayer member = world.getServer().getPlayerList().getPlayer(memberId);
                 if (member != null) {
                     anyOnline = true;
                     break;

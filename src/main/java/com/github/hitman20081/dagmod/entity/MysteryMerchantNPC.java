@@ -1,310 +1,310 @@
 package com.github.hitman20081.dagmod.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.trade.MerchantDialogue;
 import com.github.hitman20081.dagmod.trade.MerchantType;
 import com.github.hitman20081.dagmod.trade.RotatingTradeManager;
 import com.github.hitman20081.dagmod.trade.RotatingTradeRegistry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.village.TradedItem;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.village.Merchant;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOfferList;
-import net.minecraft.world.World;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.screen.MerchantScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.trading.Merchant;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.inventory.MerchantMenu;
+import net.minecraft.world.SimpleMenuProvider;
 
 import java.util.List;
 import java.util.OptionalInt;
+import net.minecraft.world.item.trading.ItemCost;
 
-public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
+public class MysteryMerchantNPC extends PathfinderMob implements Merchant {
 
-    private PlayerEntity customer;
-    private TradeOfferList offers;
-    private final TradeOfferList staticOffers;
+    private Player customer;
+    private MerchantOffers offers;
+    private final MerchantOffers staticOffers;
 
-    public MysteryMerchantNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public MysteryMerchantNPC(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.staticOffers = new TradeOfferList();
-        this.offers = new TradeOfferList();
+        this.staticOffers = new MerchantOffers();
+        this.offers = new MerchantOffers();
 
         // ===== MID-TIER WEAPONS =====
         // Mythril Sword - Entry level rare weapon
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 16),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 16),
                 java.util.Optional.empty(),
                 new ItemStack(ModItems.MYTHRIL_SWORD),
                 3, 5, 0.05F
         ));
         // Gilded Rapier - Fast attack speed
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 24),
-                java.util.Optional.of(new TradedItem(Items.GOLD_INGOT, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 24),
+                java.util.Optional.of(new ItemCost(Items.GOLD_INGOT, 8)),
                 new ItemStack(ModItems.GILDED_RAPIER),
                 2, 8, 0.05F
         ));
         // Crystal Katana - Balanced rare weapon
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 32),
-                java.util.Optional.of(new TradedItem(Items.AMETHYST_SHARD, 16)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 32),
+                java.util.Optional.of(new ItemCost(Items.AMETHYST_SHARD, 16)),
                 new ItemStack(ModItems.CRYSTAL_KATANA),
                 2, 10, 0.05F
         ));
 
         // ===== HIGH-TIER WEAPONS =====
         // Dragonscale Sword
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 48),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_SCALE, 2)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 48),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 2)),
                 new ItemStack(ModItems.DRAGONSCALE_SWORD),
                 1, 15, 0.05F
         ));
         // Inferno Sword
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 48),
-                java.util.Optional.of(new TradedItem(Items.BLAZE_ROD, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 48),
+                java.util.Optional.of(new ItemCost(Items.BLAZE_ROD, 8)),
                 new ItemStack(ModItems.INFERNO_SWORD),
                 1, 15, 0.05F
         ));
         // Shadowfang Dagger - Rogue favorite
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 40),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 40),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 4)),
                 new ItemStack(ModItems.SHADOWFANG_DAGGER),
                 1, 12, 0.05F
         ));
         // Shadowfang Sword
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 52),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 52),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 8)),
                 new ItemStack(ModItems.SHADOWFANG_SWORD),
                 1, 15, 0.05F
         ));
         // Bloodthirster Blade - Lifesteal weapon
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 16),
-                java.util.Optional.of(new TradedItem(Items.GHAST_TEAR, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 16),
+                java.util.Optional.of(new ItemCost(Items.GHAST_TEAR, 4)),
                 new ItemStack(ModItems.BLOODTHIRSTER_BLADE),
                 1, 15, 0.05F
         ));
         // Frostbite Axe
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 56),
-                java.util.Optional.of(new TradedItem(Items.BLUE_ICE, 16)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 56),
+                java.util.Optional.of(new ItemCost(Items.BLUE_ICE, 16)),
                 new ItemStack(ModItems.FROSTBITE_AXE),
                 1, 15, 0.05F
         ));
         // Poison Fang Spear
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 44),
-                java.util.Optional.of(new TradedItem(Items.SPIDER_EYE, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 44),
+                java.util.Optional.of(new ItemCost(Items.SPIDER_EYE, 8)),
                 new ItemStack(ModItems.POISON_FANG_SPEAR),
                 1, 12, 0.05F
         ));
 
         // ===== EPIC WEAPONS =====
         // Ethereal Blade
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 24),
-                java.util.Optional.of(new TradedItem(Items.NETHER_STAR, 1)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 24),
+                java.util.Optional.of(new ItemCost(Items.NETHER_STAR, 1)),
                 new ItemStack(ModItems.ETHEREAL_BLADE),
                 1, 20, 0.05F
         ));
         // Thunder Pike
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 20),
-                java.util.Optional.of(new TradedItem(Items.TRIDENT, 1)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 20),
+                java.util.Optional.of(new ItemCost(Items.TRIDENT, 1)),
                 new ItemStack(ModItems.THUNDER_PIKE),
                 1, 20, 0.05F
         ));
         // Crystalhammer
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 28),
-                java.util.Optional.of(new TradedItem(ModItems.SILMARIL, 1)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 28),
+                java.util.Optional.of(new ItemCost(ModItems.SILMARIL, 1)),
                 new ItemStack(ModItems.CRYSTALHAMMER),
                 1, 25, 0.05F
         ));
 
         // ===== SHIELDS =====
         // Crystal Shield - Entry level
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 20),
-                java.util.Optional.of(new TradedItem(Items.AMETHYST_SHARD, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 20),
+                java.util.Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)),
                 new ItemStack(ModItems.CRYSTAL_SHIELD),
                 2, 8, 0.05F
         ));
         // Nature Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 24),
-                java.util.Optional.of(new TradedItem(Items.OAK_LOG, 32)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 24),
+                java.util.Optional.of(new ItemCost(Items.OAK_LOG, 32)),
                 new ItemStack(ModItems.NATURE_SHIELD),
                 2, 8, 0.05F
         ));
         // Frost Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 36),
-                java.util.Optional.of(new TradedItem(Items.BLUE_ICE, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 36),
+                java.util.Optional.of(new ItemCost(Items.BLUE_ICE, 8)),
                 new ItemStack(ModItems.FROST_SHIELD),
                 1, 12, 0.05F
         ));
         // Inferno Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 40),
-                java.util.Optional.of(new TradedItem(Items.BLAZE_ROD, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 40),
+                java.util.Optional.of(new ItemCost(Items.BLAZE_ROD, 4)),
                 new ItemStack(ModItems.INFERNO_SHIELD),
                 1, 12, 0.05F
         ));
         // Shadow Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 40),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 40),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 4)),
                 new ItemStack(ModItems.SHADOW_SHIELD),
                 1, 12, 0.05F
         ));
         // Solar Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 44),
-                java.util.Optional.of(new TradedItem(Items.SUNFLOWER, 16)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 44),
+                java.util.Optional.of(new ItemCost(Items.SUNFLOWER, 16)),
                 new ItemStack(ModItems.SOLAR_SHIELD),
                 1, 15, 0.05F
         ));
         // Dragonbone Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 16),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_BONE, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 16),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_BONE, 4)),
                 new ItemStack(ModItems.DRAGONBONE_SHIELD),
                 1, 20, 0.05F
         ));
         // Stormguard Shield
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 20),
-                java.util.Optional.of(new TradedItem(Items.HEART_OF_THE_SEA, 1)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 20),
+                java.util.Optional.of(new ItemCost(Items.HEART_OF_THE_SEA, 1)),
                 new ItemStack(ModItems.STORMGUARD_SHIELD),
                 1, 20, 0.05F
         ));
         // Celestial Shield - Top tier
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 32),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_HEART, 1)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 32),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_HEART, 1)),
                 new ItemStack(ModItems.CELESTIAL_SHIELD),
                 1, 25, 0.05F
         ));
 
         // ===== MYTHRIL ARMOR SET =====
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 24),
-                java.util.Optional.of(new TradedItem(ModItems.MYTHRIL_INGOT, 5)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 24),
+                java.util.Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 5)),
                 new ItemStack(ModItems.MYTHRIL_HELMET),
                 2, 10, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 40),
-                java.util.Optional.of(new TradedItem(ModItems.MYTHRIL_INGOT, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 40),
+                java.util.Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 8)),
                 new ItemStack(ModItems.MYTHRIL_CHESTPLATE),
                 2, 10, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 36),
-                java.util.Optional.of(new TradedItem(ModItems.MYTHRIL_INGOT, 7)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 36),
+                java.util.Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 7)),
                 new ItemStack(ModItems.MYTHRIL_LEGGINGS),
                 2, 10, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 20),
-                java.util.Optional.of(new TradedItem(ModItems.MYTHRIL_INGOT, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 20),
+                java.util.Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 4)),
                 new ItemStack(ModItems.MYTHRIL_BOOTS),
                 2, 10, 0.05F
         ));
 
         // ===== DRAGONSCALE ARMOR SET =====
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 8),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_SCALE, 5)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 8),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 5)),
                 new ItemStack(ModItems.DRAGONSCALE_HELMET),
                 1, 15, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 12),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_SCALE, 8)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 12),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 8)),
                 new ItemStack(ModItems.DRAGONSCALE_CHESTPLATE),
                 1, 15, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 10),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_SCALE, 7)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 10),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 7)),
                 new ItemStack(ModItems.DRAGONSCALE_LEGGINGS),
                 1, 15, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 6),
-                java.util.Optional.of(new TradedItem(ModItems.DRAGON_SCALE, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 6),
+                java.util.Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 4)),
                 new ItemStack(ModItems.DRAGONSCALE_BOOTS),
                 1, 15, 0.05F
         ));
 
         // ===== SHADOW ARMOR SET =====
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 32),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 32),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 4)),
                 new ItemStack(ModItems.SHADOW_HELMET),
                 1, 12, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 48),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 6)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 48),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 6)),
                 new ItemStack(ModItems.SHADOW_CHESTPLATE),
                 1, 12, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 44),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 5)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 44),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 5)),
                 new ItemStack(ModItems.SHADOW_LEGGINGS),
                 1, 12, 0.05F
         ));
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 28),
-                java.util.Optional.of(new TradedItem(Items.ECHO_SHARD, 3)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 28),
+                java.util.Optional.of(new ItemCost(Items.ECHO_SHARD, 3)),
                 new ItemStack(ModItems.SHADOW_BOOTS),
                 1, 12, 0.05F
         ));
 
         // ===== SPECIAL MATERIALS =====
         // Dragon Scale
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 4),
-                java.util.Optional.of(new TradedItem(Items.NETHERITE_SCRAP, 1)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 4),
+                java.util.Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 1)),
                 new ItemStack(ModItems.DRAGON_SCALE),
                 5, 20, 0.1F
         ));
         // Mythril Ingot
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 8),
-                java.util.Optional.of(new TradedItem(Items.IRON_INGOT, 4)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 8),
+                java.util.Optional.of(new ItemCost(Items.IRON_INGOT, 4)),
                 new ItemStack(ModItems.MYTHRIL_INGOT),
                 8, 15, 0.1F
         ));
         // Silmaril
-        this.staticOffers.add(new TradeOffer(
-                new TradedItem(Items.DIAMOND, 16),
-                java.util.Optional.of(new TradedItem(Items.AMETHYST_SHARD, 32)),
+        this.staticOffers.add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 16),
+                java.util.Optional.of(new ItemCost(Items.AMETHYST_SHARD, 32)),
                 new ItemStack(ModItems.SILMARIL),
                 1, 25, 0.05F
         ));
@@ -317,7 +317,7 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
      * Rebuilds the offer list with static trades + current rotating trades.
      */
     private void rebuildOffers() {
-        this.offers = new TradeOfferList();
+        this.offers = new MerchantOffers();
 
         // Add all static offers
         this.offers.addAll(this.staticOffers);
@@ -325,66 +325,64 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
         // Add rotating trades from the registry
         if (RotatingTradeManager.getInstance().isInitialized()) {
             int rotationIndex = RotatingTradeManager.getInstance().getRotationIndex(MerchantType.MYSTERY_MERCHANT);
-            List<TradeOffer> rotatingTrades = RotatingTradeRegistry.getRotatingTrades(MerchantType.MYSTERY_MERCHANT, rotationIndex);
+            List<MerchantOffer> rotatingTrades = RotatingTradeRegistry.getRotatingTrades(MerchantType.MYSTERY_MERCHANT, rotationIndex);
             this.offers.addAll(rotatingTrades);
         }
     }
-
-    @Override
-    public boolean canInteract(PlayerEntity player) {
+    public boolean canInteract(Player player) {
         return this.isAlive() && this.distanceTo(player) <= 6.0; // Example condition, can be adjusted
     }
 
-    public static DefaultAttributeContainer.Builder createMobAttributes() {
-        return PathAwareEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 20.0)
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.25);
+    public static AttributeSupplier.Builder createMobAttributes() {
+        return PathfinderMob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 20.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.8));
-        this.goalSelector.add(3, new LookAroundGoal(this));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (!this.getEntityWorld().isClient()) {
-            if (this.isAlive() && this.canInteract(player) && !this.hasCustomer() && !player.isSneaking()) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!this.level().isClientSide()) {
+            if (this.isAlive() && this.canInteract(player) && !this.hasCustomer() && !player.isShiftKeyDown()) {
                 // Rebuild offers to include current rotating trades
                 rebuildOffers();
 
-                this.setCustomer(player);
+                this.setTradingPlayer(player);
 
                 // Send merchant dialogue
-                if (player instanceof ServerPlayerEntity serverPlayer) {
+                if (player instanceof ServerPlayer serverPlayer) {
                     MerchantDialogue.sendGreeting(serverPlayer, MerchantType.MYSTERY_MERCHANT);
                     MerchantDialogue.sendRotationHint(serverPlayer, MerchantType.MYSTERY_MERCHANT);
                 }
 
                 this.openOfferScreen(player, this.getDisplayName(), 1);
-                return ActionResult.CONSUME;
-            } else if (this.hasCustomer() && this.getCustomer() == player) {
-                return ActionResult.PASS;
+                return InteractionResult.CONSUME;
+            } else if (this.hasCustomer() && this.getTradingPlayer() == player) {
+                return InteractionResult.PASS;
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
     
-    public void openOfferScreen(PlayerEntity player, Text name, int level) {
-        OptionalInt optionalSyncId = player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                (syncId, inventory, playerEntity) -> new MerchantScreenHandler(syncId, inventory, this),
+    public void openOfferScreen(Player player, Component name, int level) {
+        OptionalInt optionalSyncId = player.openMenu(new SimpleMenuProvider(
+                (syncId, inventory, playerEntity) -> new MerchantMenu(syncId, inventory, this),
                 this.getDisplayName()));
 
-        if (optionalSyncId.isPresent() && player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer) {
+        if (optionalSyncId.isPresent() && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
             int syncId = optionalSyncId.getAsInt();
-            serverPlayer.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket(
+            serverPlayer.connection.send(new net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket(
                     syncId,
                     this.getOffers(),
                     level,
-                    this.getExperience(),
-                    this.isLeveledMerchant(),
+                    this.getVillagerXp(),
+                    this.showProgressBar(),
                     this.canRefreshTrades()
             ));
         }
@@ -395,8 +393,8 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
     }
     
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("entity.dagmod.mystery_merchant_npc");
+    public Component getDisplayName() {
+        return Component.translatable("entity.dagmod.mystery_merchant_npc");
     }
 
     // Custom helper method, not part of Merchant interface
@@ -405,48 +403,48 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
     }
 
     @Override
-    public boolean isClient() {
-        return this.getEntityWorld().isClient();
+    public boolean isClientSide() {
+        return this.level().isClientSide();
     }
 
     @Override
-    public PlayerEntity getCustomer() {
+    public Player getTradingPlayer() {
         return this.customer;
     }
 
     @Override
-    public void setCustomer(PlayerEntity player) {
+    public void setTradingPlayer(Player player) {
         this.customer = player;
     }
 
     @Override
-    public TradeOfferList getOffers() {
+    public MerchantOffers getOffers() {
         return this.offers;
     }
 
     @Override
-    public void setOffersFromServer(TradeOfferList offers) {
+    public void overrideOffers(MerchantOffers offers) {
         // Mystery Merchant has static offers, ignore server updates
     }
 
     @Override
-    public void trade(TradeOffer offer) {
-        offer.use(); // Decrease uses
-        this.getEntityWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_VILLAGER_YES, this.getSoundCategory(), 1.0F, 1.0F); // Corrected playSound
+    public void notifyTrade(MerchantOffer offer) {
+        offer.increaseUses(); // Decrease uses
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.VILLAGER_YES, this.getSoundSource(), 1.0F, 1.0F); // Corrected playSound
     }
 
     @Override
-    public void onSellingItem(ItemStack stack) {
+    public void notifyTradeUpdated(ItemStack stack) {
         // Not implemented for Mystery Merchant
     }
 
     @Override
-    public int getExperience() {
+    public int getVillagerXp() {
         return 0; // Mystery Merchant does not gain experience
     }
 
     @Override
-    public void setExperienceFromServer(int experience) {
+    public void overrideXp(int experience) {
         // Mystery Merchant does not gain experience
     }
 
@@ -455,13 +453,13 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
     }
 
     @Override
-    public boolean isLeveledMerchant() {
+    public boolean showProgressBar() {
         return false; // Mystery Merchant is not a leveled merchant
     }
 
     @Override
-    public SoundEvent getYesSound() {
-        return SoundEvents.ENTITY_VILLAGER_YES;
+    public SoundEvent getNotifyTradeSound() {
+        return SoundEvents.VILLAGER_YES;
     }
 
     public void playWorkSound() {
@@ -469,7 +467,12 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
     }
 
     @Override
-    public boolean cannotDespawn() {
+    public boolean stillValid(Player player) {
+        return this.isAlive() && this.distanceTo(player) <= 6.0;
+    }
+
+    @Override
+    public boolean isPersistenceRequired() {
         return true;
     }
 
@@ -478,7 +481,7 @@ public class MysteryMerchantNPC extends PathAwareEntity implements Merchant {
         return false;
     }
 
-    public void pushAwayFrom(net.minecraft.entity.Entity entity) {
+    public void pushAwayFrom(net.minecraft.world.entity.Entity entity) {
         // Don't get pushed by other entities
     }
 }

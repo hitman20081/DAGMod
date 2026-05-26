@@ -1,10 +1,10 @@
 package com.github.hitman20081.dagmod.party.quest;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.*;
 
@@ -141,20 +141,20 @@ public class PartyQuestData {
     }
 
     // Get formatted progress text
-    public Text getProgressText() {
-        Text result = Text.literal("").formatted(Formatting.GRAY);
+    public Component getProgressText() {
+        Component result = Component.literal("").withStyle(ChatFormatting.GRAY);
 
         for (PartyQuestObjective objective : template.getObjectives()) {
             int current = objectiveProgress.getOrDefault(objective.getId(), 0);
             int required = objective.getRequiredAmount();
             boolean complete = current >= required;
 
-            Text line = Text.literal(complete ? "✓ " : "○ ")
-                    .formatted(complete ? Formatting.GREEN : Formatting.GRAY)
-                    .append(Text.literal(objective.getDescription() + " ")
-                            .formatted(Formatting.WHITE))
-                    .append(Text.literal("(" + Math.min(current, required) + "/" + required + ")")
-                            .formatted(complete ? Formatting.GREEN : Formatting.YELLOW));
+            Component line = Component.literal(complete ? "✓ " : "○ ")
+                    .withStyle(complete ? ChatFormatting.GREEN : ChatFormatting.GRAY)
+                    .append(Component.literal(objective.getDescription() + " ")
+                            .withStyle(ChatFormatting.WHITE))
+                    .append(Component.literal("(" + Math.min(current, required) + "/" + required + ")")
+                            .withStyle(complete ? ChatFormatting.GREEN : ChatFormatting.YELLOW));
 
             result = result.copy().append("\n").append(line);
         }
@@ -163,8 +163,8 @@ public class PartyQuestData {
     }
 
     // NBT Serialization
-    public NbtCompound toNbt() {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag toNbt() {
+        CompoundTag nbt = new CompoundTag();
 
         nbt.putString("QuestId", questId);
         nbt.putString("PartyId", partyId.toString());
@@ -174,9 +174,9 @@ public class PartyQuestData {
         nbt.putBoolean("Failed", failed);
 
         // Save objective progress
-        NbtList progressList = new NbtList();
+        ListTag progressList = new ListTag();
         for (Map.Entry<String, Integer> entry : objectiveProgress.entrySet()) {
-            NbtCompound progressNbt = new NbtCompound();
+            CompoundTag progressNbt = new CompoundTag();
             progressNbt.putString("ObjectiveId", entry.getKey());
             progressNbt.putInt("Progress", entry.getValue());
             progressList.add(progressNbt);
@@ -187,7 +187,7 @@ public class PartyQuestData {
     }
 
     // NBT Deserialization
-    public static PartyQuestData fromNbt(NbtCompound nbt, PartyQuestTemplate template) {
+    public static PartyQuestData fromNbt(CompoundTag nbt, PartyQuestTemplate template) {
         String questId = nbt.getString("QuestId").orElse("");
         UUID partyId = UUID.fromString(nbt.getString("PartyId").orElse(UUID.randomUUID().toString()));
 
@@ -201,9 +201,9 @@ public class PartyQuestData {
         data.failed = nbt.getBoolean("Failed").orElse(false);
 
         // Restore objective progress
-        NbtList progressList = nbt.getList("ObjectiveProgress").orElse(new NbtList());
+        ListTag progressList = nbt.getList("ObjectiveProgress").orElse(new ListTag());
         for (int i = 0; i < progressList.size(); i++) {
-            NbtCompound progressNbt = progressList.getCompound(i).orElse(null);
+            CompoundTag progressNbt = progressList.getCompound(i).orElse(null);
             if (progressNbt != null) {
                 String objectiveId = progressNbt.getString("ObjectiveId").orElse("");
                 int progress = progressNbt.getInt("Progress").orElse(0);

@@ -1,11 +1,12 @@
 package com.github.hitman20081.dagmod.trade;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,7 +36,7 @@ public class RotatingTradeStorage {
      * Get the trades data directory.
      */
     private static File getTradesDirectory(MinecraftServer server) {
-        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+        File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
         File dagmodRoot = new File(worldDir, DATA_ROOT);
         File tradesDir = new File(dagmodRoot, TRADES_FOLDER);
 
@@ -64,7 +65,7 @@ public class RotatingTradeStorage {
                                          Map<MerchantType, MerchantRotationState> merchantStates) {
         try {
             File dataFile = getTradesDataFile(server);
-            NbtCompound nbt = new NbtCompound();
+            CompoundTag nbt = new CompoundTag();
 
             // Version for future migrations
             nbt.putInt(VERSION_KEY, CURRENT_VERSION);
@@ -73,7 +74,7 @@ public class RotatingTradeStorage {
             nbt.putLong(LAST_ROTATION_KEY, lastRotationTime);
 
             // Merchant rotation states
-            NbtCompound merchantsNbt = new NbtCompound();
+            CompoundTag merchantsNbt = new CompoundTag();
             for (Map.Entry<MerchantType, MerchantRotationState> entry : merchantStates.entrySet()) {
                 merchantsNbt.put(entry.getKey().getId(), entry.getValue().toNbt());
             }
@@ -106,9 +107,9 @@ public class RotatingTradeStorage {
                 return null;
             }
 
-            NbtCompound nbt;
+            CompoundTag nbt;
             try (FileInputStream fis = new FileInputStream(dataFile)) {
-                nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
             }
 
             // Read last rotation time
@@ -118,10 +119,10 @@ public class RotatingTradeStorage {
             Map<MerchantType, MerchantRotationState> merchantStates = new HashMap<>();
 
             if (nbt.contains(MERCHANTS_KEY)) {
-                NbtCompound merchantsNbt = nbt.getCompound(MERCHANTS_KEY).orElse(new NbtCompound());
+                CompoundTag merchantsNbt = nbt.getCompound(MERCHANTS_KEY).orElse(new CompoundTag());
                 for (MerchantType type : MerchantType.values()) {
                     if (merchantsNbt.contains(type.getId())) {
-                        NbtCompound stateNbt = merchantsNbt.getCompound(type.getId()).orElse(new NbtCompound());
+                        CompoundTag stateNbt = merchantsNbt.getCompound(type.getId()).orElse(new CompoundTag());
                         merchantStates.put(type, MerchantRotationState.fromNbt(type, stateNbt));
                     }
                 }

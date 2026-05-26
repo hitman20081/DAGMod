@@ -5,7 +5,7 @@ import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestObjective;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class QuestNetworkHandler {
 
-    public static void handleQuestRequest(ServerPlayerEntity player, QuestRequestPacket packet) {
+    public static void handleQuestRequest(ServerPlayer player, QuestRequestPacket packet) {
         QuestManager manager = QuestManager.getInstance();
         QuestData playerData = manager.getPlayerData(player);
 
@@ -90,7 +90,7 @@ public class QuestNetworkHandler {
         ServerPlayNetworking.send(player, syncPacket);
     }
 
-    public static void sendQuestUpdate(ServerPlayerEntity player) {
+    public static void sendQuestUpdate(ServerPlayer player) {
         handleQuestRequest(player, new QuestRequestPacket());
     }
 }

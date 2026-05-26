@@ -3,27 +3,28 @@ package com.github.hitman20081.dagmod.enchantment;
 import com.github.hitman20081.dagmod.DagMod;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
@@ -40,26 +41,26 @@ public class CustomEnchantmentEffects {
     /**
      * Get the level of a dagmod enchantment on an item stack.
      */
-    public static int getEnchantmentLevel(ItemStack stack, World world, String enchantId) {
+    public static int getEnchantmentLevel(ItemStack stack, Level world, String enchantId) {
         if (stack.isEmpty()) return 0;
 
-        var enchReg = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
-        RegistryKey<Enchantment> key = RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("dagmod", enchantId));
-        Optional<RegistryEntry.Reference<Enchantment>> entry = enchReg.getOptional(key);
+        var enchReg = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath("dagmod", enchantId));
+        var entry = enchReg.get(key);
 
         if (entry.isEmpty()) return 0;
 
-        ItemEnchantmentsComponent enchantments = stack.getOrDefault(
-                DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+        ItemEnchantments enchantments = stack.getOrDefault(
+                DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         return enchantments.getLevel(entry.get());
     }
 
     private static void registerBlockBreakEffects() {
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            if (world.isClient() || !(player instanceof ServerPlayerEntity serverPlayer)) return;
+            if (world.isClientSide() || !(player instanceof ServerPlayer serverPlayer)) return;
 
-            ItemStack mainHand = serverPlayer.getMainHandStack();
-            ServerWorld serverWorld = (ServerWorld) world;
+            ItemStack mainHand = serverPlayer.getMainHandItem();
+            ServerLevel serverWorld = (ServerLevel) world;
 
             // Midas Touch
             if (getEnchantmentLevel(mainHand, world, "midas_touch_enchantment") > 0) {
@@ -78,28 +79,28 @@ public class CustomEnchantmentEffects {
         });
     }
 
-    private static void handleMidasTouch(ServerWorld world, BlockState state, BlockPos pos) {
-        if (state.isOf(Blocks.GILDED_BLACKSTONE)) {
-            Block.dropStack(world, pos, new ItemStack(Items.GOLD_BLOCK));
+    private static void handleMidasTouch(ServerLevel world, BlockState state, BlockPos pos) {
+        if (state.getBlock() == Blocks.GILDED_BLACKSTONE) {
+            Block.popResource(world, pos, new ItemStack(Items.GOLD_BLOCK));
         }
     }
 
-    private static void handleMudCollector(ServerWorld world, BlockState state, BlockPos pos) {
+    private static void handleMudCollector(ServerLevel world, BlockState state, BlockPos pos) {
         if (!world.isRaining()) return;
 
         Block block = state.getBlock();
         if (block == Blocks.DIRT || block == Blocks.GRASS_BLOCK
                 || block == Blocks.COARSE_DIRT || block == Blocks.ROOTED_DIRT) {
-            Block.dropStack(world, pos, new ItemStack(Items.MUD));
+            Block.popResource(world, pos, new ItemStack(Items.MUD));
         }
     }
 
-    private static void handleTunneling(ServerWorld world, ServerPlayerEntity player, BlockPos center) {
+    private static void handleTunneling(ServerLevel world, ServerPlayer player, BlockPos center) {
         // Raycast to determine which face the player is mining
-        HitResult hitResult = player.raycast(5.0, 0.0f, false);
+        HitResult hitResult = player.pick(5.0, 0.0f, false);
         if (!(hitResult instanceof BlockHitResult blockHit)) return;
 
-        Direction face = blockHit.getSide();
+        Direction face = blockHit.getDirection();
         // Get the two axes perpendicular to the mining direction
         Direction.Axis axis = face.getAxis();
 
@@ -111,20 +112,20 @@ public class CustomEnchantmentEffects {
 
                     BlockPos offset;
                     switch (axis) {
-                        case X -> offset = center.add(0, i, j);
-                        case Y -> offset = center.add(i, 0, j);
-                        case Z -> offset = center.add(i, j, 0);
+                        case X -> offset = center.offset(0, i, j);
+                        case Y -> offset = center.offset(i, 0, j);
+                        case Z -> offset = center.offset(i, j, 0);
                         default -> { continue; }
                     }
 
                     BlockState targetState = world.getBlockState(offset);
-                    if (targetState.isAir() || targetState.isOf(Blocks.BEDROCK)
+                    if (targetState.isAir() || targetState.getBlock() == Blocks.BEDROCK
                             || !targetState.getFluidState().isEmpty()
-                            || targetState.getHardness(world, offset) < 0) {
+                            || targetState.getDestroySpeed(world, offset) < 0) {
                         continue;
                     }
 
-                    world.breakBlock(offset, true, player);
+                    world.destroyBlock(offset, true, player);
                 }
             }
         } finally {
@@ -134,19 +135,19 @@ public class CustomEnchantmentEffects {
 
     private static void registerDeathEffects() {
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-            if (entity.getEntityWorld().isClient()) return;
-            if (!(damageSource.getAttacker() instanceof ServerPlayerEntity player)) return;
+            if (entity.level().isClientSide()) return;
+            if (!(damageSource.getEntity() instanceof ServerPlayer player)) return;
 
             // Lucky Looter — check HEAD slot
-            ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
-            int luckyLevel = getEnchantmentLevel(helmet, player.getEntityWorld(), "lucky_looter_enchantment");
+            ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+            int luckyLevel = getEnchantmentLevel(helmet, player.level(), "lucky_looter_enchantment");
             if (luckyLevel > 0) {
-                handleLuckyLooter((ServerWorld) player.getEntityWorld(), player, entity instanceof HostileEntity);
+                handleLuckyLooter((ServerLevel) player.level(), player, entity instanceof Monster);
             }
         });
     }
 
-    private static void handleLuckyLooter(ServerWorld world, ServerPlayerEntity player, boolean isHostile) {
+    private static void handleLuckyLooter(ServerLevel world, ServerPlayer player, boolean isHostile) {
         // 25% chance per kill
         if (world.getRandom().nextFloat() >= 0.25f) return;
 
@@ -171,6 +172,6 @@ public class CustomEnchantmentEffects {
             };
         }
 
-        Block.dropStack(world, player.getBlockPos(), loot);
+        Block.popResource(world, player.blockPosition(), loot);
     }
 }

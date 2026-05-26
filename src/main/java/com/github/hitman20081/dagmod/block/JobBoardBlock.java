@@ -4,27 +4,27 @@ import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
 import com.mojang.serialization.MapCodec;
 
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class JobBoardBlock extends HorizontalFacingBlock {
-    public static final MapCodec<JobBoardBlock> CODEC = createCodec(JobBoardBlock::new);
+public class JobBoardBlock extends HorizontalDirectionalBlock {
+    public static final MapCodec<JobBoardBlock> CODEC = simpleCodec(JobBoardBlock::new);
 
     @Override
-    public MapCodec<JobBoardBlock> getCodec() {
+    public MapCodec<JobBoardBlock> codec() {
         return CODEC;
     }
 
@@ -56,87 +56,73 @@ public class JobBoardBlock extends HorizontalFacingBlock {
         TURN_IN_JOBS
     }
 
-    public JobBoardBlock(Settings settings) {
+    public JobBoardBlock(Properties settings) {
         super(settings);
-        setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        Direction facing = state.get(FACING);
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        Direction facing = state.getValue(FACING);
         return switch (facing) {
-            case NORTH -> Block.createCuboidShape(0, 0, 13, 16, 16, 16);
-            case SOUTH -> Block.createCuboidShape(0, 0, 0, 16, 16, 3);
-            case WEST -> Block.createCuboidShape(13, 0, 0, 16, 16, 16);
-            case EAST -> Block.createCuboidShape(0, 0, 0, 3, 16, 16);
-            default -> Block.createCuboidShape(0, 0, 0, 16, 16, 16);
+            case NORTH -> Block.box(0, 0, 13, 16, 16, 16);
+            case SOUTH -> Block.box(0, 0, 0, 16, 16, 3);
+            case WEST -> Block.box(13, 0, 0, 16, 16, 16);
+            case EAST -> Block.box(0, 0, 0, 3, 16, 16);
+            default -> Block.box(0, 0, 0, 16, 16, 16);
         };
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) {
-            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide()) {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
 
             // Check if player has met Innkeeper Garrick (tutorial gate)
             if (!PlayerDataManager.hasMetGarrick(serverPlayer)) {
-                player.sendMessage(
-                    Text.literal("🔒 This Job Board is locked!").formatted(Formatting.RED, Formatting.BOLD),
-                    false
-                );
-                player.sendMessage(Text.literal(""), false);
-                player.sendMessage(
-                    Text.literal("Find Innkeeper Garrick to learn how to use the quest system.").formatted(Formatting.YELLOW),
-                    false
-                );
-                player.sendMessage(
-                    Text.literal("(He can usually be found at an inn or tavern)").formatted(Formatting.GRAY),
-                    false
-                );
-                return ActionResult.CONSUME;
+                player.sendSystemMessage(
+                    Component.literal("🔒 This Job Board is locked!").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                player.sendSystemMessage(Component.literal(""));
+                player.sendSystemMessage(
+                    Component.literal("Find Innkeeper Garrick to learn how to use the quest system.").withStyle(ChatFormatting.YELLOW));
+                player.sendSystemMessage(
+                    Component.literal("(He can usually be found at an inn or tavern)").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.CONSUME;
             }
 
             // Check if player has a Quest Book (tutorial completion requirement)
-            boolean hasQuestBook = player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK)) ||
-                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.APPRENTICE_QUEST_BOOK)) ||
-                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.EXPERT_QUEST_BOOK)) ||
-                                   player.getInventory().contains(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.MASTER_QUEST_TOME));
+            boolean hasQuestBook = player.getInventory().contains(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK)) ||
+                                   player.getInventory().contains(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.APPRENTICE_QUEST_BOOK)) ||
+                                   player.getInventory().contains(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.EXPERT_QUEST_BOOK)) ||
+                                   player.getInventory().contains(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.MASTER_QUEST_TOME));
 
             if (!hasQuestBook) {
-                player.sendMessage(
-                    Text.literal("📚 You need a Quest Book to use this!").formatted(Formatting.YELLOW, Formatting.BOLD),
-                    false
-                );
-                player.sendMessage(Text.literal(""), false);
-                player.sendMessage(
-                    Text.literal("Complete all 3 of Garrick's tasks to earn Quest Notes.").formatted(Formatting.GRAY),
-                    false
-                );
-                player.sendMessage(
-                    Text.literal("Then take the notes to a Quest Block to combine them").formatted(Formatting.GRAY),
-                    false
-                );
-                player.sendMessage(
-                    Text.literal("into a Novice Quest Book!").formatted(Formatting.GRAY),
-                    false
-                );
-                return ActionResult.CONSUME;
+                player.sendSystemMessage(
+                    Component.literal("📚 You need a Quest Book to use this!").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+                player.sendSystemMessage(Component.literal(""));
+                player.sendSystemMessage(
+                    Component.literal("Complete all 3 of Garrick's tasks to earn Quest Notes.").withStyle(ChatFormatting.GRAY));
+                player.sendSystemMessage(
+                    Component.literal("Then take the notes to a Quest Block to combine them").withStyle(ChatFormatting.GRAY));
+                player.sendSystemMessage(
+                    Component.literal("into a Novice Quest Book!").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.CONSUME;
             }
 
             QuestManager questManager = QuestManager.getInstance();
             QuestData playerData = questManager.getPlayerData(player);
-            UUID playerId = player.getUuid();
+            UUID playerId = player.getUUID();
 
             // Update quest progress first
             questManager.updateQuestProgress(player);
@@ -151,21 +137,21 @@ public class JobBoardBlock extends HorizontalFacingBlock {
                 case TURN_IN_JOBS -> showTurnInJobs(serverPlayer, questManager, playerData);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    private void showMainMenu(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showMainMenu(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
 
-        player.sendMessage(Text.literal("=== Job Board ===").formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("Looking for work, adventurer?"), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("=== Job Board ===").withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Looking for work, adventurer?"));
+        player.sendSystemMessage(Component.literal(""));
 
         // Show quick stats
-        player.sendMessage(Text.literal("Your Status:"), false);
-        player.sendMessage(Text.literal("• Active Jobs: " + playerData.getActiveQuestCount() + "/" + playerData.getMaxActiveQuests()), false);
-        player.sendMessage(Text.literal("• Completed: " + playerData.getTotalQuestsCompleted()), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("Your Status:"));
+        player.sendSystemMessage(Component.literal("• Active Jobs: " + playerData.getActiveQuestCount() + "/" + playerData.getMaxActiveQuests()));
+        player.sendSystemMessage(Component.literal("• Completed: " + playerData.getTotalQuestsCompleted()));
+        player.sendSystemMessage(Component.literal(""));
 
         // Check for completed jobs ready to turn in FIRST
         List<Quest> completedJobs = playerData.getActiveQuestsList().stream()
@@ -174,9 +160,9 @@ public class JobBoardBlock extends HorizontalFacingBlock {
                 .toList();
 
         if (!completedJobs.isEmpty()) {
-            player.sendMessage(Text.literal("✓ You have " + completedJobs.size() + " completed job(s) to turn in!"), false);
-            player.sendMessage(Text.literal("Right-click to collect your payment!"), false);
-            player.sendMessage(Text.literal("==================="), false);
+            player.sendSystemMessage(Component.literal("✓ You have " + completedJobs.size() + " completed job(s) to turn in!"));
+            player.sendSystemMessage(Component.literal("Right-click to collect your payment!"));
+            player.sendSystemMessage(Component.literal("==================="));
 
             playerMenuState.put(playerId, MenuState.TURN_IN_JOBS);
             playerCompletedJobs.put(playerId, completedJobs);
@@ -185,7 +171,7 @@ public class JobBoardBlock extends HorizontalFacingBlock {
         }
 
         // If no completed jobs, show available jobs
-        player.sendMessage(Text.literal("Right-click again to:"), false);
+        player.sendSystemMessage(Component.literal("Right-click again to:"));
 
         // FILTER: Only show JOB and DAILY category quests
         List<Quest> availableJobs = questManager.getAvailableQuests(player).stream()
@@ -193,78 +179,78 @@ public class JobBoardBlock extends HorizontalFacingBlock {
                 .collect(Collectors.toList());
 
         if (!availableJobs.isEmpty() && playerData.canAcceptMoreQuests()) {
-            player.sendMessage(Text.literal("→ Browse Available Jobs (" + availableJobs.size() + " posted)"), false);
+            player.sendSystemMessage(Component.literal("→ Browse Available Jobs (" + availableJobs.size() + " posted)"));
             playerMenuState.put(playerId, MenuState.BROWSE_JOBS);
             playerAvailableJobs.put(playerId, availableJobs);
             playerSelectedIndex.put(playerId, 0);
         } else if (!playerData.canAcceptMoreQuests()) {
-            player.sendMessage(Text.literal("→ View Active Jobs (job slots full)"), false);
+            player.sendSystemMessage(Component.literal("→ View Active Jobs (job slots full)"));
             playerMenuState.put(playerId, MenuState.ACTIVE_JOBS);
         } else if (!playerData.getActiveQuests().isEmpty()) {
-            player.sendMessage(Text.literal("→ View Active Jobs"), false);
+            player.sendSystemMessage(Component.literal("→ View Active Jobs"));
             playerMenuState.put(playerId, MenuState.ACTIVE_JOBS);
         } else {
-            player.sendMessage(Text.literal("No jobs available. Check back later!"), false);
+            player.sendSystemMessage(Component.literal("No jobs available. Check back later!"));
         }
 
-        player.sendMessage(Text.literal("==================="), false);
+        player.sendSystemMessage(Component.literal("==================="));
     }
 
-    private void showBrowseJobs(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showBrowseJobs(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
         List<Quest> availableJobs = playerAvailableJobs.get(playerId);
         int selectedIndex = playerSelectedIndex.get(playerId);
 
         if (availableJobs == null || availableJobs.isEmpty()) {
-            player.sendMessage(Text.literal("No jobs available."), false);
+            player.sendSystemMessage(Component.literal("No jobs available."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         if (selectedIndex >= availableJobs.size()) {
-            player.sendMessage(Text.literal("No more jobs to browse."), false);
+            player.sendSystemMessage(Component.literal("No more jobs to browse."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         Quest currentJob = availableJobs.get(selectedIndex);
 
-        player.sendMessage(Text.literal("=== Available Jobs ===").formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("Job " + (selectedIndex + 1) + "/" + availableJobs.size()).formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal("=== Available Jobs ===").withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Job " + (selectedIndex + 1) + "/" + availableJobs.size()).withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("===================").withStyle(ChatFormatting.GOLD));
 
         // Show if it's a daily job
         if (currentJob.getCategory() == Quest.QuestCategory.DAILY) {
-            player.sendMessage(Text.literal("[DAILY JOB]").formatted(Formatting.AQUA), false);
+            player.sendSystemMessage(Component.literal("[DAILY JOB]").withStyle(ChatFormatting.AQUA));
         }
 
-        Text jobTitle = Text.literal("📋 " + currentJob.getName())
-                .formatted(Formatting.BOLD)
-                .formatted(Formatting.YELLOW);
-        player.sendMessage(jobTitle, false);
-        player.sendMessage(Text.literal("Difficulty: " + currentJob.getDifficulty().getDisplayName()).formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal(""), false);
+        Component jobTitle = Component.literal("📋 " + currentJob.getName())
+                .withStyle(ChatFormatting.BOLD)
+                .withStyle(ChatFormatting.YELLOW);
+        player.sendSystemMessage(jobTitle);
+        player.sendSystemMessage(Component.literal("Difficulty: " + currentJob.getDifficulty().getDisplayName()).withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal(""));
 
-        player.sendMessage(Text.literal(currentJob.getDescription()).formatted(Formatting.WHITE), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal(currentJob.getDescription()).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.literal(""));
 
-        player.sendMessage(Text.literal("Objectives:").formatted(Formatting.GREEN), false);
+        player.sendSystemMessage(Component.literal("Objectives:").withStyle(ChatFormatting.GREEN));
         for (var objective : currentJob.getObjectives()) {
-            player.sendMessage(Text.literal("  • " + objective.getDescription()).formatted(Formatting.WHITE), false);
+            player.sendSystemMessage(Component.literal("  • " + objective.getDescription()).withStyle(ChatFormatting.WHITE));
         }
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal(""));
 
-        player.sendMessage(Text.literal("Payment:").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal("Payment:").withStyle(ChatFormatting.GOLD));
         for (var reward : currentJob.getRewards()) {
-            player.sendMessage(Text.literal("  • ").append(reward.getDisplayText()), false);
+            player.sendSystemMessage(Component.literal("  • ").append(reward.getDisplayText()));
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click to ACCEPT this job"), false);
-        player.sendMessage(Text.literal("Or sneak + right-click to SKIP"), false);
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Right-click to ACCEPT this job"));
+        player.sendSystemMessage(Component.literal("Or sneak + right-click to SKIP"));
+        player.sendSystemMessage(Component.literal("===================").withStyle(ChatFormatting.GOLD));
 
-        if (player.isSneaking()) {
+        if (player.isShiftKeyDown()) {
             playerSelectedIndex.put(playerId, selectedIndex + 1);
             return;
         }
@@ -272,8 +258,8 @@ public class JobBoardBlock extends HorizontalFacingBlock {
         playerMenuState.put(playerId, MenuState.CONFIRM_ACCEPT);
     }
 
-    private void showConfirmAccept(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showConfirmAccept(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
         List<Quest> availableJobs = playerAvailableJobs.get(playerId);
         int selectedIndex = playerSelectedIndex.get(playerId);
 
@@ -284,28 +270,28 @@ public class JobBoardBlock extends HorizontalFacingBlock {
 
         Quest jobToAccept = availableJobs.get(selectedIndex);
 
-        player.sendMessage(Text.literal("=== CONFIRM JOB ACCEPTANCE ==="), false);
-        player.sendMessage(Text.literal("Job: " + jobToAccept.getName()), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click to CONFIRM"), false);
-        player.sendMessage(Text.literal("==================="), false);
+        player.sendSystemMessage(Component.literal("=== CONFIRM JOB ACCEPTANCE ==="));
+        player.sendSystemMessage(Component.literal("Job: " + jobToAccept.getName()));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Right-click to CONFIRM"));
+        player.sendSystemMessage(Component.literal("==================="));
 
         // Accept the job
         if (questManager.startQuest(player, jobToAccept.getId())) {
-            player.sendMessage(Text.literal("✓ Job accepted: " + jobToAccept.getName()), false);
-            player.sendMessage(Text.literal("Get to work!"), false);
+            player.sendSystemMessage(Component.literal("✓ Job accepted: " + jobToAccept.getName()));
+            player.sendSystemMessage(Component.literal("Get to work!"));
         } else {
-            player.sendMessage(Text.literal("✗ Failed to accept job!"), false);
+            player.sendSystemMessage(Component.literal("✗ Failed to accept job!"));
         }
 
         playerMenuState.put(playerId, MenuState.MAIN_MENU);
         playerSelectedIndex.put(playerId, 0);
     }
 
-    private void showActiveJobs(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showActiveJobs(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
 
-        player.sendMessage(Text.literal("=== Your Active Jobs ==="), false);
+        player.sendSystemMessage(Component.literal("=== Your Active Jobs ==="));
 
         // FILTER: Only show JOB and DAILY category quests
         List<Quest> activeJobs = playerData.getActiveQuests().stream()
@@ -313,31 +299,31 @@ public class JobBoardBlock extends HorizontalFacingBlock {
                 .toList();
 
         if (activeJobs.isEmpty()) {
-            player.sendMessage(Text.literal("No active jobs."), false);
+            player.sendSystemMessage(Component.literal("No active jobs."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         for (Quest job : activeJobs) {
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("📋 " + job.getName() + " (" + job.getDifficulty().getDisplayName() + ")"), false);
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("📋 " + job.getName() + " (" + job.getDifficulty().getDisplayName() + ")"));
 
             for (var objective : job.getObjectives()) {
-                player.sendMessage(Text.literal("  " + objective.getDisplayText().getString()), false);
+                player.sendSystemMessage(Component.literal("  " + objective.getDisplayText().getString()));
             }
 
             if (job.isCompleted()) {
-                player.sendMessage(Text.literal("  ✓ Ready to collect payment!"), false);
+                player.sendSystemMessage(Component.literal("  ✓ Ready to collect payment!"));
             }
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click again to return to main menu."), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Right-click again to return to main menu."));
         playerMenuState.put(playerId, MenuState.MAIN_MENU);
     }
 
-    private void showTurnInJobs(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showTurnInJobs(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
         List<Quest> completedJobs = playerCompletedJobs.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
@@ -349,14 +335,14 @@ public class JobBoardBlock extends HorizontalFacingBlock {
             playerCompletedJobs.put(playerId, completedJobs);
 
             if (completedJobs.isEmpty()) {
-                player.sendMessage(Text.literal("No completed jobs to turn in."), false);
+                player.sendSystemMessage(Component.literal("No completed jobs to turn in."));
                 playerMenuState.put(playerId, MenuState.MAIN_MENU);
                 return;
             }
         }
 
         if (selectedIndex >= completedJobs.size()) {
-            player.sendMessage(Text.literal("All jobs completed and paid!"), false);
+            player.sendSystemMessage(Component.literal("All jobs completed and paid!"));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             playerCompletedJobs.remove(playerId);
             return;
@@ -364,37 +350,37 @@ public class JobBoardBlock extends HorizontalFacingBlock {
 
         Quest jobToTurnIn = completedJobs.get(selectedIndex);
 
-        player.sendMessage(Text.literal("=== Collect Payment " + (selectedIndex + 1) + "/" + completedJobs.size() + " ==="), false);
-        player.sendMessage(Text.literal("📋 " + jobToTurnIn.getName()), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("=== Collect Payment " + (selectedIndex + 1) + "/" + completedJobs.size() + " ==="));
+        player.sendSystemMessage(Component.literal("📋 " + jobToTurnIn.getName()));
+        player.sendSystemMessage(Component.literal(""));
 
-        player.sendMessage(Text.literal("You will receive:"), false);
+        player.sendSystemMessage(Component.literal("You will receive:"));
         for (var reward : jobToTurnIn.getRewards()) {
-            player.sendMessage(reward.getDisplayText(), false);
+            player.sendSystemMessage(reward.getDisplayText());
         }
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal(""));
 
         if (!jobToTurnIn.isCompleted()) {
-            player.sendMessage(Text.literal("✗ This job is not yet completed!"), false);
+            player.sendSystemMessage(Component.literal("✗ This job is not yet completed!"));
             List<Quest> mutableCompletedJobs = new ArrayList<>(completedJobs);
             mutableCompletedJobs.remove(selectedIndex);
             playerCompletedJobs.put(playerId, mutableCompletedJobs);
             return;
         }
 
-        player.sendMessage(Text.literal("Right-click to collect payment..."), false);
+        player.sendSystemMessage(Component.literal("Right-click to collect payment..."));
 
         boolean success = questManager.turnInQuest(player, jobToTurnIn.getId());
 
         if (success) {
-            player.sendMessage(Text.literal("✓ Job completed! Payment received!"), false);
-            player.sendMessage(Text.literal("Check your inventory!"), false);
+            player.sendSystemMessage(Component.literal("✓ Job completed! Payment received!"));
+            player.sendSystemMessage(Component.literal("Check your inventory!"));
 
             List<Quest> mutableCompletedJobs = new ArrayList<>(completedJobs);
             mutableCompletedJobs.remove(selectedIndex);
             playerCompletedJobs.put(playerId, mutableCompletedJobs);
         } else {
-            player.sendMessage(Text.literal("✗ Failed to collect payment. Check your inventory space!"), false);
+            player.sendSystemMessage(Component.literal("✗ Failed to collect payment. Check your inventory space!"));
             playerSelectedIndex.put(playerId, selectedIndex + 1);
         }
     }

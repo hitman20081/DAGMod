@@ -2,7 +2,7 @@ package com.github.hitman20081.dagmod.class_system.rogue;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class EnergyManager {
      */
     public static void initialize() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 tickEnergyRegen(player);
             }
         });
@@ -38,15 +38,15 @@ public class EnergyManager {
     /**
      * Handle energy regeneration for a player
      */
-    private static void tickEnergyRegen(ServerPlayerEntity player) {
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+    private static void tickEnergyRegen(ServerPlayer player) {
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         // Only regenerate for Rogue players (case-insensitive)
         if (!playerClass.equalsIgnoreCase("rogue")) {
             return;
         }
 
-        UUID uuid = player.getUuid();
+        UUID uuid = player.getUUID();
         EnergyData energyData = getEnergyData(uuid);
 
         // Check if already at max energy
@@ -83,8 +83,8 @@ public class EnergyManager {
     /**
      * Get a player's current energy
      */
-    public static int getEnergy(ServerPlayerEntity player) {
-        return getEnergyData(player.getUuid()).getCurrentEnergy();
+    public static int getEnergy(ServerPlayer player) {
+        return getEnergyData(player.getUUID()).getCurrentEnergy();
     }
 
     /**
@@ -97,8 +97,8 @@ public class EnergyManager {
     /**
      * Set a player's energy
      */
-    public static void setEnergy(ServerPlayerEntity player, int energy) {
-        EnergyData energyData = getEnergyData(player.getUuid());
+    public static void setEnergy(ServerPlayer player, int energy) {
+        EnergyData energyData = getEnergyData(player.getUUID());
         energyData.setEnergy(energy);
         EnergyNetworking.syncEnergyToClient(player, energy);
     }
@@ -106,8 +106,8 @@ public class EnergyManager {
     /**
      * Add energy to a player
      */
-    public static void addEnergy(ServerPlayerEntity player, int amount) {
-        EnergyData energyData = getEnergyData(player.getUuid());
+    public static void addEnergy(ServerPlayer player, int amount) {
+        EnergyData energyData = getEnergyData(player.getUUID());
         energyData.addEnergy(amount);
         EnergyNetworking.syncEnergyToClient(player, energyData.getCurrentEnergy());
     }
@@ -116,8 +116,8 @@ public class EnergyManager {
      * Try to consume energy from a player
      * Returns true if successful, false if insufficient energy
      */
-    public static boolean consumeEnergy(ServerPlayerEntity player, int amount) {
-        EnergyData energyData = getEnergyData(player.getUuid());
+    public static boolean consumeEnergy(ServerPlayer player, int amount) {
+        EnergyData energyData = getEnergyData(player.getUUID());
         boolean success = energyData.useEnergy(amount);
 
         if (success) {
@@ -130,14 +130,14 @@ public class EnergyManager {
     /**
      * Check if player has enough energy
      */
-    public static boolean hasEnergy(ServerPlayerEntity player, int amount) {
-        return getEnergyData(player.getUuid()).hasEnergy(amount);
+    public static boolean hasEnergy(ServerPlayer player, int amount) {
+        return getEnergyData(player.getUUID()).hasEnergy(amount);
     }
 
     /**
      * Initialize energy for a new Rogue player
      */
-    public static void initializePlayerEnergy(ServerPlayerEntity player) {
+    public static void initializePlayerEnergy(ServerPlayer player) {
         setEnergy(player, getMaxEnergy());
     }
 

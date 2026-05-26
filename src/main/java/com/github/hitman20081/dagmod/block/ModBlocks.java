@@ -1,295 +1,260 @@
 package com.github.hitman20081.dagmod.block;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.block.ExperienceDroppingBlock;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.util.valueproviders.UniformInt;
 
 public class ModBlocks {
 
     public static Block register(String name, Block block) {
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, name));
-        Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
 
         // Also register as an item so it can be placed
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, name));
-        Registry.register(Registries.ITEM, itemKey, new BlockItem(registeredBlock, new Item.Settings().registryKey(itemKey)));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
+        Registry.register(BuiltInRegistries.ITEM, itemKey, new BlockItem(registeredBlock, new Item.Properties()));
 
         return registeredBlock;
     }
 
     public static final Block QUEST_BLOCK = register("quest_block",
-            new QuestBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "quest_block")))
+            new QuestBlock(BlockBehaviour.Properties.of()
                     .strength(2.0f)));
 
     public static final Block JOB_BOARD_BLOCK = register("job_board",
-            new JobBoardBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "job_board")))
+            new JobBoardBlock(BlockBehaviour.Properties.of()
                     .strength(2.0f)
-                    .sounds(BlockSoundGroup.WOOD)));
+                    .sound(SoundType.WOOD)));
 
     // NEW: Class Selection Altar
     public static final Block CLASS_SELECTION_ALTAR = register("class_selection_altar",
-            new ClassSelectionAltarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "class_selection_altar")))
+            new ClassSelectionAltarBlock(BlockBehaviour.Properties.of()
                     .strength(3.0f)
-                    .sounds(BlockSoundGroup.STONE)
-                    .requiresTool()
-                    .luminance(state -> 5))); // Slight glow
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 5))); // Slight glow
 
     public static final Block RACE_SELECTION_ALTAR = register("race_selection_altar",
-            new RaceSelectionAltarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "race_selection_altar")))
+            new RaceSelectionAltarBlock(BlockBehaviour.Properties.of()
                     .strength(3.0f)
-                    .sounds(BlockSoundGroup.STONE)
-                    .requiresTool()
-                    .luminance(state -> 10))); // Glows more than class altar
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 10))); // Glows more than class altar
 
     public static final Block SHIP_HELM = register("ship_helm",
-            new ShipHelmBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "ship_helm")))
+            new ShipHelmBlock(BlockBehaviour.Properties.of()
                     .strength(2.5f)
-                    .sounds(BlockSoundGroup.WOOD)
-                    .requiresTool()));
+                    .sound(SoundType.WOOD)
+                    .requiresCorrectToolForDrops()));
 
     // Dragon Egg Block
     public static final Block DRAGON_EGG_BLOCK = register("dragon_egg",
-            new DragonEggBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "dragon_egg")))
+            new DragonEggBlock(BlockBehaviour.Properties.of()
                     .strength(3.0f)
-                    .sounds(BlockSoundGroup.STONE)
-                    .luminance(state -> 7)
-                    .nonOpaque()));
+                    .sound(SoundType.STONE)
+                    .lightLevel(state -> 7)
+                    .noOcclusion()));
 
     // ===== GEM ORE BLOCKS =====
 
     // Standard Ores
     public static final Block MYTHRIL_ORE = register("mythril_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "mythril_ore")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(3.0f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block CITRINE_ORE = register("citrine_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "citrine_ore")))
+            new DropExperienceBlock(UniformInt.of(2, 5), BlockBehaviour.Properties.of()
                     .strength(3.0f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block RUBY_ORE = register("ruby_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "ruby_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(3.0f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block SAPPHIRE_ORE = register("sapphire_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "sapphire_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(3.0f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block TANZANITE_ORE = register("tanzanite_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "tanzanite_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(3.0f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block ZIRCON_ORE = register("zircon_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "zircon_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(3.0f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     // Deepslate Ore Variants
     public static final Block DEEPSLATE_CITRINE_ORE = register("deepslate_citrine_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_citrine_ore")))
+            new DropExperienceBlock(UniformInt.of(2, 5), BlockBehaviour.Properties.of()
                     .strength(4.5f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.DEEPSLATE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
 
     public static final Block DEEPSLATE_RUBY_ORE = register("deepslate_ruby_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_ruby_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(4.5f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.DEEPSLATE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
 
     public static final Block DEEPSLATE_SAPPHIRE_ORE = register("deepslate_sapphire_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_sapphire_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(4.5f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.DEEPSLATE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
 
     public static final Block DEEPSLATE_TANZANITE_ORE = register("deepslate_tanzanite_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_tanzanite_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(4.5f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.DEEPSLATE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
 
     public static final Block DEEPSLATE_ZIRCON_ORE = register("deepslate_zircon_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "deepslate_zircon_ore")))
+            new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.of()
                     .strength(4.5f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.DEEPSLATE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
 
     public static final Block PINK_GARNET_DEEPSLATE_ORE = register("pink_garnet_deepslate_ore",
-            new ExperienceDroppingBlock(UniformIntProvider.create(5, 9), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "pink_garnet_deepslate_ore")))
+            new DropExperienceBlock(UniformInt.of(5, 9), BlockBehaviour.Properties.of()
                     .strength(4.5f, 3.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.DEEPSLATE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
 
     // ===== GEM STORAGE BLOCKS =====
 
     public static final Block MYTHRIL_BLOCK = register("mythril_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "mythril_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static final Block CITRINE_BLOCK = register("citrine_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "citrine_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static final Block RUBY_BLOCK = register("ruby_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "ruby_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static final Block SAPPHIRE_BLOCK = register("sapphire_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "sapphire_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static final Block TANZANITE_BLOCK = register("tanzanite_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "tanzanite_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static final Block ZIRCON_BLOCK = register("zircon_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "zircon_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static final Block PINK_GARNET_BLOCK = register("pink_garnet_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "pink_garnet_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     // ===== RAW GEM BLOCKS =====
 
     public static final Block RAW_MYTHRIL_BLOCK = register("raw_mythril_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "raw_mythril_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block RAW_CITRINE_BLOCK = register("raw_citrine_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "raw_citrine_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block RAW_RUBY_BLOCK = register("raw_ruby_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "raw_ruby_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block RAW_SAPPHIRE_BLOCK = register("raw_sapphire_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "raw_sapphire_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     public static final Block RAW_PINK_GARNET_BLOCK = register("raw_pink_garnet_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "raw_pink_garnet_block")))
+            new Block(BlockBehaviour.Properties.of()
                     .strength(5.0f, 6.0f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.STONE)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.STONE)));
 
     // ===== GEM CRAFTING STATIONS =====
 
     public static final Block GEM_CUTTING_STATION = register("gem_cutting_station",
-            new GemCuttingStationBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "gem_cutting_station")))
+            new GemCuttingStationBlock(BlockBehaviour.Properties.of()
                     .strength(2.5f)
-                    .requiresTool()
-                    .nonOpaque()
-                    .sounds(BlockSoundGroup.WOOD)));
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)));
 
     public static final Block GEM_POLISHING_STATION = register("gem_polishing_station",
-            new GemPolishingStationBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "gem_polishing_station")))
+            new GemPolishingStationBlock(BlockBehaviour.Properties.of()
                     .strength(2.5f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.WOOD)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.WOOD)));
 
     public static final Block GEM_INFUSING_STATION = register("gem_infusing_station",
-            new GemInfusingStationBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "gem_infusing_station")))
+            new GemInfusingStationBlock(BlockBehaviour.Properties.of()
                     .strength(2.5f)
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.WOOD)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.WOOD)));
 
     // ===== LOCKED CHESTS =====
 
     // Hall of Champions Respawn Block
     public static final Block HALL_RESPAWN_BLOCK = register("hall_respawn_block",
-            new HallRespawnBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "hall_respawn_block")))
+            new HallRespawnBlock(BlockBehaviour.Properties.of()
                     .strength(50.0f, 1200.0f)
-                    .sounds(BlockSoundGroup.STONE)
-                    .requiresTool()
-                    .luminance(state -> 12)));
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 12)));
 
     public static final Block IRON_CHEST = register("iron_chest",
-            new IronChestBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "iron_chest")))
+            new IronChestBlock(BlockBehaviour.Properties.of()
                     .strength(5.0f, 1200.0f)  // High blast resistance like obsidian
-                    .requiresTool()
-                    .sounds(BlockSoundGroup.METAL)));
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL)));
 
     public static void registerModBlocks() {
         DagMod.LOGGER.info("Registering Mod Blocks for " + DagMod.MOD_ID);
@@ -297,85 +262,85 @@ public class ModBlocks {
 
     public static void initialize() {
         // Add to creative inventory
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(QUEST_BLOCK));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(QUEST_BLOCK));
 
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(JOB_BOARD_BLOCK));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(JOB_BOARD_BLOCK));
 
         // NEW: Add class altar to functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(CLASS_SELECTION_ALTAR));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(CLASS_SELECTION_ALTAR));
 
         // NEW: Add race altar to functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(RACE_SELECTION_ALTAR));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(RACE_SELECTION_ALTAR));
 
         // NEW: Add ship helm to functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(SHIP_HELM));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(SHIP_HELM));
 
         // Dragon Egg Block to functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(DRAGON_EGG_BLOCK));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(DRAGON_EGG_BLOCK));
 
         // Gem Ores - Add to Natural Blocks group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
                 .register((itemGroup) -> {
-                    itemGroup.add(MYTHRIL_ORE);
-                    itemGroup.add(CITRINE_ORE);
-                    itemGroup.add(RUBY_ORE);
-                    itemGroup.add(SAPPHIRE_ORE);
-                    itemGroup.add(TANZANITE_ORE);
-                    itemGroup.add(ZIRCON_ORE);
-                    itemGroup.add(DEEPSLATE_CITRINE_ORE);
-                    itemGroup.add(DEEPSLATE_RUBY_ORE);
-                    itemGroup.add(DEEPSLATE_SAPPHIRE_ORE);
-                    itemGroup.add(DEEPSLATE_TANZANITE_ORE);
-                    itemGroup.add(DEEPSLATE_ZIRCON_ORE);
-                    itemGroup.add(PINK_GARNET_DEEPSLATE_ORE);
+                    itemGroup.accept(MYTHRIL_ORE);
+                    itemGroup.accept(CITRINE_ORE);
+                    itemGroup.accept(RUBY_ORE);
+                    itemGroup.accept(SAPPHIRE_ORE);
+                    itemGroup.accept(TANZANITE_ORE);
+                    itemGroup.accept(ZIRCON_ORE);
+                    itemGroup.accept(DEEPSLATE_CITRINE_ORE);
+                    itemGroup.accept(DEEPSLATE_RUBY_ORE);
+                    itemGroup.accept(DEEPSLATE_SAPPHIRE_ORE);
+                    itemGroup.accept(DEEPSLATE_TANZANITE_ORE);
+                    itemGroup.accept(DEEPSLATE_ZIRCON_ORE);
+                    itemGroup.accept(PINK_GARNET_DEEPSLATE_ORE);
                 });
 
         // Gem Storage Blocks - Add to Building Blocks group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
                 .register((itemGroup) -> {
-                    itemGroup.add(MYTHRIL_BLOCK);
-                    itemGroup.add(CITRINE_BLOCK);
-                    itemGroup.add(RUBY_BLOCK);
-                    itemGroup.add(SAPPHIRE_BLOCK);
-                    itemGroup.add(TANZANITE_BLOCK);
-                    itemGroup.add(ZIRCON_BLOCK);
-                    itemGroup.add(PINK_GARNET_BLOCK);
-                    itemGroup.add(RAW_MYTHRIL_BLOCK);
-                    itemGroup.add(RAW_CITRINE_BLOCK);
-                    itemGroup.add(RAW_RUBY_BLOCK);
-                    itemGroup.add(RAW_SAPPHIRE_BLOCK);
-                    itemGroup.add(RAW_PINK_GARNET_BLOCK);
+                    itemGroup.accept(MYTHRIL_BLOCK);
+                    itemGroup.accept(CITRINE_BLOCK);
+                    itemGroup.accept(RUBY_BLOCK);
+                    itemGroup.accept(SAPPHIRE_BLOCK);
+                    itemGroup.accept(TANZANITE_BLOCK);
+                    itemGroup.accept(ZIRCON_BLOCK);
+                    itemGroup.accept(PINK_GARNET_BLOCK);
+                    itemGroup.accept(RAW_MYTHRIL_BLOCK);
+                    itemGroup.accept(RAW_CITRINE_BLOCK);
+                    itemGroup.accept(RAW_RUBY_BLOCK);
+                    itemGroup.accept(RAW_SAPPHIRE_BLOCK);
+                    itemGroup.accept(RAW_PINK_GARNET_BLOCK);
                 });
 
         // Gem Crafting Stations - Add to Functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
                 .register((itemGroup) -> {
-                    itemGroup.add(GEM_CUTTING_STATION);
-                    itemGroup.add(GEM_POLISHING_STATION);
-                    itemGroup.add(GEM_INFUSING_STATION);
+                    itemGroup.accept(GEM_CUTTING_STATION);
+                    itemGroup.accept(GEM_POLISHING_STATION);
+                    itemGroup.accept(GEM_INFUSING_STATION);
                 });
 
         // Hall Respawn Block - Add to Functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
-                .register((itemGroup) -> itemGroup.add(HALL_RESPAWN_BLOCK));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(HALL_RESPAWN_BLOCK));
 
         // Locked Chests - Add to Functional group
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
                 .register((itemGroup) -> {
-                    itemGroup.add(IRON_CHEST);
+                    itemGroup.accept(IRON_CHEST);
                 });
 
         // Boss Spawn Triggers - Add to Operator Utilities tab
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.OPERATOR)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)
                 .register((itemGroup) -> {
-                    itemGroup.add(BOSS_SPAWN_TRIGGER);
-                    itemGroup.add(SKELETON_KING_SPAWN_TRIGGER);
+                    itemGroup.accept(BOSS_SPAWN_TRIGGER);
+                    itemGroup.accept(SKELETON_KING_SPAWN_TRIGGER);
                 });
 
         DagMod.LOGGER.info("Registering blocks for " + DagMod.MOD_ID);
@@ -383,17 +348,15 @@ public class ModBlocks {
 
     // Boss spawn trigger — indestructible, no collision, hidden in boss room NBTs
     public static final Block BOSS_SPAWN_TRIGGER = register("boss_spawn_trigger",
-            new BossSpawnTriggerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "boss_spawn_trigger")))
+            new BossSpawnTriggerBlock(BlockBehaviour.Properties.of()
                     .strength(-1.0f, 3600000.0f)
                     .noCollision()
-                    .nonOpaque()));
+                    .noOcclusion()));
 
     // Skeleton King spawn trigger — indestructible, no collision, hidden in boss room NBTs
     public static final Block SKELETON_KING_SPAWN_TRIGGER = register("skeleton_king_spawn_trigger",
-            new BossSpawnTriggerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "skeleton_king_spawn_trigger")))
+            new BossSpawnTriggerBlock(BlockBehaviour.Properties.of()
                     .strength(-1.0f, 3600000.0f)
                     .noCollision()
-                    .nonOpaque()));
+                    .noOcclusion()));
 }

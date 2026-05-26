@@ -1,20 +1,20 @@
 
 package com.github.hitman20081.dagmod.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.List;
 
 public class ClassTokenItem extends Item {
     private final String className;
-    private final Formatting color;
+    private final ChatFormatting color;
     private final String symbol;
 
-    public ClassTokenItem(Settings settings, String className, Formatting color, String symbol) {
+    public ClassTokenItem(Properties settings, String className, ChatFormatting color, String symbol) {
         super(settings);
         this.className = className;
         this.color = color;
@@ -22,13 +22,13 @@ public class ClassTokenItem extends Item {
     }
 
 
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.literal("Right-click the Class Selection Altar")
-                .formatted(Formatting.GRAY));
-        tooltip.add(Text.literal("while holding this to become a " + className)
-                .formatted(Formatting.GRAY));
-        tooltip.add(Text.empty());
-        tooltip.add(Text.literal(symbol + " " + className + " Path")
-                .formatted(color));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
+        tooltip.add(Component.literal("Right-click the Class Selection Altar")
+                .withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.literal("while holding this to become a " + className)
+                .withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.empty());
+        tooltip.add(Component.literal(symbol + " " + className + " Path")
+                .withStyle(color));
     }
 }

@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.block;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 /**
  * Invisible trigger block placed in boss room NBTs.
@@ -9,7 +9,7 @@ import net.minecraft.block.Block;
  */
 public class BossSpawnTriggerBlock extends Block {
 
-    public BossSpawnTriggerBlock(Settings settings) {
+    public BossSpawnTriggerBlock(Properties settings) {
         super(settings);
     }
 }

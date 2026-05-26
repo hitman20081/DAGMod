@@ -6,9 +6,15 @@ package com.github.hitman20081.dagmod.entity.client;
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.entity.DragonGuardianEntity;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.PartPose;
 
 /**
  * Custom dragon model with procedural state-based animations
@@ -18,7 +24,7 @@ import net.minecraft.util.Identifier;
  */
 public class DragonGuardianModel extends EntityModel<DragonGuardianRenderState> {
 
-    public static final EntityModelLayer LAYER_LOCATION = new EntityModelLayer(Identifier.of(DagMod.MOD_ID, "dragon_guardian"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "dragon_guardian"), "main");
 
     private final ModelPart body;
     private final ModelPart neck5;
@@ -97,227 +103,227 @@ public class DragonGuardianModel extends EntityModel<DragonGuardianRenderState> 
         this.tail12 = this.tail11.getChild("tail12");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData body = modelPartData.addChild("body",
-            ModelPartBuilder.create()
-                .uv(0, 224).cuboid(-12.0F, 0.0F, -16.0F, 24.0F, 24.0F, 64.0F)
-                .uv(184, 317).cuboid(-1.0F, -6.0F, -10.0F, 2.0F, 6.0F, 12.0F)
-                .uv(320, 148).cuboid(-1.0F, -6.0F, 10.0F, 2.0F, 6.0F, 12.0F)
-                .uv(320, 166).cuboid(-1.0F, -6.0F, 30.0F, 2.0F, 6.0F, 12.0F),
-            ModelTransform.of(0.0F, 4.0F, 8.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition body = modelPartData.addOrReplaceChild("body",
+            CubeListBuilder.create()
+                .texOffs(0, 224).addBox(-12.0F, 0.0F, -16.0F, 24.0F, 24.0F, 64.0F)
+                .texOffs(184, 317).addBox(-1.0F, -6.0F, -10.0F, 2.0F, 6.0F, 12.0F)
+                .texOffs(320, 148).addBox(-1.0F, -6.0F, 10.0F, 2.0F, 6.0F, 12.0F)
+                .texOffs(320, 166).addBox(-1.0F, -6.0F, 30.0F, 2.0F, 6.0F, 12.0F),
+            PartPose.offsetAndRotation(0.0F, 4.0F, 8.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData neck5 = body.addChild("neck5",
-            ModelPartBuilder.create()
-                .uv(232, 292).cuboid(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
-                .uv(320, 322).cuboid(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 12.0F, -16.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition neck5 = body.addOrReplaceChild("neck5",
+            CubeListBuilder.create()
+                .texOffs(232, 292).addBox(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(320, 322).addBox(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 12.0F, -16.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData neck4 = neck5.addChild("neck4",
-            ModelPartBuilder.create()
-                .uv(288, 272).cuboid(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
-                .uv(320, 312).cuboid(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition neck4 = neck5.addOrReplaceChild("neck4",
+            CubeListBuilder.create()
+                .texOffs(288, 272).addBox(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(320, 312).addBox(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData neck3 = neck4.addChild("neck3",
-            ModelPartBuilder.create()
-                .uv(288, 252).cuboid(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
-                .uv(320, 194).cuboid(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition neck3 = neck4.addOrReplaceChild("neck3",
+            CubeListBuilder.create()
+                .texOffs(288, 252).addBox(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(320, 194).addBox(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData neck2 = neck3.addChild("neck2",
-            ModelPartBuilder.create()
-                .uv(288, 232).cuboid(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
-                .uv(320, 184).cuboid(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition neck2 = neck3.addOrReplaceChild("neck2",
+            CubeListBuilder.create()
+                .texOffs(288, 232).addBox(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(320, 184).addBox(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData neck = neck2.addChild("neck",
-            ModelPartBuilder.create()
-                .uv(288, 212).cuboid(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
-                .uv(216, 297).cuboid(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition neck = neck2.addOrReplaceChild("neck",
+            CubeListBuilder.create()
+                .texOffs(288, 212).addBox(-5.0F, -5.0F, -10.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(216, 297).addBox(-1.0F, -9.0F, -8.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, -10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData head = neck.addChild("head",
-            ModelPartBuilder.create()
-                .uv(176, 256).cuboid(-6.0F, -1.0F, -30.0F, 12.0F, 5.0F, 16.0F)
-                .uv(176, 224).cuboid(-8.0F, -8.0F, -16.0F, 16.0F, 16.0F, 16.0F)
-                .uv(224, 204).cuboid(-5.0F, -12.0F, -10.0F, 2.0F, 4.0F, 6.0F)
-                .uv(328, 284).cuboid(-5.0F, -3.0F, -28.0F, 2.0F, 2.0F, 4.0F)
-                .uv(224, 214).cuboid(3.0F, -12.0F, -10.0F, 2.0F, 4.0F, 6.0F)
-                .uv(64, 332).cuboid(3.0F, -3.0F, -28.0F, 2.0F, 2.0F, 4.0F),
-            ModelTransform.of(0.0F, -1.0F, -10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition head = neck.addOrReplaceChild("head",
+            CubeListBuilder.create()
+                .texOffs(176, 256).addBox(-6.0F, -1.0F, -30.0F, 12.0F, 5.0F, 16.0F)
+                .texOffs(176, 224).addBox(-8.0F, -8.0F, -16.0F, 16.0F, 16.0F, 16.0F)
+                .texOffs(224, 204).addBox(-5.0F, -12.0F, -10.0F, 2.0F, 4.0F, 6.0F)
+                .texOffs(328, 284).addBox(-5.0F, -3.0F, -28.0F, 2.0F, 2.0F, 4.0F)
+                .texOffs(224, 214).addBox(3.0F, -12.0F, -10.0F, 2.0F, 4.0F, 6.0F)
+                .texOffs(64, 332).addBox(3.0F, -3.0F, -28.0F, 2.0F, 2.0F, 4.0F),
+            PartPose.offsetAndRotation(0.0F, -1.0F, -10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData jaw = head.addChild("jaw",
-            ModelPartBuilder.create()
-                .uv(176, 277).cuboid(-6.0F, 0.0F, -15.0F, 12.0F, 4.0F, 16.0F),
-            ModelTransform.of(0.0F, 4.0F, -15.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition jaw = head.addOrReplaceChild("jaw",
+            CubeListBuilder.create()
+                .texOffs(176, 277).addBox(-6.0F, 0.0F, -15.0F, 12.0F, 4.0F, 16.0F),
+            PartPose.offsetAndRotation(0.0F, 4.0F, -15.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData wing = body.addChild("wing",
-            ModelPartBuilder.create()
-                .uv(224, 0).cuboid(0.0F, -4.0F, -4.0F, 56.0F, 8.0F, 8.0F)
-                .uv(0, 0).cuboid(0.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
-            ModelTransform.of(12.0F, 1.0F, -6.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition wing = body.addOrReplaceChild("wing",
+            CubeListBuilder.create()
+                .texOffs(224, 0).addBox(0.0F, -4.0F, -4.0F, 56.0F, 8.0F, 8.0F)
+                .texOffs(0, 0).addBox(0.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
+            PartPose.offsetAndRotation(12.0F, 1.0F, -6.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData wingtip = wing.addChild("wingtip",
-            ModelPartBuilder.create()
-                .uv(224, 32).cuboid(0.0F, -2.0F, -2.0F, 56.0F, 4.0F, 4.0F)
-                .uv(0, 56).cuboid(0.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
-            ModelTransform.of(56.0F, 0.0F, -2.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition wingtip = wing.addOrReplaceChild("wingtip",
+            CubeListBuilder.create()
+                .texOffs(224, 32).addBox(0.0F, -2.0F, -2.0F, 56.0F, 4.0F, 4.0F)
+                .texOffs(0, 56).addBox(0.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
+            PartPose.offsetAndRotation(56.0F, 0.0F, -2.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData wing1 = body.addChild("wing1",
-            ModelPartBuilder.create()
-                .uv(224, 16).cuboid(-56.0F, -4.0F, -4.0F, 56.0F, 8.0F, 8.0F)
-                .uv(0, 112).cuboid(-56.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
-            ModelTransform.of(-12.0F, 1.0F, -6.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition wing1 = body.addOrReplaceChild("wing1",
+            CubeListBuilder.create()
+                .texOffs(224, 16).addBox(-56.0F, -4.0F, -4.0F, 56.0F, 8.0F, 8.0F)
+                .texOffs(0, 112).addBox(-56.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
+            PartPose.offsetAndRotation(-12.0F, 1.0F, -6.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData wingtip1 = wing1.addChild("wingtip1",
-            ModelPartBuilder.create()
-                .uv(224, 40).cuboid(-56.0F, -2.0F, -2.0F, 56.0F, 4.0F, 4.0F)
-                .uv(0, 168).cuboid(-56.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
-            ModelTransform.of(-56.0F, 0.0F, -2.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition wingtip1 = wing1.addOrReplaceChild("wingtip1",
+            CubeListBuilder.create()
+                .texOffs(224, 40).addBox(-56.0F, -2.0F, -2.0F, 56.0F, 4.0F, 4.0F)
+                .texOffs(0, 168).addBox(-56.0F, 0.0F, 2.0F, 56.0F, 0.0F, 56.0F),
+            PartPose.offsetAndRotation(-56.0F, 0.0F, -2.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData rearleg = body.addChild("rearleg",
-            ModelPartBuilder.create()
-                .uv(224, 108).cuboid(-8.0F, -4.0F, -8.0F, 16.0F, 32.0F, 16.0F),
-            ModelTransform.of(-16.0F, 12.0F, 34.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition rearleg = body.addOrReplaceChild("rearleg",
+            CubeListBuilder.create()
+                .texOffs(224, 108).addBox(-8.0F, -4.0F, -8.0F, 16.0F, 32.0F, 16.0F),
+            PartPose.offsetAndRotation(-16.0F, 12.0F, 34.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData rearlegtip = rearleg.addChild("rearlegtip",
-            ModelPartBuilder.create()
-                .uv(240, 204).cuboid(-6.0F, -2.0F, 0.0F, 12.0F, 32.0F, 12.0F),
-            ModelTransform.of(0.0F, 30.0F, -6.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition rearlegtip = rearleg.addOrReplaceChild("rearlegtip",
+            CubeListBuilder.create()
+                .texOffs(240, 204).addBox(-6.0F, -2.0F, 0.0F, 12.0F, 32.0F, 12.0F),
+            PartPose.offsetAndRotation(0.0F, 30.0F, -6.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData rearfoot = rearlegtip.addChild("rearfoot",
-            ModelPartBuilder.create()
-                .uv(224, 48).cuboid(-9.0F, 0.0F, -20.0F, 18.0F, 6.0F, 24.0F),
-            ModelTransform.of(0.0F, 26.0F, 8.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition rearfoot = rearlegtip.addOrReplaceChild("rearfoot",
+            CubeListBuilder.create()
+                .texOffs(224, 48).addBox(-9.0F, 0.0F, -20.0F, 18.0F, 6.0F, 24.0F),
+            PartPose.offsetAndRotation(0.0F, 26.0F, 8.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData rearleg1 = body.addChild("rearleg1",
-            ModelPartBuilder.create()
-                .uv(224, 156).cuboid(-8.0F, -4.0F, -8.0F, 16.0F, 32.0F, 16.0F),
-            ModelTransform.of(16.0F, 12.0F, 34.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition rearleg1 = body.addOrReplaceChild("rearleg1",
+            CubeListBuilder.create()
+                .texOffs(224, 156).addBox(-8.0F, -4.0F, -8.0F, 16.0F, 32.0F, 16.0F),
+            PartPose.offsetAndRotation(16.0F, 12.0F, 34.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData rearlegtip1 = rearleg1.addChild("rearlegtip1",
-            ModelPartBuilder.create()
-                .uv(240, 248).cuboid(-6.0F, -2.0F, 0.0F, 12.0F, 32.0F, 12.0F),
-            ModelTransform.of(0.0F, 30.0F, -6.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition rearlegtip1 = rearleg1.addOrReplaceChild("rearlegtip1",
+            CubeListBuilder.create()
+                .texOffs(240, 248).addBox(-6.0F, -2.0F, 0.0F, 12.0F, 32.0F, 12.0F),
+            PartPose.offsetAndRotation(0.0F, 30.0F, -6.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData rearfoot1 = rearlegtip1.addChild("rearfoot1",
-            ModelPartBuilder.create()
-                .uv(224, 78).cuboid(-9.0F, 0.0F, -20.0F, 18.0F, 6.0F, 24.0F),
-            ModelTransform.of(0.0F, 26.0F, 8.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition rearfoot1 = rearlegtip1.addOrReplaceChild("rearfoot1",
+            CubeListBuilder.create()
+                .texOffs(224, 78).addBox(-9.0F, 0.0F, -20.0F, 18.0F, 6.0F, 24.0F),
+            PartPose.offsetAndRotation(0.0F, 26.0F, 8.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData frontleg = body.addChild("frontleg",
-            ModelPartBuilder.create()
-                .uv(288, 148).cuboid(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
-            ModelTransform.of(-12.0F, 16.0F, -6.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition frontleg = body.addOrReplaceChild("frontleg",
+            CubeListBuilder.create()
+                .texOffs(288, 148).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+            PartPose.offsetAndRotation(-12.0F, 16.0F, -6.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData frontlegtip = frontleg.addChild("frontlegtip",
-            ModelPartBuilder.create()
-                .uv(296, 312).cuboid(-3.0F, -1.0F, -3.0F, 6.0F, 24.0F, 6.0F),
-            ModelTransform.of(0.0F, 21.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition frontlegtip = frontleg.addOrReplaceChild("frontlegtip",
+            CubeListBuilder.create()
+                .texOffs(296, 312).addBox(-3.0F, -1.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 21.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData frontfoot = frontlegtip.addChild("frontfoot",
-            ModelPartBuilder.create()
-                .uv(288, 108).cuboid(-4.0F, 0.0F, -12.0F, 8.0F, 4.0F, 16.0F),
-            ModelTransform.of(0.0F, 19.0F, -1.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition frontfoot = frontlegtip.addOrReplaceChild("frontfoot",
+            CubeListBuilder.create()
+                .texOffs(288, 108).addBox(-4.0F, 0.0F, -12.0F, 8.0F, 4.0F, 16.0F),
+            PartPose.offsetAndRotation(0.0F, 19.0F, -1.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData frontleg1 = body.addChild("frontleg1",
-            ModelPartBuilder.create()
-                .uv(288, 180).cuboid(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
-            ModelTransform.of(12.0F, 16.0F, -6.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition frontleg1 = body.addOrReplaceChild("frontleg1",
+            CubeListBuilder.create()
+                .texOffs(288, 180).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+            PartPose.offsetAndRotation(12.0F, 16.0F, -6.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData frontlegtip1 = frontleg1.addChild("frontlegtip1",
-            ModelPartBuilder.create()
-                .uv(160, 317).cuboid(-3.0F, -1.0F, -3.0F, 6.0F, 24.0F, 6.0F),
-            ModelTransform.of(0.0F, 21.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition frontlegtip1 = frontleg1.addOrReplaceChild("frontlegtip1",
+            CubeListBuilder.create()
+                .texOffs(160, 317).addBox(-3.0F, -1.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 21.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData frontfoot1 = frontlegtip1.addChild("frontfoot1",
-            ModelPartBuilder.create()
-                .uv(288, 128).cuboid(-4.0F, 0.0F, -12.0F, 8.0F, 4.0F, 16.0F),
-            ModelTransform.of(0.0F, 19.0F, -1.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition frontfoot1 = frontlegtip1.addOrReplaceChild("frontfoot1",
+            CubeListBuilder.create()
+                .texOffs(288, 128).addBox(-4.0F, 0.0F, -12.0F, 8.0F, 4.0F, 16.0F),
+            PartPose.offsetAndRotation(0.0F, 19.0F, -1.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail = body.addChild("tail",
-            ModelPartBuilder.create()
-                .uv(272, 292).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 204).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 6.0F, 48.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail = body.addOrReplaceChild("tail",
+            CubeListBuilder.create()
+                .texOffs(272, 292).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 204).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 6.0F, 48.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail2 = tail.addChild("tail2",
-            ModelPartBuilder.create()
-                .uv(176, 297).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 214).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail2 = tail.addOrReplaceChild("tail2",
+            CubeListBuilder.create()
+                .texOffs(176, 297).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 214).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail3 = tail2.addChild("tail3",
-            ModelPartBuilder.create()
-                .uv(308, 48).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 224).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail3 = tail2.addOrReplaceChild("tail3",
+            CubeListBuilder.create()
+                .texOffs(308, 48).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 224).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail4 = tail3.addChild("tail4",
-            ModelPartBuilder.create()
-                .uv(308, 68).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 234).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail4 = tail3.addOrReplaceChild("tail4",
+            CubeListBuilder.create()
+                .texOffs(308, 68).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 234).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail5 = tail4.addChild("tail5",
-            ModelPartBuilder.create()
-                .uv(308, 88).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 244).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail5 = tail4.addOrReplaceChild("tail5",
+            CubeListBuilder.create()
+                .texOffs(308, 88).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 244).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail6 = tail5.addChild("tail6",
-            ModelPartBuilder.create()
-                .uv(0, 312).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 254).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail6 = tail5.addOrReplaceChild("tail6",
+            CubeListBuilder.create()
+                .texOffs(0, 312).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 254).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail7 = tail6.addChild("tail7",
-            ModelPartBuilder.create()
-                .uv(40, 312).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 264).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail7 = tail6.addOrReplaceChild("tail7",
+            CubeListBuilder.create()
+                .texOffs(40, 312).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 264).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail8 = tail7.addChild("tail8",
-            ModelPartBuilder.create()
-                .uv(80, 312).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(328, 274).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail8 = tail7.addOrReplaceChild("tail8",
+            CubeListBuilder.create()
+                .texOffs(80, 312).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(328, 274).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail9 = tail8.addChild("tail9",
-            ModelPartBuilder.create()
-                .uv(120, 312).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(0, 332).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail9 = tail8.addOrReplaceChild("tail9",
+            CubeListBuilder.create()
+                .texOffs(120, 312).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(0, 332).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail10 = tail9.addChild("tail10",
-            ModelPartBuilder.create()
-                .uv(216, 312).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(16, 332).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail10 = tail9.addOrReplaceChild("tail10",
+            CubeListBuilder.create()
+                .texOffs(216, 312).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(16, 332).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail11 = tail10.addChild("tail11",
-            ModelPartBuilder.create()
-                .uv(256, 312).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(32, 332).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail11 = tail10.addOrReplaceChild("tail11",
+            CubeListBuilder.create()
+                .texOffs(256, 312).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(32, 332).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        ModelPartData tail12 = tail11.addChild("tail12",
-            ModelPartBuilder.create()
-                .uv(312, 292).cuboid(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
-                .uv(48, 332).cuboid(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
-            ModelTransform.of(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
+        PartDefinition tail12 = tail11.addOrReplaceChild("tail12",
+            CubeListBuilder.create()
+                .texOffs(312, 292).addBox(-5.0F, -5.0F, 0.0F, 10.0F, 10.0F, 10.0F)
+                .texOffs(48, 332).addBox(-1.0F, -9.0F, 2.0F, 2.0F, 4.0F, 6.0F),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 10.0F, 0.0F, 0.0F, 0.0F));
 
-        return TexturedModelData.of(modelData, 512, 512);
+        return LayerDefinition.create(modelData, 512, 512);
     }
 
     @Override
-    public void setAngles(DragonGuardianRenderState state) {
-        super.setAngles(state);
+    public void setupAnim(DragonGuardianRenderState state) {
+        super.setupAnim(state);
 
-        float age = state.age;
+        float age = state.ageInTicks;
         float animSpeed = state.animationSpeed; // Variable speed based on state
         DragonGuardianEntity.AnimationState animState = state.animationState;
 
@@ -337,63 +343,63 @@ public class DragonGuardianModel extends EntityModel<DragonGuardianRenderState> 
         float flapCycle = age * 0.4F * animSpeed; // Variable speed based on state
         float wingFlap = (float) Math.cos(flapCycle) * 1.2F;
 
-        this.wing.roll = wingFlap - 0.3F;
-        this.wing1.roll = -wingFlap + 0.3F;
+        this.wing.zRot = wingFlap - 0.3F;
+        this.wing1.zRot = -wingFlap + 0.3F;
 
         float wingPitch = (float) Math.sin(flapCycle) * 0.2F;
-        this.wing.pitch = wingPitch;
-        this.wing1.pitch = wingPitch;
+        this.wing.xRot = wingPitch;
+        this.wing1.xRot = wingPitch;
 
         float tipFlap = (float) Math.sin(flapCycle + 0.5F) * 1.5F;
-        this.wingtip.roll = tipFlap - 0.5F;
-        this.wingtip1.roll = -tipFlap + 0.5F;
+        this.wingtip.zRot = tipFlap - 0.5F;
+        this.wingtip1.zRot = -tipFlap + 0.5F;
 
         // === TAIL SWAYING ===
         float tailBase = (float) Math.sin(age * 0.1F * animSpeed) * 0.15F;
-        this.tail.yaw = tailBase;
-        this.tail2.yaw = tailBase * 1.2F;
-        this.tail3.yaw = tailBase * 1.4F;
-        this.tail4.yaw = tailBase * 1.6F;
-        this.tail5.yaw = tailBase * 1.8F;
-        this.tail6.yaw = tailBase * 2.0F;
-        this.tail7.yaw = tailBase * 2.2F;
-        this.tail8.yaw = tailBase * 2.4F;
-        this.tail9.yaw = tailBase * 2.6F;
-        this.tail10.yaw = tailBase * 2.8F;
-        this.tail11.yaw = tailBase * 3.0F;
-        this.tail12.yaw = tailBase * 3.2F;
+        this.tail.yRot = tailBase;
+        this.tail2.yRot = tailBase * 1.2F;
+        this.tail3.yRot = tailBase * 1.4F;
+        this.tail4.yRot = tailBase * 1.6F;
+        this.tail5.yRot = tailBase * 1.8F;
+        this.tail6.yRot = tailBase * 2.0F;
+        this.tail7.yRot = tailBase * 2.2F;
+        this.tail8.yRot = tailBase * 2.4F;
+        this.tail9.yRot = tailBase * 2.6F;
+        this.tail10.yRot = tailBase * 2.8F;
+        this.tail11.yRot = tailBase * 3.0F;
+        this.tail12.yRot = tailBase * 3.2F;
 
         // === NECK BOBBING ===
         float neckBob = (float) Math.sin(age * 0.15F * animSpeed) * 0.08F;
-        this.neck5.pitch = neckBob;
-        this.neck4.pitch = neckBob * 0.9F;
-        this.neck3.pitch = neckBob * 0.8F;
-        this.neck2.pitch = neckBob * 0.7F;
-        this.neck.pitch = neckBob * 0.6F;
+        this.neck5.xRot = neckBob;
+        this.neck4.xRot = neckBob * 0.9F;
+        this.neck3.xRot = neckBob * 0.8F;
+        this.neck2.xRot = neckBob * 0.7F;
+        this.neck.xRot = neckBob * 0.6F;
 
         // === HEAD & JAW ===
         float headBreathing = (float) Math.cos(age * 0.2F) * 0.05F;
-        this.head.pitch = headBreathing;
-        this.jaw.pitch = Math.abs((float) Math.sin(age * 0.15F)) * 0.1F;
+        this.head.xRot = headBreathing;
+        this.jaw.xRot = Math.abs((float) Math.sin(age * 0.15F)) * 0.1F;
 
         // === LEGS ===
         float legSwing = (float) Math.sin(age * 0.12F * animSpeed) * 0.15F;
-        this.rearleg.pitch = legSwing * 0.5F;
-        this.rearleg1.pitch = -legSwing * 0.5F;
-        this.rearlegtip.pitch = -legSwing * 0.3F;
-        this.rearlegtip1.pitch = legSwing * 0.3F;
-        this.frontleg.pitch = -legSwing * 0.6F;
-        this.frontleg1.pitch = legSwing * 0.6F;
-        this.frontlegtip.pitch = legSwing * 0.4F;
-        this.frontlegtip1.pitch = -legSwing * 0.4F;
+        this.rearleg.xRot = legSwing * 0.5F;
+        this.rearleg1.xRot = -legSwing * 0.5F;
+        this.rearlegtip.xRot = -legSwing * 0.3F;
+        this.rearlegtip1.xRot = legSwing * 0.3F;
+        this.frontleg.xRot = -legSwing * 0.6F;
+        this.frontleg1.xRot = legSwing * 0.6F;
+        this.frontlegtip.xRot = legSwing * 0.4F;
+        this.frontlegtip1.xRot = -legSwing * 0.4F;
     }
 
     private void animatePerched(DragonGuardianRenderState state) {
         // Wings folded against body
-        this.wing.roll = -1.5F;
-        this.wing1.roll = 1.5F;
-        this.wingtip.roll = -2.0F;
-        this.wingtip1.roll = 2.0F;
+        this.wing.zRot = -1.5F;
+        this.wing1.zRot = 1.5F;
+        this.wingtip.zRot = -2.0F;
+        this.wingtip1.zRot = 2.0F;
 
         // Tail curled
         float tailCurl = 0.2F;
@@ -412,169 +418,169 @@ public class DragonGuardianModel extends EntityModel<DragonGuardianRenderState> 
                 case 11 -> this.tail11;
                 default -> this.tail12;
             };
-            tailSegment.yaw = tailCurl * i * 0.1F;
+            tailSegment.yRot = tailCurl * i * 0.1F;
         }
 
         // Neck relaxed
-        this.neck5.pitch = -0.1F;
-        this.neck4.pitch = -0.05F;
-        this.neck3.pitch = 0.0F;
-        this.neck2.pitch = 0.0F;
-        this.neck.pitch = 0.0F;
+        this.neck5.xRot = -0.1F;
+        this.neck4.xRot = -0.05F;
+        this.neck3.xRot = 0.0F;
+        this.neck2.xRot = 0.0F;
+        this.neck.xRot = 0.0F;
 
         // Head alert with breathing
-        float breathing = (float) Math.sin(state.age * 0.1F) * 0.03F;
-        this.head.pitch = breathing;
-        this.jaw.pitch = Math.abs((float) Math.sin(state.age * 0.1F)) * 0.05F;
+        float breathing = (float) Math.sin(state.ageInTicks * 0.1F) * 0.03F;
+        this.head.xRot = breathing;
+        this.jaw.xRot = Math.abs((float) Math.sin(state.ageInTicks * 0.1F)) * 0.05F;
 
         // Legs standing
-        this.rearleg.pitch = 0.0F;
-        this.rearleg1.pitch = 0.0F;
-        this.frontleg.pitch = 0.0F;
-        this.frontleg1.pitch = 0.0F;
+        this.rearleg.xRot = 0.0F;
+        this.rearleg1.xRot = 0.0F;
+        this.frontleg.xRot = 0.0F;
+        this.frontleg1.xRot = 0.0F;
     }
 
     private void animateRoaring(DragonGuardianRenderState state, float age, float animSpeed) {
         // Wings spread wide
         float wingSpread = (float) Math.sin(age * 0.3F) * 0.3F;
-        this.wing.roll = 1.5F + wingSpread;
-        this.wing1.roll = -1.5F - wingSpread;
-        this.wingtip.roll = 2.0F;
-        this.wingtip1.roll = -2.0F;
+        this.wing.zRot = 1.5F + wingSpread;
+        this.wing1.zRot = -1.5F - wingSpread;
+        this.wingtip.zRot = 2.0F;
+        this.wingtip1.zRot = -2.0F;
 
         // Neck extended upward
-        this.neck5.pitch = -0.3F;
-        this.neck4.pitch = -0.25F;
-        this.neck3.pitch = -0.2F;
-        this.neck2.pitch = -0.15F;
-        this.neck.pitch = -0.1F;
+        this.neck5.xRot = -0.3F;
+        this.neck4.xRot = -0.25F;
+        this.neck3.xRot = -0.2F;
+        this.neck2.xRot = -0.15F;
+        this.neck.xRot = -0.1F;
 
         // Head tilted back, jaw wide open
-        this.head.pitch = -0.4F;
-        this.jaw.pitch = 0.8F; // Wide open
+        this.head.xRot = -0.4F;
+        this.jaw.xRot = 0.8F; // Wide open
 
         // Tail thrashing
         float tailThrash = (float) Math.sin(age * 0.5F) * 0.4F;
-        this.tail.yaw = tailThrash;
-        this.tail2.yaw = tailThrash * 1.2F;
-        this.tail3.yaw = tailThrash * 1.4F;
-        this.tail4.yaw = tailThrash * 1.6F;
-        this.tail5.yaw = tailThrash * 1.8F;
-        this.tail6.yaw = tailThrash * 2.0F;
-        this.tail7.yaw = tailThrash * 1.8F;
-        this.tail8.yaw = tailThrash * 1.6F;
-        this.tail9.yaw = tailThrash * 1.4F;
-        this.tail10.yaw = tailThrash * 1.2F;
-        this.tail11.yaw = tailThrash;
-        this.tail12.yaw = tailThrash * 0.8F;
+        this.tail.yRot = tailThrash;
+        this.tail2.yRot = tailThrash * 1.2F;
+        this.tail3.yRot = tailThrash * 1.4F;
+        this.tail4.yRot = tailThrash * 1.6F;
+        this.tail5.yRot = tailThrash * 1.8F;
+        this.tail6.yRot = tailThrash * 2.0F;
+        this.tail7.yRot = tailThrash * 1.8F;
+        this.tail8.yRot = tailThrash * 1.6F;
+        this.tail9.yRot = tailThrash * 1.4F;
+        this.tail10.yRot = tailThrash * 1.2F;
+        this.tail11.yRot = tailThrash;
+        this.tail12.yRot = tailThrash * 0.8F;
     }
 
     private void animateFireBreathing(DragonGuardianRenderState state, float age, float animSpeed) {
         // Wings steady for stability
-        this.wing.roll = 0.5F;
-        this.wing1.roll = -0.5F;
-        this.wingtip.roll = 0.8F;
-        this.wingtip1.roll = -0.8F;
+        this.wing.zRot = 0.5F;
+        this.wing1.zRot = -0.5F;
+        this.wingtip.zRot = 0.8F;
+        this.wingtip1.zRot = -0.8F;
 
         // Neck extended forward
-        this.neck5.pitch = 0.1F;
-        this.neck4.pitch = 0.0F;
-        this.neck3.pitch = -0.05F;
-        this.neck2.pitch = -0.1F;
-        this.neck.pitch = -0.15F;
+        this.neck5.xRot = 0.1F;
+        this.neck4.xRot = 0.0F;
+        this.neck3.xRot = -0.05F;
+        this.neck2.xRot = -0.1F;
+        this.neck.xRot = -0.15F;
 
         // Head aimed forward, jaw opening/closing
-        this.head.pitch = -0.2F;
+        this.head.xRot = -0.2F;
         float jawPulse = (float) Math.sin(age * 0.5F) * 0.3F + 0.3F;
-        this.jaw.pitch = jawPulse; // Pulsing open/close
+        this.jaw.xRot = jawPulse; // Pulsing open/close
 
         // Tail straight for balance
         float tailStraight = (float) Math.sin(age * 0.2F) * 0.05F;
-        this.tail.yaw = tailStraight;
-        this.tail2.yaw = tailStraight * 0.9F;
-        this.tail3.yaw = tailStraight * 0.8F;
-        this.tail4.yaw = tailStraight * 0.7F;
-        this.tail5.yaw = tailStraight * 0.6F;
-        this.tail6.yaw = tailStraight * 0.5F;
-        this.tail7.yaw = tailStraight * 0.4F;
-        this.tail8.yaw = tailStraight * 0.3F;
-        this.tail9.yaw = tailStraight * 0.2F;
-        this.tail10.yaw = tailStraight * 0.1F;
-        this.tail11.yaw = 0.0F;
-        this.tail12.yaw = 0.0F;
+        this.tail.yRot = tailStraight;
+        this.tail2.yRot = tailStraight * 0.9F;
+        this.tail3.yRot = tailStraight * 0.8F;
+        this.tail4.yRot = tailStraight * 0.7F;
+        this.tail5.yRot = tailStraight * 0.6F;
+        this.tail6.yRot = tailStraight * 0.5F;
+        this.tail7.yRot = tailStraight * 0.4F;
+        this.tail8.yRot = tailStraight * 0.3F;
+        this.tail9.yRot = tailStraight * 0.2F;
+        this.tail10.yRot = tailStraight * 0.1F;
+        this.tail11.yRot = 0.0F;
+        this.tail12.yRot = 0.0F;
     }
 
     private void animateSwooping(DragonGuardianRenderState state, float age, float animSpeed) {
         // Wings swept back for speed
         float wingFast = (float) Math.cos(age * 0.8F) * 0.6F; // Fast flaps
-        this.wing.roll = -0.8F + wingFast;
-        this.wing1.roll = 0.8F - wingFast;
-        this.wing.pitch = -0.3F; // Angled back
-        this.wing1.pitch = -0.3F;
+        this.wing.zRot = -0.8F + wingFast;
+        this.wing1.zRot = 0.8F - wingFast;
+        this.wing.xRot = -0.3F; // Angled back
+        this.wing1.xRot = -0.3F;
 
         // Wingtips tight
-        this.wingtip.roll = -1.0F;
-        this.wingtip1.roll = 1.0F;
+        this.wingtip.zRot = -1.0F;
+        this.wingtip1.zRot = 1.0F;
 
         // Neck streamlined
-        this.neck5.pitch = 0.2F;
-        this.neck4.pitch = 0.15F;
-        this.neck3.pitch = 0.1F;
-        this.neck2.pitch = 0.05F;
-        this.neck.pitch = 0.0F;
+        this.neck5.xRot = 0.2F;
+        this.neck4.xRot = 0.15F;
+        this.neck3.xRot = 0.1F;
+        this.neck2.xRot = 0.05F;
+        this.neck.xRot = 0.0F;
 
         // Head forward, jaw closed
-        this.head.pitch = 0.1F;
-        this.jaw.pitch = 0.0F;
+        this.head.xRot = 0.1F;
+        this.jaw.xRot = 0.0F;
 
         // Tail straight behind
-        this.tail.yaw = 0.0F;
-        this.tail2.yaw = 0.0F;
-        this.tail3.yaw = 0.0F;
-        this.tail4.yaw = 0.0F;
-        this.tail5.yaw = 0.0F;
-        this.tail6.yaw = 0.0F;
-        this.tail7.yaw = 0.0F;
-        this.tail8.yaw = 0.0F;
-        this.tail9.yaw = 0.0F;
-        this.tail10.yaw = 0.0F;
-        this.tail11.yaw = 0.0F;
-        this.tail12.yaw = 0.0F;
+        this.tail.yRot = 0.0F;
+        this.tail2.yRot = 0.0F;
+        this.tail3.yRot = 0.0F;
+        this.tail4.yRot = 0.0F;
+        this.tail5.yRot = 0.0F;
+        this.tail6.yRot = 0.0F;
+        this.tail7.yRot = 0.0F;
+        this.tail8.yRot = 0.0F;
+        this.tail9.yRot = 0.0F;
+        this.tail10.yRot = 0.0F;
+        this.tail11.yRot = 0.0F;
+        this.tail12.yRot = 0.0F;
 
         // Legs tucked
-        this.rearleg.pitch = 0.8F;
-        this.rearleg1.pitch = 0.8F;
-        this.frontleg.pitch = 0.6F;
-        this.frontleg1.pitch = 0.6F;
+        this.rearleg.xRot = 0.8F;
+        this.rearleg1.xRot = 0.8F;
+        this.frontleg.xRot = 0.6F;
+        this.frontleg1.xRot = 0.6F;
     }
 
     private void animateLanding(DragonGuardianRenderState state, float age, float animSpeed) {
         // Wings spread for braking
-        this.wing.roll = 1.8F;
-        this.wing1.roll = -1.8F;
-        this.wingtip.roll = 2.2F;
-        this.wingtip1.roll = -2.2F;
+        this.wing.zRot = 1.8F;
+        this.wing1.zRot = -1.8F;
+        this.wingtip.zRot = 2.2F;
+        this.wingtip1.zRot = -2.2F;
 
         // Neck curved down
-        this.neck5.pitch = 0.3F;
-        this.neck4.pitch = 0.25F;
-        this.neck3.pitch = 0.2F;
-        this.neck2.pitch = 0.15F;
-        this.neck.pitch = 0.1F;
+        this.neck5.xRot = 0.3F;
+        this.neck4.xRot = 0.25F;
+        this.neck3.xRot = 0.2F;
+        this.neck2.xRot = 0.15F;
+        this.neck.xRot = 0.1F;
 
         // Head looking down
-        this.head.pitch = 0.2F;
-        this.jaw.pitch = 0.05F;
+        this.head.xRot = 0.2F;
+        this.jaw.xRot = 0.05F;
 
         // Tail up for balance
-        this.tail.pitch = -0.2F;
-        this.tail2.pitch = -0.15F;
-        this.tail3.pitch = -0.1F;
+        this.tail.xRot = -0.2F;
+        this.tail2.xRot = -0.15F;
+        this.tail3.xRot = -0.1F;
 
         // Legs extended for landing
-        this.rearleg.pitch = -0.3F;
-        this.rearleg1.pitch = -0.3F;
-        this.frontleg.pitch = -0.2F;
-        this.frontleg1.pitch = -0.2F;
+        this.rearleg.xRot = -0.3F;
+        this.rearleg1.xRot = -0.3F;
+        this.frontleg.xRot = -0.2F;
+        this.frontleg1.xRot = -0.2F;
     }
 }

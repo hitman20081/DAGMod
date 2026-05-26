@@ -1,8 +1,8 @@
 package com.github.hitman20081.dagmod.quest.rewards;
 
 import com.github.hitman20081.dagmod.quest.QuestReward;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class XpReward extends QuestReward {
     private final int xpAmount;
@@ -33,26 +33,26 @@ public class XpReward extends QuestReward {
     }
 
     @Override
-    public boolean giveReward(PlayerEntity player, World world) {
+    public boolean giveReward(Player player, Level world) {
         if (!canGiveReward(player)) {
             return false;
         }
 
         if (isLevels) {
             // Add experience levels
-            player.addExperienceLevels(xpAmount);
+            player.giveExperienceLevels(xpAmount);
         } else {
             // Add experience points
-            player.addExperience(xpAmount);
+            player.giveExperiencePoints(xpAmount);
         }
 
         // Send success message
-        player.sendMessage(createSuccessMessage(), false);
+        player.sendOverlayMessage(createSuccessMessage());
         return true;
     }
 
     @Override
-    public boolean canGiveReward(PlayerEntity player) {
+    public boolean canGiveReward(Player player) {
         // XP can always be given (no inventory limitations)
         return true;
     }
@@ -63,11 +63,11 @@ public class XpReward extends QuestReward {
 
     // Static helper methods for easy creation
     public static XpReward points(int points) {
-        return new XpReward(points, false);
+        return new XpReward(points);
     }
 
     public static XpReward levels(int levels) {
-        return new XpReward(levels, true);
+        return new XpReward(levels);
     }
 
     // Preset XP rewards for different quest difficulties
@@ -89,11 +89,11 @@ public class XpReward extends QuestReward {
 
     // Override success message for XP-specific feedback
     @Override
-    protected net.minecraft.text.Text createSuccessMessage() {
+    protected net.minecraft.network.chat.Component createSuccessMessage() {
         if (isLevels) {
-            return net.minecraft.text.Text.literal("Gained " + xpAmount + " experience " + (xpAmount == 1 ? "level!" : "levels!"));
+            return net.minecraft.network.chat.Component.literal("Gained " + xpAmount + " experience " + (xpAmount == 1 ? "level!" : "levels!"));
         } else {
-            return net.minecraft.text.Text.literal("Gained " + xpAmount + " experience points!");
+            return net.minecraft.network.chat.Component.literal("Gained " + xpAmount + " experience points!");
         }
     }
 }

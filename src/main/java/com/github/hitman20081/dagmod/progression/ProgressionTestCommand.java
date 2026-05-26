@@ -5,10 +5,11 @@ import com.github.hitman20081.dagmod.progression.ProgressionManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permissions;
 
 /**
  * Test command for the progression system
@@ -16,27 +17,27 @@ import net.minecraft.text.Text;
  */
 public class ProgressionTestCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
 
-        dispatcher.register(CommandManager.literal("testprogression")
-                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
-                .then(CommandManager.argument("xp", IntegerArgumentType.integer(0))
+        dispatcher.register(Commands.literal("testprogression")
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .then(Commands.argument("xp", IntegerArgumentType.integer(0))
                         .executes(ProgressionTestCommand::executeAddXP))
                 .executes(ProgressionTestCommand::executeInfo)
         );
 
-        dispatcher.register(CommandManager.literal("testprogression")
-                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
-                .then(CommandManager.literal("info")
+        dispatcher.register(Commands.literal("testprogression")
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .then(Commands.literal("info")
                         .executes(ProgressionTestCommand::executeInfo))
-                .then(CommandManager.literal("reset")
+                .then(Commands.literal("reset")
                         .executes(ProgressionTestCommand::executeReset))
-                .then(CommandManager.literal("setlevel")
-                        .then(CommandManager.argument("level", IntegerArgumentType.integer(1, 200))
+                .then(Commands.literal("setlevel")
+                        .then(Commands.argument("level", IntegerArgumentType.integer(1, 200))
                                 .executes(ProgressionTestCommand::executeSetLevel)))
-                .then(CommandManager.literal("curve")
+                .then(Commands.literal("curve")
                         .executes(ProgressionTestCommand::executeCurve))
         );
     }
@@ -44,10 +45,10 @@ public class ProgressionTestCommand {
     /**
      * Add XP to player: /testprogression <amount>
      */
-    private static int executeAddXP(CommandContext<ServerCommandSource> context) {
+    private static int executeAddXP(CommandContext<CommandSourceStack> context) {
         var player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("This command can only be used by players"));
+            context.getSource().sendFailure(Component.literal("This command can only be used by players"));
             return 0;
         }
 
@@ -56,12 +57,12 @@ public class ProgressionTestCommand {
         // Use the real progression manager
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
 
-        player.sendMessage(Text.literal("§eBefore: " + data.getDisplayString()), false);
+        player.sendSystemMessage(Component.literal("§eBefore: " + data.getDisplayString()));
 
         // Add XP through manager (handles sync and level-ups)
         int levelsGained = ProgressionManager.addXP(player, xpAmount);
 
-        player.sendMessage(Text.literal("§aAfter: " + data.getDisplayString()), false);
+        player.sendSystemMessage(Component.literal("§aAfter: " + data.getDisplayString()));
 
         return 1;
     }
@@ -69,21 +70,21 @@ public class ProgressionTestCommand {
     /**
      * Show progression info: /testprogression info
      */
-    private static int executeInfo(CommandContext<ServerCommandSource> context) {
+    private static int executeInfo(CommandContext<CommandSourceStack> context) {
         var player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("This command can only be used by players"));
+            context.getSource().sendFailure(Component.literal("This command can only be used by players"));
             return 0;
         }
 
         // Get real data from manager
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
 
-        player.sendMessage(Text.literal("§6=== Progression Info ==="), false);
-        player.sendMessage(Text.literal("§e" + data.getDisplayString()), false);
-        player.sendMessage(Text.literal("§7Short: " + data.getShortDisplayString()), false);
-        player.sendMessage(Text.literal("§7Total XP Earned: §f" + String.format("%,d", data.getTotalXPEarned())), false);
-        player.sendMessage(Text.literal("§7Max Level: §f" + data.isMaxLevel()), false);
+        player.sendSystemMessage(Component.literal("§6=== Progression Info ==="));
+        player.sendSystemMessage(Component.literal("§e" + data.getDisplayString()));
+        player.sendSystemMessage(Component.literal("§7Short: " + data.getShortDisplayString()));
+        player.sendSystemMessage(Component.literal("§7Total XP Earned: §f" + String.format("%,d", data.getTotalXPEarned())));
+        player.sendSystemMessage(Component.literal("§7Max Level: §f" + data.isMaxLevel()));
 
         return 1;
     }
@@ -91,10 +92,10 @@ public class ProgressionTestCommand {
     /**
      * Reset progression: /testprogression reset
      */
-    private static int executeReset(CommandContext<ServerCommandSource> context) {
+    private static int executeReset(CommandContext<CommandSourceStack> context) {
         var player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("This command can only be used by players"));
+            context.getSource().sendFailure(Component.literal("This command can only be used by players"));
             return 0;
         }
 
@@ -102,8 +103,8 @@ public class ProgressionTestCommand {
         ProgressionManager.resetProgression(player);
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
 
-        player.sendMessage(Text.literal("§cProgression reset to level 1"), false);
-        player.sendMessage(Text.literal("§e" + data.getDisplayString()), false);
+        player.sendSystemMessage(Component.literal("§cProgression reset to level 1"));
+        player.sendSystemMessage(Component.literal("§e" + data.getDisplayString()));
 
         return 1;
     }
@@ -111,10 +112,10 @@ public class ProgressionTestCommand {
     /**
      * Set level: /testprogression setlevel <level>
      */
-    private static int executeSetLevel(CommandContext<ServerCommandSource> context) {
+    private static int executeSetLevel(CommandContext<CommandSourceStack> context) {
         var player = context.getSource().getPlayer();
         if (player == null) {
-            context.getSource().sendError(Text.literal("This command can only be used by players"));
+            context.getSource().sendFailure(Component.literal("This command can only be used by players"));
             return 0;
         }
 
@@ -124,8 +125,8 @@ public class ProgressionTestCommand {
         ProgressionManager.setLevel(player, level);
         PlayerProgressionData data = ProgressionManager.getPlayerData(player);
 
-        player.sendMessage(Text.literal("§aSet level to " + level), false);
-        player.sendMessage(Text.literal("§e" + data.getDisplayString()), false);
+        player.sendSystemMessage(Component.literal("§aSet level to " + level));
+        player.sendSystemMessage(Component.literal("§e" + data.getDisplayString()));
 
         return 1;
     }
@@ -133,10 +134,10 @@ public class ProgressionTestCommand {
     /**
      * Show XP curve: /testprogression curve
      */
-    private static int executeCurve(CommandContext<ServerCommandSource> context) {
+    private static int executeCurve(CommandContext<CommandSourceStack> context) {
         var source = context.getSource();
 
-        source.sendFeedback(() -> Text.literal("§6=== XP Curve (Every 5 Levels) ==="), false);
+        source.sendSuccess(() -> Component.literal("§6=== XP Curve (Every 5 Levels) ==="), false);
 
         int totalXP = 0;
         for (int level = 1; level <= 200; level++) {
@@ -147,12 +148,12 @@ public class ProgressionTestCommand {
                 String formatted = String.format("§eLv%3d: §f%,7d XP §7(Total: %,d)",
                         level, xpForLevel, totalXP);
                 final String message = formatted;
-                source.sendFeedback(() -> Text.literal(message), false);
+                source.sendSuccess(() -> Component.literal(message), false);
             }
         }
 
         int totalToMax = PlayerProgressionData.calculateTotalXPForLevel(200);
-        source.sendFeedback(() -> Text.literal(String.format("§6Total to max: §f%,d XP", totalToMax)), false);
+        source.sendSuccess(() -> Component.literal(String.format("§6Total to max: §f%,d XP", totalToMax)), false);
 
         return 1;
     }

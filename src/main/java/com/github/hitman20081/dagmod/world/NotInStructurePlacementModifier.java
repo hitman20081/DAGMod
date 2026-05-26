@@ -1,13 +1,13 @@
 package com.github.hitman20081.dagmod.world;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.structure.StructureStart;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.FeaturePlacementContext;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.placement.PlacementContext;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import java.util.stream.Stream;
 
@@ -24,12 +24,12 @@ public class NotInStructurePlacementModifier extends PlacementModifier {
     public static PlacementModifierType<NotInStructurePlacementModifier> TYPE;
 
     @Override
-    public Stream<BlockPos> getPositions(FeaturePlacementContext context, Random random, BlockPos pos) {
-        StructureWorldAccess world = context.getWorld();
+    public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
+        WorldGenLevel world = context.getLevel();
 
         // Check every structure start registered in this chunk
-        for (StructureStart start : world.getChunk(pos).getStructureStarts().values()) {
-            if (start.hasChildren() && start.getBoundingBox().contains(pos.getX(), pos.getY(), pos.getZ())) {
+        for (StructureStart start : world.getChunk(pos).getAllStarts().values()) {
+            if (!start.getPieces().isEmpty() && start.getBoundingBox().isInside(pos.getX(), pos.getY(), pos.getZ())) {
                 return Stream.empty();
             }
         }
@@ -38,7 +38,7 @@ public class NotInStructurePlacementModifier extends PlacementModifier {
     }
 
     @Override
-    public PlacementModifierType<?> getType() {
+    public PlacementModifierType<?> type() {
         return TYPE;
     }
 }

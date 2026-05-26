@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.progression;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +24,8 @@ public class ProgressionManager {
      * @param player The player
      * @return Their progression data
      */
-    public static PlayerProgressionData getPlayerData(ServerPlayerEntity player) {
-        return getPlayerData(player.getUuid());
+    public static PlayerProgressionData getPlayerData(ServerPlayer player) {
+        return getPlayerData(player.getUUID());
     }
 
     /**
@@ -56,8 +56,8 @@ public class ProgressionManager {
      * Called when player joins server
      * @param player The player joining
      */
-    public static void loadPlayerData(ServerPlayerEntity player) {
-        UUID uuid = player.getUuid();
+    public static void loadPlayerData(ServerPlayer player) {
+        UUID uuid = player.getUUID();
 
         // Try to load from file
         PlayerProgressionData data = ProgressionStorage.loadPlayerData(uuid);
@@ -86,8 +86,8 @@ public class ProgressionManager {
      * Called when player leaves or server stops
      * @param player The player leaving
      */
-    public static void savePlayerData(ServerPlayerEntity player) {
-        UUID uuid = player.getUuid();
+    public static void savePlayerData(ServerPlayer player) {
+        UUID uuid = player.getUUID();
         PlayerProgressionData data = playerDataMap.get(uuid);
 
         if (data != null) {
@@ -148,7 +148,7 @@ public class ProgressionManager {
      * @param amount XP amount to add
      * @return Number of levels gained
      */
-    public static int addXP(ServerPlayerEntity player, int amount) {
+    public static int addXP(ServerPlayer player, int amount) {
         PlayerProgressionData data = getPlayerData(player);
         if (data == null) {
             // Data not loaded yet, skip XP addition silently
@@ -173,28 +173,26 @@ public class ProgressionManager {
      * @param data Their progression data
      * @param levelsGained Number of levels gained
      */
-    private static void handleLevelUp(ServerPlayerEntity player,
+    private static void handleLevelUp(ServerPlayer player,
                                       PlayerProgressionData data,
                                       int levelsGained) {
         int currentLevel = data.getCurrentLevel();
 
         // Send level up message with stat bonuses
         String statBonus = StatScalingHandler.getStatSummary(currentLevel);
-        player.sendMessage(
-                net.minecraft.text.Text.literal("§6§l⚡ LEVEL UP! §eYou are now level " + currentLevel +
-                        (statBonus.isEmpty() ? "" : " §7(" + statBonus + ")")),
-                false
-        );
+        player.sendSystemMessage(
+                net.minecraft.network.chat.Component.literal("§6§l⚡ LEVEL UP! §eYou are now level " + currentLevel +
+                        (statBonus.isEmpty() ? "" : " §7(" + statBonus + ")")));
 
         // Play level up sound
         player.playSound(
-                net.minecraft.sound.SoundEvents.ENTITY_PLAYER_LEVELUP,
+                net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP,
                 1.0f,
                 1.0f
         );
 
         // Spawn particles
-        player.getEntityWorld().sendEntityStatus(player, (byte) 32); // Hearts particle effect
+        player.level().broadcastEntityEvent(player, (byte) 32); // Hearts particle effect
 
         // Heal player on level up (reward feeling)
         player.setHealth(player.getMaxHealth());
@@ -208,7 +206,7 @@ public class ProgressionManager {
      * @param player The player
      * @param level New level
      */
-    public static void setLevel(ServerPlayerEntity player, int level) {
+    public static void setLevel(ServerPlayer player, int level) {
         PlayerProgressionData data = getPlayerData(player);
         if (data == null) {
             LOGGER.warn("Cannot set level for player {} - data not loaded", player.getName().getString());
@@ -224,7 +222,7 @@ public class ProgressionManager {
      * Reset player progression (admin command use)
      * @param player The player
      */
-    public static void resetProgression(ServerPlayerEntity player) {
+    public static void resetProgression(ServerPlayer player) {
         PlayerProgressionData data = getPlayerData(player);
         if (data == null) {
             LOGGER.warn("Cannot reset progression for player {} - data not loaded", player.getName().getString());

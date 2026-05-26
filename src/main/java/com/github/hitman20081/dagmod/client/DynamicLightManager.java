@@ -1,8 +1,8 @@
 package com.github.hitman20081.dagmod.client;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
 
 /**
  * Tracks the player's held-item light properties and position for dynamic lighting.
@@ -19,17 +19,17 @@ import net.minecraft.util.math.BlockPos;
  * server (where it is never written to and always returns 0).
  *
  * Written by: DagModClient (client tick)
- * Read by:    DynamicLightMixin (BlockRenderView.getLightLevel injection)
+ * Read by:    DynamicLightMixin (BlockAndLightGetter.getLightLevel injection)
  */
 public final class DynamicLightManager {
 
     // Player state — updated every client tick
-    private static BlockPos playerPos      = BlockPos.ORIGIN;
+    private static BlockPos playerPos      = BlockPos.ZERO;
     private static int      heldLightLevel = 0;
     private static int      heldRadius     = 0;
 
     // Rebuild tracking — used to schedule chunk re-renders
-    private static BlockPos lastRebuildPos    = BlockPos.ORIGIN;
+    private static BlockPos lastRebuildPos    = BlockPos.ZERO;
     private static int      lastRebuildRadius = 0;
 
     private DynamicLightManager() {}

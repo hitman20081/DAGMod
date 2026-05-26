@@ -28,7 +28,7 @@ public class ProgressionEvents {
         // Player disconnect - save and unload data
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             ProgressionManager.savePlayerData(handler.player);
-            ProgressionManager.unloadPlayerData(handler.player.getUuid());
+            ProgressionManager.unloadPlayerData(handler.player.getUUID());
         });
     }
 

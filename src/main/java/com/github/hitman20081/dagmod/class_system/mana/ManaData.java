@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.mana;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 public class ManaData {
     private static final int MAX_MANA = 100;
@@ -38,11 +38,11 @@ public class ManaData {
         currentMana = Math.max(0, Math.min(amount, MAX_MANA));
     }
 
-    public void writeToNbt(NbtCompound nbt) {
+    public void writeToNbt(CompoundTag nbt) {
         nbt.putFloat("mana", currentMana);
     }
 
-    public void readFromNbt(NbtCompound nbt) {
+    public void readFromNbt(CompoundTag nbt) {
         currentMana = nbt.getFloat("mana").orElse((float)MAX_MANA);
     }
 }

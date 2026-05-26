@@ -12,14 +12,14 @@ import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.tags.ItemTags;
 import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.UnlockReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.Identifier;
 
 public class QuestRegistry {
 
@@ -287,8 +287,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 64))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 3))
                 .addReward(new ItemReward(Items.EMERALD_BLOCK, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("efficiency"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 2))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("efficiency"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fortune"), 2))
                 .addReward(XpReward.expert())
                 .addPrerequisite("mountain_kings_tribute");
     }
@@ -336,9 +336,9 @@ public class QuestRegistry {
                 .setRequiredRace("Dwarf")
                 .addObjective(new CollectObjective(Items.LAPIS_BLOCK, 8))
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 32))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("silk_touch"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("unbreaking"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("silk_touch"), 1))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 20))
                 .addReward(new ItemReward(Items.DIAMOND, 10))
                 .addReward(XpReward.master())
@@ -449,7 +449,7 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.FLINT, 48))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.ARROW, 128))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("power"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("power"), 3))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("roots_run_deep");
     }
@@ -500,8 +500,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.SPECTRAL_ARROW, 64))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("infinity"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("flame"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("infinity"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("flame"), 1))
                 .addReward(XpReward.expert())
                 .addPrerequisite("whispers_of_leaves");
     }
@@ -525,9 +525,9 @@ public class QuestRegistry {
 
     private static Quest createWorldTreeSaplingQuest() {
         return new Quest("world_tree_sapling")
-                .setName("The World Tree's Sapling")
+                .setName("The Level Tree's Sapling")
                 .setCategory(Quest.QuestCategory.MAIN)
-                .setDescription("Seek the legendary World Tree's offspring, hidden in the deepest forests.")
+                .setDescription("Seek the legendary Level Tree's offspring, hidden in the deepest forests.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Elf")
                 .addObjective(new CollectObjective(Items.DARK_OAK_SAPLING, 64))
@@ -639,7 +639,7 @@ public class QuestRegistry {
 
     private static Quest createWorldTravelerQuest() {
         return new Quest("world_traveler")
-                .setName("World Traveler")
+                .setName("Level Traveler")
                 .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Explore the diverse biomes of the world. Adaptability requires understanding all environments.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
@@ -666,8 +666,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
                 .addObjective(new CollectObjective(Items.DIAMOND, 8))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("looting"), 3))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 4))
                 .addReward(XpReward.expert())
                 .addPrerequisite("world_traveler");
@@ -685,9 +685,9 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.ANVIL, 1))
                 .addObjective(new CollectObjective(Items.BOOKSHELF, 16))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 16))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("looting"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("unbreaking"), 3))
                 .addReward(new ItemReward(Items.DIAMOND, 8))
                 .addReward(XpReward.expert())
                 .addPrerequisite("master_trader");
@@ -739,10 +739,10 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.IRON_BLOCK, 16))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 4))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 2))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("protection"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("thorns"), 3))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("feather_falling"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("sharpness"), 5))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("protection"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("thorns"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("feather_falling"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("sharpness"), 5))
                 .addReward(XpReward.master())
                 .addPrerequisite("heros_journey");
     }
@@ -857,7 +857,7 @@ public class QuestRegistry {
                 .addObjective(new KillObjective(EntityType.RAVAGER, 1))
                 .addObjective(new CollectObjective(Items.BEEF, 16))
                 .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("sharpness"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("sharpness"), 3))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("prove_your_strength");
@@ -892,8 +892,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 32))
                 .addReward(new ItemReward(Items.DIAMOND_AXE, 1))
                 .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("smite"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fire_aspect"), 2))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("smite"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fire_aspect"), 2))
                 .addReward(XpReward.expert())
                 .addPrerequisite("raid_leader");
     }
@@ -1249,11 +1249,11 @@ public class QuestRegistry {
                 .addQuest("mana_burst_unlock")
                 .addQuest("arcane_barrier_unlock")
                 .addQuest("archmage_trial")
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("power"), 5))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("silk_touch"), 1))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("unbreaking"), 3))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("power"), 5))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("looting"), 3))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("silk_touch"), 1))
                 .addChainReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 64))
                 .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 10));
 
@@ -1769,7 +1769,7 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(ModItems.DRAGON_SCALE, 3))
                 .addObjective(new CollectObjective(ModItems.DRAGON_BONE, 2))
                 .addReward(new ItemReward(DragonRealmRegistry.DRAGON_KEY, 1))
-                .addReward(new UnlockReward(Identifier.of("dagmod", "dragon_key"), "Dragon Key"))
+                .addReward(new UnlockReward(Identifier.fromNamespaceAndPath("dagmod", "dragon_key"), "Dragon Key"))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .addReward(XpReward.expert());
     }

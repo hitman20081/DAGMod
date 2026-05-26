@@ -2,14 +2,16 @@ package com.github.hitman20081.dagmod.world;
 
 import com.github.hitman20081.dagmod.DagMod;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderSet;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -24,10 +26,10 @@ public class HallSpawnInitializer {
 
     private static void onServerStarted(MinecraftServer server) {
         // Marker file ensures this only runs once per world
-        Path markerFile = server.getSavePath(WorldSavePath.ROOT).resolve("dagmod_hall_spawn.flag");
+        Path markerFile = server.getWorldPath(LevelResource.ROOT).resolve("dagmod_hall_spawn.flag");
         if (Files.exists(markerFile)) return;
 
-        ServerWorld overworld = server.getOverworld();
+        ServerLevel overworld = server.overworld();
 
         BlockPos hallPos = locateHall(overworld);
         if (hallPos == null) {
@@ -44,18 +46,18 @@ public class HallSpawnInitializer {
             DagMod.LOGGER.error("[DAGMod] Failed to write hall spawn marker", e);
         }
 
-        DagMod.LOGGER.info("[DAGMod] World spawn set near Hall of Champions at " + spawnPos);
+        DagMod.LOGGER.info("[DAGMod] Level spawn set near Hall of Champions at " + spawnPos);
     }
 
     @Nullable
-    private static BlockPos locateHall(ServerWorld overworld) {
+    private static BlockPos locateHall(ServerLevel overworld) {
         // Same pattern as BoneDungeonLocatorItem
-        var registry = overworld.getRegistryManager().getOrThrow(RegistryKeys.STRUCTURE);
-        var entry = registry.getEntry(Identifier.of(DagMod.MOD_ID, "hall_of_champions")).orElse(null);
+        var registry = overworld.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        var entry = registry.get(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "hall_of_champions")).orElse(null);
         if (entry == null) return null;
 
-        var result = overworld.getChunkManager().getChunkGenerator()
-                .locateStructure(overworld, RegistryEntryList.of(entry), BlockPos.ORIGIN, 100, false);
+        var result = overworld.getChunkSource().getGenerator()
+                .findNearestMapStructure(overworld, HolderSet.direct(entry), BlockPos.ZERO, 100, false);
 
         return result != null ? result.getFirst() : null;
     }
@@ -63,21 +65,21 @@ public class HallSpawnInitializer {
     /**
      * Walks offsets around the Hall center until it finds solid ground with 2 air blocks above.
      */
-    private static BlockPos findSafeSpawn(ServerWorld world, BlockPos hallPos) {
+    private static BlockPos findSafeSpawn(ServerLevel world, BlockPos hallPos) {
         int[] offsets = {20, -20, 25, -25, 15, -15, 0};
         for (int dx : offsets) {
             for (int dz : offsets) {
                 int x = hallPos.getX() + dx;
                 int z = hallPos.getZ() + dz;
-                int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
+                int y = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
                 BlockPos feet = new BlockPos(x, y, z);
-                if (world.getBlockState(feet).isAir() && world.getBlockState(feet.up()).isAir()) {
+                if (world.getBlockState(feet).isAir() && world.getBlockState(feet.above()).isAir()) {
                     return feet;
                 }
             }
         }
         // Fallback: surface at Hall center
-        int y = world.getTopY(Heightmap.Type.WORLD_SURFACE, hallPos.getX(), hallPos.getZ());
+        int y = world.getHeight(Heightmap.Types.WORLD_SURFACE, hallPos.getX(), hallPos.getZ());
         return new BlockPos(hallPos.getX(), y, hallPos.getZ());
     }
 
@@ -86,8 +88,8 @@ public class HallSpawnInitializer {
      */
     private static void setWorldSpawn(MinecraftServer server, BlockPos pos) {
         try {
-            var source = server.getCommandSource();
-            var dispatcher = server.getCommandManager().getDispatcher();
+            var source = server.createCommandSourceStack();
+            var dispatcher = server.getCommands().getDispatcher();
             String cmd = "setworldspawn " + pos.getX() + " " + pos.getY() + " " + pos.getZ();
             dispatcher.execute(dispatcher.parse(cmd, source));
         } catch (Exception e) {

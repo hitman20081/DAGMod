@@ -1,34 +1,34 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.Identifier;
 
 /**
  * Handles client-server synchronization for Rogue energy
  */
 public class EnergyNetworking {
-    public static final Identifier ENERGY_SYNC_ID = Identifier.of("dagmod", "energy_sync");
+    public static final Identifier ENERGY_SYNC_ID = Identifier.fromNamespaceAndPath("dagmod", "energy_sync");
 
     /**
      * Sync energy packet - sent from server to client
      */
-    public record EnergySyncPayload(int energy) implements CustomPayload {
-        public static final CustomPayload.Id<EnergySyncPayload> ID =
-                new CustomPayload.Id<>(ENERGY_SYNC_ID);
+    public record EnergySyncPayload(int energy) implements CustomPacketPayload {
+        public static final CustomPacketPayload.Type<EnergySyncPayload> ID =
+                new CustomPacketPayload.Type<>(ENERGY_SYNC_ID);
 
-        public static final PacketCodec<RegistryByteBuf, EnergySyncPayload> CODEC =
-                PacketCodec.tuple(
-                        PacketCodecs.INTEGER, EnergySyncPayload::energy,
+        public static final StreamCodec<RegistryFriendlyByteBuf, EnergySyncPayload> CODEC =
+                StreamCodec.composite(
+                        ByteBufCodecs.INT, EnergySyncPayload::energy,
                         EnergySyncPayload::new
                 );
 
         @Override
-        public Id<? extends CustomPayload> getId() {
+        public Type<? extends CustomPacketPayload> type() {
             return ID;
         }
     }
@@ -44,7 +44,7 @@ public class EnergyNetworking {
     /**
      * Sync player's energy to their client
      */
-    public static void syncEnergyToClient(ServerPlayerEntity player, int energy) {
+    public static void syncEnergyToClient(ServerPlayer player, int energy) {
         ServerPlayNetworking.send(player, new EnergySyncPayload(energy));
     }
 }

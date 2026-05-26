@@ -1,9 +1,9 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,34 +26,32 @@ public class RogueCooldownManager {
     /**
      * Start a cooldown for a specific ability
      */
-    public static void startCooldown(PlayerEntity player, RogueAbility ability) {
-        UUID uuid = player.getUuid();
-        long endTime = player.getEntityWorld().getTime() + ability.getCooldownTicks();
+    public static void startCooldown(Player player, RogueAbility ability) {
+        UUID uuid = player.getUUID();
+        long endTime = player.level().getGameTime() + ability.getCooldownTicks();
 
         cooldowns.computeIfAbsent(uuid, k -> new HashMap<>()).put(ability, endTime);
 
         // Send feedback to player
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            serverPlayer.sendMessage(
-                    Text.literal("⚔ " + ability.getDisplayName() + " activated!")
-                            .formatted(Formatting.DARK_RED, Formatting.BOLD),
-                    true
-            );
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("⚔ " + ability.getDisplayName() + " activated!")
+                            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
         }
     }
 
     /**
      * Check if an ability is on cooldown
      */
-    public static boolean isOnCooldown(PlayerEntity player, RogueAbility ability) {
-        UUID uuid = player.getUuid();
+    public static boolean isOnCooldown(Player player, RogueAbility ability) {
+        UUID uuid = player.getUUID();
         Map<RogueAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns == null || !playerCooldowns.containsKey(ability)) {
             return false;
         }
 
-        long currentTime = player.getEntityWorld().getTime();
+        long currentTime = player.level().getGameTime();
         long endTime = playerCooldowns.get(ability);
 
         if (currentTime >= endTime) {
@@ -67,15 +65,15 @@ public class RogueCooldownManager {
     /**
      * Get remaining cooldown time in ticks
      */
-    public static int getRemainingCooldown(PlayerEntity player, RogueAbility ability) {
-        UUID uuid = player.getUuid();
+    public static int getRemainingCooldown(Player player, RogueAbility ability) {
+        UUID uuid = player.getUUID();
         Map<RogueAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns == null || !playerCooldowns.containsKey(ability)) {
             return 0;
         }
 
-        long currentTime = player.getEntityWorld().getTime();
+        long currentTime = player.level().getGameTime();
         long endTime = playerCooldowns.get(ability);
 
         return Math.max(0, (int)(endTime - currentTime));
@@ -84,21 +82,19 @@ public class RogueCooldownManager {
     /**
      * Get remaining cooldown in seconds (for display)
      */
-    public static int getRemainingSeconds(PlayerEntity player, RogueAbility ability) {
+    public static int getRemainingSeconds(Player player, RogueAbility ability) {
         return (int) Math.ceil(getRemainingCooldown(player, ability) / 20.0);
     }
 
     /**
      * Send cooldown message to player
      */
-    public static void sendCooldownMessage(PlayerEntity player, RogueAbility ability) {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+    public static void sendCooldownMessage(Player player, RogueAbility ability) {
+        if (player instanceof ServerPlayer serverPlayer) {
             int seconds = getRemainingSeconds(player, ability);
-            serverPlayer.sendMessage(
-                    Text.literal("⏰ " + ability.getDisplayName() + " on cooldown: " + seconds + "s")
-                            .formatted(Formatting.RED),
-                    true
-            );
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("⏰ " + ability.getDisplayName() + " on cooldown: " + seconds + "s")
+                            .withStyle(ChatFormatting.RED));
         }
     }
 
@@ -112,8 +108,8 @@ public class RogueCooldownManager {
     /**
      * Clear a specific cooldown
      */
-    public static void clearCooldown(PlayerEntity player, RogueAbility ability) {
-        UUID uuid = player.getUuid();
+    public static void clearCooldown(Player player, RogueAbility ability) {
+        UUID uuid = player.getUUID();
         Map<RogueAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns != null) {
@@ -124,13 +120,13 @@ public class RogueCooldownManager {
     /**
      * Get all active cooldowns for a player
      */
-    public static Map<RogueAbility, Integer> getActiveCooldowns(PlayerEntity player) {
-        UUID uuid = player.getUuid();
+    public static Map<RogueAbility, Integer> getActiveCooldowns(Player player) {
+        UUID uuid = player.getUUID();
         Map<RogueAbility, Integer> active = new HashMap<>();
         Map<RogueAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns != null) {
-            long currentTime = player.getEntityWorld().getTime();
+            long currentTime = player.level().getGameTime();
 
             for (Map.Entry<RogueAbility, Long> entry : playerCooldowns.entrySet()) {
                 int remaining = (int)(entry.getValue() - currentTime);

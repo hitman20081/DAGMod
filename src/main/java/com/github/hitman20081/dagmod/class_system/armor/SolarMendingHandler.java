@@ -1,11 +1,11 @@
 package com.github.hitman20081.dagmod.class_system.armor;
 
 import com.github.hitman20081.dagmod.item.ModItems;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Set;
 
@@ -41,23 +41,23 @@ public class SolarMendingHandler {
     /**
      * Call for each player during the tick loop.
      */
-    public static void tick(ServerPlayerEntity player) {
+    public static void tick(ServerPlayer player) {
         if (!shouldRepairThisTick) return;
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerLevel world = (ServerLevel) player.level();
 
         // All conditions must be true: daytime, sky visible, not raining
-        if (!world.isDay()) return;
-        if (!world.isSkyVisible(player.getBlockPos())) return;
+        if (!world.isBrightOutside()) return;
+        if (!world.canSeeSky(player.blockPosition())) return;
         if (world.isRaining()) return;
 
         for (EquipmentSlot slot : ARMOR_SLOTS) {
-            ItemStack stack = player.getEquippedStack(slot);
+            ItemStack stack = player.getItemBySlot(slot);
             if (stack.isEmpty()) continue;
             if (!SOLARWEAVE_ITEMS.contains(stack.getItem())) continue;
-            if (stack.getDamage() <= 0) continue;
+            if (stack.getDamageValue() <= 0) continue;
 
-            stack.setDamage(stack.getDamage() - 1);
+            stack.setDamageValue(stack.getDamageValue() - 1);
         }
     }
 }

@@ -3,11 +3,11 @@ package com.github.hitman20081.dagmod.gui;
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.quest.ClientQuestData;
 import com.github.hitman20081.dagmod.quest.QuestData;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
-import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class QuestBookScreen extends Screen {
     };
 
     public QuestBookScreen(QuestData.QuestBookTier tier) {
-        super(Text.literal(tier.getDisplayName()));
+        super(Component.literal(tier.getDisplayName()));
         this.tier = tier;
     }
 
@@ -35,25 +35,25 @@ public class QuestBookScreen extends Screen {
     protected void init() {
         super.init();
 
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("< Previous"), button -> {
+        this.addRenderableWidget(Button.builder(Component.literal("< Previous"), button -> {
             if (currentPage > 0) {
                 currentPage--;
             }
-        }).dimensions(this.width / 2 - 150, this.height - 30, 80, 20).build());
+        }).bounds(this.width / 2 - 150, this.height - 30, 80, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Next >"), button -> {
+        this.addRenderableWidget(Button.builder(Component.literal("Next >"), button -> {
             if (currentPage < TOTAL_PAGES - 1) {
                 currentPage++;
             }
-        }).dimensions(this.width / 2 - 40, this.height - 30, 80, 20).build());
+        }).bounds(this.width / 2 - 40, this.height - 30, 80, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Close"), button -> {
-            this.close();
-        }).dimensions(this.width / 2 + 70, this.height - 30, 80, 20).build());
+        this.addRenderableWidget(Button.builder(Component.literal("Close"), button -> {
+            this.onClose();
+        }).bounds(this.width / 2 + 70, this.height - 30, 80, 20).build());
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         int bookX = (this.width - 192) / 2;
         int bookY = (this.height - 192) / 2;
 
@@ -64,14 +64,14 @@ public class QuestBookScreen extends Screen {
         // Inner page
         context.fill(bookX + 10, bookY + 10, bookX + 182, bookY + 182, 0xFFFFFFF8);
 
-        var font = this.client.textRenderer;
+        var font = this.font;
         int textX = bookX + 20;
         int textY = bookY + 20;
 
         // Page title
         String pageTitle = PAGE_TITLES[currentPage];
-        context.drawText(font, Text.literal(pageTitle), textX, textY, 0xFF000000, false);
-        context.drawText(font, Text.literal("Page " + (currentPage + 1) + "/" + TOTAL_PAGES),
+        context.text(font, Component.literal(pageTitle), textX, textY, 0xFF000000, false);
+        context.text(font, Component.literal("Page " + (currentPage + 1) + "/" + TOTAL_PAGES),
                 bookX + 120, textY, 0xFF666666, false);
         textY += 25;
 
@@ -88,54 +88,54 @@ public class QuestBookScreen extends Screen {
             case 5 -> renderAchievementsPage(context, font, textX, textY);
         }
 
-        super.render(context, mouseX, mouseY, delta);
+        super.extractRenderState(context, mouseX, mouseY, delta);
     }
 
-    private void renderOverviewPage(DrawContext context, TextRenderer font, int textX, int textY) {
+    private void renderOverviewPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
         ClientQuestData data = ClientQuestData.getInstance();
 
-        context.drawText(font, Text.literal("Quest Book Information:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Quest Book Information:"), textX, textY, 0xFF444444, false);
         textY += 15;
 
-        context.drawText(font, Text.literal("Tier: " + data.getTier().getDisplayName()), textX, textY, 0xFF000000, false);
+        context.text(font, Component.literal("Tier: " + data.getTier().getDisplayName()), textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("Active: " + data.getActiveQuestCount() + "/" + data.getMaxActiveQuests()),
+        context.text(font, Component.literal("Active: " + data.getActiveQuestCount() + "/" + data.getMaxActiveQuests()),
                 textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("Completed: " + data.getTotalCompleted()),
+        context.text(font, Component.literal("Completed: " + data.getTotalCompleted()),
                 textX, textY, 0xFF000000, false);
         textY += 20;
 
-        context.drawText(font, Text.literal("Available Difficulties:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Available Difficulties:"), textX, textY, 0xFF444444, false);
         textY += 15;
 
         for (var difficulty : data.getTier().getAllowedDifficulties()) {
-            context.drawText(font, Text.literal("- " + difficulty.getDisplayName()), textX, textY, 0xFF000000, false);
+            context.text(font, Component.literal("- " + difficulty.getDisplayName()), textX, textY, 0xFF000000, false);
             textY += 12;
         }
 
         textY += 15;
-        context.drawText(font, Text.literal("Navigation:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Navigation:"), textX, textY, 0xFF444444, false);
         textY += 15;
-        context.drawText(font, Text.literal("Use Previous/Next buttons"), textX, textY, 0xFF666666, false);
+        context.text(font, Component.literal("Use Previous/Next buttons"), textX, textY, 0xFF666666, false);
         textY += 10;
-        context.drawText(font, Text.literal("to browse quest pages"), textX, textY, 0xFF666666, false);
+        context.text(font, Component.literal("to browse quest pages"), textX, textY, 0xFF666666, false);
     }
 
-    private void renderActiveQuestsPage(DrawContext context, TextRenderer font, int textX, int textY) {
+    private void renderActiveQuestsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
         ClientQuestData data = ClientQuestData.getInstance();
         List<QuestSyncPacket.QuestInfo> activeQuests = data.getActiveQuests();
         int maxY = textY + 120; // bottom boundary for content
 
-        context.drawText(font, Text.literal("Currently Active Quests:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Currently Active Quests:"), textX, textY, 0xFF444444, false);
         textY += 18;
 
         if (activeQuests.isEmpty()) {
-            context.drawText(font, Text.literal("No active quests"), textX, textY, 0xFF666666, false);
+            context.text(font, Component.literal("No active quests"), textX, textY, 0xFF666666, false);
             textY += 15;
-            context.drawText(font, Text.literal("Visit a Quest Block to"), textX, textY, 0xFF888888, false);
+            context.text(font, Component.literal("Visit a Quest Block to"), textX, textY, 0xFF888888, false);
             textY += 10;
-            context.drawText(font, Text.literal("accept new quests!"), textX, textY, 0xFF888888, false);
+            context.text(font, Component.literal("accept new quests!"), textX, textY, 0xFF888888, false);
             return;
         }
 
@@ -145,14 +145,14 @@ public class QuestBookScreen extends Screen {
             QuestSyncPacket.QuestInfo quest = activeQuests.get(i);
 
             int difficultyColor = quest.difficulty().getColor();
-            context.drawText(font, Text.literal(quest.name()), textX, textY, difficultyColor, false);
+            context.text(font, Component.literal(quest.name()), textX, textY, difficultyColor, false);
             textY += 10;
 
             String progress = quest.objectivesComplete() + "/" + quest.totalObjectives() + " objectives";
             if (quest.isCompleted()) {
                 progress += " - Ready!";
             }
-            context.drawText(font, Text.literal(progress), textX + 5, textY, 0xFF666666, false);
+            context.text(font, Component.literal(progress), textX + 5, textY, 0xFF666666, false);
             textY += 10;
 
             // Show first objective (1 line only)
@@ -165,25 +165,25 @@ public class QuestBookScreen extends Screen {
         }
 
         if (questsShown < activeQuests.size() && textY + 8 <= maxY) {
-            context.drawText(font, Text.literal("+" + (activeQuests.size() - questsShown) + " more..."),
+            context.text(font, Component.literal("+" + (activeQuests.size() - questsShown) + " more..."),
                     textX, textY, 0xFF888888, false);
         }
     }
 
-    private void renderAvailableQuestsPage(DrawContext context, TextRenderer font, int textX, int textY) {
+    private void renderAvailableQuestsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
         ClientQuestData data = ClientQuestData.getInstance();
         List<QuestSyncPacket.QuestInfo> availableQuests = data.getAvailableQuests();
         int maxY = textY + 120; // bottom boundary for content
 
-        context.drawText(font, Text.literal("Available Quests:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Available Quests:"), textX, textY, 0xFF444444, false);
         textY += 18;
 
         if (availableQuests.isEmpty()) {
-            context.drawText(font, Text.literal("No quests available"), textX, textY, 0xFF666666, false);
+            context.text(font, Component.literal("No quests available"), textX, textY, 0xFF666666, false);
             textY += 15;
-            context.drawText(font, Text.literal("Complete more quests to"), textX, textY, 0xFF888888, false);
+            context.text(font, Component.literal("Complete more quests to"), textX, textY, 0xFF888888, false);
             textY += 10;
-            context.drawText(font, Text.literal("unlock new ones!"), textX, textY, 0xFF888888, false);
+            context.text(font, Component.literal("unlock new ones!"), textX, textY, 0xFF888888, false);
             return;
         }
 
@@ -195,13 +195,13 @@ public class QuestBookScreen extends Screen {
             // Quest name with difficulty color (truncate if too long)
             int difficultyColor = quest.difficulty().getColor();
             String questName = quest.name();
-            if (font.getWidth(questName) > 150) {
-                while (font.getWidth(questName + "...") > 150 && questName.length() > 10) {
+            if (font.width(questName) > 150) {
+                while (font.width(questName + "...") > 150 && questName.length() > 10) {
                     questName = questName.substring(0, questName.length() - 1);
                 }
                 questName = questName + "...";
             }
-            context.drawText(font, Text.literal(questName), textX, textY, difficultyColor, false);
+            context.text(font, Component.literal(questName), textX, textY, difficultyColor, false);
             textY += 10;
 
             // Description - 1 line only to save space
@@ -212,7 +212,7 @@ public class QuestBookScreen extends Screen {
             // Objective count
             if (textY + 8 <= maxY) {
                 String objectives = quest.totalObjectives() + " objective" + (quest.totalObjectives() != 1 ? "s" : "");
-                context.drawText(font, Text.literal(objectives), textX + 5, textY, 0xFF888888, false);
+                context.text(font, Component.literal(objectives), textX + 5, textY, 0xFF888888, false);
                 textY += 10;
             }
 
@@ -221,61 +221,61 @@ public class QuestBookScreen extends Screen {
         }
 
         if (questsShown < availableQuests.size() && textY + 8 <= maxY) {
-            context.drawText(font, Text.literal("+" + (availableQuests.size() - questsShown) + " more available"),
+            context.text(font, Component.literal("+" + (availableQuests.size() - questsShown) + " more available"),
                     textX, textY, 0xFF888888, false);
         }
     }
 
-    private void renderStatisticsPage(DrawContext context, TextRenderer font, int textX, int textY) {
+    private void renderStatisticsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
         ClientQuestData data = ClientQuestData.getInstance();
 
-        context.drawText(font, Text.literal("Quest Statistics:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Quest Statistics:"), textX, textY, 0xFF444444, false);
         textY += 20;
 
-        context.drawText(font, Text.literal("Total Completed: " + data.getTotalCompleted()),
+        context.text(font, Component.literal("Total Completed: " + data.getTotalCompleted()),
                 textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("Currently Active: " + data.getActiveQuestCount()),
+        context.text(font, Component.literal("Currently Active: " + data.getActiveQuestCount()),
                 textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("Quest Slots: " + data.getActiveQuestCount() + "/" + data.getMaxActiveQuests()),
+        context.text(font, Component.literal("Quest Slots: " + data.getActiveQuestCount() + "/" + data.getMaxActiveQuests()),
                 textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("Book Tier: " + data.getTier().getDisplayName()),
+        context.text(font, Component.literal("Book Tier: " + data.getTier().getDisplayName()),
                 textX, textY, 0xFF000000, false);
         textY += 25;
 
         // Calculate success rate
         int total = data.getTotalCompleted() + data.getActiveQuestCount();
         int successRate = total > 0 ? (data.getTotalCompleted() * 100 / total) : 100;
-        context.drawText(font, Text.literal("Success Rate: " + successRate + "%"),
+        context.text(font, Component.literal("Success Rate: " + successRate + "%"),
                 textX, textY, 0xFF00AA00, false);
     }
 
-    private void renderQuestChainsPage(DrawContext context, TextRenderer font, int textX, int textY) {
-        context.drawText(font, Text.literal("Quest Chains:"), textX, textY, 0xFF444444, false);
+    private void renderQuestChainsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
+        context.text(font, Component.literal("Quest Chains:"), textX, textY, 0xFF444444, false);
         textY += 20;
 
-        context.drawText(font, Text.literal("Quest chains are series of"), textX, textY, 0xFF666666, false);
+        context.text(font, Component.literal("Quest chains are series of"), textX, textY, 0xFF666666, false);
         textY += 10;
-        context.drawText(font, Text.literal("connected quests that tell"), textX, textY, 0xFF666666, false);
+        context.text(font, Component.literal("connected quests that tell"), textX, textY, 0xFF666666, false);
         textY += 10;
-        context.drawText(font, Text.literal("a story and grant rewards."), textX, textY, 0xFF666666, false);
+        context.text(font, Component.literal("a story and grant rewards."), textX, textY, 0xFF666666, false);
         textY += 20;
 
-        context.drawText(font, Text.literal("Complete chains to unlock:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Complete chains to unlock:"), textX, textY, 0xFF444444, false);
         textY += 15;
-        context.drawText(font, Text.literal("- Higher quest book tiers"), textX, textY, 0xFF000000, false);
+        context.text(font, Component.literal("- Higher quest book tiers"), textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("- Special rewards"), textX, textY, 0xFF000000, false);
+        context.text(font, Component.literal("- Special rewards"), textX, textY, 0xFF000000, false);
         textY += 12;
-        context.drawText(font, Text.literal("- New quest lines"), textX, textY, 0xFF000000, false);
+        context.text(font, Component.literal("- New quest lines"), textX, textY, 0xFF000000, false);
     }
 
-    private void renderAchievementsPage(DrawContext context, TextRenderer font, int textX, int textY) {
+    private void renderAchievementsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
         ClientQuestData data = ClientQuestData.getInstance();
 
-        context.drawText(font, Text.literal("Achievements:"), textX, textY, 0xFF444444, false);
+        context.text(font, Component.literal("Achievements:"), textX, textY, 0xFF444444, false);
         textY += 20;
 
         // Achievement 1: First Steps
@@ -283,9 +283,9 @@ public class QuestBookScreen extends Screen {
         int color = hasCompleted ? 0xFF00AA00 : 0xFF666666;
         String check = hasCompleted ? "✓" : "✗";
 
-        context.drawText(font, Text.literal("First Steps"), textX, textY, color, false);
+        context.text(font, Component.literal("First Steps"), textX, textY, color, false);
         textY += 12;
-        context.drawText(font, Text.literal(check + " Complete first quest"), textX + 5, textY, color, false);
+        context.text(font, Component.literal(check + " Complete first quest"), textX + 5, textY, color, false);
         textY += 18;
 
         // Achievement 2: Novice Complete
@@ -293,9 +293,9 @@ public class QuestBookScreen extends Screen {
         color = hasFive ? 0xFF00AA00 : 0xFF666666;
         check = hasFive ? "✓" : "✗";
 
-        context.drawText(font, Text.literal("Novice Complete"), textX, textY, color, false);
+        context.text(font, Component.literal("Novice Complete"), textX, textY, color, false);
         textY += 12;
-        context.drawText(font, Text.literal(check + " Complete 5 quests"), textX + 5, textY, color, false);
+        context.text(font, Component.literal(check + " Complete 5 quests"), textX + 5, textY, color, false);
         textY += 18;
 
         // Achievement 3: Apprentice Complete
@@ -303,14 +303,14 @@ public class QuestBookScreen extends Screen {
         color = hasTen ? 0xFF00AA00 : 0xFF666666;
         check = hasTen ? "✓" : "✗";
 
-        context.drawText(font, Text.literal("Apprentice Complete"), textX, textY, color, false);
+        context.text(font, Component.literal("Apprentice Complete"), textX, textY, color, false);
         textY += 12;
-        context.drawText(font, Text.literal(check + " Complete 10 quests"), textX + 5, textY, color, false);
+        context.text(font, Component.literal(check + " Complete 10 quests"), textX + 5, textY, color, false);
     }
 
     // Add this helper method at the end of the class, before the closing brace:
 
-    private void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+    private void drawBorder(GuiGraphicsExtractor context, int x, int y, int width, int height, int color) {
         context.fill(x, y, x + width, y + 1, color); // Top
         context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
         context.fill(x, y, x + 1, y + height, color); // Left
@@ -327,7 +327,7 @@ public class QuestBookScreen extends Screen {
      * @param maxWidth Maximum width in pixels
      * @return List of wrapped text lines
      */
-    private List<String> wrapText(TextRenderer font, String text, int maxWidth) {
+    private List<String> wrapText(Font font, String text, int maxWidth) {
         List<String> lines = new ArrayList<>();
         String[] words = text.split(" ");
         StringBuilder currentLine = new StringBuilder();
@@ -337,7 +337,7 @@ public class QuestBookScreen extends Screen {
                     ? currentLine.toString() + " " + word
                     : word;
 
-            if (font.getWidth(testLine) <= maxWidth) {
+            if (font.width(testLine) <= maxWidth) {
                 if (currentLine.length() > 0) {
                     currentLine.append(" ");
                 }
@@ -367,7 +367,7 @@ public class QuestBookScreen extends Screen {
      * If text exceeds maxLines, the last line ends with "..."
      * @return The final Y position after drawing all lines
      */
-    private int drawWrappedText(DrawContext context, TextRenderer font, String text,
+    private int drawWrappedText(GuiGraphicsExtractor context, Font font, String text,
                                 int x, int y, int maxWidth, int maxLines, int color) {
         List<String> lines = wrapText(font, text, maxWidth);
         int linesDrawn = 0;
@@ -378,13 +378,13 @@ public class QuestBookScreen extends Screen {
             // If this is the last line we can draw and there are more lines, add "..."
             if (i == maxLines - 1 && lines.size() > maxLines) {
                 // Truncate to fit "..."
-                while (font.getWidth(line + "...") > maxWidth && line.length() > 3) {
+                while (font.width(line + "...") > maxWidth && line.length() > 3) {
                     line = line.substring(0, line.length() - 1);
                 }
                 line = line + "...";
             }
 
-            context.drawText(font, Text.literal(line), x, y, color, false);
+            context.text(font, Component.literal(line), x, y, color, false);
             y += 8; // Line height
             linesDrawn++;
         }
@@ -393,7 +393,7 @@ public class QuestBookScreen extends Screen {
     }
 
     @Override
-    public boolean shouldPause() {
+    public boolean isPauseScreen() {
         return false;
     }
 }

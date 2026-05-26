@@ -2,10 +2,10 @@ package com.github.hitman20081.dagmod.party;
 
 import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
 import com.github.hitman20081.dagmod.progression.ProgressionManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class PartyXPHandler {
      * @param baseXp The base XP amount before bonuses
      * @param source Description of XP source (for messages)
      */
-    public static void awardPartyXP(ServerPlayerEntity player, int baseXp, String source) {
+    public static void awardPartyXP(ServerPlayer player, int baseXp, String source) {
         PartyData party = PartyManager.getInstance().getParty(player);
 
         if (party == null || !party.isXpShare()) {
@@ -30,7 +30,7 @@ public class PartyXPHandler {
             return;
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerLevel world = (ServerLevel) player.level();
 
         // Calculate XP with party bonus
         double partyBonus = party.getXpBonus();
@@ -41,35 +41,33 @@ public class PartyXPHandler {
         ProgressionManager.addXP(player, totalXp);
 
         if (bonusXp > 0) {
-            player.sendMessage(
-                    Text.literal("+" + totalXp + " XP ")
-                            .formatted(Formatting.GOLD)
-                            .append(Text.literal("(Party Bonus: +" + bonusXp + ")")
-                                    .formatted(Formatting.AQUA)),
-                    true // Action bar
+            player.sendOverlayMessage(
+                    Component.literal("+" + totalXp + " XP ")
+                            .withStyle(ChatFormatting.GOLD)
+                            .append(Component.literal("(Party Bonus: +" + bonusXp + ")")
+                                    .withStyle(ChatFormatting.AQUA))
             );
         }
 
         // Share XP with nearby party members
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(player, world);
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(player, world);
 
         if (!nearbyMembers.isEmpty()) {
             // Shared XP is 50% of the base XP (before party bonus)
             int sharedXp = baseXp / 2;
 
-            for (ServerPlayerEntity member : nearbyMembers) {
+            for (ServerPlayer member : nearbyMembers) {
                 // Each nearby member gets shared XP + their own party bonus
                 int memberBonusXp = (int) (sharedXp * partyBonus);
                 int memberTotalXp = sharedXp + memberBonusXp;
 
                 ProgressionManager.addXP(member, memberTotalXp);
 
-                member.sendMessage(
-                        Text.literal("+" + memberTotalXp + " Shared XP ")
-                                .formatted(Formatting.AQUA)
-                                .append(Text.literal("from " + player.getName().getString())
-                                        .formatted(Formatting.GRAY)),
-                        true // Action bar
+                member.sendOverlayMessage(
+                        Component.literal("+" + memberTotalXp + " Shared XP ")
+                                .withStyle(ChatFormatting.AQUA)
+                                .append(Component.literal("from " + player.getName().getString())
+                                        .withStyle(ChatFormatting.GRAY))
                 );
             }
         }
@@ -81,7 +79,7 @@ public class PartyXPHandler {
      * @param player The player
      * @return XP multiplier (1.0 = no bonus, 1.2 = +20% bonus)
      */
-    public static double getXPMultiplier(ServerPlayerEntity player) {
+    public static double getXPMultiplier(ServerPlayer player) {
         PartyData party = PartyManager.getInstance().getParty(player);
 
         if (party == null) {
@@ -98,22 +96,22 @@ public class PartyXPHandler {
      * @param source The player who earned the XP
      * @return true if they're in the same party and close enough
      */
-    public static boolean shouldShareXP(ServerPlayerEntity receiver, ServerPlayerEntity source) {
+    public static boolean shouldShareXP(ServerPlayer receiver, ServerPlayer source) {
         PartyData party = PartyManager.getInstance().getParty(source);
 
         if (party == null || !party.isXpShare()) {
             return false;
         }
 
-        if (!party.isMember(receiver.getUuid())) {
+        if (!party.isMember(receiver.getUUID())) {
             return false;
         }
 
-        if (receiver.getEntityWorld() != source.getEntityWorld()) {
+        if (receiver.level() != source.level()) {
             return false;
         }
 
-        double distance = receiver.getBlockPos().getSquaredDistance(source.getBlockPos());
+        double distance = receiver.blockPosition().distSqr(source.blockPosition());
         return distance <= PartyData.XP_SHARE_RADIUS * PartyData.XP_SHARE_RADIUS;
     }
 }

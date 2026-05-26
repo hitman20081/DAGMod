@@ -8,28 +8,29 @@ import com.github.hitman20081.dagmod.class_system.rogue.RogueCooldownManager;
 import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
 import com.github.hitman20081.dagmod.class_system.warrior.WarriorAbility;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.Map;
+import net.minecraft.server.permissions.Permissions;
 
 public class CooldownCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("cooldown")
-                .then(CommandManager.literal("info")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
+        dispatcher.register(Commands.literal("cooldown")
+                .then(Commands.literal("info")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
-                            player.sendMessage(Text.literal("=== Active Cooldowns ===")
-                                    .formatted(Formatting.GOLD, Formatting.BOLD), false);
+                            player.sendSystemMessage(Component.literal("=== Active Cooldowns ===")
+                                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
                             boolean hasCooldowns = false;
 
@@ -40,10 +41,10 @@ public class CooldownCommand {
                                         hasCooldowns = true;
                                         for (Map.Entry<WarriorAbility, Integer> entry : cooldowns.entrySet()) {
                                             int seconds = (int) Math.ceil(entry.getValue() / 20.0);
-                                            player.sendMessage(Text.literal("  " + entry.getKey().getDisplayName() + ": ")
-                                                    .formatted(Formatting.RED)
-                                                    .append(Text.literal(seconds + "s")
-                                                            .formatted(Formatting.WHITE)), false);
+                                            player.sendSystemMessage(Component.literal("  " + entry.getKey().getDisplayName() + ": ")
+                                                    .withStyle(ChatFormatting.RED)
+                                                    .append(Component.literal(seconds + "s")
+                                                            .withStyle(ChatFormatting.WHITE)));
                                         }
                                     }
                                 }
@@ -53,10 +54,10 @@ public class CooldownCommand {
                                         hasCooldowns = true;
                                         for (Map.Entry<MageAbility, Integer> entry : cooldowns.entrySet()) {
                                             int seconds = (int) Math.ceil(entry.getValue() / 20.0);
-                                            player.sendMessage(Text.literal("  " + entry.getKey().getDisplayName() + ": ")
-                                                    .formatted(Formatting.AQUA)
-                                                    .append(Text.literal(seconds + "s")
-                                                            .formatted(Formatting.WHITE)), false);
+                                            player.sendSystemMessage(Component.literal("  " + entry.getKey().getDisplayName() + ": ")
+                                                    .withStyle(ChatFormatting.AQUA)
+                                                    .append(Component.literal(seconds + "s")
+                                                            .withStyle(ChatFormatting.WHITE)));
                                         }
                                     }
                                 }
@@ -66,47 +67,47 @@ public class CooldownCommand {
                                         hasCooldowns = true;
                                         for (Map.Entry<RogueAbility, Integer> entry : cooldowns.entrySet()) {
                                             int seconds = (int) Math.ceil(entry.getValue() / 20.0);
-                                            player.sendMessage(Text.literal("  " + entry.getKey().getDisplayName() + ": ")
-                                                    .formatted(Formatting.DARK_RED)
-                                                    .append(Text.literal(seconds + "s")
-                                                            .formatted(Formatting.WHITE)), false);
+                                            player.sendSystemMessage(Component.literal("  " + entry.getKey().getDisplayName() + ": ")
+                                                    .withStyle(ChatFormatting.DARK_RED)
+                                                    .append(Component.literal(seconds + "s")
+                                                            .withStyle(ChatFormatting.WHITE)));
                                         }
                                     }
                                 }
                                 default -> {
-                                    player.sendMessage(Text.literal("No class selected.")
-                                            .formatted(Formatting.GRAY), false);
+                                    player.sendSystemMessage(Component.literal("No class selected.")
+                                            .withStyle(ChatFormatting.GRAY));
                                     return 1;
                                 }
                             }
 
                             if (!hasCooldowns) {
-                                player.sendMessage(Text.literal("No active cooldowns.")
-                                        .formatted(Formatting.GRAY), false);
+                                player.sendSystemMessage(Component.literal("No active cooldowns.")
+                                        .withStyle(ChatFormatting.GRAY));
                             }
 
                             return 1;
                         })
                 )
-                .then(CommandManager.literal("clear")
-                        .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
+                .then(Commands.literal("clear")
+                        .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
                             switch (playerClass) {
-                                case "Warrior" -> CooldownManager.clearPlayerCooldowns(player.getUuid());
-                                case "Mage" -> MageCooldownManager.clearPlayerCooldowns(player.getUuid());
-                                case "Rogue" -> RogueCooldownManager.clearPlayerCooldowns(player.getUuid());
+                                case "Warrior" -> CooldownManager.clearPlayerCooldowns(player.getUUID());
+                                case "Mage" -> MageCooldownManager.clearPlayerCooldowns(player.getUUID());
+                                case "Rogue" -> RogueCooldownManager.clearPlayerCooldowns(player.getUUID());
                                 default -> {
-                                    player.sendMessage(Text.literal("No class selected.")
-                                            .formatted(Formatting.GRAY), false);
+                                    player.sendSystemMessage(Component.literal("No class selected.")
+                                            .withStyle(ChatFormatting.GRAY));
                                     return 1;
                                 }
                             }
 
-                            player.sendMessage(Text.literal("All cooldowns cleared!")
-                                    .formatted(Formatting.GREEN), false);
+                            player.sendSystemMessage(Component.literal("All cooldowns cleared!")
+                                    .withStyle(ChatFormatting.GREEN));
                             return 1;
                         })
                 )

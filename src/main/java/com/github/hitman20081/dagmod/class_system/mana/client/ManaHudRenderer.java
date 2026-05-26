@@ -1,27 +1,28 @@
 package com.github.hitman20081.dagmod.class_system.mana.client;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.resources.Identifier;
+import net.minecraft.network.chat.Component;
 
-public class ManaHudRenderer implements HudRenderCallback {
-    private static final Identifier MANA_BAR_TEXTURE = Identifier.of("dagmod", "textures/gui/mana_bar.png");
+public class ManaHudRenderer {
+    private static final Identifier MANA_BAR_TEXTURE = Identifier.fromNamespaceAndPath("dagmod", "textures/gui/mana_bar.png");
 
-    @Override
-    public void onHudRender(DrawContext drawContext, RenderTickCounter tickCounter) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public void onHudRender(GuiGraphicsExtractor drawContext, DeltaTracker tickCounter) {
+        Minecraft client = Minecraft.getInstance();
 
         if (client.player == null) return;
 
         // Only show for Mages
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(client.player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(client.player.getUUID());
         if (!"Mage".equals(playerClass)) return;
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int screenHeight = client.getWindow().getScaledHeight();
+        int screenWidth = client.getWindow().getGuiScaledWidth();
+        int screenHeight = client.getWindow().getGuiScaledHeight();
 
         // Position: Over hunger bar (right side)
         int x = screenWidth / 2 + 10;
@@ -41,10 +42,10 @@ public class ManaHudRenderer implements HudRenderCallback {
 
         // Draw mana text
         String manaText = String.format("%.0f/%.0f", ClientManaData.getCurrentMana(), (float) ClientManaData.getMaxMana());
-        drawContext.drawText(client.textRenderer, manaText, x + 41 - client.textRenderer.getWidth(manaText) / 2, y - 10, 0x00AAFF, true);
+        drawContext.text(client.font, Component.literal(manaText), x + 41 - client.font.width(manaText) / 2, y - 10, 0x00AAFF, true);
     }
 
-    private void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+    private void drawBorder(GuiGraphicsExtractor context, int x, int y, int width, int height, int color) {
         context.fill(x, y, x + width, y + 1, color); // Top
         context.fill(x, y + height - 1, x + width, y + height, color); // Bottom
         context.fill(x, y, x + 1, y + height, color); // Left

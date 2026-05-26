@@ -1,12 +1,12 @@
 package com.github.hitman20081.dagmod.party;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,17 +140,17 @@ public class PartyData {
     }
 
     // Get nearby party members (within XP share radius)
-    public List<ServerPlayerEntity> getNearbyMembers(ServerPlayerEntity player, ServerWorld world) {
-        List<ServerPlayerEntity> nearbyMembers = new ArrayList<>();
+    public List<ServerPlayer> getNearbyMembers(ServerPlayer player, ServerLevel world) {
+        List<ServerPlayer> nearbyMembers = new ArrayList<>();
 
         for (UUID memberId : members) {
-            if (memberId.equals(player.getUuid())) {
+            if (memberId.equals(player.getUUID())) {
                 continue; // Skip self
             }
 
-            ServerPlayerEntity member = world.getServer().getPlayerManager().getPlayer(memberId);
-            if (member != null && member.getEntityWorld() == player.getEntityWorld()) {
-                double distance = player.getBlockPos().getSquaredDistance(member.getBlockPos());
+            ServerPlayer member = world.getServer().getPlayerList().getPlayer(memberId);
+            if (member != null && member.level() == player.level()) {
+                double distance = player.blockPosition().distSqr(member.blockPosition());
                 if (distance <= XP_SHARE_RADIUS * XP_SHARE_RADIUS) {
                     nearbyMembers.add(member);
                 }
@@ -161,11 +161,11 @@ public class PartyData {
     }
 
     // Get all online members
-    public List<ServerPlayerEntity> getOnlineMembers(ServerWorld world) {
-        List<ServerPlayerEntity> onlineMembers = new ArrayList<>();
+    public List<ServerPlayer> getOnlineMembers(ServerLevel world) {
+        List<ServerPlayer> onlineMembers = new ArrayList<>();
 
         for (UUID memberId : members) {
-            ServerPlayerEntity member = world.getServer().getPlayerManager().getPlayer(memberId);
+            ServerPlayer member = world.getServer().getPlayerList().getPlayer(memberId);
             if (member != null) {
                 onlineMembers.add(member);
             }
@@ -175,38 +175,38 @@ public class PartyData {
     }
 
     // Send message to all party members
-    public void sendPartyMessage(ServerWorld world, Text message) {
-        Text formattedMessage = Text.literal("[PARTY] ").formatted(Formatting.AQUA)
+    public void sendPartyMessage(ServerLevel world, Component message) {
+        Component formattedMessage = Component.literal("[PARTY] ").withStyle(ChatFormatting.AQUA)
                 .append(message);
 
         for (UUID memberId : members) {
-            ServerPlayerEntity member = world.getServer().getPlayerManager().getPlayer(memberId);
+            ServerPlayer member = world.getServer().getPlayerList().getPlayer(memberId);
             if (member != null) {
-                member.sendMessage(formattedMessage, false);
+                member.sendSystemMessage(formattedMessage);
             }
         }
     }
 
     // Send message to all party members (with sender name)
-    public void sendPartyChat(ServerWorld world, ServerPlayerEntity sender, String message) {
-        Text formattedMessage = Text.literal("[PARTY] ")
-                .formatted(Formatting.AQUA)
-                .append(Text.literal(sender.getName().getString() + ": ")
-                        .formatted(Formatting.WHITE))
-                .append(Text.literal(message)
-                        .formatted(Formatting.GRAY));
+    public void sendPartyChat(ServerLevel world, ServerPlayer sender, String message) {
+        Component formattedMessage = Component.literal("[PARTY] ")
+                .withStyle(ChatFormatting.AQUA)
+                .append(Component.literal(sender.getName().getString() + ": ")
+                        .withStyle(ChatFormatting.WHITE))
+                .append(Component.literal(message)
+                        .withStyle(ChatFormatting.GRAY));
 
         for (UUID memberId : members) {
-            ServerPlayerEntity member = world.getServer().getPlayerManager().getPlayer(memberId);
+            ServerPlayer member = world.getServer().getPlayerList().getPlayer(memberId);
             if (member != null) {
-                member.sendMessage(formattedMessage, false);
+                member.sendSystemMessage(formattedMessage);
             }
         }
     }
 
     // NBT Serialization
-    public NbtCompound toNbt() {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag toNbt() {
+        CompoundTag nbt = new CompoundTag();
 
         nbt.putString("PartyId", partyId.toString());
         nbt.putString("LeaderId", leaderId.toString());
@@ -214,9 +214,9 @@ public class PartyData {
         nbt.putBoolean("XpShare", xpShare);
         nbt.putBoolean("QuestShare", questShare);
 
-        NbtList membersList = new NbtList();
+        ListTag membersList = new ListTag();
         for (UUID memberId : members) {
-            NbtCompound memberNbt = new NbtCompound();
+            CompoundTag memberNbt = new CompoundTag();
             memberNbt.putString("MemberId", memberId.toString());
             membersList.add(memberNbt);
         }
@@ -226,7 +226,7 @@ public class PartyData {
     }
 
     // NBT Deserialization
-    public static PartyData fromNbt(NbtCompound nbt) {
+    public static PartyData fromNbt(CompoundTag nbt) {
         UUID partyId = UUID.fromString(nbt.getString("PartyId").orElse(""));
         UUID leaderId = UUID.fromString(nbt.getString("LeaderId").orElse(""));
         long createdTime = nbt.getLong("CreatedTime").orElse(Long.valueOf(System.currentTimeMillis()));
@@ -234,9 +234,9 @@ public class PartyData {
         boolean questShare = nbt.getBoolean("QuestShare").orElse(Boolean.valueOf(true));
 
         List<UUID> members = new ArrayList<>();
-        NbtList membersList = nbt.getList("Members").orElse(new NbtList());
+        ListTag membersList = nbt.getList("Members").orElse(new ListTag());
         for (int i = 0; i < membersList.size(); i++) {
-            NbtCompound memberNbt = membersList.getCompound(i).orElse(null);
+            CompoundTag memberNbt = membersList.getCompound(i).orElse(null);
             if (memberNbt != null) {
                 String memberIdStr = memberNbt.getString("MemberId").orElse("");
                 if (!memberIdStr.isEmpty()) {

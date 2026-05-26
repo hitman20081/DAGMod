@@ -1,30 +1,31 @@
 package com.github.hitman20081.dagmod.bone_realm.entity;
 
 import com.github.hitman20081.dagmod.bone_realm.chest.BossChestSpawner;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.entity.boss.BossBar;
-import net.minecraft.entity.boss.ServerBossBar;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.BossEvent;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 
-public class SkeletonLordEntity extends SkeletonEntity {
+public class SkeletonLordEntity extends Skeleton {
 
     private static final int MAX_SUMMONERS = 3; // Max Summoners Spawned
     private static final int MIN_SUMMON_COOLDOWN = 200; // 10 seconds - slower
@@ -33,94 +34,94 @@ public class SkeletonLordEntity extends SkeletonEntity {
     private int summonCooldown;
     private int summonerCount = 0;
 
-    private final ServerBossBar bossBar;
+    private final ServerBossEvent bossBar;
 
-    public SkeletonLordEntity(EntityType<? extends SkeletonEntity> entityType, World world) {
+    public SkeletonLordEntity(EntityType<? extends Skeleton> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = 50;
+        this.xpReward = 50;
         this.summonCooldown = MIN_SUMMON_COOLDOWN;
 
-        // ADD THIS:
-        this.bossBar = new ServerBossBar(
-                Text.literal("Skeleton Lord").formatted(Formatting.DARK_RED, Formatting.BOLD),
-                BossBar.Color.RED,
-                BossBar.Style.NOTCHED_10
+        this.bossBar = new ServerBossEvent(
+                this.getUUID(),
+                Component.literal("Skeleton Lord").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD),
+                BossEvent.BossBarColor.RED,
+                BossEvent.BossBarOverlay.NOTCHED_10
         );
 
-        if (!world.isClient()) {
+        if (!world.isClientSide()) {
             this.initializeEquipment();
         }
     }
 
     @Override
-    protected void initEquipment(net.minecraft.util.math.random.Random random, LocalDifficulty localDifficulty) {
-        super.initEquipment(random, localDifficulty);
+    protected void populateDefaultEquipmentSlots(net.minecraft.util.RandomSource random, DifficultyInstance localDifficulty) {
+        super.populateDefaultEquipmentSlots(random, localDifficulty);
         this.initializeEquipment();
     }
 
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData) {
-        entityData = super.initialize(world, difficulty, spawnReason, entityData);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData) {
+        entityData = super.finalizeSpawn(world, difficulty, spawnReason, entityData);
         return entityData;
     }
 
     private void initializeEquipment() {
-        ItemStack helmet = new ItemStack(net.minecraft.item.Items.DIAMOND_HELMET);
-        helmet.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Helm of the Bone Lord").formatted(Formatting.DARK_RED));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.HEAD, helmet);
+        ItemStack helmet = new ItemStack(net.minecraft.world.item.Items.DIAMOND_HELMET);
+        helmet.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Helm of the Bone Lord").withStyle(ChatFormatting.DARK_RED));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, helmet);
 
-        ItemStack chestplate = new ItemStack(net.minecraft.item.Items.DIAMOND_CHESTPLATE);
-        chestplate.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Chest of the Bone Lord").formatted(Formatting.DARK_RED));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.CHEST, chestplate);
+        ItemStack chestplate = new ItemStack(net.minecraft.world.item.Items.DIAMOND_CHESTPLATE);
+        chestplate.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Chest of the Bone Lord").withStyle(ChatFormatting.DARK_RED));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, chestplate);
 
-        ItemStack leggings = new ItemStack(net.minecraft.item.Items.DIAMOND_LEGGINGS);
-        leggings.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Leggings of the Bone Lord").formatted(Formatting.DARK_RED));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.LEGS, leggings);
+        ItemStack leggings = new ItemStack(net.minecraft.world.item.Items.DIAMOND_LEGGINGS);
+        leggings.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Leggings of the Bone Lord").withStyle(ChatFormatting.DARK_RED));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, leggings);
 
-        ItemStack boots = new ItemStack(net.minecraft.item.Items.DIAMOND_BOOTS);
-        boots.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Sabatons of the Bone Lord").formatted(Formatting.DARK_RED));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.FEET, boots);
+        ItemStack boots = new ItemStack(net.minecraft.world.item.Items.DIAMOND_BOOTS);
+        boots.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Sabatons of the Bone Lord").withStyle(ChatFormatting.DARK_RED));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, boots);
 
-        ItemStack sword = new ItemStack(net.minecraft.item.Items.DIAMOND_SWORD);
-        this.equipStack(net.minecraft.entity.EquipmentSlot.MAINHAND, sword);
+        ItemStack sword = new ItemStack(net.minecraft.world.item.Items.DIAMOND_SWORD);
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, sword);
 
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.HEAD, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.CHEST, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.LEGS, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.FEET, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.MAINHAND, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.HEAD, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.CHEST, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.LEGS, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.FEET, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.MAINHAND, 0.0f);
     }
 
-    public static DefaultAttributeContainer.Builder createSkeletonLordAttributes() {
-        return SkeletonEntity.createAbstractSkeletonAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 200.0)
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.28)
-                .add(EntityAttributes.ATTACK_DAMAGE, 10.0)
-                .add(EntityAttributes.ARMOR, 18.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 6.0)
-                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
-                .add(EntityAttributes.FOLLOW_RANGE, 40.0)
-                .add(EntityAttributes.ATTACK_KNOCKBACK, 0.25)
-                .add(EntityAttributes.SCALE, 1.5);
+    public static AttributeSupplier.Builder createSkeletonLordAttributes() {
+        return Skeleton.createAttributes()
+                .add(Attributes.MAX_HEALTH, 200.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.28)
+                .add(Attributes.ATTACK_DAMAGE, 10.0)
+                .add(Attributes.ARMOR, 18.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 6.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
+                .add(Attributes.FOLLOW_RANGE, 40.0)
+                .add(Attributes.ATTACK_KNOCKBACK, 0.25)
+                .add(Attributes.SCALE, 1.5);
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        if (!this.getEntityWorld().isClient()) {
-            this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+        if (!this.level().isClientSide()) {
+            this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
         }
 
-        if (!this.getEntityWorld().isClient() && this.isAlive()) {
+        if (!this.level().isClientSide() && this.isAlive()) {
             // Count nearby summoners
-            this.summonerCount = this.getEntityWorld().getEntitiesByClass(
+            this.summonerCount = this.level().getEntitiesOfClass(
                     SkeletonSummonerEntity.class,
-                    this.getBoundingBox().expand(40),
+                    this.getBoundingBox().inflate(40),
                     summoner -> summoner.isAlive()
             ).size();
 
@@ -135,30 +136,30 @@ public class SkeletonLordEntity extends SkeletonEntity {
     }
 
     @Override
-    public void onStartedTrackingBy(ServerPlayerEntity player) {
-        super.onStartedTrackingBy(player);
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
         this.bossBar.addPlayer(player);
     }
 
     @Override
-    public void onStoppedTrackingBy(ServerPlayerEntity player) {
-        super.onStoppedTrackingBy(player);
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
         this.bossBar.removePlayer(player);
     }
 
     private void summonSkeletonSummoner() {
-        if (!(this.getEntityWorld() instanceof ServerWorld serverWorld)) {
+        if (!(this.level() instanceof ServerLevel serverWorld)) {
             return;
         }
 
-        BlockPos spawnPos = this.getBlockPos().add(
+        BlockPos spawnPos = this.blockPosition().offset(
                 this.random.nextInt(6) - 3,
                 0,
                 this.random.nextInt(6) - 3
         );
 
         SkeletonSummonerEntity summoner = new SkeletonSummonerEntity(BoneRealmEntityRegistry.SKELETON_SUMMONER, serverWorld);
-        summoner.refreshPositionAndAngles(
+        summoner.snapTo(
                 spawnPos.getX() + 0.5,
                 spawnPos.getY(),
                 spawnPos.getZ() + 0.5,
@@ -170,7 +171,7 @@ public class SkeletonLordEntity extends SkeletonEntity {
             summoner.setTarget(this.getTarget());
         }
 
-        serverWorld.spawnEntity(summoner);
+        serverWorld.addFreshEntity(summoner);
 
         // Epic summoning effects
         for (int i = 0; i < 30; i++) {
@@ -178,7 +179,7 @@ public class SkeletonLordEntity extends SkeletonEntity {
             double offsetY = this.random.nextDouble() * 2.0;
             double offsetZ = (this.random.nextDouble() - 0.5) * 1.5;
 
-            serverWorld.spawnParticles(
+            serverWorld.sendParticles(
                     ParticleTypes.SOUL_FIRE_FLAME,
                     spawnPos.getX() + 0.5,
                     spawnPos.getY() + 0.5,
@@ -189,37 +190,37 @@ public class SkeletonLordEntity extends SkeletonEntity {
             );
         }
 
-        this.playSound(SoundEvents.ENTITY_WITHER_SPAWN, 0.5f, 1.5f);
+        this.playSound(SoundEvents.WITHER_SPAWN, 0.5f, 1.5f);
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
-        super.onDeath(damageSource);
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
 
         // ADD THIS:
-        this.bossBar.clearPlayers();
+        this.bossBar.removeAllPlayers();
 
-        if (!this.getEntityWorld().isClient()) {
-            PlayerEntity killer = null;
-            if (damageSource.getAttacker() instanceof PlayerEntity) {
-                killer = (PlayerEntity) damageSource.getAttacker();
+        if (!this.level().isClientSide()) {
+            Player killer = null;
+            if (damageSource.getEntity() instanceof Player) {
+                killer = (Player) damageSource.getEntity();
             }
-            BossChestSpawner.onBossDeath(this, killer, this.getEntityWorld());
+            BossChestSpawner.onBossDeath(this, killer, this.level());
         }
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_WITHER_SKELETON_DEATH;
+        return SoundEvents.WITHER_SKELETON_DEATH;
     }
 
     @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) {
+    public boolean removeWhenFarAway(double distanceSquared) {
         return false;
     }
 
     @Override
-    public boolean cannotDespawn() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 

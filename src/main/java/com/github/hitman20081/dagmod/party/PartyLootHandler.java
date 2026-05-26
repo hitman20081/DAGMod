@@ -1,15 +1,15 @@
 package com.github.hitman20081.dagmod.party;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class PartyLootHandler {
      */
     public static boolean isBossEntity(LivingEntity entity) {
         // Check for vanilla bosses
-        if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity) {
+        if (entity instanceof EnderDragon || entity instanceof WitherBoss) {
             return true;
         }
 
@@ -43,7 +43,7 @@ public class PartyLootHandler {
      * @param killer The player who got the killing blow
      * @param world The server world
      */
-    public static void distributeBossLoot(ServerWorld world, ServerPlayerEntity killer, double x, double y, double z) {
+    public static void distributeBossLoot(ServerLevel world, ServerPlayer killer, double x, double y, double z) {
         PartyData party = PartyManager.getInstance().getParty(killer);
 
         if (party == null) {
@@ -52,7 +52,7 @@ public class PartyLootHandler {
         }
 
         // Get all nearby party members (within 50 blocks)
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(killer, world);
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(killer, world);
 
         if (nearbyMembers.isEmpty()) {
             // Only the killer is nearby - normal loot
@@ -60,8 +60,8 @@ public class PartyLootHandler {
         }
 
         // Find all dropped items near the boss death location (within 10 blocks)
-        Box searchBox = new Box(x - 10, y - 10, z - 10, x + 10, y + 10, z + 10);
-        List<ItemEntity> droppedItems = world.getEntitiesByClass(
+        AABB searchBox = new AABB(x - 10, y - 10, z - 10, x + 10, y + 10, z + 10);
+        List<ItemEntity> droppedItems = world.getEntitiesOfClass(
                 ItemEntity.class,
                 searchBox,
                 itemEntity -> !itemEntity.isRemoved()
@@ -73,15 +73,15 @@ public class PartyLootHandler {
 
         // Give copies of the loot to each party member
         int totalItemsGiven = 0;
-        for (ServerPlayerEntity member : nearbyMembers) {
+        for (ServerPlayer member : nearbyMembers) {
             if (member.equals(killer)) continue; // Killer already got normal drops
 
             for (ItemEntity itemEntity : droppedItems) {
-                ItemStack originalStack = itemEntity.getStack();
+                ItemStack originalStack = itemEntity.getItem();
                 ItemStack copyStack = originalStack.copy();
 
                 // Try to add to inventory
-                if (!member.getInventory().insertStack(copyStack)) {
+                if (!member.getInventory().add(copyStack)) {
                     // Inventory full - drop at member's feet
                     ItemEntity droppedCopy = new ItemEntity(
                             world,
@@ -90,25 +90,23 @@ public class PartyLootHandler {
                             member.getZ(),
                             copyStack
                     );
-                    world.spawnEntity(droppedCopy);
+                    world.addFreshEntity(droppedCopy);
                 }
 
                 totalItemsGiven++;
             }
 
             // Notify member
-            member.sendMessage(
-                    Text.literal("Received " + droppedItems.size() + " items from party boss loot!")
-                            .formatted(Formatting.GREEN),
-                    false
-            );
+            member.sendSystemMessage(
+                    Component.literal("Received " + droppedItems.size() + " items from party boss loot!")
+                            .withStyle(ChatFormatting.GREEN));
         }
 
         // Notify party
         if (totalItemsGiven > 0) {
             party.sendPartyMessage(world,
-                    Text.literal("Boss loot distributed to " + (nearbyMembers.size() + 1) + " party members!")
-                            .formatted(Formatting.GOLD)
+                    Component.literal("Boss loot distributed to " + (nearbyMembers.size() + 1) + " party members!")
+                            .withStyle(ChatFormatting.GOLD)
             );
         }
     }
@@ -120,7 +118,7 @@ public class PartyLootHandler {
      * @param killer The player who killed the boss
      * @param baseXp Base XP reward for the boss
      */
-    public static void awardBossKillXP(LivingEntity boss, ServerPlayerEntity killer, int baseXp) {
+    public static void awardBossKillXP(LivingEntity boss, ServerPlayer killer, int baseXp) {
         PartyData party = PartyManager.getInstance().getParty(killer);
 
         if (party == null) {
@@ -129,8 +127,8 @@ public class PartyLootHandler {
             return;
         }
 
-        ServerWorld world = (ServerWorld) killer.getEntityWorld();
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(killer, world);
+        ServerLevel world = (ServerLevel) killer.level();
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(killer, world);
 
         // Boss kills give bonus XP to everyone
         int bonusMultiplier = 2; // Bosses give 2x normal party XP
@@ -139,35 +137,31 @@ public class PartyLootHandler {
 
         // Award XP to killer
         com.github.hitman20081.dagmod.progression.ProgressionManager.addXP(killer, totalXp);
-        killer.sendMessage(
-                Text.literal("+" + totalXp + " XP ")
-                        .formatted(Formatting.GOLD)
-                        .append(Text.literal("(Boss Kill + Party Bonus!)")
-                                .formatted(Formatting.AQUA)),
-                true
-        );
+        killer.sendOverlayMessage(
+                Component.literal("+" + totalXp + " XP ")
+                        .withStyle(ChatFormatting.GOLD)
+                        .append(Component.literal("(Boss Kill + Party Bonus!)")
+                                .withStyle(ChatFormatting.AQUA)));
 
         // Award shared XP to nearby party members
         if (!nearbyMembers.isEmpty()) {
             int sharedXp = (int) (totalXp * 0.75); // 75% of total XP for party members
 
-            for (ServerPlayerEntity member : nearbyMembers) {
+            for (ServerPlayer member : nearbyMembers) {
                 if (member.equals(killer)) continue; // Skip killer (already got XP)
 
                 com.github.hitman20081.dagmod.progression.ProgressionManager.addXP(member, sharedXp);
-                member.sendMessage(
-                        Text.literal("+" + sharedXp + " Shared Boss XP!")
-                                .formatted(Formatting.GOLD),
-                        true
-                );
+                member.sendOverlayMessage(
+                        Component.literal("+" + sharedXp + " Shared Boss XP!")
+                                .withStyle(ChatFormatting.GOLD));
             }
         }
 
         // Send party notification
         String bossName = boss.getName().getString();
         party.sendPartyMessage(world,
-                Text.literal(killer.getName().getString() + " defeated " + bossName + "!")
-                        .formatted(Formatting.GOLD)
+                Component.literal(killer.getName().getString() + " defeated " + bossName + "!")
+                        .withStyle(ChatFormatting.GOLD)
         );
     }
 

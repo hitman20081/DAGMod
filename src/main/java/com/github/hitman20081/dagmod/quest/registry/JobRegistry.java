@@ -9,10 +9,10 @@ import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
-import net.minecraft.util.Identifier;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.ItemTags;
 
 public class JobRegistry {
 
@@ -236,7 +236,7 @@ public class JobRegistry {
                 .addObjective(new MultiItemCollectObjective("Gold Ore", 8, Items.GOLD_ORE, Items.DEEPSLATE_GOLD_ORE))
                 .addObjective(new MultiItemCollectObjective("Diamond Ore", 3, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fortune"), 3))
                 .addReward(XpReward.expert());
     }
 

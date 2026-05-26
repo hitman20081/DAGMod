@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.progression;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import java.util.UUID;
 
 /**
@@ -215,8 +215,8 @@ public class PlayerProgressionData {
      * Save progression data to NBT
      * @return NBT compound with all progression data
      */
-    public NbtCompound toNbt() {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag toNbt() {
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("CurrentXP", currentXP);
         nbt.putInt("CurrentLevel", currentLevel);
         nbt.putLong("TotalXPEarned", totalXPEarned);
@@ -229,7 +229,7 @@ public class PlayerProgressionData {
      * @param nbt NBT compound containing progression data
      * @return New PlayerProgressionData instance
      */
-    public static PlayerProgressionData fromNbt(NbtCompound nbt) {
+    public static PlayerProgressionData fromNbt(CompoundTag nbt) {
         UUID uuid = UUID.fromString(nbt.getString("PlayerUUID").orElse(""));
         PlayerProgressionData data = new PlayerProgressionData(uuid);
 

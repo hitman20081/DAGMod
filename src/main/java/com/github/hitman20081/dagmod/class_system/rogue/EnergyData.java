@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * Simple energy data storage for Rogues
@@ -42,11 +42,11 @@ public class EnergyData {
         currentEnergy = Math.max(0, Math.min(amount, MAX_ENERGY));
     }
 
-    public void writeToNbt(NbtCompound nbt) {
+    public void writeToNbt(CompoundTag nbt) {
         nbt.putInt("energy", currentEnergy);
     }
 
-    public void readFromNbt(NbtCompound nbt) {
+    public void readFromNbt(CompoundTag nbt) {
         currentEnergy = nbt.getInt("energy").orElse(MAX_ENERGY);
     }
 }

@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.trade;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * Stores rotation state for a single merchant type.
@@ -42,8 +42,8 @@ public class MerchantRotationState {
     /**
      * Serialize this state to NBT.
      */
-    public NbtCompound toNbt() {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag toNbt() {
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("rotationIndex", currentRotationIndex);
         return nbt;
     }
@@ -51,7 +51,7 @@ public class MerchantRotationState {
     /**
      * Deserialize state from NBT.
      */
-    public static MerchantRotationState fromNbt(MerchantType type, NbtCompound nbt) {
+    public static MerchantRotationState fromNbt(MerchantType type, CompoundTag nbt) {
         int index = nbt.getInt("rotationIndex").orElse(0);
         return new MerchantRotationState(type, index);
     }

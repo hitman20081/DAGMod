@@ -5,15 +5,18 @@ import com.github.hitman20081.dagmod.entity.DragonGuardianEntity;
 import com.github.hitman20081.dagmod.entity.ModEntities;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.SpawnLocationTypes;
-import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 
 /**
  * Handles natural dragon spawning in the Dragon Realm
@@ -31,9 +34,9 @@ public class DragonSpawnHandler {
     public static final int MAX_GROUP_SIZE = 1;         // Max dragons per spawn
 
     // Biome configuration
-    private static final RegistryKey<Biome> DRAGON_REALM_BIOME = RegistryKey.of(
-            RegistryKeys.BIOME,
-            Identifier.of("dagmod", "dragon_realm")
+    private static final ResourceKey<Biome> DRAGON_REALM_BIOME = ResourceKey.create(
+            Registries.BIOME,
+            Identifier.fromNamespaceAndPath("dagmod", "dragon_realm")
     );
 
     /**
@@ -42,17 +45,17 @@ public class DragonSpawnHandler {
      */
     public static void register() {
         // Register spawn restrictions (when/where dragons can spawn)
-        SpawnRestriction.register(
+        SpawnPlacements.register(
                 ModEntities.DRAGON_GUARDIAN,
-                SpawnLocationTypes.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 DragonSpawnHandler::canSpawn
         );
 
         // Add dragons to Dragon Realm biome spawns
         BiomeModifications.addSpawn(
                 BiomeSelectors.includeByKey(DRAGON_REALM_BIOME),
-                SpawnGroup.MONSTER,
+                MobCategory.MONSTER,
                 ModEntities.DRAGON_GUARDIAN,
                 SPAWN_WEIGHT,
                 MIN_GROUP_SIZE,
@@ -65,14 +68,14 @@ public class DragonSpawnHandler {
      * Returns true if spawn conditions are met
      */
     private static boolean canSpawn(
-            net.minecraft.entity.EntityType<DragonGuardianEntity> type,
-            net.minecraft.world.ServerWorldAccess world,
-            net.minecraft.entity.SpawnReason spawnReason,
-            net.minecraft.util.math.BlockPos pos,
-            net.minecraft.util.math.random.Random random
+            net.minecraft.world.entity.EntityType<DragonGuardianEntity> type,
+            net.minecraft.world.level.ServerLevelAccessor world,
+            net.minecraft.world.entity.EntitySpawnReason spawnReason,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.util.RandomSource random
     ) {
         // Only spawn in Dragon Realm dimension
-        if (world.toServerWorld().getRegistryKey() != DragonRealmTeleporter.DRAGON_REALM) {
+        if (world.getLevel().dimension() != DragonRealmTeleporter.DRAGON_REALM) {
             return false;
         }
 
@@ -83,7 +86,7 @@ public class DragonSpawnHandler {
         }
 
         // Use standard hostile mob spawn conditions (dark areas)
-        if (!HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random)) {
+        if (!Monster.checkMonsterSpawnRules(type, world, spawnReason, pos, random)) {
             return false;
         }
 
@@ -100,7 +103,7 @@ public class DragonSpawnHandler {
 
         // Require at least 16 blocks of vertical clearance for flying
         for (int i = 1; i <= 16; i++) {
-            if (!world.getBlockState(pos.up(i)).isAir()) {
+            if (!world.getBlockState(pos.above(i)).isAir()) {
                 return false;
             }
         }

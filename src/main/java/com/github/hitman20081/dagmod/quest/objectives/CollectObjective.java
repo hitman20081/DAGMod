@@ -1,13 +1,14 @@
 package com.github.hitman20081.dagmod.quest.objectives;
 
 import com.github.hitman20081.dagmod.quest.QuestObjective;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 
 public class CollectObjective extends QuestObjective {
     private final Item targetItem;
@@ -20,7 +21,7 @@ public class CollectObjective extends QuestObjective {
     }
 
     private static String createDescription(Item item, int amount) {
-        String itemName = item.getName().getString();
+        String itemName = item.getName(new ItemStack(item)).getString();
         return "Collect " + amount + " " + itemName;
     }
 
@@ -30,7 +31,7 @@ public class CollectObjective extends QuestObjective {
     }
 
     @Override
-    public boolean updateProgress(PlayerEntity player, Object... params) {
+    public boolean updateProgress(Player player, Object... params) {
         // Count how many of the target item the player has
         int itemCount = countItemInInventory(player, targetItem);
 
@@ -43,12 +44,12 @@ public class CollectObjective extends QuestObjective {
     }
 
     // Count specific item in player's inventory (skips enchanted items)
-    private int countItemInInventory(PlayerEntity player, Item targetItem) {
+    private int countItemInInventory(Player player, Item targetItem) {
         int count = 0;
 
         // Check main inventory
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && stack.getItem() == targetItem && !hasEnchantments(stack)) {
                 count += stack.getCount();
             }
@@ -58,12 +59,12 @@ public class CollectObjective extends QuestObjective {
     }
 
     private static boolean hasEnchantments(ItemStack stack) {
-        ItemEnchantmentsComponent enchantments = stack.get(DataComponentTypes.ENCHANTMENTS);
+        ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
         return enchantments != null && !enchantments.isEmpty();
     }
 
     // Method to consume items when quest is turned in
-    public boolean consumeItems(PlayerEntity player) {
+    public boolean consumeItems(Player player) {
         // Check if player actually has the required items in inventory
         if (!hasRequiredItems(player)) {
             return false;
@@ -72,21 +73,21 @@ public class CollectObjective extends QuestObjective {
         int itemsToRemove = requiredAmount;
 
         // Remove items from inventory
-        for (int i = 0; i < player.getInventory().size() && itemsToRemove > 0; i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize() && itemsToRemove > 0; i++) {
+            ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && stack.getItem() == targetItem && !hasEnchantments(stack)) {
                 int removeFromStack = Math.min(itemsToRemove, stack.getCount());
-                player.getInventory().removeStack(i, removeFromStack);
+                player.getInventory().removeItem(i, removeFromStack);
                 itemsToRemove -= removeFromStack;
             }
         }
 
-        player.getInventory().markDirty();
+        player.getInventory().setChanged();
         return itemsToRemove == 0; // Returns true if all items were successfully removed
     }
 
     // Check if player has enough items without consuming them
-    public boolean hasRequiredItems(PlayerEntity player) {
+    public boolean hasRequiredItems(Player player) {
         return countItemInInventory(player, targetItem) >= requiredAmount;
     }
 
@@ -96,7 +97,7 @@ public class CollectObjective extends QuestObjective {
 
     // Helper method to create CollectObjective from item identifier
     public static CollectObjective fromIdentifier(String itemId, int amount) {
-        Item item = Registries.ITEM.get(Identifier.of(itemId));
+        Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
         return new CollectObjective(item, amount);
     }
 

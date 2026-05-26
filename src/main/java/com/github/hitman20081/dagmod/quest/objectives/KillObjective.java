@@ -1,10 +1,11 @@
 package com.github.hitman20081.dagmod.quest.objectives;
 
 import com.github.hitman20081.dagmod.quest.QuestObjective;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 
 public class KillObjective extends QuestObjective {
     private final EntityType<?> targetEntityType;
@@ -18,7 +19,7 @@ public class KillObjective extends QuestObjective {
 
     // Create description text for the objective
     private static String createDescription(EntityType<?> entityType, int amount) {
-        String entityName = entityType.getName().getString();
+        String entityName = entityType.getDescription().getString();
         return "Kill " + amount + " " + entityName + (amount > 1 ? "s" : "");
     }
 
@@ -28,7 +29,7 @@ public class KillObjective extends QuestObjective {
     }
 
     @Override
-    public boolean updateProgress(PlayerEntity player, Object... params) {
+    public boolean updateProgress(Player player, Object... params) {
         // This will be called when an entity is killed
         // params[0] should be the EntityType of the killed entity
         if (params.length > 0 && params[0] instanceof EntityType<?> killedType) {
@@ -52,7 +53,7 @@ public class KillObjective extends QuestObjective {
 
     // Helper method to create KillObjective from entity identifier
     public static KillObjective fromIdentifier(String entityId, int amount) {
-        EntityType<?> entityType = Registries.ENTITY_TYPE.get(Identifier.of(entityId));
+        EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.parse(entityId));
         return new KillObjective(entityType, amount);
     }
 
