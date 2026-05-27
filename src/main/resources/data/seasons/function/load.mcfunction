@@ -6,7 +6,6 @@ scoreboard objectives add seasons_day dummy "Current Season Day"
 scoreboard objectives add seasons_current dummy "Current Season"
 scoreboard objectives add seasons_timer dummy "Season Timer"
 scoreboard objectives add seasons_temp dummy "Temperature"
-scoreboard objectives add seasons_daytime dummy "Daytime Tracker"
 scoreboard objectives add seasons_growth dummy "Growth Modifier"
 scoreboard objectives add seasons_config dummy "Season Config"
 
