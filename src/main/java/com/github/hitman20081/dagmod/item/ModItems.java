@@ -26,8 +26,6 @@ public class ModItems {
     public static final Item ECHO_DUST = register("echo_dust", Item::new, new Item.Properties());
     public static final Item QUARTZ_POWDER = register("quartz_powder", Item::new, new Item.Properties());
     public static final Item SLIMEBALL_DUST = register("slimeball_dust", Item::new, new Item.Properties());
-    public static final Item SULFUR = register("sulfur", Item::new, new Item.Properties());
-    public static final Item POTENT_SULFUR = register("potent_sulfur", Item::new, new Item.Properties());
     public static final Item SULFUR_POWDER = register("sulfur_powder", Item::new, new Item.Properties());
 
     // Gem Items
@@ -710,11 +708,8 @@ public class ModItems {
                 .register((itemGroup) ->
                         itemGroup.accept(ModItems.SLIMEBALL_DUST));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
-                .register((itemGroup) -> {
-                    itemGroup.accept(ModItems.SULFUR);
-                    itemGroup.accept(ModItems.POTENT_SULFUR);
-                    itemGroup.accept(ModItems.SULFUR_POWDER);
-                });
+                .register((itemGroup) ->
+                        itemGroup.accept(ModItems.SULFUR_POWDER));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) ->
                         itemGroup.accept(ModItems.SUSPICIOUS_SUBSTANCE));

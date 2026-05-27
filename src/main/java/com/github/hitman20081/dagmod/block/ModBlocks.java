@@ -196,6 +196,18 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.METAL)));
 
+    public static final Block SULFUR = register("sulfur",
+            key -> new Block(BlockBehaviour.Properties.of()
+                    .setId(key)
+                    .strength(1.5f, 2.0f)
+                    .sound(SoundType.STONE)));
+
+    public static final Block POTENT_SULFUR = register("potent_sulfur",
+            key -> new Block(BlockBehaviour.Properties.of()
+                    .setId(key)
+                    .strength(2.0f, 3.0f)
+                    .sound(SoundType.STONE)));
+
     public static final Block ZIRCON_BLOCK = register("zircon_block",
             key -> new Block(BlockBehaviour.Properties.of()
                     .setId(key)
@@ -342,6 +354,13 @@ public class ModBlocks {
                     itemGroup.accept(DEEPSLATE_TANZANITE_ORE);
                     itemGroup.accept(DEEPSLATE_ZIRCON_ORE);
                     itemGroup.accept(PINK_GARNET_DEEPSLATE_ORE);
+                });
+
+        // Sulfur Blocks
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
+                .register((itemGroup) -> {
+                    itemGroup.accept(SULFUR);
+                    itemGroup.accept(POTENT_SULFUR);
                 });
 
         // Gem Storage Blocks - Add to Building Blocks group
