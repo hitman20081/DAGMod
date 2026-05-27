@@ -8,7 +8,7 @@
   ],
   "key": {
     "I": "minecraft:blaze_powder",
-    "P": "minecraft:potent_sulfur",
+    "P": "dagmod:potent_sulfur",
     "G": "minecraft:magma_block",
     "S": "minecraft:iron_sword"
   },

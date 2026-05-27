@@ -9,7 +9,7 @@
         "D": "dagmod:diamond_powder",
         "E": "dagmod:emerald_powder",
         "#": "dagmod:quartz_powder",
-        "S": "minecraft:potent_sulfur",
+        "S": "dagmod:potent_sulfur",
         "G": "dagmod:amethyst_powder",
         "P": "minecraft:potion"
     },

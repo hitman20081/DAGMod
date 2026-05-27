@@ -7,7 +7,7 @@
   ],
   "key": {
     "A": "minecraft:iron_chestplate",
-    "R": "minecraft:sulfur",
+    "R": "dagmod:sulfur",
     "E": "minecraft:blaze_powder"
   },
   "result": {
