@@ -6,5 +6,6 @@ execute if predicate seasons:biomes/hot_biomes run effect give @s minecraft:hung
 # Fire resistance near lava (adapted to heat)
 execute if block ~ ~-1 ~ minecraft:lava run effect give @s minecraft:fire_resistance 10 0 true
 
-# Energy boost during day
-execute if predicate seasons:time/day run effect give @s minecraft:haste 1 0 true
+# Energy boost during day (time_check predicate broken in MC 26.x — check via scoreboard)
+execute store result score #daytime seasons_daytime run time query daytime
+execute if score #daytime seasons_daytime matches 0..12000 run effect give @s minecraft:haste 1 0 true
