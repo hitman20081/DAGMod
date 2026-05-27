@@ -5,7 +5,7 @@
     "minecraft:paper",
     "minecraft:paper",
     "dagmod:emerald_powder",
-    "minecraft:fire_charge"
+    "minecraft:potent_sulfur"
   ],
   "result": {
     "id": "dagmod:fireball_scroll",

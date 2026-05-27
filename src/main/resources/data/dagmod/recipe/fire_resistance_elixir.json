@@ -1,11 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " G ",
+    "SG ",
     "FPF",
     " U "
   ],
   "key": {
+    "S": "minecraft:potent_sulfur",
     "G": "minecraft:blaze_powder",
     "P": "minecraft:experience_bottle",
     "F": "minecraft:magma_cream",
