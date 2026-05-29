@@ -52,7 +52,7 @@ public class BoneDungeonLocatorItem extends Item {
 
                     var structures = HolderSet.direct(entry);
                     ChunkGenerator chunkGenerator = serverWorld.getChunkSource().getGenerator();
-                    var result = chunkGenerator.findNearestMapStructure(serverWorld, structures, playerPos, 500, false);
+                    var result = chunkGenerator.findNearestMapStructure(serverWorld, structures, playerPos, 1000, false);
 
                     server.execute(() -> {
                         if (result == null) {
@@ -77,6 +77,12 @@ public class BoneDungeonLocatorItem extends Item {
                             serverPlayer.sendSystemMessage(
                                 Component.literal("  Distance: ~" + distance + " blocks")
                                     .withStyle(ChatFormatting.GRAY));
+                            serverPlayer.sendSystemMessage(
+                                Component.literal("  Portal Room: not guaranteed — if absent,")
+                                    .withStyle(ChatFormatting.GOLD));
+                            serverPlayer.sendSystemMessage(
+                                Component.literal("  extra treasure rooms await inside.")
+                                    .withStyle(ChatFormatting.GOLD));
                             serverPlayer.sendSystemMessage(
                                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
                                     .withStyle(ChatFormatting.DARK_GRAY));
