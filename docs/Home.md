@@ -17,23 +17,20 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.7.9 (April 2026)
+Current Version v1.8.0 (May 2026)
 
 ---
 
-## What's New in v1.7.9
+## What's New in v1.8.0
 
-### Seasons Setup System
-The seasons system now requires manual operator setup before it activates:
-- Server operators run `/seasons` to open an interactive clickable configuration menu
-- Configure season length (7, 14, 20, or 28 days), and toggle weather effects, crop growth, temperature, and season display independently
-- Settings persist across server restarts — no more resetting to defaults on reload
-- On first load, all players see a notice directing operators to `/seasons` to configure
+### Minecraft 26.1.2 Migration
+DAGMod has been fully ported to Minecraft 26.1.2 (Mojang official mappings). Requires Fabric Loader 0.19.2 and Fabric API 0.149.1+26.1.2.
 
-### Skeleton Kingdom Structure Chain
-The Skeleton Kingdom jigsaw structure now generates a full connected sequence:
-- **City Center** → **Entry Room** → **Hallway** → **Throne Room**
-- Fixed jigsaw anchor mismatch that previously caused the entire structure to fail generation
+### Potent Sulfur Powder
+New crafting material: 9× Sulfur Powder → 1 Potent Sulfur Powder. Used as a high-tier ingredient in fire-themed crafting recipes.
+
+### Shield & Visual Fixes
+All 9 custom shields now have correct handle orientation. Vanilla shield orientation is also restored. Locked bone chest texture now displays correctly in-world.
 
 See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 

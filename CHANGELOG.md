@@ -5,6 +5,32 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-05-30
+
+### Added
+
+- **Potent Sulfur Powder** — New crafting material; 9× Sulfur Powder → 1 Potent Sulfur Powder. Functions as a high-tier component in fire-themed crafting recipes (Inferno armor, fire weapons). Custom texture included
+- **Sulfur item and block** — Full item and block registration with all required JSON files, models, and textures
+
+### Changed
+
+- **Minecraft 26.1.2 migration** — Ported the entire mod to Minecraft 26.1.2 (Mojang official mappings). All class names, mixin targets, block/item factory patterns, and recipe codecs updated accordingly. Now requires Fabric Loader 0.19.2 and Fabric API 0.149.1+26.1.2
+- **Bone dungeon portal room** — Improved portal room spawn reliability and increased treasure density in bone dungeon generation
+- **ChestRenderer mixin ported to 26.1.2** — Locked bone chest texture mixin rewritten to use MC 26.1.2's `extractRenderState`/`submit` rendering pipeline (static capture field pattern); custom `bone_realm_locked_chest` texture now correctly applied in-world
+
+### Fixed
+
+- **All 9 custom shield handles pointed outward** — All custom shield `items/*.json` definitions were missing the `"transformation": {"scale": [1, -1, -1]}` field required to orient the model correctly. Added to Inferno, Celestial, Crystal, Dragonbone, Frost, Nature, Shadow, Solar, and Stormguard shields
+- **Vanilla shield handle also broken** — Mod contained `assets/minecraft/items/shield.json` overriding the vanilla definition without the orientation transformation. Removed; vanilla's correct version now takes effect
+- **Missing model warnings on startup** — `items/boss_spawn_trigger.json` referenced nonexistent `dagmod:block/bone_block_top`; corrected to `dagmod:block/boss_spawn_trigger`
+- **Missing texture warnings on startup** — Inferno shield `particle` texture referenced a deleted item texture; replaced with `block/magma` (entity textures are not in the block/item atlas used by model particle references)
+- **Invalid `minecraft:builtin/entity` parent on all shield models** — All 18 shield model files (9 shields + 9 blocking variants) referenced a nonexistent parent. Removed; shield models are root models as in vanilla
+- **Seasons time predicate format** — Fixed three consecutive seasons predicate issues: converted `time/day` value to array format, added required `clock` field to `time_check` predicate, deleted an unparseable predicate file
+- **Dynamic lighting terrain not updating after MC 26.1.2 migration** — `scheduleBlockRenders` was removed in MC 26.x and not replaced; terrain blocks never updated even though entity rendering worked fine. Fixed by calling `LevelRenderer.setSectionRangeDirty()` on all sections within the light radius when the player moves or changes light source
+- **Stale light persisting after removing light source from hand** — When swapping to a slot with no light source while standing still, the lit area remained visible. The clearing condition required `!oldPos.equals(playerPos)`, which was never true when the player hadn't moved; removed the position guard so old-radius sections are always dirtied when a light source is removed
+
+---
+
 ## [1.7.10] - 2026-04-13
 
 ### Added

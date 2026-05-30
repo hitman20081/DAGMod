@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.10
-**Last Updated**: 2026-04-16
+**Current Version**: v1.8.0
+**Last Updated**: 2026-05-30
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -754,10 +754,11 @@ Priority: **LOW**
 - ✅ **v1.7.7** (Mar 2026) - Class quest chains rebuilt (all 3 classes, 5 quests each, level-gated 10/25/50/75/100), per-quest level requirement system, enchanted book reward fixes, race quest polish, WildDragonEntity crash fixes
 - ✅ **v1.7.8** (Mar 2026) - Skeleton King boss encounter (throne room, barrier-sealed room, party-scaled), Skeleton Throne Room structure, King's Recall Stone, per-player chest rewards, Seasons datapack, boss stat overhaul
 - ✅ **v1.7.9** (Apr 2026) - `/seasons` command with interactive setup menu, seasons first-run notice, manual operator activation, season settings persistence, Skeleton Kingdom structure chain, jigsaw anchor fixes
-- ✅ **v1.7.10** (Apr 2026) - *(add patch notes)*
+- ✅ **v1.7.10** (Apr 2026) - Quest book upgrade overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting
+- ✅ **v1.8.0** (May 2026) - Minecraft 26.1.2 migration, Potent Sulfur Powder crafting material, bone dungeon portal room improvements, shield orientation fixes
 
 ### **Phase 1** — Core System Completion
-- 🎯 **v1.8.0** - Spell scrolls (7 new) + spell scroll crafting system
+- 🎯 **v1.8.x** - Spell scrolls (7 new) + spell scroll crafting system
 - 🎯 **v1.9.0** - Daily quest rotation system
 - 🎯 **v1.10.0** - Custom race/class enchantments
 
@@ -1096,7 +1097,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-04-16
+**Last Updated**: 2026-05-30
 **Maintained By**: hitman20081
-**Current Version**: v1.7.10
+**Current Version**: v1.8.0
 **License**: See LICENSE file

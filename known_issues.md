@@ -1,11 +1,22 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-04-13
-**Version**: v1.7.10
+**Last Updated**: 2026-05-30
+**Version**: v1.8.0
 
 ---
 
 ## Open Issues
+
+### 10. MC 26.1.2 World Chunk Artifacts (LOW)
+
+**Location**: World level files
+**Status**: Open — existing worlds generated on older versions may have visual or structural artifacts after the 26.1.2 migration
+
+The Minecraft 26.1.2 migration does not require a world reset, but pre-existing chunks may show terrain or lighting inconsistencies at chunk borders or in previously-loaded areas.
+
+**Recommended mitigation**: Use [MCA Selector](https://github.com/Querz/mcaselector) to prune or reset affected/unvisited chunks. This forces those regions to regenerate cleanly under the new version.
+
+---
 
 ### 8. Block-Attached Entity at Invalid Position (LOW)
 
@@ -54,6 +65,9 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 
 
 ## Fixed Issues
+
+### Fixed in v1.8.0
+- **Dynamic lighting broken after MC 26.1.2 migration** — `scheduleBlockRenders` was removed in MC 26.x and never replaced, so terrain blocks were not updating light when the player moved or changed held items (entity rendering still worked since entities re-render every frame). Fixed by calling `LevelRenderer.setSectionRangeDirty()` on the sections within the light radius. A second fix addressed stale light persisting after the light source was removed from hand — the old clearing condition incorrectly required the player to have moved; removed the position check so sections are always dirtied when the previous radius was non-zero
 
 ### Fixed in v1.7.10
 - `TagCollectObjective` and `CollectObjective` item consumption — `consumeItems()` was calling `stack.decrement()` directly on the `ItemStack` object, which never triggered `markDirty()` on the inventory. Items were removed server-side but the client was never synced, causing items to appear unconsumed. Fixed by replacing `stack.decrement()` with `player.getInventory().removeStack(i, amount)` and adding an explicit `markDirty()` call after the loop in both classes

@@ -45,6 +45,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.resources.Identifier;
@@ -104,11 +105,30 @@ public class DagModClient implements ClientModInitializer {
 
             net.minecraft.core.BlockPos playerPos = player.blockPosition();
 
-            // Schedule chunk rebuilds so terrain also updates, not just entities
+            // Schedule chunk rebuilds so terrain updates, not just entities
             if (DynamicLightManager.needsChunkRebuild(playerPos, newRadius) && client.levelRenderer != null) {
-                net.minecraft.core.BlockPos oldPos    = DynamicLightManager.getLastRebuildPos();
-                int                              oldRadius = DynamicLightManager.getLastRebuildRadius();
-                // scheduleBlockRenders removed in MC 26.x
+                net.minecraft.core.BlockPos oldPos = DynamicLightManager.getLastRebuildPos();
+                int oldRadius = DynamicLightManager.getLastRebuildRadius();
+
+                // Dirty sections within new light radius so they pick up the boost
+                if (newRadius > 0) {
+                    int r  = (newRadius >> 4) + 1;
+                    int px = playerPos.getX() >> 4;
+                    int py = playerPos.getY() >> 4;
+                    int pz = playerPos.getZ() >> 4;
+                    client.levelRenderer.setSectionRangeDirty(px - r, py - r, pz - r, px + r, py + r, pz + r);
+                }
+                // Dirty sections at old position so stale light is cleared.
+                // Always do this when oldRadius > 0 — the player may have simply
+                // dropped the light source without moving, so !equals check is wrong.
+                if (oldRadius > 0) {
+                    int r  = (oldRadius >> 4) + 1;
+                    int px = oldPos.getX() >> 4;
+                    int py = oldPos.getY() >> 4;
+                    int pz = oldPos.getZ() >> 4;
+                    client.levelRenderer.setSectionRangeDirty(px - r, py - r, pz - r, px + r, py + r, pz + r);
+                }
+
                 DynamicLightManager.setLastRebuildState(playerPos, newRadius);
             }
 

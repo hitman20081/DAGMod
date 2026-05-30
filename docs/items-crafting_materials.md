@@ -14,6 +14,13 @@ These powders are distinct from consumable powders and are primarily used as cra
 -   **Slimeball Dust:** Used in crafting.
 -   **Suspicious Substance:** Used in crafting.
 
+### Sulfur Materials *(Added v1.8.0)*
+
+Sulfur-based materials used in fire-themed crafting.
+
+- **Sulfur Powder** — Base crafting material. Obtain from sulfur ore or mob drops.
+- **Potent Sulfur Powder** — High-tier crafting component. Craft by combining 9× Sulfur Powder at a crafting table. Used as a premium ingredient in Inferno armor and fire weapon recipes.
+
 **Uses:** Primarily as ingredients in crafting recipes for advanced items, equipment, and other custom mod content.
 
 ### Gems
