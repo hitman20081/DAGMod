@@ -21,7 +21,9 @@
       "LastStandMixin"
 	],
   "client": [
-    "client.DynamicLightMixin"
+    "client.DynamicLightMixin",
+    "ChestRenderStateMixin",
+    "LockedChestTextureMixin"
   ],
 	"injectors": {
 		"defaultRequire": 1

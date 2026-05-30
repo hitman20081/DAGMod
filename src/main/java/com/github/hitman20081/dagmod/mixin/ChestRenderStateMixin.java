@@ -1,7 +1,37 @@
 package com.github.hitman20081.dagmod.mixin;
 
-// Temporarily disabled - ChestBlockEntityRenderState was renamed to ChestRenderState
-// in Mojang 26.1.2 and the rendering API has changed significantly.
-// Custom chest textures will not work until this mixin is properly ported.
-public class ChestRenderStateMixin {
+import com.github.hitman20081.dagmod.accessor.ChestRenderStateAccessor;
+import com.github.hitman20081.dagmod.bone_realm.chest.LockedBoneChestBlock;
+import net.minecraft.client.renderer.blockentity.state.ChestRenderState;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+
+@Mixin(ChestRenderState.class)
+public class ChestRenderStateMixin implements ChestRenderStateAccessor {
+
+    @Unique
+    private LockedBoneChestBlock.LockedChestType dagmod$customChestType;
+
+    @Unique
+    private String dagmod$customTextureName;
+
+    @Override
+    public void dagmod$setCustomChestType(LockedBoneChestBlock.LockedChestType type) {
+        this.dagmod$customChestType = type;
+    }
+
+    @Override
+    public LockedBoneChestBlock.LockedChestType dagmod$getCustomChestType() {
+        return this.dagmod$customChestType;
+    }
+
+    @Override
+    public void dagmod$setCustomTextureName(String textureName) {
+        this.dagmod$customTextureName = textureName;
+    }
+
+    @Override
+    public String dagmod$getCustomTextureName() {
+        return this.dagmod$customTextureName;
+    }
 }
