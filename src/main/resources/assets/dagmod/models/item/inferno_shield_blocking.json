@@ -1,7 +1,7 @@
 {
   "gui_light": "front",
   "textures": {
-    "particle": "dagmod:entity/shield/inferno_shield"
+    "particle": "block/magma"
   },
   "display": {
     "thirdperson_righthand": {
