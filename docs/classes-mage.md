@@ -86,14 +86,27 @@ Mages can use wands to cast spells. There are three tiers of wands:
 - **Master Wand:** Mana Cost: 10, Charge Time: 1.5s, Effect: Launches a large fireball (ghast fireball).
 
 **Spell Scrolls:**
-Single-use scrolls that cast powerful spells. Scrolls can be crafted or obtained through Mage-specific quests.
-- **Heal Scroll:** Heals the caster.
-- **Absorption Scroll:** Grants absorption hearts.
-- **Mana Shield Scroll:** Creates a shield that absorbs damage using mana.
-- **Fireball Scroll:** Launches a fireball.
-- **Teleport Scroll:** Teleports the caster a short distance.
-- **Lightning Scroll:** Summons a lightning bolt at the target location.
-- **Frost Nova Scroll:** Creates a nova of ice that slows and damages enemies.
+Single-use scrolls that cast powerful spells. All scrolls are Mage-only and consume mana. Mana is only deducted if the cast succeeds. Scrolls stack to 16 and are craftable at a crafting table.
+
+*Standard (Uncommon):*
+- **Heal** (20 mana) — Restores 3 hearts
+- **Absorption** (25 mana) — Grants Absorption II for 30 seconds
+- **Mana Shield** (15 mana) — Grants Resistance II for 10 seconds
+- **Teleport / Blink** (30 mana) — Teleports to the aimed wall surface (up to 20 blocks)
+- **Ice Wall** (35 mana) — Places a 5×3 frosted ice barrier 3 blocks in front of you
+- **Dimensional Rift** (30 mana) — Teleports 15 blocks forward horizontally; works in open air
+
+*Advanced (Rare):*
+- **Fireball** (30 mana) — Launches a large fireball in the aimed direction
+- **Lightning Bolt** (35 mana) — Strikes lightning at the aimed location (up to 30 blocks)
+- **Frost Nova** (40 mana) — Freezes all enemies within 8 blocks (Slowness IV + 2 damage)
+- **Gravity Well** (45 mana) — Pulls all enemies within 15 blocks toward you
+- **Life Drain** (40 mana) — Drains 2 HP from every enemy within 12 blocks; heals you up to 10 HP
+- **Chain Lightning** (50 mana) — Lightning bounces across up to 4 enemies (8-block bounce range)
+- **Meteor Storm** (60 mana) — Rains 5 fireballs onto the targeted area
+- **Polymorph** (55 mana) — Applies Slowness VI + Weakness VI + Blindness to the nearest mob for 8 seconds
+
+See [Mage Equipment](items-mage_equipment.md) for crafting recipes.
 
 ### Ability Combos
 
@@ -114,7 +127,20 @@ Single-use scrolls that cast powerful spells. Scrolls can be crafted or obtained
 **Emergency Escape:**
 1. Time Warp (slow pursuers)
 2. Arcane Barrier if needed (protection while escaping)
-3. Run while enemies are slowed
+3. Dimensional Rift / Blink scroll to create instant distance
+4. Run while enemies are slowed
+
+**Scroll AoE Burst:**
+1. Gravity Well (pull group together)
+2. Frost Nova scroll (freeze the clustered group)
+3. Meteor Storm scroll (rain fireballs onto frozen targets)
+4. Mana Burst (finish survivors)
+
+**Boss Solo:**
+1. Polymorph scroll (lock down adds or the boss briefly)
+2. Life Drain scroll (recover health mid-fight from surrounding mobs)
+3. Chain Lightning scroll (clear grouped minions in one cast)
+4. Arcane Barrier + Arcane Missiles (sustain damage phase)
 
 ### Strengths
 - 4 permanent abilities provide incredible versatility
