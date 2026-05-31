@@ -496,6 +496,34 @@ public class ModItems {
             settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.MANA_SHIELD),
             new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
 
+    public static final Item GRAVITY_WELL_SCROLL = register("gravity_well_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.GRAVITY_WELL),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
+
+    public static final Item CHAIN_LIGHTNING_SCROLL = register("chain_lightning_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.CHAIN_LIGHTNING),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
+
+    public static final Item ICE_WALL_SCROLL = register("ice_wall_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.ICE_WALL),
+            new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item METEOR_STORM_SCROLL = register("meteor_storm_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.METEOR_STORM),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
+
+    public static final Item LIFE_DRAIN_SCROLL = register("life_drain_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.LIFE_DRAIN),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
+
+    public static final Item DIMENSIONAL_RIFT_SCROLL = register("dimensional_rift_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.DIMENSIONAL_RIFT),
+            new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+
+    public static final Item POLYMORPH_SCROLL = register("polymorph_scroll",
+            settings -> new SpellScrollItem(settings, SpellScrollItem.SpellType.POLYMORPH),
+            new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
+
     // Apprentice Wand - Early game Mage weapon
     public static final Item APPRENTICE_WAND = register("apprentice_wand",
             settings -> new ApprenticeWandItem(settings),
@@ -1053,6 +1081,13 @@ public class ModItems {
                     itemGroup.accept(ModItems.FROST_NOVA_SCROLL);
                     itemGroup.accept(ModItems.TELEPORT_SCROLL);
                     itemGroup.accept(ModItems.MANA_SHIELD_SCROLL);
+                    itemGroup.accept(ModItems.GRAVITY_WELL_SCROLL);
+                    itemGroup.accept(ModItems.CHAIN_LIGHTNING_SCROLL);
+                    itemGroup.accept(ModItems.ICE_WALL_SCROLL);
+                    itemGroup.accept(ModItems.METEOR_STORM_SCROLL);
+                    itemGroup.accept(ModItems.LIFE_DRAIN_SCROLL);
+                    itemGroup.accept(ModItems.DIMENSIONAL_RIFT_SCROLL);
+                    itemGroup.accept(ModItems.POLYMORPH_SCROLL);
                 });
 
         // Warrior Ability Items - Add to Combat group

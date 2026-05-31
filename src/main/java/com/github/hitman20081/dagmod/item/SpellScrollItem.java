@@ -24,10 +24,13 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.level.block.Blocks;
 
 public class SpellScrollItem extends Item {
     private final float manaCost;
@@ -40,7 +43,14 @@ public class SpellScrollItem extends Item {
         LIGHTNING("Lightning Bolt", 35.0f),
         FROST_NOVA("Frost Nova", 40.0f),
         TELEPORT("Blink", 30.0f),
-        MANA_SHIELD("Mana Shield", 15.0f);
+        MANA_SHIELD("Mana Shield", 15.0f),
+        GRAVITY_WELL("Gravity Well", 45.0f),
+        CHAIN_LIGHTNING("Chain Lightning", 50.0f),
+        ICE_WALL("Ice Wall", 35.0f),
+        METEOR_STORM("Meteor Storm", 60.0f),
+        LIFE_DRAIN("Life Drain", 40.0f),
+        DIMENSIONAL_RIFT("Dimensional Rift", 30.0f),
+        POLYMORPH("Polymorph", 55.0f);
 
         private final String displayName;
         private final float baseCost;
@@ -128,6 +138,13 @@ public class SpellScrollItem extends Item {
             case FROST_NOVA -> castFrostNova(world, player);
             case TELEPORT -> castTeleport(world, player);
             case MANA_SHIELD -> castManaShield(player);
+            case GRAVITY_WELL -> castGravityWell(world, player);
+            case CHAIN_LIGHTNING -> castChainLightning(world, player);
+            case ICE_WALL -> castIceWall(world, player);
+            case METEOR_STORM -> castMeteorStorm(world, player);
+            case LIFE_DRAIN -> castLifeDrain(world, player);
+            case DIMENSIONAL_RIFT -> castDimensionalRift(world, player);
+            case POLYMORPH -> castPolymorph(world, player);
         };
     }
 
@@ -240,6 +257,170 @@ public class SpellScrollItem extends Item {
                 true
         ));
         spawnParticles((ServerLevel) player.level(), player.position(), ParticleTypes.ENCHANTED_HIT, 40);
+        return true;
+    }
+
+    private boolean castGravityWell(Level world, ServerPlayer player) {
+        Vec3 playerPos = player.position();
+        AABB area = player.getBoundingBox().inflate(15.0);
+        List<LivingEntity> pulled = world.getEntitiesOfClass(
+                LivingEntity.class, area,
+                e -> e != player && e.isAlive()
+        );
+        for (LivingEntity entity : pulled) {
+            Vec3 toPlayer = playerPos.subtract(entity.position()).normalize().scale(2.0);
+            entity.push(toPlayer.x, 0.5, toPlayer.z);
+        }
+        spawnParticles((ServerLevel) world, playerPos, ParticleTypes.REVERSE_PORTAL, 60);
+        player.sendOverlayMessage(Component.literal("Pulled " + pulled.size() + " enemies!")
+                .withStyle(ChatFormatting.DARK_PURPLE));
+        return true;
+    }
+
+    private boolean castChainLightning(Level world, ServerPlayer player) {
+        if (!(world instanceof ServerLevel serverLevel)) return false;
+        List<LivingEntity> struck = new ArrayList<>();
+        Vec3 searchFrom = player.getEyePosition();
+        LivingEntity target = nearestEnemy(world, searchFrom, player, 20.0, struck);
+        if (target == null) {
+            player.sendOverlayMessage(Component.literal("No target in range!").withStyle(ChatFormatting.RED));
+            return false;
+        }
+        for (int bounce = 0; bounce < 4 && target != null; bounce++) {
+            struck.add(target);
+            spawnLightningAt(serverLevel, target.position());
+            target = nearestEnemy(world, target.position(), player, 8.0, struck);
+        }
+        return true;
+    }
+
+    private LivingEntity nearestEnemy(Level world, Vec3 origin, Player exclude, double range, List<LivingEntity> skip) {
+        AABB area = AABB.ofSize(origin, range * 2, range * 2, range * 2);
+        LivingEntity nearest = null;
+        double nearestDist = Double.MAX_VALUE;
+        for (LivingEntity e : world.getEntitiesOfClass(LivingEntity.class, area)) {
+            if (e == exclude || !e.isAlive() || skip.contains(e)) continue;
+            double d = e.position().distanceTo(origin);
+            if (d < range && d < nearestDist) { nearest = e; nearestDist = d; }
+        }
+        return nearest;
+    }
+
+    private void spawnLightningAt(ServerLevel world, Vec3 pos) {
+        net.minecraft.world.entity.LightningBolt bolt = net.minecraft.world.entity.EntityType.LIGHTNING_BOLT
+                .create(world, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        if (bolt != null) { bolt.setPos(pos); world.addFreshEntity(bolt); }
+    }
+
+    private boolean castIceWall(Level world, ServerPlayer player) {
+        Vec3 look = player.getViewVector(1.0f);
+        Vec3 forward = new Vec3(look.x, 0, look.z).normalize();
+        Vec3 right = new Vec3(-forward.z, 0, forward.x);
+        BlockPos base = player.blockPosition().offset(
+                (int) Math.round(forward.x * 3), 0, (int) Math.round(forward.z * 3));
+        int placed = 0;
+        for (int h = 0; h < 3; h++) {
+            for (int w = -2; w <= 2; w++) {
+                BlockPos pos = base.offset(
+                        (int) Math.round(right.x * w), h, (int) Math.round(right.z * w));
+                if (world.getBlockState(pos).isAir()) {
+                    world.setBlock(pos, Blocks.FROSTED_ICE.defaultBlockState(), 3);
+                    placed++;
+                }
+            }
+        }
+        if (placed == 0) {
+            player.sendOverlayMessage(Component.literal("No space for ice wall!").withStyle(ChatFormatting.RED));
+            return false;
+        }
+        spawnParticles((ServerLevel) world, player.position(), ParticleTypes.SNOWFLAKE, 50);
+        return true;
+    }
+
+    private boolean castMeteorStorm(Level world, ServerPlayer player) {
+        if (!(world instanceof ServerLevel serverLevel)) return false;
+        Vec3 target = player.getEyePosition().add(player.getViewVector(1.0f).scale(20));
+        for (int i = 0; i < 5; i++) {
+            double ox = (world.getRandom().nextDouble() - 0.5) * 12;
+            double oz = (world.getRandom().nextDouble() - 0.5) * 12;
+            Vec3 spawnPos = new Vec3(target.x + ox, target.y + 25, target.z + oz);
+            Vec3 velocity = target.subtract(spawnPos).normalize().scale(1.5);
+            LargeFireball fireball = new LargeFireball(world, player, velocity, 1);
+            fireball.setPos(spawnPos);
+            serverLevel.addFreshEntity(fireball);
+        }
+        spawnParticles(serverLevel, player.getEyePosition(), ParticleTypes.LAVA, 30);
+        return true;
+    }
+
+    private boolean castLifeDrain(Level world, ServerPlayer player) {
+        AABB area = player.getBoundingBox().inflate(12.0);
+        List<LivingEntity> enemies = world.getEntitiesOfClass(
+                LivingEntity.class, area,
+                e -> e != player && e.isAlive()
+        );
+        if (enemies.isEmpty()) {
+            player.sendOverlayMessage(Component.literal("No enemies nearby!").withStyle(ChatFormatting.RED));
+            return false;
+        }
+        float totalHeal = 0;
+        for (LivingEntity entity : enemies) {
+            entity.hurtServer((ServerLevel) world, world.damageSources().magic(), 4.0f);
+            totalHeal += 2.0f;
+            spawnParticles((ServerLevel) world, entity.position(), ParticleTypes.SOUL_FIRE_FLAME, 10);
+        }
+        float healed = Math.min(totalHeal, 10.0f);
+        player.heal(healed);
+        spawnParticles((ServerLevel) world, player.position(), ParticleTypes.HEART, 15);
+        player.sendOverlayMessage(Component.literal("Drained " + enemies.size() + " enemies for +"
+                + String.format("%.1f", healed) + " health!").withStyle(ChatFormatting.DARK_RED));
+        return true;
+    }
+
+    private boolean castDimensionalRift(Level world, ServerPlayer player) {
+        Vec3 look = player.getViewVector(1.0f);
+        Vec3 horizontal = new Vec3(look.x, 0, look.z).normalize();
+        HitResult hit = world.clip(new ClipContext(
+                player.getEyePosition(),
+                player.getEyePosition().add(horizontal.scale(15)),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                player
+        ));
+        double destX, destZ;
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            Vec3 safe = hit.getLocation().subtract(horizontal.scale(1.5));
+            destX = safe.x; destZ = safe.z;
+        } else {
+            destX = player.getX() + horizontal.x * 15;
+            destZ = player.getZ() + horizontal.z * 15;
+        }
+        spawnParticles((ServerLevel) world, player.position(), ParticleTypes.REVERSE_PORTAL, 30);
+        player.teleportTo(destX, player.getY(), destZ);
+        spawnParticles((ServerLevel) world, player.position(), ParticleTypes.PORTAL, 30);
+        return true;
+    }
+
+    private boolean castPolymorph(Level world, ServerPlayer player) {
+        AABB area = player.getBoundingBox().inflate(15.0);
+        LivingEntity target = null;
+        double nearest = Double.MAX_VALUE;
+        for (LivingEntity e : world.getEntitiesOfClass(LivingEntity.class, area)) {
+            if (e == player || !e.isAlive() || e instanceof Player) continue;
+            double d = e.distanceTo(player);
+            if (d < nearest) { target = e; nearest = d; }
+        }
+        if (target == null) {
+            player.sendOverlayMessage(Component.literal("No target in range!").withStyle(ChatFormatting.RED));
+            return false;
+        }
+        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS,  160, 5));
+        target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,  160, 5));
+        target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 160, 0));
+        spawnParticles((ServerLevel) world, target.position(), ParticleTypes.WITCH, 40);
+        player.sendOverlayMessage(Component.literal("✦ Polymorphed "
+                + target.getType().getDescription().getString() + "! ✦")
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 

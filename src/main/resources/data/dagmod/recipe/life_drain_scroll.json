@@ -5,13 +5,11 @@
     "minecraft:paper",
     "minecraft:paper",
     "dagmod:emerald_powder",
-    "dagmod:potent_sulfur_powder"
+    "minecraft:spider_eye"
   ],
   "result": {
-    "id": "dagmod:fireball_scroll",
-    "components": {
-      "minecraft:item_model": "dagmod:fireball_scroll"
-    },
+    "id": "dagmod:life_drain_scroll",
+    "components": { "minecraft:item_model": "dagmod:life_drain_scroll" },
     "count": 1
   }
 }

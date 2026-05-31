@@ -188,19 +188,18 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 ### **v1.8.0 - Spells & Crafting**
 Priority: **MEDIUM**
 
-- ❌ **5-7 New Spell Scrolls**
-  - Gravity Well (pull enemies together)
-  - Chain Lightning (bouncing lightning)
-  - Ice Wall (creates barrier)
-  - Meteor Storm (raining meteors)
-  - Life Drain (healing damage)
-  - Dimensional Rift (short-range teleport)
-  - Polymorph (temporary mob transformation)
+- ✅ **7 New Spell Scrolls**
+  - Gravity Well — pulls all enemies within 15 blocks toward the caster
+  - Chain Lightning — bounces lightning across up to 4 enemies (8-block bounce range)
+  - Ice Wall — places a 5×3 frosted ice barrier in front of the caster
+  - Meteor Storm — rains 5 fireballs onto the targeted area
+  - Life Drain — AoE drain (12 blocks); heals caster 2 HP per enemy hit, capped at 10 HP
+  - Dimensional Rift — horizontal teleport 15 blocks forward; no wall required (unlike Blink)
+  - Polymorph — applies Slowness VI + Weakness VI + Blindness to nearest mob for 8 seconds
 
-- ❌ **Spell Scroll Crafting**
-  - Crafting recipes for all spell scrolls
-  - Rare ingredient requirements
-  - Crafting station integration
+- ✅ **Spell Scroll Crafting**
+  - Shapeless crafting recipes for all 7 new scrolls (2× paper + thematic powder + rare ingredient)
+  - Fixed broken fireball_scroll recipe (referenced nonexistent `potent_sulfur`; corrected to `potent_sulfur_powder`)
 
 ---
 
