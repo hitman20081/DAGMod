@@ -76,7 +76,7 @@ public class ResourceCommand {
                             }
 
                             int energy = EnergyManager.getEnergy(player);
-                            int max = EnergyManager.getMaxEnergy();
+                            int max = EnergyManager.getMaxEnergy(player);
                             player.sendSystemMessage(Component.literal("Energy: ")
                                     .withStyle(ChatFormatting.GREEN)
                                     .append(Component.literal(energy + "/" + max)
