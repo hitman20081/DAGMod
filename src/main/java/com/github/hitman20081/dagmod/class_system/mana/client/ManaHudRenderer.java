@@ -40,9 +40,9 @@ public class ManaHudRenderer {
         // Draw border
         drawBorder(drawContext, x - 1, y - 1, 83, 7, 0xFF000000);
 
-        // Draw mana text
-        String manaText = String.format("%.0f/%.0f", ClientManaData.getCurrentMana(), (float) ClientManaData.getMaxMana());
-        drawContext.text(client.font, Component.literal(manaText), x + 41 - client.font.width(manaText) / 2, y - 10, 0x00AAFF, true);
+        // Draw mana count to the right of the bar
+        String manaText = (int) ClientManaData.getCurrentMana() + "/" + ClientManaData.getMaxMana();
+        drawContext.text(client.font, Component.literal(manaText), x + 85, y - 1, 0x00AAFF, true);
     }
 
     private void drawBorder(GuiGraphicsExtractor context, int x, int y, int width, int height, int color) {
