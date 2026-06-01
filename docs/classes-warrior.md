@@ -14,6 +14,24 @@ Front-line melee combatant who thrives in close-quarters battle. Warriors are th
 
 Warriors command **6 powerful abilities** that combine devastating offense with incredible survivability!
 
+### Cooldown HUD
+
+Warriors have a **cooldown tracker** displayed on the right side of the HUD (same position as the hunger bar) — 6 small color-coded boxes, one per ability, spanning the same width as the mana/energy bar of other classes.
+
+- **Bright color** = ability ready to use
+- **Dark color + countdown** = ability on cooldown (shows remaining seconds, e.g. `32s`; 100+ seconds shown as `2m`)
+
+Ability colors: Rage (red), Shield Bash (blue), War Cry (gold), Battle Shout (orange), Whirlwind (sky blue), Iron Skin (gray).
+
+**Cooldowns reduce with level** — up to 40% shorter at level 200:
+
+| Level | Rage (60s base) | War Cry (90s base) | Iron Skin (120s base) |
+|-------|-----------------|--------------------|-----------------------|
+| 1 | 60s | 90s | 120s |
+| 50 | 54s | 81s | 108s |
+| 100 | 48s | 72s | 96s |
+| 200 | 36s | 54s | 72s |
+
 #### 1. Rage
 **Cooldown:** 60 seconds
 **Duration:** 10 seconds
@@ -137,7 +155,7 @@ A powerful AOE buff and debuff. Use it at the start of a big fight to give your 
 ### Weaknesses
 - Limited mobility compared to Rogue
 - No stealth capabilities
-- Abilities have moderate to long cooldowns (20-120s)
+- Abilities have moderate to long cooldowns (20-120s base; reduced by up to 40% at max level)
 
 ### Playstyle Tips
 - Rush into combat and draw enemy attention

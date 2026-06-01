@@ -20,10 +20,22 @@ Rogues are unique - they have **TWO separate ability systems** that work togethe
 
 **Requires:** Rogue Ability Tome
 **How It Works:**
-- Uses energy resource (not cooldowns)
-- Visual HUD shows current energy
-- Energy regenerates over time
-- Cycle between 3 abilities
+- Uses **Energy** as a resource (not cooldowns)
+- **Gold energy bar** appears on the right HUD (same position as the hunger bar), showing exact current/max count inside (e.g. `75/100`)
+- Energy regenerates automatically — both max energy and regen rate scale with level
+- Cycle between 3 abilities by right-clicking the tome
+
+**Energy Scaling by Level:**
+
+| Level | Max Energy | Regen Rate |
+|-------|------------|------------|
+| 1 | 100 | 5/sec |
+| 25 | 148 | 6.25/sec |
+| 50 | 198 | 7.5/sec |
+| 100 | 298 | 10/sec |
+| 200 | 498 | 15/sec |
+
+Armor set bonuses can further increase regen rate.
 
 **Energy-Based Abilities (3):**
 

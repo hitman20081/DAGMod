@@ -12,6 +12,22 @@ Ranged spellcaster who dominates from a safe distance. Mages excel at magical co
 - **Potion Duration:** +50% longer lasting potion effects
 - **Permanent Night Vision:** See in the dark at all times
 
+### Mana System
+
+Mages use **Mana** as their primary resource for abilities and spell scrolls. Mana is displayed as a **blue bar** on the right side of the HUD (same position as the hunger bar), showing the exact current/max count inside the bar (e.g. `75/100`).
+
+**Mana Regeneration:** Mana regenerates automatically over time. Both max mana and regen rate increase as you level up.
+
+| Level | Max Mana | Regen Rate |
+|-------|----------|------------|
+| 1 | 100 | 2/sec |
+| 25 | 148 | 3/sec |
+| 50 | 198 | 4/sec |
+| 100 | 298 | 6/sec |
+| 200 | 498 | 10/sec |
+
+Armor set bonuses can further increase regen rate.
+
 ### Mage Abilities (4 Total)
 
 Mages command **4 powerful abilities** that manipulate arcane energies.
@@ -157,16 +173,14 @@ See [Mage Equipment](items-mage_equipment.md) for crafting recipes.
 - Terrible at melee combat
 - Must manage ability cooldowns carefully
 - Vulnerable if enemies get close (before Arcane Barrier)
-- Abilities have moderate cooldowns (20-60s)
+- Mana regenerates slowly at low levels — manage it carefully
 
 ### Playstyle Tips
 - Keep distance from enemies at all costs
 - Use Barrier Charm proactively (before danger, not after)
-- Temporal Crystal is your panic button - use when overwhelmed
 - Focus on enchanting gear early for maximum power
 - Brew potions constantly - they're your lifeline
 - Position carefully in combat - stay at range
-- Arcane Orb on cooldown for consistent damage
 - Excellent for base building and support roles
 - Master enchanting to gear up your team
 
