@@ -9,14 +9,12 @@ import net.minecraft.network.chat.Component;
 
 public class CooldownHudRenderer {
 
-    // Labels shown inside each box (4 chars max)
-    private static final String[] LABELS = {"RAGE", "BASH", "WAR", "SHOUT", "WHIRL", "IRON"};
-
-    private static final int BOX_W   = 26;
-    private static final int BOX_H   = 22;
-    private static final int GAP     = 3;
-    private static final int TOTAL_W = WarriorAbility.values().length * BOX_W
-                                     + (WarriorAbility.values().length - 1) * GAP;
+    // Matches the mana/energy bar dimensions exactly
+    private static final int BAR_SLOT_W = 81;
+    private static final int BAR_H      = 9;
+    private static final int BOX_GAP    = 1;
+    private static final int N          = WarriorAbility.values().length; // 6
+    private static final int BOX_W      = (BAR_SLOT_W - (N - 1) * BOX_GAP) / N; // 12px
 
     public void onHudRender(GuiGraphicsExtractor drawContext, DeltaTracker tickCounter) {
         Minecraft client = Minecraft.getInstance();
@@ -28,49 +26,48 @@ public class CooldownHudRenderer {
         int screenWidth  = client.getWindow().getGuiScaledWidth();
         int screenHeight = client.getWindow().getGuiScaledHeight();
 
-        int startX = (screenWidth - TOTAL_W) / 2;
-        int y      = screenHeight - 70;
+        // Same anchor as mana bar
+        int x = screenWidth / 2 + 10;
+        int y = screenHeight - 49;
+
+        // Outer border around the whole block (matches mana bar border style)
+        drawBorder(drawContext, x - 1, y - 1, BAR_SLOT_W + 2, BAR_H + 2, 0xFF000000);
 
         WarriorAbility[] abilities = WarriorAbility.values();
-        for (int i = 0; i < abilities.length; i++) {
-            WarriorAbility ability = abilities[i];
-            int x = startX + i * (BOX_W + GAP);
-            renderAbilityBox(drawContext, client, ability, LABELS[i], x, y);
+        for (int i = 0; i < N; i++) {
+            int bx = x + i * (BOX_W + BOX_GAP);
+            renderBox(drawContext, client, abilities[i], bx, y);
         }
     }
 
-    private void renderAbilityBox(GuiGraphicsExtractor ctx, Minecraft client,
-                                  WarriorAbility ability, String label, int x, int y) {
-        boolean ready    = ClientCooldownData.isReady(ability);
-        int baseColor    = ability.getColor();
-        int bgColor      = ready ? (0xFF000000 | baseColor) : darken(baseColor);
-        int borderColor  = ready ? 0xFFFFFFFF : 0xFF666666;
+    private void renderBox(GuiGraphicsExtractor ctx, Minecraft client,
+                           WarriorAbility ability, int x, int y) {
+        boolean ready   = ClientCooldownData.isReady(ability);
+        int baseColor   = ability.getColor();
+        int bgColor     = ready ? (0xFF000000 | baseColor) : darken(baseColor);
 
-        // Background
-        ctx.fill(x, y, x + BOX_W, y + BOX_H, bgColor);
+        ctx.fill(x, y, x + BOX_W, y + BAR_H, bgColor);
 
-        // Border
-        ctx.fill(x - 1, y - 1, x + BOX_W + 1, y,          borderColor); // top
-        ctx.fill(x - 1, y + BOX_H, x + BOX_W + 1, y + BOX_H + 1, borderColor); // bottom
-        ctx.fill(x - 1, y, x,          y + BOX_H, borderColor); // left
-        ctx.fill(x + BOX_W, y, x + BOX_W + 1, y + BOX_H, borderColor); // right
-
-        // Ability label (top line)
-        int labelX = x + (BOX_W - client.font.width(label)) / 2;
-        ctx.text(client.font, Component.literal(label), labelX, y + 2, 0xFFFFFFFF, true);
-
-        // Cooldown time or ready indicator (bottom line)
-        String timeText = ready ? "RDY" : ClientCooldownData.getRemainingSeconds(ability) + "s";
-        int timeColor   = ready ? 0xFF00FF00 : 0xFFFFAA00;
-        int timeX = x + (BOX_W - client.font.width(timeText)) / 2;
-        ctx.text(client.font, Component.literal(timeText), timeX, y + 12, timeColor, true);
+        if (!ready) {
+            int secs = ClientCooldownData.getRemainingSeconds(ability);
+            String label = secs >= 100 ? (secs / 60 + 1) + "m" : String.valueOf(secs);
+            int tx = x + (BOX_W - client.font.width(label)) / 2;
+            ctx.text(client.font, Component.literal(label), tx, y + 1, 0xFFFFFFFF, true);
+        }
     }
 
-    /** Darken an RGB color to ~35% brightness for on-cooldown state. */
+    private void drawBorder(GuiGraphicsExtractor ctx, int x, int y,
+                            int w, int h, int color) {
+        ctx.fill(x, y,         x + w, y + 1,     color);
+        ctx.fill(x, y + h - 1, x + w, y + h,     color);
+        ctx.fill(x, y,         x + 1, y + h,     color);
+        ctx.fill(x + w - 1, y, x + w, y + h,     color);
+    }
+
     private static int darken(int rgb) {
-        int r = (int) (((rgb >> 16) & 0xFF) * 0.35f);
-        int g = (int) (((rgb >> 8)  & 0xFF) * 0.35f);
-        int b = (int) ((rgb         & 0xFF) * 0.35f);
+        int r = (int) (((rgb >> 16) & 0xFF) * 0.3f);
+        int g = (int) (((rgb >> 8)  & 0xFF) * 0.3f);
+        int b = (int) ((rgb         & 0xFF) * 0.3f);
         return 0xFF000000 | (r << 16) | (g << 8) | b;
     }
 }

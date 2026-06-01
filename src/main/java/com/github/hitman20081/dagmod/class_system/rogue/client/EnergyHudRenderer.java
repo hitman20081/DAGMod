@@ -22,8 +22,8 @@ public class EnergyHudRenderer {
         int barWidth  = 81;
         int barHeight = 9;
 
-        // Mirror the mana bar: left side of the hotbar center
-        int x = screenWidth / 2 - 10 - barWidth;
+        // Same position as mana bar — right side of hotbar center
+        int x = screenWidth / 2 + 10;
         int y = screenHeight - 49;
 
         int currentEnergy = ClientEnergyData.getCurrentEnergy();
