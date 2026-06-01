@@ -448,6 +448,13 @@
   "item.dagmod.frost_nova_scroll": "Frost Nova",
   "item.dagmod.teleport_scroll": "Blink",
   "item.dagmod.mana_shield_scroll": "Mana Shield",
+  "item.dagmod.gravity_well_scroll": "Gravity Well",
+  "item.dagmod.chain_lightning_scroll": "Chain Lightning",
+  "item.dagmod.ice_wall_scroll": "Ice Wall",
+  "item.dagmod.meteor_storm_scroll": "Meteor Storm",
+  "item.dagmod.life_drain_scroll": "Life Drain",
+  "item.dagmod.dimensional_rift_scroll": "Dimensional Rift",
+  "item.dagmod.polymorph_scroll": "Polymorph",
 
   "item.dagmod.apprentice_wand": "Apprentice Wand",
   "item.dagmod.adept_wand": "Adept Wand",
