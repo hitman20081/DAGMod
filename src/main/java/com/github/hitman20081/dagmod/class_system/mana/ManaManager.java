@@ -43,6 +43,19 @@ public class ManaManager {
         }
     }
 
+    public static int calculateMaxMana(int level) {
+        return ManaData.BASE_MAX_MANA + (level - 1) * 2;
+    }
+
+    public static void updateMaxManaForLevel(ServerPlayer player, int level) {
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+        if (!"Mage".equals(playerClass)) return;
+
+        ManaData data = getManaData(player);
+        data.setMaxMana(calculateMaxMana(level));
+        ManaNetworking.sendManaUpdate(player, data.getCurrentMana(), data.getMaxMana());
+    }
+
     public static void clearPlayerData(UUID playerId) {
         playerManaData.remove(playerId);
         regenTicks.remove(playerId);

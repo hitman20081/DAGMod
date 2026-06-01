@@ -77,6 +77,9 @@ public class ProgressionManager {
         // Apply level-based stats
         StatScalingHandler.applyLevelStats(player, data.getCurrentLevel());
 
+        // Apply level-based mana cap for Mages
+        com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, data.getCurrentLevel());
+
         // Sync to client
         ProgressionPackets.sendProgressionData(player, data);
     }
@@ -199,6 +202,9 @@ public class ProgressionManager {
 
         // Apply new stat bonuses
         StatScalingHandler.applyLevelStats(player, currentLevel);
+
+        // Update mana cap for Mages
+        com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, currentLevel);
     }
 
     /**
@@ -216,6 +222,9 @@ public class ProgressionManager {
 
         // Sync to client
         ProgressionPackets.sendProgressionData(player, data);
+
+        // Update mana cap
+        com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, level);
     }
 
     /**
