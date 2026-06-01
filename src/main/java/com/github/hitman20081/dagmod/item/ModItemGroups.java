@@ -66,6 +66,13 @@ public class ModItemGroups {
                             entries.accept(ModItems.FROST_NOVA_SCROLL);
                             entries.accept(ModItems.TELEPORT_SCROLL);
                             entries.accept(ModItems.MANA_SHIELD_SCROLL);
+                            entries.accept(ModItems.GRAVITY_WELL_SCROLL);
+                            entries.accept(ModItems.CHAIN_LIGHTNING_SCROLL);
+                            entries.accept(ModItems.ICE_WALL_SCROLL);
+                            entries.accept(ModItems.METEOR_STORM_SCROLL);
+                            entries.accept(ModItems.LIFE_DRAIN_SCROLL);
+                            entries.accept(ModItems.DIMENSIONAL_RIFT_SCROLL);
+                            entries.accept(ModItems.POLYMORPH_SCROLL);
 
                             // === MAGE ABILITIES ===
                             entries.accept(ModItems.ARCANE_ORB);
