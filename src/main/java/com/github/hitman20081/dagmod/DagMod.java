@@ -8,6 +8,7 @@ import com.github.hitman20081.dagmod.bone_realm.entity.BoneRealmEntityRegistry;
 import com.github.hitman20081.dagmod.class_system.mana.ManaManager;
 import com.github.hitman20081.dagmod.class_system.warrior.ShieldBashListener;
 import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
+import com.github.hitman20081.dagmod.class_system.warrior.CooldownNetworking;
 import com.github.hitman20081.dagmod.class_system.rogue.EnergyManager;
 import com.github.hitman20081.dagmod.class_system.rogue.EnergyNetworking;
 import com.github.hitman20081.dagmod.command.CooldownCommand;
@@ -470,6 +471,11 @@ public class DagMod implements ModInitializer {
                     }
                 }
 
+                // Sync Warrior cooldowns to client once per second
+                if ("Warrior".equals(playerClass) && player.level().getGameTime() % 20 == 0) {
+                    CooldownNetworking.syncCooldownsToClient(player);
+                }
+
                 // Custom armor set bonuses (Dragonscale, Crystalforge, Inferno, Nature's Guard, Shadow, Fortuna)
                 com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus.applySetBonuses(player);
 
@@ -558,7 +564,8 @@ public class DagMod implements ModInitializer {
         // Register Shield Bash listener
         ShieldBashListener.register();
 
-        // NOTE: Cooldown clearing is now handled in the main disconnect handler (line ~396)
+        // Register cooldown sync packet
+        CooldownNetworking.registerPayloads();
 
         LOGGER.info("Warrior Ability Systems registered successfully");
     }

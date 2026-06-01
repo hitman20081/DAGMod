@@ -1,5 +1,6 @@
 package com.github.hitman20081.dagmod.class_system.warrior;
 
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
@@ -8,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages cooldowns for Warrior abilities
@@ -16,23 +18,37 @@ import java.util.UUID;
 public class CooldownManager {
     // Cooldown durations in ticks (20 ticks = 1 second)
     public static final int RAGE_COOLDOWN = 60 * 20; // 60 seconds
-    public static final int SHIELD_BASH_COOLDOWN = 15 * 20; // 15 seconds
+    public static final int SHIELD_BASH_COOLDOWN = 20 * 20; // 20 seconds
     public static final int WAR_CRY_COOLDOWN = 90 * 20; // 90 seconds
     public static final int BATTLE_SHOUT_COOLDOWN = 45 * 20;  // 45 seconds
     public static final int WHIRLWIND_COOLDOWN = 30 * 20;     // 30 seconds
     public static final int IRON_SKIN_COOLDOWN = 120 * 20;    // 120 seconds (2 minutes)
 
     // Storage: UUID -> (AbilityType -> cooldown end time)
-    private static final Map<UUID, Map<WarriorAbility, Long>> cooldowns = new HashMap<>();
+    private static final Map<UUID, Map<WarriorAbility, Long>> cooldowns = new ConcurrentHashMap<>();
 
     /**
      * Start a cooldown for a specific ability
      */
+    /** Cooldown reduction: 0% at level 1, 40% at level 200. */
+    public static int getEffectiveCooldownTicks(int baseTicks, int level) {
+        float multiplier = Math.max(0.6f, 1.0f - level * 0.002f);
+        return Math.round(baseTicks * multiplier);
+    }
+
     public static void startCooldown(Player player, WarriorAbility ability) {
         UUID uuid = player.getUUID();
-        long endTime = player.level().getGameTime() + ability.getCooldownTicks();
 
-        cooldowns.computeIfAbsent(uuid, k -> new HashMap<>()).put(ability, endTime);
+        int level = 1;
+        if (player instanceof ServerPlayer sp) {
+            var progData = ProgressionManager.getPlayerData(sp);
+            if (progData != null) level = progData.getCurrentLevel();
+        }
+
+        int effectiveTicks = getEffectiveCooldownTicks(ability.getCooldownTicks(), level);
+        long endTime = player.level().getGameTime() + effectiveTicks;
+
+        cooldowns.computeIfAbsent(uuid, k -> new ConcurrentHashMap<>()).put(ability, endTime);
 
         // Send feedback to player
         if (player instanceof ServerPlayer serverPlayer) {

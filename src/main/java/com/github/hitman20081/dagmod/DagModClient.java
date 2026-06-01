@@ -33,6 +33,9 @@ import com.github.hitman20081.dagmod.class_system.mana.client.ManaHudRenderer;
 import com.github.hitman20081.dagmod.class_system.rogue.EnergyNetworking;
 import com.github.hitman20081.dagmod.class_system.rogue.client.ClientEnergyData;
 import com.github.hitman20081.dagmod.class_system.rogue.client.EnergyHudRenderer;
+import com.github.hitman20081.dagmod.class_system.warrior.CooldownNetworking;
+import com.github.hitman20081.dagmod.class_system.warrior.client.ClientCooldownData;
+import com.github.hitman20081.dagmod.class_system.warrior.client.CooldownHudRenderer;
 import com.github.hitman20081.dagmod.client.DynamicLightManager;
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.progression.client.ClientProgressionData;
@@ -99,6 +102,21 @@ public class DagModClient implements ClientModInitializer {
         );
         HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "energy_hud"), new EnergyHudRenderer()::onHudRender);
         System.out.println("Energy system registered!");
+
+        // Register Warrior cooldown system
+        ClientPlayNetworking.registerGlobalReceiver(
+                CooldownNetworking.CooldownSyncPayload.ID,
+                (payload, context) -> {
+                    context.client().execute(() -> {
+                        ClientCooldownData.update(
+                                payload.rage(), payload.shieldBash(), payload.warCry(),
+                                payload.battleShout(), payload.whirlwind(), payload.ironSkin()
+                        );
+                    });
+                }
+        );
+        HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "cooldown_hud"), new CooldownHudRenderer()::onHudRender);
+        System.out.println("Warrior cooldown HUD registered!");
 
         // Register dynamic held-item lighting
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
