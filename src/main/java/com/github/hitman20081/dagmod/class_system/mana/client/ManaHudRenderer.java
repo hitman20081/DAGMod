@@ -28,21 +28,31 @@ public class ManaHudRenderer {
         int x = screenWidth / 2 + 10;
         int y = screenHeight - 49;
 
+        int currentMana = (int) ClientManaData.getCurrentMana();
+        int maxMana = ClientManaData.getMaxMana();
         float manaPercentage = ClientManaData.getManaPercentage();
-        int manaBarWidth = (int) (81 * manaPercentage);
 
-        // Draw mana bar background (dark blue/purple)
-        drawContext.fill(x, y, x + 81, y + 5, 0xFF000033);
+        // Bar is 9px tall so text fits inside
+        int barWidth = 81;
+        int barHeight = 9;
+        int fillWidth = (int) (barWidth * manaPercentage);
+
+        // Draw mana bar background (dark blue)
+        drawContext.fill(x, y, x + barWidth, y + barHeight, 0xFF000033);
 
         // Draw mana bar foreground (bright blue)
-        drawContext.fill(x, y, x + manaBarWidth, y + 5, 0xFF00AAFF);
+        if (fillWidth > 0) {
+            drawContext.fill(x, y, x + fillWidth, y + barHeight, 0xFF00AAFF);
+        }
 
         // Draw border
-        drawBorder(drawContext, x - 1, y - 1, 83, 7, 0xFF000000);
+        drawBorder(drawContext, x - 1, y - 1, barWidth + 2, barHeight + 2, 0xFF000000);
 
-        // Draw mana count to the right of the bar
-        String manaText = (int) ClientManaData.getCurrentMana() + "/" + ClientManaData.getMaxMana();
-        drawContext.text(client.font, Component.literal(manaText), x + 85, y - 1, 0x00AAFF, true);
+        // Draw mana count centered inside the bar
+        String manaText = currentMana + "/" + maxMana;
+        int textX = x + (barWidth - client.font.width(manaText)) / 2;
+        int textY = y + 1;
+        drawContext.text(client.font, Component.literal(manaText), textX, textY, 0xFFFFFFFF, true);
     }
 
     private void drawBorder(GuiGraphicsExtractor context, int x, int y, int width, int height, int color) {
