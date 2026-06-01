@@ -79,6 +79,8 @@ public class ProgressionManager {
 
         // Apply level-based mana cap for Mages
         com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, data.getCurrentLevel());
+        // Apply level-based energy cap for Rogues
+        com.github.hitman20081.dagmod.class_system.rogue.EnergyManager.updateMaxEnergyForLevel(player, data.getCurrentLevel());
 
         // Sync to client
         ProgressionPackets.sendProgressionData(player, data);
@@ -205,6 +207,8 @@ public class ProgressionManager {
 
         // Update mana cap for Mages
         com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, currentLevel);
+        // Update energy cap for Rogues
+        com.github.hitman20081.dagmod.class_system.rogue.EnergyManager.updateMaxEnergyForLevel(player, currentLevel);
     }
 
     /**
@@ -225,6 +229,8 @@ public class ProgressionManager {
 
         // Update mana cap
         com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, level);
+        // Update energy cap
+        com.github.hitman20081.dagmod.class_system.rogue.EnergyManager.updateMaxEnergyForLevel(player, level);
     }
 
     /**

@@ -30,6 +30,9 @@ import com.github.hitman20081.dagmod.entity.client.JewelerNPCRenderer;
 import com.github.hitman20081.dagmod.class_system.mana.ManaNetworking;
 import com.github.hitman20081.dagmod.class_system.mana.client.ClientManaData;
 import com.github.hitman20081.dagmod.class_system.mana.client.ManaHudRenderer;
+import com.github.hitman20081.dagmod.class_system.rogue.EnergyNetworking;
+import com.github.hitman20081.dagmod.class_system.rogue.client.ClientEnergyData;
+import com.github.hitman20081.dagmod.class_system.rogue.client.EnergyHudRenderer;
 import com.github.hitman20081.dagmod.client.DynamicLightManager;
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.progression.client.ClientProgressionData;
@@ -84,6 +87,18 @@ public class DagModClient implements ClientModInitializer {
         // Register Mana HUD renderer
         HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "mana_hud"), new ManaHudRenderer()::onHudRender);
         System.out.println("Mana system registered!");
+
+        // Register energy system
+        ClientPlayNetworking.registerGlobalReceiver(
+                EnergyNetworking.EnergySyncPayload.ID,
+                (payload, context) -> {
+                    context.client().execute(() -> {
+                        ClientEnergyData.setEnergy(payload.energy(), payload.maxEnergy());
+                    });
+                }
+        );
+        HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "energy_hud"), new EnergyHudRenderer()::onHudRender);
+        System.out.println("Energy system registered!");
 
         // Register dynamic held-item lighting
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

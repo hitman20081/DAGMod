@@ -17,13 +17,14 @@ public class EnergyNetworking {
     /**
      * Sync energy packet - sent from server to client
      */
-    public record EnergySyncPayload(int energy) implements CustomPacketPayload {
+    public record EnergySyncPayload(int energy, int maxEnergy) implements CustomPacketPayload {
         public static final CustomPacketPayload.Type<EnergySyncPayload> ID =
                 new CustomPacketPayload.Type<>(ENERGY_SYNC_ID);
 
         public static final StreamCodec<RegistryFriendlyByteBuf, EnergySyncPayload> CODEC =
                 StreamCodec.composite(
                         ByteBufCodecs.INT, EnergySyncPayload::energy,
+                        ByteBufCodecs.INT, EnergySyncPayload::maxEnergy,
                         EnergySyncPayload::new
                 );
 
@@ -44,7 +45,7 @@ public class EnergyNetworking {
     /**
      * Sync player's energy to their client
      */
-    public static void syncEnergyToClient(ServerPlayer player, int energy) {
-        ServerPlayNetworking.send(player, new EnergySyncPayload(energy));
+    public static void syncEnergyToClient(ServerPlayer player, int energy, int maxEnergy) {
+        ServerPlayNetworking.send(player, new EnergySyncPayload(energy, maxEnergy));
     }
 }
