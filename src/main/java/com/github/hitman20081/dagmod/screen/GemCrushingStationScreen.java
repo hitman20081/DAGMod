@@ -25,7 +25,7 @@ public class GemCrushingStationScreen extends AbstractContainerScreen<GemCrushin
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
         if (menu.isCrafting()) {
             int progress = menu.getScaledProgress();
-            context.fill(x + 88, y + 33, x + 98, y + 33 + progress, 0xFF55AAFF);
+            context.fill(x + 93, y + 34, x + 97, y + 34 + progress, 0xFF55AAFF);
         }
     }
 }

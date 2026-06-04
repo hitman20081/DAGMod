@@ -1,6 +1,6 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-05-30
+**Last Updated**: 2026-06-04
 **Version**: v1.8.0
 
 ---
@@ -67,6 +67,8 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 ## Fixed Issues
 
 ### Fixed in v1.8.0
+- **Gem Crushing Station wrong texture reference** — Model referenced `gem_polishing_station_texture`; corrected to `gem_crushing_station_texture`
+- **Citrine Powder missing from Creative Tab** — CITRINE_POWDER omitted from item tab registration
 - **Dynamic lighting broken after MC 26.1.2 migration** — `scheduleBlockRenders` was removed in MC 26.x and never replaced, so terrain blocks were not updating light when the player moved or changed held items (entity rendering still worked since entities re-render every frame). Fixed by calling `LevelRenderer.setSectionRangeDirty()` on the sections within the light radius. A second fix addressed stale light persisting after the light source was removed from hand — the old clearing condition incorrectly required the player to have moved; removed the position check so sections are always dirtied when the previous radius was non-zero
 
 ### Fixed in v1.7.10

@@ -23,7 +23,6 @@ public class GemCuttingStationScreen extends AbstractContainerScreen<GemCuttingS
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
-
         if (menu.isCrafting()) {
             int progress = menu.getScaledProgress();
             context.fill(x + 63, y + 52, x + 63 + progress, y + 55, 0xFF00AA00);

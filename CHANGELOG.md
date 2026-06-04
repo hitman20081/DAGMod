@@ -5,7 +5,7 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.8.0] - 2026-05-30
+## [1.8.0] - 2026-06-04
 
 ### Added
 
@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Level-scaled energy regen** — Energy regenerates at `5 + level × 0.05` per second (Level 1 = 5/s, Level 200 = 15/s). Armor bonus still applies on top of the level bonus
 - **Warrior Cooldown HUD** — Warriors see 6 compact color-coded ability boxes (12 × 9 px each) in the same slot as the other class HUDs. Each box shows the ability's color when ready; darkened with a seconds countdown when on cooldown. Times ≥ 100 s are shown as `Xm`. Displayed only when playing as Warrior
 - **Level-based Warrior cooldown reduction** — Warrior ability cooldowns decrease with level: `max(0.6, 1.0 − level × 0.002)` multiplier (Level 1 = full cooldown, Level 200 = 60% of base)
+- **Gem Crushing Station** — New crafting block that grinds raw gems into powder. Requires a Crushing Hammer placed in the dedicated tool slot. Faces the player on placement (directional). Replaces the earlier Gem Infusing Station concept
+- **Crushing Hammer** — New tool required by the Gem Crushing Station; crafted from iron ingots and a stick
+- **Ruby Powder, Sapphire Powder, Topaz Powder** — Completes the full 8-gem powder set; all gem types now have a powder form obtainable via the Gem Crushing Station
+- **8 Gem Powder Potions** — Brew any gem powder with an Awkward Potion to create a dual-effect potion: Amethyst (Regeneration II 45s + Absorption 2min), Citrine (Night Vision 5min + Haste 3min), Diamond (Resistance 5min + Health Boost 5min), Emerald (Strength 3min + Regeneration 3min), Quartz (Haste II 3min + Jump Boost 3min), Ruby/Fury (Strength II 30s + Fire Resistance 3min), Sapphire/Deep (Speed II 3min + Water Breathing 3min), Topaz/Fortune (Luck 5min + Haste II 2min)
 
 ### Changed
 
@@ -40,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Shield Bash cooldown incorrect** — Shield Bash base cooldown was set to 15 s (`15 * 20` ticks); corrected to 20 s (`20 * 20` ticks) as intended by the design spec
 - **CooldownManager not thread-safe** — Internal cooldown map used `HashMap`; replaced with `ConcurrentHashMap` to prevent rare CME crashes when ticking and ability activation interleave across threads
 - **`ResourceCommand` compile error** — `EnergyManager.getMaxEnergy()` was updated to require a `ServerPlayer` argument during the energy regen rewrite; the call-site in `ResourceCommand.java` was not updated and failed to compile. Fixed by passing `player` to the call
+- **Gem Crushing Station wrong texture** — Block model referenced `gem_polishing_station_texture` (nonexistent); corrected to `gem_crushing_station_texture`
+- **Citrine Powder missing from Creative Tab** — CITRINE_POWDER was omitted from creative tab registration
 
 ---
 
