@@ -1,8 +1,0 @@
-{
-  "type": "dagmod:gem_infusing",
-  "ingredient": "minecraft:emerald",
-  "result": {
-    "id": "dagmod:emerald_powder",
-    "count": 2
-  }
-}

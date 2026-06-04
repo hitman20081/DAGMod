@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_crushing",
+  "ingredient": "dagmod:sapphire",
+  "result": {
+    "count": 1,
+    "id": "dagmod:sapphire_powder"
+  }
+}

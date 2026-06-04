@@ -18,23 +18,15 @@ public class GemCuttingStationScreen extends AbstractContainerScreen<GemCuttingS
     }
 
     @Override
-    protected void init() {
-        super.init();
-    }
-
-    @Override
-    public void extractContents(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
 
-        // Draw simple progress indicator when crafting
         if (menu.isCrafting()) {
             int progress = menu.getScaledProgress();
-            // Draw a simple green progress bar below the arrow area
             context.fill(x + 63, y + 52, x + 63 + progress, y + 55, 0xFF00AA00);
         }
     }
-
-    
 }

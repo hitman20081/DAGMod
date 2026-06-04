@@ -28,21 +28,21 @@ public class ModRecipes {
                     }
             );
 
-    public static final RecipeSerializer<GemInfusingRecipe> GEM_INFUSING_SERIALIZER =
+    public static final RecipeSerializer<GemCrushingRecipe> GEM_CRUSHING_SERIALIZER =
             Registry.register(
                     BuiltInRegistries.RECIPE_SERIALIZER,
-                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_infusing"),
-                    GemInfusingRecipe.SERIALIZER
+                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_crushing"),
+                    GemCrushingRecipe.SERIALIZER
             );
 
-    public static final RecipeType<GemInfusingRecipe> GEM_INFUSING_TYPE =
+    public static final RecipeType<GemCrushingRecipe> GEM_CRUSHING_TYPE =
             Registry.register(
                     BuiltInRegistries.RECIPE_TYPE,
-                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_infusing"),
-                    new RecipeType<GemInfusingRecipe>() {
+                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_crushing"),
+                    new RecipeType<GemCrushingRecipe>() {
                         @Override
                         public String toString() {
-                            return "gem_infusing";
+                            return "gem_crushing";
                         }
                     }
             );

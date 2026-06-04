@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Potent Sulfur Powder** — New crafting material; 9× Sulfur Powder → 1 Potent Sulfur Powder. Functions as a high-tier component in fire-themed crafting recipes (Inferno armor, fire weapons). Custom texture included
 - **Sulfur item and block** — Full item and block registration with all required JSON files, models, and textures
+- **7 new Mage spell scrolls** — Gravity Well, Chain Lightning, Ice Wall, Meteor Storm, Life Drain, Dimensional Rift, and Polymorph. Full item registrations and lang entries added
+- **Mana bar numeric display** — The Mage mana HUD now shows `current/max` in white text centered inside the bar, so players always know their exact mana without guessing from bar width
+- **Level-scaled max mana** — Mage max mana increases as the player levels up: `100 + (level − 1) × 2` (Level 1 = 100, Level 100 = 298, Level 200 = 498). Applied on join and level-up
+- **Level-scaled mana regen** — Mana regeneration speed scales with level: `2 + level × 0.04` mana per second (Level 1 ≈ 2.0/s, Level 200 = 10.0/s). Uses a float accumulator for smooth sub-integer regen at low levels
+- **Rogue Energy HUD** — Rogues now see a gold energy bar (`current/max`) in the same screen slot as the Mage mana bar (right of the hotbar center). Displayed only when playing as Rogue
+- **Level-scaled max energy** — Rogue max energy scales identically to mana: `100 + (level − 1) × 2`
+- **Level-scaled energy regen** — Energy regenerates at `5 + level × 0.05` per second (Level 1 = 5/s, Level 200 = 15/s). Armor bonus still applies on top of the level bonus
+- **Warrior Cooldown HUD** — Warriors see 6 compact color-coded ability boxes (12 × 9 px each) in the same slot as the other class HUDs. Each box shows the ability's color when ready; darkened with a seconds countdown when on cooldown. Times ≥ 100 s are shown as `Xm`. Displayed only when playing as Warrior
+- **Level-based Warrior cooldown reduction** — Warrior ability cooldowns decrease with level: `max(0.6, 1.0 − level × 0.002)` multiplier (Level 1 = full cooldown, Level 200 = 60% of base)
 
 ### Changed
 
@@ -28,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Seasons time predicate format** — Fixed three consecutive seasons predicate issues: converted `time/day` value to array format, added required `clock` field to `time_check` predicate, deleted an unparseable predicate file
 - **Dynamic lighting terrain not updating after MC 26.1.2 migration** — `scheduleBlockRenders` was removed in MC 26.x and not replaced; terrain blocks never updated even though entity rendering worked fine. Fixed by calling `LevelRenderer.setSectionRangeDirty()` on all sections within the light radius when the player moves or changes light source
 - **Stale light persisting after removing light source from hand** — When swapping to a slot with no light source while standing still, the lit area remained visible. The clearing condition required `!oldPos.equals(playerPos)`, which was never true when the player hadn't moved; removed the position guard so old-radius sections are always dirtied when a light source is removed
+- **Shield Bash cooldown incorrect** — Shield Bash base cooldown was set to 15 s (`15 * 20` ticks); corrected to 20 s (`20 * 20` ticks) as intended by the design spec
+- **CooldownManager not thread-safe** — Internal cooldown map used `HashMap`; replaced with `ConcurrentHashMap` to prevent rare CME crashes when ticking and ability activation interleave across threads
+- **`ResourceCommand` compile error** — `EnergyManager.getMaxEnergy()` was updated to require a `ServerPlayer` argument during the energy regen rewrite; the call-site in `ResourceCommand.java` was not updated and failed to compile. Fixed by passing `player` to the call
 
 ---
 

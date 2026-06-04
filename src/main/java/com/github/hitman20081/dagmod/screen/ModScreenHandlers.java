@@ -17,11 +17,11 @@ public class ModScreenHandlers {
                     new ExtendedMenuType<>(GemPolishingStationScreenHandler::new, BlockPos.STREAM_CODEC)
             );
 
-    public static final MenuType<GemInfusingStationScreenHandler> GEM_INFUSING_STATION_SCREEN_HANDLER =
+    public static final MenuType<GemCrushingStationScreenHandler> GEM_CRUSHING_STATION_SCREEN_HANDLER =
             Registry.register(
                     BuiltInRegistries.MENU,
-                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_infusing_station_screen_handler"),
-                    new ExtendedMenuType<>(GemInfusingStationScreenHandler::new, BlockPos.STREAM_CODEC)
+                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_crushing_station_screen_handler"),
+                    new ExtendedMenuType<>(GemCrushingStationScreenHandler::new, BlockPos.STREAM_CODEC)
             );
 
     public static final MenuType<GemCuttingStationScreenHandler> GEM_CUTTING_STATION_SCREEN_HANDLER =

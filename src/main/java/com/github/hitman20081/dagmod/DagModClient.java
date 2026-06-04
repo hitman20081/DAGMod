@@ -190,8 +190,8 @@ public class DagModClient implements ClientModInitializer {
                 com.github.hitman20081.dagmod.screen.GemPolishingStationScreen::new
         );
         net.minecraft.client.gui.screens.MenuScreens.register(
-                com.github.hitman20081.dagmod.screen.ModScreenHandlers.GEM_INFUSING_STATION_SCREEN_HANDLER,
-                com.github.hitman20081.dagmod.screen.GemInfusingStationScreen::new
+                com.github.hitman20081.dagmod.screen.ModScreenHandlers.GEM_CRUSHING_STATION_SCREEN_HANDLER,
+                com.github.hitman20081.dagmod.screen.GemCrushingStationScreen::new
         );
         net.minecraft.client.gui.screens.MenuScreens.register(
                 com.github.hitman20081.dagmod.screen.ModScreenHandlers.GEM_CUTTING_STATION_SCREEN_HANDLER,

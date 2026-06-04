@@ -122,6 +122,21 @@
           "type": "minecraft:item",
           "name": "minecraft:diamond",
           "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:sulfur_powder",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 6
+              }
+            }
+          ]
         }
       ]
     }

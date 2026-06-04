@@ -276,8 +276,8 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.WOOD)));
 
-    public static final Block GEM_INFUSING_STATION = register("gem_infusing_station",
-            key -> new GemInfusingStationBlock(BlockBehaviour.Properties.of()
+    public static final Block GEM_CRUSHING_STATION = register("gem_crushing_station",
+            key -> new GemCrushingStationBlock(BlockBehaviour.Properties.of()
                     .setId(key)
                     .strength(2.5f)
                     .requiresCorrectToolForDrops()
@@ -385,7 +385,7 @@ public class ModBlocks {
                 .register((itemGroup) -> {
                     itemGroup.accept(GEM_CUTTING_STATION);
                     itemGroup.accept(GEM_POLISHING_STATION);
-                    itemGroup.accept(GEM_INFUSING_STATION);
+                    itemGroup.accept(GEM_CRUSHING_STATION);
                 });
 
         // Hall Respawn Block - Add to Functional group

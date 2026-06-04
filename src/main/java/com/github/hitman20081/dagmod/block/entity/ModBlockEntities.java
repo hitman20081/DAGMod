@@ -17,11 +17,11 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(GemPolishingStationBlockEntity::new, ModBlocks.GEM_POLISHING_STATION).build()
             );
 
-    public static final BlockEntityType<GemInfusingStationBlockEntity> GEM_INFUSING_STATION =
+    public static final BlockEntityType<GemCrushingStationBlockEntity> GEM_CRUSHING_STATION =
             Registry.register(
                     BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_infusing_station"),
-                    FabricBlockEntityTypeBuilder.create(GemInfusingStationBlockEntity::new, ModBlocks.GEM_INFUSING_STATION).build()
+                    Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "gem_crushing_station"),
+                    FabricBlockEntityTypeBuilder.create(GemCrushingStationBlockEntity::new, ModBlocks.GEM_CRUSHING_STATION).build()
             );
 
     public static final BlockEntityType<GemCuttingStationBlockEntity> GEM_CUTTING_STATION =

@@ -11,6 +11,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.github.hitman20081.dagmod.item.ModItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.ItemCost;
@@ -93,6 +94,12 @@ public class AlchemistNPC extends PathfinderMob implements Merchant {
                 new ItemCost(Items.EMERALD, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GUNPOWDER, 4),
+                12, 5, 0.05F
+        ));
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 3),
+                java.util.Optional.empty(),
+                new ItemStack(ModItems.SULFUR_POWDER, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(

@@ -15,7 +15,7 @@ import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.level.Level;
 
-public record GemInfusingRecipe(Ingredient ingredient, Identifier resultId, int resultCount) implements Recipe<CraftingInput> {
+public record GemCrushingRecipe(Ingredient ingredient, Identifier resultId, int resultCount) implements Recipe<CraftingInput> {
 
     // Nested codec for the "result": {"id": "...", "count": N} JSON object.
     // Avoids constructing ItemStack during JSON parsing (before DataComponents are bound).
@@ -26,19 +26,19 @@ public record GemInfusingRecipe(Ingredient ingredient, Identifier resultId, int 
         ).apply(inst, ResultSpec::new));
     }
 
-    public static final MapCodec<GemInfusingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            Ingredient.CODEC.fieldOf("ingredient").forGetter(GemInfusingRecipe::ingredient),
+    public static final MapCodec<GemCrushingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.fieldOf("ingredient").forGetter(GemCrushingRecipe::ingredient),
             ResultSpec.CODEC.fieldOf("result").forGetter(r -> new ResultSpec(r.resultId, r.resultCount))
-    ).apply(inst, (ingredient, spec) -> new GemInfusingRecipe(ingredient, spec.id(), spec.count())));
+    ).apply(inst, (ingredient, spec) -> new GemCrushingRecipe(ingredient, spec.id(), spec.count())));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, GemInfusingRecipe> STREAM_CODEC =
+    public static final StreamCodec<RegistryFriendlyByteBuf, GemCrushingRecipe> STREAM_CODEC =
             StreamCodec.composite(
-                    Ingredient.CONTENTS_STREAM_CODEC, GemInfusingRecipe::ingredient,
-                    ItemStack.STREAM_CODEC, GemInfusingRecipe::result,
-                    (ingredient, stack) -> new GemInfusingRecipe(ingredient,
+                    Ingredient.CONTENTS_STREAM_CODEC, GemCrushingRecipe::ingredient,
+                    ItemStack.STREAM_CODEC, GemCrushingRecipe::result,
+                    (ingredient, stack) -> new GemCrushingRecipe(ingredient,
                             BuiltInRegistries.ITEM.getKey(stack.getItem()), stack.getCount()));
 
-    public static final RecipeSerializer<GemInfusingRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+    public static final RecipeSerializer<GemCrushingRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
     /** Creates the result ItemStack lazily at runtime (safe — DataComponents are bound by then). */
     public ItemStack result() {
@@ -70,13 +70,13 @@ public record GemInfusingRecipe(Ingredient ingredient, Identifier resultId, int 
     }
 
     @Override
-    public RecipeSerializer<GemInfusingRecipe> getSerializer() {
-        return ModRecipes.GEM_INFUSING_SERIALIZER;
+    public RecipeSerializer<GemCrushingRecipe> getSerializer() {
+        return ModRecipes.GEM_CRUSHING_SERIALIZER;
     }
 
     @Override
-    public RecipeType<GemInfusingRecipe> getType() {
-        return ModRecipes.GEM_INFUSING_TYPE;
+    public RecipeType<GemCrushingRecipe> getType() {
+        return ModRecipes.GEM_CRUSHING_TYPE;
     }
 
     @Override

@@ -25,6 +25,9 @@ public class ModItems {
     public static final Item EMERALD_POWDER = register("emerald_powder", Item::new, new Item.Properties());
     public static final Item ECHO_DUST = register("echo_dust", Item::new, new Item.Properties());
     public static final Item QUARTZ_POWDER = register("quartz_powder", Item::new, new Item.Properties());
+    public static final Item RUBY_POWDER = register("ruby_powder", Item::new, new Item.Properties());
+    public static final Item SAPPHIRE_POWDER = register("sapphire_powder", Item::new, new Item.Properties());
+    public static final Item TOPAZ_POWDER = register("topaz_powder", Item::new, new Item.Properties());
     public static final Item SLIMEBALL_DUST = register("slimeball_dust", Item::new, new Item.Properties());
     public static final Item SULFUR_POWDER = register("sulfur_powder", Item::new, new Item.Properties());
     public static final Item POTENT_SULFUR_POWDER = register("potent_sulfur_powder", Item::new, new Item.Properties());
@@ -51,6 +54,8 @@ public class ModItems {
     // Gem Crafting Tools
     public static final Item GEM_CUTTER_TOOL = register("gem_cutter_tool", Item::new,
             new Item.Properties().stacksTo(1).durability(32));
+    public static final Item CRUSHING_HAMMER = register("crushing_hammer", Item::new,
+            new Item.Properties().stacksTo(1));
 
     // Mythril Materials
     public static final Item RAW_MYTHRIL = register("raw_mythril", Item::new, new Item.Properties().stacksTo(64).fireResistant());
@@ -731,8 +736,13 @@ public class ModItems {
                 .register((itemGroup) ->
                         itemGroup.accept(ModItems.EMERALD_POWDER));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
-                .register((itemGroup) ->
-                        itemGroup.accept(ModItems.QUARTZ_POWDER));
+                .register((itemGroup) -> {
+                    itemGroup.accept(ModItems.CITRINE_POWDER);
+                    itemGroup.accept(ModItems.QUARTZ_POWDER);
+                    itemGroup.accept(ModItems.RUBY_POWDER);
+                    itemGroup.accept(ModItems.SAPPHIRE_POWDER);
+                    itemGroup.accept(ModItems.TOPAZ_POWDER);
+                });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) ->
                         itemGroup.accept(ModItems.SLIMEBALL_DUST));
@@ -782,6 +792,7 @@ public class ModItems {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
                 .register((itemGroup) -> {
                     itemGroup.accept(ModItems.GEM_CUTTER_TOOL);
+                    itemGroup.accept(ModItems.CRUSHING_HAMMER);
                 });
 
         // Mythril Tools & Armor - Add to Combat group

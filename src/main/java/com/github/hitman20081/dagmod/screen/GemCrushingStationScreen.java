@@ -8,13 +8,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
-public class GemPolishingStationScreen extends AbstractContainerScreen<GemPolishingStationScreenHandler> {
+public class GemCrushingStationScreen extends AbstractContainerScreen<GemCrushingStationScreenHandler> {
     private static final Identifier GUI_TEXTURE =
-            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "textures/gui/gem_polishing_station_gui.png");
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "textures/gui/gem_crushing_station_gui.png");
 
-    public GemPolishingStationScreen(GemPolishingStationScreenHandler handler, Inventory inventory, Component title) {
-        super(handler, inventory, title, 176, 166);
-        this.inventoryLabelY = 166 - 94;
+    public GemCrushingStationScreen(GemCrushingStationScreenHandler handler, Inventory inventory, Component title) {
+        super(handler, inventory, title, 176, 168);
+        this.inventoryLabelY = 74;
     }
 
     @Override
@@ -23,5 +23,9 @@ public class GemPolishingStationScreen extends AbstractContainerScreen<GemPolish
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
+        if (menu.isCrafting()) {
+            int progress = menu.getScaledProgress();
+            context.fill(x + 88, y + 33, x + 98, y + 33 + progress, 0xFF55AAFF);
+        }
     }
 }

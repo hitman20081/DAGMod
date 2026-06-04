@@ -99,6 +99,7 @@ import java.util.UUID;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.LevelResource;
 
+import com.github.hitman20081.dagmod.potion.ModPotions;
 import static com.github.hitman20081.dagmod.potion.ModPotions.XP_POTION;
 
 public class DagMod implements ModInitializer {
@@ -532,13 +533,19 @@ public class DagMod implements ModInitializer {
 
         FabricPotionBrewingBuilder.BUILD.register(builder -> {
             builder.registerPotionRecipe(
-                    // Input potion.
                     Potions.LUCK,
-                    // Ingredient
                     Ingredient.of(Items.EXPERIENCE_BOTTLE),
-                    // Output potion.
                     BuiltInRegistries.POTION.wrapAsHolder(XP_POTION)
             );
+            // Gem powder potions — brewed from Awkward Potion
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.AMETHYST_POWDER), ModPotions.AMETHYST_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.CITRINE_POWDER), ModPotions.CITRINE_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.DIAMOND_POWDER), ModPotions.DIAMOND_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.EMERALD_POWDER), ModPotions.EMERALD_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.QUARTZ_POWDER), ModPotions.QUARTZ_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.RUBY_POWDER), ModPotions.RUBY_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.SAPPHIRE_POWDER), ModPotions.SAPPHIRE_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.TOPAZ_POWDER), ModPotions.TOPAZ_POTION);
         });
 
         // Register party quest system

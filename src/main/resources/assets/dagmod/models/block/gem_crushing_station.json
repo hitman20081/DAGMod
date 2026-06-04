@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "dagmod:block/gem_polishing_station_texture",
-		"1": "dagmod:block/gem_polishing_station_texture",
+		"0": "dagmod:block/gem_crushing_station_texture",
+		"1": "dagmod:block/gem_crushing_station_texture",
 		"2": "dagmod:block/iron_block",
-		"particle": "dagmod:block/gem_polishing_station_texture"
+		"particle": "dagmod:block/gem_crushing_station_texture"
 	},
 	"elements": [
 		{
