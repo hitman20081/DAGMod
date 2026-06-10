@@ -13,6 +13,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 
+import com.github.hitman20081.dagmod.block.ModBlocks;
+import com.github.hitman20081.dagmod.item.ModItems;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +81,20 @@ public class FortuneDustHandler {
             bonusDrop = new ItemStack(Items.RAW_IRON, fortuneBonus);
         } else if (block == Blocks.GOLD_ORE || block == Blocks.DEEPSLATE_GOLD_ORE) {
             bonusDrop = new ItemStack(Items.RAW_GOLD, fortuneBonus);
+        } else if (block == ModBlocks.CITRINE_ORE || block == ModBlocks.DEEPSLATE_CITRINE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_CITRINE, fortuneBonus);
+        } else if (block == ModBlocks.RUBY_ORE || block == ModBlocks.DEEPSLATE_RUBY_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_RUBY, fortuneBonus);
+        } else if (block == ModBlocks.SAPPHIRE_ORE || block == ModBlocks.DEEPSLATE_SAPPHIRE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_SAPPHIRE, fortuneBonus);
+        } else if (block == ModBlocks.TANZANITE_ORE || block == ModBlocks.DEEPSLATE_TANZANITE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_TANZANITE, fortuneBonus);
+        } else if (block == ModBlocks.ZIRCON_ORE || block == ModBlocks.DEEPSLATE_ZIRCON_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_ZIRCON, fortuneBonus);
+        } else if (block == ModBlocks.PINK_GARNET_DEEPSLATE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_PINK_GARNET, fortuneBonus);
+        } else if (block == ModBlocks.MYTHRIL_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_MYTHRIL, fortuneBonus);
         }
 
         // Drop the bonus items
