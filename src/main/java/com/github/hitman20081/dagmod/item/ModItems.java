@@ -29,8 +29,8 @@ public class ModItems {
     public static final Item SAPPHIRE_POWDER = register("sapphire_powder", Item::new, new Item.Properties());
     public static final Item TOPAZ_POWDER = register("topaz_powder", Item::new, new Item.Properties());
     public static final Item SLIMEBALL_DUST = register("slimeball_dust", Item::new, new Item.Properties());
-    public static final Item SULFUR_POWDER = register("sulfur_powder", Item::new, new Item.Properties());
-    public static final Item POTENT_SULFUR_POWDER = register("potent_sulfur_powder", Item::new, new Item.Properties());
+    public static final Item BRIMSTONE_DUST = register("brimstone_dust", Item::new, new Item.Properties());
+    public static final Item PURE_BRIMSTONE_DUST = register("pure_brimstone_dust", Item::new, new Item.Properties());
 
     // Gem Items
     public static final Item CITRINE = register("citrine", Item::new, new Item.Properties().stacksTo(64));
@@ -748,8 +748,8 @@ public class ModItems {
                         itemGroup.accept(ModItems.SLIMEBALL_DUST));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) -> {
-                    itemGroup.accept(ModItems.SULFUR_POWDER);
-                    itemGroup.accept(ModItems.POTENT_SULFUR_POWDER);
+                    itemGroup.accept(ModItems.BRIMSTONE_DUST);
+                    itemGroup.accept(ModItems.PURE_BRIMSTONE_DUST);
                 });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) ->

@@ -99,7 +99,7 @@ public class AlchemistNPC extends PathfinderMob implements Merchant {
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.EMERALD, 3),
                 java.util.Optional.empty(),
-                new ItemStack(ModItems.SULFUR_POWDER, 4),
+                new ItemStack(ModItems.BRIMSTONE_DUST, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(

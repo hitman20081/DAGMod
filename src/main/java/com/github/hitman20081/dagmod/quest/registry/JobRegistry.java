@@ -10,7 +10,6 @@ import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
@@ -183,7 +182,7 @@ public class JobRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("Creepers have been destroying the farmland. Eliminate them.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
-                .addObjective(new KillObjective(EntityType.CREEPER, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:creeper", 8))
                 .addReward(new ItemReward(Items.EMERALD, 5))
                 .addReward(new ItemReward(Items.GUNPOWDER, 4))
                 .addReward(XpReward.apprentice());
@@ -246,7 +245,7 @@ public class JobRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("Endermen have been stealing blocks from the keep. Drive them off.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
-                .addObjective(new KillObjective(EntityType.ENDERMAN, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:enderman", 5))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(new ItemReward(Items.ENDER_PEARL, 2))
                 .addReward(XpReward.expert());
@@ -269,7 +268,7 @@ public class JobRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("The alchemist needs blaze rods for brewing. Brave the Nether.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
-                .addObjective(new KillObjective(EntityType.BLAZE, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:blaze", 5))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(new ItemReward(Items.BLAZE_ROD, 2))
                 .addReward(XpReward.expert());

@@ -59,15 +59,15 @@ public class KillObjective extends QuestObjective {
 
     // Helper methods for common entities
     public static KillObjective zombies(int amount) {
-        return new KillObjective(EntityType.ZOMBIE, amount);
+        return fromIdentifier("minecraft:zombie", amount);
     }
 
     public static KillObjective skeletons(int amount) {
-        return new KillObjective(EntityType.SKELETON, amount);
+        return fromIdentifier("minecraft:skeleton", amount);
     }
 
     public static KillObjective spiders(int amount) {
-        return new KillObjective(EntityType.SPIDER, amount);
+        return fromIdentifier("minecraft:spider", amount);
     }
 
     @Override

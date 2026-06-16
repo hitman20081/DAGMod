@@ -125,7 +125,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "dagmod:sulfur_powder",
+          "name": "dagmod:brimstone_dust",
           "weight": 6,
           "functions": [
             {

@@ -60,7 +60,7 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.EMERALD, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.RED_BED),
+                new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:red_bed"))),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(

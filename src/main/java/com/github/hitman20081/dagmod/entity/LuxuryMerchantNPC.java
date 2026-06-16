@@ -256,8 +256,8 @@ public class LuxuryMerchantNPC extends PathfinderMob implements Merchant {
         ));
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.EMERALD, 24),
-                Optional.of(new ItemCost(Items.COPPER_BLOCK, 8)),
-                new ItemStack(Items.LIGHTNING_ROD, 4),
+                Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:copper_block")), 8)),
+                new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 4),
                 4, 15, 0.05F
         ));
 

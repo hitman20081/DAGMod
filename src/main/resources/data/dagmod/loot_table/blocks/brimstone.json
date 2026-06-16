@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "dagmod:sulfur"
+          "name": "dagmod:brimstone"
         }
       ],
       "rolls": 1.0

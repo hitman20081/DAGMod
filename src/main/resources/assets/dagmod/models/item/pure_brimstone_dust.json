@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dagmod:item/sulfur"
+    "layer0": "dagmod:item/pure_brimstone_dust"
   }
 }

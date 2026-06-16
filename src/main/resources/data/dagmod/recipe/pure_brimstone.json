@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone",
+    "dagmod:brimstone"
+  ],
+  "result": {
+    "id": "dagmod:pure_brimstone"
+  }
+}

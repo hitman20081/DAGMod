@@ -155,7 +155,7 @@ public class EnchantsmithNPC extends PathfinderMob implements Merchant {
         // ===== SPELL SCROLLS - Advanced =====
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.EMERALD, 16),
-                Optional.of(new ItemCost(Items.LIGHTNING_ROD, 1)),
+                Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 1)),
                 new ItemStack(ModItems.LIGHTNING_SCROLL),
                 3, 15, 0.05F
         ));

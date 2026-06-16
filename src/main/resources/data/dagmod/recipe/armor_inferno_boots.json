@@ -8,7 +8,7 @@
   ],
   "key": {
     "A": "minecraft:iron_boots",
-    "R": "dagmod:sulfur",
+    "R": "minecraft:sulfur",
     "E": "minecraft:blaze_powder"
   },
   "result": {

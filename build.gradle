@@ -65,7 +65,7 @@ jar {
 	}
 }
 
-// MC 26.1.2 uses Mojang official names natively (no ProGuard file), so empty.tiny gives
+// MC 26.x uses Mojang official names natively (no ProGuard file), so empty.tiny gives
 // official→named with no entries. Loom writes fabric.defaultModDistributionNamespace=official
 // to launch.cfg, but Fabric API classTweakers declare namespace=named — causing a mismatch.
 // Patch the generated launch.cfg after every regeneration so the namespace matches.

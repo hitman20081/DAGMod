@@ -202,8 +202,8 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
         // Bed
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.EMERALD, 3),
-                Optional.of(new ItemCost(Items.WHITE_WOOL, 3)),
-                new ItemStack(Items.WHITE_BED),
+                Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:white_wool")), 3)),
+                new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:white_bed"))),
                 6, 5, 0.05F
         ));
         // Bookshelf

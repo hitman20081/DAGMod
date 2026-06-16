@@ -14,6 +14,6 @@ public class QuestBookClientHandler {
     public static void openQuestBook(QuestData.QuestBookTier tier) {
         // Request fresh quest data from server before opening the screen
         ClientPlayNetworking.send(new QuestRequestPacket());
-        Minecraft.getInstance().setScreen(new QuestBookScreen(tier));
+        Minecraft.getInstance().setScreenAndShow(new QuestBookScreen(tier));
     }
 }

@@ -196,13 +196,13 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.METAL)));
 
-    public static final Block SULFUR = register("sulfur",
+    public static final Block BRIMSTONE = register("brimstone",
             key -> new Block(BlockBehaviour.Properties.of()
                     .setId(key)
                     .strength(1.5f, 2.0f)
                     .sound(SoundType.STONE)));
 
-    public static final Block POTENT_SULFUR = register("potent_sulfur",
+    public static final Block PURE_BRIMSTONE = register("pure_brimstone",
             key -> new Block(BlockBehaviour.Properties.of()
                     .setId(key)
                     .strength(2.0f, 3.0f)
@@ -359,8 +359,8 @@ public class ModBlocks {
         // Sulfur Blocks
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
                 .register((itemGroup) -> {
-                    itemGroup.accept(SULFUR);
-                    itemGroup.accept(POTENT_SULFUR);
+                    itemGroup.accept(BRIMSTONE);
+                    itemGroup.accept(PURE_BRIMSTONE);
                 });
 
         // Gem Storage Blocks - Add to Building Blocks group

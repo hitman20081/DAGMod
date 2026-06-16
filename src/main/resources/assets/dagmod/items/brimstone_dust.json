@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "dagmod:item/sulfur_powder"
+    "model": "dagmod:item/brimstone_dust"
   }
 }

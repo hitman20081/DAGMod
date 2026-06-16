@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "dagmod:block/sulfur"
+    "all": "dagmod:block/brimstone"
   }
 }

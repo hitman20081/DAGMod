@@ -252,7 +252,7 @@ public class DragonSpawner {
         int rand = random.nextInt(100);
         if (rand < 35) return Blocks.GOLD_BLOCK;
         if (rand < 60) return Blocks.IRON_BLOCK;
-        if (rand < 75) return Blocks.COPPER_BLOCK;
+        if (rand < 75) return ((net.minecraft.world.level.block.Block) net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:copper_block")));
         if (rand < 85) return Blocks.EMERALD_BLOCK;
         if (rand < 93) return Blocks.DIAMOND_BLOCK;
         return Blocks.LAPIS_BLOCK;
@@ -264,7 +264,7 @@ public class DragonSpawner {
     private static Block getRandomShinyBlock() {
         int rand = random.nextInt(100);
         if (rand < 40) return Blocks.IRON_BLOCK;
-        if (rand < 70) return Blocks.COPPER_BLOCK;
+        if (rand < 70) return ((net.minecraft.world.level.block.Block) net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:copper_block")));
         if (rand < 85) return Blocks.GOLD_BLOCK;
         return Blocks.QUARTZ_BLOCK;
     }

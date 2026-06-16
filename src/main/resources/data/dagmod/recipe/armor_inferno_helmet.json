@@ -7,7 +7,7 @@
   ],
   "key": {
     "A": "minecraft:iron_helmet",
-    "R": "dagmod:sulfur",
+    "R": "minecraft:sulfur",
     "E": "minecraft:blaze_powder"
   },
   "result": {

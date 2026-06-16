@@ -232,25 +232,25 @@ public class RotatingTradeRegistry {
         rotations.add(Arrays.asList(
                 new MerchantOffer(
                         new ItemCost(Items.DIAMOND, 10),
-                        Optional.of(new ItemCost(Items.LIGHTNING_ROD, 2)),
+                        Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 2)),
                         new ItemStack(ModItems.STORMCALLER_HELMET),
                         1, 18, 0.05F
                 ),
                 new MerchantOffer(
                         new ItemCost(Items.DIAMOND, 14),
-                        Optional.of(new ItemCost(Items.LIGHTNING_ROD, 3)),
+                        Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 3)),
                         new ItemStack(ModItems.STORMCALLER_CHESTPLATE),
                         1, 18, 0.05F
                 ),
                 new MerchantOffer(
                         new ItemCost(Items.DIAMOND, 12),
-                        Optional.of(new ItemCost(Items.LIGHTNING_ROD, 2)),
+                        Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 2)),
                         new ItemStack(ModItems.STORMCALLER_LEGGINGS),
                         1, 18, 0.05F
                 ),
                 new MerchantOffer(
                         new ItemCost(Items.DIAMOND, 8),
-                        Optional.of(new ItemCost(Items.LIGHTNING_ROD, 1)),
+                        Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 1)),
                         new ItemStack(ModItems.STORMCALLER_BOOTS),
                         1, 18, 0.05F
                 )

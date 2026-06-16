@@ -191,8 +191,13 @@ public class SpellScrollItem extends Item {
         Vec3 strikePos = hitResult.getLocation();
 
         if (world instanceof ServerLevel serverWorld) {
+            @SuppressWarnings("unchecked")
+            net.minecraft.world.entity.EntityType<net.minecraft.world.entity.LightningBolt> lightningType =
+                    (net.minecraft.world.entity.EntityType<net.minecraft.world.entity.LightningBolt>)
+                    net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getValue(
+                            net.minecraft.resources.Identifier.parse("minecraft:lightning_bolt"));
             net.minecraft.world.entity.LightningBolt lightning =
-                    net.minecraft.world.entity.EntityType.LIGHTNING_BOLT.create(serverWorld, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+                    lightningType.create(serverWorld, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
             if (lightning != null) {
                 lightning.setPos(strikePos);
                 world.addFreshEntity(lightning);
@@ -307,8 +312,13 @@ public class SpellScrollItem extends Item {
     }
 
     private void spawnLightningAt(ServerLevel world, Vec3 pos) {
-        net.minecraft.world.entity.LightningBolt bolt = net.minecraft.world.entity.EntityType.LIGHTNING_BOLT
-                .create(world, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        @SuppressWarnings("unchecked")
+        net.minecraft.world.entity.EntityType<net.minecraft.world.entity.LightningBolt> lightningType =
+                (net.minecraft.world.entity.EntityType<net.minecraft.world.entity.LightningBolt>)
+                net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getValue(
+                        net.minecraft.resources.Identifier.parse("minecraft:lightning_bolt"));
+        net.minecraft.world.entity.LightningBolt bolt =
+                lightningType.create(world, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
         if (bolt != null) { bolt.setPos(pos); world.addFreshEntity(bolt); }
     }
 

@@ -48,7 +48,7 @@ public class PartyHUD {
     private static void render(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
         Minecraft client = Minecraft.getInstance();
 
-        if (client.options.hideGui) return;
+        if (client.gui.hud.isHidden()) return;
         if (client.player == null) return;
 
         PartyData party = ClientPartyData.getLocalPartyData();
