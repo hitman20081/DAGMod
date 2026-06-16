@@ -8,79 +8,48 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.8.0 — MC 26.1.2 Migration, Gem Powder System & Shield Fixes
-**Released:** 2026-06-04
+## v1.8.1 — MC 26.2 Migration & Brimstone Rename
+**Released:** 2026-06-16
 
 ---
 
-## What's New in v1.8.0
+## What's New in v1.8.1
 
-### Minecraft 26.1.2 Migration
+### Minecraft 26.2 Migration
 
-DAGMod has been fully ported to **Minecraft 26.1.2** (Mojang official mappings). This is a required update — v1.7.x is not compatible with 26.1.2 clients or servers.
+DAGMod has been fully ported to **Minecraft 26.2** ("Chaos Cubed"). This is a required update — v1.8.0 is not compatible with MC 26.2 clients or servers.
 
 Updated dependencies:
-- Fabric Loader 0.19.2
-- Fabric API 0.149.1+26.1.2
-- Java 25 (temurin-25.0.3)
+- Fabric Loader 0.19.3
+- Fabric API 0.150.2+26.2
+- Fabric Loom 1.17.11
 
 ---
 
-### Potent Sulfur Powder
+### Brimstone Rename
 
-A new high-tier crafting material is now available:
+The old `dagmod:sulfur` and `dagmod:potent_sulfur` blocks and items have been repurposed and renamed:
 
-- **Recipe**: 9× Sulfur Powder → 1 Potent Sulfur Powder (crafting table)
-- Used as a premium component in fire-themed crafting recipes (Inferno armor, fire weapons)
-- Sulfur block and item now have complete registration, models, and textures
+- `dagmod:sulfur` → **`dagmod:brimstone`**
+- `dagmod:potent_sulfur` → **`dagmod:pure_brimstone`**
 
----
-
-### Gem Powder System
-
-All 8 gem types can now be processed into powder using the new **Gem Crushing Station**:
-
-- **Gem Crushing Station** — Place a Crushing Hammer in the tool slot, then insert a raw gem to grind it into powder. Faces the player on placement like a furnace
-- **Crushing Hammer** — New craftable tool (iron ingots + stick) required to run the station
-- **Ruby, Sapphire, and Topaz Powder** — The final 3 gem powder forms, completing the full set
-
-Each powder can be brewed with an Awkward Potion at a brewing stand:
-
-| Gem Powder | Potion of... | Effects |
-|---|---|---|
-| Amethyst | Revival | Regeneration II (45s) + Absorption (2min) |
-| Citrine | Clarity | Night Vision (5min) + Haste (3min) |
-| Diamond | Fortitude | Resistance (5min) + Health Boost (5min) |
-| Emerald | Growth | Strength (3min) + Regeneration (3min) |
-| Quartz | Swiftness | Haste II (3min) + Jump Boost (3min) |
-| Ruby | Fury | Strength II (30s) + Fire Resistance (3min) |
-| Sapphire | the Deep | Speed II (3min) + Water Breathing (3min) |
-| Topaz | Fortune | Luck (5min) + Haste II (2min) |
-
----
-
-### Bone Dungeon Improvements
-
-- Portal room spawn reliability increased — the portal room was previously inconsistent in certain dungeon seeds
-- Treasure density in portal rooms and surrounding chambers increased
-
----
-
-### Locked Bone Chest Texture
-
-The locked chest in the Bone Realm and bone dungeons now correctly displays the custom `bone_realm_locked_chest` texture in-world. The chest renderer mixin was ported to MC 26.1.2's new `extractRenderState`/`submit` rendering pipeline.
+Recipes updated:
+- **Inferno armor and fire weapons** now use vanilla `minecraft:sulfur` and `minecraft:potent_sulfur`
+- **High-end fire magic** (fireball scrolls, Meteor Storm, Phoenix potions) now requires the new brimstone materials
 
 ---
 
 ## Bug Fixes
 
-- **All 9 custom shield handles pointed outward** — Custom shield `items/*.json` definitions were missing `"transformation": {"scale": [1, -1, -1]}`. Fixed for Inferno, Celestial, Crystal, Dragonbone, Frost, Nature, Shadow, Solar, and Stormguard shields
-- **Vanilla shield handle also broken** — The mod was overriding `assets/minecraft/items/shield.json` without the orientation transformation. Override removed; vanilla's correct definition now applies
-- **Startup model/texture warnings** — Corrected a wrong model reference in `boss_spawn_trigger.json` and replaced a deleted texture reference on the Inferno shield with a valid atlas texture
-- **Seasons predicates** — Fixed three consecutive seasons predicate parsing failures (array format, missing `clock` field, unparseable file)
-- **Dynamic lighting terrain not updating** — After the 26.1.2 migration, `scheduleBlockRenders` had been removed without a replacement; terrain blocks were not picking up the held-item light boost (entity rendering still worked). Fixed using `LevelRenderer.setSectionRangeDirty()`. A second fix addressed stale light remaining after swapping away from a light source while standing still
-- **Gem Crushing Station wrong texture** — Block model referenced a nonexistent texture name; corrected to `gem_crushing_station_texture`
-- **Citrine Powder missing from Creative Tab** — Was omitted from the item tab registration
+- **MC 26.2 API: EntityType static fields removed** — All `EntityType.ZOMBIE`, `EntityType.SKELETON`, etc. static references replaced with registry lookups across `KillObjective`, `QuestRegistry`, and `JobRegistry`
+- **MC 26.2 API: WeatheringCopperCollection type** — `Items.LIGHTNING_ROD`, `Items.COPPER_BLOCK`, and `Blocks.COPPER_BLOCK` changed type in MC 26.2; replaced with registry lookups in all NPC and merchant classes
+- **MC 26.2 API: Removed Items statics** — `Items.WHITE_WOOL`, `Items.WHITE_BED`, `Items.RED_BED` removed; replaced with registry lookups in `LumberjackNPC` and `VillageMerchantNPC`
+- **MC 26.2 API: EntityType.LIGHTNING_BOLT removed** — Replaced with registry lookup and unchecked cast in `SpellScrollItem`
+- **MC 26.2 API: Options.hideGui removed** — HUD hide check updated to `client.gui.hud.isHidden()` in `ProgressionHUD` and `PartyHUD`
+- **MC 26.2 API: Minecraft.setScreen() removed** — `QuestBookClientHandler` updated to `setScreenAndShow()`
+- **MC 26.2 API: LevelRenderer.setSectionRangeDirty() moved** — Dynamic lighting now correctly calls `ClientLevel.setSectionRangeDirty()` (method moved from `LevelRenderer` to `ClientLevel` in MC 26.2)
+- **MC 26.2 data: Enchantment entity predicate format** — Entity type tag predicates inside enchantment JSON effects changed from `{"type": "#minecraft:tag"}` to `{"minecraft:entity_type": "#minecraft:tag"}`. Fixed in 6 enchantments: `bane_of_white_walker`, `lights_blessing`, `rise_of_the_zombies`, `siphon_enchantment`, `summon_enchantment`, `xdamage_enchantment`
+- **MC 26.2 data: Tree feature missing field** — `charred_tree` configured feature updated with the new required `below_trunk_provider` field
 
 ---
 
@@ -88,9 +57,9 @@ The locked chest in the Bone Realm and bone dungeons now correctly displays the 
 
 | Component | Version |
 |---|---|
-| Minecraft | 26.1.2 |
-| Fabric Loader | 0.19.2+ |
-| Fabric API | 0.149.1+26.1.2 |
+| Minecraft | 26.2 |
+| Fabric Loader | 0.19.3+ |
+| Fabric API | 0.150.2+26.2 |
 
 ---
 
@@ -100,21 +69,20 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.8.0 `.jar` and ensure your Fabric Loader is updated to 0.19.2+
-4. Launch Minecraft 26.1.2
+3. Install the v1.8.1 `.jar` and update Fabric Loader to 0.19.3+
+4. Launch Minecraft 26.2
 
 ### Migration Notes
 
-- **Minecraft version change** — This update requires Minecraft 26.1.2. You must update your client and server
-- **No world regen required** — Existing worlds load without issue. Race, class, level, and quest data are fully preserved
-- **Chunk artifacts** — Existing pre-generated chunks may show minor terrain or lighting inconsistencies at chunk borders. If you notice issues, use [MCA Selector](https://github.com/Querys/mcaselector) to prune and regenerate affected unvisited chunks
-- **Dynamic Lighting** — Terrain lighting (`LevelRenderer.setSectionRangeDirty()`) and stale-light clearing are fully fixed in this release
+- **Minecraft version change** — This update requires Minecraft 26.2. You must update your client and server
+- **Brimstone rename** — If you have `dagmod:sulfur` or `dagmod:potent_sulfur` blocks or items in an existing world, they will become air/missing items after updating. Pick them up before updating or expect them to disappear
+- **No world regen required** — All other progress (race, class, level, quests) carries over without issue
 
 ---
 
 ## Known Issues
 
-- **MC 26.1.2 chunk artifacts** — Pre-existing chunks may have minor artifacts; recommend MCA Selector chunk pruning for affected areas
+- **Pre-existing chunk artifacts** — Chunks generated on older versions may show minor terrain or lighting artifacts at borders. Use [MCA Selector](https://github.com/Querys/mcaselector) to prune unvisited chunks if needed
 - Harmless "Block-attached entity at invalid position" warnings in server logs during worldgen (vanilla Minecraft issue, no gameplay impact)
 - See [GitHub Issues](https://github.com/hitman20081/DAGMod/issues) for anything else reported
 
@@ -133,6 +101,7 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 | Version | Summary |
 |---|---|
+| v1.8.0 | MC 26.1.2 migration, Gem Powder System, Gem Crushing Station, shield handle fixes |
 | v1.7.10 | Quest book overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting |
 | v1.7.9 | Seasons setup system, Skeleton Kingdom structure chain, jigsaw anchor fix |
 | v1.7.8 | Skeleton King boss encounter, boss rebalance, seasons datapack |

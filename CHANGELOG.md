@@ -5,6 +5,25 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.1] - 2026-06-16
+
+### Changed
+
+- **Minecraft 26.2 migration** — Ported the mod from MC 26.1.2 to MC 26.2 ("Chaos Cubed"). Updated to Fabric Loader 0.19.3 and Fabric API 0.150.2+26.2
+- **Brimstone rename** — `dagmod:sulfur` and `dagmod:potent_sulfur` blocks and items renamed to `dagmod:brimstone` and `dagmod:pure_brimstone`. Inferno armor and fire weapons now use vanilla `minecraft:sulfur` and `minecraft:potent_sulfur`; high-end fire magic recipes use the new brimstone materials
+
+### Fixed
+
+- **MC 26.2 removed EntityType static fields** — All `EntityType.ZOMBIE`, `EntityType.SKELETON`, etc. references replaced with registry lookups via `BuiltInRegistries.ENTITY_TYPE.getValue()` in `KillObjective`, `QuestRegistry`, and `JobRegistry`
+- **MC 26.2 WeatheringCopperCollection type change** — `Items.LIGHTNING_ROD`, `Items.COPPER_BLOCK`, and `Blocks.COPPER_BLOCK` return `WeatheringCopperCollection` in MC 26.2; replaced all references with registry lookups
+- **MC 26.2 removed Items statics** — `Items.WHITE_WOOL`, `Items.WHITE_BED`, and `Items.RED_BED` removed as static fields; replaced with registry lookups in NPC entity classes
+- **MC 26.2 EntityType.LIGHTNING_BOLT removed** — Replaced with registry lookup and unchecked cast in `SpellScrollItem`
+- **MC 26.2 Options.hideGui removed** — HUD hide check updated from `client.options.hideGui` to `client.gui.hud.isHidden()` in `ProgressionHUD` and `PartyHUD`
+- **MC 26.2 Minecraft.setScreen() removed** — `QuestBookClientHandler` updated to use `setScreenAndShow()`
+- **MC 26.2 LevelRenderer.setSectionRangeDirty() moved** — Dynamic lighting chunk dirty call updated to use `ClientLevel.setSectionRangeDirty()` (moved from `LevelRenderer` to `ClientLevel` in MC 26.2)
+- **MC 26.2 enchantment entity predicate format** — Entity type tag predicates inside enchantment JSON effects changed from `{"type": "#minecraft:tag"}` to `{"minecraft:entity_type": "#minecraft:tag"}` (registry key `minecraft:type` removed from `entity_sub_predicate_type` in MC 26.2). Fixed in `bane_of_white_walker`, `lights_blessing`, `rise_of_the_zombies`, `siphon_enchantment`, `summon_enchantment`, and `xdamage_enchantment`
+- **MC 26.2 tree feature missing field** — `charred_tree` configured feature now includes the new required `below_trunk_provider` field
+
 ## [1.8.0] - 2026-06-04
 
 ### Added
