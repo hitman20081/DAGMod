@@ -30,10 +30,10 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "type": "#minecraft:skeletons",
             "flags": {
               "is_sneaking": true
-            }
+            },
+            "minecraft:entity_type": "#minecraft:skeletons"
           }
         }
       }

@@ -23,7 +23,7 @@
           "predicate": {
             "tags": [],
             "source_entity": {
-              "type": "#minecraft:zombies"
+              "minecraft:entity_type": "#minecraft:zombies"
             }
           }
         },

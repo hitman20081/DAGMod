@@ -20,7 +20,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "type": "#minecraft:freeze_immune_entity_types"
+            "minecraft:entity_type": "#minecraft:freeze_immune_entity_types"
           }
         }
       }
@@ -48,7 +48,7 @@
               "condition": "minecraft:entity_properties",
               "entity": "this",
               "predicate": {
-                "type": "#minecraft:freeze_immune_entity_types"
+                "minecraft:entity_type": "#minecraft:freeze_immune_entity_types"
               }
             },
             {
