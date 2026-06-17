@@ -17,20 +17,20 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.8.1 (June 2026)
+Current Version v1.8.2 (June 2026)
 
 ---
 
-## What's New in v1.8.1
+## What's New in v1.8.2
 
-### Minecraft 26.2 Migration
-DAGMod has been fully ported to Minecraft 26.2 ("Chaos Cubed"). Requires Fabric Loader 0.19.3 and Fabric API 0.150.2+26.2.
+### Village NPC Structures
+7 standalone NPC buildings now generate across plains, forest, and taiga biomes — inn, tavern, two shops, traders, jeweler, and blacksmith. Each is individually locatable with `/locate structure dagmod:<name>`.
 
-### Brimstone Rename
-`dagmod:sulfur` and `dagmod:potent_sulfur` have been renamed to `dagmod:brimstone` and `dagmod:pure_brimstone`. Inferno armor and fire weapons now use vanilla `minecraft:sulfur`; high-end fire magic uses the new brimstone materials.
+### Dynamic Lighting Fix
+Held-item lighting now correctly illuminates terrain blocks as you move. The chunk rebuild system was passing block coordinates where section coordinates were required, causing terrain around the world origin to update instead of chunks near the player.
 
-### MC 26.2 Compatibility Fixes
-All API breakages from MC 26.2 resolved — EntityType static fields, WeatheringCopperCollection types, HUD hide check, screen switching, dynamic lighting chunk updates, enchantment entity predicate format, and tree feature schema.
+### Hall of Champions Rarity
+Halls now generate ~2.5× less frequently, freeing up world space for other structures.
 
 See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 

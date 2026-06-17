@@ -8,48 +8,39 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.8.1 — MC 26.2 Migration & Brimstone Rename
-**Released:** 2026-06-16
+## v1.8.2 — Village NPC Structures & Dynamic Lighting Fix
+**Released:** 2026-06-17
 
 ---
 
-## What's New in v1.8.1
+## What's New in v1.8.2
 
-### Minecraft 26.2 Migration
+### Village NPC Structures
 
-DAGMod has been fully ported to **Minecraft 26.2** ("Chaos Cubed"). This is a required update — v1.8.0 is not compatible with MC 26.2 clients or servers.
+7 standalone NPC buildings now generate across plains, forest, and taiga biomes. Each is an independent structure locatable with `/locate structure dagmod:<name>`:
 
-Updated dependencies:
-- Fabric Loader 0.19.3
-- Fabric API 0.150.2+26.2
-- Fabric Loom 1.17.11
+- `village_inn` — traveller's rest stop
+- `village_tavern` — drinks and rumours
+- `village_shop_1` / `village_shop_2` — general goods
+- `village_traders_1` — roaming merchant stall
+- `village_jeweler` — gems and fine wares
+- `village_blacksmith` — weapons and repairs
 
----
-
-### Brimstone Rename
-
-The old `dagmod:sulfur` and `dagmod:potent_sulfur` blocks and items have been repurposed and renamed:
-
-- `dagmod:sulfur` → **`dagmod:brimstone`**
-- `dagmod:potent_sulfur` → **`dagmod:pure_brimstone`**
-
-Recipes updated:
-- **Inferno armor and fire weapons** now use vanilla `minecraft:sulfur` and `minecraft:potent_sulfur`
-- **High-end fire magic** (fireball scrolls, Meteor Storm, Phoenix potions) now requires the new brimstone materials
+Buildings share a placement grid (spacing 16 chunks / 256 blocks) so you'll find a mix of types within a reasonable exploration radius.
 
 ---
 
 ## Bug Fixes
 
-- **MC 26.2 API: EntityType static fields removed** — All `EntityType.ZOMBIE`, `EntityType.SKELETON`, etc. static references replaced with registry lookups across `KillObjective`, `QuestRegistry`, and `JobRegistry`
-- **MC 26.2 API: WeatheringCopperCollection type** — `Items.LIGHTNING_ROD`, `Items.COPPER_BLOCK`, and `Blocks.COPPER_BLOCK` changed type in MC 26.2; replaced with registry lookups in all NPC and merchant classes
-- **MC 26.2 API: Removed Items statics** — `Items.WHITE_WOOL`, `Items.WHITE_BED`, `Items.RED_BED` removed; replaced with registry lookups in `LumberjackNPC` and `VillageMerchantNPC`
-- **MC 26.2 API: EntityType.LIGHTNING_BOLT removed** — Replaced with registry lookup and unchecked cast in `SpellScrollItem`
-- **MC 26.2 API: Options.hideGui removed** — HUD hide check updated to `client.gui.hud.isHidden()` in `ProgressionHUD` and `PartyHUD`
-- **MC 26.2 API: Minecraft.setScreen() removed** — `QuestBookClientHandler` updated to `setScreenAndShow()`
-- **MC 26.2 API: LevelRenderer.setSectionRangeDirty() moved** — Dynamic lighting now correctly calls `ClientLevel.setSectionRangeDirty()` (method moved from `LevelRenderer` to `ClientLevel` in MC 26.2)
-- **MC 26.2 data: Enchantment entity predicate format** — Entity type tag predicates inside enchantment JSON effects changed from `{"type": "#minecraft:tag"}` to `{"minecraft:entity_type": "#minecraft:tag"}`. Fixed in 6 enchantments: `bane_of_white_walker`, `lights_blessing`, `rise_of_the_zombies`, `siphon_enchantment`, `summon_enchantment`, `xdamage_enchantment`
-- **MC 26.2 data: Tree feature missing field** — `charred_tree` configured feature updated with the new required `below_trunk_provider` field
+- **Dynamic lighting terrain not updating** — `setSectionRangeDirty` was receiving raw block coordinates instead of section coordinates (1 section = 16 blocks), so terrain chunks near the world origin were being marked dirty instead of chunks around the player. Lighting now correctly illuminates terrain as you move
+- **Village NPC structure set not loading** — The old jigsaw setup referenced a missing `village_docks.nbt`, causing the entire structure set to silently fail on world init and preventing `/locate structure` from working at all
+
+---
+
+## Changes
+
+- **Hall of Champions rarity** — Spacing increased 40→64 chunks, separation 12→20. Halls are now ~2.5× rarer (one per ~1024 blocks vs ~640 blocks). Reduces overcrowding and frees up world space for other structures
+- **Village exclusion zones reduced** — Hall exclusion radius around villages reduced 15→8 chunks; bone dungeon exclusion 12→6 chunks
 
 ---
 
@@ -69,14 +60,10 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.8.1 `.jar` and update Fabric Loader to 0.19.3+
+3. Install the v1.8.2 `.jar`
 4. Launch Minecraft 26.2
 
-### Migration Notes
-
-- **Minecraft version change** — This update requires Minecraft 26.2. You must update your client and server
-- **Brimstone rename** — If you have `dagmod:sulfur` or `dagmod:potent_sulfur` blocks or items in an existing world, they will become air/missing items after updating. Pick them up before updating or expect them to disappear
-- **No world regen required** — All other progress (race, class, level, quests) carries over without issue
+> **Note:** Village NPC structures only generate in newly explored chunks. Use `/locate structure dagmod:village_inn` (or any building name) to find the nearest one.
 
 ---
 
@@ -101,6 +88,7 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 | Version | Summary |
 |---|---|
+| v1.8.1 | MC 26.2 migration (Fabric Loader 0.19.3, Fabric API 0.150.2+26.2), brimstone rename |
 | v1.8.0 | MC 26.1.2 migration, Gem Powder System, Gem Crushing Station, shield handle fixes |
 | v1.7.10 | Quest book overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting |
 | v1.7.9 | Seasons setup system, Skeleton Kingdom structure chain, jigsaw anchor fix |

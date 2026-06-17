@@ -5,6 +5,22 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2026-06-17
+
+### Added
+
+- **Village NPC structures** — 7 individual standalone structures now generate in plains, forest, and taiga biomes: `village_inn`, `village_tavern`, `village_shop_1`, `village_shop_2`, `village_traders_1`, `village_jeweler`, `village_blacksmith`. Each is individually locatable via `/locate structure dagmod:<name>`
+
+### Fixed
+
+- **Dynamic lighting terrain not updating** — `setSectionRangeDirty` was being called with raw block coordinates instead of section coordinates (1 section = 16 blocks), so terrain chunks around the world origin were being marked dirty instead of the chunks around the player. Lighting now correctly updates terrain as you move
+- **Village NPC structure set not loading** — Old jigsaw setup referenced a missing `village_docks.nbt`, causing the entire structure set to fail to load on world init. Replaced with 7 individual structures, each with its own template pool
+
+### Changed
+
+- **Hall of Champions rarity** — Spacing increased from 40→64 chunks, separation from 12→20. Halls now generate roughly 2.5× less frequently (one per ~1024 blocks instead of ~640 blocks)
+- **Village NPC exclusion zones** — Hall of Champions exclusion radius reduced from 15→8 chunks; bone dungeon exclusion reduced from 12→6 chunks
+
 ## [1.8.1] - 2026-06-16
 
 ### Changed
