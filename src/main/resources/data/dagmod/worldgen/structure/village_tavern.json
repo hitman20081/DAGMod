@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
-  "start_pool": "dagmod:village_npc/town_center",
-  "size": 4,
+  "start_pool": "dagmod:village_npc/tavern",
+  "size": 1,
   "max_distance_from_center": 80,
   "biomes": "#dagmod:has_structure/village_npc",
   "step": "surface_structures",

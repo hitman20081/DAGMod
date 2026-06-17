@@ -142,12 +142,17 @@ public class DagModClient implements ClientModInitializer {
             if (DynamicLightManager.needsChunkRebuild(playerPos, newRadius) && client.levelRenderer != null) {
                 int oldRadius = DynamicLightManager.getLastRebuildRadius();
 
-                // Dirty sections within new light radius so they pick up the boost
+                // Dirty sections within new light radius so they pick up the boost.
+                // setSectionRangeDirty takes section coords (1 section = 16 blocks).
                 if ((newRadius > 0 || oldRadius > 0) && client.level != null) {
                     int r = Math.max(newRadius, oldRadius);
                     client.level.setSectionRangeDirty(
-                            playerPos.getX() - r, playerPos.getY() - r, playerPos.getZ() - r,
-                            playerPos.getX() + r, playerPos.getY() + r, playerPos.getZ() + r
+                            net.minecraft.core.SectionPos.blockToSectionCoord(playerPos.getX() - r),
+                            net.minecraft.core.SectionPos.blockToSectionCoord(playerPos.getY() - r),
+                            net.minecraft.core.SectionPos.blockToSectionCoord(playerPos.getZ() - r),
+                            net.minecraft.core.SectionPos.blockToSectionCoord(playerPos.getX() + r),
+                            net.minecraft.core.SectionPos.blockToSectionCoord(playerPos.getY() + r),
+                            net.minecraft.core.SectionPos.blockToSectionCoord(playerPos.getZ() + r)
                     );
                 }
 

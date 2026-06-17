@@ -7,16 +7,7 @@
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
-      "weight": 3
-    },
-    {
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "dagmod:village_npc/village_tavern",
-        "processors": "minecraft:empty",
-        "projection": "rigid"
-      },
-      "weight": 2
+      "weight": 1
     }
   ],
   "fallback": "minecraft:empty"
