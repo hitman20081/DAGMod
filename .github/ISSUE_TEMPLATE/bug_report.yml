@@ -1,0 +1,72 @@
+name: Bug Report
+description: Report something that isn't working correctly in DAGMod
+title: "[Bug]: "
+labels: ["bug", "status:needs-repro"]
+body:
+  - type: input
+    id: mod-version
+    attributes:
+      label: DAGMod Version
+      placeholder: "e.g. v1.7.10"
+    validations:
+      required: true
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft / Fabric Loader / Fabric API Versions
+      placeholder: "e.g. MC 1.21.11, Fabric Loader 0.18.4, Fabric API 0.141.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected Area
+      options:
+        - Races/Classes
+        - Quests
+        - Abilities/Combat
+        - Dungeons/Bosses
+        - Loot/Items
+        - Merchants/Trading
+        - Parties/Multiplayer
+        - Dimensions/Portals
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Crash Report
+      description: Paste relevant log output or a link to a paste site (e.g. gist, pastebin)
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: other-mods
+    attributes:
+      label: Other Mods
+      options:
+        - label: This happens with only DAGMod installed (no other mods)
