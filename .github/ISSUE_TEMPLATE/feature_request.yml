@@ -1,0 +1,39 @@
+name: Feature Request
+description: Suggest an idea, quest, item, or mechanic for DAGMod
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Related Area
+      options:
+        - Races/Classes
+        - Quests
+        - Abilities/Combat
+        - Dungeons/Bosses
+        - Loot/Items
+        - Merchants/Trading
+        - Parties/Multiplayer
+        - Dimensions/Portals
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem or gap does this address?
+    validations:
+      required: false
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Describe your idea
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
