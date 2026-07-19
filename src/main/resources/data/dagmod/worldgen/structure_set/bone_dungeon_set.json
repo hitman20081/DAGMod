@@ -10,6 +10,7 @@
     "salt": 14357621,
     "spacing": 40,
     "separation": 12,
+    "avoid_water": true,
     "exclusion_zones": [
       { "other_set": "dagmod:hall_spawn",      "chunk_count": 16 },
       { "other_set": "dagmod:village_npc_set", "chunk_count": 6 }
