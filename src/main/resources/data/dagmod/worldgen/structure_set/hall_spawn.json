@@ -6,9 +6,12 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "dagmod:multi_exclusion_random_spread",
     "salt": 1648920074,
     "spacing": 64,
-    "separation": 20
+    "separation": 20,
+    "exclusion_zones": [
+      { "other_set": "dagmod:bone_dungeon_set", "chunk_count": 16 }
+    ]
   }
 }
