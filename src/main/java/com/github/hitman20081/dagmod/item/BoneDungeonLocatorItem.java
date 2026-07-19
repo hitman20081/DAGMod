@@ -1,7 +1,6 @@
 package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.DagMod;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -28,12 +27,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class BoneDungeonLocatorItem extends Item {
 
-    // Dungeon starts at absolute Y=-15 because STRUCTURE_STARTS runs before terrain
-    // generation, so project_start_to_heightmap: WORLD_SURFACE_WG returns 0.
+    // Dungeon always starts at absolute Y=-15 because STRUCTURE_STARTS runs before
+    // terrain generation, so project_start_to_heightmap: WORLD_SURFACE_WG returns 0.
     static final int DUNGEON_START_Y = -15;
 
-    private static final int BIOME_SEARCH_RADIUS = 8000;
-    private static final int SEARCH_REGIONS = 2;
+    // spacing=40 × SEARCH_REGIONS=10 = ±400 chunks = ±6400 blocks from player
+    private static final int SEARCH_REGIONS = 10;
 
     public BoneDungeonLocatorItem(Properties settings) {
         super(settings);
@@ -76,61 +75,52 @@ public class BoneDungeonLocatorItem extends Item {
         // Pure math — no chunk loading, no server thread blocking.
         CompletableFuture.runAsync(() -> {
             try {
-                // Find nearest eligible biome (pure noise, no chunk loading).
-                Pair<BlockPos, ?> biomeResult = null;
-                try {
-                    biomeResult = serverWorld.findClosestBiome3d(
-                            biome -> biome.is(BiomeTags.IS_BADLANDS) || biome.is(Biomes.DESERT),
-                            new BlockPos(playerPos.getX(), 64, playerPos.getZ()),
-                            BIOME_SEARCH_RADIUS, 32, 64);
-                } catch (Exception ignored) {}
+                int spacing = spreadPlacement.spacing();
+                long worldSeed = serverWorld.getSeed();
+                int playerChunkX = playerPos.getX() >> 4;
+                int playerChunkZ = playerPos.getZ() >> 4;
 
-                if (biomeResult == null) {
+                // For every grid region within SEARCH_REGIONS, compute the candidate chunk
+                // and verify the biome there is actually eligible (desert/badlands). This
+                // filters out candidates that fall outside the biome, which would otherwise
+                // point to empty underground and look like vanilla dungeon spawner rooms.
+                List<BlockPos> candidates = new ArrayList<>();
+                for (int dr = -SEARCH_REGIONS; dr <= SEARCH_REGIONS; dr++) {
+                    for (int dc = -SEARCH_REGIONS; dc <= SEARCH_REGIONS; dc++) {
+                        ChunkPos cp = spreadPlacement.getPotentialStructureChunk(
+                                worldSeed,
+                                playerChunkX + dr * spacing,
+                                playerChunkZ + dc * spacing);
+                        // getNoiseBiome uses quart coords (>> 2); Y=16 quarts = block Y=64 (surface)
+                        var biome = serverWorld.getNoiseBiome(cp.getMiddleBlockX() >> 2, 16, cp.getMiddleBlockZ() >> 2);
+                        if (biome.is(BiomeTags.IS_BADLANDS) || biome.is(Biomes.DESERT)) {
+                            candidates.add(new BlockPos(cp.getMiddleBlockX(), DUNGEON_START_Y, cp.getMiddleBlockZ()));
+                        }
+                    }
+                }
+
+                if (candidates.isEmpty()) {
                     server.execute(() -> {
                         serverPlayer.sendSystemMessage(
                                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
                         serverPlayer.sendSystemMessage(
                                 Component.literal("  NO DUNGEON IN RANGE").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                         serverPlayer.sendSystemMessage(
-                                Component.literal("  Head toward the badlands or desert biome.").withStyle(ChatFormatting.YELLOW));
+                                Component.literal("  No badlands or desert within ~6400 blocks.").withStyle(ChatFormatting.YELLOW));
                         serverPlayer.sendSystemMessage(
                                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
                     });
                     return;
                 }
 
-                BlockPos biomePos = biomeResult.getFirst();
-                int spacing = spreadPlacement.spacing();
-                long worldSeed = serverWorld.getSeed();
-                int biomeChunkX = biomePos.getX() >> 4;
-                int biomeChunkZ = biomePos.getZ() >> 4;
-
-                // Compute candidate dungeon positions around the biome entry point.
-                List<BlockPos> candidates = new ArrayList<>();
-                for (int dr = -SEARCH_REGIONS; dr <= SEARCH_REGIONS; dr++) {
-                    for (int dc = -SEARCH_REGIONS; dc <= SEARCH_REGIONS; dc++) {
-                        ChunkPos cp = spreadPlacement.getPotentialStructureChunk(
-                                worldSeed,
-                                biomeChunkX + dr * spacing,
-                                biomeChunkZ + dc * spacing);
-                        candidates.add(new BlockPos(cp.getMiddleBlockX(), DUNGEON_START_Y, cp.getMiddleBlockZ()));
-                    }
-                }
                 candidates.sort(Comparator.comparingDouble(p -> playerPos.distSqr(p)));
-
-                if (candidates.isEmpty()) {
-                    server.execute(() -> serverPlayer.sendSystemMessage(
-                            Component.literal("The charts are damaged. Try again near the badlands.")
-                                    .withStyle(ChatFormatting.RED)));
-                    return;
-                }
-
                 BlockPos nearest = candidates.get(0);
                 final int distance = (int) Math.sqrt(playerPos.distSqr(nearest));
 
                 server.execute(() -> sendResult(serverPlayer, nearest, distance));
 
             } catch (Exception e) {
+                DagMod.LOGGER.error("BoneDungeonLocator: search failed", e);
                 server.execute(() -> serverPlayer.sendSystemMessage(
                         Component.literal("The charts are unreadable. (" + e.getMessage() + ")")
                                 .withStyle(ChatFormatting.RED)));
