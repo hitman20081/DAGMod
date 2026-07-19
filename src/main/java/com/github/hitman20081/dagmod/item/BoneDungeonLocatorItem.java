@@ -187,18 +187,30 @@ public class BoneDungeonLocatorItem extends Item {
 
         String coordStr = "[" + nearest.getX() + ", " + nearest.getY() + ", " + nearest.getZ() + "]";
         player.sendSystemMessage(
-                Component.literal("  Go to: ").withStyle(ChatFormatting.GRAY)
+                Component.literal("  Ruins at: ").withStyle(ChatFormatting.GRAY)
                         .append(Component.literal(coordStr).withStyle(ChatFormatting.AQUA))
                         .append(Component.literal("  (~" + distance + " blocks)").withStyle(ChatFormatting.GRAY)));
 
         player.sendSystemMessage(
-                Component.literal("  Dungeon entrance is underground at that depth")
+                Component.literal("  Seek the ancient ruins breaking from the earth.")
                         .withStyle(ChatFormatting.YELLOW));
+
+        String direction = compassDirection(player.blockPosition(), nearest);
         player.sendSystemMessage(
-                Component.literal("  Tip: /tp " + nearest.getX() + " " + nearest.getY() + " " + nearest.getZ())
+                Component.literal("  Head " + direction + " — look for stone structures on the surface.")
                         .withStyle(ChatFormatting.GRAY));
 
         player.sendSystemMessage(
                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
+    }
+
+    private static String compassDirection(BlockPos from, BlockPos to) {
+        int dx = to.getX() - from.getX();
+        int dz = to.getZ() - from.getZ();
+        // atan2(dx, -dz): North=-Z is 0°, East=+X is 90°, clockwise
+        double angle = Math.toDegrees(Math.atan2(dx, -dz));
+        if (angle < 0) angle += 360;
+        String[] dirs = {"North", "North-East", "East", "South-East", "South", "South-West", "West", "North-West"};
+        return dirs[(int) Math.round(angle / 45.0) % 8];
     }
 }
