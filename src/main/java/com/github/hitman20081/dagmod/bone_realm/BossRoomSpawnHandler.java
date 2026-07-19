@@ -6,7 +6,6 @@ import com.github.hitman20081.dagmod.bone_realm.entity.SkeletonKingEntity;
 import com.github.hitman20081.dagmod.bone_realm.entity.SkeletonLordEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -103,7 +102,7 @@ public class BossRoomSpawnHandler {
     }
 
     /**
-     * Scans a 70x30x70 area around the trigger for light blocks (level 0 used as door markers)
+     * Scans a 70x30x70 area around the trigger for light blocks (used as door markers in the NBT)
      * and replaces them with barrier blocks to lock players in the boss room.
      */
     public static void sealRoom(ServerLevel world, BlockPos center) {
@@ -111,7 +110,7 @@ public class BossRoomSpawnHandler {
                 center.offset(-35, -15, -35),
                 center.offset(35, 15, 35))) {
             var state = world.getBlockState(pos);
-            if (state.getBlock() == Blocks.LIGHT && state.getValue(LightBlock.LEVEL) == 0) {
+            if (state.getBlock() == Blocks.LIGHT) {
                 world.setBlock(pos, Blocks.BARRIER.defaultBlockState(), 3);
             }
         }
