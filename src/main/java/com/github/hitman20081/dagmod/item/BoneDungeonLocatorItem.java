@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 
@@ -27,9 +28,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class BoneDungeonLocatorItem extends Item {
 
-    // Dungeon always starts at absolute Y=-15 because STRUCTURE_STARTS runs before
-    // terrain generation, so project_start_to_heightmap: WORLD_SURFACE_WG returns 0.
-    static final int DUNGEON_START_Y = -15;
+    // How far below terrain the dungeon entrance sits (matches start_height: absolute -15
+    // combined with project_start_to_heightmap: WORLD_SURFACE_WG in bone_dungeon.json).
+    private static final int SURFACE_DEPTH_OFFSET = 15;
 
     // spacing=40 × SEARCH_REGIONS=10 = ±400 chunks = ±6400 blocks from player
     private static final int SEARCH_REGIONS = 10;
@@ -50,8 +51,9 @@ public class BoneDungeonLocatorItem extends Item {
         MinecraftServer server = serverWorld.getServer();
         BlockPos playerPos = serverPlayer.blockPosition();
 
-        var setHolder = serverWorld.registryAccess()
-                .lookupOrThrow(Registries.STRUCTURE_SET)
+        var structureSetRegistry = serverWorld.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET);
+
+        var setHolder = structureSetRegistry
                 .get(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "bone_dungeon_set"))
                 .orElse(null);
         if (setHolder == null) {
@@ -69,10 +71,21 @@ public class BoneDungeonLocatorItem extends Item {
             return;
         }
 
+        // Load competing structure placements for exclusion zone checks.
+        RandomSpreadStructurePlacement hallSpawnPlacement = null;
+        RandomSpreadStructurePlacement villagePlacement = null;
+        var hallHolder = structureSetRegistry.get(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "hall_spawn")).orElse(null);
+        var villageHolder = structureSetRegistry.get(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "village_npc_set")).orElse(null);
+        if (hallHolder != null && hallHolder.value().placement() instanceof RandomSpreadStructurePlacement p) hallSpawnPlacement = p;
+        if (villageHolder != null && villageHolder.value().placement() instanceof RandomSpreadStructurePlacement p) villagePlacement = p;
+
+        final RandomSpreadStructurePlacement finalHall = hallSpawnPlacement;
+        final RandomSpreadStructurePlacement finalVillage = villagePlacement;
+
         serverPlayer.sendSystemMessage(
                 Component.literal("Consulting the ancient charts...").withStyle(ChatFormatting.YELLOW));
 
-        // Pure math — no chunk loading, no server thread blocking.
+        // All pure math — no chunk loading, no server thread blocking.
         CompletableFuture.runAsync(() -> {
             try {
                 int spacing = spreadPlacement.spacing();
@@ -80,10 +93,6 @@ public class BoneDungeonLocatorItem extends Item {
                 int playerChunkX = playerPos.getX() >> 4;
                 int playerChunkZ = playerPos.getZ() >> 4;
 
-                // For every grid region within SEARCH_REGIONS, compute the candidate chunk
-                // and verify the biome there is actually eligible (desert/badlands). This
-                // filters out candidates that fall outside the biome, which would otherwise
-                // point to empty underground and look like vanilla dungeon spawner rooms.
                 List<BlockPos> candidates = new ArrayList<>();
                 for (int dr = -SEARCH_REGIONS; dr <= SEARCH_REGIONS; dr++) {
                     for (int dc = -SEARCH_REGIONS; dc <= SEARCH_REGIONS; dc++) {
@@ -91,11 +100,25 @@ public class BoneDungeonLocatorItem extends Item {
                                 worldSeed,
                                 playerChunkX + dr * spacing,
                                 playerChunkZ + dc * spacing);
-                        // getNoiseBiome uses quart coords (>> 2); Y=16 quarts = block Y=64 (surface)
+
+                        // Filter 1: biome must be eligible (no chunk loading — pure noise).
                         var biome = serverWorld.getNoiseBiome(cp.getMiddleBlockX() >> 2, 16, cp.getMiddleBlockZ() >> 2);
-                        if (biome.is(BiomeTags.IS_BADLANDS) || biome.is(Biomes.DESERT)) {
-                            candidates.add(new BlockPos(cp.getMiddleBlockX(), DUNGEON_START_Y, cp.getMiddleBlockZ()));
-                        }
+                        if (!biome.is(BiomeTags.IS_BADLANDS) && !biome.is(Biomes.DESERT)) continue;
+
+                        // Filter 2: exclusion zones — replicate bone_dungeon_set's exclusion logic.
+                        // chunk_count=16 for hall_spawn, chunk_count=6 for village_npc_set.
+                        if (isExcluded(cp, worldSeed, finalHall, 16)) continue;
+                        if (isExcluded(cp, worldSeed, finalVillage, 6)) continue;
+
+                        // Compute accurate entrance Y using terrain noise (no chunk loading).
+                        int surfaceY = serverWorld.getChunkSource().getGenerator().getBaseHeight(
+                                cp.getMiddleBlockX(), cp.getMiddleBlockZ(),
+                                Heightmap.Types.WORLD_SURFACE_WG,
+                                serverWorld,
+                                serverWorld.getChunkSource().randomState());
+                        int dungeonY = surfaceY - SURFACE_DEPTH_OFFSET;
+
+                        candidates.add(new BlockPos(cp.getMiddleBlockX(), dungeonY, cp.getMiddleBlockZ()));
                     }
                 }
 
@@ -106,7 +129,7 @@ public class BoneDungeonLocatorItem extends Item {
                         serverPlayer.sendSystemMessage(
                                 Component.literal("  NO DUNGEON IN RANGE").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
                         serverPlayer.sendSystemMessage(
-                                Component.literal("  No badlands or desert within ~6400 blocks.").withStyle(ChatFormatting.YELLOW));
+                                Component.literal("  No eligible location within ~6400 blocks.").withStyle(ChatFormatting.YELLOW));
                         serverPlayer.sendSystemMessage(
                                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
                     });
@@ -128,23 +151,51 @@ public class BoneDungeonLocatorItem extends Item {
         });
     }
 
+    /**
+     * Returns true if the bone dungeon candidate at {@code boneChunk} is within
+     * {@code chunkCount} chunks (Chebyshev) of any candidate from {@code otherPlacement}.
+     * Pure math — identical to the exclusion zone logic in MultiExclusionRandomSpreadPlacement.
+     */
+    private static boolean isExcluded(ChunkPos boneChunk, long seed,
+                                       RandomSpreadStructurePlacement otherPlacement,
+                                       int chunkCount) {
+        if (otherPlacement == null) return false;
+        int os = otherPlacement.spacing();
+        // How many other-structure regions can have a candidate within chunkCount chunks of boneChunk?
+        int range = (int) Math.ceil((chunkCount + os - 1.0) / os);
+        // getMinBlockX() = chunkX * 16, so >> 4 gives the chunk coordinate.
+        int cx = boneChunk.getMinBlockX() >> 4;
+        int cz = boneChunk.getMinBlockZ() >> 4;
+        for (int dr = -range; dr <= range; dr++) {
+            for (int dc = -range; dc <= range; dc++) {
+                ChunkPos other = otherPlacement.getPotentialStructureChunk(seed, cx + dr * os, cz + dc * os);
+                int ox = other.getMinBlockX() >> 4;
+                int oz = other.getMinBlockZ() >> 4;
+                if (Math.max(Math.abs(ox - cx), Math.abs(oz - cz)) <= chunkCount) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void sendResult(ServerPlayer player, BlockPos nearest, int distance) {
         player.sendSystemMessage(
                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
         player.sendSystemMessage(
                 Component.literal("  BONE DUNGEON LOCATED").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 
-        String coordStr = "[" + nearest.getX() + ", " + DUNGEON_START_Y + ", " + nearest.getZ() + "]";
+        String coordStr = "[" + nearest.getX() + ", " + nearest.getY() + ", " + nearest.getZ() + "]";
         player.sendSystemMessage(
                 Component.literal("  Go to: ").withStyle(ChatFormatting.GRAY)
                         .append(Component.literal(coordStr).withStyle(ChatFormatting.AQUA))
                         .append(Component.literal("  (~" + distance + " blocks)").withStyle(ChatFormatting.GRAY)));
 
         player.sendSystemMessage(
-                Component.literal("  Dungeon is underground — use spectator or dig down")
+                Component.literal("  Dungeon entrance is underground at that depth")
                         .withStyle(ChatFormatting.YELLOW));
         player.sendSystemMessage(
-                Component.literal("  Tip: /tp " + nearest.getX() + " " + DUNGEON_START_Y + " " + nearest.getZ())
+                Component.literal("  Tip: /tp " + nearest.getX() + " " + nearest.getY() + " " + nearest.getZ())
                         .withStyle(ChatFormatting.GRAY));
 
         player.sendSystemMessage(
