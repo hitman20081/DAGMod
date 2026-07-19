@@ -15,6 +15,7 @@ import com.github.hitman20081.dagmod.command.CooldownCommand;
 import com.github.hitman20081.dagmod.command.DragonRespawnCommand;
 import com.github.hitman20081.dagmod.command.GraveCommand;
 import com.github.hitman20081.dagmod.command.InfoCommand;
+import com.github.hitman20081.dagmod.command.LocateBoneDungeonCommand;
 import com.github.hitman20081.dagmod.command.LocateDragonCommand;
 import com.github.hitman20081.dagmod.command.LocateWildDragonCommand;
 import com.github.hitman20081.dagmod.command.MerchantCommand;
@@ -244,6 +245,7 @@ public class DagMod implements ModInitializer {
             PartyCommand.register(dispatcher, registryAccess, environment);
             PartyQuestCommand.register(dispatcher, registryAccess, environment);
             LocateDragonCommand.register(dispatcher, registryAccess, environment);
+            LocateBoneDungeonCommand.register(dispatcher, registryAccess, environment);
             LocateWildDragonCommand.register(dispatcher, registryAccess, environment);
             GraveCommand.register(dispatcher, registryAccess, environment);
             DragonRespawnCommand.register(dispatcher, registryAccess, environment);
