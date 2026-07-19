@@ -33,7 +33,7 @@ public class BoneDungeonLocatorItem extends Item {
     static final int DUNGEON_START_Y = -15;
 
     private static final int BIOME_SEARCH_RADIUS = 8000;
-    private static final int SEARCH_REGIONS = 5;
+    private static final int SEARCH_REGIONS = 2;
 
     public BoneDungeonLocatorItem(Properties settings) {
         super(settings);
@@ -127,10 +127,8 @@ public class BoneDungeonLocatorItem extends Item {
 
                 BlockPos nearest = candidates.get(0);
                 final int distance = (int) Math.sqrt(playerPos.distSqr(nearest));
-                final int biomeDistance = (int) Math.sqrt(playerPos.distSqr(biomePos));
-                final BlockPos finalBiomePos = biomePos;
 
-                server.execute(() -> sendResult(serverPlayer, nearest, distance, biomeDistance, finalBiomePos));
+                server.execute(() -> sendResult(serverPlayer, nearest, distance));
 
             } catch (Exception e) {
                 server.execute(() -> serverPlayer.sendSystemMessage(
@@ -140,7 +138,7 @@ public class BoneDungeonLocatorItem extends Item {
         });
     }
 
-    public static void sendResult(ServerPlayer player, BlockPos nearest, int distance, int biomeDistance, BlockPos biomePos) {
+    public static void sendResult(ServerPlayer player, BlockPos nearest, int distance) {
         player.sendSystemMessage(
                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
         player.sendSystemMessage(
@@ -158,13 +156,6 @@ public class BoneDungeonLocatorItem extends Item {
         player.sendSystemMessage(
                 Component.literal("  Tip: /tp " + nearest.getX() + " " + DUNGEON_START_Y + " " + nearest.getZ())
                         .withStyle(ChatFormatting.GRAY));
-
-        if (biomeDistance > 200) {
-            player.sendSystemMessage(
-                    Component.literal("  Nearest badlands: ").withStyle(ChatFormatting.GRAY)
-                            .append(Component.literal("[" + biomePos.getX() + ", ~, " + biomePos.getZ() + "]").withStyle(ChatFormatting.GOLD))
-                            .append(Component.literal(" (~" + biomeDistance + " blocks)").withStyle(ChatFormatting.GRAY)));
-        }
 
         player.sendSystemMessage(
                 Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").withStyle(ChatFormatting.DARK_GRAY));
