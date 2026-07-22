@@ -70,9 +70,9 @@ Quests in DAGMod are categorized to help players understand their purpose and pr
 
 -   **Main Quests**: Core story and progression quests that guide players through the main narrative of DAGMod.
 -   **Side Quests**: Optional quests that offer additional lore, rewards, and challenges.
--   **Class Quests**: Specific quests tailored to each class (Warrior, Mage, Rogue), often involving unique challenges or rewards relevant to their abilities.
--   **Daily Quests**: Repeatable quests that reset daily, providing a consistent source of rewards and experience.
--   **Job Quests**: Quests typically found on job boards, involving gathering, crafting, or other tasks.
+-   **Class Quests**: Specific quests tailored to each class (Warrior, Mage, Rogue). Started through the **Class Trainer NPC** in the Hall of Champions — not the Quest Block.
+-   **Daily Quests**: Repeatable quests available from the **Job Board**. Rotate daily with streak-based XP bonuses. See [Daily Quests](#daily-quests) below.
+-   **Job Quests**: Repeatable gathering/combat tasks from the **Job Board**. Good for steady emerald and XP income.
 
 ### Fetch Quests
 
@@ -253,6 +253,57 @@ Start as a lowly Grunt proving your worth through combat. Rise through the warri
 **Total XP:** ~11,700 XP from all 10 quests
 
 **Best For:** Players focused on combat, hunting, and aggressive gameplay
+
+---
+
+## Daily Quests
+
+Daily quests are repeatable quests available from the **Job Board** (right-click the Job Board block in the Hall of Champions or villages).
+
+### How Daily Quests Work
+
+- **5 quests are offered each day**, shared across all players on the server
+- The pool resets at **UTC midnight** — a countdown timer is shown on the Job Board main menu
+- Each player can complete up to **3 daily quests per day** (active + already-completed count toward the limit)
+- Daily quests are **repeatable** — they do not lock permanently after completion and return to the pool the next day
+- Daily quests bypass the normal quest book tier requirement, so any player can accept them
+
+### Streak System
+
+Completing at least one daily per UTC day builds a **streak**. Missing a day resets it to 1 on your next completion.
+
+**XP Multipliers (streak × level — both apply simultaneously):**
+
+| Streak | Bonus |
+|--------|-------|
+| 3+ days | ×1.1 |
+| 7+ days | ×1.25 |
+| 14+ days | ×1.5 |
+
+| Player Level | Bonus |
+|--------------|-------|
+| 51–100 | ×1.3 |
+| 101–150 | ×1.6 |
+| 151+ | ×2.0 |
+
+*Example: a 14-day streak at level 120 gives ×1.5 × ×1.6 = **×2.4 XP**.*
+
+### Daily Quest Difficulties
+
+Daily quests span three difficulty tiers:
+- **Novice** — Chop wood, catch fish, harvest wheat, gather sand/wool/eggs/clay, mine stone
+- **Apprentice** — Hunt zombies/skeletons/spiders/creepers, mine iron/coal/gold, gather leather
+- **Expert** — Hunt blazes/endermen, mine diamonds/obsidian
+
+The streak and level bonuses apply equally to all tiers.
+
+### Job Board Main Menu Info
+
+The main menu shows your current daily status at a glance:
+- How many dailies you've completed today vs. the 3/day limit
+- How many of today's 5 quests are still available to you
+- Time remaining until the next UTC midnight reset
+- Your current streak (shown if ≥1 day)
 
 ---
 
@@ -465,10 +516,10 @@ Some quests are designed specifically for certain classes or races. These quests
 ## Frequently Asked Questions
 
 **Q: How many total quests are there?**
-A: 64 total quests - 40 race-specific (10 per race) + 24 general quests
+A: 64 permanent quests (40 race-specific + 24 general) plus 20 daily quests in the rotating pool (5 shown per day). Class quests are started via the Class Trainer NPC, not the Quest Block.
 
 **Q: Can I repeat quests after completing them?**
-A: Generally no, quests can only be completed once per character. However, some quests may be marked as repeatable (e.g., Daily Quests).
+A: Main, side, race, and class quests can only be completed once. **Daily quests** are fully repeatable — they reset each UTC day, do not permanently lock, and are tracked separately from your permanent quest log.
 
 **Q: What happens if I lose items before turning in a fetch quest?**
 A: You'll need to gather the items again. Items must be in your inventory when claiming rewards.

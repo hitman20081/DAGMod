@@ -22,6 +22,7 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
     *   Read the **Class Selection Tome** to study the three classes: Warrior, Mage, and Rogue.
     *   Use a **Class Token** (one of each provided) at the altar to select your class.
     *   **Your class choice can be changed later with Class Reset Potions and Crystals, but your race is permanent.**
+    *   Once your class is set, find the **Class Trainer NPC** in the Hall of Champions (near the Class Selection Altar). They give you access to your class quest chain — a series of class-specific missions with unique rewards.
 5.  **Explore Synergies:**
     *   Your chosen race and class combine to unlock unique **synergy bonuses**. Review these to understand your character's strengths.
 6.  **Begin Your Journey:**
@@ -29,13 +30,10 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
     *   Progress through 200 levels, earning stat bonuses every 10 levels.
     *   Visit **Merchant NPCs** in the Hall of Champions to trade for gear and supplies.
     *   In multiplayer, form a **Party** with `/party create <name>` for shared XP and group quests.
-7.  **Begin Questing (Garrick Quests):**
-    *   Find **Quest Blocks** within the Hall of Champions or scattered throughout the world.
-    *   Interact with a Quest Block to view available quests.
-    *   Accept quests appropriate to your current tier and level.
-    *   **Initial Quest Example (Novice Tier):** Garrick, the Quest Master, will likely offer you a simple "Gather Wood" or "Kill Zombies" quest to get you started.
-    *   Complete quest objectives (gathering items, defeating mobs, exploration).
-    *   Return to a Quest Block to claim rewards.
+7.  **Begin Questing:**
+    *   Find **Quest Blocks** within the Hall of Champions or scattered throughout the world. Interact to accept and turn in Main, Side, and Race quests.
+    *   **Innkeeper Garrick** (the tutorial NPC in the Hall of Champions) gives you your first three tutorial tasks and then hands you off to the Class Trainer for class quests.
+    *   The **Job Board** (also in the Hall of Champions) is where you find **daily quests** (5 fresh quests per UTC day, up to 3 per player) and repeatable **job quests** for steady XP and emerald income. A streak bonus multiplies XP for consecutive days of completion.
 8.  **Progress Through Tiers:**
     *   Complete quests to unlock higher difficulties (Apprentice at Level 10, Expert at Level 25, Master at Level 50).
     *   Embark on your **race-specific epic quest chain** (10 quests per race).

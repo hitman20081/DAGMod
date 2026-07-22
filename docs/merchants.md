@@ -1,6 +1,6 @@
 # Merchants
 
-DAGMod features **13 unique merchant NPCs**, each specializing in different types of gear and supplies. Merchants offer both permanent static trades and some feature rotating premium inventories that cycle on a real-world timer.
+DAGMod features **14 unique merchant NPCs**, each specializing in different types of gear and supplies. Merchants offer both permanent static trades and some feature rotating premium inventories that cycle on a real-world timer.
 
 ## Merchant System Overview
 
@@ -251,6 +251,27 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 
 ---
 
+### Class Trainer
+
+**Specialty:** Class quest chain guidance and class progression
+
+**Found in:** Hall of Champions (near the Class Selection Altar)
+
+**How It Works:**
+- Right-click to begin or continue your class quest chain (Warrior, Mage, or Rogue)
+- Checks your current class and picks up the quest chain at the correct tier
+- Class quests are gated by level (same as standard quest tiers), but bypass the quest book tier check
+- The Class Trainer is the **only** way to access CLASS category quests — they no longer appear on Quest Blocks
+- Innkeeper Garrick will direct you to the Class Trainer after your tutorial quests are complete
+
+**No Trades:** The Class Trainer does not sell items — interaction opens the class quest dialogue only.
+
+**Dialogue Style:** Knowledgeable mentor, speaks to your specific class's strengths
+
+**Summon:** `/summon dagmod:class_trainer`
+
+---
+
 ### Village Merchant (General Store)
 
 **Specialty:** Everyday supplies and general goods
@@ -288,6 +309,7 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 | Jeweler | Gems & gem tools | Yes | - | Amethyst Chime |
 | Alchemist | Brewing & potions | Yes | - | Brewing Stand |
 | Village Merchant | General store | Yes | - | Trading |
+| Class Trainer | Class quest chain | No trades | - | Villager |
 
 ---
 

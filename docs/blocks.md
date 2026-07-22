@@ -95,13 +95,19 @@ The Job Board is a wall-mounted block that provides access to JOB and DAILY cate
 
 | Menu | Description |
 |------|-------------|
-| Main Menu | Shows active jobs, completed jobs count, and available jobs |
-| Browse Jobs | Displays individual jobs with [DAILY JOB] tags, objectives, and payment |
-| Confirm Accept | Confirms job acceptance |
-| Active Jobs | Shows ongoing jobs with progress |
-| Turn In Jobs | Collects payment for completed jobs |
+| Main Menu | Shows active jobs count, daily quest status (X/3 completed, available today, reset countdown, streak), and available jobs |
+| Browse Jobs | Lists today's daily quests first, then regular jobs — each shows name, difficulty, objectives, and payment |
+| Confirm Accept | Confirms job or daily quest acceptance |
+| Active Jobs | Shows ongoing jobs and dailies with objective progress |
+| Turn In Jobs | Collects payment for completed jobs/dailies |
 
-**Note:** The Job Board uses "Payment" instead of "Rewards" in its interface. Jobs are repeatable tasks designed for steady income and XP gain.
+**Daily Quest Highlights (shown on Main Menu):**
+- How many of today's 3-per-day dailies you've used
+- How many of today's 5-quest pool are still available to you
+- Countdown to next UTC midnight reset
+- Your current streak (e.g. "🔥 7-day streak!")
+
+**Note:** The Job Board uses "Payment" instead of "Rewards" in its interface. Regular jobs are repeatable tasks for steady income; daily quests reset every UTC day and reward streak-scaled XP.
 
 ---
 
