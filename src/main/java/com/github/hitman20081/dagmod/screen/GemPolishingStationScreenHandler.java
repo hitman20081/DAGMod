@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.screen;
 
 import com.github.hitman20081.dagmod.block.entity.GemPolishingStationBlockEntity;
+import com.github.hitman20081.dagmod.item.ModItems;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,16 +30,24 @@ public class GemPolishingStationScreenHandler extends AbstractContainerMenu {
         this.propertyDelegate = propertyDelegate;
         this.blockEntity = ((GemPolishingStationBlockEntity) blockEntity);
 
-        checkContainerSize(inventory, 2);
+        checkContainerSize(inventory, 3);
 
-        // Input slot (top)
+        // Catalyst slot — diamond powder only
+        this.addSlot(new Slot(inventory, GemPolishingStationBlockEntity.CATALYST_SLOT, 39, 36) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.DIAMOND_POWDER);
+            }
+        });
+
+        // Input slot
         this.addSlot(new Slot(inventory, GemPolishingStationBlockEntity.INPUT_SLOT, 80, 11));
 
-        // Output slot (bottom)
+        // Output slot
         this.addSlot(new Slot(inventory, GemPolishingStationBlockEntity.OUTPUT_SLOT, 80, 59) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return false; // Output slot can't be inserted into
+                return false;
             }
         });
 
@@ -47,6 +56,17 @@ public class GemPolishingStationScreenHandler extends AbstractContainerMenu {
         addPlayerHotbar(playerInventory);
 
         addDataSlots(propertyDelegate);
+    }
+
+    public boolean isCrafting() {
+        return propertyDelegate.get(0) > 0;
+    }
+
+    public int getScaledProgress() {
+        int progress = this.propertyDelegate.get(0);
+        int maxProgress = this.propertyDelegate.get(1);
+        int progressArrowSize = 24; // Height in pixels of the progress bar sprite
+        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
     @Override
@@ -63,9 +83,16 @@ public class GemPolishingStationScreenHandler extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(originalStack, 0, this.inventory.getContainerSize(), false)) {
-                // Moving from player inventory to block inventory
-                return ItemStack.EMPTY;
+            } else {
+                if (originalStack.is(ModItems.DIAMOND_POWDER)) {
+                    if (!this.moveItemStackTo(originalStack, GemPolishingStationBlockEntity.CATALYST_SLOT, GemPolishingStationBlockEntity.CATALYST_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    if (!this.moveItemStackTo(originalStack, GemPolishingStationBlockEntity.INPUT_SLOT, GemPolishingStationBlockEntity.INPUT_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
             }
 
             if (originalStack.isEmpty()) {

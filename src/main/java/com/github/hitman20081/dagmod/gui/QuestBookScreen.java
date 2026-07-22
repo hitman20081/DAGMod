@@ -15,7 +15,11 @@ import java.util.List;
 public class QuestBookScreen extends Screen {
     private final QuestData.QuestBookTier tier;
     private int currentPage = 0;
+    private int selectedQuestIndex = 0;
     private static final int TOTAL_PAGES = 6;
+
+    private Button prevQuestButton;
+    private Button nextQuestButton;
 
     private static final String[] PAGE_TITLES = {
             "Quest Book Overview",
@@ -35,21 +39,41 @@ public class QuestBookScreen extends Screen {
     protected void init() {
         super.init();
 
+        int bookX = (this.width - 192) / 2;
+        int bookY = (this.height - 192) / 2;
+
         this.addRenderableWidget(Button.builder(Component.literal("< Previous"), button -> {
             if (currentPage > 0) {
                 currentPage--;
+                selectedQuestIndex = 0;
             }
         }).bounds(this.width / 2 - 150, this.height - 30, 80, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.literal("Next >"), button -> {
             if (currentPage < TOTAL_PAGES - 1) {
                 currentPage++;
+                selectedQuestIndex = 0;
             }
         }).bounds(this.width / 2 - 40, this.height - 30, 80, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.literal("Close"), button -> {
             this.onClose();
         }).bounds(this.width / 2 + 70, this.height - 30, 80, 20).build());
+
+        // Quest navigation buttons — only visible on the Active Quests page
+        prevQuestButton = Button.builder(Component.literal("<"), button -> {
+            if (selectedQuestIndex > 0) selectedQuestIndex--;
+        }).bounds(bookX + 12, bookY + 168, 20, 12).build();
+
+        nextQuestButton = Button.builder(Component.literal(">"), button -> {
+            int size = ClientQuestData.getInstance().getActiveQuests().size();
+            if (selectedQuestIndex < size - 1) selectedQuestIndex++;
+        }).bounds(bookX + 160, bookY + 168, 20, 12).build();
+
+        prevQuestButton.visible = false;
+        nextQuestButton.visible = false;
+        this.addRenderableWidget(prevQuestButton);
+        this.addRenderableWidget(nextQuestButton);
     }
 
     @Override
@@ -78,6 +102,11 @@ public class QuestBookScreen extends Screen {
         if (currentPage >= TOTAL_PAGES) {
             currentPage = TOTAL_PAGES - 1;
         }
+
+        // Show quest nav buttons only on the Active Quests page
+        boolean onActiveQuests = currentPage == 1;
+        if (prevQuestButton != null) prevQuestButton.visible = onActiveQuests;
+        if (nextQuestButton != null) nextQuestButton.visible = onActiveQuests;
 
         switch (currentPage) {
             case 0 -> renderOverviewPage(context, font, textX, textY);
@@ -125,10 +154,12 @@ public class QuestBookScreen extends Screen {
     private void renderActiveQuestsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {
         ClientQuestData data = ClientQuestData.getInstance();
         List<QuestSyncPacket.QuestInfo> activeQuests = data.getActiveQuests();
-        int maxY = textY + 120; // bottom boundary for content
+        int maxY = textY + 140; // bottom boundary — leaves room for nav buttons
 
-        context.text(font, Component.literal("Currently Active Quests:"), textX, textY, 0xFF444444, false);
-        textY += 18;
+        // Clamp index in case a quest was completed while the book was open
+        if (selectedQuestIndex >= activeQuests.size()) {
+            selectedQuestIndex = Math.max(0, activeQuests.size() - 1);
+        }
 
         if (activeQuests.isEmpty()) {
             context.text(font, Component.literal("No active quests"), textX, textY, 0xFF666666, false);
@@ -139,34 +170,38 @@ public class QuestBookScreen extends Screen {
             return;
         }
 
-        int questsShown = 0;
-        for (int i = 0; i < activeQuests.size(); i++) {
-            if (textY + 10 > maxY) break;
-            QuestSyncPacket.QuestInfo quest = activeQuests.get(i);
+        QuestSyncPacket.QuestInfo quest = activeQuests.get(selectedQuestIndex);
 
-            int difficultyColor = quest.difficulty().getColor();
-            context.text(font, Component.literal(quest.name()), textX, textY, difficultyColor, false);
-            textY += 10;
+        // Quest counter and name
+        String counter = "Quest " + (selectedQuestIndex + 1) + " of " + activeQuests.size();
+        context.text(font, Component.literal(counter), textX, textY, 0xFF888888, false);
+        textY += 11;
 
-            String progress = quest.objectivesComplete() + "/" + quest.totalObjectives() + " objectives";
-            if (quest.isCompleted()) {
-                progress += " - Ready!";
-            }
-            context.text(font, Component.literal(progress), textX + 5, textY, 0xFF666666, false);
-            textY += 10;
+        context.text(font, Component.literal(quest.name()), textX, textY, quest.difficulty().getColor(), false);
+        textY += 11;
 
-            // Show first objective (1 line only)
-            if (!quest.objectiveDescriptions().isEmpty() && textY + 8 <= maxY) {
-                textY = drawWrappedText(context, font, "- " + quest.objectiveDescriptions().get(0), textX + 5, textY, 135, 1, 0xFF000000);
-            }
-
-            textY += 8;
-            questsShown++;
+        // Description
+        if (!quest.description().isBlank()) {
+            textY = drawWrappedText(context, font, quest.description(), textX, textY, 152, 2, 0xFF555555);
+            textY += 4;
         }
 
-        if (questsShown < activeQuests.size() && textY + 8 <= maxY) {
-            context.text(font, Component.literal("+" + (activeQuests.size() - questsShown) + " more..."),
-                    textX, textY, 0xFF888888, false);
+        // Progress
+        String progress = quest.objectivesComplete() + "/" + quest.totalObjectives() + " objectives";
+        int progressColor = quest.isCompleted() ? 0xFF00AA00 : 0xFF666666;
+        if (quest.isCompleted()) progress += " - Ready to turn in!";
+        context.text(font, Component.literal(progress), textX, textY, progressColor, false);
+        textY += 12;
+
+        // Divider
+        context.fill(textX, textY, textX + 152, textY + 1, 0xFFCCBBA0);
+        textY += 5;
+
+        // All objectives
+        for (String obj : quest.objectiveDescriptions()) {
+            if (textY + 8 > maxY) break;
+            textY = drawWrappedText(context, font, "- " + obj, textX + 2, textY, 150, 2, 0xFF222222);
+            textY += 2;
         }
     }
 

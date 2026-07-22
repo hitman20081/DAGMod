@@ -227,6 +227,9 @@ public class ProgressionManager {
         // Sync to client
         ProgressionPackets.sendProgressionData(player, data);
 
+        // Apply stat bonuses for the new level
+        StatScalingHandler.applyLevelStats(player, level);
+
         // Update mana cap
         com.github.hitman20081.dagmod.class_system.mana.ManaManager.updateMaxManaForLevel(player, level);
         // Update energy cap
@@ -247,6 +250,9 @@ public class ProgressionManager {
 
         // Sync to client
         ProgressionPackets.sendProgressionData(player, data);
+
+        // Remove level stat bonuses since player is back to level 1
+        StatScalingHandler.removeAllLevelStats(player);
     }
 
     /**

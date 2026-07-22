@@ -2,6 +2,7 @@ package com.github.hitman20081.dagmod.quest.registry;
 
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestManager;
+import com.github.hitman20081.dagmod.quest.registry.DailyQuestRegistry;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
@@ -16,6 +17,7 @@ import net.minecraft.tags.ItemTags;
 public class JobRegistry {
 
     public static void registerJobs(QuestManager manager) {
+        DailyQuestRegistry.registerDailyQuests(manager);
         // ========== NOVICE JOBS ==========
         manager.registerQuest(createGatherCobblestoneJob());
         manager.registerQuest(createHuntZombiesJob());

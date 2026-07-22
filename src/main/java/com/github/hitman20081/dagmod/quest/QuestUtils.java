@@ -56,57 +56,73 @@ public class QuestUtils {
         // Page 1: Welcome
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§6Welcome to DAGMod!§r\n\n")
-                        .append(Component.literal("This guide will help you get started on your adventure.\n\n"))
-                        .append(Component.literal("§nGetting Started:§r\n"))
+                        .append(Component.literal("A race/class RPG built on top of Minecraft.\n\n"))
+                        .append(Component.literal("§nFirst steps:§r\n"))
                         .append(Component.literal("1. Find the Hall of Champions\n"))
                         .append(Component.literal("2. Choose your Race\n"))
-                        .append(Component.literal("3. Choose your Class"))
+                        .append(Component.literal("3. Choose your Class\n"))
+                        .append(Component.literal("4. Find Innkeeper Garrick"))
         ));
 
         // Page 2: Hall Locator
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§dHall Locator§r\n\n")
-                        .append(Component.literal("You've been given a Hall Locator item.\n\n"))
-                        .append(Component.literal("§6Right-click§r it to see the command to locate the Hall of Champions.\n\n"))
-                        .append(Component.literal("Follow the coordinates to reach the hall."))
+                        .append(Component.literal("You have a §6Hall Locator§r in your inventory.\n\n"))
+                        .append(Component.literal("§6Right-click§r it to get the coordinates of the nearest Hall of Champions.\n\n"))
+                        .append(Component.literal("The Hall is where you pick your Race and Class at the selection altars."))
         ));
 
         // Page 3: Races
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§bRaces§r\n\n")
-                        .append(Component.literal("§6Dwarf§r - Mining bonuses\n"))
-                        .append(Component.literal("§aElf§r - Forest & archery bonuses\n"))
-                        .append(Component.literal("§eHuman§r - Versatile bonuses\n"))
-                        .append(Component.literal("§cOrc§r - Combat bonuses\n\n"))
-                        .append(Component.literal("Choose wisely!"))
+                        .append(Component.literal("§6Dwarf§r\nMining & underground bonuses\n\n"))
+                        .append(Component.literal("§aElf§r\nForest & archery bonuses\n\n"))
+                        .append(Component.literal("§eHuman§r\n+25% XP, versatile bonuses\n\n"))
+                        .append(Component.literal("§cOrc§r\nCombat & berserker bonuses"))
         ));
 
         // Page 4: Classes
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§cClasses§r\n\n")
-                        .append(Component.literal("§4Warrior§r - Melee combat\n\n"))
-                        .append(Component.literal("§5Mage§r - Magic master\n\n"))
-                        .append(Component.literal("§8Rogue§r - Stealth expert"))
+                        .append(Component.literal("§4Warrior§r\nMelee tank, 6 abilities\n\n"))
+                        .append(Component.literal("§5Mage§r\nRanged magic, 4 abilities + wands + scrolls\n\n"))
+                        .append(Component.literal("§8Rogue§r\nStealth assassin, 7 abilities (dual system)"))
         ));
 
-        // Page 5: Quests
+        // Page 5: Quest Block & Garrick
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§2Quests§r\n\n")
-                        .append(Component.literal("After choosing:\n\n"))
-                        .append(Component.literal("1. Find Quest Blocks\n"))
-                        .append(Component.literal("2. Right-click to browse\n"))
-                        .append(Component.literal("3. Complete objectives\n"))
-                        .append(Component.literal("4. Turn in for rewards!"))
+                Component.literal("§l§2Quest Blocks§r\n\n")
+                        .append(Component.literal("§6Quest Blocks§r are glowing blocks found in buildings and the Hall of Champions.\n\n"))
+                        .append(Component.literal("Before you can use one, find §6Innkeeper Garrick§r at any Inn. Complete his 3 tasks to earn your §nNovice Quest Book§r, then return to a Quest Block."))
         ));
 
-        // Page 6: Commands
+        // Page 6: Class Abilities via Quest Block
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§eClass Abilities§r\n\n")
+                        .append(Component.literal("Your class abilities are unlocked through §6Class Quests§r at the §6Quest Block§r.\n\n"))
+                        .append(Component.literal("Each quest rewards an §nability item§r — hold it in your hotbar to activate that ability.\n\n"))
+                        .append(Component.literal("The chain starts at level 10 and ends at level 100 with a boss fight.\n\n"))
+                        .append(Component.literal("(The §6Job Board§r is for daily & job quests — separate rewards.)"))
+        ));
+
+        // Page 7: Dimensions
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§dDimensions§r\n\n")
+                        .append(Component.literal("DAGMod adds 3 extra dimensions:\n\n"))
+                        .append(Component.literal("§c• Bone Realm§r\nSkeleton-themed danger zone\n\n"))
+                        .append(Component.literal("§5• Dragon Realm§r\nDragon boss encounter\n\n"))
+                        .append(Component.literal("§9• Dungeon Realm§r\nProcedural dungeons\n\n"))
+                        .append(Component.literal("Unlock through late-game quests."))
+        ));
+
+        // Page 8: Commands
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§9Commands§r\n\n")
-                        .append(Component.literal("§6/dagmod info§r\n"))
-                        .append(Component.literal("View your race/class\n\n"))
-                        .append(Component.literal("§6/quest skip§r\n"))
-                        .append(Component.literal("Skip to next quest\n\n"))
-                        .append(Component.literal("Good luck!"))
+                        .append(Component.literal("§6/info§r\nView race, class & stats\n\n"))
+                        .append(Component.literal("§6/quest list§r\nList active quests\n\n"))
+                        .append(Component.literal("§6/quest skip§r\nSkip current quest in menu\n\n"))
+                        .append(Component.literal("§6/party create <name>§r\nGroup play\n\n"))
+                        .append(Component.literal("Good luck, adventurer!"))
         ));
 
         net.minecraft.world.item.component.WrittenBookContent content =

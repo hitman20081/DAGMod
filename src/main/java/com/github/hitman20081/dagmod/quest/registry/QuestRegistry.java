@@ -17,6 +17,7 @@ import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.UnlockReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
+import com.github.hitman20081.dagmod.block.ModBlocks;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.Identifier;
 
@@ -121,6 +122,11 @@ public class QuestRegistry {
         // NPC Quests
         manager.registerQuest(createGarricksSpecialBrewQuest());
 
+        // Gem Crafting Tutorial Chain (triggered by Jeweler NPC)
+        manager.registerQuest(createGemRoughTradeQuest());
+        manager.registerQuest(createGemACutAboveQuest());
+        manager.registerQuest(createGemArtOfPolishQuest());
+
         // ========== JOB BOARD QUESTS ==========
         JobRegistry.registerJobs(manager);
     }
@@ -202,6 +208,64 @@ public class QuestRegistry {
         registerWarriorQuestChain(manager);
         registerMageQuestChain(manager);
         registerRogueQuestChain(manager);
+        registerGemCraftingChain(manager);
+    }
+
+    private static void registerGemCraftingChain(QuestManager manager) {
+        QuestChain gemCrafting = new QuestChain(
+                "gem_crafting_basics",
+                "The Jeweler's Art",
+                "Learn the art of gem crafting from the Jeweler — cut, polish, and refine raw gems into prized materials.",
+                QuestData.QuestBookTier.NOVICE,
+                null
+        )
+                .addQuest("gem_rough_trade")
+                .addQuest("gem_a_cut_above")
+                .addQuest("gem_art_of_polish")
+                .addChainReward(new ItemReward(ModItems.DIAMOND_POWDER, 3))
+                .addChainReward(new ItemReward(Items.EMERALD, 5))
+                .addChainReward(XpReward.novice());
+
+        manager.registerQuestChain(gemCrafting);
+    }
+
+    private static Quest createGemRoughTradeQuest() {
+        return new Quest("gem_rough_trade")
+                .setName("Rough Trade")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("The Jeweler wants to teach you the art of gem crafting. Start by gathering raw citrine from the earth — it's the most common gem and a perfect starting point.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(new CollectObjective(ModItems.RAW_CITRINE, 5))
+                .addReward(new ItemReward(ModBlocks.GEM_CUTTING_STATION.asItem(), 1))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createGemACutAboveQuest() {
+        return new Quest("gem_a_cut_above")
+                .setName("A Cut Above")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("The Jeweler gave you a Gem Cutting Station. Use it — or the one at the jeweler stall in the Hall of Champions — to cut your raw citrine into proper Cut Citrine gems.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addPrerequisite("gem_rough_trade")
+                .addObjective(new CollectObjective(ModItems.GEM_CUT_CITRINE, 5))
+                .addReward(new ItemReward(ModBlocks.GEM_POLISHING_STATION.asItem(), 1))
+                .addReward(new ItemReward(ModBlocks.GEM_CRUSHING_STATION.asItem(), 1))
+                .addReward(new ItemReward(ModItems.CRUSHING_HAMMER, 1))
+                .addReward(new ItemReward(ModItems.DIAMOND_POWDER, 2))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createGemArtOfPolishQuest() {
+        return new Quest("gem_art_of_polish")
+                .setName("The Art of Polish")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("You have the stations and Diamond Powder. Use a Gem Polishing Station — yours or the one at the Hall of Champions jeweler stall — put Cut Citrine in the input slot and Diamond Powder in the catalyst slot, then bring the Jeweler proof of your work.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addPrerequisite("gem_a_cut_above")
+                .addObjective(new CollectObjective(ModItems.GEM_POLISHED_CITRINE, 3))
+                .addReward(new ItemReward(ModItems.DIAMOND_POWDER, 5))
+                .addReward(new ItemReward(Items.EMERALD, 5))
+                .addReward(XpReward.novice());
     }
 
     // ========== DWARF RACE QUESTS - "The Forgemaster's Legacy" ==========

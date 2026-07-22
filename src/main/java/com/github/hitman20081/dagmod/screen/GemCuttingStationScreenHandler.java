@@ -33,11 +33,11 @@ public class GemCuttingStationScreenHandler extends AbstractContainerMenu {
 
         checkContainerSize(inventory, 4);
 
-        // Water bottle slot (left side)
+        // Water bottle / bucket slot (left side)
         this.addSlot(new Slot(inventory, GemCuttingStationBlockEntity.WATER_SLOT, 34, 40) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() == Items.POTION; // Only potions (water bottles)
+                return stack.getItem() == Items.POTION || stack.getItem() == Items.WATER_BUCKET;
             }
         });
 
@@ -74,7 +74,7 @@ public class GemCuttingStationScreenHandler extends AbstractContainerMenu {
     public int getScaledProgress() {
         int progress = this.propertyDelegate.get(0);
         int maxProgress = this.propertyDelegate.get(1);
-        int progressArrowSize = 26; // Width in pixels of progress arrow
+        int progressArrowSize = 24; // Height in pixels of the progress arrow sprite
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
@@ -96,8 +96,8 @@ public class GemCuttingStationScreenHandler extends AbstractContainerMenu {
             } else {
                 // Moving from player inventory to block inventory
                 // Try to insert into appropriate slot based on item type
-                if (originalStack.getItem() == Items.POTION) {
-                    // Water bottles go to water slot
+                if (originalStack.getItem() == Items.POTION || originalStack.getItem() == Items.WATER_BUCKET) {
+                    // Water bottles / buckets go to water slot
                     if (!this.moveItemStackTo(originalStack, GemCuttingStationBlockEntity.WATER_SLOT, GemCuttingStationBlockEntity.WATER_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }

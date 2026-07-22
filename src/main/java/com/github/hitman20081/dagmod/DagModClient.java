@@ -27,6 +27,7 @@ import com.github.hitman20081.dagmod.entity.client.BakerNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.AlchemistNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.BlacksmithNPCRenderer;
 import com.github.hitman20081.dagmod.entity.client.JewelerNPCRenderer;
+import com.github.hitman20081.dagmod.entity.client.ClassTrainerNPCRenderer;
 import com.github.hitman20081.dagmod.class_system.mana.ManaNetworking;
 import com.github.hitman20081.dagmod.class_system.mana.client.ClientManaData;
 import com.github.hitman20081.dagmod.class_system.mana.client.ManaHudRenderer;
@@ -248,6 +249,9 @@ public class DagModClient implements ClientModInitializer {
 
         // Register Jeweler renderer
         EntityRenderers.register(ModEntities.JEWELER_NPC, JewelerNPCRenderer::new);
+
+        // Register Class Trainer renderer
+        EntityRenderers.register(ModEntities.CLASS_TRAINER, ClassTrainerNPCRenderer::new);
 
         // Register Dragon Guardian renderer
         EntityRenderers.register(ModEntities.DRAGON_GUARDIAN, DragonGuardianRenderer::new);

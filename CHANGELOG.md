@@ -5,6 +5,51 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-07-22
+
+### Added
+
+- **Class Trainer NPC** — New `ClassTrainerNPC` entity type (`dagmod:class_trainer`). A fixed-position NPC (look-at-player AI only, no stroll) serving as the exclusive interface for all class quest chains. Right-clicking opens an interactive progress display for all 5 class quests with status symbols (✓ complete / ★ ready to turn in / ⟳ in progress / ◈ available / 🔒 locked). Subsequent clicks handle turn-in or accept in a single conversation flow. Invulnerable and persistent; admin placement via `/summon dagmod:class_trainer`
+- **`QuestManager.startClassQuest()`** — New method that starts a class quest while bypassing the quest book tier check. Class chain progression is gated by player level and prerequisites only, not quest book tier
+- **Garrick → Class Trainer handoff** — After completing all 3 tutorial tasks, Garrick's final dialogue now directs players to the Class Trainer NPC at the Hall of Champions to begin their class quest chain
+- **Hall of Champions land-only biome tag** — Added `data/dagmod/tags/worldgen/biome/has_structure/hall_of_champions.json` listing 41 overworld land biomes. All 9 ocean variants excluded (ocean, deep_ocean, cold_ocean, deep_cold_ocean, frozen_ocean, deep_frozen_ocean, lukewarm_ocean, deep_lukewarm_ocean, warm_ocean)
+
+### Changed
+
+- **Class quests moved off the Quest Block** — `QuestBlock` no longer shows `Quest.QuestCategory.CLASS` quests. The Quest Block now displays only `MAIN` and `SIDE` quests; class quests are exclusively handled by the Class Trainer NPC
+- **Quest block model uses custom texture** — Block model changed to `cube_all` with `dagmod:block/quest_block`, fixing the regression where the block rendered with vanilla bookshelf and oak_planks textures instead of the custom texture
+- **Welcome book expanded and rewritten** — Starting welcome book expanded from 6 to 8 pages. Additions clarify: Quest Blocks are for story/side quests; class quests open at the Quest Block after Garrick's tutorial; ability items must be held in the hotbar; Job Board handles daily/job quests (not class quests). Dimension overview and command reference added as new pages
+- **Village NPC spawn density reduced** — `village_npc_set.json` spacing increased 16 → 28, separation 5 → 10. Average inter-village gap ~256 → ~448 blocks; minimum gap 80 → 160 blocks. Only newly generated chunks are affected in existing worlds
+- **Hall of Champions biome target** — Structure set now references `#dagmod:has_structure/hall_of_champions` instead of `#minecraft:is_overworld`, preventing generation in ocean biomes
+
+### Fixed
+
+- **Class Trainer stale collect objective progress** — `ClassTrainerNPC.handleOverview()` now calls `QuestManager.updateQuestProgress(player)` before reading objective completion state. Previously, collect objectives (e.g., 16 iron ingots) appeared incomplete even with sufficient items in inventory because cached progress was never refreshed before the completion check
+
+---
+
+## [1.8.3] - 2026-07-21
+
+### Added
+
+- **Gem tier system** — Gems now have four upgrade tiers: Cut → Polished → Flawless → Grand. All 7 gem types (Citrine, Ruby, Sapphire, Tanzanite, Topaz, Zircon, Pink Garnet) are available in all four tiers. Item IDs follow the `gem_cut_*`, `gem_polished_*`, `gem_flawless_*`, `gem_grand_*` naming scheme
+- **Polishing Station tier upgrades** — The Gem Polishing Station handles all three upgrade tiers using Diamond Powder as the catalyst
+- **In-game enchantment descriptions** — Hovering over any item with a DAGMod enchantment shows a dark gray description line when advanced tooltips are enabled (F3+H). All 26 custom enchantments have descriptions
+- **Quest book objective navigation** — The Active Quests page now shows one quest at a time with ◀ / ▶ navigation buttons, making all objectives visible regardless of quest length
+
+### Changed
+
+- **Diamond Powder charge economy** — One Diamond Powder charge upgrades: 4× Cut→Polished, 2× Polished→Flawless, or 1× Flawless→Grand
+- **Gem item IDs renamed** — All bare gem IDs (`dagmod:ruby`, `dagmod:citrine`, etc.) renamed to `dagmod:gem_cut_*`. Existing worlds with old IDs will lose those items on update
+
+### Fixed
+
+- **Gem station inventory persistence** — Items in the Gem Cutting Station, Gem Crushing Station, and Gem Polishing Station were lost on logout. All three block entities now correctly save and load inventories via `ContainerHelper`
+- **Gem Crushing Station hitbox** — Hitbox was oversized; replaced with a flat `16×10×16` shape matching the current block model
+- **Tanzanite recipes referencing removed item ID** — Three recipe files still referenced `dagmod:tanzanite`. Updated to `dagmod:gem_cut_tanzanite`; redundant smelting and blasting recipes deleted
+
+---
+
 ## [1.8.2] - 2026-06-17
 
 ### Added

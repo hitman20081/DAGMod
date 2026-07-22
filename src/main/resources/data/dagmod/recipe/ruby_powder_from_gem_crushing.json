@@ -1,6 +1,6 @@
 {
   "type": "dagmod:gem_crushing",
-  "ingredient": "dagmod:ruby",
+  "ingredient": "dagmod:raw_ruby",
   "result": {
     "count": 1,
     "id": "dagmod:ruby_powder"

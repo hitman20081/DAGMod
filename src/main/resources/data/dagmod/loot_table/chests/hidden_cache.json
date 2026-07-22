@@ -65,7 +65,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "dagmod:citrine",
+          "name": "dagmod:gem_cut_citrine",
           "weight": 6,
           "functions": [
             {
@@ -76,7 +76,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "dagmod:ruby",
+          "name": "dagmod:gem_cut_ruby",
           "weight": 6,
           "functions": [
             {
@@ -87,7 +87,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "dagmod:sapphire",
+          "name": "dagmod:gem_cut_sapphire",
           "weight": 6,
           "functions": [
             {
@@ -98,7 +98,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "dagmod:tanzanite",
+          "name": "dagmod:gem_cut_tanzanite",
           "weight": 4,
           "functions": [
             {
@@ -109,7 +109,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "dagmod:zircon",
+          "name": "dagmod:gem_cut_zircon",
           "weight": 4,
           "functions": [
             {

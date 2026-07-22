@@ -25,7 +25,12 @@ public class GemCuttingStationScreen extends AbstractContainerScreen<GemCuttingS
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
         if (menu.isCrafting()) {
             int progress = menu.getScaledProgress();
-            context.fill(x + 63, y + 52, x + 63 + progress, y + 55, 0xFF00AA00);
+            // Blit the filled arrow sprite on top of the outline, clipping height to progress
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
+                    x + 104, y + 41,  // screen position matching the empty outline
+                    178, 0,           // UV of the filled arrow sprite in the texture sheet
+                    2, progress,      // 2px wide, height grows as crafting progresses
+                    256, 256);
         }
     }
 }

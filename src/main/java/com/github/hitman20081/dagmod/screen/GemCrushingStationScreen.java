@@ -25,7 +25,11 @@ public class GemCrushingStationScreen extends AbstractContainerScreen<GemCrushin
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
         if (menu.isCrafting()) {
             int progress = menu.getScaledProgress();
-            context.fill(x + 93, y + 34, x + 97, y + 34 + progress, 0xFF55AAFF);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
+                    x + 104, y + 41,  // screen position matching the empty outline
+                    178, 0,           // UV of the filled sprite in the texture sheet
+                    2, progress,      // 2px wide, height grows as crafting progresses
+                    256, 256);
         }
     }
 }

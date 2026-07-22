@@ -23,22 +23,39 @@ Sulfur-based materials used in fire-themed crafting.
 
 **Uses:** Primarily as ingredients in crafting recipes for advanced items, equipment, and other custom mod content.
 
-### Gems
+### Gems *(Tier system added v1.8.3)*
 
-Custom gems obtained by mining gem ores in the Overworld. Raw gems drop from ore blocks and can be smelted into polished gems.
+Custom gems obtained by mining gem ores in the Overworld. Gems progress through four quality tiers via the gem crafting stations.
 
 **Raw Gems (from mining):**
-- **Raw Citrine** — Smelts into Citrine. Common, found Y -16 to 64.
-- **Raw Ruby** — Smelts into Ruby. Uncommon, found Y -64 to 32.
-- **Raw Sapphire** — Smelts into Sapphire. Uncommon, found Y -64 to 32.
-- **Raw Tanzanite** — Smelts into Tanzanite. Rare, found Y -64 to 16.
-- **Raw Zircon** — Smelts into Zircon. Rare, found Y -64 to 16.
-- **Raw Pink Garnet** — Smelts into Pink Garnet. Very rare, deepslate only below Y -16.
+- **Raw Citrine** — Common, found Y -16 to 64
+- **Raw Ruby** — Uncommon, found Y -64 to 32
+- **Raw Sapphire** — Uncommon, found Y -64 to 32
+- **Raw Tanzanite** — Rare, found Y -64 to 16
+- **Raw Topaz** — Rare, found Y -64 to 16
+- **Raw Zircon** — Rare, found Y -64 to 16
+- **Raw Pink Garnet** — Very rare, deepslate only below Y -16
 
-**Polished Gems (from smelting):**
-- **Citrine, Ruby, Sapphire, Tanzanite, Zircon, Pink Garnet** — Used as crafting ingredients for advanced items and equipment.
+**Gem Tier Progression:**
 
-**Uses:** Gems are used in crafting recipes for armor, weapons, and other custom mod content. Rarer gems are required for higher-tier crafting.
+All 7 gem types follow the same four-tier upgrade path:
+
+| Tier | Item ID pattern | How to obtain |
+|------|----------------|---------------|
+| Cut | `gem_cut_*` | Process raw gem in the **Gem Cutting Station** |
+| Polished | `gem_polished_*` | Upgrade Cut gem in the **Gem Polishing Station** with Diamond Powder (4 per charge) |
+| Flawless | `gem_flawless_*` | Upgrade Polished gem in the **Gem Polishing Station** with Diamond Powder (2 per charge) |
+| Grand | `gem_grand_*` | Upgrade Flawless gem in the **Gem Polishing Station** with Diamond Powder (1 per charge) |
+
+**Diamond Powder charge economy:** One Diamond Powder is consumed per batch. A single powder upgrades 4 Cut→Polished, 2 Polished→Flawless, or 1 Flawless→Grand.
+
+**Gem Powder (for potions):**
+
+Raw gems can also be processed at the **Gem Crushing Station** (requires a Crushing Hammer in the tool slot) to produce gem powder — a separate material used for brewing gem potions and other crafting recipes.
+
+> **Hall of Champions:** All three gem stations are available at the jeweler stall inside the Hall of Champions, so you can start cutting and polishing gems before building your own stations.
+
+**Uses:** Higher-tier gems are used in crafting recipes for armor, weapons, and other custom mod content. Rarer gem types and higher tiers are required for higher-tier crafting.
 
 See [Custom Blocks - Gem Ores](./blocks.md#gem-ores) for full mining details and ore distribution.
 

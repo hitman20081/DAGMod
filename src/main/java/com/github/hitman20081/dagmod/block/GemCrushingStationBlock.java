@@ -22,7 +22,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -32,17 +31,7 @@ public class GemCrushingStationBlock extends BaseEntityBlock {
 
     public static final net.minecraft.world.level.block.state.properties.EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
-    private static final VoxelShape SHAPE;
-
-    static {
-        VoxelShape legFrontLeft = Block.box(0, 0, 0, 2, 4, 2);
-        VoxelShape legFrontRight = Block.box(14, 0, 0, 16, 4, 2);
-        VoxelShape legBackLeft = Block.box(0, 0, 14, 2, 4, 16);
-        VoxelShape legBackRight = Block.box(14, 0, 14, 16, 4, 16);
-        VoxelShape base = Block.box(0, 4, 0, 16, 10, 16);
-        VoxelShape tray = Block.box(6, 10, 6, 10, 11, 10);
-        SHAPE = Shapes.or(legFrontLeft, legFrontRight, legBackLeft, legBackRight, base, tray);
-    }
+    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 10, 16);
 
     public GemCrushingStationBlock(Properties settings) {
         super(settings);

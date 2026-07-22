@@ -2,6 +2,8 @@
 
 DAGMod includes 26 custom enchantments ranging from combat enhancements to utility effects. Some are data-driven (JSON effects) while others have custom Java implementations for unique behavior. Enchanted books with these enchantments can also be found in bone dungeon chests in 3 rarity tiers (common, uncommon, and rare).
 
+> **In-game descriptions** *(added v1.8.3)*: Press **F3+H** to enable advanced tooltips. After that, hovering over any item with a DAGMod enchantment shows a short description directly in the tooltip — no need to check the wiki for basic info.
+
 ---
 
 ## Combat Enchantments

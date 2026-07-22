@@ -13,8 +13,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
@@ -69,6 +72,18 @@ public class GemCrushingStationBlockEntity extends BlockEntity implements Extend
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
         super.setChanged();
+    }
+
+    @Override
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
+        ContainerHelper.saveAllItems(tag, inventory);
+    }
+
+    @Override
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        ContainerHelper.loadAllItems(tag, inventory);
     }
 
     @Override
@@ -127,6 +142,17 @@ public class GemCrushingStationBlockEntity extends BlockEntity implements Extend
         Optional<RecipeHolder<GemCrushingRecipe>> recipe = getCurrentRecipe();
 
         this.removeItem(INPUT_SLOT, 1);
+
+        // Damage the crushing hammer
+        ItemStack hammerStack = this.getItem(HAMMER_SLOT);
+        if (hammerStack.isDamageableItem()) {
+            int newDamage = hammerStack.getDamageValue() + 1;
+            if (newDamage >= hammerStack.getMaxDamage()) {
+                this.setItem(HAMMER_SLOT, ItemStack.EMPTY);
+            } else {
+                hammerStack.setDamageValue(newDamage);
+            }
+        }
 
         this.setItem(OUTPUT_SLOT, new ItemStack(recipe.get().value().result().getItem(),
                 getItem(OUTPUT_SLOT).getCount() + recipe.get().value().result().getCount()));

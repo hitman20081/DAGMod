@@ -161,6 +161,22 @@ This gives Rogues unmatched versatility and the highest skill ceiling in the gam
 - Excellent for PvP if your server allows it
 - Practice ability timing and positioning for success
 
+### Class Quest Chain — Path of Shadows
+
+Completing the Rogue quest chain unlocks both ability systems piece by piece and ends with a dragon hunt. Quests are received from the **Job Board** and tracked in your quest book.
+
+| # | Quest | Level Req | Objectives | Ability Unlocked |
+|---|-------|-----------|------------|-----------------|
+| 1 | Shadow's Calling | 10 | Kill 15 Spiders, kill 8 Cave Spiders, collect 8 Gunpowder | **Rogue Ability Tome** *(energy system)* |
+| 2 | Step Between Shadows | 25 | Kill 6 Phantoms, collect 4 Phantom Membrane + 8 Ender Pearl | **Void Blade** |
+| 3 | Toxin and Shadow | 50 | Kill 8 Endermen, collect 4 Echo Shard + 16 Spider Eye + 8 Fermented Spider Eye | **Poison Vial** |
+| 4 | The Perfect Kill | 75 | Kill 15 Pillagers, kill 3 Evokers, collect 16 Diamond + 2 Netherite Ingot | **Assassin's Mark** |
+| 5 | Into the Dark | 100 | Kill 1 Wild Dragon, collect 2 Netherite Block + 4 Enchanted Golden Apple | **Vanish Cloak** |
+
+**Chain completion reward:** Netherite Sword, Netherite Chestplate, 10× Enchanted Golden Apple
+
+> Quest 1 rewards the **Rogue Ability Tome** — this is the key to the energy-based ability system (Smoke Bomb, Poison Dagger, Shadow Step). The remaining quests unlock individual cooldown-based ability items. You need all five to have access to the full Rogue kit.
+
 ### Best Race Synergies
 - **Elf Rogue:** Invisibility in forests when sneaking - ultimate stealth predator
 - **Orc Rogue:** +20% extra backstab damage (stacks with base + Assassin's Mark) - INSANE burst damage

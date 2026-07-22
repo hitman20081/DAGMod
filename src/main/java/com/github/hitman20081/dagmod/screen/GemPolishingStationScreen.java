@@ -23,5 +23,16 @@ public class GemPolishingStationScreen extends AbstractContainerScreen<GemPolish
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
+        if (menu.isCrafting()) {
+            int progress = menu.getScaledProgress();
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
+                    x + 88, y + 31,  // screen position matching the empty outline
+                    178, 0,          // UV of the filled sprite in the texture sheet
+                    2, progress,     // 2px wide, height grows as crafting progresses
+                    256, 256);
+        }
+        // Label under diamond powder catalyst slot (slot at 39,36; center at x+48)
+        context.text(this.font, Component.literal("Diamond"), x + 26, y + 56, 0x404040, false);
+        context.text(this.font, Component.literal("Powder"),  x + 30, y + 65, 0x404040, false);
     }
 }

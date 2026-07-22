@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:gem_cut_zircon",
+  "result": {
+    "id": "dagmod:gem_polished_zircon",
+    "count": 1
+  }
+}

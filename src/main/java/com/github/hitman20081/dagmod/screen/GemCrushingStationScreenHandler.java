@@ -32,19 +32,19 @@ public class GemCrushingStationScreenHandler extends AbstractContainerMenu {
 
         checkContainerSize(inventory, 3);
 
-        // Crushing Hammer slot (left side) — only accepts the Crushing Hammer
-        this.addSlot(new Slot(inventory, GemCrushingStationBlockEntity.HAMMER_SLOT, 12, 15) {
+        // Crushing Hammer slot — only accepts the Crushing Hammer
+        this.addSlot(new Slot(inventory, GemCrushingStationBlockEntity.HAMMER_SLOT, 103, 18) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() == ModItems.CRUSHING_HAMMER;
             }
         });
 
-        // Input slot (right top)
-        this.addSlot(new Slot(inventory, GemCrushingStationBlockEntity.INPUT_SLOT, 86, 15));
+        // Input slot
+        this.addSlot(new Slot(inventory, GemCrushingStationBlockEntity.INPUT_SLOT, 57, 18));
 
-        // Output slot (right bottom)
-        this.addSlot(new Slot(inventory, GemCrushingStationBlockEntity.OUTPUT_SLOT, 86, 60) {
+        // Output slot
+        this.addSlot(new Slot(inventory, GemCrushingStationBlockEntity.OUTPUT_SLOT, 80, 60) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
@@ -64,7 +64,7 @@ public class GemCrushingStationScreenHandler extends AbstractContainerMenu {
     public int getScaledProgress() {
         int progress = this.propertyDelegate.get(0);
         int maxProgress = this.propertyDelegate.get(1);
-        int progressArrowSize = 26;
+        int progressArrowSize = 24; // Height in pixels of the progress bar sprite
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
@@ -82,8 +82,16 @@ public class GemCrushingStationScreenHandler extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(originalStack, 0, this.inventory.getContainerSize(), false)) {
-                return ItemStack.EMPTY;
+            } else {
+                if (originalStack.getItem() == ModItems.CRUSHING_HAMMER) {
+                    if (!this.moveItemStackTo(originalStack, GemCrushingStationBlockEntity.HAMMER_SLOT, GemCrushingStationBlockEntity.HAMMER_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    if (!this.moveItemStackTo(originalStack, GemCrushingStationBlockEntity.INPUT_SLOT, GemCrushingStationBlockEntity.INPUT_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
             }
 
             if (originalStack.isEmpty()) {

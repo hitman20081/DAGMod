@@ -3,6 +3,7 @@ package com.github.hitman20081.dagmod.item;
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.item.QuestBookItem;
 import com.github.hitman20081.dagmod.quest.QuestData;
+import com.github.hitman20081.dagmod.util.ModTags;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -32,15 +33,43 @@ public class ModItems {
     public static final Item BRIMSTONE_DUST = register("brimstone_dust", Item::new, new Item.Properties());
     public static final Item PURE_BRIMSTONE_DUST = register("pure_brimstone_dust", Item::new, new Item.Properties());
 
-    // Gem Items
-    public static final Item CITRINE = register("citrine", Item::new, new Item.Properties().stacksTo(64));
-    public static final Item RUBY = register("ruby", Item::new, new Item.Properties().stacksTo(64));
-    public static final Item SAPPHIRE = register("sapphire", Item::new, new Item.Properties().stacksTo(64));
-    public static final Item TANZANITE = register("tanzanite", Item::new, new Item.Properties().stacksTo(64));
-    public static final Item TOPAZ = register("topaz", Item::new, new Item.Properties().stacksTo(64));
-    public static final Item ZIRCON = register("zircon", Item::new, new Item.Properties().stacksTo(64));
+    // Gem Items — Cut tier
+    public static final Item GEM_CUT_CITRINE    = register("gem_cut_citrine",    Item::new, new Item.Properties().stacksTo(64));
+    public static final Item GEM_CUT_RUBY       = register("gem_cut_ruby",       Item::new, new Item.Properties().stacksTo(64));
+    public static final Item GEM_CUT_SAPPHIRE   = register("gem_cut_sapphire",   Item::new, new Item.Properties().stacksTo(64));
+    public static final Item GEM_CUT_TANZANITE  = register("gem_cut_tanzanite",  Item::new, new Item.Properties().stacksTo(64));
+    public static final Item GEM_CUT_TOPAZ      = register("gem_cut_topaz",      Item::new, new Item.Properties().stacksTo(64));
+    public static final Item GEM_CUT_ZIRCON     = register("gem_cut_zircon",     Item::new, new Item.Properties().stacksTo(64));
+    public static final Item GEM_CUT_PINK_GARNET = register("gem_cut_pink_garnet", Item::new, new Item.Properties().stacksTo(64));
+
+    // Gem Items — Polished tier
+    public static final Item GEM_POLISHED_CITRINE    = register("gem_polished_citrine",    Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+    public static final Item GEM_POLISHED_RUBY       = register("gem_polished_ruby",       Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+    public static final Item GEM_POLISHED_SAPPHIRE   = register("gem_polished_sapphire",   Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+    public static final Item GEM_POLISHED_TANZANITE  = register("gem_polished_tanzanite",  Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+    public static final Item GEM_POLISHED_TOPAZ      = register("gem_polished_topaz",      Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+    public static final Item GEM_POLISHED_ZIRCON     = register("gem_polished_zircon",     Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+    public static final Item GEM_POLISHED_PINK_GARNET = register("gem_polished_pink_garnet", Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+
+    // Gem Items — Flawless tier
+    public static final Item GEM_FLAWLESS_CITRINE    = register("gem_flawless_citrine",    Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+    public static final Item GEM_FLAWLESS_RUBY       = register("gem_flawless_ruby",       Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+    public static final Item GEM_FLAWLESS_SAPPHIRE   = register("gem_flawless_sapphire",   Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+    public static final Item GEM_FLAWLESS_TANZANITE  = register("gem_flawless_tanzanite",  Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+    public static final Item GEM_FLAWLESS_TOPAZ      = register("gem_flawless_topaz",      Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+    public static final Item GEM_FLAWLESS_ZIRCON     = register("gem_flawless_zircon",     Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+    public static final Item GEM_FLAWLESS_PINK_GARNET = register("gem_flawless_pink_garnet", Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
+
+    // Gem Items — Grand tier
+    public static final Item GEM_GRAND_CITRINE    = register("gem_grand_citrine",    Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+    public static final Item GEM_GRAND_RUBY       = register("gem_grand_ruby",       Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+    public static final Item GEM_GRAND_SAPPHIRE   = register("gem_grand_sapphire",   Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+    public static final Item GEM_GRAND_TANZANITE  = register("gem_grand_tanzanite",  Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+    public static final Item GEM_GRAND_TOPAZ      = register("gem_grand_topaz",      Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+    public static final Item GEM_GRAND_ZIRCON     = register("gem_grand_zircon",     Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+    public static final Item GEM_GRAND_PINK_GARNET = register("gem_grand_pink_garnet", Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+
     public static final Item SILMARIL = register("silmaril", Item::new, new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
-    public static final Item PINK_GARNET = register("pink_garnet", Item::new, new Item.Properties().stacksTo(64));
 
     // Raw Gem Items
     public static final Item RAW_CITRINE = register("raw_citrine", Item::new, new Item.Properties().stacksTo(64));
@@ -53,9 +82,14 @@ public class ModItems {
 
     // Gem Crafting Tools
     public static final Item GEM_CUTTER_TOOL = register("gem_cutter_tool", Item::new,
-            new Item.Properties().stacksTo(1).durability(32));
+            new Item.Properties().stacksTo(1).durability(500).repairable(ModTags.Items.MYTHRIL_REPAIR));
     public static final Item CRUSHING_HAMMER = register("crushing_hammer", Item::new,
-            new Item.Properties().stacksTo(1));
+            new Item.Properties().stacksTo(1).durability(250).repairable(ModTags.Items.CRUSHING_HAMMER_REPAIR));
+
+    // Gem Powders (mod gems only — vanilla powders registered near the top of the file)
+    public static final Item TANZANITE_POWDER = register("tanzanite_powder", Item::new, new Item.Properties());
+    public static final Item ZIRCON_POWDER = register("zircon_powder", Item::new, new Item.Properties());
+    public static final Item PINK_GARNET_POWDER = register("pink_garnet_powder", Item::new, new Item.Properties());
 
     // Mythril Materials
     public static final Item RAW_MYTHRIL = register("raw_mythril", Item::new, new Item.Properties().stacksTo(64).fireResistant());
@@ -742,6 +776,9 @@ public class ModItems {
                     itemGroup.accept(ModItems.RUBY_POWDER);
                     itemGroup.accept(ModItems.SAPPHIRE_POWDER);
                     itemGroup.accept(ModItems.TOPAZ_POWDER);
+                    itemGroup.accept(ModItems.TANZANITE_POWDER);
+                    itemGroup.accept(ModItems.ZIRCON_POWDER);
+                    itemGroup.accept(ModItems.PINK_GARNET_POWDER);
                 });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) ->
@@ -755,17 +792,50 @@ public class ModItems {
                 .register((itemGroup) ->
                         itemGroup.accept(ModItems.SUSPICIOUS_SUBSTANCE));
 
-        // Gem Items
+        // Gem Items — Cut tier
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) -> {
-                    itemGroup.accept(ModItems.CITRINE);
-                    itemGroup.accept(ModItems.RUBY);
-                    itemGroup.accept(ModItems.SAPPHIRE);
-                    itemGroup.accept(ModItems.TANZANITE);
-                    itemGroup.accept(ModItems.TOPAZ);
-                    itemGroup.accept(ModItems.ZIRCON);
+                    itemGroup.accept(ModItems.GEM_CUT_CITRINE);
+                    itemGroup.accept(ModItems.GEM_CUT_RUBY);
+                    itemGroup.accept(ModItems.GEM_CUT_SAPPHIRE);
+                    itemGroup.accept(ModItems.GEM_CUT_TANZANITE);
+                    itemGroup.accept(ModItems.GEM_CUT_TOPAZ);
+                    itemGroup.accept(ModItems.GEM_CUT_ZIRCON);
+                    itemGroup.accept(ModItems.GEM_CUT_PINK_GARNET);
+                });
+        // Gem Items — Polished tier
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+                .register((itemGroup) -> {
+                    itemGroup.accept(ModItems.GEM_POLISHED_CITRINE);
+                    itemGroup.accept(ModItems.GEM_POLISHED_RUBY);
+                    itemGroup.accept(ModItems.GEM_POLISHED_SAPPHIRE);
+                    itemGroup.accept(ModItems.GEM_POLISHED_TANZANITE);
+                    itemGroup.accept(ModItems.GEM_POLISHED_TOPAZ);
+                    itemGroup.accept(ModItems.GEM_POLISHED_ZIRCON);
+                    itemGroup.accept(ModItems.GEM_POLISHED_PINK_GARNET);
+                });
+        // Gem Items — Flawless tier
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+                .register((itemGroup) -> {
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_CITRINE);
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_RUBY);
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_SAPPHIRE);
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_TANZANITE);
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_TOPAZ);
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_ZIRCON);
+                    itemGroup.accept(ModItems.GEM_FLAWLESS_PINK_GARNET);
+                });
+        // Gem Items — Grand tier
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+                .register((itemGroup) -> {
+                    itemGroup.accept(ModItems.GEM_GRAND_CITRINE);
+                    itemGroup.accept(ModItems.GEM_GRAND_RUBY);
+                    itemGroup.accept(ModItems.GEM_GRAND_SAPPHIRE);
+                    itemGroup.accept(ModItems.GEM_GRAND_TANZANITE);
+                    itemGroup.accept(ModItems.GEM_GRAND_TOPAZ);
+                    itemGroup.accept(ModItems.GEM_GRAND_ZIRCON);
+                    itemGroup.accept(ModItems.GEM_GRAND_PINK_GARNET);
                     itemGroup.accept(ModItems.SILMARIL);
-                    itemGroup.accept(ModItems.PINK_GARNET);
                 });
 
         // Raw Gem Items

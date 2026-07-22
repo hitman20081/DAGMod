@@ -128,6 +128,9 @@ public class DagMod implements ModInitializer {
             // Initialize rotating trade manager
             RotatingTradeManager.getInstance().initialize(server);
 
+            // Load daily quest rotation
+            com.github.hitman20081.dagmod.quest.daily.DailyQuestManager.getInstance().load(server);
+
             // Initialize grave system
             GraveManager.getInstance().initialize(server);
         });
@@ -202,6 +205,7 @@ public class DagMod implements ModInitializer {
 
         // Register custom enchantment effects (Midas Touch, Mud Collector, Tunneling, Lucky Looter)
         CustomEnchantmentEffects.register();
+        com.github.hitman20081.dagmod.enchantment.HeartArmorHandler.register();
 
         // Register Party Quest block break handler
         com.github.hitman20081.dagmod.event.PartyQuestBlockBreakHandler.register();
@@ -346,6 +350,10 @@ public class DagMod implements ModInitializer {
 
                 // Load quest data
                 QuestManager.getInstance().loadPlayerQuestData(player);
+
+                // Load daily streak data
+                com.github.hitman20081.dagmod.quest.daily.DailyStreakManager.load(
+                        player.level().getServer(), player.getUUID());
 
                 // Then apply abilities (already loaded by loadPlayerData, but this ensures sync)
                 ClassAbilityManager.applyClassAbilities(player);
@@ -505,6 +513,9 @@ public class DagMod implements ModInitializer {
             QuestManager.getInstance().savePlayerQuestData(player);
 
             // Note: Progression data is saved/unloaded by ProgressionEvents.java
+
+            // Unload daily streak data
+            com.github.hitman20081.dagmod.quest.daily.DailyStreakManager.unload(playerId);
 
             // Clean up memory (prevent memory leaks)
             QuestManager.getInstance().clearPlayerData(playerId);

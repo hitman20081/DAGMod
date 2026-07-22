@@ -23,7 +23,8 @@
   "client": [
     "client.DynamicLightMixin",
     "ChestRenderStateMixin",
-    "LockedChestTextureMixin"
+    "LockedChestTextureMixin",
+    "EnchantmentDescriptionMixin"
   ],
 	"injectors": {
 		"defaultRequire": 1

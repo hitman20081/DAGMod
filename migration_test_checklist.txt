@@ -1,0 +1,288 @@
+================================================================================
+  DAGMod - MC 1.21.1 -> 26.2 Migration Verification Checklist
+  Generated: 2026-07-19
+================================================================================
+
+HOW TO USE:
+  Replace [ ] with [X] when passed, [F] when failed, [S] when skipped.
+  Add notes after the line with a > symbol.
+  Example:  [X] Test passed fine
+            [F] Test failed - boss bar showed wrong name
+            > Happened only on second spawn attempt
+
+================================================================================
+  SECTION 1 - KNOWN CODE ISSUES (Fix before testing these)
+================================================================================
+
+These are confirmed bugs found by code audit. They should be patched first,
+then verified in-game.
+
+--- 1A. Enchantment Tag (#minecraft:in_enchanting_table removed) ---
+
+Files affected:
+  - data/dagmod/loot_table/boss/boss_loot_table.json
+  - data/dagmod/loot_table/chests/skeleton_king_chest.json
+
+The tag #minecraft:in_enchanting_table was removed in MC 1.21. Books rolled
+against it receive NO enchantment. Needs to be replaced with
+#minecraft:on_random_loot in both files.
+
+[ ] boss_loot_table.json updated to use #minecraft:on_random_loot
+[ ] skeleton_king_chest.json updated to use #minecraft:on_random_loot
+[ ] Open a boss chest in-game and confirm books receive enchantments
+[ ] Open the skeleton king chest in-game and confirm books receive enchantments
+    >
+
+--- 1B. DeathGraveMixin - keepInventory never suppresses graves ---
+
+File: src/main/java/com/github/hitman20081/dagmod/mixin/DeathGraveMixin.java
+Line: 36
+
+world.getGameRules().get(GameRules.KEEP_INVENTORY) returns a BooleanValue
+object, not a boolean. The condition is always true, so graves never suppress
+when keepInventory is enabled.
+Fix: change .get() to .getBoolean()
+
+[ ] Code fix applied
+[ ] Enable keepInventory gamerule (/gamerule keepInventory true)
+[ ] Die (fall damage, void, etc.)
+[ ] Verify NO grave spawns and items stay in inventory
+[ ] Disable keepInventory and die again
+[ ] Verify grave DOES spawn with items inside
+    >
+
+--- 1C. MageStatusEffectMixin - targets removed single-arg addEffect overload ---
+
+File: src/main/java/com/github/hitman20081/dagmod/mixin/MageStatusEffectMixin.java
+
+Targets addEffect(MobEffectInstance) single-arg overload. In MC 1.21+ the
+primary overload is addEffect(MobEffectInstance, Entity). With defaultRequire=1
+in the mixin config, if the old overload is gone this will CRASH ON LOAD.
+
+[ ] Verify game loads without crash on startup
+[ ] If it crashes - mixin needs to target the two-arg overload
+[ ] Select Mage class
+[ ] Drink a potion (e.g. Strength or Regeneration)
+[ ] Verify the effect duration is extended compared to a non-Mage character
+    >
+
+================================================================================
+  SECTION 2 - IN-GAME VERIFICATION TESTS
+================================================================================
+
+These need to be tested in a world. Use a creative/test world where possible.
+
+--- 2A. Death & Grave System ---
+
+[ ] Die with keepInventory OFF - grave spawns at death location
+[ ] Grave contains all items that were in inventory
+[ ] Right-click grave to retrieve items
+[ ] Items are returned to inventory correctly
+[ ] Grave disappears after looting
+[ ] Die in water/lava - grave spawns correctly
+[ ] Die in void - verify behavior (expected: items lost or special handling)
+    >
+
+--- 2B. Mage Class ---
+
+[ ] Mage can be selected at class altar
+[ ] Mana bar appears on HUD
+[ ] Mana regenerates over time
+[ ] Arcane Missiles fires correctly
+[ ] Time Warp ability works
+[ ] Potion durations are extended (see 1C above)
+[ ] Mana cost is deducted on ability use
+[ ] Mana does not go below zero
+    >
+
+--- 2C. Rogue Class ---
+
+[ ] Rogue can be selected at class altar
+[ ] Energy bar appears on HUD
+[ ] Energy regenerates correctly
+[ ] Stealth ability works
+[ ] Backstab deals bonus damage
+[ ] Energy cost deducted on ability use
+    >
+
+--- 2D. Warrior Class ---
+
+[ ] Warrior can be selected at class altar
+[ ] Cooldown system functions
+[ ] Warrior abilities activate without errors
+[ ] Cooldown bar/indicator appears correctly
+    >
+
+--- 2E. Race System ---
+
+[ ] Race can be selected at race altar
+[ ] Human XP bonus applies (HumanExperienceMixin - flagged as risk)
+    > If broken: Human players gain no XP bonus
+[ ] Dwarf mining bonus - break an ore, verify chance of double drops
+    > If broken: No extra drops, RaceMiningMixin failed to inject
+[ ] Elf gathering bonus - harvest a crop/plant, verify bonus
+    > If broken: No extra drops, RaceMiningMixin failed to inject
+[ ] Race abilities apply on login (re-log and check effects are present)
+    >
+
+--- 2F. Boss Encounters ---
+
+SKELETON LORD:
+[ ] Skeleton Lord spawns when player enters trigger range (non-creative)
+[ ] Boss bar appears on screen
+[ ] Spawn two Skeleton Lords simultaneously
+[ ] Verify TWO separate boss bars appear (not one shared bar)
+    > If one bar: ServerBossEvent UUID issue confirmed
+
+SKELETON KING:
+[ ] Skeleton King spawns from throne room trigger
+[ ] Barrier walls seal the room on spawn (light level 0 blocks replaced)
+[ ] Boss bar appears
+[ ] On death: barrier walls are removed
+[ ] Skeleton King chest spawns/is accessible after kill
+[ ] Skeleton King chest contains appropriate loot (not ancient city loot)
+[ ] Books in chest have enchantments on them
+    >
+
+DRAGON GUARDIAN:
+[ ] Dragon Guardian spawns correctly in dragon realm
+[ ] Boss bar appears
+[ ] No collision between boss bars if multiple present
+    >
+
+--- 2G. Bone Dungeon System ---
+
+[ ] Bone Dungeon Locator item gives result without freezing server
+[ ] Result shows coordinates, distance, and compass direction
+[ ] "Consulting the ancient charts..." message appears first
+[ ] Follow coordinates - bone dungeon is present at or near that location
+[ ] Dungeon is in a badlands or desert biome
+[ ] Dungeon is NOT spawned in/under water
+[ ] Portal room spawns the boss spawner correctly
+[ ] /locatebonedungeon command also works without freezing
+    >
+
+--- 2H. Skeleton Kingdom Loot ---
+
+[ ] Iron chest in skeleton kingdom uses skeleton_kingdom loot table
+    (NOT ancient city loot)
+[ ] Loot contains thematic items: bones, arrows, gems, potions
+[ ] Books in chests have enchantments
+[ ] Skeleton King locked chest uses skeleton_king_chest loot table
+[ ] Skeleton King chest contains high-tier loot (netherite gear, etc.)
+    >
+
+--- 2I. Quest System ---
+
+[ ] Quest board displays available quests
+[ ] Quest can be accepted
+[ ] CollectObjective tracks item collection correctly
+[ ] KillObjective tracks mob kills correctly
+[ ] Quest completes on objective met
+[ ] Reward is granted (correct tier - Iron/Chainmail minimum for NOVICE)
+[ ] Quest data persists through relog
+[ ] /quest list command works
+    >
+
+--- 2J. Progression System ---
+
+[ ] XP is gained from kills/quests
+[ ] Level increases at correct thresholds
+[ ] Level persists through relog and dimension change
+[ ] /testprogression 500 adds XP correctly
+[ ] /testprogression setlevel 25 sets level correctly
+[ ] /testprogression reset resets correctly
+[ ] /info shows correct player stats
+    >
+
+--- 2K. Dimensions ---
+
+BONE REALM:
+[ ] Bone realm portal activates
+[ ] Player is transported to bone realm
+[ ] Bone realm portal back to overworld works
+[ ] Skeleton entities spawn in bone realm
+
+DRAGON REALM:
+[ ] Dragon realm portal activates
+[ ] Player is transported to dragon realm
+[ ] Dragon realm portal back works
+    >
+
+--- 2L. Party System ---
+
+[ ] /party create <name> creates a party
+[ ] Other player can join party
+[ ] Party members shown in party UI
+[ ] Party quest can be accepted
+[ ] Party data does not persist incorrectly after disband
+    >
+
+--- 2M. Hall of Champions ---
+
+[ ] Hall spawn generates in world
+[ ] Hall spawn is NOT within 16 chunks of a bone dungeon
+[ ] Hall respawn block functions
+[ ] NPCs present and interactable
+    >
+
+--- 2N. Custom Enchantments ---
+
+[ ] Blazing Strike enchantment applies fire damage
+[ ] Frostbite enchantment applies slow/freeze
+[ ] Heart Armor enchantment grants bonus HP
+[ ] Reach enchantment extends melee range
+[ ] Bane of White Walker deals bonus to undead
+[ ] soul_bound prevents item drop on death
+[ ] Enchantments appear in enchanting table or via books
+    >
+
+--- 2O. Items & Blocks ---
+
+[ ] Bone Dungeon Locator item is obtainable (/give or creative)
+[ ] Gem Cutting Station opens UI and functions
+[ ] Gem Polishing Station opens UI and functions
+[ ] Iron Chest opens and stores items
+[ ] Locked Bone Chest is locked (cannot be opened without trigger)
+[ ] Job Board displays quests
+[ ] Altars (Race, Class) open selection UI
+    >
+
+================================================================================
+  SECTION 3 - STRUCTURE INTEGRITY
+================================================================================
+
+[ ] Bone dungeon generates with all rooms intact (no missing sections)
+[ ] Portal room spawner is present
+[ ] Hall of Champions generates correctly (no missing blocks)
+[ ] Skeleton throne room generates with throne and chest placements
+[ ] Skeleton throne room has light level 0 marker blocks placed
+    > These were removed during migration - need to be manually added back
+[ ] Village NPC structures generate correctly
+[ ] Village NPCs are present and not floating/clipping
+    >
+
+================================================================================
+  SECTION 4 - PERFORMANCE / STABILITY
+================================================================================
+
+[ ] No server freeze when using Bone Dungeon Locator
+[ ] No TPS drop in areas with many structures loaded
+[ ] No memory leak observed over extended play session
+[ ] No errors in server log during normal gameplay
+[ ] No errors in client log during normal gameplay
+    >
+
+================================================================================
+  NOTES / GENERAL OBSERVATIONS
+================================================================================
+
+>
+>
+>
+>
+>
+
+================================================================================
+  END OF CHECKLIST
+================================================================================

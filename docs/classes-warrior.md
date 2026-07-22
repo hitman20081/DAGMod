@@ -166,6 +166,22 @@ A powerful AOE buff and debuff. Use it at the start of a big fight to give your 
 - Excellent for dungeon diving and boss fights
 - In group play, tank for your team
 
+### Class Quest Chain — Path of the Berserker
+
+Completing the Warrior quest chain unlocks all six class abilities one by one and culminates in a chain-completion reward. Quests are received from the **Job Board** and tracked in your quest book.
+
+| # | Quest | Level Req | Objectives | Ability Unlocked |
+|---|-------|-----------|------------|-----------------|
+| 1 | Trial of Fury | 10 | Kill 15 Zombies, kill 10 Skeletons, collect 16 Iron Ingot | **Rage Totem** |
+| 2 | Battle Hardened | 25 | Kill 12 Pillagers, kill 6 Vindicators, collect 16 Gold Ingot + 4 Iron Block | **Battle Standard** |
+| 3 | Whirlwind Mastery | 50 | Kill 10 Blazes, kill 8 Wither Skeletons, collect 16 Diamond + 4 Netherite Scrap | **Whirlwind Axe** |
+| 4 | Iron Skin Trial | 75 | Kill 8 Piglin Brutes, collect 8 Ancient Debris + 4 Netherite Ingot | **Iron Talisman** |
+| 5 | War Cry | 100 | Kill 1 Wild Dragon, kill 1 Skeleton Lord, collect 4 Netherite Block | **War Horn** |
+
+**Chain completion reward:** Netherite Sword, Netherite Axe, 10× Enchanted Golden Apple
+
+> The ability items are the actual usable items for each ability — equip them in your hotbar to activate that ability. You need all five to have access to the full Warrior kit.
+
 ### Best Race Synergies
 - **Dwarf Warrior:** Gains Resistance underground (Y<50) + extra HP - unstoppable cave tank
 - **Orc Warrior:** Berserker rage (Strength + Speed) when below 30% health - devastating when cornered

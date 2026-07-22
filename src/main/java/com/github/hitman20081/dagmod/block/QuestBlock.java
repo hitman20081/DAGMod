@@ -158,11 +158,10 @@ public class QuestBlock extends Block {
         // If no completed quests, show other options
         player.sendSystemMessage(Component.literal("Right-click again to:"));
 
-        // FILTER: Show MAIN, SIDE, and CLASS category quests (Job Board handles JOB and DAILY)
+        // FILTER: MAIN and SIDE quests only. CLASS quests are handled by the Class Trainer NPC.
         List<Quest> availableQuests = questManager.getAvailableQuests(player).stream()
                 .filter(q -> q.getCategory() == Quest.QuestCategory.MAIN
-                          || q.getCategory() == Quest.QuestCategory.SIDE
-                          || q.getCategory() == Quest.QuestCategory.CLASS)
+                          || q.getCategory() == Quest.QuestCategory.SIDE)
                 .toList();
 
         if (!availableQuests.isEmpty() && playerData.canAcceptMoreQuests()) {

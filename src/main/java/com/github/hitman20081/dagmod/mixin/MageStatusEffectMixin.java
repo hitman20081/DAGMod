@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class MageStatusEffectMixin {
 
     @ModifyVariable(
-            method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z",
+            method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z",
             at = @At("HEAD"),
             argsOnly = true
     )

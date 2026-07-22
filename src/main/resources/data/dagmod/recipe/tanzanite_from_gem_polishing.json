@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:gem_cut_tanzanite",
+  "result": {
+    "id": "dagmod:gem_polished_tanzanite",
+    "count": 1
+  }
+}

@@ -1,6 +1,9 @@
 package com.github.hitman20081.dagmod.quest;
 
 import com.github.hitman20081.dagmod.progression.LevelRequirements;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
+import com.github.hitman20081.dagmod.quest.daily.DailyQuestManager;
+import com.github.hitman20081.dagmod.quest.daily.DailyStreakManager;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
@@ -167,6 +170,137 @@ public class QuestManager {
 
     // Check if player can start a quest
     public boolean startQuest(Player player, String questId) {
+        return startQuest(player, questId, false);
+    }
+
+    public boolean startClassQuest(Player player, String questId) {
+        return startQuest(player, questId, true);
+    }
+
+    /**
+     * Starts a daily quest. Bypasses quest book tier check.
+     * Enforces the per-day completion limit (3 dailies/day) and checks today's pool.
+     */
+    public boolean startDailyQuest(Player player, String questId) {
+        UUID uid = player.getUUID();
+
+        // Must be in today's pool
+        if (!DailyQuestManager.getInstance().getTodayQuestIds().contains(questId)) {
+            player.sendSystemMessage(Component.literal("That quest isn't available today.").withStyle(net.minecraft.ChatFormatting.RED));
+            return false;
+        }
+
+        // Can't accept one already completed today
+        if (DailyStreakManager.hasCompletedToday(uid, questId)) {
+            player.sendSystemMessage(Component.literal("You've already completed that daily today!").withStyle(net.minecraft.ChatFormatting.YELLOW));
+            return false;
+        }
+
+        // Enforce 3-daily-per-day limit (completed + currently active dailies)
+        int completedToday = DailyStreakManager.completedTodayCount(uid);
+        long activeDailies = getPlayerData(player).getActiveQuests().stream()
+                .filter(q -> q.getCategory() == Quest.QuestCategory.DAILY).count();
+        if (completedToday + activeDailies >= DailyQuestManager.DAILY_COMPLETION_LIMIT) {
+            player.sendSystemMessage(Component.literal("Daily quest limit reached (3/day). Come back tomorrow!").withStyle(net.minecraft.ChatFormatting.YELLOW));
+            return false;
+        }
+
+        return startQuest(player, questId, true); // bypass tier check
+    }
+
+    /**
+     * Turns in a completed daily quest. Does NOT add to completedQuestIds — daily quests are
+     * repeatable. Instead, marks the completion in DailyStreakManager and applies bonus multipliers.
+     */
+    public boolean turnInDailyQuest(Player player, String questId) {
+        QuestData playerData = getPlayerData(player);
+        Quest quest = playerData.getActiveQuest(questId);
+
+        if (quest == null) {
+            player.sendOverlayMessage(Component.literal("You don't have that quest active."));
+            return false;
+        }
+
+        // Refresh and validate objectives
+        for (QuestObjective objective : quest.getObjectives()) {
+            objective.updateProgress(player);
+        }
+        if (!quest.isCompleted()) {
+            player.sendSystemMessage(Component.literal("Quest objectives not completed yet!"));
+            return false;
+        }
+
+        // Consume collect items
+        for (QuestObjective objective : quest.getObjectives()) {
+            if (objective instanceof CollectObjective co) {
+                if (!co.consumeItems(player)) {
+                    player.sendSystemMessage(Component.literal("✗ You don't have the required items!").withStyle(net.minecraft.ChatFormatting.RED));
+                    return false;
+                }
+            } else if (objective instanceof com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective mi) {
+                if (!mi.consumeItems(player)) {
+                    player.sendSystemMessage(Component.literal("✗ You don't have the required items!").withStyle(net.minecraft.ChatFormatting.RED));
+                    return false;
+                }
+            } else if (objective instanceof com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective tc) {
+                if (!tc.consumeItems(player)) {
+                    player.sendSystemMessage(Component.literal("✗ You don't have the required items!").withStyle(net.minecraft.ChatFormatting.RED));
+                    return false;
+                }
+            }
+        }
+
+        // Calculate bonus XP multiplier from streak and level
+        UUID uid = player.getUUID();
+        int playerLevel = 1;
+        var progData = ProgressionManager.getPlayerData((ServerPlayer) player);
+        if (progData != null) playerLevel = progData.getCurrentLevel();
+        float multiplier = DailyStreakManager.getTotalMultiplier(uid, playerLevel);
+
+        // Give rewards (with XP multiplier applied)
+        for (QuestReward reward : quest.getRewards()) {
+            if (reward instanceof com.github.hitman20081.dagmod.quest.rewards.XpReward xpReward && multiplier != 1.0f) {
+                xpReward.giveScaledReward(player, player.level(), multiplier);
+            } else {
+                reward.giveReward(player, player.level());
+            }
+        }
+
+        // Mark as completed in DailyStreakManager (NOT in permanentcompletedQuestIds)
+        net.minecraft.server.MinecraftServer server = player.level().getServer();
+        if (server != null) {
+            DailyStreakManager.markCompleted(server, uid, questId);
+        }
+
+        // Remove from active quests (but not added to completedQuestIds — it's repeatable)
+        playerData.removeActiveQuest(questId);
+
+        // Persist
+        if (player instanceof ServerPlayer sp) {
+            savePlayerQuestData(sp);
+        }
+
+        // Streak feedback
+        int streak = DailyStreakManager.getStreak(uid);
+        int completedToday = DailyStreakManager.completedTodayCount(uid);
+        player.sendSystemMessage(Component.literal("✓ Daily quest complete: " + quest.getName()).withStyle(net.minecraft.ChatFormatting.GREEN));
+        if (multiplier > 1.0f) {
+            player.sendSystemMessage(Component.literal(String.format("  Bonus XP ×%.2f (streak %dd, level %d)", multiplier, streak, playerLevel)).withStyle(net.minecraft.ChatFormatting.AQUA));
+        }
+        if (streak >= 3) {
+            player.sendSystemMessage(Component.literal("  🔥 " + streak + "-day streak!").withStyle(net.minecraft.ChatFormatting.GOLD));
+        }
+        int remaining = DailyQuestManager.DAILY_COMPLETION_LIMIT - completedToday;
+        if (remaining > 0) {
+            player.sendSystemMessage(Component.literal("  " + remaining + " daily quest(s) remaining today.").withStyle(net.minecraft.ChatFormatting.GRAY));
+        } else {
+            player.sendSystemMessage(Component.literal("  All daily quests complete for today! Come back tomorrow.").withStyle(net.minecraft.ChatFormatting.YELLOW));
+        }
+
+        return true;
+    }
+
+    private boolean startQuest(Player player, String questId, boolean bypassTierCheck) {
         Quest quest = allQuests.get(questId);
         if (quest == null) {
             player.sendSystemMessage(Component.literal("Quest not found: " + questId));
@@ -175,15 +309,15 @@ public class QuestManager {
 
         QuestData playerData = getPlayerData(player);
 
-        // Check if player's quest book tier allows this quest difficulty
-        if (!playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
+        // Class quests bypass the quest book tier check — they run on their own track
+        if (!bypassTierCheck && !playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
             player.sendSystemMessage(Component.literal("Your quest book tier doesn't allow " +
                     quest.getDifficulty().getDisplayName() + " quests!"));
             player.sendSystemMessage(Component.literal("Upgrade your quest book to access this quest."));
             return false;
         }
 
-        // ADD THIS: Check level requirement
+        // Check level requirement
         if (!LevelRequirements.meetsLevelRequirement((ServerPlayer) player, quest)) {
             int requiredLevel = LevelRequirements.getRequiredLevelForQuest(quest);
             LevelRequirements.sendLevelRequirementMessage((ServerPlayer) player, requiredLevel);

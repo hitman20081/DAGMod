@@ -395,6 +395,8 @@ Each race chain provides themed rewards:
 
 Players can track their active quests and their progress through the in-game Quest Log. Objectives show their completion status, and progress persists across game sessions.
 
+> **Quest Book navigation** *(added v1.8.3)*: The Active Quests page shows one quest at a time with ◀ / ▶ navigation buttons at the bottom of the book. All objectives for the selected quest are visible — use the arrows to cycle between your active quests.
+
 ### Completing Quests
 
 1. Complete all quest objectives

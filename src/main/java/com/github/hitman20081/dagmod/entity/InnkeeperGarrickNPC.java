@@ -355,6 +355,16 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
         player.sendSystemMessage(Component.empty());
         sendDialogue(player, "Quest Blocks look like ornate bookshelves with decorated tops.", ChatFormatting.YELLOW);
         sendDialogue(player, "There should be one nearby. Good luck, adventurer!", ChatFormatting.GREEN);
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("⚔ ONE MORE THING").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("   Once you've chosen your class at the Hall of Champions,").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("   find the §dClass Trainer§r there. They'll give you your").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("   class quest chain — that's how you unlock your abilities.").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
     }
 
 

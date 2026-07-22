@@ -42,6 +42,7 @@ public class PlayerDataManager {
     private static final String RACE_KEY = "dagmod_race";
     private static final String CLASS_KEY = "dagmod_class";
     private static final String MET_GARRICK_KEY = "dagmod_met_garrick";
+    private static final String GEM_CHAIN_STARTED_KEY = "dagmod_gem_chain_started";
 
     // Tutorial task tracking keys
     private static final String TASK1_COMPLETE_KEY = "dagmod_task1_complete";
@@ -134,6 +135,7 @@ public class PlayerDataManager {
 
             // Save NPC interaction tracking
             nbt.putBoolean(MET_GARRICK_KEY, hasMetGarrick(player.getUUID()));
+            nbt.putBoolean(GEM_CHAIN_STARTED_KEY, hasStartedGemChain(player.getUUID()));
 
             // Save tutorial task tracking
             nbt.putBoolean(TASK1_COMPLETE_KEY, isTask1Complete(player.getUUID()));
@@ -199,6 +201,7 @@ public class PlayerDataManager {
                 task2CompleteSet.remove(player.getUUID());
                 task3CompleteSet.remove(player.getUUID());
                 task2MobKills.remove(player.getUUID());
+                gemChainStartedSet.remove(player.getUUID());
 
                 return; // No data to load for new players
             }
@@ -270,6 +273,12 @@ public class PlayerDataManager {
                 Optional<Boolean> metGarrickOpt = nbt.getBoolean(MET_GARRICK_KEY);
                 if (metGarrickOpt.isPresent() && metGarrickOpt.get()) {
                     markMetGarrick(player.getUUID());
+                }
+            }
+            if (nbt.contains(GEM_CHAIN_STARTED_KEY)) {
+                Optional<Boolean> gemChainOpt = nbt.getBoolean(GEM_CHAIN_STARTED_KEY);
+                if (gemChainOpt.isPresent() && gemChainOpt.get()) {
+                    gemChainStartedSet.add(player.getUUID());
                 }
             }
 
@@ -494,5 +503,26 @@ public class PlayerDataManager {
 
     public static boolean hasCompletedAllTasks(ServerPlayer player) {
         return hasCompletedAllTasks(player.getUUID());
+    }
+
+    // ========== GEM CRAFTING CHAIN TRACKING ==========
+
+    private static final java.util.Set<UUID> gemChainStartedSet = new java.util.HashSet<>();
+
+    public static boolean hasStartedGemChain(UUID playerId) {
+        return gemChainStartedSet.contains(playerId);
+    }
+
+    public static boolean hasStartedGemChain(ServerPlayer player) {
+        return hasStartedGemChain(player.getUUID());
+    }
+
+    public static void markGemChainStarted(UUID playerId) {
+        gemChainStartedSet.add(playerId);
+    }
+
+    public static void markGemChainStarted(ServerPlayer player) {
+        markGemChainStarted(player.getUUID());
+        savePlayerData(player);
     }
 }

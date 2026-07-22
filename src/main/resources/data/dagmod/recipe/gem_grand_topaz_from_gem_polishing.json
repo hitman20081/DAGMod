@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:gem_flawless_topaz",
+  "result": {
+    "id": "dagmod:gem_grand_topaz",
+    "count": 1
+  }
+}

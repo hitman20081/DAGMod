@@ -87,6 +87,18 @@ public class XpReward extends QuestReward {
         return new XpReward(1, true); // 1 full level
     }
 
+    /** Give XP scaled by a multiplier (used for daily quest streak/level bonuses). */
+    public boolean giveScaledReward(net.minecraft.world.entity.player.Player player, net.minecraft.world.level.Level world, float multiplier) {
+        if (isLevels) {
+            player.giveExperienceLevels(Math.max(1, Math.round(xpAmount * multiplier)));
+        } else {
+            player.giveExperiencePoints(Math.max(1, Math.round(xpAmount * multiplier)));
+        }
+        int scaled = Math.max(1, Math.round(xpAmount * multiplier));
+        player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Gained " + scaled + " experience points!"));
+        return true;
+    }
+
     // Override success message for XP-specific feedback
     @Override
     protected net.minecraft.network.chat.Component createSuccessMessage() {

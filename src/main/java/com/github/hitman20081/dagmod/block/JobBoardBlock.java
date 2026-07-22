@@ -4,6 +4,8 @@ import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
+import com.github.hitman20081.dagmod.quest.daily.DailyQuestManager;
+import com.github.hitman20081.dagmod.quest.daily.DailyStreakManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -124,6 +126,10 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
             QuestData playerData = questManager.getPlayerData(player);
             UUID playerId = player.getUUID();
 
+            // Check and rotate daily quests if UTC day has changed
+            net.minecraft.server.MinecraftServer mcServer = world.getServer();
+            if (mcServer != null) DailyQuestManager.getInstance().checkAndReset(mcServer);
+
             // Update quest progress first
             questManager.updateQuestProgress(player);
 
@@ -145,6 +151,29 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
 
         player.sendSystemMessage(Component.literal("=== Job Board ===").withStyle(ChatFormatting.GOLD));
         player.sendSystemMessage(Component.literal("Looking for work, adventurer?"));
+        player.sendSystemMessage(Component.literal(""));
+
+        // --- Daily quest status ---
+        DailyQuestManager dqm = DailyQuestManager.getInstance();
+        int completedToday = DailyStreakManager.completedTodayCount(playerId);
+        int streak = DailyStreakManager.getStreak(playerId);
+        long secsLeft = dqm.secondsUntilReset();
+        String resetStr = secsLeft >= 3600
+                ? (secsLeft / 3600) + "h " + ((secsLeft % 3600) / 60) + "m"
+                : (secsLeft / 60) + "m";
+
+        // How many of today's pool the player can still accept/complete
+        long activeDailies = playerData.getActiveQuests().stream()
+                .filter(q -> q.getCategory() == Quest.QuestCategory.DAILY).count();
+        int dailySlots = DailyQuestManager.DAILY_COMPLETION_LIMIT - completedToday - (int) activeDailies;
+        dailySlots = Math.max(0, dailySlots);
+
+        String streakLine = streak >= 3 ? " 🔥 " + streak + "-day streak!" : "";
+        String dailyStatus = completedToday >= DailyQuestManager.DAILY_COMPLETION_LIMIT
+                ? "All done! Resets in " + resetStr
+                : completedToday + "/" + DailyQuestManager.DAILY_COMPLETION_LIMIT + " complete | " + dailySlots + " available | Resets in " + resetStr;
+
+        player.sendSystemMessage(Component.literal("⭐ Daily Quests: " + dailyStatus + streakLine).withStyle(ChatFormatting.AQUA));
         player.sendSystemMessage(Component.literal(""));
 
         // Show quick stats
@@ -173,15 +202,26 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
         // If no completed jobs, show available jobs
         player.sendSystemMessage(Component.literal("Right-click again to:"));
 
-        // FILTER: Only show JOB and DAILY category quests
-        List<Quest> availableJobs = questManager.getAvailableQuests(player).stream()
-                .filter(q -> q.getCategory() == Quest.QuestCategory.JOB || q.getCategory() == Quest.QuestCategory.DAILY)
+        // Daily quests: only today's pool, not already completed today
+        List<String> todayIds = DailyQuestManager.getInstance().getTodayQuestIds();
+        List<Quest> availableDailies = questManager.getAvailableQuests(player).stream()
+                .filter(q -> q.getCategory() == Quest.QuestCategory.DAILY)
+                .filter(q -> todayIds.contains(q.getId()))
+                .filter(q -> !DailyStreakManager.hasCompletedToday(player.getUUID(), q.getId()))
                 .collect(Collectors.toList());
 
-        if (!availableJobs.isEmpty() && playerData.canAcceptMoreQuests()) {
-            player.sendSystemMessage(Component.literal("→ Browse Available Jobs (" + availableJobs.size() + " posted)"));
+        List<Quest> availableJobs = questManager.getAvailableQuests(player).stream()
+                .filter(q -> q.getCategory() == Quest.QuestCategory.JOB)
+                .collect(Collectors.toList());
+
+        // Merge: dailies first
+        List<Quest> allAvailable = new java.util.ArrayList<>(availableDailies);
+        allAvailable.addAll(availableJobs);
+
+        if (!allAvailable.isEmpty() && playerData.canAcceptMoreQuests()) {
+            player.sendSystemMessage(Component.literal("→ Browse Available Jobs (" + allAvailable.size() + " posted)"));
             playerMenuState.put(playerId, MenuState.BROWSE_JOBS);
-            playerAvailableJobs.put(playerId, availableJobs);
+            playerAvailableJobs.put(playerId, allAvailable);
             playerSelectedIndex.put(playerId, 0);
         } else if (!playerData.canAcceptMoreQuests()) {
             player.sendSystemMessage(Component.literal("→ View Active Jobs (job slots full)"));
@@ -276,8 +316,11 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
         player.sendSystemMessage(Component.literal("Right-click to CONFIRM"));
         player.sendSystemMessage(Component.literal("==================="));
 
-        // Accept the job
-        if (questManager.startQuest(player, jobToAccept.getId())) {
+        // Accept the job — daily quests use the dedicated start method
+        boolean accepted = jobToAccept.getCategory() == Quest.QuestCategory.DAILY
+                ? questManager.startDailyQuest(player, jobToAccept.getId())
+                : questManager.startQuest(player, jobToAccept.getId());
+        if (accepted) {
             player.sendSystemMessage(Component.literal("✓ Job accepted: " + jobToAccept.getName()));
             player.sendSystemMessage(Component.literal("Get to work!"));
         } else {
@@ -370,11 +413,15 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
 
         player.sendSystemMessage(Component.literal("Right-click to collect payment..."));
 
-        boolean success = questManager.turnInQuest(player, jobToTurnIn.getId());
+        boolean success = jobToTurnIn.getCategory() == Quest.QuestCategory.DAILY
+                ? questManager.turnInDailyQuest(player, jobToTurnIn.getId())
+                : questManager.turnInQuest(player, jobToTurnIn.getId());
 
         if (success) {
-            player.sendSystemMessage(Component.literal("✓ Job completed! Payment received!"));
-            player.sendSystemMessage(Component.literal("Check your inventory!"));
+            if (jobToTurnIn.getCategory() != Quest.QuestCategory.DAILY) {
+                player.sendSystemMessage(Component.literal("✓ Job completed! Payment received!"));
+                player.sendSystemMessage(Component.literal("Check your inventory!"));
+            }
 
             List<Quest> mutableCompletedJobs = new ArrayList<>(completedJobs);
             mutableCompletedJobs.remove(selectedIndex);

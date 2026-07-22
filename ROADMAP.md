@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.8.0
-**Last Updated**: 2026-05-30
+**Current Version**: v1.9.0
+**Last Updated**: 2026-07-22
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -125,6 +125,12 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - Dialogue system
   - Custom renderers
 
+- ✅ **Class Trainer NPC** (v1.9.0)
+  - Fixed-position NPC dedicated to class quest chain progression
+  - Interactive progress display with per-quest status indicators (complete / turn-in / in progress / available / locked)
+  - Bypasses quest book tier check — class progression gated by level only
+  - Garrick tutorial handoff directs players to Class Trainer on completion
+
 - ✅ **Merchant NPC Rotating Trade System** (v1.6.0)
   - 8 merchant NPCs with rotating inventories (Armorer, Mystery Merchant, Enchantsmith, Voodoo Illusioner, Trophy Dealer, Miner, Hunter, Lumberjack)
   - Static trades always available for currency building
@@ -203,10 +209,13 @@ Priority: **MEDIUM**
 
 ---
 
-### **v1.9.0 - Daily Quests**
+### **v1.9.0 - Class Trainer & Daily Quests**
 Priority: **MEDIUM**
 
-- ❌ **Daily Quest System**
+- ✅ **Class Trainer NPC** — Dedicated NPC for class quest chain interaction (see NPCs section)
+- ✅ **Class quest system separation** — Class quests removed from Quest Block; Quest Block now shows MAIN/SIDE only
+- ✅ **Onboarding improvements** — Custom quest block texture, welcome book rewrite (8 pages), village NPC spawn density reduction, Hall of Champions ocean biome exclusion
+- 🟡 **Daily Quest System** (in progress)
   - Daily quest rotation (3-5 quests per day)
   - 24-hour reset timers
   - Scaling rewards based on player level
@@ -755,10 +764,12 @@ Priority: **LOW**
 - ✅ **v1.7.9** (Apr 2026) - `/seasons` command with interactive setup menu, seasons first-run notice, manual operator activation, season settings persistence, Skeleton Kingdom structure chain, jigsaw anchor fixes
 - ✅ **v1.7.10** (Apr 2026) - Quest book upgrade overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting
 - ✅ **v1.8.0** (May 2026) - Minecraft 26.1.2 migration, Potent Sulfur Powder crafting material, bone dungeon portal room improvements, shield orientation fixes
+- ✅ **v1.8.1** (Jun 2026) - Minecraft 26.2 migration, brimstone rename, MC 26.2 API fixes
+- ✅ **v1.8.2** (Jun 2026) - Village NPC structures (7 individual structures), dynamic lighting terrain fix, Hall of Champions rarity increase
+- ✅ **v1.8.3** (Jul 2026) - Gem tier system (Cut/Polished/Flawless/Grand), in-game enchantment descriptions, quest book objective navigation, gem station inventory persistence
 
 ### **Phase 1** — Core System Completion
-- 🎯 **v1.8.x** - Spell scrolls (7 new) + spell scroll crafting system
-- 🎯 **v1.9.0** - Daily quest rotation system
+- 🚧 **v1.9.0** - Class Trainer NPC, class quest separation, onboarding improvements (complete); daily quest rotation system (in progress)
 - 🎯 **v1.10.0** - Custom race/class enchantments
 
 ### **Phase 2** — World Expansion & Economy Foundation
@@ -1096,7 +1107,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-05-30
+**Last Updated**: 2026-07-22
 **Maintained By**: hitman20081
-**Current Version**: v1.8.0
+**Current Version**: v1.9.0
 **License**: See LICENSE file

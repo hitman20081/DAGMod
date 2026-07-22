@@ -1,6 +1,8 @@
 package com.github.hitman20081.dagmod.entity;
 
+import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.item.ModItems;
+import com.github.hitman20081.dagmod.quest.QuestManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -39,43 +41,43 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
 
         // ===== BUY PROCESSED GEMS (Player sells gems → gets emeralds) =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.RUBY, 2),
+                new ItemCost(ModItems.GEM_CUT_RUBY, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 5),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.SAPPHIRE, 2),
+                new ItemCost(ModItems.GEM_CUT_SAPPHIRE, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 5),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CITRINE, 2),
+                new ItemCost(ModItems.GEM_CUT_CITRINE, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 3),
                 16, 6, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.TANZANITE, 2),
+                new ItemCost(ModItems.GEM_CUT_TANZANITE, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 6),
                 16, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.TOPAZ, 2),
+                new ItemCost(ModItems.GEM_CUT_TOPAZ, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 3),
                 16, 6, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.ZIRCON, 2),
+                new ItemCost(ModItems.GEM_CUT_ZIRCON, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 4),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(ModItems.PINK_GARNET, 2),
+                new ItemCost(ModItems.GEM_CUT_PINK_GARNET, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.EMERALD, 4),
                 16, 8, 0.05F
@@ -141,9 +143,17 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
                 this.setTradingPlayer(player);
 
                 if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.sendSystemMessage(
-                            Component.literal("<Jeweler> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))
-                                    .append(Component.literal("Gems, jewels, and fine craftsmanship. Care to browse my collection?").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
+                    if (!PlayerDataManager.hasStartedGemChain(serverPlayer)) {
+                        PlayerDataManager.markGemChainStarted(serverPlayer);
+                        QuestManager.getInstance().startQuest(serverPlayer, "gem_rough_trade");
+                        serverPlayer.sendSystemMessage(
+                                Component.literal("<Jeweler> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))
+                                        .append(Component.literal("Ah, a new face! Before we get to trading, let me teach you the craft. Raw gems are worthless on their own — bring me five Raw Citrine and I'll give you the tools to turn them into something worth selling.").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
+                    } else {
+                        serverPlayer.sendSystemMessage(
+                                Component.literal("<Jeweler> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))
+                                        .append(Component.literal("Gems, jewels, and fine craftsmanship. Care to browse my collection?").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
+                    }
                 }
 
                 this.openOfferScreen(player, this.getDisplayName(), 1);

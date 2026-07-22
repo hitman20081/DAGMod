@@ -147,6 +147,14 @@ public class ModEntities {
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "blacksmith_npc")))
     );
 
+    public static final EntityType<ClassTrainerNPC> CLASS_TRAINER = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "class_trainer"),
+            EntityType.Builder.of(ClassTrainerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "class_trainer")))
+    );
+
     // Dragon Entities
     public static final EntityType<DragonGuardianEntity> DRAGON_GUARDIAN = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
@@ -197,6 +205,7 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(ALCHEMIST_NPC, AlchemistNPC.createMobAttributes());
         FabricDefaultAttributeRegistry.register(JEWELER_NPC, JewelerNPC.createMobAttributes());
         FabricDefaultAttributeRegistry.register(BLACKSMITH_NPC, BlacksmithNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(CLASS_TRAINER, ClassTrainerNPC.createMobAttributes());
 
         // Register dragon entity attributes
         FabricDefaultAttributeRegistry.register(DRAGON_GUARDIAN, DragonGuardianEntity.createDragonGuardianAttributes());

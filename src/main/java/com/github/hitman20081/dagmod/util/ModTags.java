@@ -29,6 +29,7 @@ public class ModTags {
         public static final TagKey<Item> SOLARWEAVE_REPAIR = createTag("solarweave_repair");
         public static final TagKey<Item> STORMCALLER_REPAIR = createTag("stormcaller_repair");
         public static final TagKey<Item> OBSIDIAN_REPAIR = createTag("obsidian_repair");
+        public static final TagKey<Item> CRUSHING_HAMMER_REPAIR = createTag("crushing_hammer_repair");
 
         private static TagKey<Item> createTag(String name) {
             return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));

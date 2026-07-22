@@ -184,6 +184,22 @@ See [Mage Equipment](items-mage_equipment.md) for crafting recipes.
 - Excellent for base building and support roles
 - Master enchanting to gear up your team
 
+### Class Quest Chain — Path of the Archmage
+
+Completing the Mage quest chain unlocks ability items and culminates in a boss trial. Quests are received from the **Job Board** and tracked in your quest book.
+
+| # | Quest | Level Req | Objectives | Ability Unlocked |
+|---|-------|-----------|------------|-----------------|
+| 1 | First Spark | 10 | Collect 16 Paper, 16 Glowstone Dust, 32 Redstone | **Arcane Orb** |
+| 2 | Temporal Mastery | 25 | Collect 16 Blaze Powder, 8 Ender Pearl, 4 Ghast Tear | **Temporal Crystal** |
+| 3 | Surge of Power | 50 | Collect 32 Amethyst Shard, 8 Eye of Ender, 8 Lapis Block, 4 Echo Shard | **Mana Catalyst** |
+| 4 | Archmage's Aegis | 75 | Collect 4 Netherite Ingot, 4 Diamond Block, 64 XP Bottle | **Barrier Charm** |
+| 5 | The Archmage's Trial | 100 | Kill 1 Skeleton Lord, collect 4 Netherite Ingot + 2 Diamond Block | *(boss trial — no new item)* |
+
+**Chain completion reward:** Enchanted books (Mending I, Unbreaking III, Power V, Looting III, Silk Touch I), 64× XP Bottle, 10× Enchanted Golden Apple
+
+> The ability items are the actual usable items for each ability — equip them in your hotbar to activate that ability. You need all four to have access to the full Mage kit.
+
 ### Best Race Synergies
 - **Dwarf Mage:** Permanent Fire Resistance - safe Nether exploration
 - **Elf Mage:** Haste in forest biomes - fastest caster in game

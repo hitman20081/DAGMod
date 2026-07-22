@@ -8,39 +8,45 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.8.2 — Village NPC Structures & Dynamic Lighting Fix
-**Released:** 2026-06-17
+## v1.8.3 — Gem Tier System & Enchantment Descriptions
+**Released:** 2026-07-21
 
 ---
 
-## What's New in v1.8.2
+## What's New in v1.8.3
 
-### Village NPC Structures
+### Gem Tier System
 
-7 standalone NPC buildings now generate across plains, forest, and taiga biomes. Each is an independent structure locatable with `/locate structure dagmod:<name>`:
+Gems now have four quality tiers — **Cut → Polished → Flawless → Grand** — across all 7 gem types (Citrine, Ruby, Sapphire, Tanzanite, Topaz, Zircon, Pink Garnet). Raw gems are crushed into powder at the Gem Crushing Station, cut into Cut gems at the Gem Cutting Station, then upgraded through tiers at the Gem Polishing Station using Diamond Powder as the catalyst.
 
-- `village_inn` — traveller's rest stop
-- `village_tavern` — drinks and rumours
-- `village_shop_1` / `village_shop_2` — general goods
-- `village_traders_1` — roaming merchant stall
-- `village_jeweler` — gems and fine wares
-- `village_blacksmith` — weapons and repairs
+Diamond Powder charge economy:
+- 1 powder → 4× Cut→Polished upgrades
+- 1 powder → 2× Polished→Flawless upgrades
+- 1 powder → 1× Flawless→Grand upgrade
 
-Buildings share a placement grid (spacing 16 chunks / 256 blocks) so you'll find a mix of types within a reasonable exploration radius.
+Item IDs use the `gem_cut_*`, `gem_polished_*`, `gem_flawless_*`, `gem_grand_*` naming scheme.
+
+### In-Game Enchantment Descriptions
+
+All 26 DAGMod custom enchantments now have descriptions visible directly in-game. Hold **F3+H** to enable advanced tooltips, then hover over any enchanted item to see what each enchantment does — no more hunting the GitHub wiki.
+
+### Quest Book Objective Navigation
+
+The Active Quests page in the quest book now shows **one quest at a time** with ◀ / ▶ navigation buttons. All 10 objectives are now readable regardless of quest length.
 
 ---
 
 ## Bug Fixes
 
-- **Dynamic lighting terrain not updating** — `setSectionRangeDirty` was receiving raw block coordinates instead of section coordinates (1 section = 16 blocks), so terrain chunks near the world origin were being marked dirty instead of chunks around the player. Lighting now correctly illuminates terrain as you move
-- **Village NPC structure set not loading** — The old jigsaw setup referenced a missing `village_docks.nbt`, causing the entire structure set to silently fail on world init and preventing `/locate structure` from working at all
+- **Gem station inventory persistence** — Items placed in any gem crafting station (Cutting, Crushing, Polishing) were lost on logout. All three block entities now correctly save and restore their inventories
+- **Gem Crushing Station hitbox** — The hitbox was much taller than the block model. Now matches the flat profile of the current model
+- **Tanzanite recipe errors** — Three recipes still referenced the old `dagmod:tanzanite` ID. Updated to `dagmod:gem_cut_tanzanite`; redundant smelting and blasting recipes removed
 
 ---
 
-## Changes
+## Migration Notes
 
-- **Hall of Champions rarity** — Spacing increased 40→64 chunks, separation 12→20. Halls are now ~2.5× rarer (one per ~1024 blocks vs ~640 blocks). Reduces overcrowding and frees up world space for other structures
-- **Village exclusion zones reduced** — Hall exclusion radius around villages reduced 15→8 chunks; bone dungeon exclusion 12→6 chunks
+> **Breaking change:** All bare gem item IDs have been renamed. If you have old `dagmod:ruby`, `dagmod:citrine`, `dagmod:sapphire`, `dagmod:tanzanite`, `dagmod:topaz`, `dagmod:zircon`, or `dagmod:pink_garnet` items in an existing world, those items will be lost after updating. Replace them with the `gem_cut_*` equivalents before updating, or start fresh.
 
 ---
 
@@ -56,20 +62,19 @@ Buildings share a placement grid (spacing 16 chunks / 256 blocks) so you'll find
 
 ## Updating
 
-Your existing progress is safe — race, class, level, and quest data all persist across updates.
-
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.8.2 `.jar`
+3. Install the v1.8.3 `.jar`
 4. Launch Minecraft 26.2
 
-> **Note:** Village NPC structures only generate in newly explored chunks. Use `/locate structure dagmod:village_inn` (or any building name) to find the nearest one.
+> **Note:** See the migration warning above regarding old gem item IDs.
 
 ---
 
 ## Known Issues
 
-- **Pre-existing chunk artifacts** — Chunks generated on older versions may show minor terrain or lighting artifacts at borders. Use [MCA Selector](https://github.com/Querys/mcaselector) to prune unvisited chunks if needed
+- **Flawless and Grand gem textures** — Currently placeholder copies of the Cut tier texture. Unique art is planned
+- **Enchantment descriptions require F3+H** — Advanced tooltips must be enabled to see descriptions (on by default in Creative mode)
 - Harmless "Block-attached entity at invalid position" warnings in server logs during worldgen (vanilla Minecraft issue, no gameplay impact)
 - See [GitHub Issues](https://github.com/hitman20081/DAGMod/issues) for anything else reported
 
@@ -88,6 +93,7 @@ Your existing progress is safe — race, class, level, and quest data all persis
 
 | Version | Summary |
 |---|---|
+| v1.8.2 | Village NPC structures (7 buildings), dynamic lighting chunk fix, Hall of Champions rarity increase |
 | v1.8.1 | MC 26.2 migration (Fabric Loader 0.19.3, Fabric API 0.150.2+26.2), brimstone rename |
 | v1.8.0 | MC 26.1.2 migration, Gem Powder System, Gem Crushing Station, shield handle fixes |
 | v1.7.10 | Quest book overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting |

@@ -1,6 +1,6 @@
 {
   "type": "dagmod:gem_crushing",
-  "ingredient": "dagmod:citrine",
+  "ingredient": "dagmod:raw_citrine",
   "result": {
     "count": 1,
     "id": "dagmod:citrine_powder"
