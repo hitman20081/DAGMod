@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.PathfinderMob;
@@ -71,7 +70,6 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
         // Look at nearby players
         this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0f));
         // Wander around occasionally (barkeeps don't move much)
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.6));
         // Look around randomly
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }

@@ -306,7 +306,8 @@ public class ModBlocks {
             key -> new BlacksmithAnvilBlock(BlockBehaviour.Properties.of()
                     .setId(key)
                     .strength(50.0f, 1200.0f)
-                    .sound(SoundType.ANVIL)));
+                    .sound(SoundType.ANVIL)
+                    .noOcclusion()));
 
     // Boss spawn triggers — indestructible, no collision, hidden in boss room NBTs
     public static final Block BOSS_SPAWN_TRIGGER = register("boss_spawn_trigger",
