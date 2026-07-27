@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "dagmod:mythril_chestplate",
+    "dagmod:dragonscale_chestplate",
+    "dagmod:inferno_chestplate",
+    "dagmod:crystalforge_chestplate",
+    "dagmod:naturesguard_chestplate",
+    "dagmod:shadow_chestplate",
+    "dagmod:frostbound_chestplate",
+    "dagmod:solarweave_chestplate",
+    "dagmod:stormcaller_chestplate",
+    "dagmod:obsidian_chestplate"
+  ]
+}

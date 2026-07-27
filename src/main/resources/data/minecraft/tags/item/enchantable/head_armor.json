@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "dagmod:mythril_helmet",
+    "dagmod:dragonscale_helmet",
+    "dagmod:inferno_helmet",
+    "dagmod:crystalforge_helmet",
+    "dagmod:naturesguard_helmet",
+    "dagmod:shadow_helmet",
+    "dagmod:frostbound_helmet",
+    "dagmod:solarweave_helmet",
+    "dagmod:stormcaller_helmet",
+    "dagmod:obsidian_helmet"
+  ]
+}

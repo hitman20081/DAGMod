@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "dagmod:mythril_leggings",
+    "dagmod:dragonscale_leggings",
+    "dagmod:inferno_leggings",
+    "dagmod:crystalforge_leggings",
+    "dagmod:naturesguard_leggings",
+    "dagmod:shadow_leggings",
+    "dagmod:frostbound_leggings",
+    "dagmod:solarweave_leggings",
+    "dagmod:stormcaller_leggings",
+    "dagmod:obsidian_leggings"
+  ]
+}

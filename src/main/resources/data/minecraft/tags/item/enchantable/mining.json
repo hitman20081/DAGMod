@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "dagmod:mythril_pickaxe",
+    "dagmod:mythril_axe",
+    "dagmod:mythril_shovel",
+    "dagmod:mythril_hoe",
+    "dagmod:frostbite_axe",
+    "dagmod:crystalhammer",
+    "dagmod:whirlwind_axe",
+    "dagmod:gem_cutter_tool",
+    "dagmod:crushing_hammer"
+  ]
+}
