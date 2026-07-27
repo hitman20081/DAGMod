@@ -13,16 +13,16 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
     *   You will receive a **Hall Locator** item in your inventory. Hold it to see the direction to the nearest Hall.
     *   Alternatively, explore naturally! The Hall of Champions is a unique structure that generates in your world.
 3.  **Discover Your Heritage (Race Selection):**
-    *   Approach the **Race Selection Altar** within the Hall of Champions.
-    *   Read the **Race Selection Tome** (you'll receive one upon interacting with the altar) to learn about each of the four races: Human, Dwarf, Elf, and Orc.
-    *   Use a **Race Token** (you'll receive one of each upon interacting) at the altar to make your choice.
+    *   Talk to **Innkeeper Garrick** in the Hall of Champions — he acts as the Guild Registry.
+    *   Garrick presents all four races (Human, Dwarf, Elf, Orc) with stat summaries via chat menu.
+    *   Select your race through the dialogue. Garrick hands you race-specific starter gear on the spot.
     *   **Your race choice is permanent, so choose wisely!**
+    *   *Alternatively*, the **Race Selection Altars** in the Hall of Champions work the same way if you prefer the physical block interface.
 4.  **Choose Your Calling (Class Selection):**
-    *   After selecting your race, approach the **Class Selection Altar** (also in the Hall of Champions).
-    *   Read the **Class Selection Tome** to study the three classes: Warrior, Mage, and Rogue.
-    *   Use a **Class Token** (one of each provided) at the altar to select your class.
-    *   **Your class choice can be changed later with Class Reset Potions and Crystals, but your race is permanent.**
-    *   Once your class is set, find the **Class Trainer NPC** in the Hall of Champions (near the Class Selection Altar). They give you access to your class quest chain — a series of class-specific missions with unique rewards.
+    *   Garrick immediately follows race selection with class selection — choose Warrior, Mage, or Rogue.
+    *   Class-specific starter gear is granted on selection.
+    *   **Your class choice can be changed later with Class Reset Potions and Crystals (sold by the Voodoo Illusioner), but your race is permanent.**
+    *   Once your class is set, find the **Class Trainer NPC** in the Hall of Champions. They give you access to your class quest chain — a series of class-specific missions with unique rewards.
 5.  **Explore Synergies:**
     *   Your chosen race and class combine to unlock unique **synergy bonuses**. Review these to understand your character's strengths.
 6.  **Begin Your Journey:**

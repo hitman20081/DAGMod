@@ -24,7 +24,7 @@ The Quest Block is the primary interface for accepting, tracking, and completing
 | Turn In Quests | Allows turning in completed quests for rewards |
 | Upgrade Menu | Upgrades quest book tier when a quest chain unlock is available |
 
-**Quest Categories:** The Quest Block shows MAIN, SIDE, and CLASS quests only. For JOB and DAILY quests, use the Job Board.
+**Quest Categories:** The Quest Block shows MAIN and SIDE quests only. CLASS quests are handled exclusively by the **Class Trainer NPC** in the Hall of Champions. For JOB and DAILY quests, use the Job Board.
 
 **Quest Book Tiers:** Completing quest chains unlocks higher-tier quest books, granting access to harder quests with better rewards.
 
@@ -32,9 +32,9 @@ The Quest Block is the primary interface for accepting, tracking, and completing
 
 ## Race Selection Altar
 
-The Race Selection Altar is a one-time-use block where players choose their race.
+The Race Selection Altar is a one-time-use block where players choose their race. Race and class selection is also available through **Innkeeper Garrick** — talking to Garrick is the recommended starting point for new players, as he guides you through both selections via dialogue and hands out starter gear immediately.
 
-**How It Works:**
+**How It Works (Altar):**
 1. Right-click the altar with an empty hand
 2. Receive a Race Selection Tome and 4 race tokens (Human, Dwarf, Elf, Orc)
 3. Right-click while holding a token to lock in that race permanently
@@ -50,16 +50,16 @@ The Race Selection Altar is a one-time-use block where players choose their race
 | Orc | Iron Sword, Iron Bow, Fishing Rod, 16 Arrows, 8 Cooked Porkchops | +15% melee damage, hunting bonuses |
 
 **Resetting Your Race:**
-- **Race Reset Crystal** or **Potion of Racial Rebirth** -- resets race only
-- **Character Reset Crystal** or **Total Rebirth Potion** -- resets both race and class
+- Talk to the **Voodoo Illusioner** NPC in the Hall of Champions and apply a **Race Reset Crystal** or **Potion of Racial Rebirth** through them — resets race only
+- Apply a **Character Reset Crystal** or **Total Rebirth Potion** via the Voodoo Illusioner — resets both race and class
 
 ---
 
 ## Class Selection Altar
 
-The Class Selection Altar lets players choose their combat class.
+The Class Selection Altar lets players choose their combat class. Class selection is also handled by **Innkeeper Garrick** immediately after race selection — using Garrick is the recommended flow for new players.
 
-**How It Works:**
+**How It Works (Altar):**
 1. Right-click the altar with an empty hand
 2. Receive a Class Selection Tome and 3 class tokens (Warrior, Mage, Rogue)
 3. Right-click while holding a token to select that class
@@ -74,9 +74,9 @@ The Class Selection Altar lets players choose their combat class.
 | Rogue | Iron Sword, Bow, 32 Arrows, Full Leather Armor, 32 Cooked Chicken |
 
 **Resetting Your Class:**
-- **Class Reset Crystal** -- resets class selection
-- **Free reset** -- available every 10 quests completed (sneak + right-click the altar to confirm)
-- **Character Reset Crystal** or **Total Rebirth Potion** -- resets both race and class
+- Talk to the **Voodoo Illusioner** NPC in the Hall of Champions and apply a **Class Reset Crystal** — resets class selection
+- **Free reset** — available every 10 quests completed (sneak + right-click the altar to confirm)
+- Apply a **Character Reset Crystal** or **Total Rebirth Potion** via the Voodoo Illusioner — resets both race and class
 
 ---
 
@@ -172,6 +172,35 @@ Mythril ore does **not** spawn in the Overworld. It is exclusive to the **Dragon
 
 ---
 
+## Blacksmith's Anvil
+
+The Blacksmith's Anvil is a permanent crafting station that functions as an always-available anvil — rename items, combine enchantments, and repair gear without consuming an anvil block.
+
+**How It Works:**
+- Right-click to open the standard vanilla anvil interface
+- Fully functional: renaming, enchantment combining, and item repair all work normally
+- XP costs apply as usual — the station itself is free to use
+
+**Survival Behavior:**
+- **Indestructible in Survival mode** — cannot be broken by players, explosions, or tools
+- **Creative mode only** — break and re-place in Creative to reposition
+- No drops when broken in Creative (purely a placed station)
+
+**Placement:**
+- Faces perpendicular to the player's facing direction on placement (long axis across your body), matching vanilla anvil behaviour
+- Can be rotated by breaking and re-placing in Creative
+
+**Block Properties:**
+
+| Property | Value |
+|----------|-------|
+| Strength | 50.0 (indestructible in Survival) |
+| Blast Resistance | 1200 |
+| Sound | Anvil |
+| Collision Shape | Matches vanilla anvil geometry exactly |
+
+---
+
 ## Block Locations
 
 All custom blocks are found in the **Hall of Champions**, a structure that serves as the central hub for character creation and quest management.
@@ -183,3 +212,4 @@ All custom blocks are found in the **Hall of Champions**, a structure that serve
 | Quest Block | Hall of Champions - Main hall |
 | Job Board | Hall of Champions - Wall-mounted near quest area |
 | Hall Respawn Block | Hall of Champions - Central area |
+| Blacksmith's Anvil | Placed by operators — `/give @p dagmod:blacksmith_anvil` |
