@@ -28,12 +28,12 @@ public class BlacksmithAnvilBlock extends Block {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private static final VoxelShape BASE   = Block.box( 2.0,  0.0,  2.0, 14.0,  4.0, 14.0);
-    private static final VoxelShape X_LEG1 = Block.box( 4.0,  4.0,  3.0, 12.0,  5.0, 13.0);
-    private static final VoxelShape X_LEG2 = Block.box( 5.0,  5.0,  4.0, 11.0, 10.0, 12.0);
-    private static final VoxelShape X_TOP  = Block.box( 0.0, 10.0,  4.0, 16.0, 16.0, 12.0);
-    private static final VoxelShape Z_LEG1 = Block.box( 3.0,  4.0,  4.0, 13.0,  5.0, 12.0);
-    private static final VoxelShape Z_LEG2 = Block.box( 4.0,  5.0,  5.0, 12.0, 10.0, 11.0);
-    private static final VoxelShape Z_TOP  = Block.box( 4.0, 10.0,  0.0, 12.0, 16.0, 16.0);
+    private static final VoxelShape Z_LEG1 = Block.box( 4.0,  4.0,  3.0, 12.0,  5.0, 13.0);
+    private static final VoxelShape Z_LEG2 = Block.box( 6.0,  5.0,  4.0, 10.0, 10.0, 12.0);
+    private static final VoxelShape Z_TOP  = Block.box( 3.0, 10.0,  0.0, 13.0, 16.0, 16.0);
+    private static final VoxelShape X_LEG1 = Block.box( 3.0,  4.0,  4.0, 13.0,  5.0, 12.0);
+    private static final VoxelShape X_LEG2 = Block.box( 4.0,  5.0,  6.0, 12.0, 10.0, 10.0);
+    private static final VoxelShape X_TOP  = Block.box( 0.0, 10.0,  3.0, 16.0, 16.0, 13.0);
     private static final VoxelShape X_SHAPE = Shapes.or(BASE, X_LEG1, X_LEG2, X_TOP);
     private static final VoxelShape Z_SHAPE = Shapes.or(BASE, Z_LEG1, Z_LEG2, Z_TOP);
 
@@ -75,7 +75,7 @@ public class BlacksmithAnvilBlock extends Block {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getClockWise());
     }
 
     @Override
