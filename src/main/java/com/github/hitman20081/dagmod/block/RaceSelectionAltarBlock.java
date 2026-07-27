@@ -134,28 +134,26 @@ public class RaceSelectionAltarBlock extends Block {
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Applies race selection without requiring a block interaction.
+     * Called by GarrickRegistryCommand for the guild registry flow.
+     */
+    public static void applyRaceSelection(ServerPlayer player, String raceName) {
+        setPlayerRace(player.getUUID(), raceName);
+        PlayerDataManager.savePlayerData(player);
+        RaceAbilityManager.applyRaceAbilities(player);
+        initializeRace(player, raceName);
+    }
+
     private void selectRace(Player player, Level world, BlockPos pos,
                             String raceName, ChatFormatting color) {
-        UUID playerId = player.getUUID();
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        // Store race in memory
-        playerRaces.put(playerId, raceName);
+        applyRaceSelection(serverPlayer, raceName);
 
-        // Save to NBT
-        if (player instanceof ServerPlayer serverPlayer) {
-            PlayerDataManager.savePlayerData(serverPlayer);
-        }
-
-        // Remove unused tokens from inventory
+        // Remove unused tokens and tome (altar-specific cleanup)
         removeUnusedTokens(player, raceName);
-
-        // Remove the race selection tome
         removeRaceTome(player);
-
-        // Apply race abilities immediately if server-side player
-        if (player instanceof ServerPlayer serverPlayer) {
-            RaceAbilityManager.applyRaceAbilities(serverPlayer);
-        }
 
         // Send messages
         player.sendSystemMessage(Component.empty());
@@ -169,8 +167,8 @@ public class RaceSelectionAltarBlock extends Block {
                 .withStyle(ChatFormatting.YELLOW));
         player.sendSystemMessage(Component.empty());
 
-        // Initialize race-specific items
-        initializeRace(player, raceName);
+        // Initialize race-specific items — already called inside applyRaceSelection
+        // (initializeRace already ran)
 
         // Celebration effects
         if (world instanceof ServerLevel serverWorld) {
@@ -212,7 +210,7 @@ public class RaceSelectionAltarBlock extends Block {
         }
     }
 
-    private void initializeRace(Player player, String raceName) {
+    private static void initializeRace(Player player, String raceName) {
         switch (raceName.toLowerCase()) {
             case "human" -> initializeHuman(player);
             case "dwarf" -> initializeDwarf(player);
@@ -221,7 +219,7 @@ public class RaceSelectionAltarBlock extends Block {
         }
     }
 
-    private void initializeHuman(Player player) {
+    private static void initializeHuman(Player player) {
         // Humans are balanced - give basic tools with standard mining capabilities
         ItemStack pickaxe = new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
         ItemStack axe = new ItemStack(net.minecraft.world.item.Items.IRON_AXE);
@@ -240,7 +238,7 @@ public class RaceSelectionAltarBlock extends Block {
                 .withStyle(ChatFormatting.GREEN));
     }
 
-    private void initializeDwarf(Player player) {
+    private static void initializeDwarf(Player player) {
         // Dwarves get enhanced pickaxes with access to rare ores
         ItemStack dwarfPickaxe1 = new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
         dwarfPickaxe1.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
@@ -263,7 +261,7 @@ public class RaceSelectionAltarBlock extends Block {
                 .withStyle(ChatFormatting.GREEN));
     }
 
-    private void initializeElf(Player player) {
+    private static void initializeElf(Player player) {
         // Elves get enhanced axes and nature tools
         ItemStack elfAxe1 = new ItemStack(net.minecraft.world.item.Items.IRON_AXE);
         elfAxe1.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
@@ -291,7 +289,7 @@ public class RaceSelectionAltarBlock extends Block {
                 .withStyle(ChatFormatting.GREEN));
     }
 
-    private void initializeOrc(Player player) {
+    private static void initializeOrc(Player player) {
         // Orcs get combat and hunting tools
         ItemStack orcSword = new ItemStack(net.minecraft.world.item.Items.IRON_SWORD);
         orcSword.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
