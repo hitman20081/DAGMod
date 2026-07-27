@@ -300,6 +300,14 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.METAL)));
 
+    // ===== BLACKSMITH STATION =====
+
+    public static final Block BLACKSMITH_ANVIL = register("blacksmith_anvil",
+            key -> new BlacksmithAnvilBlock(BlockBehaviour.Properties.of()
+                    .setId(key)
+                    .strength(50.0f, 1200.0f)
+                    .sound(SoundType.ANVIL)));
+
     // Boss spawn triggers — indestructible, no collision, hidden in boss room NBTs
     public static final Block BOSS_SPAWN_TRIGGER = register("boss_spawn_trigger",
             key -> new BossSpawnTriggerBlock(BlockBehaviour.Properties.of()
@@ -397,6 +405,10 @@ public class ModBlocks {
                 .register((itemGroup) -> {
                     itemGroup.accept(IRON_CHEST);
                 });
+
+        // Blacksmith Anvil - Operator Utilities (admin-placed only)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(BLACKSMITH_ANVIL));
 
         // Boss Spawn Triggers - Add to Operator Utilities tab
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)

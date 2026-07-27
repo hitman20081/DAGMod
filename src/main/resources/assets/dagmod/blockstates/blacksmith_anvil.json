@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "dagmod:block/blacksmith_anvil" },
+    "facing=east": { "model": "dagmod:block/blacksmith_anvil", "y": 90 },
+    "facing=south": { "model": "dagmod:block/blacksmith_anvil", "y": 180 },
+    "facing=west": { "model": "dagmod:block/blacksmith_anvil", "y": 270 }
+  }
+}

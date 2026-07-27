@@ -75,6 +75,9 @@
   "block.dagmod.iron_chest": "Iron Chest",
   "item.dagmod.iron_chest": "Iron Chest",
 
+  "block.dagmod.blacksmith_anvil": "Blacksmith's Anvil",
+  "item.dagmod.blacksmith_anvil": "Blacksmith's Anvil",
+
   "_comment_crafting_stations": "=== CRAFTING STATIONS ===",
   "block.dagmod.gem_polishing_station": "Gem Polishing Station",
   "item.dagmod.gem_polishing_station": "Gem Polishing Station",
