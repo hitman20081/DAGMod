@@ -12,6 +12,22 @@ Ranged spellcaster who dominates from a safe distance. Mages excel at magical co
 - **Potion Duration:** +50% longer lasting potion effects
 - **Permanent Night Vision:** See in the dark at all times
 
+### Mana System
+
+Mages use **Mana** as their primary resource for abilities and spell scrolls. Mana is displayed as a **blue bar** on the right side of the HUD (same position as the hunger bar), showing the exact current/max count inside the bar (e.g. `75/100`).
+
+**Mana Regeneration:** Mana regenerates automatically over time. Both max mana and regen rate increase as you level up.
+
+| Level | Max Mana | Regen Rate |
+|-------|----------|------------|
+| 1 | 100 | 2/sec |
+| 25 | 148 | 3/sec |
+| 50 | 198 | 4/sec |
+| 100 | 298 | 6/sec |
+| 200 | 498 | 10/sec |
+
+Armor set bonuses can further increase regen rate.
+
 ### Mage Abilities (4 Total)
 
 Mages command **4 powerful abilities** that manipulate arcane energies.
@@ -86,14 +102,27 @@ Mages can use wands to cast spells. There are three tiers of wands:
 - **Master Wand:** Mana Cost: 10, Charge Time: 1.5s, Effect: Launches a large fireball (ghast fireball).
 
 **Spell Scrolls:**
-Single-use scrolls that cast powerful spells. Scrolls can be crafted or obtained through Mage-specific quests.
-- **Heal Scroll:** Heals the caster.
-- **Absorption Scroll:** Grants absorption hearts.
-- **Mana Shield Scroll:** Creates a shield that absorbs damage using mana.
-- **Fireball Scroll:** Launches a fireball.
-- **Teleport Scroll:** Teleports the caster a short distance.
-- **Lightning Scroll:** Summons a lightning bolt at the target location.
-- **Frost Nova Scroll:** Creates a nova of ice that slows and damages enemies.
+Single-use scrolls that cast powerful spells. All scrolls are Mage-only and consume mana. Mana is only deducted if the cast succeeds. Scrolls stack to 16 and are craftable at a crafting table.
+
+*Standard (Uncommon):*
+- **Heal** (20 mana) — Restores 3 hearts
+- **Absorption** (25 mana) — Grants Absorption II for 30 seconds
+- **Mana Shield** (15 mana) — Grants Resistance II for 10 seconds
+- **Teleport / Blink** (30 mana) — Teleports to the aimed wall surface (up to 20 blocks)
+- **Ice Wall** (35 mana) — Places a 5×3 frosted ice barrier 3 blocks in front of you
+- **Dimensional Rift** (30 mana) — Teleports 15 blocks forward horizontally; works in open air
+
+*Advanced (Rare):*
+- **Fireball** (30 mana) — Launches a large fireball in the aimed direction
+- **Lightning Bolt** (35 mana) — Strikes lightning at the aimed location (up to 30 blocks)
+- **Frost Nova** (40 mana) — Freezes all enemies within 8 blocks (Slowness IV + 2 damage)
+- **Gravity Well** (45 mana) — Pulls all enemies within 15 blocks toward you
+- **Life Drain** (40 mana) — Drains 2 HP from every enemy within 12 blocks; heals you up to 10 HP
+- **Chain Lightning** (50 mana) — Lightning bounces across up to 4 enemies (8-block bounce range)
+- **Meteor Storm** (60 mana) — Rains 5 fireballs onto the targeted area
+- **Polymorph** (55 mana) — Applies Slowness VI + Weakness VI + Blindness to the nearest mob for 8 seconds
+
+See [Mage Equipment](items-mage_equipment.md) for crafting recipes.
 
 ### Ability Combos
 
@@ -114,7 +143,20 @@ Single-use scrolls that cast powerful spells. Scrolls can be crafted or obtained
 **Emergency Escape:**
 1. Time Warp (slow pursuers)
 2. Arcane Barrier if needed (protection while escaping)
-3. Run while enemies are slowed
+3. Dimensional Rift / Blink scroll to create instant distance
+4. Run while enemies are slowed
+
+**Scroll AoE Burst:**
+1. Gravity Well (pull group together)
+2. Frost Nova scroll (freeze the clustered group)
+3. Meteor Storm scroll (rain fireballs onto frozen targets)
+4. Mana Burst (finish survivors)
+
+**Boss Solo:**
+1. Polymorph scroll (lock down adds or the boss briefly)
+2. Life Drain scroll (recover health mid-fight from surrounding mobs)
+3. Chain Lightning scroll (clear grouped minions in one cast)
+4. Arcane Barrier + Arcane Missiles (sustain damage phase)
 
 ### Strengths
 - 4 permanent abilities provide incredible versatility
@@ -131,18 +173,32 @@ Single-use scrolls that cast powerful spells. Scrolls can be crafted or obtained
 - Terrible at melee combat
 - Must manage ability cooldowns carefully
 - Vulnerable if enemies get close (before Arcane Barrier)
-- Abilities have moderate cooldowns (20-60s)
+- Mana regenerates slowly at low levels — manage it carefully
 
 ### Playstyle Tips
 - Keep distance from enemies at all costs
 - Use Barrier Charm proactively (before danger, not after)
-- Temporal Crystal is your panic button - use when overwhelmed
 - Focus on enchanting gear early for maximum power
 - Brew potions constantly - they're your lifeline
 - Position carefully in combat - stay at range
-- Arcane Orb on cooldown for consistent damage
 - Excellent for base building and support roles
 - Master enchanting to gear up your team
+
+### Class Quest Chain — Path of the Archmage
+
+Completing the Mage quest chain unlocks ability items and culminates in a boss trial. Quests are received from the **Job Board** and tracked in your quest book.
+
+| # | Quest | Level Req | Objectives | Ability Unlocked |
+|---|-------|-----------|------------|-----------------|
+| 1 | First Spark | 10 | Collect 16 Paper, 16 Glowstone Dust, 32 Redstone | **Arcane Orb** |
+| 2 | Temporal Mastery | 25 | Collect 16 Blaze Powder, 8 Ender Pearl, 4 Ghast Tear | **Temporal Crystal** |
+| 3 | Surge of Power | 50 | Collect 32 Amethyst Shard, 8 Eye of Ender, 8 Lapis Block, 4 Echo Shard | **Mana Catalyst** |
+| 4 | Archmage's Aegis | 75 | Collect 4 Netherite Ingot, 4 Diamond Block, 64 XP Bottle | **Barrier Charm** |
+| 5 | The Archmage's Trial | 100 | Kill 1 Skeleton Lord, collect 4 Netherite Ingot + 2 Diamond Block | *(boss trial — no new item)* |
+
+**Chain completion reward:** Enchanted books (Mending I, Unbreaking III, Power V, Looting III, Silk Touch I), 64× XP Bottle, 10× Enchanted Golden Apple
+
+> The ability items are the actual usable items for each ability — equip them in your hotbar to activate that ability. You need all four to have access to the full Mage kit.
 
 ### Best Race Synergies
 - **Dwarf Mage:** Permanent Fire Resistance - safe Nether exploration

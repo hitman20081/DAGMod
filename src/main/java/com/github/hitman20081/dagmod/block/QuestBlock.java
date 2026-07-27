@@ -8,19 +8,19 @@ import com.github.hitman20081.dagmod.quest.QuestChain;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,31 +44,25 @@ public class QuestBlock extends Block {
         TURN_IN_QUESTS
     }
 
-    public QuestBlock(Settings settings) {
+    public QuestBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) { // Server side only
-            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide()) { // Server side only
+            ServerPlayer serverPlayer = (ServerPlayer) player;
 
             // Check if player has met Innkeeper Garrick (tutorial gate)
             if (!PlayerDataManager.hasMetGarrick(serverPlayer)) {
-                player.sendMessage(
-                    Text.literal("🔒 This Quest Block is locked!").formatted(Formatting.RED, Formatting.BOLD),
-                    false
-                );
-                player.sendMessage(Text.literal(""), false);
-                player.sendMessage(
-                    Text.literal("Find Innkeeper Garrick to learn how to use the quest system.").formatted(Formatting.YELLOW),
-                    false
-                );
-                player.sendMessage(
-                    Text.literal("(He can usually be found at an inn or tavern)").formatted(Formatting.GRAY),
-                    false
-                );
-                return ActionResult.CONSUME;
+                player.sendSystemMessage(
+                    Component.literal("🔒 This Quest Block is locked!").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+                player.sendSystemMessage(Component.literal(""));
+                player.sendSystemMessage(
+                    Component.literal("Find Innkeeper Garrick to learn how to use the quest system.").withStyle(ChatFormatting.YELLOW));
+                player.sendSystemMessage(
+                    Component.literal("(He can usually be found at an inn or tavern)").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.CONSUME;
             }
 
             // Check if player has all 3 quest notes (tutorial completion)
@@ -83,48 +77,36 @@ public class QuestBlock extends Block {
             // If player has all 3 notes, combine them into Quest Book
             if (hasNote1 && hasNote2 && hasNote3 && !hasQuestBook) {
                 combineNotesIntoQuestBook(serverPlayer);
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
 
             // If player doesn't have Quest Book and doesn't have all notes, block access
             if (!hasQuestBook) {
-                player.sendMessage(
-                    Text.literal("📚 You need a Quest Book to use this!").formatted(Formatting.YELLOW, Formatting.BOLD),
-                    false
-                );
-                player.sendMessage(Text.literal(""), false);
+                player.sendSystemMessage(
+                    Component.literal("📚 You need a Quest Book to use this!").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+                player.sendSystemMessage(Component.literal(""));
 
                 if (hasNote1 || hasNote2 || hasNote3) {
                     int noteCount = (hasNote1 ? 1 : 0) + (hasNote2 ? 1 : 0) + (hasNote3 ? 1 : 0);
-                    player.sendMessage(
-                        Text.literal("You have " + noteCount + "/3 of Garrick's Quest Notes.").formatted(Formatting.GRAY),
-                        false
-                    );
-                    player.sendMessage(
-                        Text.literal("Complete all of Garrick's tasks to get all 3 notes,").formatted(Formatting.GRAY),
-                        false
-                    );
-                    player.sendMessage(
-                        Text.literal("then return here to combine them into a Quest Book.").formatted(Formatting.GRAY),
-                        false
-                    );
+                    player.sendSystemMessage(
+                        Component.literal("You have " + noteCount + "/3 of Garrick's Quest Notes.").withStyle(ChatFormatting.GRAY));
+                    player.sendSystemMessage(
+                        Component.literal("Complete all of Garrick's tasks to get all 3 notes,").withStyle(ChatFormatting.GRAY));
+                    player.sendSystemMessage(
+                        Component.literal("then return here to combine them into a Quest Book.").withStyle(ChatFormatting.GRAY));
                 } else {
-                    player.sendMessage(
-                        Text.literal("Complete Garrick's 3 tasks to earn Quest Notes.").formatted(Formatting.GRAY),
-                        false
-                    );
-                    player.sendMessage(
-                        Text.literal("Find Innkeeper Garrick to begin your tutorial!").formatted(Formatting.GRAY),
-                        false
-                    );
+                    player.sendSystemMessage(
+                        Component.literal("Complete Garrick's 3 tasks to earn Quest Notes.").withStyle(ChatFormatting.GRAY));
+                    player.sendSystemMessage(
+                        Component.literal("Find Innkeeper Garrick to begin your tutorial!").withStyle(ChatFormatting.GRAY));
                 }
 
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
 
             QuestManager questManager = QuestManager.getInstance();
             QuestData playerData = questManager.getPlayerData(player);
-            UUID playerId = player.getUuid();
+            UUID playerId = player.getUUID();
 
             // Update quest progress first
             questManager.updateQuestProgress(player);
@@ -139,22 +121,22 @@ public class QuestBlock extends Block {
                 case TURN_IN_QUESTS -> showTurnInQuests(serverPlayer, questManager, playerData);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    private void showMainMenu(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showMainMenu(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
 
-        player.sendMessage(Text.literal("=== Quest Master ==="), false);
-        player.sendMessage(Text.literal("Welcome, adventurer! How can I help you today?"), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("=== Quest Master ==="));
+        player.sendSystemMessage(Component.literal("Welcome, adventurer! How can I help you today?"));
+        player.sendSystemMessage(Component.literal(""));
 
         // Show quick stats
-        player.sendMessage(Text.literal("Your Quest Progress:"), false);
-        player.sendMessage(Text.literal("• Active Quests: " + playerData.getActiveQuestCount() + "/" + playerData.getMaxActiveQuests()), false);
-        player.sendMessage(Text.literal("• Completed Quests: " + playerData.getTotalQuestsCompleted()), false);
-        player.sendMessage(Text.literal("• Quest Book Tier: " + playerData.getQuestBookTier().getDisplayName()), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("Your Quest Progress:"));
+        player.sendSystemMessage(Component.literal("• Active Quests: " + playerData.getActiveQuestCount() + "/" + playerData.getMaxActiveQuests()));
+        player.sendSystemMessage(Component.literal("• Completed Quests: " + playerData.getTotalQuestsCompleted()));
+        player.sendSystemMessage(Component.literal("• Quest Book Tier: " + playerData.getQuestBookTier().getDisplayName()));
+        player.sendSystemMessage(Component.literal(""));
 
         // Check for completed quests ready to turn in FIRST
         List<Quest> completedQuests = playerData.getActiveQuestsList().stream()
@@ -162,9 +144,9 @@ public class QuestBlock extends Block {
                 .toList();
 
         if (!completedQuests.isEmpty()) {
-            player.sendMessage(Text.literal("✓ You have " + completedQuests.size() + " completed quest(s) ready to turn in!"), false);
-            player.sendMessage(Text.literal("Right-click to turn in quests!"), false);
-            player.sendMessage(Text.literal("==================="), false);
+            player.sendSystemMessage(Component.literal("✓ You have " + completedQuests.size() + " completed quest(s) ready to turn in!"));
+            player.sendSystemMessage(Component.literal("Right-click to turn in quests!"));
+            player.sendSystemMessage(Component.literal("==================="));
 
             // Set up for quest turn-in
             playerMenuState.put(playerId, MenuState.TURN_IN_QUESTS);
@@ -174,50 +156,49 @@ public class QuestBlock extends Block {
         }
 
         // If no completed quests, show other options
-        player.sendMessage(Text.literal("Right-click again to:"), false);
+        player.sendSystemMessage(Component.literal("Right-click again to:"));
 
-        // FILTER: Show MAIN, SIDE, and CLASS category quests (Job Board handles JOB and DAILY)
+        // FILTER: MAIN and SIDE quests only. CLASS quests are handled by the Class Trainer NPC.
         List<Quest> availableQuests = questManager.getAvailableQuests(player).stream()
                 .filter(q -> q.getCategory() == Quest.QuestCategory.MAIN
-                          || q.getCategory() == Quest.QuestCategory.SIDE
-                          || q.getCategory() == Quest.QuestCategory.CLASS)
+                          || q.getCategory() == Quest.QuestCategory.SIDE)
                 .toList();
 
         if (!availableQuests.isEmpty() && playerData.canAcceptMoreQuests()) {
-            player.sendMessage(Text.literal("→ Browse Available Quests (" + availableQuests.size() + " available)"), false);
+            player.sendSystemMessage(Component.literal("→ Browse Available Quests (" + availableQuests.size() + " available)"));
             playerMenuState.put(playerId, MenuState.BROWSE_QUESTS);
             playerAvailableQuests.put(playerId, availableQuests);
             playerSelectedIndex.put(playerId, 0);
         } else if (!playerData.canAcceptMoreQuests()) {
-            player.sendMessage(Text.literal("→ View Active Quests (quest slots full)"), false);
+            player.sendSystemMessage(Component.literal("→ View Active Quests (quest slots full)"));
             playerMenuState.put(playerId, MenuState.ACTIVE_QUESTS);
         } else if (!playerData.getActiveQuests().isEmpty()) {
-            player.sendMessage(Text.literal("→ View Active Quests"), false);
+            player.sendSystemMessage(Component.literal("→ View Active Quests"));
             playerMenuState.put(playerId, MenuState.ACTIVE_QUESTS);
         } else {
-            player.sendMessage(Text.literal("No quests available at your current level."), false);
+            player.sendSystemMessage(Component.literal("No quests available at your current level."));
         }
 
         // Quest book upgrade information
         showQuestBookUpgradeInfo(player, questManager, playerData);
 
-        player.sendMessage(Text.literal("==================="), false);
+        player.sendSystemMessage(Component.literal("==================="));
     }
 
-    private void showBrowseQuests(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showBrowseQuests(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
         if (availableQuests == null || availableQuests.isEmpty()) {
-            player.sendMessage(Text.literal("No quests available for your current level."), false);
+            player.sendSystemMessage(Component.literal("No quests available for your current level."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         if (selectedIndex >= availableQuests.size()) {
-            player.sendMessage(Text.literal("=== End of Quest List ==="), false);
-            player.sendMessage(Text.literal("Returning to main menu..."), false);
+            player.sendSystemMessage(Component.literal("=== End of Quest List ==="));
+            player.sendSystemMessage(Component.literal("Returning to main menu..."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             playerSelectedIndex.put(playerId, 0);
             return;
@@ -225,74 +206,74 @@ public class QuestBlock extends Block {
 
         Quest currentQuest = availableQuests.get(selectedIndex);
 
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("Quest " + (selectedIndex + 1) + "/" + availableQuests.size()).formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal("===================").withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Quest " + (selectedIndex + 1) + "/" + availableQuests.size()).withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("===================").withStyle(ChatFormatting.GOLD));
 
         if (currentQuest.isClassRestricted()) {
-            player.sendMessage(Text.literal("[" + currentQuest.getRequiredClass() + " Only]").formatted(Formatting.AQUA), false);
+            player.sendSystemMessage(Component.literal("[" + currentQuest.getRequiredClass() + " Only]").withStyle(ChatFormatting.AQUA));
         }
         if (currentQuest.isRaceRestricted()) {
-            player.sendMessage(Text.literal("[" + currentQuest.getRequiredRace() + " Only]").formatted(Formatting.AQUA), false);
+            player.sendSystemMessage(Component.literal("[" + currentQuest.getRequiredRace() + " Only]").withStyle(ChatFormatting.AQUA));
         }
 
-        Text questTitle = Text.literal("📜 " + currentQuest.getName())
-                .append(Text.literal(" (" + currentQuest.getDifficulty().getDisplayName() + ")")
-                        .styled(style -> style.withColor(currentQuest.getDifficulty().getColor())));
-        player.sendMessage(questTitle, false);
-        player.sendMessage(Text.literal(currentQuest.getDescription()).formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal(""), false);
+        Component questTitle = Component.literal("📜 " + currentQuest.getName())
+                .append(Component.literal(" (" + currentQuest.getDifficulty().getDisplayName() + ")")
+                        .withStyle(style -> style.withColor(currentQuest.getDifficulty().getColor())));
+        player.sendSystemMessage(questTitle);
+        player.sendSystemMessage(Component.literal(currentQuest.getDescription()).withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal(""));
 
-        player.sendMessage(Text.literal("Objectives:").formatted(Formatting.YELLOW), false);
+        player.sendSystemMessage(Component.literal("Objectives:").withStyle(ChatFormatting.YELLOW));
         for (var objective : currentQuest.getObjectives()) {
-            player.sendMessage(Text.literal("  • " + objective.getDescription()), false);
+            player.sendSystemMessage(Component.literal("  • " + objective.getDescription()));
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Rewards:").formatted(Formatting.YELLOW), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Rewards:").withStyle(ChatFormatting.YELLOW));
         for (var reward : currentQuest.getRewards()) {
-            player.sendMessage(Text.literal("  ").append(reward.getDisplayText()), false);
+            player.sendSystemMessage(Component.literal("  ").append(reward.getDisplayText()));
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal(">> Right-click to: ACCEPT THIS QUEST <<").formatted(Formatting.GREEN).formatted(Formatting.BOLD), false);
-        player.sendMessage(Text.literal(">> OR type: /quest skip <<").formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.literal("===================").formatted(Formatting.GOLD), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal(">> Right-click to: ACCEPT THIS QUEST <<").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal(">> OR type: /quest skip <<").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("===================").withStyle(ChatFormatting.GOLD));
 
         // Next click always goes to confirmation
         playerMenuState.put(playerId, MenuState.CONFIRM_ACCEPT);
     }
 
-    private void showConfirmAccept(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showConfirmAccept(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
         List<Quest> availableQuests = playerAvailableQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
         if (availableQuests == null || availableQuests.isEmpty() || selectedIndex < 0 || selectedIndex >= availableQuests.size()) {
-            player.sendMessage(Text.literal("Invalid quest selection. Returning to menu."), false);
+            player.sendSystemMessage(Component.literal("Invalid quest selection. Returning to menu."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         Quest questToAccept = availableQuests.get(selectedIndex);
 
-        player.sendMessage(Text.literal("=== CONFIRM QUEST ACCEPTANCE ==="), false);
-        player.sendMessage(Text.literal("Quest: " + questToAccept.getName()), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click to CONFIRM and accept this quest"), false);
-        player.sendMessage(Text.literal("==================="), false);
+        player.sendSystemMessage(Component.literal("=== CONFIRM QUEST ACCEPTANCE ==="));
+        player.sendSystemMessage(Component.literal("Quest: " + questToAccept.getName()));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Right-click to CONFIRM and accept this quest"));
+        player.sendSystemMessage(Component.literal("==================="));
 
         // Accept the quest
         if (questManager.startQuest(player, questToAccept.getId())) {
-            player.sendMessage(Text.literal("✓ Quest accepted: " + questToAccept.getName()), false);
-            player.sendMessage(Text.literal("Check your active quests to track progress!"), false);
+            player.sendSystemMessage(Component.literal("✓ Quest accepted: " + questToAccept.getName()));
+            player.sendSystemMessage(Component.literal("Check your active quests to track progress!"));
 
             // Spawn quest-specific entities on acceptance
             if (questToAccept.getId().equals("red_dragon_fury")) {
                 spawnRedDragon(player);
             }
         } else {
-            player.sendMessage(Text.literal("✗ Failed to accept quest!"), false);
+            player.sendSystemMessage(Component.literal("✗ Failed to accept quest!"));
         }
 
         // Return to main menu
@@ -300,37 +281,37 @@ public class QuestBlock extends Block {
         playerSelectedIndex.put(playerId, 0);
     }
 
-    private void showActiveQuests(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showActiveQuests(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
 
-        player.sendMessage(Text.literal("=== Your Active Quests ==="), false);
+        player.sendSystemMessage(Component.literal("=== Your Active Quests ==="));
 
         if (playerData.getActiveQuests().isEmpty()) {
-            player.sendMessage(Text.literal("No active quests."), false);
+            player.sendSystemMessage(Component.literal("No active quests."));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             return;
         }
 
         for (Quest quest : playerData.getActiveQuests()) {
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("📜 " + quest.getName() + " (" + quest.getDifficulty().getDisplayName() + ")"), false);
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("📜 " + quest.getName() + " (" + quest.getDifficulty().getDisplayName() + ")"));
 
             for (var objective : quest.getObjectives()) {
-                player.sendMessage(Text.literal("  " + objective.getDisplayText().getString()), false);
+                player.sendSystemMessage(Component.literal("  " + objective.getDisplayText().getString()));
             }
 
             if (quest.isCompleted()) {
-                player.sendMessage(Text.literal("  ✓ Ready to turn in!"), false);
+                player.sendSystemMessage(Component.literal("  ✓ Ready to turn in!"));
             }
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Right-click again to return to main menu."), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Right-click again to return to main menu."));
         playerMenuState.put(playerId, MenuState.MAIN_MENU);
     }
 
-    private void showTurnInQuests(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
-        UUID playerId = player.getUuid();
+    private void showTurnInQuests(ServerPlayer player, QuestManager questManager, QuestData playerData) {
+        UUID playerId = player.getUUID();
         List<Quest> completedQuests = playerCompletedQuests.get(playerId);
         int selectedIndex = playerSelectedIndex.getOrDefault(playerId, 0);
 
@@ -342,14 +323,14 @@ public class QuestBlock extends Block {
             playerCompletedQuests.put(playerId, completedQuests);
 
             if (completedQuests.isEmpty()) {
-                player.sendMessage(Text.literal("No completed quests to turn in."), false);
+                player.sendSystemMessage(Component.literal("No completed quests to turn in."));
                 playerMenuState.put(playerId, MenuState.MAIN_MENU);
                 return;
             }
         }
 
         if (selectedIndex >= completedQuests.size()) {
-            player.sendMessage(Text.literal("All completed quests turned in!"), false);
+            player.sendSystemMessage(Component.literal("All completed quests turned in!"));
             playerMenuState.put(playerId, MenuState.MAIN_MENU);
             playerCompletedQuests.remove(playerId);
             return;
@@ -363,41 +344,41 @@ public class QuestBlock extends Block {
             objective.updateProgress(player);
         }
 
-        player.sendMessage(Text.literal("=== Turn In Quest " + (selectedIndex + 1) + "/" + completedQuests.size() + " ==="), false);
-        player.sendMessage(Text.literal("📜 " + questToTurnIn.getName()), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("=== Turn In Quest " + (selectedIndex + 1) + "/" + completedQuests.size() + " ==="));
+        player.sendSystemMessage(Component.literal("📜 " + questToTurnIn.getName()));
+        player.sendSystemMessage(Component.literal(""));
 
         // Show what rewards they'll get
-        player.sendMessage(Text.literal("You will receive:"), false);
+        player.sendSystemMessage(Component.literal("You will receive:"));
         for (var reward : questToTurnIn.getRewards()) {
-            player.sendMessage(reward.getDisplayText(), false);
+            player.sendSystemMessage(reward.getDisplayText());
         }
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal(""));
 
         // Check if quest is STILL completed after refresh
         if (!questToTurnIn.isCompleted()) {
-            player.sendMessage(Text.literal("✗ This quest is no longer completed!"), false);
-            player.sendMessage(Text.literal("(Collect quests require items in inventory at turn-in)").formatted(net.minecraft.util.Formatting.GRAY), false);
+            player.sendSystemMessage(Component.literal("✗ This quest is no longer completed!"));
+            player.sendSystemMessage(Component.literal("(Collect quests require items in inventory at turn-in)").withStyle(net.minecraft.ChatFormatting.GRAY));
             List<Quest> mutableCompletedQuests = new ArrayList<>(completedQuests);
             mutableCompletedQuests.remove(selectedIndex);
             playerCompletedQuests.put(playerId, mutableCompletedQuests);
             return;
         }
 
-        player.sendMessage(Text.literal("Right-click to confirm turn-in..."), false);
+        player.sendSystemMessage(Component.literal("Right-click to confirm turn-in..."));
 
         // Turn in the quest
         boolean success = questManager.turnInQuest(player, questToTurnIn.getId());
 
         if (success) {
-            player.sendMessage(Text.literal("✓ Quest completed successfully!"), false);
-            player.sendMessage(Text.literal("Check your inventory for rewards!"), false);
+            player.sendSystemMessage(Component.literal("✓ Quest completed successfully!"));
+            player.sendSystemMessage(Component.literal("Check your inventory for rewards!"));
 
             List<Quest> mutableCompletedQuests = new ArrayList<>(completedQuests);
             mutableCompletedQuests.remove(selectedIndex);
             playerCompletedQuests.put(playerId, mutableCompletedQuests);
         } else {
-            player.sendMessage(Text.literal("✗ Failed to turn in quest. Check your inventory space!"), false);
+            player.sendSystemMessage(Component.literal("✗ Failed to turn in quest. Check your inventory space!"));
             playerSelectedIndex.put(playerId, selectedIndex + 1);
         }
     }
@@ -405,109 +386,87 @@ public class QuestBlock extends Block {
     /**
      * Combine 3 Quest Notes into a Novice Quest Book
      */
-    private void combineNotesIntoQuestBook(ServerPlayerEntity player) {
-        player.sendMessage(
-            Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
-            false
-        );
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(
-            Text.literal("📚 QUEST NOTES DETECTED!").formatted(Formatting.GOLD, Formatting.BOLD),
-            false
-        );
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(
-            Text.literal("You have all 3 of Garrick's Quest Notes!").formatted(Formatting.YELLOW),
-            false
-        );
-        player.sendMessage(
-            Text.literal("The Quest Block combines them into a proper Quest Book...").formatted(Formatting.GRAY),
-            false
-        );
-        player.sendMessage(Text.literal(""), false);
+    private void combineNotesIntoQuestBook(ServerPlayer player) {
+        player.sendSystemMessage(
+            Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(
+            Component.literal("📚 QUEST NOTES DETECTED!").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(
+            Component.literal("You have all 3 of Garrick's Quest Notes!").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(
+            Component.literal("The Quest Block combines them into a proper Quest Book...").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal(""));
 
         // Remove the 3 notes from inventory
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            net.minecraft.world.item.ItemStack stack = player.getInventory().getItem(i);
             if (stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_FIRST_NOTE ||
                 stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_SECOND_NOTE ||
                 stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.GARRICKS_THIRD_NOTE) {
-                player.getInventory().removeStack(i, 1);
+                player.getInventory().removeItemNoUpdate(i);
             }
         }
-        player.getInventory().markDirty();
+        player.getInventory().setChanged();
 
         // Give Novice Quest Book
-        player.giveItemStack(new net.minecraft.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK));
+        player.addItem(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.NOVICE_QUEST_BOOK));
 
-        player.sendMessage(
-            Text.literal("✓ Received: Novice Quest Book!").formatted(Formatting.GREEN, Formatting.BOLD),
-            false
-        );
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(
-            Text.literal("Congratulations! You've completed Garrick's tutorial!").formatted(Formatting.YELLOW),
-            false
-        );
+        player.sendSystemMessage(
+            Component.literal("✓ Received: Novice Quest Book!").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(
+            Component.literal("Congratulations! You've completed Garrick's tutorial!").withStyle(ChatFormatting.YELLOW));
 
         // Auto-start Garrick's Welcome as the first chain quest
         QuestManager questManager = QuestManager.getInstance();
         boolean questStarted = questManager.startQuest(player, "garricks_special_brew");
         if (questStarted) {
             questManager.savePlayerQuestData(player);
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(
-                Text.literal("📜 First quest assigned: Garrick's Welcome").formatted(Formatting.AQUA),
-                false
-            );
-            player.sendMessage(
-                Text.literal("   Right-click this Quest Block to track your progress.").formatted(Formatting.GRAY),
-                false
-            );
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(
+                Component.literal("📜 First quest assigned: Garrick's Welcome").withStyle(ChatFormatting.AQUA));
+            player.sendSystemMessage(
+                Component.literal("   Right-click this Quest Block to track your progress.").withStyle(ChatFormatting.GRAY));
         } else {
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(
-                Text.literal("Right-click this Quest Block again to start questing!").formatted(Formatting.AQUA, Formatting.BOLD),
-                false
-            );
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(
+                Component.literal("Right-click this Quest Block again to start questing!").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
         }
 
-        player.sendMessage(
-            Text.literal("═══════════════════════════════════════════").formatted(Formatting.DARK_GRAY),
-            false
-        );
+        player.sendSystemMessage(
+            Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     /**
      * Spawns a Red Dragon 100–200 blocks away from the player when the red_dragon_fury quest is accepted.
      */
-    private void spawnRedDragon(ServerPlayerEntity player) {
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+    private void spawnRedDragon(ServerPlayer player) {
+        ServerLevel world = (ServerLevel) player.level();
 
-        double angle = world.random.nextDouble() * 2 * Math.PI;
-        double distance = 100 + world.random.nextInt(101); // 100–200 blocks
+        double angle = world.getRandom().nextDouble() * 2 * Math.PI;
+        double distance = 100 + world.getRandom().nextInt(101); // 100–200 blocks
         int spawnX = (int) (player.getX() + Math.cos(angle) * distance);
         int spawnZ = (int) (player.getZ() + Math.sin(angle) * distance);
-        int spawnY = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, spawnX, spawnZ) + 10;
+        int spawnY = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawnX, spawnZ) + 10;
 
         RedDragonEntity dragon = new RedDragonEntity(ModEntities.RED_DRAGON, world);
-        dragon.refreshPositionAndAngles(spawnX, spawnY, spawnZ, world.random.nextFloat() * 360, 0);
+        dragon.snapTo(spawnX, spawnY, spawnZ, world.getRandom().nextFloat() * 360, 0);
         dragon.setTarget(player);
-        world.spawnEntity(dragon);
+        world.addFreshEntity(dragon);
 
-        player.sendMessage(
-            Text.literal("[!] A Red Dragon has been spotted nearby! Hunt it down.")
-                .formatted(Formatting.RED, Formatting.BOLD),
-            false
-        );
+        player.sendSystemMessage(
+            Component.literal("[!] A Red Dragon has been spotted nearby! Hunt it down.")
+                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
     }
 
     /**
      * Helper method to check if player has a specific item in their inventory
      */
-    private boolean hasItemInInventory(PlayerEntity player, net.minecraft.item.Item item) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
+    private boolean hasItemInInventory(Player player, net.minecraft.world.item.Item item) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            net.minecraft.world.item.ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && stack.getItem() == item) {
                 return true;
             }
@@ -518,7 +477,7 @@ public class QuestBlock extends Block {
     /**
      * Show information about quest book upgrades and which chains unlock them
      */
-    private void showQuestBookUpgradeInfo(ServerPlayerEntity player, QuestManager questManager, QuestData playerData) {
+    private void showQuestBookUpgradeInfo(ServerPlayer player, QuestManager questManager, QuestData playerData) {
         QuestData.QuestBookTier nextTier = playerData.getNextQuestBookTier();
 
         // Already at max tier
@@ -536,14 +495,14 @@ public class QuestBlock extends Block {
 
                 if (completed == total) {
                     // Chain completed, upgrade available
-                    player.sendMessage(Text.literal("⭐ Quest Book Upgrade (AVAILABLE!)").formatted(Formatting.GOLD), false);
-                    player.sendMessage(Text.literal("   Right-click to upgrade to: " + nextTier.getDisplayName()).formatted(Formatting.YELLOW), false);
+                    player.sendSystemMessage(Component.literal("⭐ Quest Book Upgrade (AVAILABLE!)").withStyle(ChatFormatting.GOLD));
+                    player.sendSystemMessage(Component.literal("   Right-click to upgrade to: " + nextTier.getDisplayName()).withStyle(ChatFormatting.YELLOW));
                 } else {
                     // Chain in progress
-                    player.sendMessage(Text.literal(""), false);
-                    player.sendMessage(Text.literal("📖 Next Quest Book: " + nextTier.getDisplayName()).formatted(Formatting.AQUA), false);
-                    player.sendMessage(Text.literal("   Complete: " + chain.getChainName()).formatted(Formatting.GRAY), false);
-                    player.sendMessage(Text.literal("   Progress: " + completed + "/" + total + " quests").formatted(Formatting.GRAY), false);
+                    player.sendSystemMessage(Component.literal(""));
+                    player.sendSystemMessage(Component.literal("📖 Next Quest Book: " + nextTier.getDisplayName()).withStyle(ChatFormatting.AQUA));
+                    player.sendSystemMessage(Component.literal("   Complete: " + chain.getChainName()).withStyle(ChatFormatting.GRAY));
+                    player.sendSystemMessage(Component.literal("   Progress: " + completed + "/" + total + " quests").withStyle(ChatFormatting.GRAY));
                 }
                 foundChain = true;
                 break;
@@ -552,9 +511,9 @@ public class QuestBlock extends Block {
 
         // If no specific chain, just show the tier info
         if (!foundChain) {
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("📖 Next Quest Book: " + nextTier.getDisplayName()).formatted(Formatting.AQUA), false);
-            player.sendMessage(Text.literal("   Complete quest chains to unlock!").formatted(Formatting.GRAY), false);
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("📖 Next Quest Book: " + nextTier.getDisplayName()).withStyle(ChatFormatting.AQUA));
+            player.sendSystemMessage(Component.literal("   Complete quest chains to unlock!").withStyle(ChatFormatting.GRAY));
         }
     }
 }

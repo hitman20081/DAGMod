@@ -1,13 +1,14 @@
 package com.github.hitman20081.dagmod.quest;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,7 +43,7 @@ public class QuestStorage {
      * Get the quests data directory
      */
     private static File getQuestsDirectory(MinecraftServer server) {
-        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+        File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
         File dagmodRoot = new File(worldDir, DATA_ROOT);
         File questsDir = new File(dagmodRoot, QUESTS_FOLDER);
 
@@ -64,10 +65,10 @@ public class QuestStorage {
     /**
      * Save player's quest data to file
      */
-    public static void saveQuestData(ServerPlayerEntity player, QuestData questData) {
+    public static void saveQuestData(ServerPlayer player, QuestData questData) {
         try {
-            File dataFile = getQuestDataFile(player.getEntityWorld().getServer(), player.getUuid());
-            NbtCompound nbt = new NbtCompound();
+            File dataFile = getQuestDataFile(player.level().getServer(), player.getUUID());
+            CompoundTag nbt = new CompoundTag();
 
             // Save quest book tier
             nbt.putString(QUEST_BOOK_TIER_KEY, questData.getQuestBookTier().name());
@@ -76,32 +77,32 @@ public class QuestStorage {
             nbt.putInt(TOTAL_QUESTS_COMPLETED_KEY, questData.getTotalQuestsCompleted());
 
             // Save completed quest IDs
-            NbtList completedList = new NbtList();
+            ListTag completedList = new ListTag();
             for (String questId : questData.getCompletedQuestIds()) {
-                NbtCompound questNbt = new NbtCompound();
+                CompoundTag questNbt = new CompoundTag();
                 questNbt.putString("id", questId);
                 completedList.add(questNbt);
             }
             nbt.put(COMPLETED_QUESTS_KEY, completedList);
 
             // Save quest completion times
-            NbtCompound timesNbt = new NbtCompound();
+            CompoundTag timesNbt = new CompoundTag();
             for (Map.Entry<String, Long> entry : questData.getQuestCompletionTimes().entrySet()) {
                 timesNbt.putLong(entry.getKey(), entry.getValue());
             }
             nbt.put(QUEST_COMPLETION_TIMES_KEY, timesNbt);
 
             // Save active quests with their progress
-            NbtList activeList = new NbtList();
+            ListTag activeList = new ListTag();
             for (Quest quest : questData.getActiveQuests()) {
-                NbtCompound questNbt = new NbtCompound();
+                CompoundTag questNbt = new CompoundTag();
                 questNbt.putString(QUEST_ID_KEY, quest.getId());
 
                 // Save objective progress
-                NbtList objectivesList = new NbtList();
+                ListTag objectivesList = new ListTag();
                 for (int i = 0; i < quest.getObjectives().size(); i++) {
                     QuestObjective objective = quest.getObjectives().get(i);
-                    NbtCompound objectiveNbt = new NbtCompound();
+                    CompoundTag objectiveNbt = new CompoundTag();
                     objectiveNbt.putInt(OBJECTIVE_CURRENT_KEY, objective.getCurrentProgress());
                     objectiveNbt.putInt(OBJECTIVE_REQUIRED_KEY, objective.getRequiredProgress());
                     objectivesList.add(objectiveNbt);
@@ -128,22 +129,22 @@ public class QuestStorage {
      * Load player's quest data from file
      * Returns null if no save data exists (new player)
      */
-    public static QuestData loadQuestData(ServerPlayerEntity player) {
+    public static QuestData loadQuestData(ServerPlayer player) {
         try {
-            File dataFile = getQuestDataFile(player.getEntityWorld().getServer(), player.getUuid());
+            File dataFile = getQuestDataFile(player.level().getServer(), player.getUUID());
 
             if (!dataFile.exists()) {
                 DagMod.LOGGER.info("No quest data found for player: " + player.getName().getString() + " (new player)");
                 return null; // No data to load for new players
             }
 
-            NbtCompound nbt;
+            CompoundTag nbt;
             try (FileInputStream fis = new FileInputStream(dataFile)) {
-                nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
             }
 
             // Create new QuestData
-            QuestData questData = new QuestData(player.getUuid());
+            QuestData questData = new QuestData(player.getUUID());
             QuestManager manager = QuestManager.getInstance();
 
             // Load quest book tier
@@ -164,9 +165,9 @@ public class QuestStorage {
 
             // Load completed quest IDs
             if (nbt.contains(COMPLETED_QUESTS_KEY)) {
-                NbtList completedList = nbt.getList(COMPLETED_QUESTS_KEY).orElse(new NbtList());
+                ListTag completedList = nbt.getList(COMPLETED_QUESTS_KEY).orElse(new ListTag());
                 for (int i = 0; i < completedList.size(); i++) {
-                    NbtCompound questNbt = completedList.getCompound(i).orElse(new NbtCompound());
+                    CompoundTag questNbt = completedList.getCompound(i).orElse(new CompoundTag());
                     String questId = questNbt.getString("id").orElse("");
                     if (!questId.isEmpty()) {
                         questData.markQuestCompleted(questId);
@@ -176,8 +177,8 @@ public class QuestStorage {
 
             // Load quest completion times
             if (nbt.contains(QUEST_COMPLETION_TIMES_KEY)) {
-                NbtCompound timesNbt = nbt.getCompound(QUEST_COMPLETION_TIMES_KEY).orElse(new NbtCompound());
-                for (String key : timesNbt.getKeys()) {
+                CompoundTag timesNbt = nbt.getCompound(QUEST_COMPLETION_TIMES_KEY).orElse(new CompoundTag());
+                for (String key : timesNbt.keySet()) {
                     long time = timesNbt.getLong(key).orElse(0L);
                     questData.setQuestCompletionTime(key, time);
                 }
@@ -185,9 +186,9 @@ public class QuestStorage {
 
             // Load active quests
             if (nbt.contains(ACTIVE_QUESTS_KEY)) {
-                NbtList activeList = nbt.getList(ACTIVE_QUESTS_KEY).orElse(new NbtList());
+                ListTag activeList = nbt.getList(ACTIVE_QUESTS_KEY).orElse(new ListTag());
                 for (int i = 0; i < activeList.size(); i++) {
-                    NbtCompound questNbt = activeList.getCompound(i).orElse(new NbtCompound());
+                    CompoundTag questNbt = activeList.getCompound(i).orElse(new CompoundTag());
                     String questId = questNbt.getString(QUEST_ID_KEY).orElse("");
 
                     // Get the quest from registry
@@ -202,9 +203,9 @@ public class QuestStorage {
 
                     // Restore objective progress
                     if (questNbt.contains(QUEST_OBJECTIVES_KEY)) {
-                        NbtList objectivesList = questNbt.getList(QUEST_OBJECTIVES_KEY).orElse(new NbtList());
+                        ListTag objectivesList = questNbt.getList(QUEST_OBJECTIVES_KEY).orElse(new ListTag());
                         for (int j = 0; j < objectivesList.size() && j < questCopy.getObjectives().size(); j++) {
-                            NbtCompound objectiveNbt = objectivesList.getCompound(j).orElse(new NbtCompound());
+                            CompoundTag objectiveNbt = objectivesList.getCompound(j).orElse(new CompoundTag());
                             int current = objectiveNbt.getInt(OBJECTIVE_CURRENT_KEY).orElse(0);
 
                             QuestObjective objective = questCopy.getObjectives().get(j);
@@ -233,16 +234,16 @@ public class QuestStorage {
     /**
      * Check if player has existing quest data
      */
-    public static boolean hasQuestData(ServerPlayerEntity player) {
-        File dataFile = getQuestDataFile(player.getEntityWorld().getServer(), player.getUuid());
+    public static boolean hasQuestData(ServerPlayer player) {
+        File dataFile = getQuestDataFile(player.level().getServer(), player.getUUID());
         return dataFile.exists();
     }
 
     /**
      * Delete quest data file (used for reset commands)
      */
-    public static boolean deleteQuestData(ServerPlayerEntity player) {
-        File dataFile = getQuestDataFile(player.getEntityWorld().getServer(), player.getUuid());
+    public static boolean deleteQuestData(ServerPlayer player) {
+        File dataFile = getQuestDataFile(player.level().getServer(), player.getUUID());
         if (dataFile.exists()) {
             return dataFile.delete();
         }

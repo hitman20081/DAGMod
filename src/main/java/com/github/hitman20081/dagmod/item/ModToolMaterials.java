@@ -1,7 +1,7 @@
 package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.util.ModTags;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.ToolMaterial;
 
 public class ModToolMaterials {
     public static final ToolMaterial MYTHRIL = new ToolMaterial(

@@ -1,18 +1,18 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
 import com.github.hitman20081.dagmod.event.SpellModifierHandler;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,13 +36,13 @@ public class TimeWarpAbility {
     private static final double RADIUS = 10.0;
     private static final int DURATION_TICKS = 8 * 20; // 8 seconds
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
-        UUID uuid = serverPlayer.getUuid();
+        ServerLevel world = serverPlayer.level();
+        UUID uuid = serverPlayer.getUUID();
 
         boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
         float power = SpellModifierHandler.consumeOvercharge(uuid);
@@ -54,7 +54,7 @@ public class TimeWarpAbility {
         return result;
     }
 
-    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+    private static boolean activateInternal(ServerPlayer player, ServerLevel world,
                                             boolean applyModifiers, float powerMultiplier) {
         int durationTicks = Math.round(DURATION_TICKS * powerMultiplier);
 
@@ -62,27 +62,27 @@ public class TimeWarpAbility {
             MageCooldownManager.startCooldown(player, MageAbility.TIME_WARP);
         }
 
-        Box searchBox = Box.of(
-                player.getEntityPos(),
+        AABB searchBox = AABB.ofSize(
+                player.position(),
                 RADIUS * 2,
                 RADIUS * 2,
                 RADIUS * 2
         );
 
-        List<LivingEntity> nearbyEntities = world.getEntitiesByClass(
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
-                entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
         );
 
         int affectedCount = 0;
 
         for (LivingEntity entity : nearbyEntities) {
-            double distance = player.squaredDistanceTo(entity);
+            double distance = player.distanceToSqr(entity);
             if (distance <= RADIUS * RADIUS) {
 
-                entity.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SLOWNESS,
+                entity.addEffect(new MobEffectInstance(
+                        MobEffects.SLOWNESS,
                         durationTicks,
                         3, // Slowness IV
                         false,
@@ -90,8 +90,8 @@ public class TimeWarpAbility {
                         true
                 ));
 
-                entity.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.WEAKNESS,
+                entity.addEffect(new MobEffectInstance(
+                        MobEffects.WEAKNESS,
                         durationTicks,
                         1, // Weakness II
                         false,
@@ -99,8 +99,8 @@ public class TimeWarpAbility {
                         true
                 ));
 
-                entity.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.MINING_FATIGUE,
+                entity.addEffect(new MobEffectInstance(
+                        MobEffects.MINING_FATIGUE,
                         durationTicks,
                         2, // Mining Fatigue III
                         false,
@@ -108,10 +108,10 @@ public class TimeWarpAbility {
                         true
                 ));
 
-                world.spawnParticles(
+                world.sendParticles(
                         ParticleTypes.SOUL,
                         entity.getX(),
-                        entity.getY() + entity.getHeight() / 2,
+                        entity.getY() + entity.getBbHeight() / 2,
                         entity.getZ(),
                         30,
                         0.3, 0.5, 0.3,
@@ -128,7 +128,7 @@ public class TimeWarpAbility {
             double z = player.getZ() + Math.sin(angle) * RADIUS;
             double y = player.getY() + 1.0;
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.END_ROD,
                     x, y, z,
                     1,
@@ -137,7 +137,7 @@ public class TimeWarpAbility {
             );
         }
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.PORTAL,
                 player.getX(),
                 player.getY() + 1.0,
@@ -149,34 +149,30 @@ public class TimeWarpAbility {
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.BLOCK_PORTAL_TRIGGER,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.PORTAL_TRIGGER,
+                SoundSource.PLAYERS,
                 1.0f,
                 0.5f
         );
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.BLOCK_BEACON_DEACTIVATE,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.BEACON_DEACTIVATE,
+                SoundSource.PLAYERS,
                 0.8f,
                 0.7f
         );
 
         if (affectedCount > 0) {
-            player.sendMessage(
-                    Text.literal("⏰ Time Warp! Slowed " + affectedCount + " enemies!")
-                            .formatted(Formatting.AQUA, Formatting.BOLD),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("⏰ Time Warp! Slowed " + affectedCount + " enemies!")
+                            .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
         } else {
-            player.sendMessage(
-                    Text.literal("⏰ Time Warp! No enemies nearby.")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("⏰ Time Warp! No enemies nearby.")
+                            .withStyle(ChatFormatting.YELLOW));
         }
 
         return true;

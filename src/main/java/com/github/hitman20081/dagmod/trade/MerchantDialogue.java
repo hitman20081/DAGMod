@@ -1,18 +1,19 @@
 package com.github.hitman20081.dagmod.trade;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
-import java.util.Random;
+
 
 /**
  * Handles merchant dialogue/flavor text.
  * Displays greeting messages when players open trade screens.
  */
 public class MerchantDialogue {
-    private static final Random RANDOM = new Random();
+    private static final RandomSource RANDOM = RandomSource.create();
 
     // ==================== ARMORER DIALOGUE ====================
     private static final List<String> ARMORER_GREETINGS = List.of(
@@ -132,16 +133,16 @@ public class MerchantDialogue {
      * @param player The player opening the trade screen
      * @param type The merchant type
      */
-    public static void sendGreeting(ServerPlayerEntity player, MerchantType type) {
+    public static void sendGreeting(ServerPlayer player, MerchantType type) {
         String greeting = getRandomGreeting(type);
         String merchantName = getMerchantDisplayName(type);
 
         // Format as chat message: <Merchant Name> message
-        Text message = Text.literal("<" + merchantName + "> ")
-                .formatted(Formatting.GOLD)
-                .append(Text.literal(greeting).formatted(Formatting.YELLOW));
+        Component message = Component.literal("<" + merchantName + "> ")
+                .withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(greeting).withStyle(ChatFormatting.YELLOW));
 
-        player.sendMessage(message, false);
+        player.sendSystemMessage(message);
     }
 
     /**
@@ -151,7 +152,7 @@ public class MerchantDialogue {
      * @param player The player
      * @param type The merchant type
      */
-    public static void sendRotationHint(ServerPlayerEntity player, MerchantType type) {
+    public static void sendRotationHint(ServerPlayer player, MerchantType type) {
         int rotationIndex = RotatingTradeManager.getInstance().getRotationIndex(type);
         String rotationDesc = RotatingTradeRegistry.getRotationDescription(type, rotationIndex);
         String hint = getRandomRotationHint(type, rotationDesc);
@@ -159,11 +160,11 @@ public class MerchantDialogue {
 
         // Only send hint sometimes (30% chance)
         if (RANDOM.nextFloat() < 0.3f) {
-            Text message = Text.literal("<" + merchantName + "> ")
-                    .formatted(Formatting.GOLD)
-                    .append(Text.literal(hint).formatted(Formatting.AQUA));
+            Component message = Component.literal("<" + merchantName + "> ")
+                    .withStyle(ChatFormatting.GOLD)
+                    .append(Component.literal(hint).withStyle(ChatFormatting.AQUA));
 
-            player.sendMessage(message, false);
+            player.sendSystemMessage(message);
         }
     }
 

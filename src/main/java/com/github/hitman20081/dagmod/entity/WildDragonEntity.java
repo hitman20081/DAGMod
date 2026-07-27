@@ -6,48 +6,52 @@ import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.block.DragonEggBlock;
 import com.github.hitman20081.dagmod.block.ModBlocks;
 import com.github.hitman20081.dagmod.item.ModItems;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.control.FlightMoveControl;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SmallFireballEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.*;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.util.RandomSource;
 
 /**
  * Wild Dragon - Tameable flying dragon found in mountains and Dragon Realm
  * Smaller than Dragon Guardian boss, can be tamed from eggs
  * Features: Flying AI, egg laying, nesting, taming, growth stages
  */
-public class WildDragonEntity extends HostileEntity {
+public class WildDragonEntity extends Monster {
 
     // Animation states
     public enum AnimationState {
@@ -92,15 +96,15 @@ public class WildDragonEntity extends HostileEntity {
         }
     }
 
-    private static final TrackedData<Integer> ANIMATION_STATE = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> IS_PERCHED = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> IS_TAMED = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<String> OWNER_UUID = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.STRING);
-    private static final TrackedData<Boolean> IS_SITTING = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Integer> GROWTH_STAGE = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> MEAT_FED = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> IS_ABANDONED = DataTracker.registerData(WildDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IS_PERCHED = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IS_TAMED = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> OWNER_UUID = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> IS_SITTING = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> GROWTH_STAGE = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MEAT_FED = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IS_ABANDONED = SynchedEntityData.defineId(WildDragonEntity.class, EntityDataSerializers.BOOLEAN);
 
 
     private static final int DRAGON_SCALE_DROP_MIN = 2;
@@ -135,68 +139,68 @@ public class WildDragonEntity extends HostileEntity {
     private int nestAbandonmentTimer = -1;
     private static final int NEST_ABANDON_TIME = 6000; // 5 minutes
 
-    public WildDragonEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public WildDragonEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = 20; // Less XP than boss
+        this.xpReward = 20; // Less XP than boss
 
         // Enable flying
         this.setNoGravity(true);
-        this.moveControl = new FlightMoveControl(this, 20, true);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(ANIMATION_STATE, AnimationState.IDLE.ordinal());
-        builder.add(IS_PERCHED, false);
-        builder.add(VARIANT, DragonGuardianEntity.DragonVariant.RED.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ANIMATION_STATE, AnimationState.IDLE.ordinal());
+        builder.define(IS_PERCHED, false);
+        builder.define(VARIANT, DragonGuardianEntity.DragonVariant.RED.ordinal());
 
         // Taming system data trackers
-        builder.add(IS_TAMED, false);
-        builder.add(OWNER_UUID, ""); // Empty string = no owner
-        builder.add(IS_SITTING, false);
-        builder.add(GROWTH_STAGE, GrowthStage.ADULT.ordinal()); // Wild dragons spawn as adults
-        builder.add(MEAT_FED, 0); // Track meat feeding progress for taming
-        builder.add(IS_ABANDONED, false);
+        builder.define(IS_TAMED, false);
+        builder.define(OWNER_UUID, ""); // Empty string = no owner
+        builder.define(IS_SITTING, false);
+        builder.define(GROWTH_STAGE, GrowthStage.ADULT.ordinal()); // Wild dragons spawn as adults
+        builder.define(MEAT_FED, 0); // Track meat feeding progress for taming
+        builder.define(IS_ABANDONED, false);
     }
 
     // Animation state management
     public AnimationState getAnimationState() {
-        return AnimationState.values()[this.dataTracker.get(ANIMATION_STATE)];
+        return AnimationState.values()[this.entityData.get(ANIMATION_STATE)];
     }
 
     public void setAnimationState(AnimationState state) {
-        this.dataTracker.set(ANIMATION_STATE, state.ordinal());
+        this.entityData.set(ANIMATION_STATE, state.ordinal());
         this.animationTimer = 0;
     }
 
     public boolean isPerched() {
-        return this.dataTracker.get(IS_PERCHED);
+        return this.entityData.get(IS_PERCHED);
     }
 
     public void setPerched(boolean perched) {
-        this.dataTracker.set(IS_PERCHED, perched);
+        this.entityData.set(IS_PERCHED, perched);
     }
 
     public DragonGuardianEntity.DragonVariant getVariant() {
-        return DragonGuardianEntity.DragonVariant.values()[this.dataTracker.get(VARIANT)];
+        return DragonGuardianEntity.DragonVariant.values()[this.entityData.get(VARIANT)];
     }
 
     public void setVariant(DragonGuardianEntity.DragonVariant variant) {
-        this.dataTracker.set(VARIANT, variant.ordinal());
+        this.entityData.set(VARIANT, variant.ordinal());
     }
 
     // Taming system getters/setters
     public boolean isTamed() {
-        return this.dataTracker.get(IS_TAMED);
+        return this.entityData.get(IS_TAMED);
     }
 
     public void setTamed(boolean tamed) {
-        this.dataTracker.set(IS_TAMED, tamed);
+        this.entityData.set(IS_TAMED, tamed);
     }
 
     public java.util.Optional<java.util.UUID> getOwnerUuid() {
-        String uuidString = this.dataTracker.get(OWNER_UUID);
+        String uuidString = this.entityData.get(OWNER_UUID);
         if (uuidString == null || uuidString.isEmpty()) {
             return java.util.Optional.empty();
         }
@@ -208,25 +212,25 @@ public class WildDragonEntity extends HostileEntity {
     }
 
     public void setOwnerUuid(java.util.UUID uuid) {
-        this.dataTracker.set(OWNER_UUID, uuid == null ? "" : uuid.toString());
+        this.entityData.set(OWNER_UUID, uuid == null ? "" : uuid.toString());
     }
 
     public boolean isSitting() {
-        return this.dataTracker.get(IS_SITTING);
+        return this.entityData.get(IS_SITTING);
     }
 
     public void setSitting(boolean sitting) {
-        this.dataTracker.set(IS_SITTING, sitting);
+        this.entityData.set(IS_SITTING, sitting);
     }
 
     public GrowthStage getGrowthStage() {
-        return GrowthStage.values()[this.dataTracker.get(GROWTH_STAGE)];
+        return GrowthStage.values()[this.entityData.get(GROWTH_STAGE)];
     }
 
     public void setGrowthStage(GrowthStage stage) {
-        this.dataTracker.set(GROWTH_STAGE, stage.ordinal());
+        this.entityData.set(GROWTH_STAGE, stage.ordinal());
         // Update scale to match growth stage
-        this.getAttributeInstance(net.minecraft.entity.attribute.EntityAttributes.SCALE).setBaseValue(stage.getScale());
+        this.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.SCALE).setBaseValue(stage.getScale());
     }
 
     public int getAnimationTimer() {
@@ -246,37 +250,36 @@ public class WildDragonEntity extends HostileEntity {
     }
 
     @Override
-    protected EntityNavigation createNavigation(World world) {
+    protected PathNavigation createNavigation(Level world) {
         // Use bird navigation for flying
-        BirdNavigation birdNavigation = new BirdNavigation(this, world);
-        birdNavigation.setCanSwim(false);
+        FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
         return birdNavigation;
     }
 
     @Override
-    protected void initGoals() {
+    protected void registerGoals() {
         // Tamed dragon goals (highest priority when tamed)
-        this.goalSelector.add(0, new SitGoal(this));
-        this.goalSelector.add(1, new FollowOwnerGoal(this, 1.2D, 8.0F, 3.0F));
+        this.goalSelector.addGoal(0, new SitGoal(this));
+        this.goalSelector.addGoal(1, new FollowOwnerGoal(this, 1.2D, 8.0F, 3.0F));
 
         // Combat goals (only for wild/attacking dragons)
-        this.goalSelector.add(2, new FireBreathGoal(this));
-        this.goalSelector.add(3, new SwoopAttackGoal(this));
-        this.goalSelector.add(4, new RoarGoal(this));
-        this.goalSelector.add(5, new FlyingMeleeAttackGoal(this, 1.2D));
+        this.goalSelector.addGoal(2, new FireBreathGoal(this));
+        this.goalSelector.addGoal(3, new SwoopAttackGoal(this));
+        this.goalSelector.addGoal(4, new RoarGoal(this));
+        this.goalSelector.addGoal(5, new FlyingMeleeAttackGoal(this, 1.2D));
 
         // Movement and perching
-        this.goalSelector.add(6, new ReturnToNestGoal(this));
-        this.goalSelector.add(7, new PerchGoal(this));
-        this.goalSelector.add(8, new FlyGoal(this, 1.0D));
-        this.goalSelector.add(9, new LookAtEntityGoal(this, PlayerEntity.class, 32.0F));
-        this.goalSelector.add(10, new LookAroundGoal(this));
+        this.goalSelector.addGoal(6, new ReturnToNestGoal(this));
+        this.goalSelector.addGoal(7, new PerchGoal(this));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 32.0F));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 
         // Target goals
-        this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
-        this.targetSelector.add(2, new AttackWithOwnerGoal(this));
-        this.targetSelector.add(3, new RevengeGoal(this));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(1, new TrackOwnerAttackerGoal(this));
+        this.targetSelector.addGoal(2, new AttackWithOwnerGoal(this));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     /**
@@ -284,22 +287,22 @@ public class WildDragonEntity extends HostileEntity {
      * and prevent tamed dragons from attacking their owner
      */
     @Override
-    public boolean canTarget(LivingEntity target) {
+    public boolean canAttack(LivingEntity target) {
         // Tamed dragons should not attack their owner
-        if (this.isTamed() && target instanceof PlayerEntity player) {
-            if (this.getOwnerUuid().isPresent() && this.getOwnerUuid().get().equals(player.getUuid())) {
+        if (this.isTamed() && target instanceof Player player) {
+            if (this.getOwnerUuid().isPresent() && this.getOwnerUuid().get().equals(player.getUUID())) {
                 return false; // Never attack owner
             }
         }
 
         // Wild dragons don't attack creative/spectator players
-        if (target instanceof PlayerEntity player) {
+        if (target instanceof Player player) {
             if (player.isCreative() || player.isSpectator()) {
                 return false;
             }
         }
 
-        return super.canTarget(target);
+        return super.canAttack(target);
     }
 
     /**
@@ -316,16 +319,16 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (dragon.fireBreathCooldown > 0) return false;
             this.target = dragon.getTarget();
             if (target == null) return false;
-            double distance = dragon.squaredDistanceTo(target);
+            double distance = dragon.distanceToSqr(target);
             return distance >= 16.0 && distance <= 400.0; // 4-20 blocks
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             return chargingTicks < CHARGE_TIME && target != null && target.isAlive();
         }
 
@@ -333,23 +336,23 @@ public class WildDragonEntity extends HostileEntity {
         public void start() {
             chargingTicks = 0;
             dragon.setAnimationState(AnimationState.FIRE_BREATHING);
-            dragon.getEntityWorld().playSound(null, dragon.getBlockPos(), SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.HOSTILE, 1.5F, 1.2F);
+            dragon.level().playSound(null, dragon.blockPosition(), SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 1.5F, 1.2F);
         }
 
         @Override
         public void tick() {
             chargingTicks++;
-            dragon.getLookControl().lookAt(target, 30.0F, 30.0F);
+            dragon.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
             // Spawn fire particles during charging
-            if (dragon.getEntityWorld() instanceof ServerWorld serverWorld && chargingTicks % 2 == 0) {
-                Vec3d mouthPos = new Vec3d(dragon.getX(), dragon.getY(), dragon.getZ()).add(dragon.getRotationVec(1.0F).multiply(1.5));
-                serverWorld.spawnParticles(ParticleTypes.FLAME, mouthPos.x, mouthPos.y + 0.8, mouthPos.z, 2, 0.15, 0.15, 0.15, 0.02);
+            if (dragon.level() instanceof ServerLevel serverWorld && chargingTicks % 2 == 0) {
+                Vec3 mouthPos = new Vec3(dragon.getX(), dragon.getY(), dragon.getZ()).add(dragon.getViewVector(1.0F).scale(1.5));
+                serverWorld.sendParticles(ParticleTypes.FLAME, mouthPos.x, mouthPos.y + 0.8, mouthPos.z, 2, 0.15, 0.15, 0.15, 0.02);
             }
 
             // Fire the fireball
             if (chargingTicks == CHARGE_TIME) {
-                Vec3d lookVec = dragon.getRotationVec(1.0F);
+                Vec3 lookVec = dragon.getViewVector(1.0F);
 
                 // Spawn fireball from head position
                 double spawnX = dragon.getX() + lookVec.x * 1.5;
@@ -357,20 +360,20 @@ public class WildDragonEntity extends HostileEntity {
                 double spawnZ = dragon.getZ() + lookVec.z * 1.5;
 
                 // Calculate direction vector toward current target position
-                Vec3d targetPos = new Vec3d(target.getX(), target.getY() + target.getHeight() / 2.0, target.getZ());
-                Vec3d spawnPos = new Vec3d(spawnX, spawnY, spawnZ);
-                Vec3d direction = targetPos.subtract(spawnPos).normalize();
+                Vec3 targetPos = new Vec3(target.getX(), target.getY() + target.getBbHeight() / 2.0, target.getZ());
+                Vec3 spawnPos = new Vec3(spawnX, spawnY, spawnZ);
+                Vec3 direction = targetPos.subtract(spawnPos).normalize();
 
                 // Create fireball
-                SmallFireballEntity fireball = new SmallFireballEntity(
-                    dragon.getEntityWorld(),
+                SmallFireball fireball = new SmallFireball(
+                    dragon.level(),
                     spawnX, spawnY, spawnZ,
                     direction
                 );
                 fireball.setOwner(dragon);
-                dragon.getEntityWorld().spawnEntity(fireball);
+                dragon.level().addFreshEntity(fireball);
 
-                dragon.getEntityWorld().playSound(null, dragon.getBlockPos(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                dragon.level().playSound(null, dragon.blockPosition(), SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 1.0F, 1.0F);
                 dragon.fireBreathCooldown = 100; // 5 second cooldown
             }
         }
@@ -388,7 +391,7 @@ public class WildDragonEntity extends HostileEntity {
     private static class SwoopAttackGoal extends Goal {
         private final WildDragonEntity dragon;
         private LivingEntity target;
-        private Vec3d swoopStart;
+        private Vec3 swoopStart;
         private boolean isSwooping = false;
 
         public SwoopAttackGoal(WildDragonEntity dragon) {
@@ -396,11 +399,11 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (dragon.swoopCooldown > 0 || dragon.isPerched()) return false;
             this.target = dragon.getTarget();
             if (target == null) return false;
-            double distance = dragon.squaredDistanceTo(target);
+            double distance = dragon.distanceToSqr(target);
             // Only swoop if dragon is above target
             return distance < 400.0 && dragon.getY() > target.getY() + 5;
         }
@@ -408,9 +411,9 @@ public class WildDragonEntity extends HostileEntity {
         @Override
         public void start() {
             isSwooping = true;
-            swoopStart = new Vec3d(dragon.getX(), dragon.getY(), dragon.getZ());
+            swoopStart = new Vec3(dragon.getX(), dragon.getY(), dragon.getZ());
             dragon.setAnimationState(AnimationState.SWOOPING);
-            dragon.setVelocity(dragon.getVelocity().multiply(1.5, 0.5, 1.5));
+            dragon.setDeltaMovement(dragon.getDeltaMovement().multiply(1.5, 0.5, 1.5));
         }
 
         @Override
@@ -421,21 +424,21 @@ public class WildDragonEntity extends HostileEntity {
             }
 
             // Dive towards target
-            Vec3d targetPos = new Vec3d(target.getX(), target.getY(), target.getZ());
-            Vec3d dragonPos = new Vec3d(dragon.getX(), dragon.getY(), dragon.getZ());
-            Vec3d direction = targetPos.subtract(dragonPos).normalize();
+            Vec3 targetPos = new Vec3(target.getX(), target.getY(), target.getZ());
+            Vec3 dragonPos = new Vec3(dragon.getX(), dragon.getY(), dragon.getZ());
+            Vec3 direction = targetPos.subtract(dragonPos).normalize();
 
-            dragon.setVelocity(direction.multiply(1.3));
+            dragon.setDeltaMovement(direction.scale(1.3));
 
             // Wing dust particles during swoop
-            if (dragon.getEntityWorld() instanceof ServerWorld serverWorld && dragon.age % 2 == 0) {
-                serverWorld.spawnParticles(ParticleTypes.CLOUD, dragonPos.x, dragonPos.y, dragonPos.z, 2, 0.4, 0.2, 0.4, 0);
+            if (dragon.level() instanceof ServerLevel serverWorld && dragon.tickCount % 2 == 0) {
+                serverWorld.sendParticles(ParticleTypes.CLOUD, dragonPos.x, dragonPos.y, dragonPos.z, 2, 0.4, 0.2, 0.4, 0);
             }
 
             // Attack if close enough
-            if (dragon.squaredDistanceTo(target) < 4.0) {
-                if (dragon.getEntityWorld() instanceof ServerWorld serverWorld) {
-                    dragon.tryAttack(serverWorld, target);
+            if (dragon.distanceToSqr(target) < 4.0) {
+                if (dragon.level() instanceof ServerLevel serverWorld) {
+                    dragon.doHurtTarget(serverWorld, target);
                 }
                 dragon.swoopCooldown = 120; // 6 second cooldown
                 stop();
@@ -449,8 +452,8 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean shouldContinue() {
-            return isSwooping && target != null && target.isAlive() && dragon.squaredDistanceTo(target) > 4.0;
+        public boolean canContinueToUse() {
+            return isSwooping && target != null && target.isAlive() && dragon.distanceToSqr(target) > 4.0;
         }
     }
 
@@ -467,31 +470,31 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (dragon.roarCooldown > 0) return false;
             LivingEntity target = dragon.getTarget();
             // Roar when first acquiring a target
-            return target != null && dragon.age - dragon.getLastAttackTime() > 200;
+            return target != null && dragon.tickCount - dragon.getLastHurtMobTimestamp() > 200;
         }
 
         @Override
         public void start() {
             roarTicks = 0;
             dragon.setAnimationState(AnimationState.ROARING);
-            dragon.getEntityWorld().playSound(null, dragon.getBlockPos(), SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.HOSTILE, 2.0F, 1.0F);
+            dragon.level().playSound(null, dragon.blockPosition(), SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 2.0F, 1.0F);
         }
 
         @Override
         public void tick() {
             roarTicks++;
-            dragon.setVelocity(Vec3d.ZERO); // Stationary while roaring
+            dragon.setDeltaMovement(Vec3.ZERO); // Stationary while roaring
 
             // Intimidation effect - apply slowness to nearby players
             if (roarTicks == 15) {
-                dragon.getEntityWorld().getEntitiesByClass(PlayerEntity.class, dragon.getBoundingBox().expand(8), p -> true)
+                dragon.level().getEntitiesOfClass(Player.class, dragon.getBoundingBox().inflate(8), p -> true)
                         .forEach(player -> {
-                            player.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
-                                    net.minecraft.entity.effect.StatusEffects.SLOWNESS, 40, 0));
+                            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                                    net.minecraft.world.effect.MobEffects.SLOWNESS, 40, 0));
                         });
             }
         }
@@ -503,7 +506,7 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             return roarTicks < ROAR_DURATION;
         }
     }
@@ -519,7 +522,7 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             // Only perch if it has a nest, no target, and not already perched
             return dragon.nestPosition != null && dragon.getTarget() == null && !dragon.isPerched() && dragon.random.nextInt(200) == 0;
         }
@@ -527,7 +530,7 @@ public class WildDragonEntity extends HostileEntity {
         @Override
         public void start() {
             // Find a high point nearby to perch on
-            BlockPos currentPos = dragon.getBlockPos();
+            BlockPos currentPos = dragon.blockPosition();
             BlockPos perchPos = findPerchLocation(currentPos);
 
             if (perchPos != null) {
@@ -545,23 +548,23 @@ public class WildDragonEntity extends HostileEntity {
 
             if (!dragon.isPerched()) {
                 // Descend to perch location
-                Vec3d targetPos = Vec3d.ofCenter(dragon.perchLocation);
-                Vec3d dragonPos = new Vec3d(dragon.getX(), dragon.getY(), dragon.getZ());
-                Vec3d direction = targetPos.subtract(dragonPos).normalize().multiply(0.3);
-                dragon.setVelocity(direction);
+                Vec3 targetPos = Vec3.atCenterOf(dragon.perchLocation);
+                Vec3 dragonPos = new Vec3(dragon.getX(), dragon.getY(), dragon.getZ());
+                Vec3 direction = targetPos.subtract(dragonPos).normalize().scale(0.3);
+                dragon.setDeltaMovement(direction);
 
                 // Land when close enough
-                if (dragon.squaredDistanceTo(Vec3d.ofCenter(dragon.perchLocation)) < 4.0) {
-                    dragon.setPosition(Vec3d.ofCenter(dragon.perchLocation));
-                    dragon.setVelocity(Vec3d.ZERO);
+                if (dragon.distanceToSqr(Vec3.atCenterOf(dragon.perchLocation)) < 4.0) {
+                    dragon.setPos(Vec3.atCenterOf(dragon.perchLocation));
+                    dragon.setDeltaMovement(Vec3.ZERO);
                     dragon.setPerched(true);
                     dragon.setAnimationState(AnimationState.PERCHED);
                     dragon.perchTime = 0;
 
                     // Check if landing on a nest (stone/Magma Block platform)
-                    BlockPos groundPos = dragon.perchLocation.down();
-                    if (dragon.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.STONE ||
-                        dragon.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.MAGMA_BLOCK) {
+                    BlockPos groundPos = dragon.perchLocation.below();
+                    if (dragon.level().getBlockState(groundPos).getBlock() == Blocks.STONE ||
+                        dragon.level().getBlockState(groundPos).getBlock() == Blocks.MAGMA_BLOCK) {
                         dragon.nestPosition = groundPos; // Set nest position
                         DagMod.LOGGER.debug("Wild Dragon landed on nest at {}", groundPos);
                     }
@@ -569,7 +572,7 @@ public class WildDragonEntity extends HostileEntity {
             } else {
                 // Stay perched
                 dragon.perchTime++;
-                dragon.setVelocity(Vec3d.ZERO);
+                dragon.setDeltaMovement(Vec3.ZERO);
 
                 // Leave perch after timeout or if threatened
                 if (dragon.perchTime > MAX_PERCH_TIME || dragon.getTarget() != null) {
@@ -588,7 +591,7 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             return dragon.perchLocation != null && dragon.getTarget() == null;
         }
 
@@ -597,10 +600,10 @@ public class WildDragonEntity extends HostileEntity {
             for (int y = 10; y >= -5; y--) {
                 for (int x = -20; x <= 20; x += 5) {
                     for (int z = -20; z <= 20; z += 5) {
-                        BlockPos testPos = center.add(x, y, z);
-                        if (dragon.getEntityWorld().getBlockState(testPos).isSolidBlock(dragon.getEntityWorld(), testPos)
-                                && dragon.getEntityWorld().isAir(testPos.up())) {
-                            return testPos.up();
+                        BlockPos testPos = center.offset(x, y, z);
+                        if (dragon.level().getBlockState(testPos).isSolid()
+                                && dragon.level().getBlockState(testPos.above()).isAir()) {
+                            return testPos.above();
                         }
                     }
                 }
@@ -624,7 +627,7 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (dragon.nestPosition == null || dragon.getTarget() != null || dragon.isPerched()) {
                 return false;
             }
@@ -635,7 +638,7 @@ public class WildDragonEntity extends HostileEntity {
             }
             ticksSinceCheck = 0;
 
-            double distance = dragon.squaredDistanceTo(
+            double distance = dragon.distanceToSqr(
                 dragon.nestPosition.getX() + 0.5,
                 dragon.nestPosition.getY() + 1.0,
                 dragon.nestPosition.getZ() + 0.5
@@ -659,8 +662,8 @@ public class WildDragonEntity extends HostileEntity {
             }
 
             // Fly toward nest
-            Vec3d targetPos = Vec3d.ofCenter(dragon.nestPosition).add(0, 3, 0);
-            Vec3d dragonPos = new Vec3d(dragon.getX(), dragon.getY(), dragon.getZ());
+            Vec3 targetPos = Vec3.atCenterOf(dragon.nestPosition).add(0, 3, 0);
+            Vec3 dragonPos = new Vec3(dragon.getX(), dragon.getY(), dragon.getZ());
             double distance = dragonPos.distanceTo(targetPos);
 
             if (distance < 8.0) {
@@ -668,9 +671,9 @@ public class WildDragonEntity extends HostileEntity {
                 return;
             }
 
-            Vec3d direction = targetPos.subtract(dragonPos).normalize().multiply(0.25);
-            dragon.setVelocity(direction);
-            dragon.getLookControl().lookAt(targetPos.x, targetPos.y, targetPos.z);
+            Vec3 direction = targetPos.subtract(dragonPos).normalize().scale(0.25);
+            dragon.setDeltaMovement(direction);
+            dragon.getLookControl().setLookAt(targetPos.x, targetPos.y, targetPos.z);
         }
 
         @Override
@@ -681,12 +684,12 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             if (!returning || dragon.nestPosition == null || dragon.getTarget() != null) {
                 return false;
             }
 
-            double distance = dragon.squaredDistanceTo(
+            double distance = dragon.distanceToSqr(
                 dragon.nestPosition.getX() + 0.5,
                 dragon.nestPosition.getY() + 1.0,
                 dragon.nestPosition.getZ() + 0.5
@@ -710,7 +713,7 @@ public class WildDragonEntity extends HostileEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             return dragon.getTarget() != null && dragon.getTarget().isAlive() && !dragon.isPerched();
         }
 
@@ -729,20 +732,20 @@ public class WildDragonEntity extends HostileEntity {
             LivingEntity target = dragon.getTarget();
             if (target == null) return;
 
-            double distance = dragon.squaredDistanceTo(target);
+            double distance = dragon.distanceToSqr(target);
 
             if (distance < 4.0) {
                 // Attack range
-                if (dragon.getEntityWorld() instanceof ServerWorld serverWorld) {
-                    dragon.tryAttack(serverWorld, target);
+                if (dragon.level() instanceof ServerLevel serverWorld) {
+                    dragon.doHurtTarget(serverWorld, target);
                 }
                 cooldown = 20; // 1 second cooldown
             } else if (distance < 256.0) {
                 // Chase range - fly towards target
-                Vec3d targetPos = new Vec3d(target.getX(), target.getY() + 1.5, target.getZ());
-                Vec3d dragonPos = new Vec3d(dragon.getX(), dragon.getY(), dragon.getZ());
-                Vec3d direction = targetPos.subtract(dragonPos).normalize().multiply(speed);
-                dragon.setVelocity(direction);
+                Vec3 targetPos = new Vec3(target.getX(), target.getY() + 1.5, target.getZ());
+                Vec3 dragonPos = new Vec3(dragon.getX(), dragon.getY(), dragon.getZ());
+                Vec3 direction = targetPos.subtract(dragonPos).normalize().scale(speed);
+                dragon.setDeltaMovement(direction);
                 dragon.setAnimationState(AnimationState.ATTACKING);
             }
         }
@@ -762,36 +765,36 @@ public class WildDragonEntity extends HostileEntity {
         return false;
     }
 
-    public static DefaultAttributeContainer.Builder createWildDragonAttributes() {
-        return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 160.0)          // 160 HP
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.18)       // Base speed
-                .add(EntityAttributes.FLYING_SPEED, 0.35)         // Flying speed (slightly slower than boss)
-                .add(EntityAttributes.ATTACK_DAMAGE, 10.0)        // Moderate attacks (vs boss 16.0)
-                .add(EntityAttributes.ARMOR, 6.0)                 // Light armor (vs boss 16.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 8.0)       // Toughness counters heavy hits
-                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.5)  // Lower resistance (vs boss 0.8)
-                .add(EntityAttributes.FOLLOW_RANGE, 40.0)         // Slightly lower range
-                .add(EntityAttributes.ATTACK_KNOCKBACK, 0.5)      // Moderate knockback (vs boss 1.0)
-                .add(EntityAttributes.SCALE, 0.4);                // 40% size (vs boss 60%)
+    public static AttributeSupplier.Builder createWildDragonAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 160.0)          // 160 HP
+                .add(Attributes.MOVEMENT_SPEED, 0.18)       // Base speed
+                .add(Attributes.FLYING_SPEED, 0.35)         // Flying speed (slightly slower than boss)
+                .add(Attributes.ATTACK_DAMAGE, 10.0)        // Moderate attacks (vs boss 16.0)
+                .add(Attributes.ARMOR, 6.0)                 // Light armor (vs boss 16.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 8.0)       // Toughness counters heavy hits
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)  // Lower resistance (vs boss 0.8)
+                .add(Attributes.FOLLOW_RANGE, 40.0)         // Slightly lower range
+                .add(Attributes.ATTACK_KNOCKBACK, 0.5)      // Moderate knockback (vs boss 1.0)
+                .add(Attributes.SCALE, 0.4);                // 40% size (vs boss 60%)
     }
 
     @Override
-    public boolean damage(net.minecraft.server.world.ServerWorld world, DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel world, DamageSource source, float amount) {
         // Immune to fall damage
-        if (source.isOf(net.minecraft.entity.damage.DamageTypes.FALL)) {
+        if (source.is(net.minecraft.world.damagesource.DamageTypes.FALL)) {
             return false;
         }
-        return super.damage(world, source, amount);
+        return super.hurtServer(world, source, amount);
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, net.minecraft.block.BlockState state, net.minecraft.util.math.BlockPos pos) {
+    protected void checkFallDamage(double heightDifference, boolean onGround, net.minecraft.world.level.block.state.BlockState state, net.minecraft.core.BlockPos pos) {
         // Don't apply fall damage logic for flying entity
     }
 
     @Override
-    public boolean isClimbing() {
+    public boolean onClimbable() {
         // Never climbing, always flying
         return false;
     }
@@ -801,7 +804,7 @@ public class WildDragonEntity extends HostileEntity {
         super.tick();
 
         // Server-side logic
-        if (!this.getEntityWorld().isClient()) {
+        if (!this.level().isClientSide()) {
             // Decrement cooldowns
             if (this.fireBreathCooldown > 0) this.fireBreathCooldown--;
             if (this.roarCooldown > 0) this.roarCooldown--;
@@ -822,7 +825,7 @@ public class WildDragonEntity extends HostileEntity {
 
                 // Animation complete, spawn egg
                 if (this.eggLayingTimer == 0 && getAnimationState() == AnimationState.LAYING_EGG) {
-                    tryLayEgg((ServerWorld) this.getEntityWorld());
+                    tryLayEgg((ServerLevel) this.level());
                     setAnimationState(AnimationState.PERCHED);
                 }
             } else {
@@ -842,13 +845,13 @@ public class WildDragonEntity extends HostileEntity {
                     this.growthProgress = 0; // Reset progress for next stage
 
                     // Growth particle effects
-                    if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
-                        serverWorld.spawnParticles(ParticleTypes.HAPPY_VILLAGER,
-                            this.getX(), this.getY() + this.getHeight() / 2, this.getZ(),
+                    if (this.level() instanceof ServerLevel serverWorld) {
+                        serverWorld.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                            this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                             20, 0.5, 0.5, 0.5, 0.1);
 
-                        serverWorld.playSound(null, this.getBlockPos(),
-                            SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 1.0F, 1.5F);
+                        serverWorld.playSound(null, this.blockPosition(),
+                            SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0F, 1.5F);
                     }
 
                     DagMod.LOGGER.info("Wild Dragon grew from {} to {}", currentStage.name(), nextStage.name());
@@ -863,8 +866,8 @@ public class WildDragonEntity extends HostileEntity {
                     boolean hasEggs = false;
                     for (int x = -3; x <= 3; x++) {
                         for (int z = -3; z <= 3; z++) {
-                            BlockPos checkPos = this.nestPosition.add(x, 1, z);
-                            if (this.getEntityWorld().getBlockState(checkPos).getBlock() == ModBlocks.DRAGON_EGG_BLOCK) {
+                            BlockPos checkPos = this.nestPosition.offset(x, 1, z);
+                            if (this.level().getBlockState(checkPos).getBlock() == ModBlocks.DRAGON_EGG_BLOCK) {
                                 hasEggs = true;
                                 break;
                             }
@@ -893,14 +896,14 @@ public class WildDragonEntity extends HostileEntity {
                     // Abandon nest
                     DagMod.LOGGER.info("Wild Dragon is abandoning its nest at {}.", this.nestPosition);
                     this.nestPosition = null;
-                    this.dataTracker.set(IS_ABANDONED, true);
+                    this.entityData.set(IS_ABANDONED, true);
                     this.nestAbandonmentTimer = -1; // Stop timer
                 }
             }
 
             // Update animation state based on velocity if not in special state
             if (getAnimationState() == AnimationState.FLYING || getAnimationState() == AnimationState.IDLE) {
-                double velocity = this.getVelocity().length();
+                double velocity = this.getDeltaMovement().length();
                 if (velocity > 0.3) {
                     setAnimationState(AnimationState.FLYING);
                 } else if (velocity < 0.1 && !isPerched()) {
@@ -913,13 +916,13 @@ public class WildDragonEntity extends HostileEntity {
         this.animationTimer++;
 
         // Server-side ambient particle effects
-        if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld serverWorld) {
+        if (!this.level().isClientSide() && this.level() instanceof ServerLevel serverWorld) {
             spawnAmbientParticles(serverWorld);
         }
 
         // Wing flap sounds
-        if (this.age % 15 == 0 && getAnimationState() != AnimationState.PERCHED) {
-            this.getEntityWorld().playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.HOSTILE, 0.4F, 1.2F);
+        if (this.tickCount % 15 == 0 && getAnimationState() != AnimationState.PERCHED) {
+            this.level().playSound(null, this.blockPosition(), SoundEvents.ENDER_DRAGON_FLAP, SoundSource.HOSTILE, 0.4F, 1.2F);
         }
     }
 
@@ -927,40 +930,38 @@ public class WildDragonEntity extends HostileEntity {
      * Handle player interactions with the dragon (taming, sitting, feeding)
      */
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
 
         // Only handle on server
-        if (this.getEntityWorld().isClient()) {
-            return this.isTamed() ? ActionResult.SUCCESS : ActionResult.PASS;
+        if (this.level().isClientSide()) {
+            return this.isTamed() ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
 
         // Alternative taming with raw meat (only for baby/juvenile dragons)
         if (!this.isTamed() && isRawMeat(itemStack)) {
             if (this.getGrowthStage() == GrowthStage.ADULT) {
                 // Adult wild dragons cannot be tamed
-                player.sendMessage(Text.literal("This dragon is too old to be tamed!").formatted(Formatting.RED), false);
-                return ActionResult.FAIL;
+                player.sendOverlayMessage(Component.literal("This dragon is too old to be tamed!").withStyle(ChatFormatting.RED));
+                return InteractionResult.FAIL;
             }
 
             // Increment meat fed counter
-            int currentMeat = this.dataTracker.get(MEAT_FED);
+            int currentMeat = this.entityData.get(MEAT_FED);
             currentMeat++;
-            this.dataTracker.set(MEAT_FED, currentMeat);
+            this.entityData.set(MEAT_FED, currentMeat);
 
             // Progress feedback
             int remaining = MEAT_REQUIRED_FOR_TAMING - currentMeat;
             if (remaining > 0) {
-                player.sendMessage(
-                    Text.literal("Dragon trusts you more... (" + currentMeat + "/" + MEAT_REQUIRED_FOR_TAMING + " meat fed)")
-                        .formatted(Formatting.YELLOW),
-                    true
-                );
+                player.sendSystemMessage(
+                    Component.literal("Dragon trusts you more... (" + currentMeat + "/" + MEAT_REQUIRED_FOR_TAMING + " meat fed)")
+                        .withStyle(ChatFormatting.YELLOW));
 
                 // Progress particles
-                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
-                    serverWorld.spawnParticles(ParticleTypes.HEART,
-                        this.getX(), this.getY() + this.getHeight(), this.getZ(),
+                if (this.level() instanceof ServerLevel serverWorld) {
+                    serverWorld.sendParticles(ParticleTypes.HEART,
+                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                         3, 0.3, 0.3, 0.3, 0.0);
                 }
             }
@@ -969,178 +970,176 @@ public class WildDragonEntity extends HostileEntity {
             if (currentMeat >= MEAT_REQUIRED_FOR_TAMING) {
                 // Successfully tamed!
                 this.setTamed(true);
-                this.setOwnerUuid(player.getUuid());
+                this.setOwnerUuid(player.getUUID());
                 this.setTarget(null);
-                this.dataTracker.set(MEAT_FED, 0);
+                this.entityData.set(MEAT_FED, 0);
 
                 // Heart particles
-                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
-                    serverWorld.spawnParticles(ParticleTypes.HEART,
-                        this.getX(), this.getY() + this.getHeight(), this.getZ(),
+                if (this.level() instanceof ServerLevel serverWorld) {
+                    serverWorld.sendParticles(ParticleTypes.HEART,
+                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                         20, 0.5, 0.5, 0.5, 0.0);
                 }
 
-                this.getEntityWorld().playSound(null, this.getBlockPos(),
-                    SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 1.0F, 2.0F);
+                this.level().playSound(null, this.blockPosition(),
+                    SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0F, 2.0F);
 
-                player.sendMessage(Text.literal("The dragon has been tamed!").formatted(Formatting.GREEN), false);
+                player.sendOverlayMessage(Component.literal("The dragon has been tamed!").withStyle(ChatFormatting.GREEN));
             }
 
             if (!player.isCreative()) {
-                itemStack.decrement(1);
+                itemStack.shrink(1);
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         // Taming with Dragon Heart (only for baby/juvenile dragons)
-        if (!this.isTamed() && itemStack.isOf(ModItems.DRAGON_HEART)) {
+        if (!this.isTamed() && itemStack.getItem() == ModItems.DRAGON_HEART) {
             if (this.getGrowthStage() == GrowthStage.ADULT) {
-                player.sendMessage(Text.literal("This dragon is too old to be tamed!").formatted(Formatting.RED), false);
-                return ActionResult.FAIL;
+                player.sendSystemMessage(Component.literal("This dragon is too old to be tamed!").withStyle(ChatFormatting.RED));
+                return InteractionResult.FAIL;
             }
 
-            // Random chance to tame (33% per heart)
+            // RandomSource chance to tame (33% per heart)
             if (this.random.nextInt(100) < TAMING_CHANCE) {
                 // Successfully tamed!
                 this.setTamed(true);
-                this.setOwnerUuid(player.getUuid());
+                this.setOwnerUuid(player.getUUID());
                 this.setTarget(null);
 
                 // Heart particles
-                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
-                    serverWorld.spawnParticles(ParticleTypes.HEART,
-                        this.getX(), this.getY() + this.getHeight(), this.getZ(),
+                if (this.level() instanceof ServerLevel serverWorld) {
+                    serverWorld.sendParticles(ParticleTypes.HEART,
+                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                         15, 0.5, 0.5, 0.5, 0.0);
                 }
 
-                this.getEntityWorld().playSound(null, this.getBlockPos(),
-                    SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 1.0F, 2.0F);
+                this.level().playSound(null, this.blockPosition(),
+                    SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0F, 2.0F);
 
-                player.sendMessage(Text.literal("The dragon has been tamed!").formatted(Formatting.GREEN), false);
+                player.sendSystemMessage(Component.literal("The dragon has been tamed!").withStyle(ChatFormatting.GREEN));
 
                 if (!player.isCreative()) {
-                    itemStack.decrement(1);
+                    itemStack.shrink(1);
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
                 // Failed, try again
-                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
-                    serverWorld.spawnParticles(ParticleTypes.SMOKE,
-                        this.getX(), this.getY() + this.getHeight(), this.getZ(),
+                if (this.level() instanceof ServerLevel serverWorld) {
+                    serverWorld.sendParticles(ParticleTypes.SMOKE,
+                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                         5, 0.3, 0.3, 0.3, 0.0);
                 }
 
                 if (!player.isCreative()) {
-                    itemStack.decrement(1);
+                    itemStack.shrink(1);
                 }
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
 
         // Tamed dragon interactions
-        if (this.isTamed() && this.getOwnerUuid().isPresent() && this.getOwnerUuid().get().equals(player.getUuid())) {
+        if (this.isTamed() && this.getOwnerUuid().isPresent() && this.getOwnerUuid().get().equals(player.getUUID())) {
             // Shift + right-click to toggle sitting
-            if (player.isSneaking()) {
+            if (player.isShiftKeyDown()) {
                 this.setSitting(!this.isSitting());
-                player.sendMessage(
-                    Text.literal(this.isSitting() ? "Dragon is now sitting" : "Dragon is now following")
-                        .formatted(Formatting.YELLOW),
-                    true
-                );
-                return ActionResult.SUCCESS;
+                player.sendSystemMessage(
+                    Component.literal(this.isSitting() ? "Dragon is now sitting" : "Dragon is now following")
+                        .withStyle(ChatFormatting.YELLOW));
+                return InteractionResult.SUCCESS;
             }
 
             // Feeding system (food items heal the dragon)
-            FoodComponent food = itemStack.get(DataComponentTypes.FOOD);
+            FoodProperties food = itemStack.get(DataComponents.FOOD);
             if (food != null && this.getHealth() < this.getMaxHealth()) {
                     // Heal dragon based on food value
                     float healAmount = food.nutrition() * 2.0F;
                     this.heal(healAmount);
 
                     // Eating particles and sound
-                    if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
-                        serverWorld.spawnParticles(ParticleTypes.HEART,
-                            this.getX(), this.getY() + this.getHeight() / 2, this.getZ(),
+                    if (this.level() instanceof ServerLevel serverWorld) {
+                        serverWorld.sendParticles(ParticleTypes.HEART,
+                            this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                             5, 0.3, 0.3, 0.3, 0.0);
 
-                        serverWorld.playSound(null, this.getBlockPos(),
-                            SoundEvents.ENTITY_GENERIC_EAT.value(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        serverWorld.playSound(null, this.blockPosition(),
+                            SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                     }
 
                 if (!player.isCreative()) {
-                    itemStack.decrement(1);
+                    itemStack.shrink(1);
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
 
-        return super.interactMob(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     /**
      * Check if an item is raw meat that can be used for taming
      */
     private boolean isRawMeat(ItemStack stack) {
-        return stack.isOf(Items.BEEF) ||
-               stack.isOf(Items.PORKCHOP) ||
-               stack.isOf(Items.CHICKEN) ||
-               stack.isOf(Items.MUTTON) ||
-               stack.isOf(Items.RABBIT) ||
-               stack.isOf(Items.COD) ||
-               stack.isOf(Items.SALMON);
+        return stack.getItem() == Items.BEEF ||
+               stack.getItem() == Items.PORKCHOP ||
+               stack.getItem() == Items.CHICKEN ||
+               stack.getItem() == Items.MUTTON ||
+               stack.getItem() == Items.RABBIT ||
+               stack.getItem() == Items.COD ||
+               stack.getItem() == Items.SALMON;
     }
 
     /**
      * Spawn ambient particles on server side
      */
-    private void spawnAmbientParticles(ServerWorld world) {
+    private void spawnAmbientParticles(ServerLevel world) {
         switch (getAnimationState()) {
             case FLYING, ATTACKING -> {
                 // Wing dust trails (smaller than boss)
-                if (this.age % 4 == 0) {
-                    double yawRad = Math.toRadians(this.getYaw());
-                    Vec3d wingLeft = new Vec3d(
+                if (this.tickCount % 4 == 0) {
+                    double yawRad = Math.toRadians(this.getYRot());
+                    Vec3 wingLeft = new Vec3(
                         this.getX() + (-1.0 * Math.cos(yawRad)),
                         this.getY() + 0.3,
                         this.getZ() + (-1.0 * Math.sin(yawRad))
                     );
-                    Vec3d wingRight = new Vec3d(
+                    Vec3 wingRight = new Vec3(
                         this.getX() + (1.0 * Math.cos(yawRad)),
                         this.getY() + 0.3,
                         this.getZ() + (1.0 * Math.sin(yawRad))
                     );
 
-                    world.spawnParticles(ParticleTypes.CLOUD, wingLeft.x, wingLeft.y, wingLeft.z, 1, 0.0, -0.05, 0.0, 0.0);
-                    world.spawnParticles(ParticleTypes.CLOUD, wingRight.x, wingRight.y, wingRight.z, 1, 0.0, -0.05, 0.0, 0.0);
+                    world.sendParticles(ParticleTypes.CLOUD, wingLeft.x, wingLeft.y, wingLeft.z, 1, 0.0, -0.05, 0.0, 0.0);
+                    world.sendParticles(ParticleTypes.CLOUD, wingRight.x, wingRight.y, wingRight.z, 1, 0.0, -0.05, 0.0, 0.0);
                 }
             }
             case ROARING -> {
                 // Intimidation particles
-                if (this.age % 6 == 0) {
+                if (this.tickCount % 6 == 0) {
                     double radius = 1.5;
                     for (int i = 0; i < 2; i++) {
                         double angle = this.random.nextDouble() * 2 * Math.PI;
                         double x = this.getX() + Math.cos(angle) * radius;
                         double z = this.getZ() + Math.sin(angle) * radius;
-                        world.spawnParticles(ParticleTypes.ANGRY_VILLAGER, x, this.getY() + 1.0, z, 1, 0.0, 0.1, 0.0, 0.0);
+                        world.sendParticles(ParticleTypes.ANGRY_VILLAGER, x, this.getY() + 1.0, z, 1, 0.0, 0.1, 0.0, 0.0);
                     }
                 }
             }
             case LANDING -> {
                 // Dust particles during landing
-                if (this.age % 3 == 0 && this.getVelocity().y < -0.1) {
-                    world.spawnParticles(ParticleTypes.CLOUD, this.getX(), this.getY(), this.getZ(),
+                if (this.tickCount % 3 == 0 && this.getDeltaMovement().y < -0.1) {
+                    world.sendParticles(ParticleTypes.CLOUD, this.getX(), this.getY(), this.getZ(),
                             2, 0.2, 0.1, 0.2, 0.02);
                 }
             }
             case LAYING_EGG -> {
                 // Heart and sparkle particles during egg laying
-                if (this.age % 10 == 0) {
-                    world.spawnParticles(ParticleTypes.HEART, this.getX(), this.getY() + 0.8, this.getZ(),
+                if (this.tickCount % 10 == 0) {
+                    world.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + 0.8, this.getZ(),
                             1, 0.3, 0.3, 0.3, 0.0);
                 }
-                if (this.age % 5 == 0) {
-                    world.spawnParticles(ParticleTypes.ENCHANT, this.getX(), this.getY(), this.getZ(),
+                if (this.tickCount % 5 == 0) {
+                    world.sendParticles(ParticleTypes.ENCHANT, this.getX(), this.getY(), this.getZ(),
                             2, 0.4, 0.2, 0.4, 0.01);
                 }
             }
@@ -1148,61 +1147,61 @@ public class WildDragonEntity extends HostileEntity {
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
-        super.onDeath(damageSource);
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
 
         // Death effects and drops
-        if (!this.getEntityWorld().isClient()) {
-            ServerWorld serverWorld = (ServerWorld) this.getEntityWorld();
+        if (!this.level().isClientSide()) {
+            ServerLevel serverWorld = (ServerLevel) this.level();
 
             // Death particle explosion
             for (int i = 0; i < 30; i++) {
                 double offsetX = this.random.nextGaussian() * 1.5;
                 double offsetY = this.random.nextGaussian() * 1.5;
                 double offsetZ = this.random.nextGaussian() * 1.5;
-                serverWorld.spawnParticles(ParticleTypes.POOF,
+                serverWorld.sendParticles(ParticleTypes.POOF,
                         this.getX() + offsetX, this.getY() + 0.8 + offsetY, this.getZ() + offsetZ,
                         3, 0.3, 0.3, 0.3, 0.1);
             }
 
             // Explosion effect
-            serverWorld.spawnParticles(ParticleTypes.EXPLOSION,
+            serverWorld.sendParticles(ParticleTypes.EXPLOSION,
                     this.getX(), this.getY() + 0.8, this.getZ(),
                     1, 0.0, 0.0, 0.0, 0.0);
 
             // Play death sound
-            serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.HOSTILE, 1.5F, 1.2F);
+            serverWorld.playSound(null, this.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.HOSTILE, 1.5F, 1.2F);
 
             // Drop Dragon Scales (2-4)
             int scaleCount = DRAGON_SCALE_DROP_MIN + this.random.nextInt(DRAGON_SCALE_DROP_MAX - DRAGON_SCALE_DROP_MIN + 1);
             ItemStack scaleStack = new ItemStack(ModItems.DRAGON_SCALE, scaleCount);
             ItemEntity scaleEntity = new ItemEntity(serverWorld, this.getX(), this.getY(), this.getZ(), scaleStack);
-            serverWorld.spawnEntity(scaleEntity);
+            serverWorld.addFreshEntity(scaleEntity);
 
             // Drop Dragon Bones (1-2)
             int boneCount = 1 + this.random.nextInt(2);
             ItemStack boneStack = new ItemStack(ModItems.DRAGON_BONE, boneCount);
             ItemEntity boneEntity = new ItemEntity(serverWorld, this.getX(), this.getY(), this.getZ(), boneStack);
-            serverWorld.spawnEntity(boneEntity);
+            serverWorld.addFreshEntity(boneEntity);
 
             // Drop Dragon Skin (1)
             ItemStack skinStack = new ItemStack(ModItems.DRAGON_SKIN, 1);
             ItemEntity skinEntity = new ItemEntity(serverWorld, this.getX(), this.getY(), this.getZ(), skinStack);
-            serverWorld.spawnEntity(skinEntity);
+            serverWorld.addFreshEntity(skinEntity);
 
             // Drop Dragon Heart: guaranteed for quest-specific subclasses, 50% otherwise
             if (this.alwaysDropHeart() || this.random.nextBoolean()) {
                 ItemStack heartStack = new ItemStack(ModItems.DRAGON_HEART, 1);
                 ItemEntity heartEntity = new ItemEntity(serverWorld, this.getX(), this.getY(), this.getZ(), heartStack);
-                serverWorld.spawnEntity(heartEntity);
+                serverWorld.addFreshEntity(heartEntity);
             }
 
             // Remove this dragon's location from spawn tracking
-            DragonSpawner.removeDragonLocation(this.getBlockPos());
+            DragonSpawner.removeDragonLocation(this.blockPosition());
 
             // Start respawn cooldown — only for natural wild dragons, not quest subclasses
             if (this.getClass() == WildDragonEntity.class) {
-                DragonSpawner.recordDragonDeath(serverWorld.getTime());
+                DragonSpawner.recordDragonDeath(serverWorld.getGameTime());
             }
         }
     }
@@ -1210,14 +1209,14 @@ public class WildDragonEntity extends HostileEntity {
     /**
      * Attempt to lay an egg on the nest
      */
-    private void tryLayEgg(ServerWorld world) {
+    private void tryLayEgg(ServerLevel world) {
         if (this.nestPosition == null) return;
 
         // Count existing eggs in nest area
         int eggCount = 0;
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
-                BlockPos checkPos = this.nestPosition.add(x, 1, z);
+                BlockPos checkPos = this.nestPosition.offset(x, 1, z);
                 if (world.getBlockState(checkPos).getBlock() == ModBlocks.DRAGON_EGG_BLOCK) {
                     eggCount++;
                 }
@@ -1234,26 +1233,26 @@ public class WildDragonEntity extends HostileEntity {
         for (int attempt = 0; attempt < 10; attempt++) {
             int x = random.nextInt(3) - 1;
             int z = random.nextInt(3) - 1;
-            BlockPos eggPos = this.nestPosition.add(x, 1, z);
+            BlockPos eggPos = this.nestPosition.offset(x, 1, z);
 
-            if (world.getBlockState(eggPos).isAir() && world.getBlockState(eggPos.down()).isOf(Blocks.MAGMA_BLOCK)) {
+            if (world.getBlockState(eggPos).isAir() && world.getBlockState(eggPos.below()).getBlock() == Blocks.MAGMA_BLOCK) {
                 // Place the egg with the correct variant in the BlockState (for rendering)
-                world.setBlockState(eggPos, ModBlocks.DRAGON_EGG_BLOCK.getDefaultState()
-                    .with(DragonEggBlock.VARIANT, this.getVariant()));
+                world.setBlock(eggPos, ModBlocks.DRAGON_EGG_BLOCK.defaultBlockState()
+                    .setValue(DragonEggBlock.VARIANT, this.getVariant()), 3);
 
                 // Set the egg's variant in the BlockEntity as well (for hatching logic)
                 if (world.getBlockEntity(eggPos) instanceof DragonEggBlockEntity eggEntity) {
                     eggEntity.setVariant(this.getVariant());
-                    eggEntity.markDirty();
+                    eggEntity.setChanged();
                 }
 
                 // Particle effects
-                world.spawnParticles(ParticleTypes.HEART,
+                world.sendParticles(ParticleTypes.HEART,
                         eggPos.getX() + 0.5, eggPos.getY() + 0.5, eggPos.getZ() + 0.5,
                         5, 0.3, 0.3, 0.3, 0.0);
 
                 // Success sound
-                world.playSound(null, eggPos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 1.0F, 0.7F);
+                world.playSound(null, eggPos, SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1.0F, 0.7F);
 
                 DagMod.LOGGER.info("Wild {} Dragon laid egg at {} (total eggs in nest: {})",
                         this.getVariant().name(), eggPos, eggCount + 1);
@@ -1266,39 +1265,39 @@ public class WildDragonEntity extends HostileEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_ENDER_DRAGON_AMBIENT;
+        return SoundEvents.ENDER_DRAGON_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_ENDER_DRAGON_HURT;
+        return SoundEvents.ENDER_DRAGON_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_WITHER_DEATH;
+        return SoundEvents.WITHER_DEATH;
     }
 
     @Override
-    public Text getName() {
+    public Component getName() {
         // Return variant-specific name with matching color
         return switch (getVariant()) {
-            case RED -> Text.translatable("entity.dagmod.wild_red_dragon").formatted(Formatting.RED);
-            case ICE -> Text.translatable("entity.dagmod.wild_ice_dragon").formatted(Formatting.AQUA);
-            case LAVA -> Text.translatable("entity.dagmod.wild_lava_dragon").formatted(Formatting.GOLD);
-            case EARTH -> Text.translatable("entity.dagmod.wild_earth_dragon").formatted(Formatting.DARK_GREEN);
-            case WIND -> Text.translatable("entity.dagmod.wild_wind_dragon").formatted(Formatting.WHITE);
+            case RED -> Component.translatable("entity.dagmod.wild_red_dragon").withStyle(ChatFormatting.RED);
+            case ICE -> Component.translatable("entity.dagmod.wild_ice_dragon").withStyle(ChatFormatting.AQUA);
+            case LAVA -> Component.translatable("entity.dagmod.wild_lava_dragon").withStyle(ChatFormatting.GOLD);
+            case EARTH -> Component.translatable("entity.dagmod.wild_earth_dragon").withStyle(ChatFormatting.DARK_GREEN);
+            case WIND -> Component.translatable("entity.dagmod.wild_wind_dragon").withStyle(ChatFormatting.WHITE);
         };
     }
 
     @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) {
-        return !isTamed() && this.dataTracker.get(IS_ABANDONED);
+    public boolean removeWhenFarAway(double distanceSquared) {
+        return !isTamed() && this.entityData.get(IS_ABANDONED);
     }
 
     @Override
-    public boolean isPersistent() {
-        return isTamed() || !this.dataTracker.get(IS_ABANDONED);
+    public boolean isPersistenceRequired() {
+        return isTamed() || !this.entityData.get(IS_ABANDONED);
     }
 
 
@@ -1306,34 +1305,33 @@ public class WildDragonEntity extends HostileEntity {
      * Write custom dragon data for persistence
      */
     @Override
-    protected void writeCustomData(net.minecraft.storage.WriteView writeView) {
-        super.writeCustomData(writeView);
+    protected void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
 
-        writeView.putInt("DragonVariant", this.getVariant().ordinal());
-        writeView.putBoolean("IsTamed", this.isTamed());
-        writeView.putBoolean("IsSitting", this.isSitting());
-        writeView.putInt("GrowthStage", this.getGrowthStage().ordinal());
-        writeView.putInt("GrowthProgress", this.growthProgress);
-        writeView.putInt("MeatFed", this.dataTracker.get(MEAT_FED));
-        writeView.putBoolean("IsAbandoned", this.dataTracker.get(IS_ABANDONED));
-
+        output.putInt("DragonVariant", this.getVariant().ordinal());
+        output.putBoolean("IsTamed", this.isTamed());
+        output.putBoolean("IsSitting", this.isSitting());
+        output.putInt("GrowthStage", this.getGrowthStage().ordinal());
+        output.putInt("GrowthProgress", this.growthProgress);
+        output.putInt("MeatFed", this.entityData.get(MEAT_FED));
+        output.putBoolean("IsAbandoned", this.entityData.get(IS_ABANDONED));
 
         if (this.getOwnerUuid().isPresent()) {
-            writeView.putString("OwnerUUID", this.getOwnerUuid().get().toString());
+            output.putString("OwnerUUID", this.getOwnerUuid().get().toString());
         }
 
         DagMod.LOGGER.debug("[SAVE] Saving Wild {} Dragon (variant: {}, tamed: {}, growth: {}, abandoned: {})",
-            this.getVariant().name(), this.getVariant().ordinal(), this.isTamed(), this.getGrowthStage().name(), this.dataTracker.get(IS_ABANDONED));
+            this.getVariant().name(), this.getVariant().ordinal(), this.isTamed(), this.getGrowthStage().name(), this.entityData.get(IS_ABANDONED));
     }
 
     /**
      * Read custom dragon data when loading
      */
     @Override
-    protected void readCustomData(net.minecraft.storage.ReadView readView) {
-        super.readCustomData(readView);
+    protected void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
 
-        int variantOrdinal = readView.getInt("DragonVariant", 0);
+        int variantOrdinal = input.getIntOr("DragonVariant", 0);
 
         if (variantOrdinal >= 0 && variantOrdinal < DragonGuardianEntity.DragonVariant.values().length) {
             DragonGuardianEntity.DragonVariant loadedVariant = DragonGuardianEntity.DragonVariant.values()[variantOrdinal];
@@ -1345,32 +1343,29 @@ public class WildDragonEntity extends HostileEntity {
             this.setVariant(DragonGuardianEntity.DragonVariant.RED);
         }
 
-        this.setTamed(readView.getBoolean("IsTamed", false));
-        this.setSitting(readView.getBoolean("IsSitting", false));
-        this.growthProgress = readView.getInt("GrowthProgress", 0);
-        this.dataTracker.set(MEAT_FED, readView.getInt("MeatFed", 0));
-        this.dataTracker.set(IS_ABANDONED, readView.getBoolean("IsAbandoned", false));
+        this.setTamed(input.getBooleanOr("IsTamed", false));
+        this.setSitting(input.getBooleanOr("IsSitting", false));
+        this.growthProgress = input.getIntOr("GrowthProgress", 0);
+        this.entityData.set(MEAT_FED, input.getIntOr("MeatFed", 0));
+        this.entityData.set(IS_ABANDONED, input.getBooleanOr("IsAbandoned", false));
 
-
-        int growthStageOrdinal = readView.getInt("GrowthStage", GrowthStage.ADULT.ordinal());
+        int growthStageOrdinal = input.getIntOr("GrowthStage", GrowthStage.ADULT.ordinal());
         if (growthStageOrdinal >= 0 && growthStageOrdinal < GrowthStage.values().length) {
             this.setGrowthStage(GrowthStage.values()[growthStageOrdinal]);
         }
 
-        if (readView.contains("OwnerUUID")) {
-            try {
-                String uuidString = readView.getString("OwnerUUID", "");
-                if (uuidString != null && !uuidString.isEmpty()) {
-                    java.util.UUID ownerUuid = java.util.UUID.fromString(uuidString);
-                    this.setOwnerUuid(ownerUuid);
+        input.getString("OwnerUUID").ifPresent(uuidString -> {
+            if (!uuidString.isEmpty()) {
+                try {
+                    this.setOwnerUuid(java.util.UUID.fromString(uuidString));
+                } catch (Exception e) {
+                    DagMod.LOGGER.warn("[LOAD] Failed to load owner UUID: {}", e.getMessage());
                 }
-            } catch (Exception e) {
-                DagMod.LOGGER.warn("[LOAD] Failed to load owner UUID: {}", e.getMessage());
             }
-        }
+        });
 
         DagMod.LOGGER.debug("[LOAD] Loaded Wild Dragon taming state: tamed={}, growth={}, owner={}, abandoned={}",
-            this.isTamed(), this.getGrowthStage().name(), this.getOwnerUuid().isPresent(), this.dataTracker.get(IS_ABANDONED));
+            this.isTamed(), this.getGrowthStage().name(), this.getOwnerUuid().isPresent(), this.entityData.get(IS_ABANDONED));
     }
 
     /**
@@ -1381,16 +1376,16 @@ public class WildDragonEntity extends HostileEntity {
 
         public SitGoal(WildDragonEntity dragon) {
             this.dragon = dragon;
-            this.setControls(EnumSet.of(Control.MOVE, Control.JUMP));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             return dragon.isTamed() && dragon.isSitting();
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             return dragon.isSitting();
         }
     }
@@ -1400,7 +1395,7 @@ public class WildDragonEntity extends HostileEntity {
      */
     private static class FollowOwnerGoal extends Goal {
         private final WildDragonEntity dragon;
-        private PlayerEntity owner;
+        private Player owner;
         private final double speed;
         private final float maxDistance;
         private final float minDistance;
@@ -1411,11 +1406,11 @@ public class WildDragonEntity extends HostileEntity {
             this.speed = speed;
             this.maxDistance = maxDistance;
             this.minDistance = minDistance;
-            this.setControls(EnumSet.of(Control.MOVE, Control.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (!dragon.isTamed() || dragon.isSitting()) {
                 return false;
             }
@@ -1424,7 +1419,7 @@ public class WildDragonEntity extends HostileEntity {
                 return false;
             }
 
-            this.owner = dragon.getEntityWorld().getPlayerByUuid(dragon.getOwnerUuid().get());
+            this.owner = dragon.level().getPlayerByUUID(dragon.getOwnerUuid().get());
             if (this.owner == null) {
                 return false;
             }
@@ -1433,17 +1428,17 @@ public class WildDragonEntity extends HostileEntity {
                 return false;
             }
 
-            double distance = dragon.squaredDistanceTo(owner);
+            double distance = dragon.distanceToSqr(owner);
             return distance > (this.minDistance * this.minDistance);
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             if (this.owner == null || dragon.isSitting()) {
                 return false;
             }
 
-            double distance = dragon.squaredDistanceTo(owner);
+            double distance = dragon.distanceToSqr(owner);
             return distance > (this.minDistance * this.minDistance);
         }
 
@@ -1459,22 +1454,22 @@ public class WildDragonEntity extends HostileEntity {
 
         @Override
         public void tick() {
-            dragon.getLookControl().lookAt(owner, 10.0F, dragon.getMaxLookPitchChange());
+            dragon.getLookControl().setLookAt(owner, 10.0F, dragon.getMaxHeadXRot());
 
             if (--this.updateCountdownTicks <= 0) {
                 this.updateCountdownTicks = 10;
 
-                double distance = dragon.squaredDistanceTo(owner);
+                double distance = dragon.distanceToSqr(owner);
 
                 // Teleport if too far
                 if (distance > (maxDistance * 2 * maxDistance * 2)) {
-                    dragon.refreshPositionAndAngles(
+                    dragon.snapTo(
                         owner.getX(), owner.getY(), owner.getZ(),
-                        dragon.getYaw(), dragon.getPitch()
+                        dragon.getYRot(), dragon.getXRot()
                     );
                 } else {
                     // Fly towards owner
-                    dragon.getNavigation().startMovingTo(owner, this.speed);
+                    dragon.getNavigation().moveTo(owner, this.speed);
                 }
             }
         }
@@ -1490,34 +1485,34 @@ public class WildDragonEntity extends HostileEntity {
 
         public TrackOwnerAttackerGoal(WildDragonEntity dragon) {
             this.dragon = dragon;
-            this.setControls(EnumSet.of(Control.TARGET));
+            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (!dragon.isTamed() || dragon.getOwnerUuid().isEmpty()) {
                 return false;
             }
 
-            PlayerEntity owner = dragon.getEntityWorld().getPlayerByUuid(dragon.getOwnerUuid().get());
+            Player owner = dragon.level().getPlayerByUUID(dragon.getOwnerUuid().get());
             if (owner == null) {
                 return false;
             }
 
-            this.attacker = owner.getAttacker();
-            int timeSinceAttacked = owner.getLastAttackedTime();
+            this.attacker = owner;
+            int timeSinceAttacked = owner.getLastHurtByMobTimestamp();
 
             return timeSinceAttacked != this.lastAttackedTime &&
                    attacker != null &&
-                   dragon.canTarget(attacker);
+                   dragon.canAttack(attacker);
         }
 
         @Override
         public void start() {
             dragon.setTarget(this.attacker);
-            PlayerEntity owner = dragon.getEntityWorld().getPlayerByUuid(dragon.getOwnerUuid().get());
+            Player owner = dragon.level().getPlayerByUUID(dragon.getOwnerUuid().get());
             if (owner != null) {
-                this.lastAttackedTime = owner.getLastAttackedTime();
+                this.lastAttackedTime = owner.getLastHurtByMobTimestamp();
             }
         }
     }
@@ -1532,34 +1527,34 @@ public class WildDragonEntity extends HostileEntity {
 
         public AttackWithOwnerGoal(WildDragonEntity dragon) {
             this.dragon = dragon;
-            this.setControls(EnumSet.of(Control.TARGET));
+            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if (!dragon.isTamed() || dragon.isSitting() || dragon.getOwnerUuid().isEmpty()) {
                 return false;
             }
 
-            PlayerEntity owner = dragon.getEntityWorld().getPlayerByUuid(dragon.getOwnerUuid().get());
+            Player owner = dragon.level().getPlayerByUUID(dragon.getOwnerUuid().get());
             if (owner == null) {
                 return false;
             }
 
-            this.target = owner.getAttacking();
-            int timeSinceAttacked = owner.getLastAttackTime();
+            this.target = owner.getLastHurtMob();
+            int timeSinceAttacked = owner.getLastHurtMobTimestamp();
 
             return timeSinceAttacked != this.lastAttackTime &&
                    target != null &&
-                   dragon.canTarget(target);
+                   dragon.canAttack(target);
         }
 
         @Override
         public void start() {
             dragon.setTarget(this.target);
-            PlayerEntity owner = dragon.getEntityWorld().getPlayerByUuid(dragon.getOwnerUuid().get());
+            Player owner = dragon.level().getPlayerByUUID(dragon.getOwnerUuid().get());
             if (owner != null) {
-                this.lastAttackTime = owner.getLastAttackTime();
+                this.lastAttackTime = owner.getLastHurtMobTimestamp();
             }
         }
     }
@@ -1568,9 +1563,9 @@ public class WildDragonEntity extends HostileEntity {
      * Make dragon aggressive towards a specific player
      * Called when player mines egg without Silk Touch
      */
-    public void setAngryAt(PlayerEntity player) {
+    public void setAngryAt(Player player) {
         this.setTarget(player);
-        this.setAttacking(true);
+        this.setAggressive(true);
     }
 
     // Setter for nestPosition, called by DragonSpawner

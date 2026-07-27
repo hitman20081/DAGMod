@@ -1,11 +1,11 @@
 package com.github.hitman20081.dagmod.party;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.List;
 
@@ -26,28 +26,28 @@ public class PartyQuestHandler {
      * @param player The player who made progress
      * @param progressMessage The message to send to party
      */
-    public static void notifyPartyQuestProgress(ServerPlayerEntity player, String progressMessage) {
+    public static void notifyPartyQuestProgress(ServerPlayer player, String progressMessage) {
         PartyData party = PartyManager.getInstance().getParty(player);
 
         if (party == null || !party.isQuestShare()) {
             return;
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(player, world);
+        ServerLevel world = (ServerLevel) player.level();
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(player, world);
 
         if (nearbyMembers.isEmpty()) {
             return;
         }
 
         // Notify party members
-        Text message = Text.literal(player.getName().getString() + " ")
-                .formatted(Formatting.AQUA)
-                .append(Text.literal(progressMessage)
-                        .formatted(Formatting.GRAY));
+        Component message = Component.literal(player.getName().getString() + " ")
+                .withStyle(ChatFormatting.AQUA)
+                .append(Component.literal(progressMessage)
+                        .withStyle(ChatFormatting.GRAY));
 
-        for (ServerPlayerEntity member : nearbyMembers) {
-            member.sendMessage(message, true);
+        for (ServerPlayer member : nearbyMembers) {
+            member.sendOverlayMessage(message);
         }
     }
 
@@ -58,15 +58,15 @@ public class PartyQuestHandler {
      * Example usage in your death event:
      * PartyQuestHandler.shareMobKill(killer, mob, "killed a " + mobName);
      */
-    public static void shareMobKill(ServerPlayerEntity killer, LivingEntity mob, String mobName) {
+    public static void shareMobKill(ServerPlayer killer, LivingEntity mob, String mobName) {
         PartyData party = PartyManager.getInstance().getParty(killer);
 
         if (party == null || !party.isQuestShare()) {
             return;
         }
 
-        ServerWorld world = (ServerWorld) killer.getEntityWorld();
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(killer, world);
+        ServerLevel world = (ServerLevel) killer.level();
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(killer, world);
 
         if (nearbyMembers.isEmpty()) {
             return;
@@ -76,7 +76,7 @@ public class PartyQuestHandler {
         notifyPartyQuestProgress(killer, "killed " + mobName);
 
         // Update quest progress for all nearby party members
-        for (ServerPlayerEntity member : nearbyMembers) {
+        for (ServerPlayer member : nearbyMembers) {
             com.github.hitman20081.dagmod.quest.QuestManager.getInstance().updateQuestProgress(member);
         }
     }
@@ -88,15 +88,15 @@ public class PartyQuestHandler {
      * Example usage:
      * PartyQuestHandler.shareItemCollection(player, itemStack, "found " + itemName);
      */
-    public static void shareItemCollection(ServerPlayerEntity player, ItemStack item, String itemName) {
+    public static void shareItemCollection(ServerPlayer player, ItemStack item, String itemName) {
         PartyData party = PartyManager.getInstance().getParty(player);
 
         if (party == null || !party.isQuestShare()) {
             return;
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(player, world);
+        ServerLevel world = (ServerLevel) player.level();
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(player, world);
 
         if (nearbyMembers.isEmpty()) {
             return;
@@ -106,7 +106,7 @@ public class PartyQuestHandler {
         notifyPartyQuestProgress(player, "collected " + itemName);
 
         // Update quest progress for all nearby party members
-        for (ServerPlayerEntity member : nearbyMembers) {
+        for (ServerPlayer member : nearbyMembers) {
             com.github.hitman20081.dagmod.quest.QuestManager.getInstance().updateQuestProgress(member);
         }
     }
@@ -118,15 +118,15 @@ public class PartyQuestHandler {
      * Example usage in QuestManager.completeQuest():
      * PartyQuestHandler.shareQuestCompletion(player, questName, xpReward);
      */
-    public static void shareQuestCompletion(ServerPlayerEntity player, String questName, int xpReward) {
+    public static void shareQuestCompletion(ServerPlayer player, String questName, int xpReward) {
         PartyData party = PartyManager.getInstance().getParty(player);
 
         if (party == null || !party.isQuestShare()) {
             return;
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        List<ServerPlayerEntity> nearbyMembers = party.getNearbyMembers(player, world);
+        ServerLevel world = (ServerLevel) player.level();
+        List<ServerPlayer> nearbyMembers = party.getNearbyMembers(player, world);
 
         if (nearbyMembers.isEmpty()) {
             return;
@@ -135,49 +135,47 @@ public class PartyQuestHandler {
         // Give bonus XP for party completion
         int partyBonusXp = (int) (xpReward * 0.1); // 10% bonus XP for party
 
-        for (ServerPlayerEntity member : nearbyMembers) {
+        for (ServerPlayer member : nearbyMembers) {
             // Award bonus XP
             com.github.hitman20081.dagmod.progression.ProgressionManager.addXP(member, partyBonusXp);
 
-            member.sendMessage(
-                    Text.literal("+" + partyBonusXp + " Bonus XP for party quest completion!")
-                            .formatted(Formatting.GOLD),
-                    false
-            );
+            member.sendSystemMessage(
+                    Component.literal("+" + partyBonusXp + " Bonus XP for party quest completion!")
+                            .withStyle(ChatFormatting.GOLD));
         }
 
         // Notify party
         party.sendPartyMessage(world,
-                Text.literal(player.getName().getString() + " completed: " + questName + "!")
-                        .formatted(Formatting.GREEN)
+                Component.literal(player.getName().getString() + " completed: " + questName + "!")
+                        .withStyle(ChatFormatting.GREEN)
         );
     }
 
     /**
      * Toggle quest sharing for a party
      */
-    public static void toggleQuestSharing(ServerPlayerEntity leader) {
+    public static void toggleQuestSharing(ServerPlayer leader) {
         PartyData party = PartyManager.getInstance().getParty(leader);
 
         if (party == null) {
-            leader.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return;
         }
 
-        if (!party.isLeader(leader.getUuid())) {
-            leader.sendMessage(Text.literal("Only the party leader can toggle quest sharing!").formatted(Formatting.RED), false);
+        if (!party.isLeader(leader.getUUID())) {
+            leader.sendSystemMessage(Component.literal("Only the party leader can toggle quest sharing!").withStyle(ChatFormatting.RED));
             return;
         }
 
         party.setQuestShare(!party.isQuestShare());
 
-        ServerWorld world = (ServerWorld) leader.getEntityWorld();
+        ServerLevel world = (ServerLevel) leader.level();
         String status = party.isQuestShare() ? "enabled" : "disabled";
-        Formatting color = party.isQuestShare() ? Formatting.GREEN : Formatting.RED;
+        ChatFormatting color = party.isQuestShare() ? ChatFormatting.GREEN : ChatFormatting.RED;
 
         party.sendPartyMessage(world,
-                Text.literal("Quest sharing " + status + "!")
-                        .formatted(color)
+                Component.literal("Quest sharing " + status + "!")
+                        .withStyle(color)
         );
     }
 }

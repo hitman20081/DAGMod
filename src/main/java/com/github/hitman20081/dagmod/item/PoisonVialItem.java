@@ -4,14 +4,14 @@ import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.class_system.rogue.PoisonStrikeAbility;
 import com.github.hitman20081.dagmod.class_system.rogue.RogueAbility;
 import com.github.hitman20081.dagmod.class_system.rogue.RogueCooldownManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 /**
  * Poison Vial - Activates Poison Strike ability for Rogues
@@ -23,45 +23,43 @@ import net.minecraft.world.World;
  * Cooldown: 20 seconds
  */
 public class PoisonVialItem extends Item {
-    public PoisonVialItem(Settings settings) {
+    public PoisonVialItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
         // Check if player is a Rogue
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
         if (!"Rogue".equalsIgnoreCase(playerClass)) {
-            player.sendMessage(
-                    Text.literal("✦ Only Rogues can use Poison Strike!")
-                            .formatted(Formatting.RED),
-                    true
-            );
-            return ActionResult.FAIL;
+            player.sendOverlayMessage(
+                    Component.literal("✦ Only Rogues can use Poison Strike!")
+                            .withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
         }
 
         // Check cooldown
         if (RogueCooldownManager.isOnCooldown(player, RogueAbility.POISON_STRIKE)) {
             RogueCooldownManager.sendCooldownMessage(player, RogueAbility.POISON_STRIKE);
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Activate Poison Strike
         boolean success = PoisonStrikeAbility.activate(player);
 
         if (success) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ActionResult.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override
-    public boolean hasGlint(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return true;
     }
 }

@@ -1,19 +1,20 @@
 package com.github.hitman20081.dagmod.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,15 +55,15 @@ public class DragonEggBlockEntity extends BlockEntity {
      * Tick method called every game tick
      * Only increments hatching timer when placed on a Magma Block
      */
-    public static void tick(World world, BlockPos pos, BlockState state, DragonEggBlockEntity blockEntity) {
-        if (world.isClient() || !(world instanceof ServerWorld serverWorld)) {
+    public static void tick(Level world, BlockPos pos, BlockState state, DragonEggBlockEntity blockEntity) {
+        if (world.isClientSide() || !(world instanceof ServerLevel serverWorld)) {
             return; // Only tick on server
         }
 
         // Check if the block below is a Magma block
-        BlockPos belowPos = pos.down();
+        BlockPos belowPos = pos.below();
         BlockState belowState = world.getBlockState(belowPos);
-        boolean onMagmaBlock = belowState.isOf(Blocks.MAGMA_BLOCK);
+        boolean onMagmaBlock = belowState.getBlock() == Blocks.MAGMA_BLOCK;
 
         // Only increment hatching timer when on Magma block
         if (onMagmaBlock) {
@@ -70,7 +71,7 @@ public class DragonEggBlockEntity extends BlockEntity {
 
             // Periodic particle effects to show egg is "alive" and hatching
             if (blockEntity.hatchingTicks % PARTICLE_INTERVAL == 0) {
-                serverWorld.spawnParticles(ParticleTypes.FLAME,
+                serverWorld.sendParticles(ParticleTypes.FLAME,
                     pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5,
                     3, 0.2, 0.1, 0.2, 0.01);
             }
@@ -81,14 +82,14 @@ public class DragonEggBlockEntity extends BlockEntity {
             }
         } else {
             // Show different particle effect when NOT on Magma block (egg is dormant)
-            if (world.getTime() % 200 == 0) { // Every 10 seconds
-                serverWorld.spawnParticles(ParticleTypes.ENCHANT,
+            if (world.getGameTime() % 200 == 0) { // Every 10 seconds
+                serverWorld.sendParticles(ParticleTypes.ENCHANT,
                     pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5,
                     2, 0.2, 0.2, 0.2, 0.01);
             }
         }
 
-        blockEntity.markDirty();
+        blockEntity.setChanged();
     }
 
     /**
@@ -97,26 +98,26 @@ public class DragonEggBlockEntity extends BlockEntity {
      * Baby dragons spawn at 20% scale (0.2) and will grow to adult size (0.4) over time
      * Dragons hatched from player-placed eggs are automatically tamed to that player
      */
-    private void hatchEgg(ServerWorld world, BlockPos pos) {
+    private void hatchEgg(ServerLevel world, BlockPos pos) {
         // Remove the egg block
         world.removeBlock(pos, false);
 
         // Spawn Wild Dragon from egg with the stored variant
         WildDragonEntity dragon = new WildDragonEntity(ModEntities.WILD_DRAGON, world);
-        dragon.refreshPositionAndAngles(
+        dragon.snapTo(
             pos.getX() + 0.5,
             pos.getY(),
             pos.getZ() + 0.5,
-            world.random.nextFloat() * 360.0F,
+            world.getRandom().nextFloat() * 360.0F,
             0.0F
         );
         dragon.setVariant(this.variant); // Set variant before initializing
-        dragon.initialize(world, world.getLocalDifficulty(pos), SpawnReason.BREEDING, null);
+        dragon.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), EntitySpawnReason.BREEDING, null);
 
         // Make hatched dragons spawn as babies
         // Adult Wild Dragons are 0.4 scale, babies are 0.2 scale (half size)
         dragon.setGrowthStage(WildDragonEntity.GrowthStage.BABY);
-        dragon.getAttributeInstance(net.minecraft.entity.attribute.EntityAttributes.SCALE).setBaseValue(
+        dragon.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.SCALE).setBaseValue(
             WildDragonEntity.GrowthStage.BABY.getScale()
         );
 
@@ -127,20 +128,20 @@ public class DragonEggBlockEntity extends BlockEntity {
             dragon.setSitting(false); // Start following immediately
         }
 
-        world.spawnEntity(dragon);
+        world.addFreshEntity(dragon);
 
         // Hatching effects
-        world.playSound(null, pos, SoundEvents.ENTITY_ENDER_DRAGON_AMBIENT,
-            SoundCategory.NEUTRAL, 1.0F, 1.5F);
+        world.playSound(null, pos, SoundEvents.ENDER_DRAGON_AMBIENT,
+            SoundSource.NEUTRAL, 1.0F, 1.5F);
 
-        world.spawnParticles(ParticleTypes.EXPLOSION,
+        world.sendParticles(ParticleTypes.EXPLOSION,
             pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
             20, 0.5, 0.5, 0.5, 0.1);
     }
 
     @Override
-    protected void writeData(WriteView data) {
-        super.writeData(data);
+    protected void saveAdditional(ValueOutput data) {
+        super.saveAdditional(data);
         data.putInt("HatchingTicks", hatchingTicks);
         data.putInt("Variant", variant.ordinal());
         if (ownerUuid != null) {
@@ -149,15 +150,15 @@ public class DragonEggBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void readData(ReadView data) {
-        super.readData(data);
-        this.hatchingTicks = data.getInt("HatchingTicks", 0);
-        int variantOrdinal = data.getInt("Variant", 0);
+    protected void loadAdditional(ValueInput data) {
+        super.loadAdditional(data);
+        this.hatchingTicks = data.getIntOr("HatchingTicks", 0);
+        int variantOrdinal = data.getIntOr("Variant", 0);
         DragonGuardianEntity.DragonVariant[] variants = DragonGuardianEntity.DragonVariant.values();
         if (variantOrdinal >= 0 && variantOrdinal < variants.length) {
             this.variant = variants[variantOrdinal];
         }
-        Optional<String> ownerOpt = data.getOptionalString("OwnerUUID");
+        Optional<String> ownerOpt = data.getString("OwnerUUID");
         if (ownerOpt.isPresent()) {
             try {
                 this.ownerUuid = UUID.fromString(ownerOpt.get());
@@ -168,8 +169,8 @@ public class DragonEggBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        NbtCompound nbt = super.toInitialChunkDataNbt(registryLookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+        CompoundTag nbt = super.getUpdateTag(registryLookup);
         nbt.putInt("HatchingTicks", hatchingTicks);
         nbt.putInt("Variant", variant.ordinal());
         if (ownerUuid != null) {

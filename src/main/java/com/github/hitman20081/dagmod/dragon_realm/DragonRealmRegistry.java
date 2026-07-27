@@ -4,18 +4,20 @@ import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.dragon_realm.portal.DragonKeyItem;
 import com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmPortalBlock;
 import com.github.hitman20081.dagmod.dragon_realm.portal.ObsidianPortalFrameBlock;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Rarity;
+
+import java.util.function.Function;
 
 /**
  * Central registry for all Dragon Realm dimension content
@@ -31,13 +33,13 @@ public class DragonRealmRegistry {
      */
     public static final Block OBSIDIAN_PORTAL_FRAME = registerBlock(
             "obsidian_portal_frame",
-            new ObsidianPortalFrameBlock(
-                    AbstractBlock.Settings.create()
-                            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "obsidian_portal_frame")))
+            key -> new ObsidianPortalFrameBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(key)
                             .strength(50.0f, 1200.0f)
-                            .requiresTool()
-                            .luminance(state -> 8)
-                            .sounds(BlockSoundGroup.STONE)
+                            .requiresCorrectToolForDrops()
+                            .lightLevel(state -> 8)
+                            .sound(SoundType.STONE)
             )
     );
 
@@ -47,13 +49,13 @@ public class DragonRealmRegistry {
      */
     public static final Block DRAGON_REALM_PORTAL = registerBlock(
             "dragon_realm_portal",
-            new DragonRealmPortalBlock(
-                    AbstractBlock.Settings.create()
-                            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "dragon_realm_portal")))
+            key -> new DragonRealmPortalBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(key)
                             .strength(-1.0f)
                             .noCollision()
-                            .luminance(state -> 15)
-                            .dropsNothing()
+                            .lightLevel(state -> 15)
+                            .noLootTable()
             )
     );
 
@@ -65,11 +67,7 @@ public class DragonRealmRegistry {
      */
     public static final Item DRAGON_KEY = registerItem(
             "dragon_key",
-            new DragonKeyItem(new Item.Settings()
-                    .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, "dragon_key")))
-                    .maxCount(1)
-                    .rarity(Rarity.EPIC)
-            )
+            key -> new DragonKeyItem(new Item.Properties().setId(key).stacksTo(1).rarity(Rarity.EPIC))
     );
 
     /**
@@ -89,20 +87,15 @@ public class DragonRealmRegistry {
     /**
      * Register a block and its corresponding item
      */
-    private static Block registerBlock(String name, Block block) {
-        // Register the block itself
-        Block registeredBlock = Registry.register(
-                Registries.BLOCK,
-                Identifier.of(DagMod.MOD_ID, name),
-                block
-        );
+    private static Block registerBlock(String name, Function<ResourceKey<Block>, Block> factory) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(blockKey));
 
-        // Register the block's item form
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
         Registry.register(
-                Registries.ITEM,
+                BuiltInRegistries.ITEM,
                 itemKey,
-                new net.minecraft.item.BlockItem(registeredBlock, new Item.Settings().registryKey(itemKey))
+                new net.minecraft.world.item.BlockItem(registeredBlock, new Item.Properties().setId(itemKey))
         );
 
         return registeredBlock;
@@ -111,12 +104,9 @@ public class DragonRealmRegistry {
     /**
      * Register an item
      */
-    private static Item registerItem(String name, Item item) {
-        return Registry.register(
-                Registries.ITEM,
-                Identifier.of(DagMod.MOD_ID, name),
-                item
-        );
+    private static Item registerItem(String name, Function<ResourceKey<Item>, Item> factory) {
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
+        return Registry.register(BuiltInRegistries.ITEM, itemKey, factory.apply(itemKey));
     }
 
     /**
@@ -124,13 +114,13 @@ public class DragonRealmRegistry {
      */
     private static void addToCreativeTabs() {
         // Add to Building Blocks tab
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
-            entries.add(OBSIDIAN_PORTAL_FRAME);
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
+            entries.accept(OBSIDIAN_PORTAL_FRAME.asItem());
         });
 
         // Add to Functional Blocks tab
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
-            entries.add(DRAGON_KEY);
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
+            entries.accept(DRAGON_KEY);
         });
     }
 }

@@ -1,14 +1,15 @@
 package com.github.hitman20081.dagmod.travel;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-import net.minecraft.world.TeleportTarget;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.TeleportTransition;
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 
@@ -64,7 +65,7 @@ public class ShipTravelManager {
     /**
      * Check if player can access a destination
      */
-    public static boolean canAccessDestination(ServerPlayerEntity player, String destinationId) {
+    public static boolean canAccessDestination(ServerPlayer player, String destinationId) {
         Destination dest = DESTINATIONS.get(destinationId);
         if (dest == null) return false;
 
@@ -79,7 +80,7 @@ public class ShipTravelManager {
     /**
      * Helper method to check quest completion - adjust based on your QuestManager API
      */
-    private static boolean checkQuestCompleted(ServerPlayerEntity player, String questId) {
+    private static boolean checkQuestCompleted(ServerPlayer player, String questId) {
         // Replace this with your actual quest checking logic
         // Example possibilities:
         // return QuestManager.getInstance().isQuestCompleted(player, questId);
@@ -90,7 +91,7 @@ public class ShipTravelManager {
     /**
      * Get all destinations accessible to this player
      */
-    public static Map<String, Destination> getAccessibleDestinations(ServerPlayerEntity player) {
+    public static Map<String, Destination> getAccessibleDestinations(ServerPlayer player) {
         Map<String, Destination> accessible = new HashMap<>();
 
         for (Map.Entry<String, Destination> entry : DESTINATIONS.entrySet()) {
@@ -105,55 +106,47 @@ public class ShipTravelManager {
     /**
      * Teleport player to destination with ship travel effects
      */
-    public static void travelToDestination(ServerPlayerEntity player, String destinationId) {
+    public static void travelToDestination(ServerPlayer player, String destinationId) {
         Destination dest = DESTINATIONS.get(destinationId);
 
         if (dest == null) {
-            player.sendMessage(Text.literal("Unknown destination!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("Unknown destination!").withStyle(ChatFormatting.RED));
             return;
         }
 
         if (!canAccessDestination(player, destinationId)) {
-            player.sendMessage(
-                    Text.literal("The captain shakes his head. 'That route hasn't been charted yet...'")
-                            .formatted(Formatting.GRAY),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("The captain shakes his head. 'That route hasn't been charted yet...'")
+                            .withStyle(ChatFormatting.GRAY));
             return;
         }
 
         // Get the destination world
         String[] parts = dest.dimensionId.split(":");
-        RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD,
-                Identifier.of(parts[0], parts[1]));
-        ServerWorld destinationWorld = player.getEntityWorld().getServer().getWorld(worldKey);
+        ResourceKey<Level> worldKey = ResourceKey.create(Registries.DIMENSION,
+                Identifier.fromNamespaceAndPath(parts[0], parts[1]));
+        ServerLevel destinationWorld = player.level().getServer().getLevel(worldKey);
 
         if (destinationWorld == null) {
-            player.sendMessage(Text.literal("Destination world not found!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("Destination world not found!").withStyle(ChatFormatting.RED));
             return;
         }
 
         // Send departure message
-        player.sendMessage(
-                Text.literal("════════════════════════════════")
-                        .formatted(Formatting.AQUA),
-                false
-        );
-        player.sendMessage(
-                Text.literal("⛵ The ship sets sail for " + dest.name + "...")
-                        .formatted(Formatting.YELLOW).formatted(Formatting.BOLD),
-                false
-        );
-        player.sendMessage(
-                Text.literal("════════════════════════════════")
-                        .formatted(Formatting.AQUA),
-                false
-        );
+        player.sendSystemMessage(
+                Component.literal("════════════════════════════════")
+                        .withStyle(ChatFormatting.AQUA));
+        player.sendSystemMessage(
+                Component.literal("⛵ The ship sets sail for " + dest.name + "...")
+                        .withStyle(ChatFormatting.YELLOW).withStyle(ChatFormatting.BOLD));
+        player.sendSystemMessage(
+                Component.literal("════════════════════════════════")
+                        .withStyle(ChatFormatting.AQUA));
 
         // Teleport with a slight delay for immersion
-        player.getEntityWorld().getServer().execute(() -> {
+        player.level().getServer().execute(() -> {
             // Use the correct teleport method signature
-            player.teleport(
+            player.teleportTo(
                     destinationWorld,
                     dest.x,
                     dest.y,
@@ -165,11 +158,9 @@ public class ShipTravelManager {
             );
 
             // Send arrival message
-            player.sendMessage(
-                    Text.literal("You have arrived at " + dest.name + "!")
-                            .formatted(Formatting.GREEN),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("You have arrived at " + dest.name + "!")
+                            .withStyle(ChatFormatting.GREEN));
         });
     }
 

@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_crushing",
+  "ingredient": "minecraft:emerald",
+  "result": {
+    "id": "dagmod:emerald_powder",
+    "count": 2
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 4,
+        "max": 7
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blaze_rod",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 6 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blaze_powder",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nether_wart",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:magma_cream",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 6 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ghast_tear",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 2 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:soul_sand",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glowstone_dust",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:quartz",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 16 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:brimstone_dust",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 3, "max": 8 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:pure_brimstone_dust",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:long_fire_resistance"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:long_strength"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 5 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:fire_aspect",
+                "minecraft:fire_protection",
+                "minecraft:flame",
+                "minecraft:blast_protection",
+                "minecraft:unbreaking",
+                "minecraft:sharpness",
+                "minecraft:power",
+                "dagmod:blazing_strike",
+                "dagmod:magma_walker_enchantment",
+                "dagmod:savage_enchantment",
+                "dagmod:berserker",
+                "dagmod:reach",
+                "dagmod:lightning_enchantment"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_scrap",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 2 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ancient_debris",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:inferno_sword",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": { "type": "minecraft:uniform", "min": 15, "max": 30 },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 15
+        }
+      ]
+    }
+  ]
+}

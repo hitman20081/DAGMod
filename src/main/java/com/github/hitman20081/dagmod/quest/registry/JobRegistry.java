@@ -2,6 +2,7 @@ package com.github.hitman20081.dagmod.quest.registry;
 
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestManager;
+import com.github.hitman20081.dagmod.quest.registry.DailyQuestRegistry;
 import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
@@ -9,14 +10,14 @@ import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
-import net.minecraft.util.Identifier;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.ItemTags;
 
 public class JobRegistry {
 
     public static void registerJobs(QuestManager manager) {
+        DailyQuestRegistry.registerDailyQuests(manager);
         // ========== NOVICE JOBS ==========
         manager.registerQuest(createGatherCobblestoneJob());
         manager.registerQuest(createHuntZombiesJob());
@@ -183,7 +184,7 @@ public class JobRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("Creepers have been destroying the farmland. Eliminate them.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
-                .addObjective(new KillObjective(EntityType.CREEPER, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:creeper", 8))
                 .addReward(new ItemReward(Items.EMERALD, 5))
                 .addReward(new ItemReward(Items.GUNPOWDER, 4))
                 .addReward(XpReward.apprentice());
@@ -236,7 +237,7 @@ public class JobRegistry {
                 .addObjective(new MultiItemCollectObjective("Gold Ore", 8, Items.GOLD_ORE, Items.DEEPSLATE_GOLD_ORE))
                 .addObjective(new MultiItemCollectObjective("Diamond Ore", 3, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fortune"), 3))
                 .addReward(XpReward.expert());
     }
 
@@ -246,7 +247,7 @@ public class JobRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("Endermen have been stealing blocks from the keep. Drive them off.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
-                .addObjective(new KillObjective(EntityType.ENDERMAN, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:enderman", 5))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(new ItemReward(Items.ENDER_PEARL, 2))
                 .addReward(XpReward.expert());
@@ -269,7 +270,7 @@ public class JobRegistry {
                 .setCategory(Quest.QuestCategory.JOB)
                 .setDescription("The alchemist needs blaze rods for brewing. Brave the Nether.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
-                .addObjective(new KillObjective(EntityType.BLAZE, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:blaze", 5))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(new ItemReward(Items.BLAZE_ROD, 2))
                 .addReward(XpReward.expert());

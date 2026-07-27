@@ -1,10 +1,10 @@
 package com.github.hitman20081.dagmod.class_system;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.Identifier;
 
 import java.util.UUID;
 
@@ -15,8 +15,8 @@ public class ClassAbilityManager {
     private static final UUID WARRIOR_ATTACK_UUID = UUID.fromString("b2c3d4e5-2345-6789-abcd-ef0123456789");
     private static final UUID WARRIOR_SPEED_UUID = UUID.fromString("c3d4e5f6-3456-789a-bcde-f01234567890");
 
-    public static void applyClassAbilities(ServerPlayerEntity player) {
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+    public static void applyClassAbilities(ServerPlayer player) {
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         // Remove any existing class modifiers first
         removeAllClassModifiers(player);
@@ -29,39 +29,39 @@ public class ClassAbilityManager {
         }
     }
 
-    private static void applyWarriorAbilities(ServerPlayerEntity player) {
+    private static void applyWarriorAbilities(ServerPlayer player) {
         // +4 hearts (8 health points)
-        var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        var healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (healthAttribute != null) {
-            healthAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "warrior_health"),
+            healthAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "warrior_health"),
                             8.0, // +4 hearts
-                            EntityAttributeModifier.Operation.ADD_VALUE
+                            AttributeModifier.Operation.ADD_VALUE
                     )
             );
         }
 
         // +25% melee attack damage
-        var attackAttribute = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
+        var attackAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
         if (attackAttribute != null) {
-            attackAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "warrior_attack"),
+            attackAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "warrior_attack"),
                             0.25, // +25%
-                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                     )
             );
         }
 
         // -10% movement speed
-        var speedAttribute = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        var speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttribute != null) {
-            speedAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "warrior_speed"),
+            speedAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "warrior_speed"),
                             -0.10, // -10%
-                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                     )
             );
         }
@@ -70,33 +70,31 @@ public class ClassAbilityManager {
         player.setHealth(player.getMaxHealth());
 
         // Tip: inform the player about Shield Bash
-        player.sendMessage(
-                net.minecraft.text.Text.literal("§6[Warrior] §7Tip: §fEquip a Shield and right-click to activate §6Shield Bash§f — dash forward, deal damage, and knock back enemies!"),
-                false
-        );
+        player.sendSystemMessage(
+                net.minecraft.network.chat.Component.literal("§6[Warrior] §7Tip: §fEquip a Shield and right-click to activate §6Shield Bash§f — dash forward, deal damage, and knock back enemies!"));
     }
 
-    private static void applyMageAbilities(ServerPlayerEntity player) {
+    private static void applyMageAbilities(ServerPlayer player) {
         // +1 hearts (2 health points)
-        var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        var healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (healthAttribute != null) {
-            healthAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "mage_health"),
+            healthAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "mage_health"),
                             2.0, // +1 hearts
-                            EntityAttributeModifier.Operation.ADD_VALUE
+                            AttributeModifier.Operation.ADD_VALUE
                     )
             );
         }
 
         // -25% melee attack damage
-        var attackAttribute = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
+        var attackAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
         if (attackAttribute != null) {
-            attackAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "mage_attack"),
+            attackAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "mage_attack"),
                             -0.25, // -25%
-                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                     )
             );
         }
@@ -107,27 +105,27 @@ public class ClassAbilityManager {
         }
     }
 
-    private static void applyRogueAbilities(ServerPlayerEntity player) {
+    private static void applyRogueAbilities(ServerPlayer player) {
         // +2 heart (4 health points)
-        var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        var healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (healthAttribute != null) {
-            healthAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "rogue_health"),
+            healthAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "rogue_health"),
                             4.0, // +2 heart
-                            EntityAttributeModifier.Operation.ADD_VALUE
+                            AttributeModifier.Operation.ADD_VALUE
                     )
             );
         }
 
         // +30% movement speed
-        var speedAttribute = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        var speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttribute != null) {
-            speedAttribute.addTemporaryModifier(
-                    new EntityAttributeModifier(
-                            Identifier.of("dagmod", "rogue_speed"),
+            speedAttribute.addOrUpdateTransientModifier(
+                    new AttributeModifier(
+                            Identifier.fromNamespaceAndPath("dagmod", "rogue_speed"),
                             0.30, // +30%
-                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                     )
             );
         }
@@ -138,27 +136,27 @@ public class ClassAbilityManager {
         }
     }
 
-    private static void removeAllClassModifiers(ServerPlayerEntity player) {
+    private static void removeAllClassModifiers(ServerPlayer player) {
         // Remove health modifiers
-        var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        var healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (healthAttribute != null) {
-            healthAttribute.removeModifier(Identifier.of("dagmod", "warrior_health"));
-            healthAttribute.removeModifier(Identifier.of("dagmod", "mage_health"));
-            healthAttribute.removeModifier(Identifier.of("dagmod", "rogue_health"));
+            healthAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "warrior_health"));
+            healthAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "mage_health"));
+            healthAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "rogue_health"));
         }
 
         // Remove attack modifiers
-        var attackAttribute = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
+        var attackAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
         if (attackAttribute != null) {
-            attackAttribute.removeModifier(Identifier.of("dagmod", "warrior_attack"));
-            attackAttribute.removeModifier(Identifier.of("dagmod", "mage_attack"));
+            attackAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "warrior_attack"));
+            attackAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "mage_attack"));
         }
 
         // Remove speed modifiers
-        var speedAttribute = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        var speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttribute != null) {
-            speedAttribute.removeModifier(Identifier.of("dagmod", "warrior_speed"));
-            speedAttribute.removeModifier(Identifier.of("dagmod", "rogue_speed"));
+            speedAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "warrior_speed"));
+            speedAttribute.removeModifier(Identifier.fromNamespaceAndPath("dagmod", "rogue_speed"));
         }
     }
 }

@@ -8,12 +8,14 @@ import com.github.hitman20081.dagmod.bone_realm.entity.BoneRealmEntityRegistry;
 import com.github.hitman20081.dagmod.class_system.mana.ManaManager;
 import com.github.hitman20081.dagmod.class_system.warrior.ShieldBashListener;
 import com.github.hitman20081.dagmod.class_system.warrior.CooldownManager;
+import com.github.hitman20081.dagmod.class_system.warrior.CooldownNetworking;
 import com.github.hitman20081.dagmod.class_system.rogue.EnergyManager;
 import com.github.hitman20081.dagmod.class_system.rogue.EnergyNetworking;
 import com.github.hitman20081.dagmod.command.CooldownCommand;
 import com.github.hitman20081.dagmod.command.DragonRespawnCommand;
 import com.github.hitman20081.dagmod.command.GraveCommand;
 import com.github.hitman20081.dagmod.command.InfoCommand;
+import com.github.hitman20081.dagmod.command.LocateBoneDungeonCommand;
 import com.github.hitman20081.dagmod.command.LocateDragonCommand;
 import com.github.hitman20081.dagmod.command.LocateWildDragonCommand;
 import com.github.hitman20081.dagmod.command.MerchantCommand;
@@ -58,20 +60,22 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Potions;
-import net.minecraft.registry.Registries;
+import net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -79,8 +83,6 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import com.github.hitman20081.dagmod.command.ResetClassCommand;
 import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
 import com.github.hitman20081.dagmod.class_system.RogueCombatHandler;
-import com.github.hitman20081.dagmod.party.quest.PartyQuestRegistry;
-import com.github.hitman20081.dagmod.party.quest.PartyQuestManager;
 import com.github.hitman20081.dagmod.party.command.PartyQuestCommand;
 import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
 import com.github.hitman20081.dagmod.enchantment.SoulBoundStorage;
@@ -95,8 +97,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
 
+import com.github.hitman20081.dagmod.potion.ModPotions;
 import static com.github.hitman20081.dagmod.potion.ModPotions.XP_POTION;
 
 public class DagMod implements ModInitializer {
@@ -123,6 +127,9 @@ public class DagMod implements ModInitializer {
 
             // Initialize rotating trade manager
             RotatingTradeManager.getInstance().initialize(server);
+
+            // Load daily quest rotation
+            com.github.hitman20081.dagmod.quest.daily.DailyQuestManager.getInstance().load(server);
 
             // Initialize grave system
             GraveManager.getInstance().initialize(server);
@@ -187,7 +194,7 @@ public class DagMod implements ModInitializer {
         // ===== ROGUE SYSTEM INITIALIZATION =====
 
         // Register energy networking packets
-        PayloadTypeRegistry.playS2C().register(
+        PayloadTypeRegistry.clientboundPlay().register(
                 EnergyNetworking.EnergySyncPayload.ID,
                 EnergyNetworking.EnergySyncPayload.CODEC
         );
@@ -198,6 +205,7 @@ public class DagMod implements ModInitializer {
 
         // Register custom enchantment effects (Midas Touch, Mud Collector, Tunneling, Lucky Looter)
         CustomEnchantmentEffects.register();
+        com.github.hitman20081.dagmod.enchantment.HeartArmorHandler.register();
 
         // Register Party Quest block break handler
         com.github.hitman20081.dagmod.event.PartyQuestBlockBreakHandler.register();
@@ -241,6 +249,7 @@ public class DagMod implements ModInitializer {
             PartyCommand.register(dispatcher, registryAccess, environment);
             PartyQuestCommand.register(dispatcher, registryAccess, environment);
             LocateDragonCommand.register(dispatcher, registryAccess, environment);
+            LocateBoneDungeonCommand.register(dispatcher, registryAccess, environment);
             LocateWildDragonCommand.register(dispatcher, registryAccess, environment);
             GraveCommand.register(dispatcher, registryAccess, environment);
             DragonRespawnCommand.register(dispatcher, registryAccess, environment);
@@ -252,11 +261,11 @@ public class DagMod implements ModInitializer {
             SeasonsCommand.register(dispatcher, registryAccess, environment);
 
             // Ship Travel Command
-            dispatcher.register(net.minecraft.server.command.CommandManager.literal("travel")
-                    .then(net.minecraft.server.command.CommandManager.argument("destination",
+            dispatcher.register(Commands.literal("travel")
+                    .then(Commands.argument("destination",
                                     com.mojang.brigadier.arguments.StringArgumentType.word())
                             .executes(context -> {
-                                ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                ServerPlayer player = context.getSource().getPlayerOrException();
                                 String destination = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "destination");
 
                                 com.github.hitman20081.dagmod.travel.ShipTravelManager
@@ -268,32 +277,30 @@ public class DagMod implements ModInitializer {
             );
 
             // Summon Innkeeper Garrick Command (for testing/structure blocks)
-            dispatcher.register(CommandManager.literal("summon_garrick")
+            dispatcher.register(Commands.literal("summon_garrick")
                     // TODO: Re-add OP permission check using Fabric Permissions API
                     .executes(context -> {
-                        ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                        ServerPlayer player = context.getSource().getPlayerOrException();
 
                         // Spawn Garrick at player's location
                         com.github.hitman20081.dagmod.entity.InnkeeperGarrickNPC garrick =
                             new com.github.hitman20081.dagmod.entity.InnkeeperGarrickNPC(
                                 ModEntities.INNKEEPER_GARRICK,
-                                player.getEntityWorld()
+                                player.level()
                             );
 
-                        garrick.refreshPositionAndAngles(
+                        garrick.snapTo(
                             player.getX(),
                             player.getY(),
                             player.getZ(),
-                            player.getYaw(),
+                            player.getYRot(),
                             0.0F
                         );
 
-                        player.getEntityWorld().spawnEntity(garrick);
+                        player.level().addFreshEntity(garrick);
 
-                        player.sendMessage(
-                            Text.literal("Innkeeper Garrick summoned!").formatted(Formatting.GREEN),
-                            false
-                        );
+                        player.sendSystemMessage(
+                            Component.literal("Innkeeper Garrick summoned!").withStyle(ChatFormatting.GREEN));
 
                         return 1;
                     })
@@ -303,24 +310,24 @@ public class DagMod implements ModInitializer {
         // Apply class abilities when player respawns (including after death)
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             // Restore Soul Bound enchanted items to original slots
-            java.util.List<ItemStack> soulItems = SoulBoundStorage.retrieve(newPlayer.getUuid());
-            java.util.List<Integer> soulSlots = SoulBoundStorage.retrieveSlots(newPlayer.getUuid());
+            java.util.List<ItemStack> soulItems = SoulBoundStorage.retrieve(newPlayer.getUUID());
+            java.util.List<Integer> soulSlots = SoulBoundStorage.retrieveSlots(newPlayer.getUUID());
             if (soulItems != null) {
                 for (int i = 0; i < soulItems.size(); i++) {
                     ItemStack item = soulItems.get(i);
                     if (soulSlots != null && i < soulSlots.size()) {
                         int slot = soulSlots.get(i);
-                        if (newPlayer.getInventory().getStack(slot).isEmpty()) {
-                            newPlayer.getInventory().setStack(slot, item);
+                        if (newPlayer.getInventory().getItem(slot).isEmpty()) {
+                            newPlayer.getInventory().setItem(slot, item);
                         } else {
-                            newPlayer.giveItemStack(item);
+                            newPlayer.addItem(item);
                         }
                     } else {
-                        newPlayer.giveItemStack(item);
+                        newPlayer.addItem(item);
                     }
                 }
-                newPlayer.sendMessage(Text.literal("Your Soul Bound items have been preserved!")
-                        .formatted(Formatting.LIGHT_PURPLE), false);
+                newPlayer.sendSystemMessage(Component.literal("Your Soul Bound items have been preserved!")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
 
             ClassAbilityManager.applyClassAbilities(newPlayer);
@@ -337,12 +344,16 @@ public class DagMod implements ModInitializer {
 
         // Load player data when entity loads (login, respawn, dimension change)
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
-            if (entity instanceof ServerPlayerEntity player) {
+            if (entity instanceof ServerPlayer player) {
                 // Load persistent data first
                 PlayerDataManager.loadPlayerData(player);
 
                 // Load quest data
                 QuestManager.getInstance().loadPlayerQuestData(player);
+
+                // Load daily streak data
+                com.github.hitman20081.dagmod.quest.daily.DailyStreakManager.load(
+                        player.level().getServer(), player.getUUID());
 
                 // Then apply abilities (already loaded by loadPlayerData, but this ensures sync)
                 ClassAbilityManager.applyClassAbilities(player);
@@ -352,28 +363,28 @@ public class DagMod implements ModInitializer {
 
         // Give starter items ONLY on first join (not on dimension change or respawn)
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayerEntity player = handler.player;
+            ServerPlayer player = handler.player;
 
             // Only give items to completely new players (no race/class data)
             if (!PlayerDataManager.hasPlayerData(player)) {
                 // Check if player already has a Hall Locator (double-check safety)
                 if (!hasHallLocator(player)) {
-                    player.giveItemStack(new ItemStack(ModItems.HALL_LOCATOR));
-                    player.giveItemStack(QuestUtils.createWelcomeBook());
+                    player.addItem(new ItemStack(ModItems.HALL_LOCATOR));
+                    player.addItem(QuestUtils.createWelcomeBook());
                     // NOTE: Removed NOVICE_QUEST_BOOK - it will be given on class selection instead
 
-                    player.sendMessage(Text.literal("═══════════════════════════════")
-                            .formatted(Formatting.GOLD), false);
-                    player.sendMessage(Text.literal("Welcome to DAGMod!")
-                            .formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD), false);
-                    player.sendMessage(Text.literal("═══════════════════════════════")
-                            .formatted(Formatting.GOLD), false);
-                    player.sendMessage(Text.literal("You've been given a Hall Locator!")
-                            .formatted(Formatting.YELLOW), false);
-                    player.sendMessage(Text.literal("Right-click it to find the Hall of Champions.")
-                            .formatted(Formatting.GRAY), false);
-                    player.sendMessage(Text.literal("═══════════════════════════════")
-                            .formatted(Formatting.GOLD), false);
+                    player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                            .withStyle(ChatFormatting.GOLD));
+                    player.sendSystemMessage(Component.literal("Welcome to DAGMod!")
+                            .withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.BOLD));
+                    player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                            .withStyle(ChatFormatting.GOLD));
+                    player.sendSystemMessage(Component.literal("You've been given a Hall Locator!")
+                            .withStyle(ChatFormatting.YELLOW));
+                    player.sendSystemMessage(Component.literal("Right-click it to find the Hall of Champions.")
+                            .withStyle(ChatFormatting.GRAY));
+                    player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                            .withStyle(ChatFormatting.GOLD));
                 }
             }
         });
@@ -381,19 +392,19 @@ public class DagMod implements ModInitializer {
         // Hook into entity death events for kill objectives
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             // Check if a player killed this entity
-            if (damageSource.getAttacker() instanceof ServerPlayerEntity player) {
+            if (damageSource.getEntity() instanceof ServerPlayer player) {
                 // Update kill objectives for this player
                 QuestManager.getInstance().updateKillProgress(player, entity.getType());
 
                 // --- PARTY QUEST OBJECTIVE TRACKING ---
                 com.github.hitman20081.dagmod.party.quest.PartyQuestData quest = com.github.hitman20081.dagmod.party.quest.PartyQuestManager.getInstance().getActiveQuest(player);
                 if (quest != null) {
-                    String mobType = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
+                    String mobType = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
 
                     // Handle KILL_ENTITY objectives
                     for (var objective : quest.getTemplate().getObjectives()) {
                         if (objective.getType() == com.github.hitman20081.dagmod.party.quest.PartyQuestObjectiveType.KILL_ENTITY) {
-                            boolean isHostile = entity instanceof net.minecraft.entity.mob.Monster;
+                            boolean isHostile = entity instanceof net.minecraft.world.entity.monster.Monster;
                             if (objective.getTarget().equals(mobType) || (objective.getTarget().equals("hostile") && isHostile)) {
                                 com.github.hitman20081.dagmod.party.quest.PartyQuestManager.getInstance().updateObjective(
                                         quest.getPartyId(),
@@ -422,7 +433,7 @@ public class DagMod implements ModInitializer {
             }
 
             // Add death message for players
-            if (entity instanceof ServerPlayerEntity deadPlayer) {
+            if (entity instanceof ServerPlayer deadPlayer) {
                 DeathMessageHandler.sendDeathMessage(deadPlayer);
             }
         });
@@ -439,7 +450,7 @@ public class DagMod implements ModInitializer {
             tickCounter++;
             if (tickCounter >= DragonSpawner.getSpawnInterval()) {
                 tickCounter = 0;
-                for (ServerWorld world : server.getWorlds()) {
+                for (ServerLevel world : server.getAllLevels()) {
                     DragonSpawner.trySpawnDragon(world);
                     DragonSpawner.trySpawnDragonInDragonRealm(world);
                 }
@@ -451,17 +462,17 @@ public class DagMod implements ModInitializer {
             // Update Solar Mending counter once per tick (before player loop)
             com.github.hitman20081.dagmod.class_system.armor.SolarMendingHandler.serverTick();
 
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
                 // Mana regeneration for all players (ManaManager checks if they're Mage)
                 ManaManager.tick(player);
 
                 // Night Vision for Mages
                 if ("Mage".equals(playerClass)) {
-                    if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-                        player.addStatusEffect(new StatusEffectInstance(
-                                StatusEffects.NIGHT_VISION,
+                    if (!player.hasEffect(MobEffects.NIGHT_VISION)) {
+                        player.addEffect(new MobEffectInstance(
+                                MobEffects.NIGHT_VISION,
                                 300, // 15 seconds
                                 0,
                                 true,  // ambient
@@ -469,6 +480,11 @@ public class DagMod implements ModInitializer {
                                 false  // no icon
                         ));
                     }
+                }
+
+                // Sync Warrior cooldowns to client once per second
+                if ("Warrior".equals(playerClass) && player.level().getGameTime() % 20 == 0) {
+                    CooldownNetworking.syncCooldownsToClient(player);
                 }
 
                 // Custom armor set bonuses (Dragonscale, Crystalforge, Inferno, Nature's Guard, Shadow, Fortuna)
@@ -485,8 +501,8 @@ public class DagMod implements ModInitializer {
         // ========== PLAYER DISCONNECT HANDLER - SAVE ALL DATA ==========
         // This is CRITICAL for data persistence - saves all player progress on disconnect
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            ServerPlayerEntity player = handler.player;
-            UUID playerId = player.getUuid();
+            ServerPlayer player = handler.player;
+            UUID playerId = player.getUUID();
 
             LOGGER.info("Saving data for disconnecting player: " + player.getName().getString());
 
@@ -497,6 +513,9 @@ public class DagMod implements ModInitializer {
             QuestManager.getInstance().savePlayerQuestData(player);
 
             // Note: Progression data is saved/unloaded by ProgressionEvents.java
+
+            // Unload daily streak data
+            com.github.hitman20081.dagmod.quest.daily.DailyStreakManager.unload(playerId);
 
             // Clean up memory (prevent memory leaks)
             QuestManager.getInstance().clearPlayerData(playerId);
@@ -509,31 +528,37 @@ public class DagMod implements ModInitializer {
 
         // Register grave right-click interaction
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (world.isClient()) return net.minecraft.util.ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity serverPlayer)) return net.minecraft.util.ActionResult.PASS;
+            if (world.isClientSide()) return net.minecraft.world.InteractionResult.PASS;
+            if (!(player instanceof ServerPlayer serverPlayer)) return net.minecraft.world.InteractionResult.PASS;
 
             BlockPos clickedPos = hitResult.getBlockPos();
-            if (!world.getBlockState(clickedPos).isOf(net.minecraft.block.Blocks.LODESTONE)) {
-                return net.minecraft.util.ActionResult.PASS;
+            if (world.getBlockState(clickedPos).getBlock() != net.minecraft.world.level.block.Blocks.LODESTONE) {
+                return net.minecraft.world.InteractionResult.PASS;
             }
 
             boolean handled = GraveManager.getInstance().collectGrave(serverPlayer, clickedPos);
             if (handled) {
-                return net.minecraft.util.ActionResult.SUCCESS;
+                return net.minecraft.world.InteractionResult.SUCCESS;
             }
 
-            return net.minecraft.util.ActionResult.PASS;
+            return net.minecraft.world.InteractionResult.PASS;
         });
 
-        FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {
+        FabricPotionBrewingBuilder.BUILD.register(builder -> {
             builder.registerPotionRecipe(
-                    // Input potion.
                     Potions.LUCK,
-                    // Ingredient
-                    Items.EXPERIENCE_BOTTLE,
-                    // Output potion.
-                    Registries.POTION.getEntry(XP_POTION)
+                    Ingredient.of(Items.EXPERIENCE_BOTTLE),
+                    BuiltInRegistries.POTION.wrapAsHolder(XP_POTION)
             );
+            // Gem powder potions — brewed from Awkward Potion
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.AMETHYST_POWDER), ModPotions.AMETHYST_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.CITRINE_POWDER), ModPotions.CITRINE_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.DIAMOND_POWDER), ModPotions.DIAMOND_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.EMERALD_POWDER), ModPotions.EMERALD_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.QUARTZ_POWDER), ModPotions.QUARTZ_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.RUBY_POWDER), ModPotions.RUBY_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.SAPPHIRE_POWDER), ModPotions.SAPPHIRE_POTION);
+            builder.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.TOPAZ_POWDER), ModPotions.TOPAZ_POTION);
         });
 
         // Register party quest system
@@ -559,20 +584,21 @@ public class DagMod implements ModInitializer {
         // Register Shield Bash listener
         ShieldBashListener.register();
 
-        // NOTE: Cooldown clearing is now handled in the main disconnect handler (line ~396)
+        // Register cooldown sync packet
+        CooldownNetworking.registerPayloads();
 
         LOGGER.info("Warrior Ability Systems registered successfully");
     }
 
     // Helper method for updating quest progress - THIS GOES OUTSIDE onInitialize()
-    public static void updatePlayerQuestProgress(ServerPlayerEntity player) {
+    public static void updatePlayerQuestProgress(ServerPlayer player) {
         QuestManager.getInstance().updateQuestProgress(player);
     }
 
     // Helper method to check if player has Hall Locator in inventory
-    private static boolean hasHallLocator(ServerPlayerEntity player) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+    private static boolean hasHallLocator(ServerPlayer player) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
             if (stack.getItem() == ModItems.HALL_LOCATOR) {
                 return true;
             }
@@ -586,7 +612,7 @@ public class DagMod implements ModInitializer {
     private static void copyBundledBleakwindWorld(MinecraftServer server) {
         try {
             // The dimension folder path should match your dimension JSON location
-            Path dimensionPath = server.getSavePath(WorldSavePath.ROOT)
+            Path dimensionPath = server.getWorldPath(LevelResource.ROOT)
                     .resolve("dimensions/dagmod/bleakwind");
 
             Path regionPath = dimensionPath.resolve("region");
@@ -702,38 +728,36 @@ public class DagMod implements ModInitializer {
     private static void registerTutorialMobKillTracking() {
         net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             // Only process on server side
-            if (entity.getEntityWorld().isClient()) {
+            if (entity.level().isClientSide()) {
                 return;
             }
 
             // Check if killer is a player
-            if (!(damageSource.getAttacker() instanceof net.minecraft.server.network.ServerPlayerEntity player)) {
+            if (!(damageSource.getEntity() instanceof net.minecraft.server.level.ServerPlayer player)) {
                 return;
             }
 
             // Only count hostile mobs (monsters)
-            if (entity instanceof net.minecraft.entity.mob.HostileEntity) {
+            if (entity instanceof net.minecraft.world.entity.monster.Monster) {
                 // Only track if player has completed Task 1, hasn't completed task 2 yet, and has met Garrick
-                if (!PlayerDataManager.isTask2Complete(player.getUuid())
+                if (!PlayerDataManager.isTask2Complete(player.getUUID())
                         && PlayerDataManager.hasMetGarrick(player)
-                        && PlayerDataManager.isTask1Complete(player.getUuid())) {
+                        && PlayerDataManager.isTask1Complete(player.getUUID())) {
                     PlayerDataManager.incrementTask2MobKills(player);
 
                     // Send feedback to player
-                    int kills = PlayerDataManager.getTask2MobKills(player.getUuid());
-                    player.sendMessage(
-                        net.minecraft.text.Text.literal("✓ Tutorial Progress: " + kills + "/5 hostile mobs defeated")
-                            .formatted(net.minecraft.util.Formatting.GRAY),
+                    int kills = PlayerDataManager.getTask2MobKills(player.getUUID());
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("✓ Tutorial Progress: " + kills + "/5 hostile mobs defeated")
+                            .withStyle(net.minecraft.ChatFormatting.GRAY),
                         true // Action bar
                     );
 
                     // Notify when complete
                     if (kills >= 5) {
-                        player.sendMessage(
-                            net.minecraft.text.Text.literal("✓ Task Complete! Return to Innkeeper Garrick")
-                                .formatted(net.minecraft.util.Formatting.GREEN, net.minecraft.util.Formatting.BOLD),
-                            false
-                        );
+                        player.sendSystemMessage(
+                            net.minecraft.network.chat.Component.literal("✓ Task Complete! Return to Innkeeper Garrick")
+                                .withStyle(net.minecraft.ChatFormatting.GREEN, net.minecraft.ChatFormatting.BOLD));
                     }
                 }
             }

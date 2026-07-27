@@ -1,27 +1,27 @@
 package com.github.hitman20081.dagmod.bone_realm.client;
 
 import com.github.hitman20081.dagmod.bone_realm.entity.SkeletonKingEntity;
-import net.minecraft.client.render.entity.AbstractSkeletonEntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.state.SkeletonEntityRenderState;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.AbstractSkeletonRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.state.SkeletonRenderState;
+import net.minecraft.resources.Identifier;
 
-public class SkeletonKingRenderer extends AbstractSkeletonEntityRenderer<SkeletonKingEntity, SkeletonEntityRenderState> {
+public class SkeletonKingRenderer extends AbstractSkeletonRenderer<SkeletonKingEntity, SkeletonRenderState> {
 
-    private static final Identifier TEXTURE = Identifier.ofVanilla("textures/entity/skeleton/wither_skeleton.png");
+    private static final Identifier TEXTURE = Identifier.withDefaultNamespace("textures/entity/skeleton/wither_skeleton.png");
 
-    public SkeletonKingRenderer(EntityRendererFactory.Context context) {
-        super(context, EntityModelLayers.SKELETON, EntityModelLayers.SKELETON_EQUIPMENT);
+    public SkeletonKingRenderer(EntityRendererProvider.Context context) {
+        super(context, ModelLayers.SKELETON, ModelLayers.SKELETON_ARMOR);
     }
 
     @Override
-    public Identifier getTexture(SkeletonEntityRenderState state) {
+    public Identifier getTextureLocation(SkeletonRenderState state) {
         return TEXTURE;
     }
 
     @Override
-    public SkeletonEntityRenderState createRenderState() {
-        return new SkeletonEntityRenderState();
+    public SkeletonRenderState createRenderState() {
+        return new SkeletonRenderState();
     }
 }

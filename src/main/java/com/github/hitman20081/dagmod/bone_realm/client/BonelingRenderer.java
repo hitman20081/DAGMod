@@ -1,32 +1,32 @@
 package com.github.hitman20081.dagmod.bone_realm.client;
 
 import com.github.hitman20081.dagmod.bone_realm.entity.BonelingEntity;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.SkeletonEntityModel;
-import net.minecraft.client.render.entity.state.SkeletonEntityRenderState;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.monster.skeleton.SkeletonModel;
+import net.minecraft.client.renderer.entity.state.SkeletonRenderState;
+import net.minecraft.resources.Identifier;
 
 /**
  * Renderer for Boneling
  * Uses the regular skeleton model
  */
-public class BonelingRenderer extends MobEntityRenderer<BonelingEntity, SkeletonEntityRenderState, SkeletonEntityModel<SkeletonEntityRenderState>> {
+public class BonelingRenderer extends MobRenderer<BonelingEntity, SkeletonRenderState, SkeletonModel<SkeletonRenderState>> {
 
-    private static final Identifier TEXTURE = Identifier.ofVanilla("textures/entity/skeleton/skeleton.png");
+    private static final Identifier TEXTURE = Identifier.withDefaultNamespace("textures/entity/skeleton/skeleton.png");
 
-    public BonelingRenderer(EntityRendererFactory.Context context) {
-        super(context, new SkeletonEntityModel<>(context.getPart(EntityModelLayers.SKELETON)), 0.5f);
+    public BonelingRenderer(EntityRendererProvider.Context context) {
+        super(context, new SkeletonModel<>(context.bakeLayer(ModelLayers.SKELETON)), 0.5f);
     }
 
     @Override
-    public SkeletonEntityRenderState createRenderState() {
-        return new SkeletonEntityRenderState();
+    public SkeletonRenderState createRenderState() {
+        return new SkeletonRenderState();
     }
 
     @Override
-    public Identifier getTexture(SkeletonEntityRenderState state) {
+    public Identifier getTextureLocation(SkeletonRenderState state) {
         return TEXTURE;
     }
 }

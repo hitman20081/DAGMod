@@ -1,16 +1,16 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
 import com.github.hitman20081.dagmod.event.SpellModifierHandler;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,13 +34,13 @@ public class ManaBurstAbility {
     private static final float DAMAGE = 10.0f; // 5 hearts
     private static final double KNOCKBACK_STRENGTH = 1.5;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
-        UUID uuid = serverPlayer.getUuid();
+        ServerLevel world = serverPlayer.level();
+        UUID uuid = serverPlayer.getUUID();
 
         boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
         float power = SpellModifierHandler.consumeOvercharge(uuid);
@@ -52,7 +52,7 @@ public class ManaBurstAbility {
         return result;
     }
 
-    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+    private static boolean activateInternal(ServerPlayer player, ServerLevel world,
                                             boolean applyModifiers, float powerMultiplier) {
         float damage = DAMAGE * powerMultiplier;
 
@@ -60,14 +60,14 @@ public class ManaBurstAbility {
             MageCooldownManager.startCooldown(player, MageAbility.MANA_BURST);
         }
 
-        Box searchBox = Box.of(
-                player.getEntityPos(),
+        AABB searchBox = AABB.ofSize(
+                player.position(),
                 RADIUS * 2,
                 RADIUS * 2,
                 RADIUS * 2
         );
 
-        List<LivingEntity> nearbyEntities = world.getEntitiesByClass(
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
                 entity -> entity != player && entity.isAlive()
@@ -76,10 +76,10 @@ public class ManaBurstAbility {
         int hitCount = 0;
 
         for (LivingEntity entity : nearbyEntities) {
-            double distance = player.squaredDistanceTo(entity);
+            double distance = player.distanceToSqr(entity);
             if (distance <= RADIUS * RADIUS) {
 
-                entity.damage(world, world.getDamageSources().magic(), damage);
+                entity.hurt(world.damageSources().magic(), damage);
 
                 double dx = entity.getX() - player.getX();
                 double dy = entity.getY() - player.getY();
@@ -91,17 +91,17 @@ public class ManaBurstAbility {
                     dy /= distance3d;
                     dz /= distance3d;
 
-                    entity.setVelocity(
+                    entity.setDeltaMovement(
                             dx * KNOCKBACK_STRENGTH,
                             0.5,
                             dz * KNOCKBACK_STRENGTH
                     );
                 }
 
-                world.spawnParticles(
+                world.sendParticles(
                         ParticleTypes.ENCHANTED_HIT,
                         entity.getX(),
-                        entity.getY() + entity.getHeight() / 2,
+                        entity.getY() + entity.getBbHeight() / 2,
                         entity.getZ(),
                         20,
                         0.3, 0.3, 0.3,
@@ -121,7 +121,7 @@ public class ManaBurstAbility {
                 double z = player.getZ() + Math.sin(angle) * ringRadius;
                 double y = player.getY() + 0.5;
 
-                world.spawnParticles(
+                world.sendParticles(
                         ParticleTypes.WITCH,
                         x, y, z,
                         1,
@@ -131,7 +131,7 @@ public class ManaBurstAbility {
             }
         }
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.EXPLOSION_EMITTER,
                 player.getX(),
                 player.getY() + 1.0,
@@ -141,7 +141,7 @@ public class ManaBurstAbility {
                 0
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.ENCHANT,
                 player.getX(),
                 player.getY() + 1.0,
@@ -151,7 +151,7 @@ public class ManaBurstAbility {
                 0.2
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.ELECTRIC_SPARK,
                 player.getX(),
                 player.getY() + 1.0,
@@ -166,33 +166,29 @@ public class ManaBurstAbility {
                 player.getX(),
                 player.getY(),
                 player.getZ(),
-                SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.PLAYERS,
+                SoundEvents.GENERIC_EXPLODE,
+                SoundSource.PLAYERS,
                 1.0f,
                 1.5f
         );
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ENTITY_EVOKER_PREPARE_ATTACK,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.EVOKER_PREPARE_ATTACK,
+                SoundSource.PLAYERS,
                 1.0f,
                 0.8f
         );
 
         if (hitCount > 0) {
-            player.sendMessage(
-                    Text.literal("💥 Mana Burst! Hit " + hitCount + " enemies!")
-                            .formatted(Formatting.BLUE, Formatting.BOLD),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("💥 Mana Burst! Hit " + hitCount + " enemies!")
+                            .withStyle(ChatFormatting.BLUE, ChatFormatting.BOLD));
         } else {
-            player.sendMessage(
-                    Text.literal("💥 Mana Burst! No enemies nearby.")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("💥 Mana Burst! No enemies nearby.")
+                            .withStyle(ChatFormatting.YELLOW));
         }
 
         return true;

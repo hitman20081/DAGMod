@@ -1,16 +1,16 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -32,33 +32,31 @@ public class BlinkStrikeAbility {
     private static final double SEARCH_RADIUS = 15.0;
     private static final double TELEPORT_DISTANCE = 2.0;
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Find nearest enemy
-        Box searchBox = Box.of(
-                player.getEntityPos(),
+        AABB searchBox = AABB.ofSize(
+                player.position(),
                 SEARCH_RADIUS * 2,
                 SEARCH_RADIUS * 2,
                 SEARCH_RADIUS * 2
         );
 
-        List<LivingEntity> nearbyEntities = world.getEntitiesByClass(
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
                 LivingEntity.class,
                 searchBox,
-                entity -> entity != player && entity.isAlive() && !entity.isTeammate(player)
+                entity -> entity != player && entity.isAlive() && !entity.isAlliedTo(player)
         );
 
         if (nearbyEntities.isEmpty()) {
-            player.sendMessage(
-                    Text.literal("No enemies in range!")
-                            .formatted(Formatting.RED),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("No enemies in range!")
+                            .withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -67,7 +65,7 @@ public class BlinkStrikeAbility {
         double closestDistance = Double.MAX_VALUE;
 
         for (LivingEntity entity : nearbyEntities) {
-            double distance = player.squaredDistanceTo(entity);
+            double distance = player.distanceToSqr(entity);
             if (distance < closestDistance) {
                 closestDistance = distance;
                 closestEnemy = entity;
@@ -79,17 +77,17 @@ public class BlinkStrikeAbility {
         }
 
         // Calculate position behind target
-        Vec3d targetPos = closestEnemy.getEntityPos();
-        Vec3d targetLookVec = closestEnemy.getRotationVec(1.0f);
+        Vec3 targetPos = closestEnemy.position();
+        Vec3 targetLookVec = closestEnemy.getViewVector(1.0f);
 
-        Vec3d behindPos = targetPos.subtract(
+        Vec3 behindPos = targetPos.subtract(
                 targetLookVec.x * TELEPORT_DISTANCE,
                 0,
                 targetLookVec.z * TELEPORT_DISTANCE
         );
 
         // Particles at old position
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.SMOKE,
                 player.getX(),
                 player.getY() + 1.0,
@@ -99,7 +97,7 @@ public class BlinkStrikeAbility {
                 0.1
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.LARGE_SMOKE,
                 player.getX(),
                 player.getY() + 1.0,
@@ -110,17 +108,17 @@ public class BlinkStrikeAbility {
         );
 
         // TELEPORT
-        player.teleport(behindPos.x, behindPos.y, behindPos.z, true);
+        serverPlayer.connection.teleport(behindPos.x, behindPos.y, behindPos.z, player.getYRot(), player.getXRot());
 
         // Face the target
-        Vec3d lookDirection = targetPos.subtract(player.getEntityPos()).normalize();
+        Vec3 lookDirection = targetPos.subtract(player.position()).normalize();
         float yaw = (float)(Math.atan2(lookDirection.z, lookDirection.x) * 180.0 / Math.PI) - 90.0f;
         float pitch = (float)(Math.asin(-lookDirection.y) * 180.0 / Math.PI);
-        player.setYaw(yaw);
-        player.setPitch(pitch);
+        player.setYRot(yaw);
+        player.setXRot(pitch);
 
         // Particles at new position
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.SMOKE,
                 player.getX(),
                 player.getY() + 1.0,
@@ -130,7 +128,7 @@ public class BlinkStrikeAbility {
                 0.1
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.PORTAL,
                 player.getX(),
                 player.getY() + 1.0,
@@ -141,8 +139,8 @@ public class BlinkStrikeAbility {
         );
 
         // Brief invisibility + speed
-        player.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
-                net.minecraft.entity.effect.StatusEffects.INVISIBILITY,
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.INVISIBILITY,
                 2 * 20,
                 0,
                 false,
@@ -150,8 +148,8 @@ public class BlinkStrikeAbility {
                 true
         ));
 
-        player.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
-                net.minecraft.entity.effect.StatusEffects.SPEED,
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.SPEED,
                 3 * 20,
                 1,
                 false,
@@ -168,18 +166,16 @@ public class BlinkStrikeAbility {
                 player.getX(),
                 player.getY(),
                 player.getZ(),
-                SoundEvents.ENTITY_ENDERMAN_TELEPORT,
-                SoundCategory.PLAYERS,
+                SoundEvents.ENDERMAN_TELEPORT,
+                SoundSource.PLAYERS,
                 1.0f,
                 1.2f
         );
 
         // FEEDBACK
-        serverPlayer.sendMessage(
-                Text.literal("🌑 Blink Strike! Behind " + closestEnemy.getName().getString() + "!")
-                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
-                true
-        );
+        serverPlayer.sendOverlayMessage(
+                Component.literal("🌑 Blink Strike! Behind " + closestEnemy.getName().getString() + "!")
+                        .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
 
         return true;
     }

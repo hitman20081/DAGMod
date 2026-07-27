@@ -422,6 +422,21 @@
               }
             }
           ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:brimstone_dust",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
         }
       ],
       "rolls": {

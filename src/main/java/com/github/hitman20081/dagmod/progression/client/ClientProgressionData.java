@@ -42,7 +42,7 @@ public class ClientProgressionData {
      */
     public static void registerClientPackets() {
         // Don't register payload type here - it's already registered server-side
-        // The PayloadTypeRegistry.playS2C() is shared between client and server
+        // The PayloadTypeRegistry.clientboundPlay() is shared between client and server
 
         // Handle progression sync from server
         ClientPlayNetworking.registerGlobalReceiver(

@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "dagmod:item/gravity_well_scroll"
+  }
+}

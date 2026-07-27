@@ -1,45 +1,36 @@
 package com.github.hitman20081.dagmod.screen;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
-public class GemCuttingStationScreen extends HandledScreen<GemCuttingStationScreenHandler> {
+public class GemCuttingStationScreen extends AbstractContainerScreen<GemCuttingStationScreenHandler> {
     private static final Identifier GUI_TEXTURE =
-            Identifier.of(DagMod.MOD_ID, "textures/gui/gem_cutting_station_gui.png");
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "textures/gui/gem_cutting_station_gui.png");
 
-    public GemCuttingStationScreen(GemCuttingStationScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
-        this.backgroundHeight = 168;
-        this.playerInventoryTitleY = 74;
+    public GemCuttingStationScreen(GemCuttingStationScreenHandler handler, Inventory inventory, Component title) {
+        super(handler, inventory, title, 176, 168);
+        this.inventoryLabelY = 74;
     }
 
     @Override
-    protected void init() {
-        super.init();
-    }
-
-    @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (width - backgroundWidth) / 2;
-        int y = (height - backgroundHeight) / 2;
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight, 256, 256);
-
-        // Draw simple progress indicator when crafting
-        if (handler.isCrafting()) {
-            int progress = handler.getScaledProgress();
-            // Draw a simple green progress bar below the arrow area
-            context.fill(x + 63, y + 52, x + 63 + progress, y + 55, 0xFF00AA00);
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
+        if (menu.isCrafting()) {
+            int progress = menu.getScaledProgress();
+            // Blit the filled arrow sprite on top of the outline, clipping height to progress
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
+                    x + 104, y + 41,  // screen position matching the empty outline
+                    178, 0,           // UV of the filled arrow sprite in the texture sheet
+                    2, progress,      // 2px wide, height grows as crafting progresses
+                    256, 256);
         }
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        drawMouseoverTooltip(context, mouseX, mouseY);
     }
 }

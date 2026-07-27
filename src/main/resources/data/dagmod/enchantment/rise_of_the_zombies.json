@@ -20,7 +20,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "type": "#minecraft:zombies"
+            "minecraft:entity_type": "#minecraft:zombies"
           }
         }
       }
@@ -48,7 +48,7 @@
               "condition": "minecraft:entity_properties",
               "entity": "this",
               "predicate": {
-                "type": "#minecraft:zombies"
+                "minecraft:entity_type": "#minecraft:zombies"
               }
             },
             {

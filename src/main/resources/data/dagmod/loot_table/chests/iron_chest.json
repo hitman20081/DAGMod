@@ -1,0 +1,315 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 5,
+        "max": 9
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 4 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_block",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 2 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 3, "max": 8 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:mythril_ingot",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:mythril_nugget",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 3, "max": 9 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:brimstone_dust",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 8 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_citrine",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 4 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_ruby",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 4 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_sapphire",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 4 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_tanzanite",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_pink_garnet",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_scrap",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 1 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:dragon_scale",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:strong_strength"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:strong_regeneration"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:sharpness",
+                "minecraft:protection",
+                "minecraft:efficiency",
+                "minecraft:unbreaking",
+                "minecraft:power",
+                "minecraft:fire_aspect",
+                "minecraft:knockback",
+                "minecraft:projectile_protection",
+                "minecraft:blast_protection",
+                "minecraft:fire_protection",
+                "minecraft:aqua_affinity",
+                "minecraft:respiration",
+                "dagmod:climb_enchantment",
+                "dagmod:reach",
+                "dagmod:lights_blessing",
+                "dagmod:frostbite",
+                "dagmod:blazing_strike",
+                "dagmod:mud_collector",
+                "dagmod:rise_of_the_zombies",
+                "dagmod:bane_of_white_walker"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:looting",
+                "minecraft:fortune",
+                "minecraft:silk_touch",
+                "minecraft:feather_falling",
+                "minecraft:infinity",
+                "minecraft:flame",
+                "minecraft:thorns",
+                "minecraft:depth_strider",
+                "minecraft:swift_sneak",
+                "dagmod:shadow_enchantment",
+                "dagmod:heart_armor",
+                "dagmod:solar_enchantment",
+                "dagmod:siphon_enchantment",
+                "dagmod:soul_boost_enchantment",
+                "dagmod:midas_touch_enchantment"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:mending",
+                "minecraft:frost_walker",
+                "dagmod:soul_bound",
+                "dagmod:shatterproof",
+                "dagmod:leach_enchantment",
+                "dagmod:lightning_enchantment",
+                "dagmod:savage_enchantment",
+                "dagmod:lucky_looter_enchantment",
+                "dagmod:tunneling_enchantment",
+                "dagmod:berserker"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:mythril_sword",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": { "type": "minecraft:uniform", "min": 10, "max": 25 },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_chestplate",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": { "type": "minecraft:uniform", "min": 20, "max": 30 },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_helmet",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": { "type": "minecraft:uniform", "min": 20, "max": 30 },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_golden_apple",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 20
+        }
+      ]
+    }
+  ]
+}

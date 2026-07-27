@@ -1,54 +1,54 @@
 package com.github.hitman20081.dagmod.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
-public class SimpleNPC extends PathAwareEntity {
+public class SimpleNPC extends PathfinderMob {
 
-    public SimpleNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public SimpleNPC(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 
     // This sets up the NPC's basic stats (health, speed, etc.)
-    public static DefaultAttributeContainer.Builder createMobAttributes() {
-        return PathAwareEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 20.0) // Same as player
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.25); // Slightly slower than player
+    public static AttributeSupplier.Builder createMobAttributes() {
+        return PathfinderMob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 20.0) // Same as player
+                .add(Attributes.MOVEMENT_SPEED, 0.25); // Slightly slower than player
     }
 
     // This sets up the NPC's AI behaviors
     @Override
-    protected void initGoals() {
+    protected void registerGoals() {
         // Look at nearby players
-        this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
+        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0f));
         // Wander around occasionally
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.8));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.8));
         // Look around randomly
-        this.goalSelector.add(3, new LookAroundGoal(this));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     // This handles what happens when a player right-clicks the NPC
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (!this.getEntityWorld().isClient()) { // Only run on server side
-            player.sendMessage(Text.literal("Hello! I'm a simple NPC from DAGmod!"), false);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!this.level().isClientSide()) { // Only run on server side
+            player.sendSystemMessage(Component.literal("Hello! I'm a simple NPC from DAGmod!"));
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public boolean cannotDespawn() {
+    public boolean isPersistenceRequired() {
         return true; // NPC never despawns
     }
 
@@ -57,7 +57,7 @@ public class SimpleNPC extends PathAwareEntity {
         return false; // Ignore all damage - this is the main invulnerability method
     }
 
-    public void pushAwayFrom(net.minecraft.entity.Entity entity) {
+    public void pushAwayFrom(net.minecraft.world.entity.Entity entity) {
         // Don't get pushed by other entities
     }
 }

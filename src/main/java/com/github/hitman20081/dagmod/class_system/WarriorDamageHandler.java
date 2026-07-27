@@ -1,16 +1,16 @@
 package com.github.hitman20081.dagmod.class_system;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerPlayer;
 
 public class WarriorDamageHandler {
 
     /**
      * Apply Warrior's damage reduction (15% less physical damage taken)
      */
-    public static float modifyDamageTaken(ServerPlayerEntity player, DamageSource source, float amount) {
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+    public static float modifyDamageTaken(ServerPlayer player, DamageSource source, float amount) {
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (!"Warrior".equals(playerClass)) {
             return amount;
@@ -26,7 +26,7 @@ public class WarriorDamageHandler {
 
     private static boolean isPhysicalDamage(DamageSource source) {
         // Physical damage types that Warriors resist
-        String damageType = source.getName();
+        String damageType = source.type().msgId();
 
         return damageType.contains("mob") ||
                 damageType.contains("player") ||

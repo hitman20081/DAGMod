@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:amethyst_powder",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "dagmod:gravity_well_scroll",
+    "components": { "minecraft:item_model": "dagmod:gravity_well_scroll" },
+    "count": 1
+  }
+}

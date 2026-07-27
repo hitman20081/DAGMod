@@ -283,7 +283,7 @@
           "functions": [
             {
               "function": "minecraft:enchant_randomly",
-              "options": "#minecraft:in_enchanting_table"
+              "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "minecraft:book",

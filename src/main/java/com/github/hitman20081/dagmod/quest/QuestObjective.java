@@ -1,7 +1,7 @@
 package com.github.hitman20081.dagmod.quest;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
 
 public abstract class QuestObjective {
     protected String description;
@@ -17,7 +17,7 @@ public abstract class QuestObjective {
     }
 
     // Abstract method - each objective type implements its own update logic
-    public abstract boolean updateProgress(PlayerEntity player, Object... params);
+    public abstract boolean updateProgress(Player player, Object... params);
 
     // Abstract method - each objective type defines what triggers it
     public abstract ObjectiveType getType();
@@ -43,16 +43,16 @@ public abstract class QuestObjective {
     }
 
     // Get progress as text (e.g., "5/10")
-    public Text getProgressText() {
-        return Text.literal(currentProgress + "/" + requiredProgress);
+    public Component getProgressText() {
+        return Component.literal(currentProgress + "/" + requiredProgress);
     }
 
     // Get full description with progress
-    public Text getDisplayText() {
+    public Component getDisplayText() {
         if (completed) {
-            return Text.literal("✓ " + description + " (Complete)");
+            return Component.literal("✓ " + description + " (Complete)");
         } else {
-            return Text.literal(description + " (" + currentProgress + "/" + requiredProgress + ")");
+            return Component.literal(description + " (" + currentProgress + "/" + requiredProgress + ")");
         }
     }
 

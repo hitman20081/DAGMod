@@ -1,4 +1,7 @@
 accessWidener v2 named
 
 # Make ExclusionZone.shouldExclude accessible so we can check multiple zones from our custom placement
-accessible method net/minecraft/world/gen/chunk/placement/StructurePlacement$ExclusionZone shouldExclude (Lnet/minecraft/world/gen/chunk/placement/StructurePlacementCalculator;II)Z
+# TODO: update to Mojang-mapped class and method names once Loom downloads mappings and IntelliJ can resolve them
+# Yarn: net/minecraft/world/gen/chunk/placement/StructurePlacement$ExclusionZone shouldExclude (Lnet/minecraft/world/gen/chunk/placement/StructurePlacementCalculator;II)Z
+# accessible method <mojang-class> <mojang-method> (<mojang-descriptor>)Z
+accessible method net/minecraft/world/entity/SpawnPlacements register (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/SpawnPlacementType;Lnet/minecraft/world/level/levelgen/Heightmap$Types;Lnet/minecraft/world/entity/SpawnPlacements$SpawnPredicate;)V

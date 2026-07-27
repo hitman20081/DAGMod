@@ -1,12 +1,13 @@
 package com.github.hitman20081.dagmod.dragon_realm.boss;
 
 import com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmTeleporter;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,8 +57,8 @@ public class DragonRespawnTimerManager {
     /**
      * Start respawn timer for a dimension
      */
-    public void startTimer(ServerWorld world) {
-        String dimensionKey = world.getRegistryKey().getValue().toString();
+    public void startTimer(ServerLevel world) {
+        String dimensionKey = world.dimension().identifier().toString();
         DragonRespawnTimer timer = timers.computeIfAbsent(dimensionKey, k -> new DragonRespawnTimer());
         timer.startTimer(world);
         saveToFile();
@@ -66,8 +67,8 @@ public class DragonRespawnTimerManager {
     /**
      * Start respawn timer with custom delay
      */
-    public void startTimer(ServerWorld world, long customDelay) {
-        String dimensionKey = world.getRegistryKey().getValue().toString();
+    public void startTimer(ServerLevel world, long customDelay) {
+        String dimensionKey = world.dimension().identifier().toString();
         DragonRespawnTimer timer = timers.computeIfAbsent(dimensionKey, k -> new DragonRespawnTimer());
         timer.startTimer(world, customDelay);
         saveToFile();
@@ -85,7 +86,7 @@ public class DragonRespawnTimerManager {
             }
 
             // Get the world for this timer
-            ServerWorld world = getWorldByKey(minecraftServer, entry.getKey());
+            ServerLevel world = getWorldByKey(minecraftServer, entry.getKey());
             if (world == null) {
                 continue;
             }
@@ -102,7 +103,7 @@ public class DragonRespawnTimerManager {
     /**
      * Respawn the boss in the dimension
      */
-    private void respawnBoss(ServerWorld world) {
+    private void respawnBoss(ServerLevel world) {
         // Check if boss already exists (shouldn't, but safety check)
         if (DragonGuardianSpawner.bossExists(world)) {
             return;
@@ -115,8 +116,8 @@ public class DragonRespawnTimerManager {
     /**
      * Check if a dimension has an active timer
      */
-    public boolean hasActiveTimer(ServerWorld world) {
-        String dimensionKey = world.getRegistryKey().getValue().toString();
+    public boolean hasActiveTimer(ServerLevel world) {
+        String dimensionKey = world.dimension().identifier().toString();
         DragonRespawnTimer timer = timers.get(dimensionKey);
         return timer != null && timer.isActive();
     }
@@ -124,8 +125,8 @@ public class DragonRespawnTimerManager {
     /**
      * Get time remaining for a dimension (in ticks)
      */
-    public long getTimeRemaining(ServerWorld world) {
-        String dimensionKey = world.getRegistryKey().getValue().toString();
+    public long getTimeRemaining(ServerLevel world) {
+        String dimensionKey = world.dimension().identifier().toString();
         DragonRespawnTimer timer = timers.get(dimensionKey);
         if (timer == null || !timer.isActive()) {
             return 0;
@@ -136,8 +137,8 @@ public class DragonRespawnTimerManager {
     /**
      * Cancel timer for a dimension
      */
-    public void cancelTimer(ServerWorld world) {
-        String dimensionKey = world.getRegistryKey().getValue().toString();
+    public void cancelTimer(ServerLevel world) {
+        String dimensionKey = world.dimension().identifier().toString();
         DragonRespawnTimer timer = timers.get(dimensionKey);
         if (timer != null) {
             timer.cancel();
@@ -148,9 +149,9 @@ public class DragonRespawnTimerManager {
     /**
      * Get world by dimension key string
      */
-    private ServerWorld getWorldByKey(MinecraftServer minecraftServer, String keyString) {
-        for (ServerWorld world : minecraftServer.getWorlds()) {
-            if (world.getRegistryKey().getValue().toString().equals(keyString)) {
+    private ServerLevel getWorldByKey(MinecraftServer minecraftServer, String keyString) {
+        for (ServerLevel world : minecraftServer.getAllLevels()) {
+            if (world.dimension().identifier().toString().equals(keyString)) {
                 return world;
             }
         }
@@ -165,7 +166,7 @@ public class DragonRespawnTimerManager {
             throw new IllegalStateException("DragonRespawnTimerManager not initialized!");
         }
 
-        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+        File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
         File dagmodDir = new File(worldDir, DATA_ROOT);
 
         if (!dagmodDir.exists()) {
@@ -181,11 +182,11 @@ public class DragonRespawnTimerManager {
     private void saveToFile() {
         try {
             File file = getTimerFile();
-            NbtCompound nbt = new NbtCompound();
+            CompoundTag nbt = new CompoundTag();
 
-            NbtCompound timersNbt = new NbtCompound();
+            CompoundTag timersNbt = new CompoundTag();
             for (Map.Entry<String, DragonRespawnTimer> entry : timers.entrySet()) {
-                NbtCompound timerNbt = new NbtCompound();
+                CompoundTag timerNbt = new CompoundTag();
                 entry.getValue().writeNbt(timerNbt);
                 timersNbt.put(entry.getKey(), timerNbt);
             }
@@ -216,13 +217,13 @@ public class DragonRespawnTimerManager {
         }
 
         try (FileInputStream fis = new FileInputStream(file)) {
-            NbtCompound nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+            CompoundTag nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
 
             if (nbt.contains("Timers")) {
-                NbtCompound timersNbt = nbt.getCompound("Timers").orElse(new NbtCompound());
+                CompoundTag timersNbt = nbt.getCompound("Timers").orElse(new CompoundTag());
 
-                for (String key : timersNbt.getKeys()) {
-                    NbtCompound timerNbt = timersNbt.getCompound(key).orElse(new NbtCompound());
+                for (String key : timersNbt.keySet()) {
+                    CompoundTag timerNbt = timersNbt.getCompound(key).orElse(new CompoundTag());
                     DragonRespawnTimer timer = new DragonRespawnTimer();
                     timer.readNbt(timerNbt);
                     manager.timers.put(key, timer);

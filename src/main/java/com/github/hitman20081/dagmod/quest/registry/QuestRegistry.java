@@ -12,14 +12,14 @@ import com.github.hitman20081.dagmod.quest.objectives.CollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.tags.ItemTags;
 import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.UnlockReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import com.github.hitman20081.dagmod.block.ModBlocks;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.Identifier;
 
 public class QuestRegistry {
 
@@ -122,6 +122,11 @@ public class QuestRegistry {
         // NPC Quests
         manager.registerQuest(createGarricksSpecialBrewQuest());
 
+        // Gem Crafting Tutorial Chain (triggered by Jeweler NPC)
+        manager.registerQuest(createGemRoughTradeQuest());
+        manager.registerQuest(createGemACutAboveQuest());
+        manager.registerQuest(createGemArtOfPolishQuest());
+
         // ========== JOB BOARD QUESTS ==========
         JobRegistry.registerJobs(manager);
     }
@@ -203,6 +208,64 @@ public class QuestRegistry {
         registerWarriorQuestChain(manager);
         registerMageQuestChain(manager);
         registerRogueQuestChain(manager);
+        registerGemCraftingChain(manager);
+    }
+
+    private static void registerGemCraftingChain(QuestManager manager) {
+        QuestChain gemCrafting = new QuestChain(
+                "gem_crafting_basics",
+                "The Jeweler's Art",
+                "Learn the art of gem crafting from the Jeweler — cut, polish, and refine raw gems into prized materials.",
+                QuestData.QuestBookTier.NOVICE,
+                null
+        )
+                .addQuest("gem_rough_trade")
+                .addQuest("gem_a_cut_above")
+                .addQuest("gem_art_of_polish")
+                .addChainReward(new ItemReward(ModItems.DIAMOND_POWDER, 3))
+                .addChainReward(new ItemReward(Items.EMERALD, 5))
+                .addChainReward(XpReward.novice());
+
+        manager.registerQuestChain(gemCrafting);
+    }
+
+    private static Quest createGemRoughTradeQuest() {
+        return new Quest("gem_rough_trade")
+                .setName("Rough Trade")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("The Jeweler wants to teach you the art of gem crafting. Start by gathering raw citrine from the earth — it's the most common gem and a perfect starting point.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addObjective(new CollectObjective(ModItems.RAW_CITRINE, 5))
+                .addReward(new ItemReward(ModBlocks.GEM_CUTTING_STATION.asItem(), 1))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createGemACutAboveQuest() {
+        return new Quest("gem_a_cut_above")
+                .setName("A Cut Above")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("The Jeweler gave you a Gem Cutting Station. Use it — or the one at the jeweler stall in the Hall of Champions — to cut your raw citrine into proper Cut Citrine gems.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addPrerequisite("gem_rough_trade")
+                .addObjective(new CollectObjective(ModItems.GEM_CUT_CITRINE, 5))
+                .addReward(new ItemReward(ModBlocks.GEM_POLISHING_STATION.asItem(), 1))
+                .addReward(new ItemReward(ModBlocks.GEM_CRUSHING_STATION.asItem(), 1))
+                .addReward(new ItemReward(ModItems.CRUSHING_HAMMER, 1))
+                .addReward(new ItemReward(ModItems.DIAMOND_POWDER, 2))
+                .addReward(XpReward.novice());
+    }
+
+    private static Quest createGemArtOfPolishQuest() {
+        return new Quest("gem_art_of_polish")
+                .setName("The Art of Polish")
+                .setCategory(Quest.QuestCategory.MAIN)
+                .setDescription("You have the stations and Diamond Powder. Use a Gem Polishing Station — yours or the one at the Hall of Champions jeweler stall — put Cut Citrine in the input slot and Diamond Powder in the catalyst slot, then bring the Jeweler proof of your work.")
+                .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addPrerequisite("gem_a_cut_above")
+                .addObjective(new CollectObjective(ModItems.GEM_POLISHED_CITRINE, 3))
+                .addReward(new ItemReward(ModItems.DIAMOND_POWDER, 5))
+                .addReward(new ItemReward(Items.EMERALD, 5))
+                .addReward(XpReward.novice());
     }
 
     // ========== DWARF RACE QUESTS - "The Forgemaster's Legacy" ==========
@@ -287,8 +350,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.LAPIS_LAZULI, 64))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 3))
                 .addReward(new ItemReward(Items.EMERALD_BLOCK, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("efficiency"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fortune"), 2))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("efficiency"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fortune"), 2))
                 .addReward(XpReward.expert())
                 .addPrerequisite("mountain_kings_tribute");
     }
@@ -336,9 +399,9 @@ public class QuestRegistry {
                 .setRequiredRace("Dwarf")
                 .addObjective(new CollectObjective(Items.LAPIS_BLOCK, 8))
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 32))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("silk_touch"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("unbreaking"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("silk_touch"), 1))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 20))
                 .addReward(new ItemReward(Items.DIAMOND, 10))
                 .addReward(XpReward.master())
@@ -414,7 +477,7 @@ public class QuestRegistry {
                 .setDescription("Every great forest begins with a single seed. Plant the foundations of a thriving woodland.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setRequiredRace("Elf")
-                .addObjective(new TagCollectObjective(ItemTags.SAPLINGS, 64, "any saplings"))
+                .addObjective(new TagCollectObjective(ItemTags.SAPLINGS, 16, "any saplings"))
                 .addReward(new ItemReward(Items.BONE_MEAL, 32))
                 .addReward(new ItemReward(ModItems.ELVEN_BREAD, 4))
                 .addReward(new ItemReward(ModItems.GLOWBERRY_JAM, 3))
@@ -444,12 +507,12 @@ public class QuestRegistry {
                 .setDescription("Master the sacred art of the bow. Hunt with precision and honor.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredRace("Elf")
-                .addObjective(new KillObjective(EntityType.SKELETON, 20))
+                .addObjective(KillObjective.fromIdentifier("minecraft:skeleton", 20))
                 .addObjective(new CollectObjective(Items.BONE, 32))
-                .addObjective(new CollectObjective(Items.FLINT, 48))
+                .addObjective(new CollectObjective(Items.FLINT, 16))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.ARROW, 128))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("power"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("power"), 3))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("roots_run_deep");
     }
@@ -462,8 +525,8 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Elf")
                 .addObjective(KillObjective.zombies(15))
-                .addObjective(new KillObjective(EntityType.SPIDER, 12))
-                .addObjective(new KillObjective(EntityType.CREEPER, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:spider", 12))
+                .addObjective(KillObjective.fromIdentifier("minecraft:creeper", 8))
                 .addReward(new ItemReward(Items.DIAMOND, 8))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
@@ -500,8 +563,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
                 .addReward(new ItemReward(Items.BOW, 1))
                 .addReward(new ItemReward(Items.SPECTRAL_ARROW, 64))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("infinity"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("flame"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("infinity"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("flame"), 1))
                 .addReward(XpReward.expert())
                 .addPrerequisite("whispers_of_leaves");
     }
@@ -513,9 +576,9 @@ public class QuestRegistry {
                 .setDescription("Protect the sacred places. Drive back those who would defile nature.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Elf")
-                .addObjective(new KillObjective(EntityType.PILLAGER, 10))
-                .addObjective(new KillObjective(EntityType.VINDICATOR, 5))
-                .addObjective(new KillObjective(EntityType.RAVAGER, 3))
+                .addObjective(KillObjective.fromIdentifier("minecraft:pillager", 10))
+                .addObjective(KillObjective.fromIdentifier("minecraft:vindicator", 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:ravager", 3))
                 .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 2))
                 .addReward(new ItemReward(Items.EMERALD, 32))
@@ -525,9 +588,9 @@ public class QuestRegistry {
 
     private static Quest createWorldTreeSaplingQuest() {
         return new Quest("world_tree_sapling")
-                .setName("The World Tree's Sapling")
+                .setName("The Level Tree's Sapling")
                 .setCategory(Quest.QuestCategory.MAIN)
-                .setDescription("Seek the legendary World Tree's offspring, hidden in the deepest forests.")
+                .setDescription("Seek the legendary Level Tree's offspring, hidden in the deepest forests.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Elf")
                 .addObjective(new CollectObjective(Items.DARK_OAK_SAPLING, 64))
@@ -639,7 +702,7 @@ public class QuestRegistry {
 
     private static Quest createWorldTravelerQuest() {
         return new Quest("world_traveler")
-                .setName("World Traveler")
+                .setName("Level Traveler")
                 .setCategory(Quest.QuestCategory.MAIN)
                 .setDescription("Explore the diverse biomes of the world. Adaptability requires understanding all environments.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
@@ -666,8 +729,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
                 .addObjective(new CollectObjective(Items.DIAMOND, 8))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("looting"), 3))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 4))
                 .addReward(XpReward.expert())
                 .addPrerequisite("world_traveler");
@@ -685,9 +748,9 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.ANVIL, 1))
                 .addObjective(new CollectObjective(Items.BOOKSHELF, 16))
                 .addReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 16))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("looting"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("unbreaking"), 3))
                 .addReward(new ItemReward(Items.DIAMOND, 8))
                 .addReward(XpReward.expert())
                 .addPrerequisite("master_trader");
@@ -718,7 +781,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Human")
                 .addObjective(new CollectObjective(Items.DIAMOND_BLOCK, 4))
-                .addObjective(new KillObjective(EntityType.WITHER_SKELETON, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:wither_skeleton", 5))
                 .addObjective(new CollectObjective(Items.NETHER_STAR, 1))
                 .addReward(new ItemReward(Items.NETHERITE_INGOT, 4))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 5))
@@ -739,10 +802,10 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.IRON_BLOCK, 16))
                 .addReward(new ItemReward(Items.DIAMOND_BLOCK, 4))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 2))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("protection"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("thorns"), 3))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("feather_falling"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("sharpness"), 5))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("protection"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("thorns"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("feather_falling"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("sharpness"), 5))
                 .addReward(XpReward.master())
                 .addPrerequisite("heros_journey");
     }
@@ -838,7 +901,7 @@ public class QuestRegistry {
                 .setRequiredRace("Orc")
                 .addObjective(KillObjective.zombies(15))
                 .addObjective(KillObjective.skeletons(10))
-                .addObjective(new KillObjective(EntityType.CREEPER, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:creeper", 5))
                 .addReward(new ItemReward(Items.IRON_AXE, 1))
                 .addReward(new ItemReward(Items.IRON_CHESTPLATE, 1))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
@@ -853,11 +916,11 @@ public class QuestRegistry {
                 .setDescription("Only the greatest hunters can claim the mightiest trophies. Bring down powerful beasts.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setRequiredRace("Orc")
-                .addObjective(new KillObjective(EntityType.IRON_GOLEM, 2))
-                .addObjective(new KillObjective(EntityType.RAVAGER, 1))
+                .addObjective(KillObjective.fromIdentifier("minecraft:iron_golem", 2))
+                .addObjective(KillObjective.fromIdentifier("minecraft:ravager", 1))
                 .addObjective(new CollectObjective(Items.BEEF, 16))
                 .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("sharpness"), 3))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("sharpness"), 3))
                 .addReward(new ItemReward(Items.EMERALD, 8))
                 .addReward(XpReward.apprentice())
                 .addPrerequisite("prove_your_strength");
@@ -870,9 +933,9 @@ public class QuestRegistry {
                 .setDescription("Lead your warriors to victory. Complete dangerous raids and emerge triumphant.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Orc")
-                .addObjective(new KillObjective(EntityType.PILLAGER, 12))
-                .addObjective(new KillObjective(EntityType.VINDICATOR, 8))
-                .addObjective(new KillObjective(EntityType.EVOKER, 3))
+                .addObjective(KillObjective.fromIdentifier("minecraft:pillager", 12))
+                .addObjective(KillObjective.fromIdentifier("minecraft:vindicator", 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:evoker", 3))
                 .addReward(new ItemReward(Items.DIAMOND_CHESTPLATE, 1))
                 .addReward(new ItemReward(Items.TOTEM_OF_UNDYING, 1))
                 .addReward(new ItemReward(Items.EMERALD, 16))
@@ -892,8 +955,8 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 32))
                 .addReward(new ItemReward(Items.DIAMOND_AXE, 1))
                 .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("smite"), 4))
-                .addReward(new EnchantedBookReward(Identifier.ofVanilla("fire_aspect"), 2))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("smite"), 4))
+                .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fire_aspect"), 2))
                 .addReward(XpReward.expert())
                 .addPrerequisite("raid_leader");
     }
@@ -905,9 +968,9 @@ public class QuestRegistry {
                 .setDescription("Every scar tells a story of survival. Face the deadliest foes and live to tell the tale.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setRequiredRace("Orc")
-                .addObjective(new KillObjective(EntityType.BLAZE, 10))
-                .addObjective(new KillObjective(EntityType.WITHER_SKELETON, 8))
-                .addObjective(new KillObjective(EntityType.GHAST, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:blaze", 10))
+                .addObjective(KillObjective.fromIdentifier("minecraft:wither_skeleton", 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:ghast", 5))
                 .addReward(new ItemReward(Items.NETHERITE_SCRAP, 4))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 8))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
@@ -923,7 +986,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Orc")
                 .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 8))
-                .addObjective(new KillObjective(EntityType.ENDERMAN, 10))
+                .addObjective(KillObjective.fromIdentifier("minecraft:enderman", 10))
                 .addObjective(new CollectObjective(Items.ENDER_PEARL, 16))
                 .addReward(new ItemReward(Items.NETHERITE_SWORD, 1))
                 .addReward(new ItemReward(Items.NETHERITE_HELMET, 1))
@@ -940,7 +1003,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Orc")
                 .addObjective(new CollectObjective(Items.ANCIENT_DEBRIS, 16))
-                .addObjective(new KillObjective(EntityType.PIGLIN_BRUTE, 10))
+                .addObjective(KillObjective.fromIdentifier("minecraft:piglin_brute", 10))
                 .addObjective(new CollectObjective(Items.NETHERITE_BLOCK, 2))
                 .addReward(new ItemReward(Items.NETHERITE_CHESTPLATE, 1))
                 .addReward(new ItemReward(Items.NETHERITE_LEGGINGS, 1))
@@ -956,7 +1019,7 @@ public class QuestRegistry {
                 .setDescription("Only the mightiest warriors dare challenge the Wither. Prove you are worthy.")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
                 .setRequiredRace("Orc")
-                .addObjective(new KillObjective(EntityType.WITHER, 1))
+                .addObjective(KillObjective.fromIdentifier("minecraft:wither", 1))
                 .addObjective(new CollectObjective(Items.NETHER_STAR, 1))
                 .addReward(new ItemReward(Items.NETHERITE_BOOTS, 1))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 8))
@@ -1036,8 +1099,8 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setMinLevel(25)
                 .setRequiredClass("Warrior")
-                .addObjective(new KillObjective(EntityType.PILLAGER, 12))
-                .addObjective(new KillObjective(EntityType.VINDICATOR, 6))
+                .addObjective(KillObjective.fromIdentifier("minecraft:pillager", 12))
+                .addObjective(KillObjective.fromIdentifier("minecraft:vindicator", 6))
                 .addObjective(new CollectObjective(Items.GOLD_INGOT, 16))
                 .addObjective(new CollectObjective(Items.IRON_BLOCK, 4))
                 .addReward(new ItemReward(ModItems.BATTLE_STANDARD, 1))
@@ -1056,8 +1119,8 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setMinLevel(50)
                 .setRequiredClass("Warrior")
-                .addObjective(new KillObjective(EntityType.BLAZE, 10))
-                .addObjective(new KillObjective(EntityType.WITHER_SKELETON, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:blaze", 10))
+                .addObjective(KillObjective.fromIdentifier("minecraft:wither_skeleton", 8))
                 .addObjective(new CollectObjective(Items.DIAMOND, 16))
                 .addObjective(new CollectObjective(Items.NETHERITE_SCRAP, 4))
                 .addReward(new ItemReward(ModItems.WHIRLWIND_AXE, 1))
@@ -1076,7 +1139,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setMinLevel(75)
                 .setRequiredClass("Warrior")
-                .addObjective(new KillObjective(EntityType.PIGLIN_BRUTE, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:piglin_brute", 8))
                 .addObjective(new CollectObjective(Items.ANCIENT_DEBRIS, 8))
                 .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 4))
                 .addReward(new ItemReward(ModItems.IRON_TALISMAN, 1))
@@ -1249,11 +1312,11 @@ public class QuestRegistry {
                 .addQuest("mana_burst_unlock")
                 .addQuest("arcane_barrier_unlock")
                 .addQuest("archmage_trial")
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("mending"), 1))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("unbreaking"), 3))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("power"), 5))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("looting"), 3))
-                .addChainReward(new EnchantedBookReward(Identifier.ofVanilla("silk_touch"), 1))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("mending"), 1))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("unbreaking"), 3))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("power"), 5))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("looting"), 3))
+                .addChainReward(new EnchantedBookReward(Identifier.withDefaultNamespace("silk_touch"), 1))
                 .addChainReward(new ItemReward(Items.EXPERIENCE_BOTTLE, 64))
                 .addChainReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 10));
 
@@ -1270,8 +1333,8 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .setMinLevel(10)
                 .setRequiredClass("Rogue")
-                .addObjective(new KillObjective(EntityType.SPIDER, 15))
-                .addObjective(new KillObjective(EntityType.CAVE_SPIDER, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:spider", 15))
+                .addObjective(KillObjective.fromIdentifier("minecraft:cave_spider", 8))
                 .addObjective(new CollectObjective(Items.GUNPOWDER, 8))
                 .addReward(new ItemReward(ModItems.ROGUE_ABILITY_TOME, 1))
                 .addReward(new ItemReward(Items.DIAMOND_SWORD, 1))
@@ -1287,7 +1350,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .setMinLevel(25)
                 .setRequiredClass("Rogue")
-                .addObjective(new KillObjective(EntityType.PHANTOM, 6))
+                .addObjective(KillObjective.fromIdentifier("minecraft:phantom", 6))
                 .addObjective(new CollectObjective(Items.PHANTOM_MEMBRANE, 4))
                 .addObjective(new CollectObjective(Items.ENDER_PEARL, 8))
                 .addReward(new ItemReward(ModItems.VOID_BLADE, 1))
@@ -1305,7 +1368,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setMinLevel(50)
                 .setRequiredClass("Rogue")
-                .addObjective(new KillObjective(EntityType.ENDERMAN, 8))
+                .addObjective(KillObjective.fromIdentifier("minecraft:enderman", 8))
                 .addObjective(new CollectObjective(Items.ECHO_SHARD, 4))
                 .addObjective(new CollectObjective(Items.SPIDER_EYE, 16))
                 .addObjective(new CollectObjective(Items.FERMENTED_SPIDER_EYE, 8))
@@ -1325,8 +1388,8 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .setMinLevel(75)
                 .setRequiredClass("Rogue")
-                .addObjective(new KillObjective(EntityType.PILLAGER, 15))
-                .addObjective(new KillObjective(EntityType.EVOKER, 3))
+                .addObjective(KillObjective.fromIdentifier("minecraft:pillager", 15))
+                .addObjective(KillObjective.fromIdentifier("minecraft:evoker", 3))
                 .addObjective(new CollectObjective(Items.DIAMOND, 16))
                 .addObjective(new CollectObjective(Items.NETHERITE_INGOT, 2))
                 .addReward(new ItemReward(ModItems.ASSASSINS_MARK, 1))
@@ -1609,7 +1672,7 @@ public class QuestRegistry {
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(KillObjective.zombies(8))
                 .addObjective(KillObjective.skeletons(6))
-                .addObjective(new KillObjective(EntityType.CREEPER, 3))
+                .addObjective(KillObjective.fromIdentifier("minecraft:creeper", 3))
                 .addReward(new ItemReward(Items.DIAMOND_HELMET, 1))
                 .addReward(new ItemReward(Items.GOLDEN_APPLE, 3))
                 .addReward(XpReward.expert())
@@ -1687,7 +1750,7 @@ public class QuestRegistry {
                 // Combat mastery
                 .addObjective(KillObjective.zombies(25))
                 .addObjective(KillObjective.skeletons(20))
-                .addObjective(new KillObjective(EntityType.ENDERMAN, 5))
+                .addObjective(KillObjective.fromIdentifier("minecraft:enderman", 5))
                 // Resource gathering (versatility)
                 .addObjective(new CollectObjective(Items.DIAMOND, 8))
                 .addObjective(new CollectObjective(Items.EMERALD, 4))
@@ -1769,7 +1832,7 @@ public class QuestRegistry {
                 .addObjective(new CollectObjective(ModItems.DRAGON_SCALE, 3))
                 .addObjective(new CollectObjective(ModItems.DRAGON_BONE, 2))
                 .addReward(new ItemReward(DragonRealmRegistry.DRAGON_KEY, 1))
-                .addReward(new UnlockReward(Identifier.of("dagmod", "dragon_key"), "Dragon Key"))
+                .addReward(new UnlockReward(Identifier.fromNamespaceAndPath("dagmod", "dragon_key"), "Dragon Key"))
                 .addReward(new ItemReward(Items.ENCHANTED_GOLDEN_APPLE, 2))
                 .addReward(XpReward.expert());
     }

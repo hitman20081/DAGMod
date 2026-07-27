@@ -3,155 +3,155 @@ package com.github.hitman20081.dagmod.bone_realm.entity;
 import com.github.hitman20081.dagmod.bone_realm.BoneRealmRegistry;
 import com.github.hitman20081.dagmod.bone_realm.BossRoomSpawnHandler;
 import com.github.hitman20081.dagmod.item.ModItems;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.boss.BossBar;
-import net.minecraft.entity.boss.ServerBossBar;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.BossEvent;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.util.RandomSource;
 
-public class SkeletonKingEntity extends SkeletonEntity {
+public class SkeletonKingEntity extends Skeleton {
 
-    private final ServerBossBar bossBar;
+    private final ServerBossEvent bossBar;
 
-    public SkeletonKingEntity(EntityType<? extends SkeletonEntity> entityType, World world) {
+    public SkeletonKingEntity(EntityType<? extends Skeleton> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = 100;
+        this.xpReward = 100;
 
-        this.bossBar = new ServerBossBar(
-                Text.literal("Skeleton King").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
-                BossBar.Color.PURPLE,
-                BossBar.Style.NOTCHED_10
+        this.bossBar = new ServerBossEvent(
+                this.getUUID(),
+                Component.literal("Skeleton King").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD),
+                BossEvent.BossBarColor.PURPLE,
+                BossEvent.BossBarOverlay.NOTCHED_10
         );
-        this.bossBar.setDarkenSky(true);
+        this.bossBar.setDarkenScreen(true);
 
-        if (!world.isClient()) {
+        if (!world.isClientSide()) {
             this.initializeEquipment();
         }
     }
 
     @Override
-    protected void initEquipment(net.minecraft.util.math.random.Random random, LocalDifficulty localDifficulty) {
-        super.initEquipment(random, localDifficulty);
+    protected void populateDefaultEquipmentSlots(net.minecraft.util.RandomSource random, DifficultyInstance localDifficulty) {
+        super.populateDefaultEquipmentSlots(random, localDifficulty);
         this.initializeEquipment();
     }
 
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData) {
-        entityData = super.initialize(world, difficulty, spawnReason, entityData);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData) {
+        entityData = super.finalizeSpawn(world, difficulty, spawnReason, entityData);
         return entityData;
     }
 
     private void initializeEquipment() {
-        ItemStack helmet = new ItemStack(net.minecraft.item.Items.NETHERITE_HELMET);
-        helmet.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Crown of the Bone Sovereign").formatted(Formatting.DARK_PURPLE));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.HEAD, helmet);
+        ItemStack helmet = new ItemStack(net.minecraft.world.item.Items.NETHERITE_HELMET);
+        helmet.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Crown of the Bone Sovereign").withStyle(ChatFormatting.DARK_PURPLE));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, helmet);
 
-        ItemStack chestplate = new ItemStack(net.minecraft.item.Items.NETHERITE_CHESTPLATE);
-        chestplate.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Regalia of the Death Lord").formatted(Formatting.DARK_PURPLE));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.CHEST, chestplate);
+        ItemStack chestplate = new ItemStack(net.minecraft.world.item.Items.NETHERITE_CHESTPLATE);
+        chestplate.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Regalia of the Death Lord").withStyle(ChatFormatting.DARK_PURPLE));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, chestplate);
 
-        ItemStack leggings = new ItemStack(net.minecraft.item.Items.NETHERITE_LEGGINGS);
-        leggings.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Royal Bone Greaves").formatted(Formatting.DARK_PURPLE));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.LEGS, leggings);
+        ItemStack leggings = new ItemStack(net.minecraft.world.item.Items.NETHERITE_LEGGINGS);
+        leggings.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Royal Bone Greaves").withStyle(ChatFormatting.DARK_PURPLE));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, leggings);
 
-        ItemStack boots = new ItemStack(net.minecraft.item.Items.NETHERITE_BOOTS);
-        boots.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Sovereign's Marrow Treads").formatted(Formatting.DARK_PURPLE));
-        this.equipStack(net.minecraft.entity.EquipmentSlot.FEET, boots);
+        ItemStack boots = new ItemStack(net.minecraft.world.item.Items.NETHERITE_BOOTS);
+        boots.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.literal("Sovereign's Marrow Treads").withStyle(ChatFormatting.DARK_PURPLE));
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, boots);
 
-        ItemStack sword = new ItemStack(net.minecraft.item.Items.NETHERITE_SWORD);
-        this.equipStack(net.minecraft.entity.EquipmentSlot.MAINHAND, sword);
+        ItemStack sword = new ItemStack(net.minecraft.world.item.Items.NETHERITE_SWORD);
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, sword);
 
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.HEAD, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.CHEST, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.LEGS, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.FEET, 0.0f);
-        this.setEquipmentDropChance(net.minecraft.entity.EquipmentSlot.MAINHAND, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.HEAD, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.CHEST, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.LEGS, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.FEET, 0.0f);
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.MAINHAND, 0.0f);
     }
 
-    public static DefaultAttributeContainer.Builder createSkeletonKingAttributes() {
-        return SkeletonEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 300.0)
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.3)
-                .add(EntityAttributes.ATTACK_DAMAGE, 13.0)
-                .add(EntityAttributes.ARMOR, 22.0)
-                .add(EntityAttributes.ARMOR_TOUGHNESS, 8.0)
-                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
-                .add(EntityAttributes.FOLLOW_RANGE, 48.0)
-                .add(EntityAttributes.ATTACK_KNOCKBACK, 0.45)
-                .add(EntityAttributes.SCALE, 2.0);
+    public static AttributeSupplier.Builder createSkeletonKingAttributes() {
+        return Skeleton.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 300.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.ATTACK_DAMAGE, 13.0)
+                .add(Attributes.ARMOR, 22.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 8.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
+                .add(Attributes.FOLLOW_RANGE, 48.0)
+                .add(Attributes.ATTACK_KNOCKBACK, 0.45)
+                .add(Attributes.SCALE, 2.0);
     }
 
     @Override
-    public void onStartedTrackingBy(ServerPlayerEntity player) {
-        super.onStartedTrackingBy(player);
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
         this.bossBar.addPlayer(player);
     }
 
     @Override
-    public void onStoppedTrackingBy(ServerPlayerEntity player) {
-        super.onStoppedTrackingBy(player);
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
         this.bossBar.removePlayer(player);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.getEntityWorld().isClient()) {
-            this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+        if (!this.level().isClientSide()) {
+            this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
         }
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
-        super.onDeath(damageSource);
-        this.bossBar.clearPlayers();
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
+        this.bossBar.removeAllPlayers();
 
-        if (!this.getEntityWorld().isClient()) {
-            ServerWorld serverWorld = (ServerWorld) this.getEntityWorld();
+        if (!this.level().isClientSide()) {
+            ServerLevel serverWorld = (ServerLevel) this.level();
 
             // Unseal the throne room
-            BossRoomSpawnHandler.unsealRoom(serverWorld, this.getBlockPos());
+            BossRoomSpawnHandler.unsealRoom(serverWorld, this.blockPosition());
 
             // Give rewards to every player within 25 blocks
-            BlockPos deathPos = this.getBlockPos();
-            for (ServerPlayerEntity nearbyPlayer : serverWorld.getPlayers()) {
-                if (nearbyPlayer.getBlockPos().isWithinDistance(deathPos, 25)) {
+            BlockPos deathPos = this.blockPosition();
+            for (ServerPlayer nearbyPlayer : serverWorld.players()) {
+                if (nearbyPlayer.blockPosition().closerThan(deathPos, 25)) {
                     // Two keys — players choose which pre-placed chests to open
                     for (int i = 0; i < 2; i++) {
                         ItemStack key = new ItemStack(BoneRealmRegistry.SKELETON_KING_KEY);
-                        if (!nearbyPlayer.getInventory().insertStack(key)) {
-                            nearbyPlayer.dropItem(key, false);
+                        if (!nearbyPlayer.getInventory().add(key)) {
+                            nearbyPlayer.drop(key, false);
                         }
                     }
-                    nearbyPlayer.sendMessage(
-                            Text.literal("✦ You received 2 Skeleton King's Keys! ✦")
-                                    .formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
-                            false
-                    );
+                    nearbyPlayer.sendSystemMessage(
+                            Component.literal("✦ You received 2 Skeleton King's Keys! ✦")
+                                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
 
                     // Recall Stone
                     ItemStack stone = new ItemStack(ModItems.KINGS_RECALL_STONE);
-                    if (!nearbyPlayer.getInventory().insertStack(stone)) {
-                        nearbyPlayer.dropItem(stone, false);
+                    if (!nearbyPlayer.getInventory().add(stone)) {
+                        nearbyPlayer.drop(stone, false);
                     }
                 }
             }
@@ -160,26 +160,26 @@ public class SkeletonKingEntity extends SkeletonEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_WITHER_SKELETON_AMBIENT;
+        return SoundEvents.WITHER_SKELETON_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_WITHER_SKELETON_HURT;
+        return SoundEvents.WITHER_SKELETON_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_WITHER_SKELETON_DEATH;
+        return SoundEvents.WITHER_SKELETON_DEATH;
     }
 
     @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) {
+    public boolean removeWhenFarAway(double distanceSquared) {
         return false;
     }
 
     @Override
-    public boolean cannotDespawn() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 }

@@ -3,57 +3,58 @@ package com.github.hitman20081.dagmod.command;
 import com.github.hitman20081.dagmod.trade.MerchantType;
 import com.github.hitman20081.dagmod.trade.RotatingTradeManager;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.server.permissions.Permissions;
 
 public class MerchantCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("merchant")
-                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
-                .then(CommandManager.literal("status")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
+        dispatcher.register(Commands.literal("merchant")
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .then(Commands.literal("status")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ServerPlayer player = context.getSource().getPlayerOrException();
                             RotatingTradeManager manager = RotatingTradeManager.getInstance();
 
-                            player.sendMessage(Text.literal("=== Merchant Rotation Status ===")
-                                    .formatted(Formatting.GOLD, Formatting.BOLD), false);
+                            player.sendSystemMessage(Component.literal("=== Merchant Rotation Status ===")
+                                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
                             // Time until next rotation
-                            player.sendMessage(Text.literal("Next rotation: ")
-                                    .formatted(Formatting.YELLOW)
-                                    .append(Text.literal(manager.getTimeUntilNextRotationFormatted())
-                                            .formatted(Formatting.WHITE)), false);
+                            player.sendSystemMessage(Component.literal("Next rotation: ")
+                                    .withStyle(ChatFormatting.YELLOW)
+                                    .append(Component.literal(manager.getTimeUntilNextRotationFormatted())
+                                            .withStyle(ChatFormatting.WHITE)));
 
-                            player.sendMessage(Text.empty(), false);
+                            player.sendSystemMessage(Component.empty());
 
                             // Current rotation index per type
                             for (MerchantType type : MerchantType.values()) {
                                 int index = manager.getRotationIndex(type);
-                                player.sendMessage(Text.literal("  " + type.getId() + ": ")
-                                        .formatted(Formatting.AQUA)
-                                        .append(Text.literal("rotation #" + index)
-                                                .formatted(Formatting.WHITE)), false);
+                                player.sendSystemMessage(Component.literal("  " + type.getId() + ": ")
+                                        .withStyle(ChatFormatting.AQUA)
+                                        .append(Component.literal("rotation #" + index)
+                                                .withStyle(ChatFormatting.WHITE)));
                             }
 
                             return 1;
                         })
                 )
-                .then(CommandManager.literal("rotate")
+                .then(Commands.literal("rotate")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ServerPlayer player = context.getSource().getPlayerOrException();
                             RotatingTradeManager manager = RotatingTradeManager.getInstance();
 
                             manager.forceRotation();
 
-                            player.sendMessage(Text.literal("Forced merchant trade rotation!")
-                                    .formatted(Formatting.GREEN), false);
+                            player.sendSystemMessage(Component.literal("Forced merchant trade rotation!")
+                                    .withStyle(ChatFormatting.GREEN));
                             return 1;
                         })
                 )

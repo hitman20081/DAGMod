@@ -1,15 +1,15 @@
 package com.github.hitman20081.dagmod.class_system.warrior;
 
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 /**
  * IRON SKIN - Warrior Ability
@@ -32,12 +32,12 @@ public class IronSkinAbility {
     private static final int DURATION_TICKS = 15 * 20; // 15 seconds
     private static final float ABSORPTION_AMOUNT = 16.0f; // 8 hearts
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Start cooldown
         CooldownManager.startCooldown(player, WarriorAbility.IRON_SKIN);
@@ -46,8 +46,8 @@ public class IronSkinAbility {
         player.setAbsorptionAmount(player.getAbsorptionAmount() + ABSORPTION_AMOUNT);
 
         // RESISTANCE II (60% damage reduction)
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.RESISTANCE,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.RESISTANCE,
                 DURATION_TICKS,
                 1, // Resistance II
                 false,
@@ -56,8 +56,8 @@ public class IronSkinAbility {
         ));
 
         // FIRE RESISTANCE (survive lava/fire)
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.FIRE_RESISTANCE,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.FIRE_RESISTANCE,
                 DURATION_TICKS,
                 0,
                 false,
@@ -66,8 +66,8 @@ public class IronSkinAbility {
         ));
 
         // SLOWNESS I (trade-off for defense)
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.SLOWNESS,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.SLOWNESS,
                 DURATION_TICKS,
                 0, // Slowness I
                 false,
@@ -76,7 +76,7 @@ public class IronSkinAbility {
         ));
 
         // VISUAL: Iron/Gray particles forming armor
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.ITEM_SNOWBALL, // White/gray particles
                 player.getX(), player.getY() + 1.0, player.getZ(),
                 50,
@@ -84,7 +84,7 @@ public class IronSkinAbility {
                 0.1
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.SMOKE,
                 player.getX(), player.getY() + 1.0, player.getZ(),
                 30,
@@ -94,7 +94,7 @@ public class IronSkinAbility {
 
         // Iron particles rising up
         for (int i = 0; i < 10; i++) {
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.CLOUD,
                     player.getX() + (Math.random() - 0.5),
                     player.getY() + (Math.random() * 2),
@@ -108,34 +108,30 @@ public class IronSkinAbility {
         // SOUND: Heavy metal impact
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.BLOCK_ANVIL_LAND,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.ANVIL_LAND,
+                SoundSource.PLAYERS,
                 0.7f,
                 1.0f
         );
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ITEM_ARMOR_EQUIP_IRON.value(),
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.ARMOR_EQUIP_IRON.value(),
+                SoundSource.PLAYERS,
                 1.0f,
                 0.8f
         );
 
         // FEEDBACK
-        serverPlayer.sendMessage(
-                Text.literal("🛡 Iron Skin activated! Tank mode engaged!")
-                        .formatted(Formatting.GRAY, Formatting.BOLD),
-                true
-        );
+        serverPlayer.sendOverlayMessage(
+                Component.literal("🛡 Iron Skin activated! Tank mode engaged!")
+                        .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD));
 
-        serverPlayer.sendMessage(
-                Text.literal("60% damage reduction for 15 seconds")
-                        .formatted(Formatting.DARK_GRAY),
-                false
-        );
+        serverPlayer.sendSystemMessage(
+                Component.literal("60% damage reduction for 15 seconds")
+                        .withStyle(ChatFormatting.DARK_GRAY));
 
         return true;
     }

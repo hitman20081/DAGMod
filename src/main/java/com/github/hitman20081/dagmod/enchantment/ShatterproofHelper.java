@@ -1,11 +1,11 @@
 package com.github.hitman20081.dagmod.enchantment;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
 
 /**
  * Utility class for checking if an item is in the "shatterproof broken" state.
@@ -21,14 +21,14 @@ public class ShatterproofHelper {
     public static boolean isShatterproofBroken(ItemStack stack) {
         if (stack.isEmpty()) return false;
         if (stack.getMaxDamage() <= 0) return false;
-        if (stack.getDamage() < stack.getMaxDamage() - 1) return false;
+        if (stack.getDamageValue() < stack.getMaxDamage() - 1) return false;
 
-        ItemEnchantmentsComponent enchantments = stack.getOrDefault(
-                DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+        ItemEnchantments enchantments = stack.getOrDefault(
+                DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 
-        for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
-            if (entry.getKey().isPresent()) {
-                Identifier id = entry.getKey().get().getValue();
+        for (Holder<Enchantment> entry : enchantments.keySet()) {
+            if (entry.unwrapKey().isPresent()) {
+                var id = entry.unwrapKey().get().identifier();
                 if (id.getNamespace().equals("dagmod") && id.getPath().equals("shatterproof")) {
                     return true;
                 }

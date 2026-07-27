@@ -1,11 +1,44 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-04-13
-**Version**: v1.7.10
+**Last Updated**: 2026-07-21
+**Version**: v1.8.3
 
 ---
 
 ## Open Issues
+
+### 12. Flawless and Grand Gem Textures Are Placeholders (LOW)
+
+**Location**: `src/main/resources/assets/dagmod/textures/item/`
+**Status**: Open — cosmetic only, no gameplay impact
+
+The `gem_flawless_*` and `gem_grand_*` textures are currently copies of the Cut tier textures. All tiers are fully functional, but Flawless and Grand gems share the same appearance as Cut gems in inventory.
+
+**Resolution**: Draw unique textures for the Flawless and Grand tiers and replace the placeholder PNGs.
+
+---
+
+### 11. Enchantment Descriptions Require Advanced Tooltips (LOW)
+
+**Location**: `mixin/EnchantmentDescriptionMixin.java`
+**Status**: Open — by design, but not obvious to players
+
+In-game enchantment descriptions added in v1.8.3 only display when advanced tooltips are active. Players must press **F3+H** to enable advanced tooltips; they are on by default in Creative mode only.
+
+**Resolution**: Document in the wiki. No code change planned — gating behind advanced mode prevents tooltip overflow on heavily enchanted armor.
+
+---
+
+### 10. MC 26.1.2 World Chunk Artifacts (LOW)
+
+**Location**: World level files
+**Status**: Open — existing worlds generated on older versions may have visual or structural artifacts after the 26.1.2 migration
+
+The Minecraft 26.1.2 migration does not require a world reset, but pre-existing chunks may show terrain or lighting inconsistencies at chunk borders or in previously-loaded areas.
+
+**Recommended mitigation**: Use [MCA Selector](https://github.com/Querz/mcaselector) to prune or reset affected/unvisited chunks. This forces those regions to regenerate cleanly under the new version.
+
+---
 
 ### 8. Block-Attached Entity at Invalid Position (LOW)
 
@@ -55,6 +88,11 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 
 ## Fixed Issues
 
+### Fixed in v1.8.0
+- **Gem Crushing Station wrong texture reference** — Model referenced `gem_polishing_station_texture`; corrected to `gem_crushing_station_texture`
+- **Citrine Powder missing from Creative Tab** — CITRINE_POWDER omitted from item tab registration
+- **Dynamic lighting broken after MC 26.1.2 migration** — `scheduleBlockRenders` was removed in MC 26.x and never replaced, so terrain blocks were not updating light when the player moved or changed held items (entity rendering still worked since entities re-render every frame). Fixed by calling `LevelRenderer.setSectionRangeDirty()` on the sections within the light radius. A second fix addressed stale light persisting after the light source was removed from hand — the old clearing condition incorrectly required the player to have moved; removed the position check so sections are always dirtied when the previous radius was non-zero
+
 ### Fixed in v1.7.10
 - `TagCollectObjective` and `CollectObjective` item consumption — `consumeItems()` was calling `stack.decrement()` directly on the `ItemStack` object, which never triggered `markDirty()` on the inventory. Items were removed server-side but the client was never synced, causing items to appear unconsumed. Fixed by replacing `stack.decrement()` with `player.getInventory().removeStack(i, amount)` and adding an explicit `markDirty()` call after the loop in both classes
 
@@ -103,7 +141,6 @@ No configuration system exists. All gameplay-affecting values are hard-coded:
 1. **Permission Test**: Verify admin commands are restricted after permission system is added
 2. **Concurrency Test**: 10+ players interacting with quest blocks simultaneously
 3. **Data Persistence Test**: Force server crash during save and verify backup recovery
-4. **Quest System Test**: Complete quests using TagCollectObjective types
 
 ---
 

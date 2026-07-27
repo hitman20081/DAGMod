@@ -73,7 +73,7 @@ package com.github.hitman20081.dagmod.progression;
  *
  * Award XP from your quest system:
  *
- * public void onQuestComplete(ServerPlayerEntity player, Quest quest) {
+ * public void onQuestComplete(ServerPlayer player, Quest quest) {
  *     int xpReward = quest.getXPReward();
  *     int levelsGained = ProgressionManager.addXP(player, xpReward);
  *
@@ -90,9 +90,9 @@ package com.github.hitman20081.dagmod.progression;
  *
  * Award XP from mob kills (in a mixin or event handler):
  *
- * @Inject(method = "onDeath", at = @At("HEAD"))
+ * @Inject(method = "die", at = @At("HEAD"))
  * private void onMobDeath(DamageSource source, CallbackInfo ci) {
- *     if (source.getAttacker() instanceof ServerPlayerEntity player) {
+ *     if (source.getEntity() instanceof ServerPlayer player) {
  *         LivingEntity entity = (LivingEntity)(Object)this;
  *
  *         int xp = calculateMobXP(entity);
@@ -102,7 +102,7 @@ package com.github.hitman20081.dagmod.progression;
  *
  * Check player level for gating:
  *
- * public boolean canAccessQuest(ServerPlayerEntity player, Quest quest) {
+ * public boolean canAccessQuest(ServerPlayer player, Quest quest) {
  *     PlayerProgressionData data = ProgressionManager.getPlayerData(player);
  *     return data.getCurrentLevel() >= quest.getRequiredLevel();
  * }
@@ -155,7 +155,7 @@ package com.github.hitman20081.dagmod.progression;
  *
  * In your QuestHandler class, add XP rewards:
  *
- * private void completeQuest(ServerPlayerEntity player, QuestData quest) {
+ * private void completeQuest(ServerPlayer player, QuestData quest) {
  *     // Your existing quest completion logic...
  *
  *     // Award XP based on quest tier

@@ -1,29 +1,30 @@
 package com.github.hitman20081.dagmod.dragon_realm.portal;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.network.chat.Component;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 
 import java.util.List;
 
@@ -39,28 +40,28 @@ import java.util.List;
  */
 public class DragonRealmPortalBlock extends Block {
 
-    public static final EnumProperty<Direction.Axis> AXIS = Properties.HORIZONTAL_AXIS;
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
-    protected static final VoxelShape X_SHAPE = Block.createCuboidShape(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
-    protected static final VoxelShape Z_SHAPE = Block.createCuboidShape(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
+    protected static final VoxelShape X_SHAPE = Block.box(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
+    protected static final VoxelShape Z_SHAPE = Block.box(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
 
-    public DragonRealmPortalBlock(Settings settings) {
+    public DragonRealmPortalBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.X));
+        this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.X));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AXIS);
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, net.minecraft.block.ShapeContext context) {
-        return state.get(AXIS) == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext context) {
+        return state.getValue(AXIS) == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         // Enchant particles (main portal effect - glowing purple)
         if (random.nextInt(3) == 0) {
             double x = pos.getX() + random.nextDouble();
@@ -71,7 +72,7 @@ public class DragonRealmPortalBlock extends Block {
             double vy = (random.nextDouble() - 0.5) * 0.1;
             double vz = (random.nextDouble() - 0.5) * 0.1;
 
-            world.addParticleClient(ParticleTypes.ENCHANT, x, y, z, vx, vy, vz);
+            world.addParticle(ParticleTypes.ENCHANT, x, y, z, vx, vy, vz);
         }
 
         // Portal particles (swirling effect)
@@ -84,7 +85,7 @@ public class DragonRealmPortalBlock extends Block {
             double vy = -random.nextDouble() * 0.5;
             double vz = (random.nextDouble() - 0.5) * 0.5;
 
-            world.addParticleClient(ParticleTypes.PORTAL, x, y, z, vx, vy, vz);
+            world.addParticle(ParticleTypes.PORTAL, x, y, z, vx, vy, vz);
         }
 
         // End rod particles (sparkles)
@@ -93,7 +94,7 @@ public class DragonRealmPortalBlock extends Block {
             double y = pos.getY() + random.nextDouble();
             double z = pos.getZ() + random.nextDouble();
 
-            world.addParticleClient(ParticleTypes.END_ROD, x, y, z, 0, 0.05, 0);
+            world.addParticle(ParticleTypes.END_ROD, x, y, z, 0, 0.05, 0);
         }
 
         // Ambient portal sound
@@ -103,8 +104,8 @@ public class DragonRealmPortalBlock extends Block {
                     pos.getX() + 0.5,
                     pos.getY() + 0.5,
                     pos.getZ() + 0.5,
-                    SoundEvents.BLOCK_PORTAL_AMBIENT,
-                    SoundCategory.BLOCKS,
+                    SoundEvents.PORTAL_AMBIENT,
+                    SoundSource.BLOCKS,
                     0.3f,
                     random.nextFloat() * 0.4f + 0.8f
             );
@@ -112,66 +113,66 @@ public class DragonRealmPortalBlock extends Block {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         super.randomTick(state, world, pos, random);
         handleEntityCollisions(state, world, pos);
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         handleEntityCollisions(state, world, pos);
         // Schedule next tick
-        world.scheduleBlockTick(pos, this, 10);
+        world.scheduleTick(pos, this, 10);
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        super.onBlockAdded(state, world, pos, oldState, notify);
+    protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onPlace(state, world, pos, oldState, notify);
         // Schedule first tick when portal is created
-        if (!world.isClient()) {
-            world.scheduleBlockTick(pos, this, 10);
+        if (!world.isClientSide()) {
+            world.scheduleTick(pos, this, 10);
         }
     }
 
-    private void handleEntityCollisions(BlockState state, ServerWorld world, BlockPos pos) {
+    private void handleEntityCollisions(BlockState state, ServerLevel world, BlockPos pos) {
         // Get bounding box for this block
-        Box box = state.getOutlineShape(world, pos).getBoundingBox().offset(pos);
+        AABB box = state.getShape(world, pos).bounds().move(pos);
 
         // Find all entities in this block
-        List<Entity> entities = world.getEntitiesByClass(Entity.class, box, entity -> true);
+        List<Entity> entities = world.getEntitiesOfClass(Entity.class, box, entity -> true);
 
         for (Entity entity : entities) {
-            if (entity instanceof ServerPlayerEntity player) {
+            if (entity instanceof ServerPlayer player) {
                 teleportPlayer(player, world, pos);
             }
         }
     }
 
-    private void teleportPlayer(ServerPlayerEntity player, ServerWorld world, BlockPos pos) {
+    private void teleportPlayer(ServerPlayer player, ServerLevel world, BlockPos pos) {
         // Skip if player already has cooldown
-        if (player.hasPortalCooldown()) {
+        if (player.isOnPortalCooldown()) {
             return;
         }
 
         // Get destination world
-        RegistryKey<World> destinationKey = world.getRegistryKey() == DragonRealmTeleporter.DRAGON_REALM
+        ResourceKey<Level> destinationKey = world.dimension() == DragonRealmTeleporter.DRAGON_REALM
                 ? DragonRealmTeleporter.OVERWORLD
                 : DragonRealmTeleporter.DRAGON_REALM;
 
-        ServerWorld destWorld = world.getServer().getWorld(destinationKey);
+        ServerLevel destWorld = world.getServer().getLevel(destinationKey);
 
         if (destWorld == null) {
-            player.sendMessage(Text.literal("§cDestination dimension not found!"), false);
+            player.sendSystemMessage(Component.literal("§cDestination dimension not found!"));
             return;
         }
 
         // Server-side sound BEFORE teleport
         world.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
-                SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                SoundEvents.PORTAL_TRIGGER, SoundSource.BLOCKS, 1.0f, 1.0f);
 
         // Particle burst BEFORE teleport
         for (int i = 0; i < 20; i++) {
-            world.spawnParticles(ParticleTypes.ENCHANT,
+            world.sendParticles(ParticleTypes.ENCHANT,
                     player.getX(), player.getY() + 1, player.getZ(),
                     1, 0.5, 0.5, 0.5, 0.1);
         }
@@ -184,40 +185,40 @@ public class DragonRealmPortalBlock extends Block {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(
+    protected BlockState updateShape(
             BlockState state,
-            WorldView world,
-            ScheduledTickView tickView,
+            LevelReader world,
+            ScheduledTickAccess tickView,
             BlockPos pos,
             Direction direction,
             BlockPos neighborPos,
             BlockState neighborState,
-            Random random
+            RandomSource random
     ) {
-        Direction.Axis axis = state.get(AXIS);
+        Direction.Axis axis = state.getValue(AXIS);
 
         // Check if frame is still valid when a neighbor changes
-        if (world instanceof WorldAccess worldAccess) {
+        if (world instanceof LevelAccessor worldAccess) {
             // Only check if the neighbor that changed was an Obsidian Portal Frame that broke
             if (neighborState.isAir() && !isValidFrame(worldAccess, pos, axis)) {
-                return Blocks.AIR.getDefaultState();
+                return Blocks.AIR.defaultBlockState();
             }
         }
 
         return state;
     }
 
-    private boolean isValidFrame(WorldAccess world, BlockPos pos, Direction.Axis axis) {
+    private boolean isValidFrame(LevelAccessor world, BlockPos pos, Direction.Axis axis) {
         // Check if we're still inside a valid portal frame
         // We need at least one Obsidian Portal Frame adjacent to us
 
         Direction dir1 = axis == Direction.Axis.X ? Direction.NORTH : Direction.WEST;
         Direction dir2 = dir1.getOpposite();
 
-        BlockState state1 = world.getBlockState(pos.offset(dir1));
-        BlockState state2 = world.getBlockState(pos.offset(dir2));
-        BlockState stateUp = world.getBlockState(pos.up());
-        BlockState stateDown = world.getBlockState(pos.down());
+        BlockState state1 = world.getBlockState(pos.relative(dir1));
+        BlockState state2 = world.getBlockState(pos.relative(dir2));
+        BlockState stateUp = world.getBlockState(pos.above());
+        BlockState stateDown = world.getBlockState(pos.below());
 
         // Count how many adjacent Obsidian Portal Frame or Portal blocks we have
         int validNeighbors = 0;

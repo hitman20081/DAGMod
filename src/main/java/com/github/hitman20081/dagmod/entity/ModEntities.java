@@ -5,177 +5,185 @@ import com.github.hitman20081.dagmod.block.DragonEggBlock;
 import com.github.hitman20081.dagmod.block.ModBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.SpawnLocationTypes;
-import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.Heightmap;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class ModEntities {
 
     public static final EntityType<SimpleNPC> SIMPLE_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "simple_npc"),
-            EntityType.Builder.create(SimpleNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "simple_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "simple_npc"),
+            EntityType.Builder.of(SimpleNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "simple_npc")))
     );
 
     public static final EntityType<InnkeeperGarrickNPC> INNKEEPER_GARRICK = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "innkeeper_garrick"),
-            EntityType.Builder.create(InnkeeperGarrickNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "innkeeper_garrick")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "innkeeper_garrick"),
+            EntityType.Builder.of(InnkeeperGarrickNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "innkeeper_garrick")))
     );
 
     public static final EntityType<MysteryMerchantNPC> MYSTERY_MERCHANT_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "mystery_merchant_npc"),
-            EntityType.Builder.create(MysteryMerchantNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "mystery_merchant_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "mystery_merchant_npc"),
+            EntityType.Builder.of(MysteryMerchantNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "mystery_merchant_npc")))
     );
 
     public static final EntityType<MinerNPC> MINER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "miner_npc"),
-            EntityType.Builder.create(MinerNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "miner_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "miner_npc"),
+            EntityType.Builder.of(MinerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "miner_npc")))
     );
 
     public static final EntityType<LumberjackNPC> LUMBERJACK_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "lumberjack_npc"),
-            EntityType.Builder.create(LumberjackNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "lumberjack_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "lumberjack_npc"),
+            EntityType.Builder.of(LumberjackNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "lumberjack_npc")))
     );
 
     public static final EntityType<EnchantsmithNPC> ENCHANTSMITH_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "enchantsmith_npc"),
-            EntityType.Builder.create(EnchantsmithNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "enchantsmith_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "enchantsmith_npc"),
+            EntityType.Builder.of(EnchantsmithNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "enchantsmith_npc")))
     );
 
     public static final EntityType<LuxuryMerchantNPC> LUXURY_MERCHANT_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "luxury_merchant_npc"),
-            EntityType.Builder.create(LuxuryMerchantNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "luxury_merchant_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "luxury_merchant_npc"),
+            EntityType.Builder.of(LuxuryMerchantNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "luxury_merchant_npc")))
     );
 
     public static final EntityType<VillageMerchantNPC> VILLAGE_MERCHANT_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "village_merchant_npc"),
-            EntityType.Builder.create(VillageMerchantNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "village_merchant_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "village_merchant_npc"),
+            EntityType.Builder.of(VillageMerchantNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "village_merchant_npc")))
     );
 
     public static final EntityType<HunterNPC> HUNTER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "hunter_npc"),
-            EntityType.Builder.create(HunterNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "hunter_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "hunter_npc"),
+            EntityType.Builder.of(HunterNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "hunter_npc")))
     );
 
     public static final EntityType<VoodooIllusionerNPC> VOODOO_ILLUSIONER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "voodoo_illusioner_npc"),
-            EntityType.Builder.create(VoodooIllusionerNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "voodoo_illusioner_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "voodoo_illusioner_npc"),
+            EntityType.Builder.of(VoodooIllusionerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "voodoo_illusioner_npc")))
     );
 
     public static final EntityType<ArmorerNPC> ARMORER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "armorer_npc"),
-            EntityType.Builder.create(ArmorerNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "armorer_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "armorer_npc"),
+            EntityType.Builder.of(ArmorerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "armorer_npc")))
     );
 
     public static final EntityType<CuteVillagerNPC> CUTE_VILLAGER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "cute_villager_npc"),
-            EntityType.Builder.create(CuteVillagerNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "cute_villager_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "cute_villager_npc"),
+            EntityType.Builder.of(CuteVillagerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "cute_villager_npc")))
     );
 
     public static final EntityType<BakerNPC> BAKER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "baker_npc"),
-            EntityType.Builder.create(BakerNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "baker_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "baker_npc"),
+            EntityType.Builder.of(BakerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "baker_npc")))
     );
 
     public static final EntityType<JewelerNPC> JEWELER_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "jeweler_npc"),
-            EntityType.Builder.create(JewelerNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "jeweler_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "jeweler_npc"),
+            EntityType.Builder.of(JewelerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "jeweler_npc")))
     );
 
     public static final EntityType<AlchemistNPC> ALCHEMIST_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "alchemist_npc"),
-            EntityType.Builder.create(AlchemistNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "alchemist_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "alchemist_npc"),
+            EntityType.Builder.of(AlchemistNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "alchemist_npc")))
     );
 
     public static final EntityType<BlacksmithNPC> BLACKSMITH_NPC = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "blacksmith_npc"),
-            EntityType.Builder.create(BlacksmithNPC::new, SpawnGroup.CREATURE)
-                    .dimensions(0.6f, 1.95f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "blacksmith_npc")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "blacksmith_npc"),
+            EntityType.Builder.of(BlacksmithNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "blacksmith_npc")))
+    );
+
+    public static final EntityType<ClassTrainerNPC> CLASS_TRAINER = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "class_trainer"),
+            EntityType.Builder.of(ClassTrainerNPC::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "class_trainer")))
     );
 
     // Dragon Entities
     public static final EntityType<DragonGuardianEntity> DRAGON_GUARDIAN = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "dragon_guardian"),
-            EntityType.Builder.create(DragonGuardianEntity::new, SpawnGroup.MONSTER)
-                    .dimensions(3.0f, 1.5f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "dragon_guardian")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "dragon_guardian"),
+            EntityType.Builder.of(DragonGuardianEntity::new, MobCategory.MONSTER)
+                    .sized(3.0f, 1.5f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "dragon_guardian")))
     );
 
     public static final EntityType<WildDragonEntity> WILD_DRAGON = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "wild_dragon"),
-            EntityType.Builder.create(WildDragonEntity::new, SpawnGroup.MONSTER)
-                    .dimensions(2.5f, 1.5f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "wild_dragon")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "wild_dragon"),
+            EntityType.Builder.of(WildDragonEntity::new, MobCategory.MONSTER)
+                    .sized(2.5f, 1.5f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "wild_dragon")))
     );
 
     public static final EntityType<RedDragonEntity> RED_DRAGON = Registry.register(
-            Registries.ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "red_dragon"),
-            EntityType.Builder.create(RedDragonEntity::new, SpawnGroup.MONSTER)
-                    .dimensions(2.5f, 1.5f)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DagMod.MOD_ID, "red_dragon")))
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "red_dragon"),
+            EntityType.Builder.of(RedDragonEntity::new, MobCategory.MONSTER)
+                    .sized(2.5f, 1.5f)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "red_dragon")))
     );
 
     // Dragon Egg Block Entity
     public static final BlockEntityType<DragonEggBlockEntity> DRAGON_EGG_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE,
-            Identifier.of(DagMod.MOD_ID, "dragon_egg_entity"),
+            BuiltInRegistries.BLOCK_ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "dragon_egg_entity"),
             FabricBlockEntityTypeBuilder.create(DragonEggBlockEntity::new, ModBlocks.DRAGON_EGG_BLOCK).build()
     );
 
@@ -197,6 +205,7 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(ALCHEMIST_NPC, AlchemistNPC.createMobAttributes());
         FabricDefaultAttributeRegistry.register(JEWELER_NPC, JewelerNPC.createMobAttributes());
         FabricDefaultAttributeRegistry.register(BLACKSMITH_NPC, BlacksmithNPC.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(CLASS_TRAINER, ClassTrainerNPC.createMobAttributes());
 
         // Register dragon entity attributes
         FabricDefaultAttributeRegistry.register(DRAGON_GUARDIAN, DragonGuardianEntity.createDragonGuardianAttributes());
@@ -204,18 +213,18 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(RED_DRAGON, WildDragonEntity.createWildDragonAttributes());
 
         // Block natural spawning of Dragon Guardian - it should only spawn via DragonGuardianSpawner
-        SpawnRestriction.register(
+        SpawnPlacements.register(
                 DRAGON_GUARDIAN,
-                SpawnLocationTypes.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (type, world, spawnReason, pos, random) -> false
         );
 
         // Block natural spawning of Red Dragon - it only spawns via quest acceptance
-        SpawnRestriction.register(
+        SpawnPlacements.register(
                 RED_DRAGON,
-                SpawnLocationTypes.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (type, world, spawnReason, pos, random) -> false
         );
 

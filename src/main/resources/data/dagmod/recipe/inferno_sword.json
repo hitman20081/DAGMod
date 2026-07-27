@@ -4,10 +4,11 @@
   "pattern": [
     "I I",
     "GSG",
-    "I I"
+    "P P"
   ],
   "key": {
     "I": "minecraft:blaze_powder",
+    "P": "minecraft:potent_sulfur",
     "G": "minecraft:magma_block",
     "S": "minecraft:iron_sword"
   },

@@ -1,150 +1,146 @@
 package com.github.hitman20081.dagmod.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.village.TradedItem;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.village.Merchant;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOfferList;
-import net.minecraft.world.World;
-import net.minecraft.screen.MerchantScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.trading.Merchant;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.inventory.MerchantMenu;
+import net.minecraft.world.SimpleMenuProvider;
 
 import java.util.OptionalInt;
+import net.minecraft.world.item.trading.ItemCost;
 
-public class BakerNPC extends PathAwareEntity implements Merchant {
+public class BakerNPC extends PathfinderMob implements Merchant {
 
-    private PlayerEntity customer;
-    private TradeOfferList offers;
+    private Player customer;
+    private MerchantOffers offers;
 
-    public BakerNPC(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public BakerNPC(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.offers = new TradeOfferList();
+        this.offers = new MerchantOffers();
 
         // ===== BAKED GOODS =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BREAD, 8),
                 16, 5, 0.05F
         ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 4),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COOKIE, 16),
                 12, 5, 0.05F
         ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 5),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 5),
                 java.util.Optional.empty(),
                 new ItemStack(Items.PUMPKIN_PIE, 4),
                 10, 8, 0.05F
         ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 8),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 8),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CAKE),
                 6, 10, 0.05F
         ));
 
         // ===== PREMIUM FOODS =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 12),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 12),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GOLDEN_APPLE, 2),
                 4, 15, 0.05F
         ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 6),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 6),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GOLDEN_CARROT, 8),
                 8, 8, 0.05F
         ));
 
         // ===== COOKED MEATS =====
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COOKED_BEEF, 8),
                 16, 5, 0.05F
         ));
-        this.offers.add(new TradeOffer(
-                new TradedItem(Items.EMERALD, 3),
+        this.offers.add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COOKED_PORKCHOP, 8),
                 16, 5, 0.05F
         ));
     }
-
-    @Override
-    public boolean canInteract(PlayerEntity player) {
+    public boolean canInteract(Player player) {
         return this.isAlive() && this.distanceTo(player) <= 6.0;
     }
 
-    public static DefaultAttributeContainer.Builder createMobAttributes() {
-        return PathAwareEntity.createMobAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 20.0)
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.25);
+    public static AttributeSupplier.Builder createMobAttributes() {
+        return PathfinderMob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 20.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.8));
-        this.goalSelector.add(3, new LookAroundGoal(this));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (!this.getEntityWorld().isClient()) {
-            if (this.isAlive() && this.canInteract(player) && !this.hasCustomer() && !player.isSneaking()) {
-                this.setCustomer(player);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!this.level().isClientSide()) {
+            if (this.isAlive() && this.canInteract(player) && !this.hasCustomer() && !player.isShiftKeyDown()) {
+                this.setTradingPlayer(player);
 
-                if (player instanceof ServerPlayerEntity serverPlayer) {
-                    serverPlayer.sendMessage(
-                            Text.literal("<Baker> ").styled(s -> s.withColor(net.minecraft.util.Formatting.GOLD))
-                                    .append(Text.literal("Fresh from the oven! Take a look at what I've got today.").styled(s -> s.withColor(net.minecraft.util.Formatting.YELLOW))),
-                            false
-                    );
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.sendSystemMessage(
+                            Component.literal("<Baker> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))
+                                    .append(Component.literal("Fresh from the oven! Take a look at what I've got today.").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
                 }
 
                 this.openOfferScreen(player, this.getDisplayName(), 1);
-                return ActionResult.CONSUME;
-            } else if (this.hasCustomer() && this.getCustomer() == player) {
-                return ActionResult.PASS;
+                return InteractionResult.CONSUME;
+            } else if (this.hasCustomer() && this.getTradingPlayer() == player) {
+                return InteractionResult.PASS;
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    public void openOfferScreen(PlayerEntity player, Text name, int level) {
-        OptionalInt optionalSyncId = player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                (syncId, inventory, playerEntity) -> new MerchantScreenHandler(syncId, inventory, this),
+    public void openOfferScreen(Player player, Component name, int level) {
+        OptionalInt optionalSyncId = player.openMenu(new SimpleMenuProvider(
+                (syncId, inventory, playerEntity) -> new MerchantMenu(syncId, inventory, this),
                 this.getDisplayName()));
 
-        if (optionalSyncId.isPresent() && player instanceof ServerPlayerEntity serverPlayer) {
+        if (optionalSyncId.isPresent() && player instanceof ServerPlayer serverPlayer) {
             int syncId = optionalSyncId.getAsInt();
-            serverPlayer.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket(
+            serverPlayer.connection.send(new net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket(
                     syncId,
                     this.getOffers(),
                     level,
-                    this.getExperience(),
-                    this.isLeveledMerchant(),
+                    this.getVillagerXp(),
+                    this.showProgressBar(),
                     this.canRefreshTrades()
             ));
         }
@@ -155,8 +151,8 @@ public class BakerNPC extends PathAwareEntity implements Merchant {
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("entity.dagmod.baker_npc");
+    public Component getDisplayName() {
+        return Component.translatable("entity.dagmod.baker_npc");
     }
 
     public boolean hasCustomer() {
@@ -164,62 +160,67 @@ public class BakerNPC extends PathAwareEntity implements Merchant {
     }
 
     @Override
-    public boolean isClient() {
-        return this.getEntityWorld().isClient();
+    public boolean isClientSide() {
+        return this.level().isClientSide();
     }
 
     @Override
-    public PlayerEntity getCustomer() {
+    public Player getTradingPlayer() {
         return this.customer;
     }
 
     @Override
-    public void setCustomer(PlayerEntity player) {
+    public void setTradingPlayer(Player player) {
         this.customer = player;
     }
 
     @Override
-    public TradeOfferList getOffers() {
+    public MerchantOffers getOffers() {
         return this.offers;
     }
 
     @Override
-    public void setOffersFromServer(TradeOfferList offers) {
+    public void overrideOffers(MerchantOffers offers) {
         // Baker has static offers
     }
 
     @Override
-    public void trade(TradeOffer offer) {
-        offer.use();
-        this.getEntityWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
-                SoundEvents.ENTITY_VILLAGER_YES, this.getSoundCategory(), 1.0F, 1.0F);
+    public void notifyTrade(MerchantOffer offer) {
+        offer.increaseUses();
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                SoundEvents.VILLAGER_YES, this.getSoundSource(), 1.0F, 1.0F);
     }
 
     @Override
-    public void onSellingItem(ItemStack stack) {
+    public void notifyTradeUpdated(ItemStack stack) {
     }
 
     @Override
-    public int getExperience() {
+    public int getVillagerXp() {
         return 0;
     }
 
     @Override
-    public void setExperienceFromServer(int experience) {
+    public void overrideXp(int experience) {
     }
 
     @Override
-    public boolean isLeveledMerchant() {
+    public boolean showProgressBar() {
         return false;
     }
 
     @Override
-    public SoundEvent getYesSound() {
-        return SoundEvents.ENTITY_VILLAGER_YES;
+    public SoundEvent getNotifyTradeSound() {
+        return SoundEvents.VILLAGER_YES;
     }
 
     @Override
-    public boolean cannotDespawn() {
+    public boolean stillValid(Player player) {
+        return this.isAlive() && this.distanceTo(player) <= 6.0;
+    }
+
+    @Override
+    public boolean isPersistenceRequired() {
         return true;
     }
 
@@ -227,6 +228,6 @@ public class BakerNPC extends PathAwareEntity implements Merchant {
         return false;
     }
 
-    public void pushAwayFrom(net.minecraft.entity.Entity entity) {
+    public void pushAwayFrom(net.minecraft.world.entity.Entity entity) {
     }
 }

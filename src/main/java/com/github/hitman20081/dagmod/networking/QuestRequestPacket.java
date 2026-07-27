@@ -1,20 +1,20 @@
 package com.github.hitman20081.dagmod.networking;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public record QuestRequestPacket() implements CustomPayload {
+public record QuestRequestPacket() implements CustomPacketPayload {
 
-    public static final CustomPayload.Id<QuestRequestPacket> ID =
-            new CustomPayload.Id<>(Identifier.of("dagmod", "quest_request"));
+    public static final CustomPacketPayload.Type<QuestRequestPacket> ID =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("dagmod", "quest_request"));
 
-    public static final PacketCodec<PacketByteBuf, QuestRequestPacket> CODEC =
-            PacketCodec.of((value, buf) -> {}, buf -> new QuestRequestPacket());
+    public static final StreamCodec<FriendlyByteBuf, QuestRequestPacket> CODEC =
+            StreamCodec.of((value, buf) -> {}, buf -> new QuestRequestPacket());
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

@@ -20,10 +20,22 @@ Rogues are unique - they have **TWO separate ability systems** that work togethe
 
 **Requires:** Rogue Ability Tome
 **How It Works:**
-- Uses energy resource (not cooldowns)
-- Visual HUD shows current energy
-- Energy regenerates over time
-- Cycle between 3 abilities
+- Uses **Energy** as a resource (not cooldowns)
+- **Gold energy bar** appears on the right HUD (same position as the hunger bar), showing exact current/max count inside (e.g. `75/100`)
+- Energy regenerates automatically — both max energy and regen rate scale with level
+- Cycle between 3 abilities by right-clicking the tome
+
+**Energy Scaling by Level:**
+
+| Level | Max Energy | Regen Rate |
+|-------|------------|------------|
+| 1 | 100 | 5/sec |
+| 25 | 148 | 6.25/sec |
+| 50 | 198 | 7.5/sec |
+| 100 | 298 | 10/sec |
+| 200 | 498 | 15/sec |
+
+Armor set bonuses can further increase regen rate.
 
 **Energy-Based Abilities (3):**
 
@@ -148,6 +160,22 @@ This gives Rogues unmatched versatility and the highest skill ceiling in the gam
 - Poison Vial first, then burst damage while enemy is debuffed
 - Excellent for PvP if your server allows it
 - Practice ability timing and positioning for success
+
+### Class Quest Chain — Path of Shadows
+
+Completing the Rogue quest chain unlocks both ability systems piece by piece and ends with a dragon hunt. Quests are received from the **Job Board** and tracked in your quest book.
+
+| # | Quest | Level Req | Objectives | Ability Unlocked |
+|---|-------|-----------|------------|-----------------|
+| 1 | Shadow's Calling | 10 | Kill 15 Spiders, kill 8 Cave Spiders, collect 8 Gunpowder | **Rogue Ability Tome** *(energy system)* |
+| 2 | Step Between Shadows | 25 | Kill 6 Phantoms, collect 4 Phantom Membrane + 8 Ender Pearl | **Void Blade** |
+| 3 | Toxin and Shadow | 50 | Kill 8 Endermen, collect 4 Echo Shard + 16 Spider Eye + 8 Fermented Spider Eye | **Poison Vial** |
+| 4 | The Perfect Kill | 75 | Kill 15 Pillagers, kill 3 Evokers, collect 16 Diamond + 2 Netherite Ingot | **Assassin's Mark** |
+| 5 | Into the Dark | 100 | Kill 1 Wild Dragon, collect 2 Netherite Block + 4 Enchanted Golden Apple | **Vanish Cloak** |
+
+**Chain completion reward:** Netherite Sword, Netherite Chestplate, 10× Enchanted Golden Apple
+
+> Quest 1 rewards the **Rogue Ability Tome** — this is the key to the energy-based ability system (Smoke Bomb, Poison Dagger, Shadow Step). The remaining quests unlock individual cooldown-based ability items. You need all five to have access to the full Rogue kit.
 
 ### Best Race Synergies
 - **Elf Rogue:** Invisibility in forests when sneaking - ultimate stealth predator

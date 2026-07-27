@@ -1,5 +1,5 @@
 # DAGMod: A Fantasy RPG Experience in Minecraft
-**v1.7.10 for Minecraft 1.21.11 (Fabric)**
+**v1.9.0 for Minecraft 26.2 (Fabric)**
 
 DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique race and class, master powerful abilities, level up through a dynamic quest system, and conquer procedurally generated dungeons filled with custom bosses.
 
@@ -29,7 +29,7 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 ## 🚀 Getting Started
 
-1.  **Installation**: Install **Minecraft 1.21.11**, **Fabric Loader 0.18.4**, and **Fabric API 0.141.1+1.21.11**. Then, drop the DAGMod JAR file into your `mods` folder.
+1.  **Installation**: Install **Minecraft 26.2**, **Fabric Loader 0.19.3**, and **Fabric API 0.150.2+26.2**. Then, drop the DAGMod JAR file into your `mods` folder.
 
 2.  **Find the Hall of Champions**: When you first spawn, you'll have a **Hall Locator** item. Use it to find the Hall of Champions structure where you can choose your Race and Class at two distinct altars.
 

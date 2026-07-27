@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_crushing",
+  "ingredient": "minecraft:quartz",
+  "result": {
+    "id": "dagmod:quartz_powder",
+    "count": 2
+  }
+}

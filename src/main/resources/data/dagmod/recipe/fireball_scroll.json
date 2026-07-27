@@ -5,7 +5,7 @@
     "minecraft:paper",
     "minecraft:paper",
     "dagmod:emerald_powder",
-    "minecraft:fire_charge"
+    "dagmod:pure_brimstone_dust"
   ],
   "result": {
     "id": "dagmod:fireball_scroll",

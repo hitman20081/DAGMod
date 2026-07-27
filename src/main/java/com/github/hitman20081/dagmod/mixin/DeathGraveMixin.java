@@ -3,11 +3,11 @@ package com.github.hitman20081.dagmod.mixin;
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
 import com.github.hitman20081.dagmod.grave.GraveManager;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.rule.GameRules;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,34 +24,34 @@ import java.util.Map;
  * In Sponge Mixin, higher priority @Mixin is applied later, so its HEAD injection
  * runs first at runtime. We use a LOWER priority so SoulBound runs first.
  */
-@Mixin(value = ServerPlayerEntity.class, priority = 900)
+@Mixin(value = ServerPlayer.class, priority = 900)
 public class DeathGraveMixin {
 
-    @Inject(method = "onDeath", at = @At("HEAD"))
+    @Inject(method = "die", at = @At("HEAD"))
     private void captureInventoryForGrave(DamageSource damageSource, CallbackInfo ci) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerPlayer player = (ServerPlayer) (Object) this;
+        ServerLevel world = (ServerLevel) player.level();
 
         // Skip if keepInventory is enabled
-        boolean keepInventory = world.getGameRules().getValue(GameRules.KEEP_INVENTORY);
+        boolean keepInventory = world.getGameRules().get(GameRules.KEEP_INVENTORY);
         if (keepInventory) {
             DagMod.LOGGER.info("Grave system: keepInventory is ON for {}, skipping grave creation", player.getName().getString());
             return;
         }
 
-        DagMod.LOGGER.info("Grave system: capturing inventory for {} ({} slots)", player.getName().getString(), player.getInventory().size());
+        DagMod.LOGGER.info("Grave system: capturing inventory for {} ({} slots)", player.getName().getString(), player.getInventory().getContainerSize());
 
         Map<Integer, ItemStack> items = new HashMap<>();
 
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty()) {
                 // Skip soulbound items (safety check — SoulBoundMixin should have already removed them)
-                if (CustomEnchantmentEffects.getEnchantmentLevel(stack, player.getEntityWorld(), "soul_bound") > 0) {
+                if (CustomEnchantmentEffects.getEnchantmentLevel(stack, player.level(), "soul_bound") > 0) {
                     continue;
                 }
                 items.put(i, stack.copy());
-                player.getInventory().setStack(i, ItemStack.EMPTY);
+                player.getInventory().setItem(i, ItemStack.EMPTY);
             }
         }
 

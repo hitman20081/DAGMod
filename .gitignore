@@ -53,3 +53,8 @@ replay_*.log
 /.claude/
 /RELEASE_INSTRUCTIONS.md
 actions-runner/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key

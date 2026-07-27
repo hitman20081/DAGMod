@@ -118,6 +118,47 @@ Players gain permanent stat bonuses as they level up:
 
 ---
 
+## Class Resource Scaling
+
+In addition to the universal stat scaling above, each class has a **resource system that grows with level**.
+
+### Mage — Mana
+
+| Level | Max Mana | Regen Rate |
+|-------|----------|------------|
+| 1 | 100 | 2/sec |
+| 50 | 198 | 4/sec |
+| 100 | 298 | 6/sec |
+| 200 | 498 | 10/sec |
+
+Formula: `Max Mana = 100 + (level − 1) × 2` · `Regen = 2 + level × 0.04 /sec`
+
+### Rogue — Energy
+
+| Level | Max Energy | Regen Rate |
+|-------|------------|------------|
+| 1 | 100 | 5/sec |
+| 50 | 198 | 7.5/sec |
+| 100 | 298 | 10/sec |
+| 200 | 498 | 15/sec |
+
+Formula: `Max Energy = 100 + (level − 1) × 2` · `Regen = 5 + level × 0.05 /sec`
+
+### Warrior — Ability Cooldowns
+
+Warrior ability cooldowns shorten by **0.2% per level**, capped at **40% reduction** at level 200.
+
+| Level | Cooldown Multiplier | Rage (60s) | Iron Skin (120s) |
+|-------|---------------------|------------|------------------|
+| 1 | 100% | 60s | 120s |
+| 50 | 90% | 54s | 108s |
+| 100 | 80% | 48s | 96s |
+| 200 | 60% | 36s | 72s |
+
+Formula: `Multiplier = max(0.6, 1.0 − level × 0.002)`
+
+---
+
 ## Level Gates
 
 Certain quest tiers are locked behind level requirements:

@@ -1,34 +1,35 @@
 package com.github.hitman20081.dagmod.quest.rewards;
 
 import com.github.hitman20081.dagmod.quest.QuestReward;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 
 public class ItemReward extends QuestReward {
     private final Item item;
     private final int amount;
 
     public ItemReward(Item item, int amount) {
-        super(RewardType.ITEM, amount + "x " + Registries.ITEM.getId(item).getPath().replace('_', ' '));
+        super(RewardType.ITEM, amount + "x " + BuiltInRegistries.ITEM.getKey(item).getPath().replace('_', ' '));
         this.item = item;
         this.amount = amount;
     }
 
-    // Build a Text with the translatable item name so the client resolves it
-    private MutableText buildRewardText() {
-        MutableText text = Text.literal(amount + "x ");
-        text.append(item.getName());
+    // Build a Component with the translatable item name so the client resolves it
+    private MutableComponent buildRewardText() {
+        MutableComponent text = Component.literal(amount + "x ");
+        text.append(item.getName(new ItemStack(item)));
         return text;
     }
 
     @Override
-    public boolean giveReward(PlayerEntity player, World world) {
+    public boolean giveReward(Player player, Level world) {
         if (!canGiveReward(player)) {
             return false;
         }
@@ -37,22 +38,22 @@ public class ItemReward extends QuestReward {
         ItemStack rewardStack = new ItemStack(item, amount);
 
         // Try to add to player's inventory
-        boolean success = player.getInventory().insertStack(rewardStack);
+        boolean success = player.getInventory().add(rewardStack);
 
         if (success) {
             // Send success message to player
-            player.sendMessage(createSuccessMessage(), false);
+            player.sendSystemMessage(createSuccessMessage());
             return true;
         } else {
             // If inventory insert failed, drop the item in the world
-            player.dropItem(rewardStack, false);
-            player.sendMessage(createSuccessMessage(), false);
+            player.drop(rewardStack, false);
+            player.sendSystemMessage(createSuccessMessage());
             return true;
         }
     }
 
     @Override
-    public boolean canGiveReward(PlayerEntity player) {
+    public boolean canGiveReward(Player player) {
         // Check if player has inventory space for the reward
         ItemStack testStack = new ItemStack(item, amount);
 
@@ -61,19 +62,19 @@ public class ItemReward extends QuestReward {
     }
 
     // Check if player has enough inventory space
-    private boolean hasInventorySpace(PlayerEntity player, ItemStack stack) {
+    private boolean hasInventorySpace(Player player, ItemStack stack) {
         int remainingToInsert = stack.getCount();
 
         // Check each inventory slot
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack slotStack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack slotStack = player.getInventory().getItem(i);
 
             if (slotStack.isEmpty()) {
                 // Empty slot can fit entire stack
-                remainingToInsert -= Math.min(remainingToInsert, stack.getMaxCount());
-            } else if (ItemStack.areItemsAndComponentsEqual(slotStack, stack)) {
+                remainingToInsert -= Math.min(remainingToInsert, stack.getItem().getDefaultMaxStackSize());
+            } else if (ItemStack.matches(slotStack, stack)) {
                 // Existing stack can be combined with reward
-                int spaceInSlot = slotStack.getMaxCount() - slotStack.getCount();
+                int spaceInSlot = slotStack.getItem().getDefaultMaxStackSize() - slotStack.getCount();
                 remainingToInsert -= Math.min(remainingToInsert, spaceInSlot);
             }
 
@@ -91,7 +92,7 @@ public class ItemReward extends QuestReward {
 
     // Helper method to create ItemReward from item identifier
     public static ItemReward fromIdentifier(String itemId, int amount) {
-        Item item = Registries.ITEM.get(Identifier.of(itemId));
+        Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
         return new ItemReward(item, amount);
     }
 
@@ -101,17 +102,17 @@ public class ItemReward extends QuestReward {
     }
 
     @Override
-    public Text getDisplayText() {
-        return Text.literal("• ").append(buildRewardText());
+    public Component getDisplayText() {
+        return Component.literal("• ").append(buildRewardText());
     }
 
     @Override
-    protected Text createSuccessMessage() {
-        return Text.literal("Quest reward received: ").append(buildRewardText());
+    protected Component createSuccessMessage() {
+        return Component.literal("Quest reward received: ").append(buildRewardText());
     }
 
     @Override
-    protected Text createFailureMessage() {
-        return Text.literal("Could not receive: ").append(buildRewardText()).append(" (inventory full?)");
+    protected Component createFailureMessage() {
+        return Component.literal("Could not receive: ").append(buildRewardText()).append(" (inventory full?)");
     }
 }

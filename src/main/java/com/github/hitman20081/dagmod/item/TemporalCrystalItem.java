@@ -4,14 +4,14 @@ import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.class_system.mage.MageAbility;
 import com.github.hitman20081.dagmod.class_system.mage.MageCooldownManager;
 import com.github.hitman20081.dagmod.class_system.mage.TimeWarpAbility;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 /**
  * Temporal Crystal - Activates the Time Warp ability for Mages
@@ -23,47 +23,45 @@ import net.minecraft.world.World;
  * Cooldown: 45 seconds
  */
 public class TemporalCrystalItem extends Item {
-    public TemporalCrystalItem(Settings settings) {
+    public TemporalCrystalItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getStackInHand(hand);
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
 
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
         // Check if player is a Mage
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
         if (!"Mage".equalsIgnoreCase(playerClass)) {
-            player.sendMessage(
-                    Text.literal("✦ Only Mages can use Time Warp!")
-                            .formatted(Formatting.RED),
-                    true
-            );
-            return ActionResult.FAIL;
+            player.sendOverlayMessage(
+                    Component.literal("✦ Only Mages can use Time Warp!")
+                            .withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
         }
 
         // Check cooldown
         if (MageCooldownManager.isOnCooldown(player, MageAbility.TIME_WARP)) {
             MageCooldownManager.sendCooldownMessage(player, MageAbility.TIME_WARP);
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Activate Time Warp
         boolean success = TimeWarpAbility.activate(player);
 
         if (success) {
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ActionResult.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override
-    public boolean hasGlint(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return true; // Enchanted appearance
     }
 }

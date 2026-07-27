@@ -2,14 +2,14 @@ package com.github.hitman20081.dagmod.class_system.armor;
 
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,29 +25,29 @@ public class CustomArmorSetBonus {
      * Enum for all custom armor sets
      */
     public enum ArmorSet {
-        DRAGONSCALE("Dragonscale", Formatting.DARK_RED),
-        CRYSTALFORGE("Crystalforge", Formatting.LIGHT_PURPLE),
-        INFERNO("Inferno", Formatting.RED),
-        NATURES_GUARD("Nature", Formatting.GREEN),  // Detects "Nature's" in name
-        SHADOW("Shadow", Formatting.DARK_PURPLE),
-        FORTUNA("Fortuna", Formatting.GOLD),
-        MYTHRIL("Mythril", Formatting.AQUA),
-        FROSTBOUND("Frostbound", Formatting.BLUE),
-        SOLARWEAVE("Solarweave", Formatting.YELLOW),
-        STORMCALLER("Stormcaller", Formatting.DARK_AQUA),
-        OBSIDIAN("Obsidian", Formatting.DARK_GRAY),
-        NONE("None", Formatting.GRAY);
+        DRAGONSCALE("Dragonscale", ChatFormatting.DARK_RED),
+        CRYSTALFORGE("Crystalforge", ChatFormatting.LIGHT_PURPLE),
+        INFERNO("Inferno", ChatFormatting.RED),
+        NATURES_GUARD("Nature", ChatFormatting.GREEN),  // Detects "Nature's" in name
+        SHADOW("Shadow", ChatFormatting.DARK_PURPLE),
+        FORTUNA("Fortuna", ChatFormatting.GOLD),
+        MYTHRIL("Mythril", ChatFormatting.AQUA),
+        FROSTBOUND("Frostbound", ChatFormatting.BLUE),
+        SOLARWEAVE("Solarweave", ChatFormatting.YELLOW),
+        STORMCALLER("Stormcaller", ChatFormatting.DARK_AQUA),
+        OBSIDIAN("Obsidian", ChatFormatting.DARK_GRAY),
+        NONE("None", ChatFormatting.GRAY);
 
         private final String name;
-        private final Formatting color;
+        private final ChatFormatting color;
 
-        ArmorSet(String name, Formatting color) {
+        ArmorSet(String name, ChatFormatting color) {
             this.name = name;
             this.color = color;
         }
 
         public String getName() { return name; }
-        public Formatting getColor() { return color; }
+        public ChatFormatting getColor() { return color; }
     }
 
     // Track last bonus state per player to avoid spam
@@ -79,11 +79,11 @@ public class CustomArmorSetBonus {
         if (stack.isEmpty()) return ArmorSet.NONE;
 
         // Check for item_name component (used by your recipes)
-        if (!stack.contains(DataComponentTypes.ITEM_NAME)) {
+        if (!stack.has(DataComponents.ITEM_NAME)) {
             return ArmorSet.NONE;
         }
 
-        String name = stack.getName().getString();
+        String name = stack.getHoverName().getString();
 
         // Check each armor set
         for (ArmorSet set : ArmorSet.values()) {
@@ -98,15 +98,15 @@ public class CustomArmorSetBonus {
     /**
      * Get the player's current armor set and piece count
      */
-    private static ArmorSetState getPlayerArmorSetState(ServerPlayerEntity player) {
+    private static ArmorSetState getPlayerArmorSetState(ServerPlayer player) {
         Map<ArmorSet, Integer> setCounts = new HashMap<>();
 
         // Count pieces for each set type
         ItemStack[] armorPieces = {
-                player.getEquippedStack(EquipmentSlot.HEAD),
-                player.getEquippedStack(EquipmentSlot.CHEST),
-                player.getEquippedStack(EquipmentSlot.LEGS),
-                player.getEquippedStack(EquipmentSlot.FEET)
+                player.getItemBySlot(EquipmentSlot.HEAD),
+                player.getItemBySlot(EquipmentSlot.CHEST),
+                player.getItemBySlot(EquipmentSlot.LEGS),
+                player.getItemBySlot(EquipmentSlot.FEET)
         };
 
         for (ItemStack piece : armorPieces) {
@@ -133,25 +133,25 @@ public class CustomArmorSetBonus {
     /**
      * Apply appropriate set bonuses based on equipped armor
      */
-    public static void applySetBonuses(ServerPlayerEntity player) {
+    public static void applySetBonuses(ServerPlayer player) {
         ArmorSetState currentState = getPlayerArmorSetState(player);
 
         // No armor or no matching set
         if (currentState.currentSet == ArmorSet.NONE || currentState.pieceCount == 0) {
-            playerSetStates.remove(player.getUuid());
-            activeSynergies.remove(player.getUuid()); // Clear weapon synergy tracking
+            playerSetStates.remove(player.getUUID());
+            activeSynergies.remove(player.getUUID()); // Clear weapon synergy tracking
             return;
         }
 
         // Check if state changed (to avoid spam)
-        ArmorSetState lastState = playerSetStates.get(player.getUuid());
+        ArmorSetState lastState = playerSetStates.get(player.getUUID());
         if (lastState == null || !lastState.equals(currentState)) {
             notifySetBonus(player, currentState);
-            playerSetStates.put(player.getUuid(), currentState);
+            playerSetStates.put(player.getUUID(), currentState);
         }
 
         // Apply bonuses based on set type
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         switch (currentState.currentSet) {
             case DRAGONSCALE -> applyDragonscaleBonuses(player, currentState.pieceCount, playerClass);
@@ -168,179 +168,179 @@ public class CustomArmorSetBonus {
 
     // ===== DRAGONSCALE SET BONUSES =====
 
-    private static void applyDragonscaleBonuses(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyDragonscaleBonuses(ServerPlayer player, int pieceCount, String playerClass) {
         if (pieceCount >= 2) {
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.RESISTANCE, 100, 0, true, false, false));
-                case "Mage" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.GLOWING, 100, 0, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED, 100, 0, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.RESISTANCE, 100, 0, true, false, false));
+                case "Mage" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.GLOWING, 100, 0, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.SPEED, 100, 0, true, false, false));
             }
         }
 
         if (pieceCount >= 4) {
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.RESISTANCE, 100, 1, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.RESISTANCE, 100, 1, true, false, false));
                 case "Mage" -> {} // Mana regen handled elsewhere
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED, 100, 1, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.SPEED, 100, 1, true, false, false));
             }
         }
     }
 
     // ===== CRYSTALFORGE SET BONUSES =====
 
-    private static void applyCrystalForgeBonuses(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyCrystalForgeBonuses(ServerPlayer player, int pieceCount, String playerClass) {
         if (pieceCount >= 2) {
             // Universal: +10% absorption & sneak speed (already on armor)
             // Add Night Vision for all classes
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.NIGHT_VISION, 300, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.NIGHT_VISION, 300, 0, true, false, false));
 
             // Class-specific 2pc bonus
             switch (playerClass) {
-                case "Mage" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.REGENERATION, 100, 0, true, false, false));
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.ABSORPTION, 100, 0, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.JUMP_BOOST, 100, 0, true, false, false));
+                case "Mage" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.REGENERATION, 100, 0, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.ABSORPTION, 100, 0, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.JUMP_BOOST, 100, 0, true, false, false));
             }
         }
 
         if (pieceCount >= 4) {
             // Universal: Enhanced Night Vision + Glowing
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.GLOWING, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.GLOWING, 100, 0, true, false, false));
 
             // Class-specific 4pc bonus
             switch (playerClass) {
                 case "Mage" -> {
                     // -20% mana costs (handled in spell casting)
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.REGENERATION, 100, 1, true, false, false));
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.REGENERATION, 100, 1, true, false, false));
                 }
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.ABSORPTION, 100, 1, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.JUMP_BOOST, 100, 1, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.ABSORPTION, 100, 1, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.JUMP_BOOST, 100, 1, true, false, false));
             }
         }
     }
 
     // ===== INFERNO SET BONUSES =====
 
-    private static void applyInfernoBonuses(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyInfernoBonuses(ServerPlayer player, int pieceCount, String playerClass) {
         if (pieceCount >= 2) {
             // Fire Resistance for all classes
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.FIRE_RESISTANCE, 300, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.FIRE_RESISTANCE, 300, 0, true, false, false));
 
             // Class-specific 2pc bonus
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.STRENGTH, 100, 0, true, false, false));
-                case "Mage" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.REGENERATION, 100, 0, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED, 100, 0, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.STRENGTH, 100, 0, true, false, false));
+                case "Mage" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.REGENERATION, 100, 0, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.SPEED, 100, 0, true, false, false));
             }
         }
 
         if (pieceCount >= 4) {
             // Full set: Permanent fire immunity + glowing
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.FIRE_RESISTANCE, 300, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.GLOWING, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.FIRE_RESISTANCE, 300, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.GLOWING, 100, 0, true, false, false));
 
             // Class-specific 4pc enhancement
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.STRENGTH, 100, 1, true, false, false));
-                case "Mage" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.REGENERATION, 100, 1, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.HASTE, 100, 1, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.STRENGTH, 100, 1, true, false, false));
+                case "Mage" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.REGENERATION, 100, 1, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.HASTE, 100, 1, true, false, false));
             }
         }
     }
 
 // ===== NATURE'S GUARD SET BONUSES =====
 
-    private static void applyNaturesGuardBonuses(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyNaturesGuardBonuses(ServerPlayer player, int pieceCount, String playerClass) {
         if (pieceCount >= 2) {
             // Regeneration for all classes
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.REGENERATION, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.REGENERATION, 100, 0, true, false, false));
 
             // Class-specific 2pc bonus
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.RESISTANCE, 100, 0, true, false, false));
-                case "Mage" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.LUCK, 100, 0, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.JUMP_BOOST, 100, 1, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.RESISTANCE, 100, 0, true, false, false));
+                case "Mage" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.LUCK, 100, 0, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.JUMP_BOOST, 100, 1, true, false, false));
             }
         }
 
         if (pieceCount >= 4) {
             // Full set: Enhanced regeneration + saturation
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.REGENERATION, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SATURATION, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.REGENERATION, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SATURATION, 100, 0, true, false, false));
 
             // Class-specific 4pc enhancement
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.ABSORPTION, 100, 1, true, false, false));
-                case "Mage" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.LUCK, 100, 1, true, false, false));
-                case "Rogue" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.INVISIBILITY, 100, 0, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.ABSORPTION, 100, 1, true, false, false));
+                case "Mage" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.LUCK, 100, 1, true, false, false));
+                case "Rogue" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.INVISIBILITY, 100, 0, true, false, false));
             }
         }
     }
 
 // ===== SHADOW SET BONUSES =====
 
-    private static void applyShadowBonuses(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyShadowBonuses(ServerPlayer player, int pieceCount, String playerClass) {
         if (pieceCount >= 2) {
             // Speed and Night Vision for all
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 100, 0, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.NIGHT_VISION, 300, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SPEED, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.NIGHT_VISION, 300, 0, true, false, false));
 
             // Rogue gets extra benefit
             if ("Rogue".equals(playerClass)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.INVISIBILITY, 100, 0, true, false, false));
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.INVISIBILITY, 100, 0, true, false, false));
             }
         }
 
         if (pieceCount >= 4) {
             // Full set: Enhanced stealth abilities
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.NIGHT_VISION, 300, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SPEED, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.NIGHT_VISION, 300, 0, true, false, false));
 
             // Class-specific 4pc bonus
             switch (playerClass) {
-                case "Warrior" -> player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.RESISTANCE, 100, 0, true, false, false));
+                case "Warrior" -> player.addEffect(new MobEffectInstance(
+                        MobEffects.RESISTANCE, 100, 0, true, false, false));
                 case "Mage" -> {} // Teleportation bonus (would need custom implementation)
                 case "Rogue" -> {
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.INVISIBILITY, 100, 0, true, false, false));
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.JUMP_BOOST, 100, 1, true, false, false));
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.INVISIBILITY, 100, 0, true, false, false));
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.JUMP_BOOST, 100, 1, true, false, false));
                 }
             }
         }
@@ -348,25 +348,25 @@ public class CustomArmorSetBonus {
 
 // ===== FORTUNA SET BONUSES =====
 
-    private static void applyFortunaBonuses(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyFortunaBonuses(ServerPlayer player, int pieceCount, String playerClass) {
         if (pieceCount >= 2) {
             // Luck and Speed for all
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.LUCK, 300, 2, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.LUCK, 300, 2, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SPEED, 100, 0, true, false, false));
         }
 
         if (pieceCount >= 4) {
             // Full set: Massive luck + Hero of the Village
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.LUCK, 300, 4, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.HERO_OF_THE_VILLAGE, 300, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.LUCK, 300, 4, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.HERO_OF_THE_VILLAGE, 300, 0, true, false, false));
 
             // Universal bonus: Extra movement speed
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SPEED, 100, 1, true, false, false));
         }
     }
 
@@ -375,11 +375,11 @@ public class CustomArmorSetBonus {
     /**
      * Check if player is wielding a weapon that matches their armor set
      */
-    private static boolean hasMatchingWeapon(ServerPlayerEntity player, ArmorSet armorSet) {
-        ItemStack mainHand = player.getMainHandStack();
+    private static boolean hasMatchingWeapon(ServerPlayer player, ArmorSet armorSet) {
+        ItemStack mainHand = player.getMainHandItem();
         if (mainHand.isEmpty()) return false;
 
-        String weaponName = mainHand.getName().getString();
+        String weaponName = mainHand.getHoverName().getString();
 
         return switch (armorSet) {
             case DRAGONSCALE -> weaponName.contains("Dragonscale Blade");
@@ -395,12 +395,12 @@ public class CustomArmorSetBonus {
     /**
      * Apply weapon synergy bonuses when player has matching armor + weapon
      */
-    private static void applyWeaponSynergy(ServerPlayerEntity player, ArmorSetState state, String playerClass) {
+    private static void applyWeaponSynergy(ServerPlayer player, ArmorSetState state, String playerClass) {
         if (state.pieceCount < 2) return; // Need at least 2 pieces for synergy
         if (!hasMatchingWeapon(player, state.currentSet)) return;
 
         // Notify player of synergy (only once)
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getUUID();
         if (!activeSynergies.containsKey(playerId) || !activeSynergies.get(playerId).equals(state.currentSet)) {
             notifyWeaponSynergy(player, state.currentSet);
             activeSynergies.put(playerId, state.currentSet);
@@ -422,158 +422,152 @@ public class CustomArmorSetBonus {
     /**
      * Notify player when weapon synergy activates
      */
-    private static void notifyWeaponSynergy(ServerPlayerEntity player, ArmorSet set) {
-        player.sendMessage(
-                Text.literal("⚔️ " + set.getName() + " Weapon Synergy Activated! ⚔️")
-                        .formatted(set.getColor()).formatted(Formatting.BOLD),
-                true
-        );
+    private static void notifyWeaponSynergy(ServerPlayer player, ArmorSet set) {
+        player.sendOverlayMessage(
+                Component.literal("⚔️ " + set.getName() + " Weapon Synergy Activated! ⚔️")
+                        .withStyle(set.getColor()).withStyle(ChatFormatting.BOLD));
     }
 
 // ===== DRAGONSCALE WEAPON SYNERGY =====
 
-    private static void applyDragonscaleWeaponSynergy(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyDragonscaleWeaponSynergy(ServerPlayer player, int pieceCount, String playerClass) {
         // 2pc: Fire Aspect enhancement + Strength
         if (pieceCount >= 2) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.STRENGTH, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.STRENGTH, 100, 0, true, false));
         }
 
         // 4pc: Enhanced fire damage + chance to ignite ground
         if (pieceCount >= 4) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.STRENGTH, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.FIRE_RESISTANCE, 300, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.STRENGTH, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.FIRE_RESISTANCE, 300, 0, true, false, false));
 
             // Warrior gets extra damage
             if ("Warrior".equals(playerClass)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.ABSORPTION, 100, 1, true, false, false));
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.ABSORPTION, 100, 1, true, false, false));
             }
         }
     }
 
 // ===== INFERNO WEAPON SYNERGY =====
 
-    private static void applyInfernoWeaponSynergy(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyInfernoWeaponSynergy(ServerPlayer player, int pieceCount, String playerClass) {
         // 2pc: Enhanced fire damage
         if (pieceCount >= 2) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.STRENGTH, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.STRENGTH, 100, 0, true, false, false));
         }
 
         // 4pc: Burning aura - enemies near you take fire damage
         if (pieceCount >= 4) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.STRENGTH, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.STRENGTH, 100, 1, true, false, false));
 
             // Create fire aura effect (damage nearby entities)
             // This would need a custom effect or mixin to implement fully
             // For now, give player bonuses
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.HASTE, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.HASTE, 100, 1, true, false, false));
         }
     }
 
 // ===== SHADOW WEAPON SYNERGY =====
 
-    private static void applyShadowWeaponSynergy(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyShadowWeaponSynergy(ServerPlayer player, int pieceCount, String playerClass) {
         // 2pc: Enhanced stealth attacks
         if (pieceCount >= 2) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SPEED, 100, 1, true, false, false));
 
             // Rogue gets invisibility boost
             if ("Rogue".equals(playerClass)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.INVISIBILITY, 100, 0, true, false, false));
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.INVISIBILITY, 100, 0, true, false, false));
             }
         }
 
         // 4pc: Backstab damage massively increased + teleport on kill
         if (pieceCount >= 4) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 100, 2, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.JUMP_BOOST, 100, 2, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SPEED, 100, 2, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.JUMP_BOOST, 100, 2, true, false, false));
 
             // Rogue gets enhanced invisibility
             if ("Rogue".equals(playerClass)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.INVISIBILITY, 100, 0, true, false, false));
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.INVISIBILITY, 100, 0, true, false, false));
             }
         }
     }
 
 // ===== NATURE'S GUARD WEAPON SYNERGY =====
 
-    private static void applyNaturesGuardWeaponSynergy(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyNaturesGuardWeaponSynergy(ServerPlayer player, int pieceCount, String playerClass) {
         // 2pc: Poison enhancement + regeneration
         if (pieceCount >= 2) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.REGENERATION, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.LUCK, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.REGENERATION, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.LUCK, 100, 0, true, false, false));
         }
 
         // 4pc: Poison spreads to nearby enemies + heal on poisoned kill
         if (pieceCount >= 4) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.REGENERATION, 100, 2, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.LUCK, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SATURATION, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.REGENERATION, 100, 2, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.LUCK, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.SATURATION, 100, 0, true, false, false));
         }
     }
 
 // ===== CRYSTALFORGE WEAPON SYNERGY =====
 
-    private static void applyCrystalforgeWeaponSynergy(ServerPlayerEntity player, int pieceCount, String playerClass) {
+    private static void applyCrystalforgeWeaponSynergy(ServerPlayer player, int pieceCount, String playerClass) {
         // 2pc: Enhanced density damage + absorption
         if (pieceCount >= 2) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.ABSORPTION, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.RESISTANCE, 100, 0, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.ABSORPTION, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.RESISTANCE, 100, 0, true, false, false));
         }
 
         // 4pc: Smash attacks create shockwaves
         if (pieceCount >= 4) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.ABSORPTION, 100, 2, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.RESISTANCE, 100, 1, true, false, false));
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.JUMP_BOOST, 100, 2, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.ABSORPTION, 100, 2, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.RESISTANCE, 100, 1, true, false, false));
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.JUMP_BOOST, 100, 2, true, false, false));
         }
     }
 
     // ===== NOTIFICATION SYSTEM =====
 
-    private static void notifySetBonus(ServerPlayerEntity player, ArmorSetState state) {
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+    private static void notifySetBonus(ServerPlayer player, ArmorSetState state) {
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (state.pieceCount == 2) {
-            player.sendMessage(
-                    Text.literal("⚡ " + state.currentSet.getName() + " 2-Piece Bonus! ⚡")
-                            .formatted(state.currentSet.getColor()),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("⚡ " + state.currentSet.getName() + " 2-Piece Bonus! ⚡")
+                            .withStyle(state.currentSet.getColor()));
 
             String bonus = get2PieceBonusText(state.currentSet, playerClass);
-            player.sendMessage(Text.literal(bonus).formatted(Formatting.YELLOW), true);
+            player.sendOverlayMessage(Component.literal(bonus).withStyle(ChatFormatting.YELLOW));
 
         } else if (state.pieceCount == 4) {
-            player.sendMessage(
-                    Text.literal("🔥 " + state.currentSet.getName() + " 4-Piece Bonus! 🔥")
-                            .formatted(state.currentSet.getColor()).formatted(Formatting.BOLD),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("🔥 " + state.currentSet.getName() + " 4-Piece Bonus! 🔥")
+                            .withStyle(state.currentSet.getColor()).withStyle(ChatFormatting.BOLD));
 
             String bonus = get4PieceBonusText(state.currentSet, playerClass);
-            player.sendMessage(Text.literal(bonus).formatted(Formatting.GOLD), true);
+            player.sendOverlayMessage(Component.literal(bonus).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -651,9 +645,9 @@ public class CustomArmorSetBonus {
     /**
      * Get mana cost reduction for player's current armor set
      */
-    public static float getManaCostReduction(ServerPlayerEntity player) {
+    public static float getManaCostReduction(ServerPlayer player) {
         ArmorSetState state = getPlayerArmorSetState(player);
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (!"Mage".equals(playerClass)) return 0f;
 
@@ -669,9 +663,9 @@ public class CustomArmorSetBonus {
     /**
      * Get mana regen bonus for player's current armor set
      */
-    public static float getManaRegenBonus(ServerPlayerEntity player) {
+    public static float getManaRegenBonus(ServerPlayer player) {
         ArmorSetState state = getPlayerArmorSetState(player);
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (!"Mage".equals(playerClass)) return 0f;
 
@@ -686,9 +680,9 @@ public class CustomArmorSetBonus {
     /**
      * Get crit chance bonus for player's current armor set
      */
-    public static float getCritBonus(ServerPlayerEntity player) {
+    public static float getCritBonus(ServerPlayer player) {
         ArmorSetState state = getPlayerArmorSetState(player);
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (!"Rogue".equals(playerClass)) return 0f;
 
@@ -703,9 +697,9 @@ public class CustomArmorSetBonus {
     /**
      * Get energy regen bonus for player's current armor set
      */
-    public static float getEnergyRegenBonus(ServerPlayerEntity player) {
+    public static float getEnergyRegenBonus(ServerPlayer player) {
         ArmorSetState state = getPlayerArmorSetState(player);
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (!"Rogue".equals(playerClass)) return 0f;
 
@@ -719,9 +713,9 @@ public class CustomArmorSetBonus {
     /**
      * Get backstab damage multiplier for weapon synergy
      */
-    public static float getWeaponSynergyBackstabBonus(ServerPlayerEntity player) {
+    public static float getWeaponSynergyBackstabBonus(ServerPlayer player) {
         ArmorSetState state = getPlayerArmorSetState(player);
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         if (!"Rogue".equals(playerClass)) return 0f;
         if (!hasMatchingWeapon(player, state.currentSet)) return 0f;
@@ -736,7 +730,7 @@ public class CustomArmorSetBonus {
     /**
      * Get melee damage bonus for weapon synergy
      */
-    public static float getWeaponSynergyDamageBonus(ServerPlayerEntity player) {
+    public static float getWeaponSynergyDamageBonus(ServerPlayer player) {
         ArmorSetState state = getPlayerArmorSetState(player);
         if (!hasMatchingWeapon(player, state.currentSet)) return 0f;
 

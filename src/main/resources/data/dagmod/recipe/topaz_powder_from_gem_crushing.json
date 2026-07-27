@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_crushing",
+  "ingredient": "dagmod:raw_topaz",
+  "result": {
+    "count": 1,
+    "id": "dagmod:topaz_powder"
+  }
+}

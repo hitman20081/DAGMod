@@ -2,10 +2,10 @@ package com.github.hitman20081.dagmod.networking;
 
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +17,15 @@ public record QuestSyncPacket(
         int totalCompleted,
         List<QuestInfo> activeQuests,
         List<QuestInfo> availableQuests  // NEW: Added available quests
-) implements CustomPayload {
+) implements CustomPacketPayload {
 
-    public static final CustomPayload.Id<QuestSyncPacket> ID =
-            new CustomPayload.Id<>(Identifier.of("dagmod", "quest_sync"));
+    public static final CustomPacketPayload.Type<QuestSyncPacket> ID =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("dagmod", "quest_sync"));
 
-    public static final PacketCodec<PacketByteBuf, QuestSyncPacket> CODEC =
-            CustomPayload.codecOf(QuestSyncPacket::write, QuestSyncPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, QuestSyncPacket> CODEC =
+            CustomPacketPayload.codec(QuestSyncPacket::write, QuestSyncPacket::new);
 
-    public QuestSyncPacket(PacketByteBuf buf) {
+    public QuestSyncPacket(FriendlyByteBuf buf) {
         this(
                 QuestData.QuestBookTier.values()[buf.readInt()],
                 buf.readInt(),
@@ -36,7 +36,7 @@ public record QuestSyncPacket(
         );
     }
 
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(tier.getTier() - 1);
         buf.writeInt(activeQuestCount);
         buf.writeInt(maxActiveQuests);
@@ -46,7 +46,7 @@ public record QuestSyncPacket(
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -60,28 +60,28 @@ public record QuestSyncPacket(
             boolean isCompleted,
             List<String> objectiveDescriptions
     ) {
-        public QuestInfo(PacketByteBuf buf) {
+        public QuestInfo(FriendlyByteBuf buf) {
             this(
-                    buf.readString(),
-                    buf.readString(),
-                    buf.readString(),
+                    buf.readUtf(),
+                    buf.readUtf(),
+                    buf.readUtf(),
                     Quest.QuestDifficulty.values()[buf.readInt()],
                     buf.readInt(),
                     buf.readInt(),
                     buf.readBoolean(),
-                    buf.readList(PacketByteBuf::readString)
+                    buf.readList(FriendlyByteBuf::readUtf)
             );
         }
 
-        public void write(PacketByteBuf buf) {
-            buf.writeString(id);
-            buf.writeString(name);
-            buf.writeString(description);
+        public void write(FriendlyByteBuf buf) {
+            buf.writeUtf(id);
+            buf.writeUtf(name);
+            buf.writeUtf(description);
             buf.writeInt(difficulty.ordinal());
             buf.writeInt(objectivesComplete);
             buf.writeInt(totalObjectives);
             buf.writeBoolean(isCompleted);
-            buf.writeCollection(objectiveDescriptions, PacketByteBuf::writeString);
+            buf.writeCollection(objectiveDescriptions, FriendlyByteBuf::writeUtf);
         }
     }
 }

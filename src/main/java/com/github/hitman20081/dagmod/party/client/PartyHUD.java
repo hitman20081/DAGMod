@@ -1,13 +1,14 @@
 package com.github.hitman20081.dagmod.party.client;
 
 import com.github.hitman20081.dagmod.party.PartyData;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +39,16 @@ public class PartyHUD {
      * Register the HUD renderer
      */
     public static void register() {
-        HudRenderCallback.EVENT.register(PartyHUD::render);
+        HudElementRegistry.addLast(net.minecraft.resources.Identifier.fromNamespaceAndPath("dagmod", "party_hud"), PartyHUD::render);
     }
 
     /**
      * Render the party HUD
      */
-    private static void render(DrawContext context, RenderTickCounter tickCounter) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    private static void render(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
+        Minecraft client = Minecraft.getInstance();
 
-        if (client.options.hudHidden) return;
+        if (client.gui.hud.isHidden()) return;
         if (client.player == null) return;
 
         PartyData party = ClientPartyData.getLocalPartyData();
@@ -59,9 +60,9 @@ public class PartyHUD {
         int y = START_Y;
 
         // Render party header
-        context.drawText(
-                client.textRenderer,
-                Text.literal("Party (" + party.getSize() + "/5)").formatted(Formatting.GOLD),
+        context.text(
+                client.font,
+                Component.literal("Party (" + party.getSize() + "/5)").withStyle(ChatFormatting.GOLD),
                 START_X,
                 y,
                 COLOR_LEADER,
@@ -72,9 +73,9 @@ public class PartyHUD {
         // Render XP bonus
         int xpBonus = party.getXpBonusPercentage();
         if (xpBonus > 0) {
-            context.drawText(
-                    client.textRenderer,
-                    Text.literal("XP Bonus: +" + xpBonus + "%").formatted(Formatting.AQUA),
+            context.text(
+                    client.font,
+                    Component.literal("XP Bonus: +" + xpBonus + "%").withStyle(ChatFormatting.AQUA),
                     START_X,
                     y,
                     COLOR_XP_BONUS,
@@ -89,7 +90,7 @@ public class PartyHUD {
         List<PartyMemberInfo> members = ClientPartyData.getPartyMembers();
         for (PartyMemberInfo member : members) {
             // Skip self
-            if (member.uuid.equals(client.player.getUuid())) {
+            if (member.uuid.equals(client.player.getUUID())) {
                 continue;
             }
 
@@ -101,15 +102,15 @@ public class PartyHUD {
     /**
      * Render a single party member
      */
-    private static void renderMember(DrawContext context, MinecraftClient client, PartyMemberInfo member, int x, int y, boolean isLeader) {
+    private static void renderMember(GuiGraphicsExtractor context, Minecraft client, PartyMemberInfo member, int x, int y, boolean isLeader) {
         // Background
         context.fill(x, y, x + MEMBER_WIDTH, y + MEMBER_HEIGHT, COLOR_BACKGROUND);
 
         // Leader star
         if (isLeader) {
-            context.drawText(
-                    client.textRenderer,
-                    Text.literal("★").formatted(Formatting.GOLD),
+            context.text(
+                    client.font,
+                    Component.literal("★").withStyle(ChatFormatting.GOLD),
                     x + 2,
                     y + 2,
                     COLOR_LEADER,
@@ -119,9 +120,9 @@ public class PartyHUD {
 
         // Name
         int nameX = x + (isLeader ? 12 : 4);
-        context.drawText(
-                client.textRenderer,
-                Text.literal(member.name),
+        context.text(
+                client.font,
+                Component.literal(member.name),
                 nameX,
                 y + 2,
                 isLeader ? COLOR_LEADER : COLOR_MEMBER,

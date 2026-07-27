@@ -1,20 +1,21 @@
 package com.github.hitman20081.dagmod.grave;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.core.BlockPos;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,10 +53,10 @@ public class GraveManager {
         server = null;
     }
 
-    public void createGrave(ServerPlayerEntity player, Map<Integer, ItemStack> items) {
+    public void createGrave(ServerPlayer player, Map<Integer, ItemStack> items) {
         if (items.isEmpty()) return;
 
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getUUID();
         String playerName = player.getName().getString();
 
         // If player has existing grave, drop those old items at the old location
@@ -65,15 +66,15 @@ public class GraveManager {
             removePositionLookup(existing);
         }
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        BlockPos deathPos = player.getBlockPos();
-        Identifier dimension = world.getRegistryKey().getValue();
-        long currentTick = server.getOverworld().getTime();
+        ServerLevel world = (ServerLevel) player.level();
+        BlockPos deathPos = player.blockPosition();
+        Identifier dimension = world.dimension().identifier();
+        long currentTick = server.overworld().getGameTime();
 
         // If the player died in the void, snap the search origin to the surface
-        if (deathPos.getY() < world.getBottomY()) {
-            int surfaceY = world.getTopY(net.minecraft.world.Heightmap.Type.MOTION_BLOCKING, deathPos.getX(), deathPos.getZ());
-            deathPos = new BlockPos(deathPos.getX(), Math.max(surfaceY, world.getBottomY() + 1), deathPos.getZ());
+        if (deathPos.getY() < world.getMinY()) {
+            int surfaceY = world.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, deathPos.getX(), deathPos.getZ());
+            deathPos = new BlockPos(deathPos.getX(), Math.max(surfaceY, world.getMinY() + 1), deathPos.getZ());
             DagMod.LOGGER.info("Grave system: void death detected for {}, snapping grave origin to surface Y={}", playerName, deathPos.getY());
         }
 
@@ -83,7 +84,7 @@ public class GraveManager {
         GraveData grave = new GraveData(playerId, playerName, items, gravePos, dimension, currentTick);
 
         // Place lodestone block
-        world.setBlockState(gravePos, Blocks.LODESTONE.getDefaultState());
+        world.setBlock(gravePos, Blocks.LODESTONE.defaultBlockState(), 3);
 
         // Store in memory
         graves.put(playerId, grave);
@@ -92,13 +93,11 @@ public class GraveManager {
         // Persist to disk
         saveGrave(playerId, grave);
 
-        player.sendMessage(
-                Text.literal("Your items have been stored in a grave at ")
-                        .formatted(Formatting.GRAY)
-                        .append(Text.literal("[" + gravePos.getX() + ", " + gravePos.getY() + ", " + gravePos.getZ() + "]")
-                                .formatted(Formatting.YELLOW)),
-                false
-        );
+        player.sendSystemMessage(
+                Component.literal("Your items have been stored in a grave at ")
+                        .withStyle(ChatFormatting.GRAY)
+                        .append(Component.literal("[" + gravePos.getX() + ", " + gravePos.getY() + ", " + gravePos.getZ() + "]")
+                                .withStyle(ChatFormatting.YELLOW)));
 
         DagMod.LOGGER.info("Created grave for {} at {} in {}", playerName, gravePos, dimension);
     }
@@ -107,9 +106,9 @@ public class GraveManager {
      * Attempt to collect a grave at the given position.
      * Returns true if the grave was collected (or rejected with message), false if no grave exists at this position.
      */
-    public boolean collectGrave(ServerPlayerEntity player, BlockPos pos) {
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        Identifier dimension = world.getRegistryKey().getValue();
+    public boolean collectGrave(ServerPlayer player, BlockPos pos) {
+        ServerLevel world = (ServerLevel) player.level();
+        Identifier dimension = world.dimension().identifier();
         String key = positionKey(dimension, pos);
         UUID graveOwner = positionLookup.get(key);
 
@@ -126,12 +125,12 @@ public class GraveManager {
             return false;
         }
 
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getUUID();
         boolean isOwner = playerId.equals(graveOwner);
 
         // Check loot delay for non-owners
         if (!isOwner) {
-            long currentTick = server.getOverworld().getTime();
+            long currentTick = server.overworld().getGameTime();
             long elapsed = currentTick - grave.getCreatedAt();
 
             if (elapsed < LOOT_DELAY_TICKS) {
@@ -140,12 +139,10 @@ public class GraveManager {
                 long minutes = remainingSeconds / 60;
                 long seconds = remainingSeconds % 60;
 
-                player.sendMessage(
-                        Text.literal("This grave belongs to " + grave.getOwnerName() + "! You can loot it in "
+                player.sendSystemMessage(
+                        Component.literal("This grave belongs to " + grave.getOwnerName() + "! You can loot it in "
                                 + minutes + "m " + seconds + "s.")
-                                .formatted(Formatting.RED),
-                        false
-                );
+                                .withStyle(ChatFormatting.RED));
                 return true; // Handled (rejected), don't pass through to normal interaction
             }
         }
@@ -153,16 +150,16 @@ public class GraveManager {
         // Drop all items at the player's feet
         for (ItemStack stack : grave.getItems().values()) {
             ItemEntity itemEntity = new ItemEntity(
-                    player.getEntityWorld(),
+                    player.level(),
                     player.getX(), player.getY() + 0.5, player.getZ(),
                     stack.copy()
             );
-            itemEntity.setPickupDelay(0);
-            player.getEntityWorld().spawnEntity(itemEntity);
+            itemEntity.setNoPickUpDelay();
+            player.level().addFreshEntity(itemEntity);
         }
 
         // Remove the lodestone block
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 
         // Clean up data
         removePositionLookup(grave);
@@ -170,17 +167,13 @@ public class GraveManager {
         deleteGraveFile(graveOwner);
 
         if (isOwner) {
-            player.sendMessage(
-                    Text.literal("You recovered your items from the grave!")
-                            .formatted(Formatting.GREEN),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("You recovered your items from the grave!")
+                            .withStyle(ChatFormatting.GREEN));
         } else {
-            player.sendMessage(
-                    Text.literal("You looted an abandoned grave!")
-                            .formatted(Formatting.YELLOW),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("You looted an abandoned grave!")
+                            .withStyle(ChatFormatting.YELLOW));
         }
 
         DagMod.LOGGER.info("{} collected grave at {}", player.getName().getString(), pos);
@@ -196,7 +189,7 @@ public class GraveManager {
     }
 
     public long getCurrentTick() {
-        return server != null ? server.getOverworld().getTime() : 0;
+        return server != null ? server.overworld().getGameTime() : 0;
     }
 
     public boolean hasGraveAt(BlockPos pos, Identifier dimension) {
@@ -204,7 +197,7 @@ public class GraveManager {
     }
 
     private void dropOldGraveItems(GraveData grave) {
-        ServerWorld world = findWorld(grave.getDimension());
+        ServerLevel world = findWorld(grave.getDimension());
         if (world == null) {
             DagMod.LOGGER.warn("Could not find world {} to drop old grave items", grave.getDimension());
             return;
@@ -219,26 +212,26 @@ public class GraveManager {
                     pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                     stack.copy()
             );
-            world.spawnEntity(itemEntity);
+            world.addFreshEntity(itemEntity);
         }
 
         // Remove the old lodestone
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 
         deleteGraveFile(grave.getOwnerId());
         DagMod.LOGGER.info("Dropped old grave items at {} in {}", pos, grave.getDimension());
     }
 
-    private ServerWorld findWorld(Identifier dimensionId) {
-        for (ServerWorld world : server.getWorlds()) {
-            if (world.getRegistryKey().getValue().equals(dimensionId)) {
+    private ServerLevel findWorld(Identifier dimensionId) {
+        for (ServerLevel world : server.getAllLevels()) {
+            if (world.dimension().identifier().equals(dimensionId)) {
                 return world;
             }
         }
         return null;
     }
 
-    private BlockPos findGravePosition(ServerWorld world, BlockPos deathPos) {
+    private BlockPos findGravePosition(ServerLevel world, BlockPos deathPos) {
         // Try the death position first
         if (canPlaceGrave(world, deathPos)) {
             return deathPos;
@@ -248,7 +241,7 @@ public class GraveManager {
         for (int dx = -3; dx <= 3; dx++) {
             for (int dz = -3; dz <= 3; dz++) {
                 for (int dy = -3; dy <= 3; dy++) {
-                    BlockPos candidate = deathPos.add(dx, dy, dz);
+                    BlockPos candidate = deathPos.offset(dx, dy, dz);
                     if (canPlaceGrave(world, candidate)) {
                         return candidate;
                     }
@@ -260,8 +253,8 @@ public class GraveManager {
         return deathPos;
     }
 
-    private boolean canPlaceGrave(ServerWorld world, BlockPos pos) {
-        return world.getBlockState(pos).isReplaceable() || world.getBlockState(pos).isAir();
+    private boolean canPlaceGrave(ServerLevel world, BlockPos pos) {
+        return world.getBlockState(pos).canBeReplaced() || world.getBlockState(pos).isAir();
     }
 
     // --- Position Lookup Helpers ---
@@ -281,7 +274,7 @@ public class GraveManager {
     // --- Persistence ---
 
     private File getGravesDir() {
-        File dir = server.getSavePath(WorldSavePath.ROOT)
+        File dir = server.getWorldPath(LevelResource.ROOT)
                 .resolve("data").resolve("dagmod").resolve("graves").toFile();
         if (!dir.exists()) {
             dir.mkdirs();
@@ -299,7 +292,7 @@ public class GraveManager {
         File backupFile = new File(dataFile.getPath() + ".bak");
 
         try {
-            NbtCompound nbt = grave.toNbt(server);
+            CompoundTag nbt = grave.toNbt(server);
 
             try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                 NbtIo.writeCompressed(nbt, fos);
@@ -337,9 +330,9 @@ public class GraveManager {
                 String fileName = file.getName().replace(".dat", "");
                 UUID playerId = UUID.fromString(fileName);
 
-                NbtCompound nbt;
+                CompoundTag nbt;
                 try (FileInputStream fis = new FileInputStream(file)) {
-                    nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                    nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
                 }
 
                 GraveData grave = GraveData.fromNbt(nbt, server);

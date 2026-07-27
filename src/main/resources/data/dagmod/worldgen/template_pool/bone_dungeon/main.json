@@ -39,7 +39,7 @@
       }
     },
     {
-      "weight": 6,
+      "weight": 20,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_crossway_boss",
         "processors": "dagmod:no_water",
@@ -75,7 +75,7 @@
       }
     },
     {
-      "weight": 3,
+      "weight": 8,
       "element": {
         "location": "dagmod:bone_dungeon/bone_dungeon_treasure_room",
         "processors": "dagmod:no_water",

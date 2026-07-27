@@ -1,13 +1,13 @@
 package com.github.hitman20081.dagmod.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 /**
  * Quest-exclusive Red Dragon — spawns only when the "red_dragon_fury" quest is accepted.
@@ -17,22 +17,22 @@ import net.minecraft.world.World;
  */
 public class RedDragonEntity extends WildDragonEntity {
 
-    public RedDragonEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public RedDragonEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    public Text getName() {
-        return Text.literal("Red Dragon").formatted(Formatting.RED);
+    public Component getName() {
+        return Component.literal("Red Dragon").withStyle(ChatFormatting.RED);
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (this.getEntityWorld().isClient()) {
-            return ActionResult.FAIL;
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (this.level().isClientSide()) {
+            return InteractionResult.FAIL;
         }
-        player.sendMessage(Text.literal("This dragon cannot be tamed!").formatted(Formatting.RED), true);
-        return ActionResult.FAIL;
+        player.sendOverlayMessage(Component.literal("This dragon cannot be tamed!").withStyle(ChatFormatting.RED));
+        return InteractionResult.FAIL;
     }
 
     @Override
@@ -41,12 +41,12 @@ public class RedDragonEntity extends WildDragonEntity {
     }
 
     @Override
-    public boolean isPersistent() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 
     @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) {
+    public boolean removeWhenFarAway(double distanceSquared) {
         return false;
     }
 }

@@ -9,13 +9,13 @@ See [CHANGELOG.md](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md)
 ## System Requirements
 
 ### Minecraft Version
-- **Minecraft 1.21.11**
+- **Minecraft 26.2**
 - DAGMod is built for this specific version
 - Earlier or later versions may not be compatible
 
 ### Required Dependencies
-- **Fabric Loader** 0.18.4
-- **Fabric API** 0.141.1+1.21.11
+- **Fabric Loader** 0.19.3+
+- **Fabric API** 0.150.2+26.2
 
 ### Recommended System Specs
 - **RAM:** 4GB minimum, 6-8GB recommended
@@ -42,8 +42,8 @@ Choose the installation method that best fits your needs:
 
 1. Download the Fabric Installer from [fabricmc.net](https://fabricmc.net/use/installer/)
 2. Run the installer
-3. Select **Minecraft 1.21.11**
-4. Select **Fabric Loader** 0.18.4
+3. Select **Minecraft 26.2**
+4. Select **Fabric Loader** 0.19.3
 5. Click "Install"
 6. Wait for installation to complete
 
@@ -52,13 +52,13 @@ Choose the installation method that best fits your needs:
 1. Open the Minecraft Launcher
 2. Go to "Installations"
 3. Click "New Installation"
-4. Select version: **fabric-loader-0.18.4-1.21.11**
+4. Select version: **fabric-loader-0.19.3-26.2**
 5. Name it "DAGMod"
 6. Click "Create"
 
 ### Step 2: Install Fabric API
 
-1. Download **Fabric API 0.141.1+1.21.11** from:
+1. Download **Fabric API 0.150.2+26.2** from:
    - [Modrinth](https://modrinth.com/mod/fabric-api) (recommended)
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 2. Locate your Minecraft mods folder:
@@ -80,7 +80,7 @@ Choose the installation method that best fits your needs:
 ### Step 4: Launch Minecraft
 
 1. Open the Minecraft Launcher
-2. Select the **Fabric Loader 1.21.11** profile (or "DAGMod" if you named it)
+2. Select the **Fabric Loader 26.2** profile (or "DAGMod" if you named it)
 3. Click "Play"
 4. Wait for Minecraft to load
 5. Check the main menu - you should see "X mods loaded" in the bottom-left
@@ -117,14 +117,14 @@ Choose the installation method that best fits your needs:
 **Or use the Fabric Installer:**
 1. Run the Fabric Installer
 2. Select "Server" tab
-2. Choose **Minecraft 1.21.11**
-3. Choose **Fabric Loader 0.18.4**
+2. Choose **Minecraft 26.2**
+3. Choose **Fabric Loader 0.19.3**
 5. Select your server folder
 6. Click "Install"
 
 ### Step 2: Install Fabric API
 
-1. Download **Fabric API 0.141.1+1.21.11**
+1. Download **Fabric API 0.150.2+26.2**
 2. Place it in the `mods` folder inside your server directory
 3. If the `mods` folder doesn't exist, create it
 
@@ -208,8 +208,8 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 **Issue: "Incompatible mod set" error**
 - **Cause:** Version mismatch
 - **Solution:** Verify all mods are for the correct Minecraft version
-- Check Fabric Loader version 0.18.4
-- Check Fabric API version 0.141.1+1.21.11
+- Check Fabric Loader version 0.19.3+
+- Check Fabric API version 0.150.2+26.2
 - Check DAGMod version matches the server
 
 **Issue: Mods not loading**
@@ -221,7 +221,7 @@ java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui
 
 **Issue: DAGMod features not working**
 - **Cause:** Missing Fabric API
-- **Solution:** Install Fabric API 0.141.1+1.21.11
+- **Solution:** Install Fabric API 0.150.2+26.2
 
 **Issue: Hall of Champions not generating**
 - **Cause:** World generated before mod installation
@@ -357,10 +357,10 @@ Want to contribute or modify DAGMod? Here's how to set up a development environm
 
 **gradle.properties:**
 ```properties
-minecraft_version=1.21.11
-yarn_mappings=1.21.11+build.1
-loader_version=0.18.4
-fabric_version=0.141.1+1.21.11
+minecraft_version=26.2
+loader_version=0.19.3
+loom_version=1.17.11
+fabric_version=0.150.2+26.2
 ```
 
 **Project Structure:**

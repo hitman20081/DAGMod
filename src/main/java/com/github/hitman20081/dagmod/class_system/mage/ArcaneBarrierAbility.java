@@ -1,16 +1,16 @@
 package com.github.hitman20081.dagmod.class_system.mage;
 
 import com.github.hitman20081.dagmod.event.SpellModifierHandler;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.UUID;
 
@@ -32,13 +32,13 @@ public class ArcaneBarrierAbility {
     private static final int DURATION_TICKS = 10 * 20; // 10 seconds
     private static final float ABSORPTION_AMOUNT = 20.0f; // 10 hearts
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
-        UUID uuid = serverPlayer.getUuid();
+        ServerLevel world = serverPlayer.level();
+        UUID uuid = serverPlayer.getUUID();
 
         boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
         float power = SpellModifierHandler.consumeOvercharge(uuid);
@@ -50,7 +50,7 @@ public class ArcaneBarrierAbility {
         return result;
     }
 
-    private static boolean activateInternal(ServerPlayerEntity player, ServerWorld world,
+    private static boolean activateInternal(ServerPlayer player, ServerLevel world,
                                             boolean applyModifiers, float powerMultiplier) {
         float absorptionAmount = ABSORPTION_AMOUNT * powerMultiplier;
 
@@ -60,8 +60,8 @@ public class ArcaneBarrierAbility {
 
         player.setAbsorptionAmount(player.getAbsorptionAmount() + absorptionAmount);
 
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.RESISTANCE,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.RESISTANCE,
                 DURATION_TICKS,
                 1, // Resistance II
                 false,
@@ -69,8 +69,8 @@ public class ArcaneBarrierAbility {
                 true
         ));
 
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.FIRE_RESISTANCE,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.FIRE_RESISTANCE,
                 DURATION_TICKS,
                 0,
                 false,
@@ -78,8 +78,8 @@ public class ArcaneBarrierAbility {
                 true
         ));
 
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.INSTANT_HEALTH,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.INSTANT_HEALTH,
                 DURATION_TICKS,
                 0,
                 false,
@@ -97,7 +97,7 @@ public class ArcaneBarrierAbility {
             double y = player.getY() + 1.0 + radius * Math.cos(phi);
             double z = player.getZ() + radius * Math.sin(phi) * Math.sin(theta);
 
-            world.spawnParticles(
+            world.sendParticles(
                     ParticleTypes.WITCH,
                     x, y, z,
                     1,
@@ -106,7 +106,7 @@ public class ArcaneBarrierAbility {
             );
         }
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.ENCHANT,
                 player.getX(),
                 player.getY() + 1.0,
@@ -116,7 +116,7 @@ public class ArcaneBarrierAbility {
                 0.1
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.END_ROD,
                 player.getX(),
                 player.getY() + 1.0,
@@ -136,7 +136,7 @@ public class ArcaneBarrierAbility {
                         double z = player.getZ() + Math.sin(angle) * radius;
                         double y = player.getY() + Math.random() * 2;
 
-                        world.spawnParticles(
+                        world.sendParticles(
                                 ParticleTypes.WITCH,
                                 x, y, z,
                                 1,
@@ -150,34 +150,30 @@ public class ArcaneBarrierAbility {
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.BLOCK_BEACON_ACTIVATE,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.BEACON_ACTIVATE,
+                SoundSource.PLAYERS,
                 1.0f,
                 1.5f
         );
 
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.ENCHANTMENT_TABLE_USE,
+                SoundSource.PLAYERS,
                 1.0f,
                 0.8f
         );
 
         int heartsGranted = Math.round(absorptionAmount / 2);
-        player.sendMessage(
-                Text.literal("🛡 Arcane Barrier activated!")
-                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
-                true
-        );
+        player.sendOverlayMessage(
+                Component.literal("🛡 Arcane Barrier activated!")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
 
-        player.sendMessage(
-                Text.literal("Protected for 10 seconds with " + heartsGranted + " absorption hearts!")
-                        .formatted(Formatting.DARK_PURPLE),
-                false
-        );
+        player.sendSystemMessage(
+                Component.literal("Protected for 10 seconds with " + heartsGranted + " absorption hearts!")
+                        .withStyle(ChatFormatting.DARK_PURPLE));
 
         return true;
     }

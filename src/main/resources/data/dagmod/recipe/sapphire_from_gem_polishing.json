@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_polishing",
+  "ingredient": "dagmod:gem_cut_sapphire",
+  "result": {
+    "id": "dagmod:gem_polished_sapphire",
+    "count": 1
+  }
+}

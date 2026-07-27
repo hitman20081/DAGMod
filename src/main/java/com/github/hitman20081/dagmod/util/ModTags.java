@@ -1,19 +1,20 @@
 package com.github.hitman20081.dagmod.util;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.Identifier;
 
 public class ModTags {
     public static class Blocks {
         public static final TagKey<Block> INCORRECT_FOR_MYTHRIL_TOOL =
-                TagKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "incorrect_for_mythril_tool"));
+                TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "incorrect_for_mythril_tool"));
 
         private static TagKey<Block> createTag(String name) {
-            return TagKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, name));
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
         }
     }
 
@@ -28,9 +29,10 @@ public class ModTags {
         public static final TagKey<Item> SOLARWEAVE_REPAIR = createTag("solarweave_repair");
         public static final TagKey<Item> STORMCALLER_REPAIR = createTag("stormcaller_repair");
         public static final TagKey<Item> OBSIDIAN_REPAIR = createTag("obsidian_repair");
+        public static final TagKey<Item> CRUSHING_HAMMER_REPAIR = createTag("crushing_hammer_repair");
 
         private static TagKey<Item> createTag(String name) {
-            return TagKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, name));
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
         }
     }
 }

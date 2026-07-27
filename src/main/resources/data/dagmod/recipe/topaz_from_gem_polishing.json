@@ -1,8 +1,8 @@
 {
   "type": "dagmod:gem_polishing",
-  "ingredient": "dagmod:raw_topaz",
+  "ingredient": "dagmod:gem_cut_topaz",
   "result": {
-    "id": "dagmod:topaz",
-    "count": 2
+    "id": "dagmod:gem_polished_topaz",
+    "count": 1
   }
 }

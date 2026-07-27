@@ -1,11 +1,12 @@
 package com.github.hitman20081.dagmod.progression;
 
 import com.github.hitman20081.dagmod.DagMod;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,7 @@ import java.util.UUID;
  *       progression/     <-- Progression data here
  *         {uuid}.dat
  *       players/         <-- Player race/class data (managed by PlayerDataManager)
- *       world/           <-- World data (managed by PlayerDataManager)
+ *       world/           <-- Level data (managed by PlayerDataManager)
  */
 public class ProgressionStorage {
 
@@ -57,7 +58,7 @@ public class ProgressionStorage {
         }
 
         // Get world save path
-        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+        File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
         File dagmodDir = new File(worldDir, DATA_ROOT);
         File progressionDir = new File(dagmodDir, PROGRESSION_FOLDER);
 
@@ -97,7 +98,7 @@ public class ProgressionStorage {
     public static boolean savePlayerData(PlayerProgressionData data) {
         try {
             File file = getPlayerFile(data.getPlayerUUID());
-            NbtCompound nbt = data.toNbt();
+            CompoundTag nbt = data.toNbt();
 
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 NbtIo.writeCompressed(nbt, fos);
@@ -130,7 +131,7 @@ public class ProgressionStorage {
         }
 
         try (FileInputStream fis = new FileInputStream(file)) {
-            NbtCompound nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+            CompoundTag nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
             PlayerProgressionData data = PlayerProgressionData.fromNbt(nbt);
 
             LOGGER.debug("Loaded progression data for player {}: Level {} | XP {}/{}",

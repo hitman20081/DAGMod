@@ -6,9 +6,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -36,18 +36,18 @@ public class ToggleProgressionHUDCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         // Full command name with optional color argument
         dispatcher.register(
-                ClientCommandManager.literal("toggleprogressionbg")
+                ClientCommands.literal("toggleprogressionbg")
                         .executes(ToggleProgressionHUDCommand::executeToggle)
-                        .then(ClientCommandManager.argument("color", StringArgumentType.word())
+                        .then(ClientCommands.argument("color", StringArgumentType.word())
                                 .suggests(COLOR_SUGGESTIONS)
                                 .executes(ToggleProgressionHUDCommand::executeWithColor))
         );
 
         // Short alias with optional color argument
         dispatcher.register(
-                ClientCommandManager.literal("tpbg")
+                ClientCommands.literal("tpbg")
                         .executes(ToggleProgressionHUDCommand::executeToggle)
-                        .then(ClientCommandManager.argument("color", StringArgumentType.word())
+                        .then(ClientCommands.argument("color", StringArgumentType.word())
                                 .suggests(COLOR_SUGGESTIONS)
                                 .executes(ToggleProgressionHUDCommand::executeWithColor))
         );
@@ -61,11 +61,11 @@ public class ToggleProgressionHUDCommand {
 
         if (newState) {
             context.getSource().sendFeedback(
-                    Text.literal("§aProgression HUD background enabled")
+                    Component.literal("§aProgression HUD background enabled")
             );
         } else {
             context.getSource().sendFeedback(
-                    Text.literal("§cProgression HUD background disabled")
+                    Component.literal("§cProgression HUD background disabled")
             );
         }
 
@@ -83,13 +83,13 @@ public class ToggleProgressionHUDCommand {
             ProgressionHUD.setBackgroundEnabled(true);
 
             context.getSource().sendFeedback(
-                    Text.literal("§aProgression HUD background set to " + color)
+                    Component.literal("§aProgression HUD background set to " + color)
             );
         } else {
             // Invalid color
             String[] availableColors = ProgressionHUD.getAvailableColors();
             context.getSource().sendFeedback(
-                    Text.literal("§cInvalid color! Available colors: " + String.join(", ", availableColors))
+                    Component.literal("§cInvalid color! Available colors: " + String.join(", ", availableColors))
             );
         }
 

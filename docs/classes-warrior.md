@@ -14,6 +14,24 @@ Front-line melee combatant who thrives in close-quarters battle. Warriors are th
 
 Warriors command **6 powerful abilities** that combine devastating offense with incredible survivability!
 
+### Cooldown HUD
+
+Warriors have a **cooldown tracker** displayed on the right side of the HUD (same position as the hunger bar) — 6 small color-coded boxes, one per ability, spanning the same width as the mana/energy bar of other classes.
+
+- **Bright color** = ability ready to use
+- **Dark color + countdown** = ability on cooldown (shows remaining seconds, e.g. `32s`; 100+ seconds shown as `2m`)
+
+Ability colors: Rage (red), Shield Bash (blue), War Cry (gold), Battle Shout (orange), Whirlwind (sky blue), Iron Skin (gray).
+
+**Cooldowns reduce with level** — up to 40% shorter at level 200:
+
+| Level | Rage (60s base) | War Cry (90s base) | Iron Skin (120s base) |
+|-------|-----------------|--------------------|-----------------------|
+| 1 | 60s | 90s | 120s |
+| 50 | 54s | 81s | 108s |
+| 100 | 48s | 72s | 96s |
+| 200 | 36s | 54s | 72s |
+
 #### 1. Rage
 **Cooldown:** 60 seconds
 **Duration:** 10 seconds
@@ -137,7 +155,7 @@ A powerful AOE buff and debuff. Use it at the start of a big fight to give your 
 ### Weaknesses
 - Limited mobility compared to Rogue
 - No stealth capabilities
-- Abilities have moderate to long cooldowns (20-120s)
+- Abilities have moderate to long cooldowns (20-120s base; reduced by up to 40% at max level)
 
 ### Playstyle Tips
 - Rush into combat and draw enemy attention
@@ -147,6 +165,22 @@ A powerful AOE buff and debuff. Use it at the start of a big fight to give your 
 - Stand your ground - you're built to take hits
 - Excellent for dungeon diving and boss fights
 - In group play, tank for your team
+
+### Class Quest Chain — Path of the Berserker
+
+Completing the Warrior quest chain unlocks all six class abilities one by one and culminates in a chain-completion reward. Quests are received from the **Job Board** and tracked in your quest book.
+
+| # | Quest | Level Req | Objectives | Ability Unlocked |
+|---|-------|-----------|------------|-----------------|
+| 1 | Trial of Fury | 10 | Kill 15 Zombies, kill 10 Skeletons, collect 16 Iron Ingot | **Rage Totem** |
+| 2 | Battle Hardened | 25 | Kill 12 Pillagers, kill 6 Vindicators, collect 16 Gold Ingot + 4 Iron Block | **Battle Standard** |
+| 3 | Whirlwind Mastery | 50 | Kill 10 Blazes, kill 8 Wither Skeletons, collect 16 Diamond + 4 Netherite Scrap | **Whirlwind Axe** |
+| 4 | Iron Skin Trial | 75 | Kill 8 Piglin Brutes, collect 8 Ancient Debris + 4 Netherite Ingot | **Iron Talisman** |
+| 5 | War Cry | 100 | Kill 1 Wild Dragon, kill 1 Skeleton Lord, collect 4 Netherite Block | **War Horn** |
+
+**Chain completion reward:** Netherite Sword, Netherite Axe, 10× Enchanted Golden Apple
+
+> The ability items are the actual usable items for each ability — equip them in your hotbar to activate that ability. You need all five to have access to the full Warrior kit.
 
 ### Best Race Synergies
 - **Dwarf Warrior:** Gains Resistance underground (Y<50) + extra HP - unstoppable cave tank

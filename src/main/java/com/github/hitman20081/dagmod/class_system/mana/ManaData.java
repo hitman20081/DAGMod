@@ -1,13 +1,15 @@
 package com.github.hitman20081.dagmod.class_system.mana;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 public class ManaData {
-    private static final int MAX_MANA = 100;
+    static final int BASE_MAX_MANA = 100;
     private float currentMana;
+    private int maxMana;
 
     public ManaData() {
-        this.currentMana = MAX_MANA;
+        this.maxMana = BASE_MAX_MANA;
+        this.currentMana = BASE_MAX_MANA;
     }
 
     public float getCurrentMana() {
@@ -15,7 +17,12 @@ public class ManaData {
     }
 
     public int getMaxMana() {
-        return MAX_MANA;
+        return maxMana;
+    }
+
+    public void setMaxMana(int newMax) {
+        this.maxMana = Math.max(1, newMax);
+        if (currentMana > maxMana) currentMana = maxMana;
     }
 
     public boolean hasMana(float amount) {
@@ -31,18 +38,18 @@ public class ManaData {
     }
 
     public void addMana(float amount) {
-        currentMana = Math.min(currentMana + amount, MAX_MANA);
+        currentMana = Math.min(currentMana + amount, maxMana);
     }
 
     public void setMana(float amount) {
-        currentMana = Math.max(0, Math.min(amount, MAX_MANA));
+        currentMana = Math.max(0, Math.min(amount, maxMana));
     }
 
-    public void writeToNbt(NbtCompound nbt) {
+    public void writeToNbt(CompoundTag nbt) {
         nbt.putFloat("mana", currentMana);
     }
 
-    public void readFromNbt(NbtCompound nbt) {
-        currentMana = nbt.getFloat("mana").orElse((float)MAX_MANA);
+    public void readFromNbt(CompoundTag nbt) {
+        currentMana = nbt.getFloat("mana").orElse((float)BASE_MAX_MANA);
     }
 }

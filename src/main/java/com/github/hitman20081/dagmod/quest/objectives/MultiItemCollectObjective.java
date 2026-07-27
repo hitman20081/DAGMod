@@ -1,11 +1,11 @@
 package com.github.hitman20081.dagmod.quest.objectives;
 
 import com.github.hitman20081.dagmod.quest.QuestObjective;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class MultiItemCollectObjective extends QuestObjective {
     private final Item[] acceptedItems;
@@ -25,7 +25,7 @@ public class MultiItemCollectObjective extends QuestObjective {
     }
 
     @Override
-    public boolean updateProgress(PlayerEntity player, Object... params) {
+    public boolean updateProgress(Player player, Object... params) {
         int itemCount = countAllMatchingItems(player);
 
         int oldProgress = currentProgress;
@@ -34,10 +34,10 @@ public class MultiItemCollectObjective extends QuestObjective {
         return currentProgress > oldProgress;
     }
 
-    private int countAllMatchingItems(PlayerEntity player) {
+    private int countAllMatchingItems(Player player) {
         int count = 0;
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && isAcceptedItem(stack.getItem()) && !hasEnchantments(stack)) {
                 count += stack.getCount();
             }
@@ -55,22 +55,22 @@ public class MultiItemCollectObjective extends QuestObjective {
     }
 
     private static boolean hasEnchantments(ItemStack stack) {
-        ItemEnchantmentsComponent enchantments = stack.get(DataComponentTypes.ENCHANTMENTS);
+        ItemEnchantments enchantments = stack.get(DataComponents.ENCHANTMENTS);
         return enchantments != null && !enchantments.isEmpty();
     }
 
-    public boolean consumeItems(PlayerEntity player) {
+    public boolean consumeItems(Player player) {
         if (!hasRequiredItems(player)) {
             return false;
         }
 
         int itemsToRemove = requiredAmount;
 
-        for (int i = 0; i < player.getInventory().size() && itemsToRemove > 0; i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        for (int i = 0; i < player.getInventory().getContainerSize() && itemsToRemove > 0; i++) {
+            ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && isAcceptedItem(stack.getItem()) && !hasEnchantments(stack)) {
                 int removeFromStack = Math.min(itemsToRemove, stack.getCount());
-                stack.decrement(removeFromStack);
+                stack.shrink(removeFromStack);
                 itemsToRemove -= removeFromStack;
             }
         }
@@ -78,7 +78,7 @@ public class MultiItemCollectObjective extends QuestObjective {
         return itemsToRemove == 0;
     }
 
-    public boolean hasRequiredItems(PlayerEntity player) {
+    public boolean hasRequiredItems(Player player) {
         return countAllMatchingItems(player) >= requiredAmount;
     }
 

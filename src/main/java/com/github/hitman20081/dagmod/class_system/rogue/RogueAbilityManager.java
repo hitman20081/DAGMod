@@ -1,21 +1,21 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
 import com.github.hitman20081.dagmod.class_system.rogue.RogueCooldownData;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.ClipContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,22 +46,22 @@ public class RogueAbilityManager {
     /**
      * Activate Smoke Bomb ability
      */
-    public static boolean useSmokeBomb(ServerPlayerEntity player) {
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        long worldTime = world.getTime();
+    public static boolean useSmokeBomb(ServerPlayer player) {
+        ServerLevel world = (ServerLevel) player.level();
+        long worldTime = world.getGameTime();
 
         // Check cooldown
-        if (RogueCooldownData.isOnCooldown(player.getUuid(), SMOKE_BOMB_KEY, worldTime)) {
-            long remaining = RogueCooldownData.getRemainingCooldown(player.getUuid(), SMOKE_BOMB_KEY, worldTime);
-            player.sendMessage(Text.literal("Smoke Bomb on cooldown: " + (remaining / 20) + "s")
-                    .formatted(Formatting.RED), true);
+        if (RogueCooldownData.isOnCooldown(player.getUUID(), SMOKE_BOMB_KEY, worldTime)) {
+            long remaining = RogueCooldownData.getRemainingCooldown(player.getUUID(), SMOKE_BOMB_KEY, worldTime);
+            player.sendOverlayMessage(Component.literal("Smoke Bomb on cooldown: " + (remaining / 20) + "s")
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Check energy
         if (!EnergyManager.hasEnergy(player, SMOKE_BOMB_COST)) {
-            player.sendMessage(Text.literal("Not enough energy! Need " + SMOKE_BOMB_COST)
-                    .formatted(Formatting.RED), true);
+            player.sendOverlayMessage(Component.literal("Not enough energy! Need " + SMOKE_BOMB_COST)
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -69,45 +69,44 @@ public class RogueAbilityManager {
         EnergyManager.consumeEnergy(player, SMOKE_BOMB_COST);
 
         // Start cooldown
-        RogueCooldownData.startCooldown(player.getUuid(), SMOKE_BOMB_KEY, worldTime, SMOKE_BOMB_COOLDOWN);
+        RogueCooldownData.startCooldown(player.getUUID(), SMOKE_BOMB_KEY, worldTime, SMOKE_BOMB_COOLDOWN);
 
         // Apply effects
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 120, 0));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 120, 1));
+        player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 120, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.SPEED, 120, 1));
 
         // Create smoke cloud
         createSmokeCloud(player);
 
         // Sound
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 1.0f, 0.5f);
+                SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 1.0f, 0.5f);
 
-        player.sendMessage(Text.literal("Smoke Bomb activated!")
-                .formatted(Formatting.DARK_GRAY), true);
+        player.sendOverlayMessage(Component.literal("Smoke Bomb activated!")
+                .withStyle(ChatFormatting.DARK_GRAY));
 
         return true;
     }
 
-    private static void createSmokeCloud(ServerPlayerEntity player) {
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        Vec3d pos = player.getEntityPos();
+    private static void createSmokeCloud(ServerPlayer player) {
+        ServerLevel world = (ServerLevel) player.level();
+        Vec3 pos = player.position();
 
-        AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(world, pos.x, pos.y, pos.z);
+        AreaEffectCloud cloud = new AreaEffectCloud(world, pos.x, pos.y, pos.z);
         cloud.setRadius(3.0f);
         cloud.setDuration(100);
-        cloud.setRadiusGrowth(0.0f);
-        cloud.addEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 40, 1));
-        cloud.setParticleType(ParticleTypes.LARGE_SMOKE);
+        cloud.setRadiusPerTick(0.0f);
+        cloud.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 1));
 
-        world.spawnEntity(cloud);
+        world.addFreshEntity(cloud);
 
         // Extra particles
         for (int i = 0; i < 50; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 4;
-            double offsetY = world.random.nextDouble() * 2;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 4;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 4;
+            double offsetY = world.getRandom().nextDouble() * 2;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 4;
 
-            world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+            world.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
                     1, 0.0, 0.0, 0.0, 0.01);
         }
@@ -116,36 +115,36 @@ public class RogueAbilityManager {
     /**
      * Activate Poison Dagger
      */
-    public static boolean usePoisonDagger(ServerPlayerEntity player) {
+    public static boolean usePoisonDagger(ServerPlayer player) {
         if (!EnergyManager.hasEnergy(player, POISON_DAGGER_COST)) {
-            player.sendMessage(Text.literal("Not enough energy! Need " + POISON_DAGGER_COST)
-                    .formatted(Formatting.RED), true);
+            player.sendOverlayMessage(Component.literal("Not enough energy! Need " + POISON_DAGGER_COST)
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
 
         EnergyManager.consumeEnergy(player, POISON_DAGGER_COST);
-        poisonDaggerActive.put(player.getUuid(), System.currentTimeMillis());
+        poisonDaggerActive.put(player.getUUID(), System.currentTimeMillis());
 
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0, false, false));
+        player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
 
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        ServerLevel world = (ServerLevel) player.level();
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 0.7f);
+                SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1.0f, 0.7f);
 
-        Vec3d pos = player.getEntityPos();
+        Vec3 pos = player.position();
         for (int i = 0; i < 20; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 1.5;
-            double offsetY = world.random.nextDouble() * 2;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 1.5;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 1.5;
+            double offsetY = world.getRandom().nextDouble() * 2;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 1.5;
 
             // Changed to CAMPFIRE_COSY_SMOKE
-            world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+            world.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
                     1, 0.0, 0.0, 0.0, 0.01);
         }
 
-        player.sendMessage(Text.literal("Poison Dagger ready!")
-                .formatted(Formatting.DARK_GREEN), true);
+        player.sendOverlayMessage(Component.literal("Poison Dagger ready!")
+                .withStyle(ChatFormatting.DARK_GREEN));
 
         return true;
     }
@@ -171,102 +170,101 @@ public class RogueAbilityManager {
     /**
      * Activate Shadow Step
      */
-    public static boolean useShadowStep(ServerPlayerEntity player) {
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        long worldTime = world.getTime();
+    public static boolean useShadowStep(ServerPlayer player) {
+        ServerLevel world = (ServerLevel) player.level();
+        long worldTime = world.getGameTime();
 
-        if (RogueCooldownData.isOnCooldown(player.getUuid(), SHADOW_STEP_KEY, worldTime)) {
-            long remaining = RogueCooldownData.getRemainingCooldown(player.getUuid(), SHADOW_STEP_KEY, worldTime);
-            player.sendMessage(Text.literal("Shadow Step on cooldown: " + (remaining / 20) + "s")
-                    .formatted(Formatting.RED), true);
+        if (RogueCooldownData.isOnCooldown(player.getUUID(), SHADOW_STEP_KEY, worldTime)) {
+            long remaining = RogueCooldownData.getRemainingCooldown(player.getUUID(), SHADOW_STEP_KEY, worldTime);
+            player.sendOverlayMessage(Component.literal("Shadow Step on cooldown: " + (remaining / 20) + "s")
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
 
         if (!EnergyManager.hasEnergy(player, SHADOW_STEP_COST)) {
-            player.sendMessage(Text.literal("Not enough energy! Need " + SHADOW_STEP_COST)
-                    .formatted(Formatting.RED), true);
+            player.sendOverlayMessage(Component.literal("Not enough energy! Need " + SHADOW_STEP_COST)
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Raycast
-        Vec3d start = player.getEyePos();
-        Vec3d direction = player.getRotationVec(1.0f);
-        Vec3d end = start.add(direction.multiply(25));
+        Vec3 start = player.getEyePosition();
+        Vec3 direction = player.getViewVector(1.0f);
+        Vec3 end = start.add(direction.scale(25));
 
-        BlockHitResult hitResult = world.raycast(new RaycastContext(
-                start, end, RaycastContext.ShapeType.OUTLINE,
-                RaycastContext.FluidHandling.NONE, player
+        BlockHitResult hitResult = world.clip(new ClipContext(
+                start, end, ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE, player
         ));
 
         if (hitResult.getType() == HitResult.Type.MISS) {
-            player.sendMessage(Text.literal("No valid target location!")
-                    .formatted(Formatting.RED), true);
+            player.sendOverlayMessage(Component.literal("No valid target location!")
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
 
-        BlockPos targetPos = hitResult.getBlockPos().offset(hitResult.getSide());
-        Vec3d oldPos = player.getEntityPos();
+        BlockPos targetPos = hitResult.getBlockPos().relative(hitResult.getDirection());
+        Vec3 oldPos = player.position();
 
         EnergyManager.consumeEnergy(player, SHADOW_STEP_COST);
-        RogueCooldownData.startCooldown(player.getUuid(), SHADOW_STEP_KEY, worldTime, SHADOW_STEP_COOLDOWN);
+        RogueCooldownData.startCooldown(player.getUUID(), SHADOW_STEP_KEY, worldTime, SHADOW_STEP_COOLDOWN);
 
         createShadowDecoy(world, oldPos);
 
         // Teleport
-        player.teleport(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5, true);
+        player.connection.teleport(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5, player.getYRot(), player.getXRot());
 
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 60, 0));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 10, 4));
+        player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 10, 4));
 
-        spawnShadowStepParticles(world, oldPos, player.getEntityPos());
+        spawnShadowStepParticles(world, oldPos, player.position());
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 0.5f);
+                SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 0.5f);
 
-        player.sendMessage(Text.literal("Shadow Step!")
-                .formatted(Formatting.DARK_PURPLE), true);
+        player.sendOverlayMessage(Component.literal("Shadow Step!")
+                .withStyle(ChatFormatting.DARK_PURPLE));
 
         return true;
     }
 
-    private static void createShadowDecoy(ServerWorld world, Vec3d pos) {
-        AreaEffectCloudEntity decoy = new AreaEffectCloudEntity(world, pos.x, pos.y, pos.z);
+    private static void createShadowDecoy(ServerLevel world, Vec3 pos) {
+        AreaEffectCloud decoy = new AreaEffectCloud(world, pos.x, pos.y, pos.z);
         decoy.setRadius(1.0f);
         decoy.setDuration(60);
-        decoy.setRadiusGrowth(0.0f);
-        decoy.setParticleType(ParticleTypes.SMOKE);
+        decoy.setRadiusPerTick(0.0f);
 
-        world.spawnEntity(decoy);
+        world.addFreshEntity(decoy);
 
         for (int i = 0; i < 30; i++) {
-            double offsetX = (world.random.nextDouble() - 0.5) * 1.5;
-            double offsetY = world.random.nextDouble() * 2;
-            double offsetZ = (world.random.nextDouble() - 0.5) * 1.5;
+            double offsetX = (world.getRandom().nextDouble() - 0.5) * 1.5;
+            double offsetY = world.getRandom().nextDouble() * 2;
+            double offsetZ = (world.getRandom().nextDouble() - 0.5) * 1.5;
 
-            world.spawnParticles(ParticleTypes.PORTAL,
+            world.sendParticles(ParticleTypes.PORTAL,
                     pos.x + offsetX, pos.y + offsetY, pos.z + offsetZ,
                     1, 0.0, 0.0, 0.0, 0.1);
         }
     }
 
-    private static void spawnShadowStepParticles(ServerWorld world, Vec3d from, Vec3d to) {
+    private static void spawnShadowStepParticles(ServerLevel world, Vec3 from, Vec3 to) {
         for (int i = 0; i < 30; i++) {
-            world.spawnParticles(ParticleTypes.PORTAL,
+            world.sendParticles(ParticleTypes.PORTAL,
                     from.x, from.y + 1, from.z,
                     1, 0.5, 1.0, 0.5, 0.1);
         }
 
         for (int i = 0; i < 30; i++) {
-            world.spawnParticles(ParticleTypes.REVERSE_PORTAL,
+            world.sendParticles(ParticleTypes.REVERSE_PORTAL,
                     to.x, to.y + 1, to.z,
                     1, 0.5, 1.0, 0.5, 0.1);
         }
 
-        Vec3d direction = to.subtract(from).normalize();
+        Vec3 direction = to.subtract(from).normalize();
         double distance = from.distanceTo(to);
         for (double d = 0; d < distance; d += 0.5) {
-            Vec3d point = from.add(direction.multiply(d));
+            Vec3 point = from.add(direction.scale(d));
             // Changed to WITCH particle
-            world.spawnParticles(ParticleTypes.WITCH,
+            world.sendParticles(ParticleTypes.WITCH,
                     point.x, point.y + 1, point.z,
                     1, 0.1, 0.1, 0.1, 0.01);
         }

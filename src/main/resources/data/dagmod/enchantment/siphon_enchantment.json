@@ -22,7 +22,7 @@
           "condition": "minecraft:damage_source_properties",
           "predicate": {
             "source_entity": {
-              "type": "#minecraft:undead"
+              "minecraft:entity_type": "#minecraft:undead"
             }
           }
         },
@@ -44,7 +44,7 @@
               "predicate": {
                 "tags": [],
                 "source_entity": {
-                  "type": "#minecraft:undead"
+                  "minecraft:entity_type": "#minecraft:undead"
                 }
               }
             }

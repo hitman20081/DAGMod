@@ -2,154 +2,152 @@ package com.github.hitman20081.dagmod.bone_realm.chest;
 
 import com.github.hitman20081.dagmod.bone_realm.BoneRealmRegistry;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Locked Bone Chest - Requires specific keys to open
  * Visual effects when locked, opens with particle effects when unlocked
  */
-public class LockedBoneChestBlock extends BlockWithEntity {
+public class LockedBoneChestBlock extends BaseEntityBlock {
 
-    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private final LockedChestType chestType;
 
     // Codec for block serialization - simplified without LockedChestType
-    public static final MapCodec<LockedBoneChestBlock> CODEC = createCodec(settings ->
+    public static final MapCodec<LockedBoneChestBlock> CODEC = simpleCodec(settings ->
             new LockedBoneChestBlock(settings, LockedChestType.BONE_REALM)
     );
 
-    public LockedBoneChestBlock(Settings settings, LockedChestType type) {
+    public LockedBoneChestBlock(Properties settings, LockedChestType type) {
         super(settings);
         this.chestType = type;
-        setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
+    protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    protected BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING)));
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (!(blockEntity instanceof LockedBoneChestBlockEntity chestEntity)) {
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Check if already unlocked
         if (chestEntity.isUnlocked()) {
-            player.openHandledScreen(chestEntity);
-            return ActionResult.SUCCESS;
+            player.openMenu(chestEntity);
+            return InteractionResult.SUCCESS;
         }
 
         // Try to unlock with key
-        ItemStack heldItem = player.getMainHandStack();
+        ItemStack heldItem = player.getMainHandItem();
         if (canUnlockWith(heldItem)) {
             // Unlock the chest
             chestEntity.unlock();
 
             // Consume key (unless creative)
             if (!player.isCreative()) {
-                heldItem.decrement(1);
+                heldItem.shrink(1);
             }
 
             // Visual and audio effects
             unlockEffects(world, pos);
 
             // Success message
-            player.sendMessage(
-                    Text.literal("✦ Chest Unlocked! ✦")
-                            .formatted(Formatting.GOLD, Formatting.BOLD),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("✦ Chest Unlocked! ✦")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
             // Open the chest
-            player.openHandledScreen(chestEntity);
-            return ActionResult.SUCCESS;
+            player.openMenu(chestEntity);
+            return InteractionResult.SUCCESS;
         }
 
         // Wrong key or no key
         lockedEffects(world, pos);
-        player.sendMessage(
-                Text.literal("This chest is locked!")
-                        .formatted(Formatting.RED)
-                        .append(Text.literal("\nRequires: " + chestType.getKeyName())
-                                .formatted(Formatting.GRAY)),
-                true
-        );
+        player.sendOverlayMessage(
+                Component.literal("This chest is locked!")
+                        .withStyle(ChatFormatting.RED)
+                        .append(Component.literal("\nRequires: " + chestType.getKeyName())
+                                .withStyle(ChatFormatting.GRAY)));
 
-        return ActionResult.FAIL;
+        return InteractionResult.FAIL;
     }
 
     private boolean canUnlockWith(ItemStack stack) {
         return stack.getItem() == chestType.getRequiredKey();
     }
 
-    private void unlockEffects(World world, BlockPos pos) {
+    private void unlockEffects(Level world, BlockPos pos) {
         // Play unlock sound
-        world.playSound(null, pos, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.8f, 1.2f);
+        world.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.8f, 1.2f);
 
         // Spawn particles
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         for (int i = 0; i < 20; i++) {
             double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.8;
             double y = pos.getY() + 0.5 + random.nextDouble() * 0.5;
             double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.8;
 
-            world.addParticleClient(ParticleTypes.ENCHANT, x, y, z, 0, 0.1, 0);
-            world.addParticleClient(ParticleTypes.END_ROD, x, y, z,
+            world.addParticle(ParticleTypes.ENCHANT, x, y, z, 0, 0.1, 0);
+            world.addParticle(ParticleTypes.END_ROD, x, y, z,
                     (random.nextDouble() - 0.5) * 0.1,
                     random.nextDouble() * 0.2,
                     (random.nextDouble() - 0.5) * 0.1
@@ -157,23 +155,23 @@ public class LockedBoneChestBlock extends BlockWithEntity {
         }
     }
 
-    private void lockedEffects(World world, BlockPos pos) {
+    private void lockedEffects(Level world, BlockPos pos) {
         // Play locked sound
-        world.playSound(null, pos, SoundEvents.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1.0f, 1.0f);
 
         // Spawn red particles
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
         for (int i = 0; i < 5; i++) {
             double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.8;
             double y = pos.getY() + 0.5 + random.nextDouble() * 0.5;
             double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.8;
 
-            world.addParticleClient(ParticleTypes.SMOKE, x, y, z, 0, 0.05, 0);
+            world.addParticle(ParticleTypes.SMOKE, x, y, z, 0, 0.05, 0);
         }
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof LockedBoneChestBlockEntity chestEntity && !chestEntity.isUnlocked()) {
             // Locked chest particle effects
@@ -182,36 +180,36 @@ public class LockedBoneChestBlock extends BlockWithEntity {
                 double y = pos.getY() + 0.5 + random.nextDouble() * 0.3;
                 double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.6;
 
-                world.addParticleClient(chestType.getParticleType(), x, y, z, 0, 0.02, 0);
+                world.addParticle(chestType.getParticleType(), x, y, z, 0, 0.02, 0);
             }
         }
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new LockedBoneChestBlockEntity(pos, state, chestType);
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return null; // No ticking needed for now
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.cuboid(0.0625, 0.0, 0.0625, 0.9375, 0.875, 0.9375);
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.875, 0.9375);
     }
 
     @Override
-    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.cuboid(0.0625, 0.0, 0.0625, 0.9375, 0.875, 0.9375);
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.875, 0.9375);
     }
 
     public LockedChestType getChestType() {
@@ -227,9 +225,9 @@ public class LockedBoneChestBlock extends BlockWithEntity {
 
         private final String name;
         private final String keyName;
-        private final net.minecraft.particle.ParticleEffect particleType;
+        private final net.minecraft.core.particles.ParticleOptions particleType;
 
-        LockedChestType(String name, String keyName, net.minecraft.particle.ParticleEffect particleType) {
+        LockedChestType(String name, String keyName, net.minecraft.core.particles.ParticleOptions particleType) {
             this.name = name;
             this.keyName = keyName;
             this.particleType = particleType;
@@ -243,11 +241,11 @@ public class LockedBoneChestBlock extends BlockWithEntity {
             return keyName;
         }
 
-        public net.minecraft.particle.ParticleEffect getParticleType() {
+        public net.minecraft.core.particles.ParticleOptions getParticleType() {
             return particleType;
         }
 
-        public net.minecraft.item.Item getRequiredKey() {
+        public net.minecraft.world.item.Item getRequiredKey() {
             return switch (this) {
                 case SKELETON_KING -> BoneRealmRegistry.SKELETON_KING_KEY;
                 case BONE_REALM -> BoneRealmRegistry.BONE_REALM_CHEST_KEY;

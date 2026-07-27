@@ -2,112 +2,119 @@ package com.github.hitman20081.dagmod.item;
 
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.block.ModBlocks;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 public class ModItemGroups {
 
     // Create the custom creative tab
-    public static final RegistryKey<ItemGroup> DAGMOD_GROUP = RegistryKey.of(
-            RegistryKeys.ITEM_GROUP,
-            Identifier.of(DagMod.MOD_ID, "dagmod")
+    public static final ResourceKey<CreativeModeTab> DAGMOD_GROUP = ResourceKey.create(
+            Registries.CREATIVE_MODE_TAB,
+            Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "dagmod")
     );
 
     public static void registerItemGroups() {
-        Registry.register(Registries.ITEM_GROUP, DAGMOD_GROUP,
-                FabricItemGroup.builder()
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, DAGMOD_GROUP,
+                FabricCreativeModeTab.builder()
                         .icon(() -> new ItemStack(ModItems.WARRIOR_TOKEN)) // Use warrior token as icon
-                        .displayName(Text.translatable("itemGroup.dagmod"))
-                        .entries((displayContext, entries) -> {
+                        .title(Component.translatable("itemGroup.dagmod"))
+                        .displayItems((displayContext, entries) -> {
 
                             // === CLASS SELECTION TOKENS ===
-                            entries.add(ModItems.WARRIOR_TOKEN);
-                            entries.add(ModItems.MAGE_TOKEN);
-                            entries.add(ModItems.ROGUE_TOKEN);
+                            entries.accept(ModItems.WARRIOR_TOKEN);
+                            entries.accept(ModItems.MAGE_TOKEN);
+                            entries.accept(ModItems.ROGUE_TOKEN);
 
                             // === RACE SELECTION TOKENS ===
-                            entries.add(ModItems.DWARF_TOKEN);
-                            entries.add(ModItems.ELF_TOKEN);
-                            entries.add(ModItems.HUMAN_TOKEN);
-                            entries.add(ModItems.ORC_TOKEN);
+                            entries.accept(ModItems.DWARF_TOKEN);
+                            entries.accept(ModItems.ELF_TOKEN);
+                            entries.accept(ModItems.HUMAN_TOKEN);
+                            entries.accept(ModItems.ORC_TOKEN);
 
                             // === RESET ITEMS ===
-                            entries.add(ModItems.RACE_RESET_CRYSTAL);
-                            entries.add(ModItems.CLASS_RESET_CRYSTAL);
-                            entries.add(ModItems.CHARACTER_RESET_CRYSTAL);
-                            entries.add(ModItems.POTION_OF_RACIAL_REBIRTH);
-                            entries.add(ModItems.POTION_OF_CLASS_REBIRTH);
-                            entries.add(ModItems.POTION_OF_TOTAL_REBIRTH);
+                            entries.accept(ModItems.RACE_RESET_CRYSTAL);
+                            entries.accept(ModItems.CLASS_RESET_CRYSTAL);
+                            entries.accept(ModItems.CHARACTER_RESET_CRYSTAL);
+                            entries.accept(ModItems.POTION_OF_RACIAL_REBIRTH);
+                            entries.accept(ModItems.POTION_OF_CLASS_REBIRTH);
+                            entries.accept(ModItems.POTION_OF_TOTAL_REBIRTH);
 
                             // === WARRIOR ABILITIES ===
-                            entries.add(ModItems.RAGE_TOTEM);
-                            entries.add(ModItems.WAR_HORN);
-                            entries.add(ModItems.BATTLE_STANDARD);
-                            entries.add(ModItems.WHIRLWIND_AXE);
-                            entries.add(ModItems.IRON_TALISMAN);
+                            entries.accept(ModItems.RAGE_TOTEM);
+                            entries.accept(ModItems.WAR_HORN);
+                            entries.accept(ModItems.BATTLE_STANDARD);
+                            entries.accept(ModItems.WHIRLWIND_AXE);
+                            entries.accept(ModItems.IRON_TALISMAN);
 
                             // === MAGE WANDS ===
-                            entries.add(ModItems.APPRENTICE_WAND);
-                            entries.add(ModItems.ADEPT_WAND);
-                            entries.add(ModItems.MASTER_WAND);
+                            entries.accept(ModItems.APPRENTICE_WAND);
+                            entries.accept(ModItems.ADEPT_WAND);
+                            entries.accept(ModItems.MASTER_WAND);
 
                             // === MAGE SCROLLS ===
-                            entries.add(ModItems.HEAL_SCROLL);
-                            entries.add(ModItems.FIREBALL_SCROLL);
-                            entries.add(ModItems.ABSORPTION_SCROLL);
-                            entries.add(ModItems.LIGHTNING_SCROLL);
-                            entries.add(ModItems.FROST_NOVA_SCROLL);
-                            entries.add(ModItems.TELEPORT_SCROLL);
-                            entries.add(ModItems.MANA_SHIELD_SCROLL);
+                            entries.accept(ModItems.HEAL_SCROLL);
+                            entries.accept(ModItems.FIREBALL_SCROLL);
+                            entries.accept(ModItems.ABSORPTION_SCROLL);
+                            entries.accept(ModItems.LIGHTNING_SCROLL);
+                            entries.accept(ModItems.FROST_NOVA_SCROLL);
+                            entries.accept(ModItems.TELEPORT_SCROLL);
+                            entries.accept(ModItems.MANA_SHIELD_SCROLL);
+                            entries.accept(ModItems.GRAVITY_WELL_SCROLL);
+                            entries.accept(ModItems.CHAIN_LIGHTNING_SCROLL);
+                            entries.accept(ModItems.ICE_WALL_SCROLL);
+                            entries.accept(ModItems.METEOR_STORM_SCROLL);
+                            entries.accept(ModItems.LIFE_DRAIN_SCROLL);
+                            entries.accept(ModItems.DIMENSIONAL_RIFT_SCROLL);
+                            entries.accept(ModItems.POLYMORPH_SCROLL);
 
                             // === MAGE ABILITIES ===
-                            entries.add(ModItems.ARCANE_ORB);
-                            entries.add(ModItems.TEMPORAL_CRYSTAL);
-                            entries.add(ModItems.MANA_CATALYST);
-                            entries.add(ModItems.BARRIER_CHARM);
+                            entries.accept(ModItems.ARCANE_ORB);
+                            entries.accept(ModItems.TEMPORAL_CRYSTAL);
+                            entries.accept(ModItems.MANA_CATALYST);
+                            entries.accept(ModItems.BARRIER_CHARM);
 
                             // === ROGUE ABILITIES ===
-                            entries.add(ModItems.ROGUE_ABILITY_TOME);  // Existing
+                            entries.accept(ModItems.ROGUE_ABILITY_TOME);  // Existing
                             // New cooldown abilities:
-                            entries.add(ModItems.VOID_BLADE);
-                            entries.add(ModItems.VANISH_CLOAK);
-                            entries.add(ModItems.POISON_VIAL);
-                            entries.add(ModItems.ASSASSINS_MARK);
+                            entries.accept(ModItems.VOID_BLADE);
+                            entries.accept(ModItems.VANISH_CLOAK);
+                            entries.accept(ModItems.POISON_VIAL);
+                            entries.accept(ModItems.ASSASSINS_MARK);
 
                             // === QUEST BOOKS ===
-                            entries.add(ModItems.NOVICE_QUEST_BOOK);
-                            entries.add(ModItems.APPRENTICE_QUEST_BOOK);
-                            entries.add(ModItems.EXPERT_QUEST_BOOK);
-                            entries.add(ModItems.MASTER_QUEST_TOME);
+                            entries.accept(ModItems.NOVICE_QUEST_BOOK);
+                            entries.accept(ModItems.APPRENTICE_QUEST_BOOK);
+                            entries.accept(ModItems.EXPERT_QUEST_BOOK);
+                            entries.accept(ModItems.MASTER_QUEST_TOME);
 
                             // === SPECIAL ITEMS ===
-                            entries.add(ModItems.COOLDOWN_ELIXIR);
-                            entries.add(ModItems.HALL_LOCATOR);
+                            entries.accept(ModItems.COOLDOWN_ELIXIR);
+                            entries.accept(ModItems.HALL_LOCATOR);
 
                             // === BLOCKS ===
-                            entries.add(ModBlocks.CLASS_SELECTION_ALTAR);
-                            entries.add(ModBlocks.RACE_SELECTION_ALTAR);
-                            entries.add(ModBlocks.QUEST_BLOCK);
-                            entries.add(ModBlocks.JOB_BOARD_BLOCK);
+                            entries.accept(ModBlocks.CLASS_SELECTION_ALTAR);
+                            entries.accept(ModBlocks.RACE_SELECTION_ALTAR);
+                            entries.accept(ModBlocks.QUEST_BLOCK);
+                            entries.accept(ModBlocks.JOB_BOARD_BLOCK);
 
 
                             // === POWDERS ===
-                            entries.add(ModItems.AMETHYST_POWDER);
-                            entries.add(ModItems.DIAMOND_POWDER);
-                            entries.add(ModItems.EMERALD_POWDER);
-                            entries.add(ModItems.ECHO_DUST);
-                            entries.add(ModItems.QUARTZ_POWDER);
-                            entries.add(ModItems.SLIMEBALL_DUST);
+                            entries.accept(ModItems.AMETHYST_POWDER);
+                            entries.accept(ModItems.DIAMOND_POWDER);
+                            entries.accept(ModItems.EMERALD_POWDER);
+                            entries.accept(ModItems.ECHO_DUST);
+                            entries.accept(ModItems.QUARTZ_POWDER);
+                            entries.accept(ModItems.SLIMEBALL_DUST);
 
                             // === FOOD (optional - you can remove if you want food in vanilla tabs) ===
-                            // entries.add(ModItems.CHICKEN_STEW);
+                            // entries.accept(ModItems.CHICKEN_STEW);
                             // ... add food items if you want them here
 
                         })

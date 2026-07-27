@@ -10,6 +10,12 @@
       "lower_size": 0,
       "upper_size": 1
     },
+    "below_trunk_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:packed_mud"
+      }
+    },
     "dirt_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {

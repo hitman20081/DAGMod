@@ -105,4 +105,18 @@ Plus 12 more consumables! See [Items](<./items-overview.md>) page for complete l
 
 ---
 
+## Class Quest Chains
+
+Each class has a 5-quest chain that unlocks your class ability items one at a time. Quests are gated by level and require kills and material collection from progressively harder content — the Nether, End, and finally boss fights at the L100 capstone.
+
+| Class | Chain Name | Abilities Unlocked | L100 Capstone |
+|-------|------------|-------------------|---------------|
+| Warrior | Path of the Berserker | Rage Totem → Battle Standard → Whirlwind Axe → Iron Talisman → War Horn | Kill Wild Dragon + Skeleton Lord |
+| Mage | Path of the Archmage | Arcane Orb → Temporal Crystal → Mana Catalyst → Barrier Charm | Kill Skeleton Lord (boss trial) |
+| Rogue | Path of Shadows | Rogue Ability Tome → Void Blade → Poison Vial → Assassin's Mark → Vanish Cloak | Kill Wild Dragon |
+
+See the individual class pages for the full objective breakdown.
+
+---
+
 **Next Steps:** Review [Synergies](<./synergies.md>) to see what special abilities your race-class combination unlocks! Then check [Items](<./items-overview.md>) to see all ability items and how to obtain them.

@@ -2,10 +2,10 @@ package com.github.hitman20081.dagmod.mixin;
 
 import com.github.hitman20081.dagmod.class_system.RogueCombatHandler;
 import com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -17,16 +17,16 @@ public class RogueDamageMixin {
      * Modify damage when a player attacks (handles Rogue backstab + weapon synergy bonuses)
      */
     @ModifyVariable(
-            method = "damage",
+            method = "hurtServer",
             at = @At("HEAD"),
             ordinal = 0,
             argsOnly = true
     )
-    private float modifyPlayerDamage(float amount, ServerWorld world, DamageSource source) {
+    private float modifyPlayerDamage(float amount, ServerLevel world, DamageSource source) {
         LivingEntity target = (LivingEntity)(Object)this;
 
         // Check if damage source is a player attacking
-        if (source.getAttacker() instanceof ServerPlayerEntity attacker) {
+        if (source.getEntity() instanceof ServerPlayer attacker) {
             // Handle Rogue backstab (includes weapon synergy backstab bonus)
             float rogueDamage = RogueCombatHandler.handleRogueDamage(attacker, target, amount);
 
@@ -40,8 +40,8 @@ public class RogueDamageMixin {
         }
 
         // Check if this entity is a Rogue player taking fall damage
-        if ((Object)this instanceof ServerPlayerEntity player &&
-                source.isOf(net.minecraft.entity.damage.DamageTypes.FALL)) {
+        if ((Object)this instanceof ServerPlayer player &&
+                source.is(net.minecraft.world.damagesource.DamageTypes.FALL)) {
             return RogueCombatHandler.modifyFallDamage(player, amount);
         }
 

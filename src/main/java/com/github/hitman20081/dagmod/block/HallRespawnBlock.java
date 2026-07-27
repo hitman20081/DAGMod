@@ -1,20 +1,22 @@
 package com.github.hitman20081.dagmod.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldProperties;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,65 +25,59 @@ public class HallRespawnBlock extends Block {
     private static final int MIN_OFFSET = 5;
     private static final int MAX_OFFSET = 10;
 
-    public HallRespawnBlock(Settings settings) {
+    public HallRespawnBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos,
-                                 PlayerEntity player, BlockHitResult hit) {
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos,
+                                 Player player, BlockHitResult hit) {
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
-            return ActionResult.PASS;
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return InteractionResult.PASS;
         }
 
         // Pick a random safe position 5-10 blocks from the respawn block
         BlockPos spawnPos = findSafeRandomPos(world, pos);
 
-        WorldProperties.SpawnPoint spawnData = WorldProperties.SpawnPoint.create(
-                world.getRegistryKey(), spawnPos, serverPlayer.getYaw(), 0f
-        );
-        ServerPlayerEntity.Respawn respawn = new ServerPlayerEntity.Respawn(spawnData, true);
-        serverPlayer.setSpawnPoint(respawn, true);
+        serverPlayer.setRespawnPosition(new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(world.dimension(), spawnPos, serverPlayer.getYRot(), 0f), true), true);
 
         // Feedback
-        serverPlayer.sendMessage(
-                Text.literal("Respawn point set at the Hall of Champions!")
-                        .formatted(Formatting.GOLD),
-                false
-        );
+        serverPlayer.sendSystemMessage(
+                Component.literal("Respawn point set at the Hall of Champions!")
+                        .withStyle(ChatFormatting.GOLD));
 
         // Effects
-        ServerWorld serverWorld = (ServerWorld) world;
-        serverWorld.playSound(null, pos, SoundEvents.ENTITY_PLAYER_LEVELUP,
-                SoundCategory.BLOCKS, 1.0f, 1.0f);
-        serverWorld.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING,
+        ServerLevel serverWorld = (ServerLevel) world;
+        serverWorld.playSound(null, pos, SoundEvents.PLAYER_LEVELUP,
+                SoundSource.BLOCKS, 1.0f, 1.0f);
+        serverWorld.sendParticles(ParticleTypes.TOTEM_OF_UNDYING,
                 pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                 30, 0.5, 0.5, 0.5, 0.1);
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     /**
      * Finds a random safe position (2 blocks of air) within 5-10 blocks of the given position.
      * Tries up to 20 random positions, falls back to directly above the block if none found.
      */
-    private BlockPos findSafeRandomPos(World world, BlockPos center) {
+    private BlockPos findSafeRandomPos(Level world, BlockPos center) {
         ThreadLocalRandom rand = ThreadLocalRandom.current();
 
         for (int attempt = 0; attempt < 20; attempt++) {
             int dx = rand.nextInt(MIN_OFFSET, MAX_OFFSET + 1) * (rand.nextBoolean() ? 1 : -1);
             int dz = rand.nextInt(MIN_OFFSET, MAX_OFFSET + 1) * (rand.nextBoolean() ? 1 : -1);
-            BlockPos candidate = center.add(dx, 0, dz);
+            BlockPos candidate = center.offset(dx, 0, dz);
 
             // Scan vertically near the block's Y level to find ground with 2 air blocks above
             for (int dy = -3; dy <= 3; dy++) {
-                BlockPos ground = candidate.add(0, dy, 0);
-                BlockPos feet = ground.up();
-                BlockPos head = ground.up(2);
+                BlockPos ground = candidate.offset(0, dy, 0);
+                BlockPos feet = ground.above();
+                BlockPos head = ground.above(2);
 
                 if (!world.getBlockState(ground).isAir()
                         && world.getBlockState(feet).isAir()
@@ -92,6 +88,6 @@ public class HallRespawnBlock extends Block {
         }
 
         // Fallback: directly above the respawn block
-        return center.up();
+        return center.above();
     }
 }

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:echo_dust",
+    "minecraft:ender_eye"
+  ],
+  "result": {
+    "id": "dagmod:dimensional_rift_scroll",
+    "components": { "minecraft:item_model": "dagmod:dimensional_rift_scroll" },
+    "count": 1
+  }
+}

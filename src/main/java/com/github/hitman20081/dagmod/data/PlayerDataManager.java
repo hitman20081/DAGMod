@@ -5,13 +5,14 @@ import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
 import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
 import com.github.hitman20081.dagmod.race_system.RaceAbilityManager;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.core.BlockPos;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +32,7 @@ import java.util.UUID;
  *     dagmod/
  *       players/         <-- All player-specific data
  *         {uuid}.dat
- *       world/           <-- World-specific data (Hall location, etc.)
+ *       world/           <-- Level-specific data (Hall location, etc.)
  *         hall_location.dat
  *       progression/     <-- This folder will be used by ProgressionStorage
  *         {uuid}.dat
@@ -41,6 +42,7 @@ public class PlayerDataManager {
     private static final String RACE_KEY = "dagmod_race";
     private static final String CLASS_KEY = "dagmod_class";
     private static final String MET_GARRICK_KEY = "dagmod_met_garrick";
+    private static final String GEM_CHAIN_STARTED_KEY = "dagmod_gem_chain_started";
 
     // Tutorial task tracking keys
     private static final String TASK1_COMPLETE_KEY = "dagmod_task1_complete";
@@ -51,13 +53,13 @@ public class PlayerDataManager {
     // Updated path constants
     private static final String DATA_ROOT = "data/dagmod";      // Base directory
     private static final String PLAYERS_FOLDER = "players";     // Player data subfolder
-    private static final String WORLD_FOLDER = "world";         // World data subfolder
+    private static final String WORLD_FOLDER = "world";         // Level data subfolder
 
     /**
      * Get the root DAGMod data directory
      */
     private static File getDataRoot(MinecraftServer server) {
-        File worldDir = server.getSavePath(WorldSavePath.ROOT).toFile();
+        File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
         File dagmodRoot = new File(worldDir, DATA_ROOT);
 
         if (!dagmodRoot.exists()) {
@@ -112,39 +114,40 @@ public class PlayerDataManager {
      * 3. Replace .dat with .tmp
      * This prevents data loss on write failure
      */
-    public static void savePlayerData(ServerPlayerEntity player) {
+    public static void savePlayerData(ServerPlayer player) {
         File dataFile = null;
         File tempFile = null;
         File backupFile = null;
 
         try {
-            dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
+            dataFile = getPlayerDataFile(player.level().getServer(), player.getUUID());
             tempFile = new File(dataFile.getPath() + ".tmp");
             backupFile = new File(dataFile.getPath() + ".bak");
 
             // Prepare NBT data
-            NbtCompound nbt = new NbtCompound();
+            CompoundTag nbt = new CompoundTag();
 
-            String race = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
-            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+            String race = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+            String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
             nbt.putString(RACE_KEY, race);
             nbt.putString(CLASS_KEY, playerClass);
 
             // Save NPC interaction tracking
-            nbt.putBoolean(MET_GARRICK_KEY, hasMetGarrick(player.getUuid()));
+            nbt.putBoolean(MET_GARRICK_KEY, hasMetGarrick(player.getUUID()));
+            nbt.putBoolean(GEM_CHAIN_STARTED_KEY, hasStartedGemChain(player.getUUID()));
 
             // Save tutorial task tracking
-            nbt.putBoolean(TASK1_COMPLETE_KEY, isTask1Complete(player.getUuid()));
-            nbt.putBoolean(TASK2_COMPLETE_KEY, isTask2Complete(player.getUuid()));
-            nbt.putBoolean(TASK3_COMPLETE_KEY, isTask3Complete(player.getUuid()));
-            nbt.putInt(TASK2_MOB_KILLS_KEY, getTask2MobKills(player.getUuid()));
+            nbt.putBoolean(TASK1_COMPLETE_KEY, isTask1Complete(player.getUUID()));
+            nbt.putBoolean(TASK2_COMPLETE_KEY, isTask2Complete(player.getUUID()));
+            nbt.putBoolean(TASK3_COMPLETE_KEY, isTask3Complete(player.getUUID()));
+            nbt.putInt(TASK2_MOB_KILLS_KEY, getTask2MobKills(player.getUUID()));
 
             // Save mana data for Mages
             if ("Mage".equals(playerClass)) {
                 com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
                         com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
-                NbtCompound manaNbt = new NbtCompound();
+                CompoundTag manaNbt = new CompoundTag();
                 manaData.writeToNbt(manaNbt);
                 nbt.put("manaData", manaNbt);
             }
@@ -177,36 +180,37 @@ public class PlayerDataManager {
     /**
      * Load player's race and class from file with backup recovery
      */
-    public static void loadPlayerData(ServerPlayerEntity player) {
+    public static void loadPlayerData(ServerPlayer player) {
         try {
-            File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
+            File dataFile = getPlayerDataFile(player.level().getServer(), player.getUUID());
             File backupFile = new File(dataFile.getPath() + ".bak");
 
             if (!dataFile.exists()) {
                 // No data file exists (new world or new player)
                 // Clear static HashMaps to ensure fresh start
-                RaceSelectionAltarBlock.resetPlayerRace(player.getUuid());
-                ClassSelectionAltarBlock.resetPlayerClass(player.getUuid());
+                RaceSelectionAltarBlock.resetPlayerRace(player.getUUID());
+                ClassSelectionAltarBlock.resetPlayerClass(player.getUUID());
 
                 // NOTE: Do NOT clear progression data here - ProgressionManager has its own
                 // storage system that handles loading/creating fresh data independently.
                 // Clearing it here would wipe data that was already loaded by ProgressionEvents.
 
                 // Clear tutorial task tracking
-                playersWhoMetGarrick.remove(player.getUuid());
-                task1CompleteSet.remove(player.getUuid());
-                task2CompleteSet.remove(player.getUuid());
-                task3CompleteSet.remove(player.getUuid());
-                task2MobKills.remove(player.getUuid());
+                playersWhoMetGarrick.remove(player.getUUID());
+                task1CompleteSet.remove(player.getUUID());
+                task2CompleteSet.remove(player.getUUID());
+                task3CompleteSet.remove(player.getUUID());
+                task2MobKills.remove(player.getUUID());
+                gemChainStartedSet.remove(player.getUUID());
 
                 return; // No data to load for new players
             }
 
-            NbtCompound nbt = null;
+            CompoundTag nbt = null;
 
             // Try to load from main file
             try (FileInputStream fis = new FileInputStream(dataFile)) {
-                nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
             } catch (IOException mainFileError) {
                 DagMod.LOGGER.error("Failed to load player data from main file for " + player.getName().getString(), mainFileError);
 
@@ -214,7 +218,7 @@ public class PlayerDataManager {
                 if (backupFile.exists()) {
                     DagMod.LOGGER.warn("Attempting to recover from backup file...");
                     try (FileInputStream fis = new FileInputStream(backupFile)) {
-                        nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                        nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
                         DagMod.LOGGER.info("Successfully recovered player data from backup for " + player.getName().getString());
 
                         // Restore backup as main file
@@ -239,7 +243,7 @@ public class PlayerDataManager {
                 if (raceOpt.isPresent()) {
                     String race = raceOpt.get();
                     if (!race.equals("none") && !race.isEmpty()) {
-                        RaceSelectionAltarBlock.setPlayerRace(player.getUuid(), race);
+                        RaceSelectionAltarBlock.setPlayerRace(player.getUUID(), race);
                         RaceAbilityManager.applyRaceAbilities(player);
                     }
                 }
@@ -250,12 +254,12 @@ public class PlayerDataManager {
                 if (classOpt.isPresent()) {
                     String playerClass = classOpt.get();
                     if (!playerClass.equals("none") && !playerClass.isEmpty()) {
-                        ClassSelectionAltarBlock.setPlayerClass(player.getUuid(), playerClass);
+                        ClassSelectionAltarBlock.setPlayerClass(player.getUUID(), playerClass);
                         ClassAbilityManager.applyClassAbilities(player);
 
                         // Load mana data for Mages
                         if ("Mage".equals(playerClass) && nbt.contains("manaData")) {
-                            NbtCompound manaNbt = nbt;
+                            CompoundTag manaNbt = nbt;
                             com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
                                     com.github.hitman20081.dagmod.class_system.mana.ManaManager.getManaData(player);
                             manaData.readFromNbt(manaNbt);
@@ -268,7 +272,13 @@ public class PlayerDataManager {
             if (nbt.contains(MET_GARRICK_KEY)) {
                 Optional<Boolean> metGarrickOpt = nbt.getBoolean(MET_GARRICK_KEY);
                 if (metGarrickOpt.isPresent() && metGarrickOpt.get()) {
-                    markMetGarrick(player.getUuid());
+                    markMetGarrick(player.getUUID());
+                }
+            }
+            if (nbt.contains(GEM_CHAIN_STARTED_KEY)) {
+                Optional<Boolean> gemChainOpt = nbt.getBoolean(GEM_CHAIN_STARTED_KEY);
+                if (gemChainOpt.isPresent() && gemChainOpt.get()) {
+                    gemChainStartedSet.add(player.getUUID());
                 }
             }
 
@@ -276,25 +286,25 @@ public class PlayerDataManager {
             if (nbt.contains(TASK1_COMPLETE_KEY)) {
                 Optional<Boolean> task1Opt = nbt.getBoolean(TASK1_COMPLETE_KEY);
                 if (task1Opt.isPresent() && task1Opt.get()) {
-                    markTask1Complete(player.getUuid());
+                    markTask1Complete(player.getUUID());
                 }
             }
             if (nbt.contains(TASK2_COMPLETE_KEY)) {
                 Optional<Boolean> task2Opt = nbt.getBoolean(TASK2_COMPLETE_KEY);
                 if (task2Opt.isPresent() && task2Opt.get()) {
-                    markTask2Complete(player.getUuid());
+                    markTask2Complete(player.getUUID());
                 }
             }
             if (nbt.contains(TASK3_COMPLETE_KEY)) {
                 Optional<Boolean> task3Opt = nbt.getBoolean(TASK3_COMPLETE_KEY);
                 if (task3Opt.isPresent() && task3Opt.get()) {
-                    markTask3Complete(player.getUuid());
+                    markTask3Complete(player.getUUID());
                 }
             }
             if (nbt.contains(TASK2_MOB_KILLS_KEY)) {
                 Optional<Integer> mobKillsOpt = nbt.getInt(TASK2_MOB_KILLS_KEY);
                 if (mobKillsOpt.isPresent()) {
-                    setTask2MobKills(player.getUuid(), mobKillsOpt.get());
+                    setTask2MobKills(player.getUUID(), mobKillsOpt.get());
                 }
             }
 
@@ -313,7 +323,7 @@ public class PlayerDataManager {
             File worldDir = getWorldDirectory(server);
             File hallFile = new File(worldDir, HALL_LOCATION_FILE);
 
-            NbtCompound nbt = new NbtCompound();
+            CompoundTag nbt = new CompoundTag();
             nbt.putInt("x", pos.getX());
             nbt.putInt("y", pos.getY());
             nbt.putInt("z", pos.getZ());
@@ -341,9 +351,9 @@ public class PlayerDataManager {
                 return null;
             }
 
-            NbtCompound nbt;
+            CompoundTag nbt;
             try (FileInputStream fis = new FileInputStream(hallFile)) {
-                nbt = NbtIo.readCompressed(fis, NbtSizeTracker.ofUnlimitedBytes());
+                nbt = NbtIo.readCompressed(fis, NbtAccounter.unlimitedHeap());
             }
 
             // Handle Optional<Integer> return type
@@ -374,8 +384,8 @@ public class PlayerDataManager {
     /**
      * Check if player has existing data
      */
-    public static boolean hasPlayerData(ServerPlayerEntity player) {
-        File dataFile = getPlayerDataFile(player.getEntityWorld().getServer(), player.getUuid());
+    public static boolean hasPlayerData(ServerPlayer player) {
+        File dataFile = getPlayerDataFile(player.level().getServer(), player.getUUID());
         return dataFile.exists();
     }
 
@@ -401,17 +411,17 @@ public class PlayerDataManager {
     }
 
     /**
-     * Check if a player has met Innkeeper Garrick (ServerPlayerEntity version)
+     * Check if a player has met Innkeeper Garrick (ServerPlayer version)
      */
-    public static boolean hasMetGarrick(ServerPlayerEntity player) {
-        return hasMetGarrick(player.getUuid());
+    public static boolean hasMetGarrick(ServerPlayer player) {
+        return hasMetGarrick(player.getUUID());
     }
 
     /**
-     * Mark that a player has met Innkeeper Garrick (ServerPlayerEntity version)
+     * Mark that a player has met Innkeeper Garrick (ServerPlayer version)
      */
-    public static void markMetGarrick(ServerPlayerEntity player) {
-        markMetGarrick(player.getUuid());
+    public static void markMetGarrick(ServerPlayer player) {
+        markMetGarrick(player.getUUID());
         // Auto-save immediately
         savePlayerData(player);
     }
@@ -435,8 +445,8 @@ public class PlayerDataManager {
         task1CompleteSet.add(playerId);
     }
 
-    public static void markTask1Complete(ServerPlayerEntity player) {
-        markTask1Complete(player.getUuid());
+    public static void markTask1Complete(ServerPlayer player) {
+        markTask1Complete(player.getUUID());
         savePlayerData(player);
     }
 
@@ -449,8 +459,8 @@ public class PlayerDataManager {
         task2CompleteSet.add(playerId);
     }
 
-    public static void markTask2Complete(ServerPlayerEntity player) {
-        markTask2Complete(player.getUuid());
+    public static void markTask2Complete(ServerPlayer player) {
+        markTask2Complete(player.getUUID());
         savePlayerData(player);
     }
 
@@ -462,9 +472,9 @@ public class PlayerDataManager {
         task2MobKills.put(playerId, kills);
     }
 
-    public static void incrementTask2MobKills(ServerPlayerEntity player) {
-        int currentKills = getTask2MobKills(player.getUuid());
-        setTask2MobKills(player.getUuid(), currentKills + 1);
+    public static void incrementTask2MobKills(ServerPlayer player) {
+        int currentKills = getTask2MobKills(player.getUUID());
+        setTask2MobKills(player.getUUID(), currentKills + 1);
 
         // Save the kill count (Garrick will mark task complete when giving the note)
         savePlayerData(player);
@@ -479,8 +489,8 @@ public class PlayerDataManager {
         task3CompleteSet.add(playerId);
     }
 
-    public static void markTask3Complete(ServerPlayerEntity player) {
-        markTask3Complete(player.getUuid());
+    public static void markTask3Complete(ServerPlayer player) {
+        markTask3Complete(player.getUUID());
         savePlayerData(player);
     }
 
@@ -491,7 +501,28 @@ public class PlayerDataManager {
         return isTask1Complete(playerId) && isTask2Complete(playerId) && isTask3Complete(playerId);
     }
 
-    public static boolean hasCompletedAllTasks(ServerPlayerEntity player) {
-        return hasCompletedAllTasks(player.getUuid());
+    public static boolean hasCompletedAllTasks(ServerPlayer player) {
+        return hasCompletedAllTasks(player.getUUID());
+    }
+
+    // ========== GEM CRAFTING CHAIN TRACKING ==========
+
+    private static final java.util.Set<UUID> gemChainStartedSet = new java.util.HashSet<>();
+
+    public static boolean hasStartedGemChain(UUID playerId) {
+        return gemChainStartedSet.contains(playerId);
+    }
+
+    public static boolean hasStartedGemChain(ServerPlayer player) {
+        return hasStartedGemChain(player.getUUID());
+    }
+
+    public static void markGemChainStarted(UUID playerId) {
+        gemChainStartedSet.add(playerId);
+    }
+
+    public static void markGemChainStarted(ServerPlayer player) {
+        markGemChainStarted(player.getUUID());
+        savePlayerData(player);
     }
 }

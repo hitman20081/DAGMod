@@ -1,9 +1,9 @@
 package com.github.hitman20081.dagmod.mixin;
 
 import com.github.hitman20081.dagmod.enchantment.ShatterproofHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

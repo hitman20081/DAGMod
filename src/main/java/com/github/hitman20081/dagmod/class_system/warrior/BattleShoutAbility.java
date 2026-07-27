@@ -1,18 +1,18 @@
 package com.github.hitman20081.dagmod.class_system.warrior;
 
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
 
 /**
  * BATTLE SHOUT - Warrior Ability
@@ -33,12 +33,12 @@ public class BattleShoutAbility {
     private static final int DURATION_TICKS = 12 * 20; // 12 seconds
     private static final float HEAL_AMOUNT = 12.0f;    // 6 hearts
 
-    public static boolean activate(PlayerEntity player) {
-        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
+    public static boolean activate(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
         }
 
-        ServerWorld world = serverPlayer.getEntityWorld();
+        ServerLevel world = serverPlayer.level();
 
         // Start cooldown
         CooldownManager.startCooldown(player, WarriorAbility.BATTLE_SHOUT);
@@ -50,15 +50,15 @@ public class BattleShoutAbility {
         player.setHealth(newHealth);
 
         // REMOVE NEGATIVE EFFECTS
-        player.removeStatusEffect(StatusEffects.POISON);
-        player.removeStatusEffect(StatusEffects.WEAKNESS);
-        player.removeStatusEffect(StatusEffects.SLOWNESS);
-        player.removeStatusEffect(StatusEffects.MINING_FATIGUE);
-        player.removeStatusEffect(StatusEffects.WITHER);
+        player.removeEffect(MobEffects.POISON);
+        player.removeEffect(MobEffects.WEAKNESS);
+        player.removeEffect(MobEffects.SLOWNESS);
+        player.removeEffect(MobEffects.MINING_FATIGUE);
+        player.removeEffect(MobEffects.WITHER);
 
         // BUFF: +20% Attack Damage
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.STRENGTH,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.STRENGTH,
                 DURATION_TICKS,
                 0, // Strength I = +3 damage (roughly +20%)
                 false,
@@ -66,8 +66,8 @@ public class BattleShoutAbility {
         ));
 
         // BUFF: +10% Movement Speed
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.SPEED,
+        player.addEffect(new MobEffectInstance(
+                MobEffects.SPEED,
                 DURATION_TICKS,
                 0, // Speed I = +20% movement
                 false,
@@ -75,7 +75,7 @@ public class BattleShoutAbility {
         ));
 
         // VISUAL: Red + Orange particles in circle
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.FLAME,
                 player.getX(), player.getY() + 1.0, player.getZ(),
                 30, // count
@@ -83,7 +83,7 @@ public class BattleShoutAbility {
                 0.05 // speed
         );
 
-        world.spawnParticles(
+        world.sendParticles(
                 ParticleTypes.ANGRY_VILLAGER,
                 player.getX(), player.getY() + 1.5, player.getZ(),
                 10, // count
@@ -94,19 +94,17 @@ public class BattleShoutAbility {
         // SOUND: Roar
         world.playSound(
                 null,
-                player.getBlockPos(),
-                SoundEvents.ENTITY_RAVAGER_ROAR,
-                SoundCategory.PLAYERS,
+                player.blockPosition(),
+                SoundEvents.RAVAGER_ROAR,
+                SoundSource.PLAYERS,
                 1.0f,
                 1.2f
         );
 
         // FEEDBACK
-        serverPlayer.sendMessage(
-                Text.literal("💪 Battle Shout! Healed and empowered!")
-                        .formatted(Formatting.RED, Formatting.BOLD),
-                true
-        );
+        serverPlayer.sendOverlayMessage(
+                Component.literal("💪 Battle Shout! Healed and empowered!")
+                        .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
 
         return true;
     }

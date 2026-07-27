@@ -3,18 +3,19 @@ package com.github.hitman20081.dagmod.command;
 import com.github.hitman20081.dagmod.entity.WildDragonEntity;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.registry.tag.BiomeTags;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.List;
+import net.minecraft.server.permissions.Permissions;
 
 /**
  * Command to locate Wild Dragons
@@ -22,133 +23,133 @@ import java.util.List;
  */
 public class LocateWildDragonCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("locatewilddragon")
-                .requires(source -> source.getPermissions().hasPermission(new net.minecraft.command.permission.Permission.Level(net.minecraft.command.permission.PermissionLevel.GAMEMASTERS)))
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
+        dispatcher.register(Commands.literal("locatewilddragon")
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .executes(LocateWildDragonCommand::findNearestDragon));
     }
 
-    private static int findNearestDragon(CommandContext<ServerCommandSource> context) {
-        ServerCommandSource source = context.getSource();
-        ServerPlayerEntity player = source.getPlayer();
+    private static int findNearestDragon(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
 
         if (player == null) {
-            source.sendError(Text.literal("This command can only be used by players"));
+            source.sendFailure(Component.literal("This command can only be used by players"));
             return 0;
         }
 
-        ServerWorld world = (ServerWorld) source.getWorld();
-        BlockPos playerPos = player.getBlockPos();
+        ServerLevel world = (ServerLevel) source.getLevel();
+        BlockPos playerPos = player.blockPosition();
 
         // Find all dragons in the world
-        List<WildDragonEntity> dragons = world.getEntitiesByClass(
+        List<WildDragonEntity> dragons = world.getEntitiesOfClass(
                 WildDragonEntity.class,
-                player.getBoundingBox().expand(500), // Search 500 block radius
+                player.getBoundingBox().inflate(500), // Search 500 block radius
                 dragon -> true
         );
 
         if (dragons.isEmpty()) {
             // No dragons found - check if player is in valid spawn location
-            boolean isValidBiome = world.getBiome(playerPos).isIn(BiomeTags.IS_MOUNTAIN);
-            int surfaceY = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, playerPos).getY();
+            boolean isValidBiome = world.getBiome(playerPos).is(BiomeTags.IS_MOUNTAIN);
+            int surfaceY = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, playerPos).getY();
             boolean isValidHeight = surfaceY >= 160;
 
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GRAY), false);
-            player.sendMessage(Text.literal("🐉 Wild Dragon Locator").formatted(Formatting.GOLD, Formatting.BOLD), false);
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("No wild dragons found within 500 blocks").formatted(Formatting.YELLOW), false);
-            player.sendMessage(Text.literal(""), false);
+            player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.literal("🐉 Wild Dragon Locator").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("No wild dragons found within 500 blocks").withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.literal(""));
 
             // Show current location info
-            player.sendMessage(Text.literal("Current Location:").formatted(Formatting.AQUA, Formatting.BOLD), false);
-            player.sendMessage(Text.literal("  Position: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal(String.format("X: %d, Y: %d, Z: %d", playerPos.getX(), playerPos.getY(), playerPos.getZ()))
-                            .formatted(Formatting.WHITE)), false);
-            player.sendMessage(Text.literal("  Biome: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal(world.getBiome(playerPos).getKey().get().getValue().getPath())
-                            .formatted(isValidBiome ? Formatting.GREEN : Formatting.RED)), false);
-            player.sendMessage(Text.literal("  Surface Height: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal("Y: " + surfaceY)
-                            .formatted(isValidHeight ? Formatting.GREEN : Formatting.RED)), false);
+            player.sendSystemMessage(Component.literal("Current Location:").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("  Position: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(String.format("X: %d, Y: %d, Z: %d", playerPos.getX(), playerPos.getY(), playerPos.getZ()))
+                            .withStyle(ChatFormatting.WHITE)));
+            player.sendSystemMessage(Component.literal("  Biome: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(world.getBiome(playerPos).unwrapKey().isPresent() ? world.getBiome(playerPos).unwrapKey().get().identifier().getPath() : "unknown")
+                            .withStyle(isValidBiome ? ChatFormatting.GREEN : ChatFormatting.RED)));
+            player.sendSystemMessage(Component.literal("  Surface Height: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal("Y: " + surfaceY)
+                            .withStyle(isValidHeight ? ChatFormatting.GREEN : ChatFormatting.RED)));
 
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("Valid Spawn Location: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal((isValidBiome && isValidHeight) ? "✓ Yes" : "✗ No")
-                            .formatted((isValidBiome && isValidHeight) ? Formatting.GREEN : Formatting.RED)), false);
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("Valid Spawn Location: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal((isValidBiome && isValidHeight) ? "✓ Yes" : "✗ No")
+                            .withStyle((isValidBiome && isValidHeight) ? ChatFormatting.GREEN : ChatFormatting.RED)));
 
             if (!isValidBiome) {
-                player.sendMessage(Text.literal("  ✗ Not a mountain biome (need: Stony Peaks, Jagged Peaks, etc.)")
-                        .formatted(Formatting.RED), false);
+                player.sendSystemMessage(Component.literal("  ✗ Not a mountain biome (need: Stony Peaks, Jagged Peaks, etc.)")
+                        .withStyle(ChatFormatting.RED));
             }
             if (!isValidHeight) {
-                player.sendMessage(Text.literal("  ✗ Surface too low (need Y≥160, current: " + surfaceY + ")")
-                        .formatted(Formatting.RED), false);
+                player.sendSystemMessage(Component.literal("  ✗ Surface too low (need Y≥160, current: " + surfaceY + ")")
+                        .withStyle(ChatFormatting.RED));
             }
 
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("Tip: Use /locatebiome minecraft:stony_peaks to find mountains")
-                    .formatted(Formatting.GRAY, Formatting.ITALIC), false);
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GRAY), false);
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("Tip: Use /locatebiome minecraft:stony_peaks to find mountains")
+                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GRAY));
 
             return 1;
         }
 
         // Dragons found - show them
-        player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("🐉 Wild Dragon Locator").formatted(Formatting.GOLD, Formatting.BOLD), false);
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("Found " + dragons.size() + " wild dragon(s) within 500 blocks:")
-                .formatted(Formatting.GREEN), false);
-        player.sendMessage(Text.literal(""), false);
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("🐉 Wild Dragon Locator").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("Found " + dragons.size() + " wild dragon(s) within 500 blocks:")
+                .withStyle(ChatFormatting.GREEN));
+        player.sendSystemMessage(Component.literal(""));
 
         // Sort by distance
         dragons.sort((d1, d2) -> {
-            double dist1 = player.squaredDistanceTo(d1);
-            double dist2 = player.squaredDistanceTo(d2);
+            double dist1 = player.distanceToSqr(d1);
+            double dist2 = player.distanceToSqr(d2);
             return Double.compare(dist1, dist2);
         });
 
         // Show each dragon
         for (int i = 0; i < Math.min(dragons.size(), 5); i++) {
             WildDragonEntity dragon = dragons.get(i);
-            BlockPos dragonPos = dragon.getBlockPos();
-            double distance = Math.sqrt(player.squaredDistanceTo(dragon));
+            BlockPos dragonPos = dragon.blockPosition();
+            double distance = Math.sqrt(player.distanceToSqr(dragon));
 
             String healthPercent = String.format("%.0f%%", (dragon.getHealth() / dragon.getMaxHealth()) * 100);
             String distanceStr = String.format("%.1f", distance);
 
-            player.sendMessage(Text.literal("Dragon #" + (i + 1) + ":")
-                    .formatted(Formatting.AQUA, Formatting.BOLD), false);
-            player.sendMessage(Text.literal("  Location: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal(String.format("X: %d, Y: %d, Z: %d", dragonPos.getX(), dragonPos.getY(), dragonPos.getZ()))
-                            .formatted(Formatting.WHITE)), false);
-            player.sendMessage(Text.literal("  Distance: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal(distanceStr + " blocks")
-                            .formatted(Formatting.YELLOW)), false);
-            player.sendMessage(Text.literal("  Health: ")
-                    .formatted(Formatting.GRAY)
-                    .append(Text.literal(healthPercent)
-                            .formatted(dragon.getHealth() > dragon.getMaxHealth() * 0.5 ? Formatting.GREEN : Formatting.RED)), false);
+            player.sendSystemMessage(Component.literal("Dragon #" + (i + 1) + ":")
+                    .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("  Location: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(String.format("X: %d, Y: %d, Z: %d", dragonPos.getX(), dragonPos.getY(), dragonPos.getZ()))
+                            .withStyle(ChatFormatting.WHITE)));
+            player.sendSystemMessage(Component.literal("  Distance: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(distanceStr + " blocks")
+                            .withStyle(ChatFormatting.YELLOW)));
+            player.sendSystemMessage(Component.literal("  Health: ")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(healthPercent)
+                            .withStyle(dragon.getHealth() > dragon.getMaxHealth() * 0.5 ? ChatFormatting.GREEN : ChatFormatting.RED)));
 
             if (i < dragons.size() - 1) {
-                player.sendMessage(Text.literal(""), false);
+                player.sendSystemMessage(Component.literal(""));
             }
         }
 
         if (dragons.size() > 5) {
-            player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("... and " + (dragons.size() - 5) + " more")
-                    .formatted(Formatting.GRAY, Formatting.ITALIC), false);
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("... and " + (dragons.size() - 5) + " more")
+                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
         }
 
-        player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GRAY), false);
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GRAY));
 
         return dragons.size();
     }

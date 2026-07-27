@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.7.10
-**Last Updated**: 2026-04-16
+**Current Version**: v1.9.0
+**Last Updated**: 2026-07-27
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -53,15 +53,16 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - **Reworked in v1.7.0**: Level cap 50→200, heart scaling rework
 
 - ✅ **Quest System**
-  - 64+ quests across multiple categories (MAIN, SIDE, CLASS, JOB)
-  - Quest Block for story/side quests
-  - Job Board for jobs/daily quests (v1.4.5)
+  - 64+ quests across multiple categories (MAIN, SIDE, CLASS, JOB, DAILY)
+  - Quest Block for story/side/race quests
+  - Job Board for jobs and daily quests
   - 4 difficulty tiers (Novice, Apprentice, Expert, Master)
   - Quest chains with sequential progression
   - Multiple objective types (collect, kill, craft, delivery, tag-collect)
   - Quest book tier system
   - 40 race-specific quest chains
   - **Added in v1.4.5**: Tutorial gating via Innkeeper Garrick NPC
+  - **Added in v1.9.0**: Daily quest system — server-wide rotating pool of 5 quests per UTC day, 3 completions per player per day, streak-based XP multipliers (up to ×1.5), level scaling (up to ×2.0)
 
 - ✅ **Party System** (v1.4.4-v1.4.5)
   - Party creation and invitations
@@ -125,6 +126,12 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
   - Dialogue system
   - Custom renderers
 
+- ✅ **Class Trainer NPC** (v1.9.0)
+  - Fixed-position NPC dedicated to class quest chain progression
+  - Interactive progress display with per-quest status indicators (complete / turn-in / in progress / available / locked)
+  - Bypasses quest book tier check — class progression gated by level only
+  - Garrick tutorial handoff directs players to Class Trainer on completion
+
 - ✅ **Merchant NPC Rotating Trade System** (v1.6.0)
   - 8 merchant NPCs with rotating inventories (Armorer, Mystery Merchant, Enchantsmith, Voodoo Illusioner, Trophy Dealer, Miner, Hunter, Lumberjack)
   - Static trades always available for currency building
@@ -166,10 +173,6 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 
 ## 🟡 **Partially Implemented Features**
 
-### **Daily Quests** (Target: v1.9.0)
-- 🟡 **Framework exists** - Job Board has DAILY category support
-- ❌ **Implementation needed** - Daily quest rotation, reset timers, reward scaling
-
 ### **Custom Enchantments** (Target: v1.10.0)
 - 🟡 **Framework exists** - `/data/dag/enchantment/` directory with basic examples
 - ❌ **Implementation needed** - Race/class-specific enchantments, discovery system
@@ -188,31 +191,34 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 ### **v1.8.0 - Spells & Crafting**
 Priority: **MEDIUM**
 
-- ❌ **5-7 New Spell Scrolls**
-  - Gravity Well (pull enemies together)
-  - Chain Lightning (bouncing lightning)
-  - Ice Wall (creates barrier)
-  - Meteor Storm (raining meteors)
-  - Life Drain (healing damage)
-  - Dimensional Rift (short-range teleport)
-  - Polymorph (temporary mob transformation)
+- ✅ **7 New Spell Scrolls**
+  - Gravity Well — pulls all enemies within 15 blocks toward the caster
+  - Chain Lightning — bounces lightning across up to 4 enemies (8-block bounce range)
+  - Ice Wall — places a 5×3 frosted ice barrier in front of the caster
+  - Meteor Storm — rains 5 fireballs onto the targeted area
+  - Life Drain — AoE drain (12 blocks); heals caster 2 HP per enemy hit, capped at 10 HP
+  - Dimensional Rift — horizontal teleport 15 blocks forward; no wall required (unlike Blink)
+  - Polymorph — applies Slowness VI + Weakness VI + Blindness to nearest mob for 8 seconds
 
-- ❌ **Spell Scroll Crafting**
-  - Crafting recipes for all spell scrolls
-  - Rare ingredient requirements
-  - Crafting station integration
+- ✅ **Spell Scroll Crafting**
+  - Shapeless crafting recipes for all 7 new scrolls (2× paper + thematic powder + rare ingredient)
+  - Fixed broken fireball_scroll recipe (referenced nonexistent `potent_sulfur`; corrected to `potent_sulfur_powder`)
 
 ---
 
-### **v1.9.0 - Daily Quests**
+### **v1.9.0 - Class Trainer & Daily Quests** ✅ Complete
 Priority: **MEDIUM**
 
-- ❌ **Daily Quest System**
-  - Daily quest rotation (3-5 quests per day)
-  - 24-hour reset timers
-  - Scaling rewards based on player level
-  - Daily quest completion tracking
-  - Streak bonuses for consecutive days
+- ✅ **Class Trainer NPC** — Dedicated NPC for class quest chain interaction (see NPCs section)
+- ✅ **Class quest system separation** — Class quests removed from Quest Block; Quest Block now shows MAIN/SIDE only
+- ✅ **Onboarding improvements** — Custom quest block texture, welcome book rewrite (8 pages), village NPC spawn density reduction, Hall of Champions ocean biome exclusion
+- ✅ **Daily Quest System**
+  - Server-wide rotating pool of 5 quests per UTC day
+  - 3 completions per player per day
+  - Streak-based XP multipliers (3d ×1.1, 7d ×1.25, 14d ×1.5)
+  - Level scaling multipliers (50+ ×1.3, 100+ ×1.6, 150+ ×2.0)
+  - Job Board main menu shows streak, pool status, and midnight reset countdown
+- ✅ **Bug fixes** — All custom items (mythril, armor sets, special weapons) now enchantable; Elf quest grind reduced
 
 ---
 
@@ -232,24 +238,83 @@ Priority: **MEDIUM**
 
 ---
 
-### 🔷 PHASE 2 — World Expansion & Economy Foundation (v2.0.0–v2.2.0)
-> Expand the world with new content and establish the economy that all future systems build on.
+### 🔷 PHASE 2 — The Overhaul & World Expansion (v2.0.0–v2.2.0)
+> v2.0.0 is a save-breaking overhaul that restructures the entire new player experience and progression spine. Existing worlds will not be compatible.
 
 ---
 
-### **v2.0.0 - World & Economy Foundation**
-Priority: **MEDIUM** (Major milestone)
+### **v2.0.0 - The Overhaul** ⚠️ Save-Breaking
+Priority: **HIGH** (Major milestone)
+
+> Turns DAGMod from a feature list into a coherent narrative arc. The overworld becomes a story with a beginning, middle, and earned endpoint. All future content is designed around this spine.
+
+> See full design document in the [2.0 Overhaul Design](#20-overhaul-design) section below.
+
+- ❌ **Starting Inn replaces early-game HoC dependency**
+  - Garrick is relocated to a small Inn structure that generates near spawn
+  - Armorer and Jeweler NPC in the Inn basement (early repair/gem economy)
+  - Job Board accessible from the Inn from day one
+  - Race and class selection handled entirely through Garrick (no altars near spawn)
+
+- ❌ **Garrick as Guild Registry (Race & Class Selection)**
+  - Race and class selection moved from physical altars to Garrick NPC dialogue
+  - Framed as registering with a guild — "I need to know what kind of person you are"
+  - Garrick presents race/class options and stat summaries in-dialogue
+  - Selection confirmed through chat menu (same system as quest menus)
+  - Garrick hands out racial/class starter gear on selection
+  - Voodoo Illusioner takes over reset mechanics (race/class reset items applied via NPC)
+
+- ❌ **Hall of Champions as Earned Destination**
+  - HoC no longer spawns freely — one structure exists per world, far from spawn (~5,000 blocks)
+  - Triggered by completing the Master quest book and talking to Garrick
+  - Garrick gives a compass pointing to the HoC; the structure spawns at that time
+  - Race/Class Selection Altars repurposed in HoC as Champion Registration points (advance champion book tier) or decorative lore set pieces
+  - Hall Locator compass navigates back to HoC after initial discovery
+  - Warp Scroll vendor considered for fast travel back
+
+- ❌ **Broken Gear Progression Loop**
+  - Garrick rewards players at the Master book milestone with a set of broken HoC-tier gear
+  - Broken gear: stronger than iron, weaker than repaired variants, which are weaker than full HoC gear
+  - Armorer in Inn basement repairs broken gear using gem materials earned from the Job Board
+  - Repaired variants become available for purchase through the Armorer permanently (handles lost gear)
+  - Repair cost: broken item + gem materials (ties Job Board directly into gear progression)
+  - Broken → Repaired → HoC Original: three distinct power tiers for the same item
+
+- ❌ **Champion Book Progression**
+  - Replaces the Master quest book as the post-HoC progression system
+  - Three tiers: Novice Champion → Advanced Champion → Final Champion
+  - Each tier unlocks dimension access and new vendor trades
+  - Champion quests revolve around killing mobs/bosses in each dimension for crafting parts and quest objectives
+  - Some vendor trades locked behind champion book tier (visible but requires book to unlock)
+
+- ❌ **Dimension Access Gating**
+  - Bone Realm: Locked until Novice Champion quests unlock access
+    - Bone Dungeon locator + a Nether-based Bone Dungeon required to complete the unlock chain
+  - Dragon Realm: Locked until Advanced Champion quests unlock access
+    - Dragon Eye compass + Dragon Egg/Heart/specific boss drop required
+  - Dimensions are no longer freely accessible — access is earned through the champion questline
+
+- ❌ **Content Scaling Pass**
+  - All custom dimension mobs retuned to match the power level players arrive with at each champion tier
+  - Overworld intentionally remains easier (Minecraft+ philosophy — overworld power is the reward for progression)
+
+- ❌ **Major Polish & Balance Pass**
+  - Performance optimization
+  - Balance adjustments informed by 1.9.x playtesting
+  - Quest balance review across all tiers
+
+---
+
+### **v2.1.0 - Economy Foundation**
+Priority: **MEDIUM**
 
 - ❌ **Race Quest Chain Expansions**
   - Additional quest chains for each race
-  - Race-specific storylines
-  - Legendary race rewards
+  - Race-specific storylines and legendary rewards
 
 - ❌ **Additional Boss Encounters**
-  - ✅ Skeleton Lord (mini-boss) — added v1.7.5
-  - ✅ Skeleton King (boss) — added v1.7.8/v1.7.9
-  - ❌ Additional mini-bosses in Bone Dungeons
-  - ❌ Enhanced loot tables for new bosses
+  - Additional mini-bosses in Bone Dungeons
+  - Enhanced loot tables for new bosses
 
 - ❌ **Coin Currency System**
   - 4 coin tiers: Copper → Silver → Gold → Platinum (100:1 ratio each)
@@ -261,23 +326,13 @@ Priority: **MEDIUM** (Major milestone)
   - Bounty Hunter NPC in the Hall of Champions (accept and turn-in bounties)
   - Dynamically generated bounties — up to 7 days active before reset, not daily
   - First-come-first-served claim; locked to claiming player for up to 7 days
-  - Bounty tiers:
-    - **Common** — Named elite mobs, dungeon mini-bosses
-    - **Rare** — Skeleton King, Dragon Guardian and equivalent bosses
-    - **Legendary** — Major endgame bosses
-    - **Seasonal** — Limited time event targets
+  - Bounty tiers: Common, Rare, Legendary, Seasonal
   - Rewards: coins + Bounty Tokens + unique items
-  - Bounty Tokens spent at a dedicated Bounty Vendor NPC
   - Ties into Title System — bounty completions unlock Hunter titles
-
-- ❌ **Major Polish Pass**
-  - Performance optimization
-  - Balance adjustments
-  - Bug fixes and quality of life improvements
 
 ---
 
-### **v2.1.0 - The Pale Abyss**
+### **v2.2.0 - The Pale Abyss**
 Priority: **LOW** (Long-term)
 
 > See full design document in the [Pale Abyss Design](#pale-abyss-design) section below.
@@ -333,9 +388,9 @@ Priority: **LOW** (Long-term)
 
 ---
 
-### **v2.2.0 - Economy & Trading**
+### **v2.3.0 - Economy & Trading**
 Priority: **LOW** (Long-term)
-> Builds directly on the Coin Currency foundation from v2.0.0.
+> Builds directly on the Coin Currency foundation from v2.1.0.
 
 - ❌ **Gem Socket System**
   - Add sockets to gear (1-3 sockets based on item tier)
@@ -375,14 +430,14 @@ Priority: **LOW** (Long-term)
 
 ---
 
-### 🔷 PHASE 3 — Depth & Social Systems (v2.3.0–v2.5.0)
+### 🔷 PHASE 3 — Depth & Social Systems (v2.4.0–v2.6.0)
 > Deepen the RPG systems and introduce the permanent social endgame structures.
 
 ---
 
-### **v2.3.0 - Jewelry & Trinkets**
+### **v2.4.0 - Jewelry & Trinkets**
 Priority: **LOW** (Long-term)
-> Builds on the Gem Socket system from v2.2.0.
+> Builds on the Gem Socket system from v2.3.0.
 
 - ❌ **Jewelry Slots**
   - 2 Ring slots
@@ -414,7 +469,7 @@ Priority: **LOW** (Long-term)
 
 ---
 
-### **v2.4.0 - Guild System**
+### **v2.5.0 - Guild System**
 Priority: **LOW** (Long-term)
 > Releasing after the economy is established means the guild bank, trading, and social features have a full foundation to build on.
 
@@ -440,7 +495,7 @@ Priority: **LOW** (Long-term)
 
 ---
 
-### **v2.5.0 - The Labyrinth**
+### **v2.6.0 - The Labyrinth**
 Priority: **MEDIUM**
 > A story-driven update that bridges the v2.x world-building phase and the v3.0 endgame expansion.
 
@@ -754,22 +809,27 @@ Priority: **LOW**
 - ✅ **v1.7.7** (Mar 2026) - Class quest chains rebuilt (all 3 classes, 5 quests each, level-gated 10/25/50/75/100), per-quest level requirement system, enchanted book reward fixes, race quest polish, WildDragonEntity crash fixes
 - ✅ **v1.7.8** (Mar 2026) - Skeleton King boss encounter (throne room, barrier-sealed room, party-scaled), Skeleton Throne Room structure, King's Recall Stone, per-player chest rewards, Seasons datapack, boss stat overhaul
 - ✅ **v1.7.9** (Apr 2026) - `/seasons` command with interactive setup menu, seasons first-run notice, manual operator activation, season settings persistence, Skeleton Kingdom structure chain, jigsaw anchor fixes
-- ✅ **v1.7.10** (Apr 2026) - *(add patch notes)*
+- ✅ **v1.7.10** (Apr 2026) - Quest book upgrade overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting
+- ✅ **v1.8.0** (May 2026) - Minecraft 26.1.2 migration, Potent Sulfur Powder crafting material, bone dungeon portal room improvements, shield orientation fixes
+- ✅ **v1.8.1** (Jun 2026) - Minecraft 26.2 migration, brimstone rename, MC 26.2 API fixes
+- ✅ **v1.8.2** (Jun 2026) - Village NPC structures (7 individual structures), dynamic lighting terrain fix, Hall of Champions rarity increase
+- ✅ **v1.8.3** (Jul 2026) - Gem tier system (Cut/Polished/Flawless/Grand), in-game enchantment descriptions, quest book objective navigation, gem station inventory persistence
+- ✅ **v1.9.0** (Jul 2026) - Class Trainer NPC, class quest separation from Quest Block, daily quest system (server-wide rotation, streak multipliers, UTC reset), Garrick handoff, HoC land-biome tag, all custom items now enchantable, Elf quest balance fixes
 
 ### **Phase 1** — Core System Completion
-- 🎯 **v1.8.0** - Spell scrolls (7 new) + spell scroll crafting system
-- 🎯 **v1.9.0** - Daily quest rotation system
+- ✅ **v1.9.0** - Class Trainer NPC, class quest separation, daily quest system, enchanting bug fix, quest balance
 - 🎯 **v1.10.0** - Custom race/class enchantments
 
-### **Phase 2** — World Expansion & Economy Foundation
-- 🎯 **v2.0.0** (Major) - Race quest expansions, additional bosses, Coin Currency, Bounty System
-- 🎯 **v2.1.0** - The Pale Abyss dimension + Spider Queen rework
-- 🎯 **v2.2.0** - Economy & Trading (Gem Sockets, Transmog, Reforging, Auction House)
+### **Phase 2** — The Overhaul & World Expansion
+- 🎯 **v2.0.0** (Major — ⚠️ Save-Breaking) - Full narrative overhaul: Starting Inn, Garrick guild registry, HoC as earned destination, broken gear loop, champion book progression, dimension gating
+- 🎯 **v2.1.0** - Economy Foundation: Race quest expansions, additional bosses, Coin Currency, Bounty System
+- 🎯 **v2.2.0** - The Pale Abyss dimension + Spider Queen rework
+- 🎯 **v2.3.0** - Economy & Trading (Gem Sockets, Transmog, Reforging, Auction House)
 
 ### **Phase 3** — Depth & Social Systems
-- 🎯 **v2.3.0** - Jewelry & Trinkets system
-- 🎯 **v2.4.0** - Guild System (Bleakwind, permanent endgame social)
-- 🎯 **v2.5.0** - The Labyrinth dimension + Dark Mage boss
+- 🎯 **v2.4.0** - Jewelry & Trinkets system
+- 🎯 **v2.5.0** - Guild System (Bleakwind, permanent endgame social)
+- 🎯 **v2.6.0** - The Labyrinth dimension + Dark Mage boss
 
 ### **Phase 4** — Endgame
 - 🎯 **v3.0.0** (Major) - Endgame expansion (raids, prestige, seasonal events)
@@ -779,6 +839,98 @@ Priority: **LOW**
 ---
 
 ## 📋 **Design Documents**
+
+### 2.0 Overhaul Design
+
+#### Overview
+v2.0.0 restructures the entire new player experience around a narrative arc. The current model (spawn → find HoC → overwhelmed by every system at once) is replaced with a guided journey: Inn → Garrick → questing → master book → compass → Hall of Champions. The HoC becomes an earned destination and a reward, not a starting zone.
+
+This is a **save-breaking** update. Existing worlds will not be compatible. The 1.x branch will continue to receive bug fixes and balance patches while 2.0 is in development.
+
+---
+
+#### New Player Flow
+
+1. **Spawn** — Player receives a book: *"Find the local Innkeeper Garrick to begin your journey."*
+2. **The Inn** — Small structure generates near spawn. Garrick is inside, along with gear displays showing broken HoC items (aspirational rewards) and a strange compass.
+3. **Garrick — Guild Registry** — Garrick handles race and class selection via dialogue (guild ledger framing). No physical altars near spawn. Race abilities and starter gear granted on selection. Class abilities and starter gear granted on class selection.
+4. **Tutorial** — Garrick gives the 3 tutorial quest notes. Player completes them, gets the Novice Quest Book. Garrick provides flavor text at each book advancement.
+5. **Garrick Milestone Dialogue** — At Master book: *"These are relics from a better time... For now see if you can get these fixed up."* Broken gear given. Armorer and Jeweler in Inn basement handle repairs using gems from the Job Board.
+6. **Garrick Sends You** — On finishing the master questline: *"Take this. It might just get you where you need to go."* Compass given → HoC spawns ~5,000 blocks away. One per world.
+7. **Hall of Champions** — The wow moment. Full merchant roster, Class Trainer, Champion Registration points (repurposed altars). A guide NPC takes over from Garrick: *"So another one has found their way to this sacred place."*
+8. **Champion Progression** — Master Quest Book replaced with Novice Champion Book. Champion quests gate dimension access.
+
+---
+
+#### Garrick as Guild Registry
+
+Race and class selection are moved from physical altars to Garrick NPC dialogue. This removes the multi-stop early game (find Garrick → find race altar → find class altar → come back) and makes the first interaction feel like an event rather than a tutorial checklist.
+
+- Race selection presented as a chat menu with race summaries
+- Class selection follows immediately: *"Now, how do you fight?"*
+- Starter gear given on the spot for each selection
+- **Voodoo Illusioner** takes over reset mechanics — applying Race Reset and Class Reset items is done by talking to the Illusioner rather than clicking an altar
+
+---
+
+#### Race/Class Altars in HoC
+
+The physical Race and Class Selection Altars are removed from the early game. In the Hall of Champions they are repurposed as:
+- **Champion Registration Altars** — interact to advance your champion book tier when requirements are met
+- Or retained as decorative lore pieces reinforcing the "sacred hall" atmosphere
+- Their visual presence in HoC still carries weight — players will recognize them and understand their significance after the journey to get there
+
+---
+
+#### Broken Gear Loop
+
+| Stage | Item | Power Level |
+|-------|------|-------------|
+| Garrick reward | Broken HoC gear | Stronger than iron |
+| After repair | Repaired HoC gear | Weaker than full HoC original |
+| Full HoC original | Merchant trade in HoC | Best in class |
+
+- Repair cost: broken item + gem materials (sourced from Job Board jobs)
+- Once a piece is repaired, the Armorer permanently offers the repaired variant for trade (handles lost gear)
+- This gives the Job Board a concrete purpose beyond income and introduces players to the gem economy before they reach HoC
+
+---
+
+#### Champion Book Progression
+
+| Book | Unlocks | Quest Focus |
+|------|---------|-------------|
+| Novice Champion | First dimension access | Overworld boss kills, dungeon clears |
+| Advanced Champion | Bone Realm access | Ossuary Depths, Skeleton King progression |
+| Final Champion | Dragon Realm access | Dragon Realm bosses, endgame content |
+
+- Some HoC vendor trades locked behind champion book tier (visible but requires book to trade)
+- Dimension portals physically locked until the appropriate champion book is held
+
+---
+
+#### Dimension Gating
+
+**Bone Realm:**
+- Requires completing Novice Champion quests
+- Bone Dungeon locator given → a Bone Dungeon in the Nether must be completed to unlock access
+- Dragon Nether connection adds natural MC progression integration
+
+**Dragon Realm:**
+- Requires completing Advanced Champion quests
+- Dragon Eye compass + boss-specific drop (Dragon Egg/Heart/Head) required to unlock portal
+
+---
+
+#### Open Questions / To Be Decided
+- [ ] Exact Inn structure design and spawn conditions
+- [ ] Whether compass click at >5k blocks teleports player vs spawns a new marker
+- [ ] Warp Scroll vendor for HoC fast travel (vs waypoints mod compat)
+- [ ] How many champion quests per tier before book advancement
+- [ ] Specific broken gear item list and repair costs per piece
+- [ ] Final placement and function of repurposed altars in HoC
+
+---
 
 ### Pale Abyss Design
 
@@ -1096,7 +1248,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-04-16
+**Last Updated**: 2026-07-27
 **Maintained By**: hitman20081
-**Current Version**: v1.7.10
+**Current Version**: v1.9.0
 **License**: See LICENSE file

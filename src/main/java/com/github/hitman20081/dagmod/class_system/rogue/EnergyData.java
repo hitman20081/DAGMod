@@ -1,17 +1,19 @@
 package com.github.hitman20081.dagmod.class_system.rogue;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * Simple energy data storage for Rogues
  * Mirrors the ManaData pattern
  */
 public class EnergyData {
-    private static final int MAX_ENERGY = 100;
+    static final int BASE_MAX_ENERGY = 100;
     private int currentEnergy;
+    private int maxEnergy;
 
     public EnergyData() {
-        this.currentEnergy = MAX_ENERGY;
+        this.maxEnergy = BASE_MAX_ENERGY;
+        this.currentEnergy = BASE_MAX_ENERGY;
     }
 
     public int getCurrentEnergy() {
@@ -19,7 +21,12 @@ public class EnergyData {
     }
 
     public int getMaxEnergy() {
-        return MAX_ENERGY;
+        return maxEnergy;
+    }
+
+    public void setMaxEnergy(int newMax) {
+        this.maxEnergy = Math.max(1, newMax);
+        if (currentEnergy > maxEnergy) currentEnergy = maxEnergy;
     }
 
     public boolean hasEnergy(int amount) {
@@ -35,18 +42,18 @@ public class EnergyData {
     }
 
     public void addEnergy(int amount) {
-        currentEnergy = Math.min(currentEnergy + amount, MAX_ENERGY);
+        currentEnergy = Math.min(currentEnergy + amount, maxEnergy);
     }
 
     public void setEnergy(int amount) {
-        currentEnergy = Math.max(0, Math.min(amount, MAX_ENERGY));
+        currentEnergy = Math.max(0, Math.min(amount, maxEnergy));
     }
 
-    public void writeToNbt(NbtCompound nbt) {
+    public void writeToNbt(CompoundTag nbt) {
         nbt.putInt("energy", currentEnergy);
     }
 
-    public void readFromNbt(NbtCompound nbt) {
-        currentEnergy = nbt.getInt("energy").orElse(MAX_ENERGY);
+    public void readFromNbt(CompoundTag nbt) {
+        currentEnergy = nbt.getInt("energy").orElse(BASE_MAX_ENERGY);
     }
 }

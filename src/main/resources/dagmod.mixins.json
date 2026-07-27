@@ -2,7 +2,7 @@
 	"required": true,
 	"minVersion": "0.8",
 	"package": "com.github.hitman20081.dagmod.mixin",
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_25",
 	"mixins": [
       "MageStatusEffectMixin",
       "RogueDamageMixin",
@@ -21,11 +21,10 @@
       "LastStandMixin"
 	],
   "client": [
+    "client.DynamicLightMixin",
     "ChestRenderStateMixin",
-    "LockedChestTextureMixin$ChestRendererMixin",
-    "LockedChestTextureMixin$TexturedRenderLayersMixin",
-    "client.ShieldRendererMixin",
-    "client.DynamicLightMixin"
+    "LockedChestTextureMixin",
+    "EnchantmentDescriptionMixin"
   ],
 	"injectors": {
 		"defaultRequire": 1

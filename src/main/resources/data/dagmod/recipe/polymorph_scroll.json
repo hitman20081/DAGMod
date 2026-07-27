@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:suspicious_substance",
+    "minecraft:fermented_spider_eye"
+  ],
+  "result": {
+    "id": "dagmod:polymorph_scroll",
+    "components": { "minecraft:item_model": "dagmod:polymorph_scroll" },
+    "count": 1
+  }
+}

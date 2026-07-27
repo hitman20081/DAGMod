@@ -1,33 +1,33 @@
 package com.github.hitman20081.dagmod.race_system;
 
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 
 public class DwarfMiningHandler {
 
     /**
      * Gives Dwarves a chance to get bonus ores when mining
      */
-    public static void handleDwarfMining(ServerPlayerEntity player, BlockState state, BlockPos pos, ServerWorld world) {
-        String playerRace = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
+    public static void handleDwarfMining(ServerPlayer player, BlockState state, BlockPos pos, ServerLevel world) {
+        String playerRace = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
 
         if (!"Dwarf".equals(playerRace)) {
             return;
         }
 
         Block block = state.getBlock();
-        Random random = world.getRandom();
+        RandomSource random = world.getRandom();
 
         // 15% chance for bonus drops when mining ores
         if (random.nextFloat() < 0.15f) {
@@ -52,10 +52,9 @@ public class DwarfMiningHandler {
             }
 
             if (bonusDrop != null) {
-                Block.dropStack(world, pos, bonusDrop);
-                player.sendMessage(
-                        Text.literal("⛏ Dwarven Mining Bonus!").formatted(Formatting.GOLD),
-                        true // Action bar
+                Block.popResource(world, pos, bonusDrop);
+                player.sendOverlayMessage(
+                        Component.literal("⛏ Dwarven Mining Bonus!").withStyle(ChatFormatting.GOLD)
                 );
             }
         }

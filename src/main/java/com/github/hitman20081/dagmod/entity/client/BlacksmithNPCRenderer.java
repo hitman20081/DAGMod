@@ -2,28 +2,28 @@ package com.github.hitman20081.dagmod.entity.client;
 
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.entity.BlacksmithNPC;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.VillagerResemblingModel;
-import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.npc.VillagerModel;
+import net.minecraft.client.renderer.entity.state.VillagerRenderState;
+import net.minecraft.resources.Identifier;
 
-public class BlacksmithNPCRenderer extends MobEntityRenderer<BlacksmithNPC, VillagerEntityRenderState, VillagerResemblingModel> {
+public class BlacksmithNPCRenderer extends MobRenderer<BlacksmithNPC, VillagerRenderState, VillagerModel> {
 
-    private static final Identifier TEXTURE = Identifier.of(DagMod.MOD_ID, "textures/entity/villager/blacksmith.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "textures/entity/villager/blacksmith.png");
 
-    public BlacksmithNPCRenderer(EntityRendererFactory.Context context) {
-        super(context, new VillagerResemblingModel(context.getPart(EntityModelLayers.VILLAGER)), 0.5f);
+    public BlacksmithNPCRenderer(EntityRendererProvider.Context context) {
+        super(context, new VillagerModel(context.bakeLayer(ModelLayers.VILLAGER)), 0.5f);
     }
 
     @Override
-    public VillagerEntityRenderState createRenderState() {
-        return new VillagerEntityRenderState();
+    public VillagerRenderState createRenderState() {
+        return new VillagerRenderState();
     }
 
     @Override
-    public Identifier getTexture(VillagerEntityRenderState state) {
+    public Identifier getTextureLocation(VillagerRenderState state) {
         return TEXTURE;
     }
 }

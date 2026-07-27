@@ -132,7 +132,7 @@ public class PlayerProgressionDataTest {
 
         // Note: This test requires Minecraft NBT classes to actually run
         // In a real test, you would do:
-        // NbtCompound nbt = original.toNbt();
+        // CompoundTag nbt = original.toNbt();
         // PlayerProgressionData loaded = PlayerProgressionData.fromNbt(nbt);
 
     }

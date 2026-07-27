@@ -1,36 +1,35 @@
 package com.github.hitman20081.dagmod.party.quest;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 /**
- * Represents a reward for completing a party quest
+ * Represents a reward for completing a party quest.
+ * Stores Item + count rather than ItemStack to avoid constructing stacks
+ * during mod initialization (before DataComponents are bound).
  */
 public class PartyQuestReward {
-    private final ItemStack itemStack;
+    private final Item item;
     private final int quantity;
 
-    public PartyQuestReward(ItemStack itemStack, int quantity) {
-        this.itemStack = itemStack;
+    public PartyQuestReward(Item item, int quantity) {
+        this.item = item;
         this.quantity = quantity;
     }
 
-    public PartyQuestReward(ItemStack itemStack) {
-        this(itemStack, 1);
+    public PartyQuestReward(Item item) {
+        this(item, 1);
     }
 
-    // Helper constructor for creating rewards from item IDs
     public static PartyQuestReward fromId(String itemId, int count) {
-        ItemStack stack = new ItemStack(
-                Registries.ITEM.get(Identifier.of(itemId))
-        );
-        return new PartyQuestReward(stack, count);
+        Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
+        return new PartyQuestReward(item, count);
     }
 
     public ItemStack getItemStack() {
-        return itemStack.copy();
+        return new ItemStack(item);
     }
 
     public int getQuantity() {
@@ -38,13 +37,11 @@ public class PartyQuestReward {
     }
 
     public ItemStack createRewardStack() {
-        ItemStack reward = itemStack.copy();
-        reward.setCount(quantity);
-        return reward;
+        return new ItemStack(item, quantity);
     }
 
     @Override
     public String toString() {
-        return quantity + "x " + itemStack.getName().getString();
+        return quantity + "x " + createRewardStack().getHoverName().getString();
     }
 }

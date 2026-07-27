@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "dagmod:block/gem_crushing_station"
+    },
+    "facing=south": {
+      "model": "dagmod:block/gem_crushing_station",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "dagmod:block/gem_crushing_station",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "dagmod:block/gem_crushing_station",
+      "y": 90
+    }
+  }
+}

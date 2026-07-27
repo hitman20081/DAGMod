@@ -5,6 +5,130 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-07-22
+
+### Added
+
+- **Class Trainer NPC** — New `ClassTrainerNPC` entity type (`dagmod:class_trainer`). A fixed-position NPC (look-at-player AI only, no stroll) serving as the exclusive interface for all class quest chains. Right-clicking opens an interactive progress display for all 5 class quests with status symbols (✓ complete / ★ ready to turn in / ⟳ in progress / ◈ available / 🔒 locked). Subsequent clicks handle turn-in or accept in a single conversation flow. Invulnerable and persistent; admin placement via `/summon dagmod:class_trainer`
+- **`QuestManager.startClassQuest()`** — New method that starts a class quest while bypassing the quest book tier check. Class chain progression is gated by player level and prerequisites only, not quest book tier
+- **Garrick → Class Trainer handoff** — After completing all 3 tutorial tasks, Garrick's final dialogue now directs players to the Class Trainer NPC at the Hall of Champions to begin their class quest chain
+- **Hall of Champions land-only biome tag** — Added `data/dagmod/tags/worldgen/biome/has_structure/hall_of_champions.json` listing 41 overworld land biomes. All 9 ocean variants excluded (ocean, deep_ocean, cold_ocean, deep_cold_ocean, frozen_ocean, deep_frozen_ocean, lukewarm_ocean, deep_lukewarm_ocean, warm_ocean)
+
+### Changed
+
+- **Class quests moved off the Quest Block** — `QuestBlock` no longer shows `Quest.QuestCategory.CLASS` quests. The Quest Block now displays only `MAIN` and `SIDE` quests; class quests are exclusively handled by the Class Trainer NPC
+- **Quest block model uses custom texture** — Block model changed to `cube_all` with `dagmod:block/quest_block`, fixing the regression where the block rendered with vanilla bookshelf and oak_planks textures instead of the custom texture
+- **Welcome book expanded and rewritten** — Starting welcome book expanded from 6 to 8 pages. Additions clarify: Quest Blocks are for story/side quests; class quests open at the Quest Block after Garrick's tutorial; ability items must be held in the hotbar; Job Board handles daily/job quests (not class quests). Dimension overview and command reference added as new pages
+- **Village NPC spawn density reduced** — `village_npc_set.json` spacing increased 16 → 28, separation 5 → 10. Average inter-village gap ~256 → ~448 blocks; minimum gap 80 → 160 blocks. Only newly generated chunks are affected in existing worlds
+- **Hall of Champions biome target** — Structure set now references `#dagmod:has_structure/hall_of_champions` instead of `#minecraft:is_overworld`, preventing generation in ocean biomes
+
+### Fixed
+
+- **Class Trainer stale collect objective progress** — `ClassTrainerNPC.handleOverview()` now calls `QuestManager.updateQuestProgress(player)` before reading objective completion state. Previously, collect objectives (e.g., 16 iron ingots) appeared incomplete even with sufficient items in inventory because cached progress was never refreshed before the completion check
+
+---
+
+## [1.8.3] - 2026-07-21
+
+### Added
+
+- **Gem tier system** — Gems now have four upgrade tiers: Cut → Polished → Flawless → Grand. All 7 gem types (Citrine, Ruby, Sapphire, Tanzanite, Topaz, Zircon, Pink Garnet) are available in all four tiers. Item IDs follow the `gem_cut_*`, `gem_polished_*`, `gem_flawless_*`, `gem_grand_*` naming scheme
+- **Polishing Station tier upgrades** — The Gem Polishing Station handles all three upgrade tiers using Diamond Powder as the catalyst
+- **In-game enchantment descriptions** — Hovering over any item with a DAGMod enchantment shows a dark gray description line when advanced tooltips are enabled (F3+H). All 26 custom enchantments have descriptions
+- **Quest book objective navigation** — The Active Quests page now shows one quest at a time with ◀ / ▶ navigation buttons, making all objectives visible regardless of quest length
+
+### Changed
+
+- **Diamond Powder charge economy** — One Diamond Powder charge upgrades: 4× Cut→Polished, 2× Polished→Flawless, or 1× Flawless→Grand
+- **Gem item IDs renamed** — All bare gem IDs (`dagmod:ruby`, `dagmod:citrine`, etc.) renamed to `dagmod:gem_cut_*`. Existing worlds with old IDs will lose those items on update
+
+### Fixed
+
+- **Gem station inventory persistence** — Items in the Gem Cutting Station, Gem Crushing Station, and Gem Polishing Station were lost on logout. All three block entities now correctly save and load inventories via `ContainerHelper`
+- **Gem Crushing Station hitbox** — Hitbox was oversized; replaced with a flat `16×10×16` shape matching the current block model
+- **Tanzanite recipes referencing removed item ID** — Three recipe files still referenced `dagmod:tanzanite`. Updated to `dagmod:gem_cut_tanzanite`; redundant smelting and blasting recipes deleted
+
+---
+
+## [1.8.2] - 2026-06-17
+
+### Added
+
+- **Village NPC structures** — 7 individual standalone structures now generate in plains, forest, and taiga biomes: `village_inn`, `village_tavern`, `village_shop_1`, `village_shop_2`, `village_traders_1`, `village_jeweler`, `village_blacksmith`. Each is individually locatable via `/locate structure dagmod:<name>`
+
+### Fixed
+
+- **Dynamic lighting terrain not updating** — `setSectionRangeDirty` was being called with raw block coordinates instead of section coordinates (1 section = 16 blocks), so terrain chunks around the world origin were being marked dirty instead of the chunks around the player. Lighting now correctly updates terrain as you move
+- **Village NPC structure set not loading** — Old jigsaw setup referenced a missing `village_docks.nbt`, causing the entire structure set to fail to load on world init. Replaced with 7 individual structures, each with its own template pool
+
+### Changed
+
+- **Hall of Champions rarity** — Spacing increased from 40→64 chunks, separation from 12→20. Halls now generate roughly 2.5× less frequently (one per ~1024 blocks instead of ~640 blocks)
+- **Village NPC exclusion zones** — Hall of Champions exclusion radius reduced from 15→8 chunks; bone dungeon exclusion reduced from 12→6 chunks
+
+## [1.8.1] - 2026-06-16
+
+### Changed
+
+- **Minecraft 26.2 migration** — Ported the mod from MC 26.1.2 to MC 26.2 ("Chaos Cubed"). Updated to Fabric Loader 0.19.3 and Fabric API 0.150.2+26.2
+- **Brimstone rename** — `dagmod:sulfur` and `dagmod:potent_sulfur` blocks and items renamed to `dagmod:brimstone` and `dagmod:pure_brimstone`. Inferno armor and fire weapons now use vanilla `minecraft:sulfur` and `minecraft:potent_sulfur`; high-end fire magic recipes use the new brimstone materials
+
+### Fixed
+
+- **MC 26.2 removed EntityType static fields** — All `EntityType.ZOMBIE`, `EntityType.SKELETON`, etc. references replaced with registry lookups via `BuiltInRegistries.ENTITY_TYPE.getValue()` in `KillObjective`, `QuestRegistry`, and `JobRegistry`
+- **MC 26.2 WeatheringCopperCollection type change** — `Items.LIGHTNING_ROD`, `Items.COPPER_BLOCK`, and `Blocks.COPPER_BLOCK` return `WeatheringCopperCollection` in MC 26.2; replaced all references with registry lookups
+- **MC 26.2 removed Items statics** — `Items.WHITE_WOOL`, `Items.WHITE_BED`, and `Items.RED_BED` removed as static fields; replaced with registry lookups in NPC entity classes
+- **MC 26.2 EntityType.LIGHTNING_BOLT removed** — Replaced with registry lookup and unchecked cast in `SpellScrollItem`
+- **MC 26.2 Options.hideGui removed** — HUD hide check updated from `client.options.hideGui` to `client.gui.hud.isHidden()` in `ProgressionHUD` and `PartyHUD`
+- **MC 26.2 Minecraft.setScreen() removed** — `QuestBookClientHandler` updated to use `setScreenAndShow()`
+- **MC 26.2 LevelRenderer.setSectionRangeDirty() moved** — Dynamic lighting chunk dirty call updated to use `ClientLevel.setSectionRangeDirty()` (moved from `LevelRenderer` to `ClientLevel` in MC 26.2)
+- **MC 26.2 enchantment entity predicate format** — Entity type tag predicates inside enchantment JSON effects changed from `{"type": "#minecraft:tag"}` to `{"minecraft:entity_type": "#minecraft:tag"}` (registry key `minecraft:type` removed from `entity_sub_predicate_type` in MC 26.2). Fixed in `bane_of_white_walker`, `lights_blessing`, `rise_of_the_zombies`, `siphon_enchantment`, `summon_enchantment`, and `xdamage_enchantment`
+- **MC 26.2 tree feature missing field** — `charred_tree` configured feature now includes the new required `below_trunk_provider` field
+
+## [1.8.0] - 2026-06-04
+
+### Added
+
+- **Potent Sulfur Powder** — New crafting material; 9× Sulfur Powder → 1 Potent Sulfur Powder. Functions as a high-tier component in fire-themed crafting recipes (Inferno armor, fire weapons). Custom texture included
+- **Sulfur item and block** — Full item and block registration with all required JSON files, models, and textures
+- **7 new Mage spell scrolls** — Gravity Well, Chain Lightning, Ice Wall, Meteor Storm, Life Drain, Dimensional Rift, and Polymorph. Full item registrations and lang entries added
+- **Mana bar numeric display** — The Mage mana HUD now shows `current/max` in white text centered inside the bar, so players always know their exact mana without guessing from bar width
+- **Level-scaled max mana** — Mage max mana increases as the player levels up: `100 + (level − 1) × 2` (Level 1 = 100, Level 100 = 298, Level 200 = 498). Applied on join and level-up
+- **Level-scaled mana regen** — Mana regeneration speed scales with level: `2 + level × 0.04` mana per second (Level 1 ≈ 2.0/s, Level 200 = 10.0/s). Uses a float accumulator for smooth sub-integer regen at low levels
+- **Rogue Energy HUD** — Rogues now see a gold energy bar (`current/max`) in the same screen slot as the Mage mana bar (right of the hotbar center). Displayed only when playing as Rogue
+- **Level-scaled max energy** — Rogue max energy scales identically to mana: `100 + (level − 1) × 2`
+- **Level-scaled energy regen** — Energy regenerates at `5 + level × 0.05` per second (Level 1 = 5/s, Level 200 = 15/s). Armor bonus still applies on top of the level bonus
+- **Warrior Cooldown HUD** — Warriors see 6 compact color-coded ability boxes (12 × 9 px each) in the same slot as the other class HUDs. Each box shows the ability's color when ready; darkened with a seconds countdown when on cooldown. Times ≥ 100 s are shown as `Xm`. Displayed only when playing as Warrior
+- **Level-based Warrior cooldown reduction** — Warrior ability cooldowns decrease with level: `max(0.6, 1.0 − level × 0.002)` multiplier (Level 1 = full cooldown, Level 200 = 60% of base)
+- **Gem Crushing Station** — New crafting block that grinds raw gems into powder. Requires a Crushing Hammer placed in the dedicated tool slot. Faces the player on placement (directional). Replaces the earlier Gem Infusing Station concept
+- **Crushing Hammer** — New tool required by the Gem Crushing Station; crafted from iron ingots and a stick
+- **Ruby Powder, Sapphire Powder, Topaz Powder** — Completes the full 8-gem powder set; all gem types now have a powder form obtainable via the Gem Crushing Station
+- **8 Gem Powder Potions** — Brew any gem powder with an Awkward Potion to create a dual-effect potion: Amethyst (Regeneration II 45s + Absorption 2min), Citrine (Night Vision 5min + Haste 3min), Diamond (Resistance 5min + Health Boost 5min), Emerald (Strength 3min + Regeneration 3min), Quartz (Haste II 3min + Jump Boost 3min), Ruby/Fury (Strength II 30s + Fire Resistance 3min), Sapphire/Deep (Speed II 3min + Water Breathing 3min), Topaz/Fortune (Luck 5min + Haste II 2min)
+
+### Changed
+
+- **Minecraft 26.1.2 migration** — Ported the entire mod to Minecraft 26.1.2 (Mojang official mappings). All class names, mixin targets, block/item factory patterns, and recipe codecs updated accordingly. Now requires Fabric Loader 0.19.2 and Fabric API 0.149.1+26.1.2
+- **Bone dungeon portal room** — Improved portal room spawn reliability and increased treasure density in bone dungeon generation
+- **ChestRenderer mixin ported to 26.1.2** — Locked bone chest texture mixin rewritten to use MC 26.1.2's `extractRenderState`/`submit` rendering pipeline (static capture field pattern); custom `bone_realm_locked_chest` texture now correctly applied in-world
+
+### Fixed
+
+- **All 9 custom shield handles pointed outward** — All custom shield `items/*.json` definitions were missing the `"transformation": {"scale": [1, -1, -1]}` field required to orient the model correctly. Added to Inferno, Celestial, Crystal, Dragonbone, Frost, Nature, Shadow, Solar, and Stormguard shields
+- **Vanilla shield handle also broken** — Mod contained `assets/minecraft/items/shield.json` overriding the vanilla definition without the orientation transformation. Removed; vanilla's correct version now takes effect
+- **Missing model warnings on startup** — `items/boss_spawn_trigger.json` referenced nonexistent `dagmod:block/bone_block_top`; corrected to `dagmod:block/boss_spawn_trigger`
+- **Missing texture warnings on startup** — Inferno shield `particle` texture referenced a deleted item texture; replaced with `block/magma` (entity textures are not in the block/item atlas used by model particle references)
+- **Invalid `minecraft:builtin/entity` parent on all shield models** — All 18 shield model files (9 shields + 9 blocking variants) referenced a nonexistent parent. Removed; shield models are root models as in vanilla
+- **Seasons time predicate format** — Fixed three consecutive seasons predicate issues: converted `time/day` value to array format, added required `clock` field to `time_check` predicate, deleted an unparseable predicate file
+- **Dynamic lighting terrain not updating after MC 26.1.2 migration** — `scheduleBlockRenders` was removed in MC 26.x and not replaced; terrain blocks never updated even though entity rendering worked fine. Fixed by calling `LevelRenderer.setSectionRangeDirty()` on all sections within the light radius when the player moves or changes light source
+- **Stale light persisting after removing light source from hand** — When swapping to a slot with no light source while standing still, the lit area remained visible. The clearing condition required `!oldPos.equals(playerPos)`, which was never true when the player hadn't moved; removed the position guard so old-radius sections are always dirtied when a light source is removed
+- **Shield Bash cooldown incorrect** — Shield Bash base cooldown was set to 15 s (`15 * 20` ticks); corrected to 20 s (`20 * 20` ticks) as intended by the design spec
+- **CooldownManager not thread-safe** — Internal cooldown map used `HashMap`; replaced with `ConcurrentHashMap` to prevent rare CME crashes when ticking and ability activation interleave across threads
+- **`ResourceCommand` compile error** — `EnergyManager.getMaxEnergy()` was updated to require a `ServerPlayer` argument during the energy regen rewrite; the call-site in `ResourceCommand.java` was not updated and failed to compile. Fixed by passing `player` to the call
+- **Gem Crushing Station wrong texture** — Block model referenced `gem_polishing_station_texture` (nonexistent); corrected to `gem_crushing_station_texture`
+- **Citrine Powder missing from Creative Tab** — CITRINE_POWDER was omitted from creative tab registration
+
+---
+
 ## [1.7.10] - 2026-04-13
 
 ### Added

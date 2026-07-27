@@ -3,52 +3,52 @@ package com.github.hitman20081.dagmod.command;
 import com.github.hitman20081.dagmod.grave.GraveData;
 import com.github.hitman20081.dagmod.grave.GraveManager;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 public class GraveCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("grave")
-                .then(CommandManager.literal("status")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
+        dispatcher.register(Commands.literal("grave")
+                .then(Commands.literal("status")
                         .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ServerPlayer player = context.getSource().getPlayerOrException();
                             GraveManager manager = GraveManager.getInstance();
-                            GraveData grave = manager.getGraveForPlayer(player.getUuid());
+                            GraveData grave = manager.getGraveForPlayer(player.getUUID());
 
-                            player.sendMessage(Text.literal("=== Grave Status ===")
-                                    .formatted(Formatting.GOLD, Formatting.BOLD), false);
+                            player.sendSystemMessage(Component.literal("=== Grave Status ===")
+                                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
                             if (grave == null) {
-                                player.sendMessage(Text.literal("No active grave.")
-                                        .formatted(Formatting.GRAY), false);
+                                player.sendSystemMessage(Component.literal("No active grave.")
+                                        .withStyle(ChatFormatting.GRAY));
                                 return 1;
                             }
 
                             // Location and dimension
-                            player.sendMessage(Text.literal("Location: ")
-                                    .formatted(Formatting.YELLOW)
-                                    .append(Text.literal("[" + grave.getPosition().getX() + ", "
+                            player.sendSystemMessage(Component.literal("Location: ")
+                                    .withStyle(ChatFormatting.YELLOW)
+                                    .append(Component.literal("[" + grave.getPosition().getX() + ", "
                                             + grave.getPosition().getY() + ", "
                                             + grave.getPosition().getZ() + "]")
-                                            .formatted(Formatting.WHITE)), false);
+                                            .withStyle(ChatFormatting.WHITE)));
 
-                            player.sendMessage(Text.literal("Dimension: ")
-                                    .formatted(Formatting.YELLOW)
-                                    .append(Text.literal(grave.getDimension().toString())
-                                            .formatted(Formatting.WHITE)), false);
+                            player.sendSystemMessage(Component.literal("Dimension: ")
+                                    .withStyle(ChatFormatting.YELLOW)
+                                    .append(Component.literal(grave.getDimension().toString())
+                                            .withStyle(ChatFormatting.WHITE)));
 
                             // Item count
-                            player.sendMessage(Text.literal("Items: ")
-                                    .formatted(Formatting.YELLOW)
-                                    .append(Text.literal(String.valueOf(grave.getItems().size()))
-                                            .formatted(Formatting.WHITE)), false);
+                            player.sendSystemMessage(Component.literal("Items: ")
+                                    .withStyle(ChatFormatting.YELLOW)
+                                    .append(Component.literal(String.valueOf(grave.getItems().size()))
+                                            .withStyle(ChatFormatting.WHITE)));
 
                             // Time since death
                             long currentTick = manager.getCurrentTick();
@@ -57,10 +57,10 @@ public class GraveCommand {
                             long minutes = elapsedSeconds / 60;
                             long seconds = elapsedSeconds % 60;
 
-                            player.sendMessage(Text.literal("Time since death: ")
-                                    .formatted(Formatting.YELLOW)
-                                    .append(Text.literal(minutes + "m " + seconds + "s")
-                                            .formatted(Formatting.WHITE)), false);
+                            player.sendSystemMessage(Component.literal("Time since death: ")
+                                    .withStyle(ChatFormatting.YELLOW)
+                                    .append(Component.literal(minutes + "m " + seconds + "s")
+                                            .withStyle(ChatFormatting.WHITE)));
 
                             // Loot delay remaining
                             long lootDelay = manager.getLootDelayTicks();
@@ -70,15 +70,15 @@ public class GraveCommand {
                                 long delaySeconds = delayRemaining / 20;
                                 long delayMin = delaySeconds / 60;
                                 long delaySec = delaySeconds % 60;
-                                player.sendMessage(Text.literal("Loot protection: ")
-                                        .formatted(Formatting.YELLOW)
-                                        .append(Text.literal(delayMin + "m " + delaySec + "s remaining")
-                                                .formatted(Formatting.GREEN)), false);
+                                player.sendSystemMessage(Component.literal("Loot protection: ")
+                                        .withStyle(ChatFormatting.YELLOW)
+                                        .append(Component.literal(delayMin + "m " + delaySec + "s remaining")
+                                                .withStyle(ChatFormatting.GREEN)));
                             } else {
-                                player.sendMessage(Text.literal("Loot protection: ")
-                                        .formatted(Formatting.YELLOW)
-                                        .append(Text.literal("Expired (others can loot)")
-                                                .formatted(Formatting.RED)), false);
+                                player.sendSystemMessage(Component.literal("Loot protection: ")
+                                        .withStyle(ChatFormatting.YELLOW)
+                                        .append(Component.literal("Expired (others can loot)")
+                                                .withStyle(ChatFormatting.RED)));
                             }
 
                             return 1;

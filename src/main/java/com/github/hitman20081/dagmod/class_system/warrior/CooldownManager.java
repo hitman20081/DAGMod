@@ -1,13 +1,15 @@
 package com.github.hitman20081.dagmod.class_system.warrior;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages cooldowns for Warrior abilities
@@ -16,30 +18,43 @@ import java.util.UUID;
 public class CooldownManager {
     // Cooldown durations in ticks (20 ticks = 1 second)
     public static final int RAGE_COOLDOWN = 60 * 20; // 60 seconds
-    public static final int SHIELD_BASH_COOLDOWN = 15 * 20; // 15 seconds
+    public static final int SHIELD_BASH_COOLDOWN = 20 * 20; // 20 seconds
     public static final int WAR_CRY_COOLDOWN = 90 * 20; // 90 seconds
     public static final int BATTLE_SHOUT_COOLDOWN = 45 * 20;  // 45 seconds
     public static final int WHIRLWIND_COOLDOWN = 30 * 20;     // 30 seconds
     public static final int IRON_SKIN_COOLDOWN = 120 * 20;    // 120 seconds (2 minutes)
 
     // Storage: UUID -> (AbilityType -> cooldown end time)
-    private static final Map<UUID, Map<WarriorAbility, Long>> cooldowns = new HashMap<>();
+    private static final Map<UUID, Map<WarriorAbility, Long>> cooldowns = new ConcurrentHashMap<>();
 
     /**
      * Start a cooldown for a specific ability
      */
-    public static void startCooldown(PlayerEntity player, WarriorAbility ability) {
-        UUID uuid = player.getUuid();
-        long endTime = player.getEntityWorld().getTime() + ability.getCooldownTicks();
+    /** Cooldown reduction: 0% at level 1, 40% at level 200. */
+    public static int getEffectiveCooldownTicks(int baseTicks, int level) {
+        float multiplier = Math.max(0.6f, 1.0f - level * 0.002f);
+        return Math.round(baseTicks * multiplier);
+    }
 
-        cooldowns.computeIfAbsent(uuid, k -> new HashMap<>()).put(ability, endTime);
+    public static void startCooldown(Player player, WarriorAbility ability) {
+        UUID uuid = player.getUUID();
+
+        int level = 1;
+        if (player instanceof ServerPlayer sp) {
+            var progData = ProgressionManager.getPlayerData(sp);
+            if (progData != null) level = progData.getCurrentLevel();
+        }
+
+        int effectiveTicks = getEffectiveCooldownTicks(ability.getCooldownTicks(), level);
+        long endTime = player.level().getGameTime() + effectiveTicks;
+
+        cooldowns.computeIfAbsent(uuid, k -> new ConcurrentHashMap<>()).put(ability, endTime);
 
         // Send feedback to player
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            serverPlayer.sendMessage(
-                    Text.literal("⚔ " + ability.getDisplayName() + " activated!")
-                            .formatted(Formatting.GOLD, Formatting.BOLD),
-                    true // Action bar
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("⚔ " + ability.getDisplayName() + " activated!")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
             );
         }
     }
@@ -47,15 +62,15 @@ public class CooldownManager {
     /**
      * Check if an ability is on cooldown
      */
-    public static boolean isOnCooldown(PlayerEntity player, WarriorAbility ability) {
-        UUID uuid = player.getUuid();
+    public static boolean isOnCooldown(Player player, WarriorAbility ability) {
+        UUID uuid = player.getUUID();
         Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns == null || !playerCooldowns.containsKey(ability)) {
             return false;
         }
 
-        long currentTime = player.getEntityWorld().getTime();
+        long currentTime = player.level().getGameTime();
         long endTime = playerCooldowns.get(ability);
 
         if (currentTime >= endTime) {
@@ -70,15 +85,15 @@ public class CooldownManager {
     /**
      * Get remaining cooldown time in ticks
      */
-    public static int getRemainingCooldown(PlayerEntity player, WarriorAbility ability) {
-        UUID uuid = player.getUuid();
+    public static int getRemainingCooldown(Player player, WarriorAbility ability) {
+        UUID uuid = player.getUUID();
         Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns == null || !playerCooldowns.containsKey(ability)) {
             return 0;
         }
 
-        long currentTime = player.getEntityWorld().getTime();
+        long currentTime = player.level().getGameTime();
         long endTime = playerCooldowns.get(ability);
 
         return Math.max(0, (int)(endTime - currentTime));
@@ -87,20 +102,19 @@ public class CooldownManager {
     /**
      * Get remaining cooldown in seconds (for display)
      */
-    public static int getRemainingSeconds(PlayerEntity player, WarriorAbility ability) {
+    public static int getRemainingSeconds(Player player, WarriorAbility ability) {
         return (int) Math.ceil(getRemainingCooldown(player, ability) / 20.0);
     }
 
     /**
      * Send cooldown message to player
      */
-    public static void sendCooldownMessage(PlayerEntity player, WarriorAbility ability) {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+    public static void sendCooldownMessage(Player player, WarriorAbility ability) {
+        if (player instanceof ServerPlayer serverPlayer) {
             int seconds = getRemainingSeconds(player, ability);
-            serverPlayer.sendMessage(
-                    Text.literal("⏰ " + ability.getDisplayName() + " on cooldown: " + seconds + "s")
-                            .formatted(Formatting.RED),
-                    true // Action bar
+            serverPlayer.sendOverlayMessage(
+                    Component.literal("⏰ " + ability.getDisplayName() + " on cooldown: " + seconds + "s")
+                            .withStyle(ChatFormatting.RED)
             );
         }
     }
@@ -115,8 +129,8 @@ public class CooldownManager {
     /**
      * Clear a specific cooldown (for admin commands or special events)
      */
-    public static void clearCooldown(PlayerEntity player, WarriorAbility ability) {
-        UUID uuid = player.getUuid();
+    public static void clearCooldown(Player player, WarriorAbility ability) {
+        UUID uuid = player.getUUID();
         Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns != null) {
@@ -127,13 +141,13 @@ public class CooldownManager {
     /**
      * Get all active cooldowns for a player (for HUD display)
      */
-    public static Map<WarriorAbility, Integer> getActiveCooldowns(PlayerEntity player) {
-        UUID uuid = player.getUuid();
+    public static Map<WarriorAbility, Integer> getActiveCooldowns(Player player) {
+        UUID uuid = player.getUUID();
         Map<WarriorAbility, Integer> active = new HashMap<>();
         Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns != null) {
-            long currentTime = player.getEntityWorld().getTime();
+            long currentTime = player.level().getGameTime();
 
             for (Map.Entry<WarriorAbility, Long> entry : playerCooldowns.entrySet()) {
                 int remaining = (int)(entry.getValue() - currentTime);
@@ -151,20 +165,18 @@ public class CooldownManager {
      * @param player The player whose cooldowns to reduce
      * @param ticks Amount of ticks to reduce (20 ticks = 1 second)
      */
-    public static void reduceAllCooldowns(ServerPlayerEntity player, int ticks) {
-        UUID uuid = player.getUuid();
+    public static void reduceAllCooldowns(ServerPlayer player, int ticks) {
+        UUID uuid = player.getUUID();
         Map<WarriorAbility, Long> playerCooldowns = cooldowns.get(uuid);
 
         if (playerCooldowns == null || playerCooldowns.isEmpty()) {
-            player.sendMessage(
-                    Text.literal("No active cooldowns to reduce!")
-                            .formatted(Formatting.YELLOW),
-                    true
-            );
+            player.sendSystemMessage(
+                    Component.literal("No active cooldowns to reduce!")
+                            .withStyle(ChatFormatting.YELLOW));
             return;
         }
 
-        long currentTime = player.getEntityWorld().getTime();
+        long currentTime = player.level().getGameTime();
         int reducedCount = 0;
 
         // Reduce each cooldown
@@ -182,11 +194,9 @@ public class CooldownManager {
         }
 
         if (reducedCount > 0) {
-            player.sendMessage(
-                    Text.literal("⏰ Reduced " + reducedCount + " cooldown(s) by " + (ticks / 20) + " seconds!")
-                            .formatted(Formatting.GOLD),
-                    true
-            );
+            player.sendOverlayMessage(
+                    Component.literal("⏰ Reduced " + reducedCount + " cooldown(s) by " + (ticks / 20) + " seconds!")
+                            .withStyle(ChatFormatting.GOLD));
         }
     }
 }

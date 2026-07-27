@@ -1,11 +1,11 @@
 package com.github.hitman20081.dagmod.dragon_realm.boss;
 
 import com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmTeleporter;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Manages Dragon Guardian boss respawn timing
@@ -64,8 +64,8 @@ public class DragonRespawnTimer {
     /**
      * Start respawn timer after boss death
      */
-    public void startTimer(ServerWorld world) {
-        this.deathTime = world.getTime();
+    public void startTimer(ServerLevel world) {
+        this.deathTime = world.getGameTime();
         this.respawnDelay = DEFAULT_RESPAWN_DELAY;
         this.isActive = true;
         this.lastAnnouncementIndex = -1;
@@ -76,8 +76,8 @@ public class DragonRespawnTimer {
     /**
      * Start timer with custom delay
      */
-    public void startTimer(ServerWorld world, long customDelay) {
-        this.deathTime = world.getTime();
+    public void startTimer(ServerLevel world, long customDelay) {
+        this.deathTime = world.getGameTime();
         this.respawnDelay = Math.max(MIN_RESPAWN_DELAY, Math.min(MAX_RESPAWN_DELAY, customDelay));
         this.isActive = true;
         this.lastAnnouncementIndex = -1;
@@ -89,12 +89,12 @@ public class DragonRespawnTimer {
      * Tick the timer - call this every server tick
      * Returns true if boss should respawn
      */
-    public boolean tick(ServerWorld world) {
+    public boolean tick(ServerLevel world) {
         if (!isActive) {
             return false;
         }
 
-        long currentTime = world.getTime();
+        long currentTime = world.getGameTime();
         long elapsedTime = currentTime - deathTime;
         long remainingTime = respawnDelay - elapsedTime;
 
@@ -114,7 +114,7 @@ public class DragonRespawnTimer {
     /**
      * Check if we should make an announcement
      */
-    private void checkAnnouncements(ServerWorld world, long remainingTime) {
+    private void checkAnnouncements(ServerLevel world, long remainingTime) {
         for (int i = 0; i < ANNOUNCEMENT_INTERVALS.length; i++) {
             // Skip if we've already announced this interval
             if (i <= lastAnnouncementIndex) {
@@ -133,15 +133,15 @@ public class DragonRespawnTimer {
     /**
      * Announce timer start
      */
-    private void announceTimerStart(ServerWorld world) {
+    private void announceTimerStart(ServerLevel world) {
         long minutes = respawnDelay / 1200; // Convert ticks to minutes
 
-        Text message = Text.literal("The Dragon Guardian will respawn in ")
-                .formatted(Formatting.LIGHT_PURPLE)
-                .append(Text.literal(formatTime(respawnDelay))
-                        .formatted(Formatting.GOLD))
-                .append(Text.literal("...")
-                        .formatted(Formatting.LIGHT_PURPLE));
+        Component message = Component.literal("The Dragon Guardian will respawn in ")
+                .withStyle(ChatFormatting.LIGHT_PURPLE)
+                .append(Component.literal(formatTime(respawnDelay))
+                        .withStyle(ChatFormatting.GOLD))
+                .append(Component.literal("...")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
 
         broadcastToDragonRealm(world, message);
     }
@@ -149,23 +149,23 @@ public class DragonRespawnTimer {
     /**
      * Announce time remaining
      */
-    private void announceTimeRemaining(ServerWorld world, long ticksRemaining) {
+    private void announceTimeRemaining(ServerLevel world, long ticksRemaining) {
         long totalSeconds = ticksRemaining / 20;
 
         if (totalSeconds <= 10) {
             // Final countdown: bold red numbers
-            Text message = Text.literal("Dragon Guardian respawning in ")
-                    .formatted(Formatting.RED, Formatting.BOLD)
-                    .append(Text.literal(totalSeconds + "...")
-                            .formatted(Formatting.GOLD, Formatting.BOLD));
+            Component message = Component.literal("Dragon Guardian respawning in ")
+                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD)
+                    .append(Component.literal(totalSeconds + "...")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
             broadcastToDragonRealm(world, message);
         } else {
-            Text message = Text.literal("Dragon Guardian respawning in ")
-                    .formatted(Formatting.YELLOW)
-                    .append(Text.literal(formatTime(ticksRemaining))
-                            .formatted(Formatting.GOLD))
-                    .append(Text.literal("!")
-                            .formatted(Formatting.YELLOW));
+            Component message = Component.literal("Dragon Guardian respawning in ")
+                    .withStyle(ChatFormatting.YELLOW)
+                    .append(Component.literal(formatTime(ticksRemaining))
+                            .withStyle(ChatFormatting.GOLD))
+                    .append(Component.literal("!")
+                            .withStyle(ChatFormatting.YELLOW));
             broadcastToDragonRealm(world, message);
         }
     }
@@ -173,19 +173,19 @@ public class DragonRespawnTimer {
     /**
      * Announce boss respawn
      */
-    private void announceRespawn(ServerWorld world) {
-        Text message = Text.literal("☆ The Dragon Guardian has respawned! ☆")
-                .formatted(Formatting.DARK_PURPLE, Formatting.BOLD);
+    private void announceRespawn(ServerLevel world) {
+        Component message = Component.literal("☆ The Dragon Guardian has respawned! ☆")
+                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD);
 
         broadcastToDragonRealm(world, message);
 
         // Also notify Overworld
-        ServerWorld overworld = world.getServer().getWorld(DragonRealmTeleporter.OVERWORLD);
+        ServerLevel overworld = world.getServer().getLevel(DragonRealmTeleporter.OVERWORLD);
         if (overworld != null) {
-            Text overworldMsg = Text.literal("The Dragon Guardian has respawned in the Dragon Realm!")
-                    .formatted(Formatting.LIGHT_PURPLE);
-            for (ServerPlayerEntity player : overworld.getPlayers()) {
-                player.sendMessage(overworldMsg, false);
+            Component overworldMsg = Component.literal("The Dragon Guardian has respawned in the Dragon Realm!")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE);
+            for (ServerPlayer player : overworld.players()) {
+                player.sendSystemMessage(overworldMsg);
             }
         }
     }
@@ -193,18 +193,18 @@ public class DragonRespawnTimer {
     /**
      * Broadcast message to all players in Dragon Realm
      */
-    private void broadcastToDragonRealm(ServerWorld world, Text message) {
+    private void broadcastToDragonRealm(ServerLevel world, Component message) {
         // Only broadcast if we're in the Dragon Realm
-        if (world.getRegistryKey() != DragonRealmTeleporter.DRAGON_REALM) {
+        if (world.dimension() != DragonRealmTeleporter.DRAGON_REALM) {
             // Get Dragon Realm world
-            ServerWorld dragonRealm = world.getServer().getWorld(DragonRealmTeleporter.DRAGON_REALM);
+            ServerLevel dragonRealm = world.getServer().getLevel(DragonRealmTeleporter.DRAGON_REALM);
             if (dragonRealm != null) {
                 world = dragonRealm;
             }
         }
 
-        for (ServerPlayerEntity player : world.getPlayers()) {
-            player.sendMessage(message, false);
+        for (ServerPlayer player : world.players()) {
+            player.sendSystemMessage(message);
         }
     }
 
@@ -237,12 +237,12 @@ public class DragonRespawnTimer {
     /**
      * Get time remaining in ticks
      */
-    public long getTimeRemaining(ServerWorld world) {
+    public long getTimeRemaining(ServerLevel world) {
         if (!isActive) {
             return 0;
         }
 
-        long currentTime = world.getTime();
+        long currentTime = world.getGameTime();
         long elapsedTime = currentTime - deathTime;
         return Math.max(0, respawnDelay - elapsedTime);
     }
@@ -257,7 +257,7 @@ public class DragonRespawnTimer {
     /**
      * Save timer state to NBT
      */
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public CompoundTag writeNbt(CompoundTag nbt) {
         nbt.putLong("DeathTime", deathTime);
         nbt.putLong("RespawnDelay", respawnDelay);
         nbt.putBoolean("IsActive", isActive);
@@ -268,7 +268,7 @@ public class DragonRespawnTimer {
     /**
      * Load timer state from NBT
      */
-    public void readNbt(NbtCompound nbt) {
+    public void readNbt(CompoundTag nbt) {
         this.deathTime = nbt.getLong("DeathTime").orElse(0L);
         this.respawnDelay = nbt.getLong("RespawnDelay").orElse(DEFAULT_RESPAWN_DELAY);
         this.isActive = nbt.getBoolean("IsActive").orElse(false);

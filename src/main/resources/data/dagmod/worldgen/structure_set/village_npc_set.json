@@ -1,9 +1,12 @@
 {
   "structures": [
-    {
-      "structure": "dagmod:village_npc",
-      "weight": 1
-    }
+    { "structure": "dagmod:village_inn",       "weight": 1 },
+    { "structure": "dagmod:village_tavern",    "weight": 1 },
+    { "structure": "dagmod:village_shop_1",    "weight": 1 },
+    { "structure": "dagmod:village_shop_2",    "weight": 1 },
+    { "structure": "dagmod:village_traders_1", "weight": 1 },
+    { "structure": "dagmod:village_jeweler",   "weight": 1 },
+    { "structure": "dagmod:village_blacksmith","weight": 1 }
   ],
   "placement": {
     "type": "dagmod:multi_exclusion_random_spread",
@@ -11,8 +14,8 @@
     "spacing": 28,
     "separation": 10,
     "exclusion_zones": [
-      { "other_set": "dagmod:hall_spawn",      "chunk_count": 15 },
-      { "other_set": "dagmod:bone_dungeon_set","chunk_count": 12 }
+      { "other_set": "dagmod:hall_spawn",       "chunk_count": 8 },
+      { "other_set": "dagmod:bone_dungeon_set", "chunk_count": 6 }
     ]
   }
 }

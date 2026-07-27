@@ -4,20 +4,22 @@ import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.bone_realm.portal.AncientBoneBlock;
 import com.github.hitman20081.dagmod.bone_realm.portal.BoneRealmPortalBlock;
 import com.github.hitman20081.dagmod.bone_realm.portal.NecroticKeyItem;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Rarity;
+
+import java.util.function.Function;
 
 /**
  * Central registry for all Bone Realm content
@@ -43,29 +45,29 @@ public class BoneRealmRegistry {
      * Call this from your main mod initializer
      */
     public static void register() {
-        // Register blocks - must use registryKey() for 1.21.10+
+        // Register blocks
         ANCIENT_BONE_BLOCK = registerBlock(
                 "ancient_bone_block",
-                new AncientBoneBlock(AbstractBlock.Settings.create()
-                        .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "ancient_bone_block")))
+                key -> new AncientBoneBlock(BlockBehaviour.Properties.of()
+                        .setId(key)
                         .strength(50.0f, 1200.0f)
-                        .requiresTool()
-                        .sounds(BlockSoundGroup.BONE)
-                        .luminance(state -> 5)
+                        .requiresCorrectToolForDrops()
+                        .sound(SoundType.BONE_BLOCK)
+                        .lightLevel(state -> 5)
                 ),
                 true
         );
 
         BONE_REALM_PORTAL = registerBlock(
                 "bone_realm_portal",
-                new BoneRealmPortalBlock(AbstractBlock.Settings.create()
-                        .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(DagMod.MOD_ID, "bone_realm_portal")))
-                        .mapColor(MapColor.BLACK)
+                key -> new BoneRealmPortalBlock(BlockBehaviour.Properties.of()
+                        .setId(key)
+                        .mapColor(MapColor.COLOR_BLACK)
                         .noCollision()
                         .strength(-1.0f)
-                        .sounds(BlockSoundGroup.GLASS)
-                        .luminance(state -> 11)
-                        .dropsNothing()
+                        .sound(SoundType.GLASS)
+                        .lightLevel(state -> 11)
+                        .noLootTable()
                 ),
                 false // Don't create BlockItem for portal
         );
@@ -73,31 +75,17 @@ public class BoneRealmRegistry {
         // Register items
         NECROTIC_KEY = registerItem(
                 "necrotic_key",
-                new NecroticKeyItem(new Item.Settings()
-                        .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, "necrotic_key")))
-                        .maxCount(1)
-                        .rarity(Rarity.EPIC)
-                )
+                key -> new NecroticKeyItem(new Item.Properties().setId(key).stacksTo(1).rarity(Rarity.EPIC))
         );
 
-        // NEW: Bone Realm Chest Key - for locked chests in the dimension
         BONE_REALM_CHEST_KEY = registerItem(
                 "bone_realm_chest_key",
-                new Item(new Item.Settings()
-                        .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, "bone_realm_chest_key")))
-                        .maxCount(1)
-                        .rarity(Rarity.RARE)
-                )
+                key -> new Item(new Item.Properties().setId(key).stacksTo(1).rarity(Rarity.RARE))
         );
 
-        // NEW: Skeleton King Key - drops from boss, opens special chest
         SKELETON_KING_KEY = registerItem(
                 "skeleton_king_key",
-                new Item(new Item.Settings()
-                        .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(DagMod.MOD_ID, "skeleton_king_key")))
-                        .maxCount(1)
-                        .rarity(Rarity.EPIC)
-                )
+                key -> new Item(new Item.Properties().setId(key).stacksTo(1).rarity(Rarity.EPIC))
         );
 
         // Add items to creative tabs
@@ -108,18 +96,18 @@ public class BoneRealmRegistry {
     /**
      * Register a block with optional BlockItem
      */
-    private static Block registerBlock(String id, Block block, boolean createItem) {
-        Identifier identifier = Identifier.of(DagMod.MOD_ID, id);
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
+    private static Block registerBlock(String id, Function<ResourceKey<Block>, Block> factory, boolean createItem) {
+        Identifier identifier = Identifier.fromNamespaceAndPath(DagMod.MOD_ID, id);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, identifier);
 
         // Register block
-        Block registered = Registry.register(Registries.BLOCK, blockKey, block);
+        Block registered = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(blockKey));
 
         // Register BlockItem if requested
         if (createItem) {
-            RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, identifier);
-            Registry.register(Registries.ITEM, itemKey,
-                    new BlockItem(registered, new Item.Settings().registryKey(itemKey)));
+            ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, identifier);
+            Registry.register(BuiltInRegistries.ITEM, itemKey,
+                    new BlockItem(registered, new Item.Properties().setId(itemKey)));
         }
 
         return registered;
@@ -128,10 +116,10 @@ public class BoneRealmRegistry {
     /**
      * Register an item
      */
-    private static Item registerItem(String id, Item item) {
-        Identifier identifier = Identifier.of(DagMod.MOD_ID, id);
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, identifier);
-        return Registry.register(Registries.ITEM, itemKey, item);
+    private static Item registerItem(String id, java.util.function.Function<ResourceKey<Item>, Item> factory) {
+        Identifier identifier = Identifier.fromNamespaceAndPath(DagMod.MOD_ID, id);
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, identifier);
+        return Registry.register(BuiltInRegistries.ITEM, itemKey, factory.apply(itemKey));
     }
 
     /**
@@ -139,15 +127,15 @@ public class BoneRealmRegistry {
      */
     private static void addToCreativeTabs() {
         // Add Ancient Bone Block to Building Blocks tab
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(content -> {
-            content.add(ANCIENT_BONE_BLOCK);
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(content -> {
+            content.accept(ANCIENT_BONE_BLOCK);
         });
 
         // Add keys to Tools tab
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(content -> {
-            content.add(NECROTIC_KEY);
-            content.add(BONE_REALM_CHEST_KEY);
-            content.add(SKELETON_KING_KEY);
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(content -> {
+            content.accept(NECROTIC_KEY);
+            content.accept(BONE_REALM_CHEST_KEY);
+            content.accept(SKELETON_KING_KEY);
         });
     }
 }

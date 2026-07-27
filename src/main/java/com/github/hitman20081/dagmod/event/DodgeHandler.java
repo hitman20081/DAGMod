@@ -1,6 +1,6 @@
 package com.github.hitman20081.dagmod.event;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class DodgeHandler {
      *
      * @return true if the attack should be dodged
      */
-    public static boolean tryDodge(UUID uuid, long worldTime, Random random) {
+    public static boolean tryDodge(UUID uuid, long worldTime, RandomSource random) {
         Long expiry = dodgeExpiry.get(uuid);
         if (expiry == null) return false;
         if (worldTime >= expiry) {

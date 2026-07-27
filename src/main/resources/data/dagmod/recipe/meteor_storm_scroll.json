@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "dagmod:pure_brimstone_dust",
+    "minecraft:blaze_rod"
+  ],
+  "result": {
+    "id": "dagmod:meteor_storm_scroll",
+    "components": { "minecraft:item_model": "dagmod:meteor_storm_scroll" },
+    "count": 1
+  }
+}

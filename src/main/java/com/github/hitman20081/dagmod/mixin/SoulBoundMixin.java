@@ -2,9 +2,9 @@ package com.github.hitman20081.dagmod.mixin;
 
 import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
 import com.github.hitman20081.dagmod.enchantment.SoulBoundStorage;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,26 +18,26 @@ import java.util.List;
  * On death: removes soulbound items from inventory and stores them with slot indices.
  * On respawn: items are returned to original slots via the AFTER_RESPAWN handler in DagMod.java.
  */
-@Mixin(ServerPlayerEntity.class)
+@Mixin(ServerPlayer.class)
 public class SoulBoundMixin {
 
-    @Inject(method = "onDeath", at = @At("HEAD"))
+    @Inject(method = "die", at = @At("HEAD"))
     private void saveSoulBoundItems(DamageSource damageSource, CallbackInfo ci) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayer player = (ServerPlayer) (Object) this;
         List<ItemStack> saved = new ArrayList<>();
         List<Integer> slots = new ArrayList<>();
 
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (!stack.isEmpty() && CustomEnchantmentEffects.getEnchantmentLevel(stack, player.getEntityWorld(), "soul_bound") > 0) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (!stack.isEmpty() && CustomEnchantmentEffects.getEnchantmentLevel(stack, player.level(), "soul_bound") > 0) {
                 saved.add(stack.copy());
                 slots.add(i);
-                player.getInventory().setStack(i, ItemStack.EMPTY);
+                player.getInventory().setItem(i, ItemStack.EMPTY);
             }
         }
 
         if (!saved.isEmpty()) {
-            SoulBoundStorage.store(player.getUuid(), saved, slots);
+            SoulBoundStorage.store(player.getUUID(), saved, slots);
         }
     }
 }

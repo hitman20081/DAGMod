@@ -2,10 +2,10 @@ package com.github.hitman20081.dagmod.party.quest;
 
 import com.github.hitman20081.dagmod.party.PartyData;
 import com.github.hitman20081.dagmod.party.PartyManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,49 +28,45 @@ public class PartyQuestManager {
     /**
      * Start a party quest
      */
-    public boolean startQuest(ServerPlayerEntity leader, String questId) {
+    public boolean startQuest(ServerPlayer leader, String questId) {
         PartyData party = PartyManager.getInstance().getParty(leader);
 
         if (party == null) {
-            leader.sendMessage(Text.literal("You must be in a party to start a party quest!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You must be in a party to start a party quest!").withStyle(ChatFormatting.RED));
             return false;
         }
 
-        if (!party.isLeader(leader.getUuid())) {
-            leader.sendMessage(Text.literal("Only the party leader can start party quests!").formatted(Formatting.RED), false);
+        if (!party.isLeader(leader.getUUID())) {
+            leader.sendSystemMessage(Component.literal("Only the party leader can start party quests!").withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Check if party already has an active quest
         if (activeQuests.containsKey(party.getPartyId())) {
-            leader.sendMessage(Text.literal("Your party already has an active quest!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("Your party already has an active quest!").withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Get quest template
         PartyQuestTemplate template = PartyQuestRegistry.getQuest(questId);
         if (template == null) {
-            leader.sendMessage(Text.literal("Unknown quest: " + questId).formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("Unknown quest: " + questId).withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Check party size requirements
         int partySize = party.getSize();
         if (partySize < template.getMinPartySize()) {
-            leader.sendMessage(
-                    Text.literal("This quest requires at least " + template.getMinPartySize() + " players!")
-                            .formatted(Formatting.RED),
-                    false
-            );
+            leader.sendSystemMessage(
+                    Component.literal("This quest requires at least " + template.getMinPartySize() + " players!")
+                            .withStyle(ChatFormatting.RED));
             return false;
         }
 
         if (partySize > template.getMaxPartySize()) {
-            leader.sendMessage(
-                    Text.literal("This quest allows at most " + template.getMaxPartySize() + " players!")
-                            .formatted(Formatting.RED),
-                    false
-            );
+            leader.sendSystemMessage(
+                    Component.literal("This quest allows at most " + template.getMaxPartySize() + " players!")
+                            .withStyle(ChatFormatting.RED));
             return false;
         }
 
@@ -79,25 +75,25 @@ public class PartyQuestManager {
         activeQuests.put(party.getPartyId(), questData);
 
         // Notify party
-        ServerWorld world = (ServerWorld) leader.getEntityWorld();
+        ServerLevel world = (ServerLevel) leader.level();
         party.sendPartyMessage(world,
-                Text.literal("═══ Party Quest Started ═══").formatted(Formatting.GOLD)
+                Component.literal("═══ Party Quest Started ═══").withStyle(ChatFormatting.GOLD)
         );
         party.sendPartyMessage(world,
-                Text.literal(template.getName()).formatted(Formatting.YELLOW)
+                Component.literal(template.getName()).withStyle(ChatFormatting.YELLOW)
         );
         party.sendPartyMessage(world,
-                Text.literal(template.getDescription()).formatted(Formatting.GRAY)
+                Component.literal(template.getDescription()).withStyle(ChatFormatting.GRAY)
         );
         party.sendPartyMessage(world,
-                Text.literal("Difficulty: " + template.getDifficulty().getDisplayName())
-                        .formatted(Formatting.AQUA)
+                Component.literal("Difficulty: " + template.getDifficulty().getDisplayName())
+                        .withStyle(ChatFormatting.AQUA)
         );
 
         if (template.hasTimeLimit()) {
             party.sendPartyMessage(world,
-                    Text.literal("Time Limit: " + template.getTimeLimitMinutes() + " minutes")
-                            .formatted(Formatting.RED)
+                    Component.literal("Time Limit: " + template.getTimeLimitMinutes() + " minutes")
+                            .withStyle(ChatFormatting.RED)
             );
         }
 
@@ -113,7 +109,7 @@ public class PartyQuestManager {
         return activeQuests.get(partyId);
     }
 
-    public PartyQuestData getActiveQuest(ServerPlayerEntity player) {
+    public PartyQuestData getActiveQuest(ServerPlayer player) {
         PartyData party = PartyManager.getInstance().getParty(player);
         if (party == null) return null;
         return getActiveQuest(party.getPartyId());
@@ -154,22 +150,22 @@ public class PartyQuestManager {
         }
 
         // Get all online party members
-        List<ServerPlayerEntity> members = new ArrayList<>();
+        List<ServerPlayer> members = new ArrayList<>();
         for (UUID memberId : party.getMembers()) {
             // You'll need to get player from server
             // This is simplified - you'll need actual player lookup
         }
 
         if (!members.isEmpty()) {
-            ServerWorld world = (ServerWorld) members.get(0).getEntityWorld();
+            ServerLevel world = (ServerLevel) members.get(0).level();
 
             // Notify completion
             party.sendPartyMessage(world,
-                    Text.literal("═══ Quest Complete! ═══").formatted(Formatting.GREEN, Formatting.BOLD)
+                    Component.literal("═══ Quest Complete! ═══").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD)
             );
             party.sendPartyMessage(world,
-                    Text.literal(quest.getTemplate().getName() + " completed!")
-                            .formatted(Formatting.YELLOW)
+                    Component.literal(quest.getTemplate().getName() + " completed!")
+                            .withStyle(ChatFormatting.YELLOW)
             );
 
             // Award rewards to all members
@@ -183,31 +179,27 @@ public class PartyQuestManager {
     /**
      * Distribute rewards to party members
      */
-    private void distributeRewards(PartyQuestData quest, List<ServerPlayerEntity> members, ServerWorld world) {
+    private void distributeRewards(PartyQuestData quest, List<ServerPlayer> members, ServerLevel world) {
         PartyQuestTemplate template = quest.getTemplate();
         int baseXp = template.getXpReward();
         double multiplier = template.getDifficulty().getRewardMultiplier();
         int finalXp = (int) (baseXp * multiplier);
 
-        for (ServerPlayerEntity member : members) {
+        for (ServerPlayer member : members) {
             // Award XP
             com.github.hitman20081.dagmod.progression.ProgressionManager.addXP(member, finalXp);
-            member.sendMessage(
-                    Text.literal("+" + finalXp + " XP").formatted(Formatting.GOLD),
-                    false
-            );
+            member.sendSystemMessage(
+                    Component.literal("+" + finalXp + " XP").withStyle(ChatFormatting.GOLD));
 
             // Award items
             for (PartyQuestReward reward : template.getRewards()) {
-                if (!member.getInventory().insertStack(reward.createRewardStack())) {
+                if (!member.getInventory().add(reward.createRewardStack())) {
                     // Drop if inventory full
-                    member.dropStack(world, reward.createRewardStack());
+                    member.drop(reward.createRewardStack(), false);
                 }
 
-                member.sendMessage(
-                        Text.literal("Received: " + reward.toString()).formatted(Formatting.GREEN),
-                        false
-                );
+                member.sendSystemMessage(
+                        Component.literal("Received: " + reward.toString()).withStyle(ChatFormatting.GREEN));
             }
         }
     }
@@ -215,28 +207,28 @@ public class PartyQuestManager {
     /**
      * Abandon/cancel a party quest
      */
-    public boolean abandonQuest(ServerPlayerEntity leader) {
+    public boolean abandonQuest(ServerPlayer leader) {
         PartyData party = PartyManager.getInstance().getParty(leader);
 
         if (party == null) {
-            leader.sendMessage(Text.literal("You are not in a party!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("You are not in a party!").withStyle(ChatFormatting.RED));
             return false;
         }
 
-        if (!party.isLeader(leader.getUuid())) {
-            leader.sendMessage(Text.literal("Only the party leader can abandon party quests!").formatted(Formatting.RED), false);
+        if (!party.isLeader(leader.getUUID())) {
+            leader.sendSystemMessage(Component.literal("Only the party leader can abandon party quests!").withStyle(ChatFormatting.RED));
             return false;
         }
 
         PartyQuestData quest = activeQuests.remove(party.getPartyId());
         if (quest == null) {
-            leader.sendMessage(Text.literal("Your party has no active quest!").formatted(Formatting.RED), false);
+            leader.sendSystemMessage(Component.literal("Your party has no active quest!").withStyle(ChatFormatting.RED));
             return false;
         }
 
-        ServerWorld world = (ServerWorld) leader.getEntityWorld();
+        ServerLevel world = (ServerLevel) leader.level();
         party.sendPartyMessage(world,
-                Text.literal("Party quest abandoned.").formatted(Formatting.RED)
+                Component.literal("Party quest abandoned.").withStyle(ChatFormatting.RED)
         );
 
         return true;
@@ -245,30 +237,24 @@ public class PartyQuestManager {
     /**
      * Show quest progress
      */
-    public void showProgress(ServerPlayerEntity player) {
+    public void showProgress(ServerPlayer player) {
         PartyQuestData quest = getActiveQuest(player);
 
         if (quest == null) {
-            player.sendMessage(Text.literal("Your party has no active quest!").formatted(Formatting.RED), false);
+            player.sendSystemMessage(Component.literal("Your party has no active quest!").withStyle(ChatFormatting.RED));
             return;
         }
 
-        player.sendMessage(
-                Text.literal("═══ " + quest.getTemplate().getName() + " ═══").formatted(Formatting.GOLD),
-                false
-        );
-        player.sendMessage(
-                Text.literal("Progress: " + quest.getProgressPercentageInt() + "%").formatted(Formatting.YELLOW),
-                false
-        );
-        player.sendMessage(quest.getProgressText(), false);
+        player.sendSystemMessage(
+                Component.literal("═══ " + quest.getTemplate().getName() + " ═══").withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(
+                Component.literal("Progress: " + quest.getProgressPercentageInt() + "%").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(quest.getProgressText());
 
         if (quest.getTemplate().hasTimeLimit()) {
             long remaining = quest.getRemainingTime() / 1000;
-            player.sendMessage(
-                    Text.literal("Time Remaining: " + remaining + " seconds").formatted(Formatting.AQUA),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("Time Remaining: " + remaining + " seconds").withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -298,21 +284,17 @@ public class PartyQuestManager {
     /**
      * List available quests
      */
-    public void listQuests(ServerPlayerEntity player) {
-        player.sendMessage(
-                Text.literal("═══ Available Party Quests ═══").formatted(Formatting.GOLD),
-                false
-        );
+    public void listQuests(ServerPlayer player) {
+        player.sendSystemMessage(
+                Component.literal("═══ Available Party Quests ═══").withStyle(ChatFormatting.GOLD));
 
         for (PartyQuestTemplate template : PartyQuestRegistry.getAllQuests()) {
-            player.sendMessage(
-                    Text.literal("• ").formatted(Formatting.GRAY)
-                            .append(Text.literal(template.getId()).formatted(Formatting.YELLOW))
-                            .append(Text.literal(" - " + template.getName()).formatted(Formatting.WHITE))
-                            .append(Text.literal(" [" + template.getDifficulty().getDisplayName() + "]")
-                                    .formatted(Formatting.AQUA)),
-                    false
-            );
+            player.sendSystemMessage(
+                    Component.literal("• ").withStyle(ChatFormatting.GRAY)
+                            .append(Component.literal(template.getId()).withStyle(ChatFormatting.YELLOW))
+                            .append(Component.literal(" - " + template.getName()).withStyle(ChatFormatting.WHITE))
+                            .append(Component.literal(" [" + template.getDifficulty().getDisplayName() + "]")
+                                    .withStyle(ChatFormatting.AQUA)));
         }
     }
 }

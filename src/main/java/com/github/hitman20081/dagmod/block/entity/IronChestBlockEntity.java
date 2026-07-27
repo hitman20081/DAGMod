@@ -1,9 +1,9 @@
 package com.github.hitman20081.dagmod.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.core.BlockPos;
 
 /**
  * Iron Chest Block Entity - 27 slot storage with chest rendering
@@ -16,7 +16,7 @@ public class IronChestBlockEntity extends ChestBlockEntity {
     }
 
     @Override
-    protected Text getContainerName() {
-        return Text.translatable("block.dagmod.iron_chest");
+    protected Component getDefaultName() {
+        return Component.translatable("block.dagmod.iron_chest");
     }
 }

@@ -1,0 +1,8 @@
+{
+  "type": "dagmod:gem_crushing",
+  "ingredient": "minecraft:amethyst_shard",
+  "result": {
+    "id": "dagmod:amethyst_powder",
+    "count": 2
+  }
+}

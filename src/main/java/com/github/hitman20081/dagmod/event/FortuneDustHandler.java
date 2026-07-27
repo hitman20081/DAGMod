@@ -1,55 +1,59 @@
 package com.github.hitman20081.dagmod.event;
 
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+
+import com.github.hitman20081.dagmod.block.ModBlocks;
+import com.github.hitman20081.dagmod.item.ModItems;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+
 import java.util.UUID;
 
 public class FortuneDustHandler {
 
     // Track remaining blocks for each player
     private static final Map<UUID, Integer> fortuneBlocksRemaining = new HashMap<>();
-    private static final Random random = new Random();
+    private static final RandomSource random = RandomSource.create();
 
     public static void register() {
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
-                UUID playerId = serverPlayer.getUuid();
+            if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+                UUID playerId = serverPlayer.getUUID();
 
                 if (fortuneBlocksRemaining.containsKey(playerId)) {
                     // Apply Fortune III bonus drops
-                    applyFortuneBonus((ServerWorld) world, state, pos, serverPlayer);
+                    applyFortuneBonus((ServerLevel) world, state, pos, serverPlayer);
 
                     int remaining = fortuneBlocksRemaining.get(playerId);
                     remaining--;
 
                     if (remaining <= 0) {
                         fortuneBlocksRemaining.remove(playerId);
-                        serverPlayer.sendMessage(Text.literal("💎 Fortune Dust expired! 💎")
-                                .formatted(Formatting.GREEN), true);
+                        serverPlayer.sendOverlayMessage(Component.literal("💎 Fortune Dust expired! 💎")
+                                .withStyle(ChatFormatting.GREEN));
                     } else {
                         fortuneBlocksRemaining.put(playerId, remaining);
-                        serverPlayer.sendMessage(Text.literal("💎 " + remaining + " blocks remaining 💎")
-                                .formatted(Formatting.GREEN), true);
+                        serverPlayer.sendOverlayMessage(Component.literal("💎 " + remaining + " blocks remaining 💎")
+                                .withStyle(ChatFormatting.GREEN));
                     }
                 }
             }
         });
     }
 
-    private static void applyFortuneBonus(ServerWorld world, BlockState state, BlockPos pos, ServerPlayerEntity player) {
+    private static void applyFortuneBonus(ServerLevel world, BlockState state, BlockPos pos, ServerPlayer player) {
         Block block = state.getBlock();
         ItemStack bonusDrop = ItemStack.EMPTY;
         int bonusAmount = 0;
@@ -77,11 +81,25 @@ public class FortuneDustHandler {
             bonusDrop = new ItemStack(Items.RAW_IRON, fortuneBonus);
         } else if (block == Blocks.GOLD_ORE || block == Blocks.DEEPSLATE_GOLD_ORE) {
             bonusDrop = new ItemStack(Items.RAW_GOLD, fortuneBonus);
+        } else if (block == ModBlocks.CITRINE_ORE || block == ModBlocks.DEEPSLATE_CITRINE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_CITRINE, fortuneBonus);
+        } else if (block == ModBlocks.RUBY_ORE || block == ModBlocks.DEEPSLATE_RUBY_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_RUBY, fortuneBonus);
+        } else if (block == ModBlocks.SAPPHIRE_ORE || block == ModBlocks.DEEPSLATE_SAPPHIRE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_SAPPHIRE, fortuneBonus);
+        } else if (block == ModBlocks.TANZANITE_ORE || block == ModBlocks.DEEPSLATE_TANZANITE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_TANZANITE, fortuneBonus);
+        } else if (block == ModBlocks.ZIRCON_ORE || block == ModBlocks.DEEPSLATE_ZIRCON_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_ZIRCON, fortuneBonus);
+        } else if (block == ModBlocks.PINK_GARNET_DEEPSLATE_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_PINK_GARNET, fortuneBonus);
+        } else if (block == ModBlocks.MYTHRIL_ORE) {
+            bonusDrop = new ItemStack(ModItems.RAW_MYTHRIL, fortuneBonus);
         }
 
         // Drop the bonus items
         if (!bonusDrop.isEmpty()) {
-            Block.dropStack(world, pos, bonusDrop);
+            Block.popResource(world, pos, bonusDrop);
         }
     }
 

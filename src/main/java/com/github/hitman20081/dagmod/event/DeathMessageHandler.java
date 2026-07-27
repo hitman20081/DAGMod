@@ -2,15 +2,15 @@ package com.github.hitman20081.dagmod.event;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
 public class DeathMessageHandler {
 
-    public static void sendDeathMessage(ServerPlayerEntity player) {
-        String race = RaceSelectionAltarBlock.getPlayerRace(player.getUuid());
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUuid());
+    public static void sendDeathMessage(ServerPlayer player) {
+        String race = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
 
         // Only send if player has race/class selected
         if (!race.equals("none") || !playerClass.equals("none")) {
@@ -27,9 +27,9 @@ public class DeathMessageHandler {
                 message.append(playerClass);
             }
 
-            player.getEntityWorld().getServer().getPlayerManager().broadcast(
-                    Text.literal(player.getName().getString() + " (" + message + ") has died")
-                            .formatted(Formatting.RED),
+            player.level().getServer().getPlayerList().broadcastSystemMessage(
+                    Component.literal(player.getName().getString() + " (" + message + ") has died")
+                            .withStyle(ChatFormatting.RED),
                     false
             );
         }

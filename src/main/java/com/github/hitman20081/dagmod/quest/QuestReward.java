@@ -1,8 +1,8 @@
 package com.github.hitman20081.dagmod.quest;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 public abstract class QuestReward {
     protected String description;
@@ -14,14 +14,14 @@ public abstract class QuestReward {
     }
 
     // Abstract method - each reward type implements how it's given to the player
-    public abstract boolean giveReward(PlayerEntity player, World world);
+    public abstract boolean giveReward(Player player, Level world);
 
     // Abstract method - check if the reward can be given (inventory space, etc.)
-    public abstract boolean canGiveReward(PlayerEntity player);
+    public abstract boolean canGiveReward(Player player);
 
     // Get display text for the reward (shown in quest UI)
-    public Text getDisplayText() {
-        return Text.literal("• " + description);
+    public Component getDisplayText() {
+        return Component.literal("• " + description);
     }
 
     // Get the reward type
@@ -53,11 +53,11 @@ public abstract class QuestReward {
     }
 
     // Helper method to create success/failure messages
-    protected Text createSuccessMessage() {
-        return Text.literal("Received: " + description);
+    protected Component createSuccessMessage() {
+        return Component.literal("Received: " + description);
     }
 
-    protected Text createFailureMessage() {
-        return Text.literal("Could not receive: " + description + " (inventory full?)");
+    protected Component createFailureMessage() {
+        return Component.literal("Could not receive: " + description + " (inventory full?)");
     }
 }

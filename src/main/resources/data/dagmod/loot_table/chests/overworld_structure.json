@@ -1,0 +1,290 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 4,
+        "max": 8
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 3, "max": 10 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 8 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:coal",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 8, "max": 20 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cooked_beef",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 4, "max": 12 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:arrow",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 8, "max": 24 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 6 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:brimstone_dust",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 2, "max": 6 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_citrine",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_ruby",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:raw_sapphire",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 3 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:compass",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:name_tag",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:saddle",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:swiftness"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:regeneration"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:long_fire_resistance"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:sharpness",
+                "minecraft:protection",
+                "minecraft:efficiency",
+                "minecraft:unbreaking",
+                "minecraft:power",
+                "minecraft:knockback",
+                "minecraft:fire_protection",
+                "minecraft:blast_protection",
+                "minecraft:projectile_protection",
+                "minecraft:aqua_affinity",
+                "minecraft:respiration",
+                "dagmod:climb_enchantment",
+                "dagmod:reach",
+                "dagmod:lights_blessing",
+                "dagmod:frostbite",
+                "dagmod:blazing_strike"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:looting",
+                "minecraft:fortune",
+                "minecraft:silk_touch",
+                "minecraft:feather_falling",
+                "minecraft:infinity",
+                "minecraft:flame",
+                "minecraft:thorns",
+                "minecraft:mending",
+                "dagmod:shadow_enchantment",
+                "dagmod:heart_armor",
+                "dagmod:solar_enchantment",
+                "dagmod:siphon_enchantment"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 2 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dagmod:mythril_ingot",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "type": "minecraft:uniform", "min": 1, "max": 2 }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_chestplate",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": { "type": "minecraft:uniform", "min": 5, "max": 20 },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:chainmail_helmet",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": { "type": "minecraft:uniform", "min": 5, "max": 20 },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 18
+        }
+      ]
+    }
+  ]
+}

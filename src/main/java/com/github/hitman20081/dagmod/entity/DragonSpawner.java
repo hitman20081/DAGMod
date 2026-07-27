@@ -3,25 +3,27 @@ package com.github.hitman20081.dagmod.entity;
 import com.github.hitman20081.dagmod.DagMod;
 import com.github.hitman20081.dagmod.block.DragonEggBlock;
 import com.github.hitman20081.dagmod.block.ModBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.loot.LootTable;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BiomeTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 
 import java.util.HashSet;
-import java.util.Random;
+
 import java.util.Set;
 
 /**
@@ -49,7 +51,7 @@ public class DragonSpawner {
 
     // Track spawned dragon locations to prevent overcrowding
     private static final Set<ChunkPos> dragonChunks = new HashSet<>();
-    private static final Random random = new Random();
+    private static final RandomSource random = RandomSource.create();
 
     // -1 means no death recorded this session (use fast initial spawn)
     private static long lastDragonDeathTime = -1L;
@@ -58,15 +60,15 @@ public class DragonSpawner {
      * Attempt to spawn a dragon in the world
      * Called periodically from server tick
      */
-    public static void trySpawnDragon(ServerWorld world) {
+    public static void trySpawnDragon(ServerLevel world) {
         // Only spawn in Overworld
-        if (world.getRegistryKey() != World.OVERWORLD) {
+        if (world.dimension() != Level.OVERWORLD) {
             return;
         }
 
         // Enforce 10-minute respawn cooldown after a wild dragon death
         if (lastDragonDeathTime >= 0) {
-            long elapsed = world.getTime() - lastDragonDeathTime;
+            long elapsed = world.getGameTime() - lastDragonDeathTime;
             if (elapsed < RESPAWN_COOLDOWN_TICKS) {
                 return; // Still cooling down
             }
@@ -80,39 +82,34 @@ public class DragonSpawner {
         }
 
         // Global cap: count all wild dragons currently loaded in the world
-        int currentDragons = world.getEntitiesByType(ModEntities.WILD_DRAGON, dragon -> true).size();
+        int currentDragons = world.getEntities(ModEntities.WILD_DRAGON, dragon -> true).size();
         if (currentDragons >= MAX_WILD_DRAGONS) {
             return;
         }
 
         // Get a random player to use as spawn center (ensures dragons spawn near active areas)
-        if (world.getPlayers().isEmpty()) {
+        if (world.players().isEmpty()) {
             return;
         }
 
-        var players = world.getPlayers();
+        var players = world.players();
         var randomPlayer = players.get(random.nextInt(players.size()));
-        BlockPos playerPos = randomPlayer.getBlockPos();
+        BlockPos playerPos = randomPlayer.blockPosition();
 
         // Find a suitable spawn location near this player
         BlockPos spawnPos = findSuitableSpawnLocation(world, playerPos);
 
         if (spawnPos != null) {
             // Check if there's already a dragon nearby (tracked spawns)
-            ChunkPos chunkPos = new ChunkPos(spawnPos);
+            ChunkPos chunkPos = ChunkPos.containing(spawnPos);
             if (isDragonNearby(chunkPos)) {
                 DagMod.LOGGER.debug("Dragon spawn attempt cancelled - tracked dragon nearby at chunk {}", chunkPos);
                 return;
             }
 
             // Also check for ANY Wild Dragons in the world (including manually spawned ones)
-            var nearbyDragons = world.getEntitiesByClass(WildDragonEntity.class,
-                    net.minecraft.util.math.Box.of(
-                            net.minecraft.util.math.Vec3d.of(spawnPos),
-                            MIN_DRAGON_DISTANCE * 2,
-                            256,
-                            MIN_DRAGON_DISTANCE * 2
-                    ),
+            var nearbyDragons = world.getEntitiesOfClass(WildDragonEntity.class,
+                    new net.minecraft.world.phys.AABB(spawnPos).inflate(MIN_DRAGON_DISTANCE, 128, MIN_DRAGON_DISTANCE),
                     dragon -> true);
 
             if (!nearbyDragons.isEmpty()) {
@@ -123,17 +120,17 @@ public class DragonSpawner {
 
             // Spawn the Wild Dragon (tameable)
             WildDragonEntity dragon = new WildDragonEntity(ModEntities.WILD_DRAGON, world);
-            dragon.refreshPositionAndAngles(spawnPos, 0.0f, 0.0f);
+            dragon.snapTo(spawnPos, 0.0f, 0.0f);
 
             // Determine dragon variant based on biome
             Biome biome = world.getBiome(spawnPos).value();
-            var biomeKey = world.getBiome(spawnPos).getKey();
+            var biomeKey = world.getBiome(spawnPos).unwrapKey();
 
             DragonGuardianEntity.DragonVariant variant = null; // Default to null, so we only spawn if a condition is met
             String dragonType = "Unknown";
 
             if (biomeKey.isPresent()) {
-                String biomeId = biomeKey.get().getValue().toString();
+                String biomeId = biomeKey.get().identifier().toString();
 
                 // Check for cold mountain biomes → Ice Dragon
                 if (biomeId.equals("minecraft:frozen_peaks") || biomeId.equals("minecraft:jagged_peaks")) {
@@ -148,13 +145,13 @@ public class DragonSpawner {
                     DagMod.LOGGER.info("Spawning WIND dragon variant in stony biome: {}", biomeId);
                 }
                 // Check for badlands → Lava Dragon (placeholder)
-                else if (world.getBiome(spawnPos).isIn(BiomeTags.IS_BADLANDS)) {
+                else if (world.getBiome(spawnPos).is(BiomeTags.IS_BADLANDS)) {
                     variant = DragonGuardianEntity.DragonVariant.LAVA;
                     dragonType = "Lava";
                     DagMod.LOGGER.info("Spawning LAVA dragon variant in badlands biome: {}", biomeId);
                 }
                 // Default to Earth Dragon in other mountain biomes
-                else if (world.getBiome(spawnPos).isIn(BiomeTags.IS_MOUNTAIN)) {
+                else if (world.getBiome(spawnPos).is(BiomeTags.IS_MOUNTAIN)) {
                     variant = DragonGuardianEntity.DragonVariant.EARTH;
                     dragonType = "Earth";
                     DagMod.LOGGER.info("Spawning EARTH dragon variant in mountain biome: {}", biomeId);
@@ -167,13 +164,13 @@ public class DragonSpawner {
             }
 
             dragon.setVariant(variant);
-            dragon.initialize(world, world.getLocalDifficulty(spawnPos), SpawnReason.NATURAL, null);
+            dragon.finalizeSpawn(world, world.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.NATURAL, null);
 
-            if (world.spawnEntity(dragon)) {
+            if (world.addFreshEntity(dragon)) {
                 dragonChunks.add(chunkPos);
 
                 // Generate nest with eggs near the dragon
-                BlockPos nestCenter = spawnPos.down(3); // Store the nest center
+                BlockPos nestCenter = spawnPos.below(3); // Store the nest center
                 generateDragonNest(world, nestCenter, variant); // Nest at ground level
                 dragon.setNestPosition(nestCenter); // Set the nest position on the spawned dragon
 
@@ -192,13 +189,13 @@ public class DragonSpawner {
      * Attempt to spawn ambient Red DragonGuardianEntity in the Dragon Realm.
      * Called periodically from server tick alongside overworld spawner.
      */
-    public static void trySpawnDragonInDragonRealm(ServerWorld world) {
+    public static void trySpawnDragonInDragonRealm(ServerLevel world) {
         // Only spawn in the Dragon Realm
-        if (world.getRegistryKey() != com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmTeleporter.DRAGON_REALM) {
+        if (world.dimension() != com.github.hitman20081.dagmod.dragon_realm.portal.DragonRealmTeleporter.DRAGON_REALM) {
             return;
         }
 
-        if (world.getPlayers().isEmpty()) {
+        if (world.players().isEmpty()) {
             return;
         }
 
@@ -207,40 +204,40 @@ public class DragonSpawner {
         }
 
         // Count all DragonGuardianEntity in the realm (includes boss + ambient)
-        int currentDragons = world.getEntitiesByType(ModEntities.DRAGON_GUARDIAN, dragon -> true).size();
+        int currentDragons = world.getEntities(ModEntities.DRAGON_GUARDIAN, dragon -> true).size();
         if (currentDragons >= MAX_REALM_DRAGONS) {
             return;
         }
 
         // Pick a random player as spawn center
-        var players = world.getPlayers();
+        var players = world.players();
         var randomPlayer = players.get(random.nextInt(players.size()));
-        BlockPos playerPos = randomPlayer.getBlockPos();
+        BlockPos playerPos = randomPlayer.blockPosition();
 
         // Find a spawn location away from the player (40-120 blocks)
         for (int attempt = 0; attempt < 20; attempt++) {
             int offsetX = (40 + random.nextInt(REALM_SPAWN_RADIUS - 40)) * (random.nextBoolean() ? 1 : -1);
             int offsetZ = (40 + random.nextInt(REALM_SPAWN_RADIUS - 40)) * (random.nextBoolean() ? 1 : -1);
-            BlockPos searchPos = playerPos.add(offsetX, 0, offsetZ);
+            BlockPos searchPos = playerPos.offset(offsetX, 0, offsetZ);
 
-            BlockPos surfacePos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, searchPos);
-            BlockPos spawnPos = surfacePos.up(8); // Spawn in the air
+            BlockPos surfacePos = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, searchPos);
+            BlockPos spawnPos = surfacePos.above(8); // Spawn in the air
 
             // Check for clear space
             if (!world.getBlockState(spawnPos).isAir()) {
                 continue;
             }
 
-            DragonGuardianEntity dragon = ModEntities.DRAGON_GUARDIAN.create(world, SpawnReason.NATURAL);
+            DragonGuardianEntity dragon = ModEntities.DRAGON_GUARDIAN.create(world, EntitySpawnReason.NATURAL);
             if (dragon == null) {
                 return;
             }
 
-            dragon.refreshPositionAndAngles(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, random.nextFloat() * 360f, 0f);
+            dragon.snapTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, random.nextFloat() * 360f, 0f);
             dragon.setVariant(DragonGuardianEntity.DragonVariant.RED);
-            dragon.initialize(world, world.getLocalDifficulty(spawnPos), SpawnReason.NATURAL, null);
+            dragon.finalizeSpawn(world, world.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.NATURAL, null);
 
-            if (world.spawnEntity(dragon)) {
+            if (world.addFreshEntity(dragon)) {
                 DagMod.LOGGER.info("Ambient RED Dragon spawned in Dragon Realm at {} near player {}",
                         spawnPos, randomPlayer.getName().getString());
             }
@@ -255,7 +252,7 @@ public class DragonSpawner {
         int rand = random.nextInt(100);
         if (rand < 35) return Blocks.GOLD_BLOCK;
         if (rand < 60) return Blocks.IRON_BLOCK;
-        if (rand < 75) return Blocks.COPPER_BLOCK;
+        if (rand < 75) return ((net.minecraft.world.level.block.Block) net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:copper_block")));
         if (rand < 85) return Blocks.EMERALD_BLOCK;
         if (rand < 93) return Blocks.DIAMOND_BLOCK;
         return Blocks.LAPIS_BLOCK;
@@ -267,7 +264,7 @@ public class DragonSpawner {
     private static Block getRandomShinyBlock() {
         int rand = random.nextInt(100);
         if (rand < 40) return Blocks.IRON_BLOCK;
-        if (rand < 70) return Blocks.COPPER_BLOCK;
+        if (rand < 70) return ((net.minecraft.world.level.block.Block) net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:copper_block")));
         if (rand < 85) return Blocks.GOLD_BLOCK;
         return Blocks.QUARTZ_BLOCK;
     }
@@ -304,7 +301,7 @@ public class DragonSpawner {
      * Dragons gather materials from around the world: precious metals, shiny blocks, logs, and stone
      * @param variant The dragon variant - determines the variant of eggs placed in the nest
      */
-    private static void generateDragonNest(ServerWorld world, BlockPos centerPos, DragonGuardianEntity.DragonVariant variant) {
+    private static void generateDragonNest(ServerLevel world, BlockPos centerPos, DragonGuardianEntity.DragonVariant variant) {
         // Build nest in multiple layers for depth and realism
         for (int x = -5; x <= 5; x++) {
             for (int z = -5; z <= 5; z++) {
@@ -314,13 +311,13 @@ public class DragonSpawner {
                 if (distance <= 5.0) {
 
                     // === LAYER 1: Foundation (buried layer for stability) ===
-                    BlockPos foundationPos = centerPos.add(x, -1, z);
+                    BlockPos foundationPos = centerPos.offset(x, -1, z);
                     if (distance <= 4.0) {
-                        world.setBlockState(foundationPos, Blocks.STONE.getDefaultState());
+                        world.setBlock(foundationPos, Blocks.STONE.defaultBlockState(), 3);
                     }
 
                     // === LAYER 2: Main platform with bowl shape ===
-                    BlockPos basePos = centerPos.add(x, 0, z);
+                    BlockPos basePos = centerPos.offset(x, 0, z);
 
                     if (distance <= 4.5) {
                         // Inner bowl (center depression for eggs)
@@ -328,9 +325,9 @@ public class DragonSpawner {
                             // Very center: Magma Block (heat-resistant) or rare precious blocks
                             if (random.nextDouble() < 0.15) {
                                 // 15% chance for precious block in center
-                                world.setBlockState(basePos, getRandomPreciousBlock().getDefaultState());
+                                world.setBlock(basePos, getRandomPreciousBlock().defaultBlockState(), 3);
                             } else {
-                                world.setBlockState(basePos, Blocks.MAGMA_BLOCK.getDefaultState());
+                                world.setBlock(basePos, Blocks.MAGMA_BLOCK.defaultBlockState(), 3);
                             }
                         }
                         // Middle ring: Mixed materials (natural + some shiny blocks)
@@ -338,46 +335,46 @@ public class DragonSpawner {
                             int rand = random.nextInt(100);
                             if (rand < 10) {
                                 // 10% chance for shiny/metallic blocks
-                                world.setBlockState(basePos, getRandomShinyBlock().getDefaultState());
+                                world.setBlock(basePos, getRandomShinyBlock().defaultBlockState(), 3);
                             } else if (rand < 20) {
                                 // 10% chance for logs (gathered wood)
-                                world.setBlockState(basePos, getRandomLog().getDefaultState());
+                                world.setBlock(basePos, getRandomLog().defaultBlockState(), 3);
                             } else {
                                 // 80% natural stone materials
-                                world.setBlockState(basePos, getRandomNaturalBlock().getDefaultState());
+                                world.setBlock(basePos, getRandomNaturalBlock().defaultBlockState(), 3);
                             }
                         }
                         // Outer ring: Raised rim (mostly natural with occasional treasures)
                         else {
                             if (random.nextDouble() < 0.08) {
                                 // 8% chance for precious blocks on rim
-                                world.setBlockState(basePos, getRandomShinyBlock().getDefaultState());
+                                world.setBlock(basePos, getRandomShinyBlock().defaultBlockState(), 3);
                             } else {
-                                world.setBlockState(basePos, getRandomNaturalBlock().getDefaultState());
+                                world.setBlock(basePos, getRandomNaturalBlock().defaultBlockState(), 3);
                             }
                         }
                     }
 
                     // === LAYER 3: Raised rim around edges (creates bowl shape) ===
-                    BlockPos rimPos = centerPos.add(x, 1, z);
+                    BlockPos rimPos = centerPos.offset(x, 1, z);
 
                     // Only on outer ring (creates raised edge)
                     if (distance > 3.0 && distance <= 4.5) {
                         int rand = random.nextInt(100);
                         if (rand < 5) {
                             // 5% chance for precious blocks on rim
-                            world.setBlockState(rimPos, getRandomPreciousBlock().getDefaultState());
+                            world.setBlock(rimPos, getRandomPreciousBlock().defaultBlockState(), 3);
                         } else if (rand < 15) {
                             // 10% chance for logs (structural support)
-                            world.setBlockState(rimPos, getRandomLog().getDefaultState());
+                            world.setBlock(rimPos, getRandomLog().defaultBlockState(), 3);
                         } else {
                             // 85% natural stone
-                            world.setBlockState(rimPos, getRandomNaturalBlock().getDefaultState());
+                            world.setBlock(rimPos, getRandomNaturalBlock().defaultBlockState(), 3);
                         }
 
                         // Occasional second layer on rim for height variation
                         if (random.nextDouble() < 0.3) {
-                            world.setBlockState(rimPos.up(), getRandomNaturalBlock().getDefaultState());
+                            world.setBlock(rimPos.above(), getRandomNaturalBlock().defaultBlockState(), 3);
                         }
                     }
 
@@ -385,22 +382,22 @@ public class DragonSpawner {
 
                     // Scattered bone blocks around edges (dragon's prey remains)
                     if (distance > 3.5 && distance <= 5.0 && random.nextDouble() < 0.15) {
-                        BlockPos bonePos = centerPos.add(x, 1, z);
+                        BlockPos bonePos = centerPos.offset(x, 1, z);
                         if (world.getBlockState(bonePos).isAir()) {
-                            world.setBlockState(bonePos, Blocks.BONE_BLOCK.getDefaultState());
+                            world.setBlock(bonePos, Blocks.BONE_BLOCK.defaultBlockState(), 3);
                         }
                     }
 
                     // Rare treasure chest (dragon's hoard) - very rare
                     if (distance > 3.0 && distance <= 4.5 && random.nextDouble() < 0.02) {
-                        BlockPos chestPos = centerPos.add(x, 1, z);
+                        BlockPos chestPos = centerPos.offset(x, 1, z);
                         if (world.getBlockState(chestPos).isAir()) {
-                            world.setBlockState(chestPos, Blocks.CHEST.getDefaultState());
+                            world.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), 3);
 
                             // Fill chest with dragon treasure loot table
                             if (world.getBlockEntity(chestPos) instanceof ChestBlockEntity chest) {
-                                RegistryKey<LootTable> lootTableKey = RegistryKey.of(RegistryKeys.LOOT_TABLE,
-                                        Identifier.of(DagMod.MOD_ID, "chests/dragon_nest_treasure"));
+                                ResourceKey<LootTable> lootTableKey = ResourceKey.create(Registries.LOOT_TABLE,
+                                        Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "chests/dragon_nest_treasure"));
                                 chest.setLootTable(lootTableKey, random.nextLong());
                                 DagMod.LOGGER.debug("Dragon treasure chest placed at {} with loot table", chestPos);
                             }
@@ -409,18 +406,18 @@ public class DragonSpawner {
 
                     // Scattered precious blocks (hoarded treasures) - rare
                     if (distance > 2.5 && distance <= 4.5 && random.nextDouble() < 0.05) {
-                        BlockPos treasurePos = centerPos.add(x, 1, z);
+                        BlockPos treasurePos = centerPos.offset(x, 1, z);
                         if (world.getBlockState(treasurePos).isAir()) {
-                            world.setBlockState(treasurePos, getRandomShinyBlock().getDefaultState());
+                            world.setBlock(treasurePos, getRandomShinyBlock().defaultBlockState(), 3);
                         }
                     }
 
                     // Scattered gravel/coarse dirt for natural look
                     if (distance > 2.5 && distance <= 4.0 && random.nextDouble() < 0.1) {
-                        BlockPos decorPos = centerPos.add(x, 1, z);
+                        BlockPos decorPos = centerPos.offset(x, 1, z);
                         if (world.getBlockState(decorPos).isAir()) {
-                            world.setBlockState(decorPos, random.nextBoolean() ?
-                                Blocks.GRAVEL.getDefaultState() : Blocks.COARSE_DIRT.getDefaultState());
+                            world.setBlock(decorPos, random.nextBoolean() ?
+                                Blocks.GRAVEL.defaultBlockState() : Blocks.COARSE_DIRT.defaultBlockState(), 3);
                         }
                     }
                 }
@@ -435,20 +432,20 @@ public class DragonSpawner {
                 // Place eggs in the inner bowl area
                 int x = random.nextInt(3) - 1; // -1, 0, or 1
                 int z = random.nextInt(3) - 1;
-                BlockPos eggPos = centerPos.add(x, 1, z);
+                BlockPos eggPos = centerPos.offset(x, 1, z);
 
                 // Check if position is valid (air block above magma block)
-                if (world.getBlockState(eggPos).isAir() && world.getBlockState(eggPos.down()).isOf(Blocks.MAGMA_BLOCK)) {
-                    world.setBlockState(eggPos, ModBlocks.DRAGON_EGG_BLOCK.getDefaultState().with(DragonEggBlock.VARIANT, variant));
+                if (world.getBlockState(eggPos).isAir() && world.getBlockState(eggPos.below()).getBlock() == Blocks.MAGMA_BLOCK) {
+                    world.setBlock(eggPos, ModBlocks.DRAGON_EGG_BLOCK.defaultBlockState().setValue(DragonEggBlock.VARIANT, variant), 3);
 
                     // Set the egg's variant to match the parent dragon
                     if (world.getBlockEntity(eggPos) instanceof DragonEggBlockEntity eggEntity) {
                         eggEntity.setVariant(variant);
-                        eggEntity.markDirty();
+                        eggEntity.setChanged();
                     }
 
                     // Small particle effect when egg spawns (visual flair)
-                    world.spawnParticles(ParticleTypes.ENCHANT,
+                    world.sendParticles(ParticleTypes.ENCHANT,
                         eggPos.getX() + 0.5, eggPos.getY() + 0.5, eggPos.getZ() + 0.5,
                         10, 0.3, 0.3, 0.3, 0.02);
 
@@ -466,17 +463,17 @@ public class DragonSpawner {
      * Find a suitable location to spawn a dragon
      * Must be on a mountain, Y>180, with clear space
      */
-    private static BlockPos findSuitableSpawnLocation(ServerWorld world, BlockPos center) {
+    private static BlockPos findSuitableSpawnLocation(ServerLevel world, BlockPos center) {
         // Search in a radius around the center point
         for (int attempt = 0; attempt < 50; attempt++) {
-            // Random offset from center
+            // RandomSource offset from center
             int offsetX = random.nextInt(SPAWN_CHECK_RADIUS * 2) - SPAWN_CHECK_RADIUS;
             int offsetZ = random.nextInt(SPAWN_CHECK_RADIUS * 2) - SPAWN_CHECK_RADIUS;
 
-            BlockPos searchPos = center.add(offsetX, 0, offsetZ);
+            BlockPos searchPos = center.offset(offsetX, 0, offsetZ);
 
             // Get surface height at this position
-            BlockPos surfacePos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, searchPos);
+            BlockPos surfacePos = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, searchPos);
 
             // Check height requirement
             if (surfacePos.getY() < MIN_SPAWN_HEIGHT) {
@@ -485,12 +482,12 @@ public class DragonSpawner {
 
             // Check if biome is mountain
             Biome biome = world.getBiome(surfacePos).value();
-            if (!world.getBiome(surfacePos).isIn(BiomeTags.IS_MOUNTAIN)) {
+            if (!world.getBiome(surfacePos).is(BiomeTags.IS_MOUNTAIN)) {
                 continue;
             }
 
             // Check for clear space (5x5x5 area for dragon to spawn)
-            BlockPos spawnPos = surfacePos.up(3); // Spawn slightly above ground
+            BlockPos spawnPos = surfacePos.above(3); // Spawn slightly above ground
             if (hasEnoughClearSpace(world, spawnPos)) {
                 return spawnPos;
             }
@@ -502,13 +499,13 @@ public class DragonSpawner {
     /**
      * Check if there's enough clear space for a dragon to spawn
      */
-    private static boolean hasEnoughClearSpace(ServerWorld world, BlockPos pos) {
+    private static boolean hasEnoughClearSpace(ServerLevel world, BlockPos pos) {
         // Check a 5x5x5 area centered on the spawn position
         for (int x = -2; x <= 2; x++) {
             for (int y = 0; y <= 4; y++) {
                 for (int z = -2; z <= 2; z++) {
-                    BlockPos checkPos = pos.add(x, y, z);
-                    if (!world.getBlockState(checkPos).isAir() && !world.getBlockState(checkPos).isReplaceable()) {
+                    BlockPos checkPos = pos.offset(x, y, z);
+                    if (!world.getBlockState(checkPos).isAir() && !world.getBlockState(checkPos).canBeReplaced()) {
                         return false;
                     }
                 }
@@ -524,8 +521,8 @@ public class DragonSpawner {
         int chunkDistance = MIN_DRAGON_DISTANCE / 16; // Convert blocks to chunks
 
         for (ChunkPos dragonChunk : dragonChunks) {
-            int dx = Math.abs(dragonChunk.x - pos.x);
-            int dz = Math.abs(dragonChunk.z - pos.z);
+            int dx = Math.abs(dragonChunk.x() - pos.x());
+            int dz = Math.abs(dragonChunk.z() - pos.z());
 
             if (dx < chunkDistance && dz < chunkDistance) {
                 return true;
@@ -540,7 +537,7 @@ public class DragonSpawner {
      * This allows new dragons to spawn in that area eventually
      */
     public static void removeDragonLocation(BlockPos pos) {
-        ChunkPos chunkPos = new ChunkPos(pos);
+        ChunkPos chunkPos = ChunkPos.containing(pos);
         dragonChunks.remove(chunkPos);
         DagMod.LOGGER.debug("Dragon location removed at chunk {}", chunkPos);
     }

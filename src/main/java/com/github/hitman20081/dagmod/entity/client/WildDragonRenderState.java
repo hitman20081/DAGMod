@@ -2,7 +2,7 @@ package com.github.hitman20081.dagmod.entity.client;
 
 import com.github.hitman20081.dagmod.entity.WildDragonEntity;
 import com.github.hitman20081.dagmod.entity.DragonGuardianEntity;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
 /**
  * Custom render state for Wild Dragon
