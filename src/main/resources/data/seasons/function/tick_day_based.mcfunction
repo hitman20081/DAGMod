@@ -1,14 +1,15 @@
 # Day-based season system using actual Minecraft days
 
-# Get current game day
-execute store result score #current_game_day seasons_timer run time query day
+# Detect new Minecraft day using daytime (0-23999).
+# time query day is unreliable in MC 26.2 (increments every tick).
+# Instead: fire new_game_day once per day when daytime is in the first
+# 100 ticks (dawn), guarded by #day_processed so it only fires once.
+execute store result score #current_daytime seasons_timer run time query daytime
 
-# Flag whether this is a new day, update #last_game_day immediately so any
-# additional tick instances running this tick don't re-trigger new_game_day
-scoreboard players set #new_day_pending seasons_timer 0
-execute unless score #current_game_day seasons_timer = #last_game_day seasons_timer run scoreboard players set #new_day_pending seasons_timer 1
-scoreboard players operation #last_game_day seasons_timer = #current_game_day seasons_timer
-execute if score #new_day_pending seasons_timer matches 1 run function seasons:progress/new_game_day
+# Fire new_game_day at dawn (ticks 0-99) if not already processed today
+execute if score #current_daytime seasons_timer matches 0..99 unless score #day_processed seasons_timer matches 1 run function seasons:progress/new_game_day
+execute if score #current_daytime seasons_timer matches 0..99 run scoreboard players set #day_processed seasons_timer 1
+execute unless score #current_daytime seasons_timer matches 0..99 run scoreboard players set #day_processed seasons_timer 0
 
 # Apply seasonal effects to all players
 execute as @a run function seasons:effects/apply_to_player

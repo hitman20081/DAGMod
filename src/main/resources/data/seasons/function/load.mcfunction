@@ -14,8 +14,9 @@ execute unless score #global seasons_current matches 1.. run scoreboard players 
 execute unless score #global seasons_day matches 1.. run scoreboard players set #global seasons_day 1
 
 # Initialize day tracking system
-execute store result score #current_game_day seasons_timer run time query day
-execute store result score #last_game_day seasons_timer run time query day
+# #day_processed starts at 1 so the first dawn after load doesn't
+# spuriously fire new_game_day if the server loaded mid-dawn window
+execute unless score #day_processed seasons_timer matches 0.. run scoreboard players set #day_processed seasons_timer 1
 
 # Initialize timers (only if missing)
 execute unless score #display_timer seasons_timer matches 0.. run scoreboard players set #display_timer seasons_timer 0

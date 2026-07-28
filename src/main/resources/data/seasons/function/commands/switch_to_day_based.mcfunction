@@ -5,8 +5,7 @@ schedule clear seasons:tick
 schedule clear seasons:tick_fast
 
 # Initialize day tracking
-execute store result score #current_game_day seasons_timer run time query day
-execute store result score #last_game_day seasons_timer run time query day
+scoreboard players set #day_processed seasons_timer 1
 
 # Reset timers for new system
 scoreboard players set #display_timer seasons_timer 0
