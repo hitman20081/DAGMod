@@ -7,7 +7,7 @@ execute unless score #global seasons_current matches 1.. run scoreboard players 
 execute unless score #global seasons_day matches 1.. run scoreboard players set #global seasons_day 1
 
 # Start the tick loop only if not already running
-execute unless score #seasons_running seasons_config matches 1 run schedule function seasons:tick_day_based 1t
+execute unless score #seasons_running seasons_config matches 1 run schedule function seasons:tick_day_based 1t replace
 scoreboard players set #seasons_running seasons_config 1
 
 function seasons:display/show_season

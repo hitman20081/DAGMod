@@ -31,7 +31,7 @@ execute unless score #enable_display seasons_config matches 0.. run scoreboard p
 execute unless score #announce_days seasons_config matches 0.. run scoreboard players set #announce_days seasons_config 0
 
 # If already configured: resume the tick loop and show season
-execute if score #seasons_initialized seasons_config matches 1 run schedule function seasons:tick_day_based 1t
+execute if score #seasons_initialized seasons_config matches 1 run schedule function seasons:tick_day_based 1t replace
 execute if score #seasons_initialized seasons_config matches 1 run scoreboard players set #seasons_running seasons_config 1
 execute if score #seasons_initialized seasons_config matches 1 run function seasons:display/show_season
 
