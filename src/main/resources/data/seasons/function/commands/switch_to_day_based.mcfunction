@@ -5,7 +5,11 @@ schedule clear seasons:tick
 schedule clear seasons:tick_fast
 
 # Initialize day tracking
-scoreboard players set #day_processed seasons_timer 1
+scoreboard players set #day_tick_counter seasons_timer 0
+scoreboard objectives add dagmod_sleep_track minecraft.custom:minecraft.sleep_in_bed "Sleep Tracker"
+scoreboard players set #sleep_sum seasons_timer 0
+execute as @a run scoreboard players operation #sleep_sum seasons_timer += @s dagmod_sleep_track
+scoreboard players operation #sleep_last seasons_timer = #sleep_sum seasons_timer
 
 # Reset timers for new system
 scoreboard players set #display_timer seasons_timer 0

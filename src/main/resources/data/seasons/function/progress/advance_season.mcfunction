@@ -6,10 +6,10 @@ scoreboard players set #global seasons_day 1
 execute if score #global seasons_current matches 5.. run scoreboard players set #global seasons_current 1
 
 # Announce season change to all players
-execute if score #global seasons_current matches 1 run tellraw @a ["",{"text":"🌸 ","color":"green"},{"text":"Spring has arrived! ","color":"green","bold":true},{"text":"Plants grow faster and flowers bloom.","color":"dark_green"}]
-execute if score #global seasons_current matches 2 run tellraw @a ["",{"text":"☀ ","color":"yellow"},{"text":"Summer is here! ","color":"gold","bold":true},{"text":"Crops yield more and days are longer.","color":"yellow"}]
-execute if score #global seasons_current matches 3 run tellraw @a ["",{"text":"🍂 ","color":"red"},{"text":"Fall begins! ","color":"red","bold":true},{"text":"Harvest time - trees drop more resources.","color":"dark_red"}]
-execute if score #global seasons_current matches 4 run tellraw @a ["",{"text":"❄ ","color":"aqua"},{"text":"Winter arrives! ","color":"aqua","bold":true},{"text":"Bundle up - it's getting cold!","color":"dark_aqua"}]
+execute if score #global seasons_current matches 1 run tellraw @a ["",{"text":"🌸 ","color":"green"},{"text":"Spring has arrived! ","color":"green","bold":true},{"text":"Crops grow faster, rain is frequent, and flowers bloom.","color":"dark_green"}]
+execute if score #global seasons_current matches 2 run tellraw @a ["",{"text":"☀ ","color":"yellow"},{"text":"Summer is here! ","color":"gold","bold":true},{"text":"Clear skies dominate. Haste boosts all players. Beware hot biomes.","color":"yellow"}]
+execute if score #global seasons_current matches 3 run tellraw @a ["",{"text":"🍂 ","color":"red"},{"text":"Fall begins! ","color":"red","bold":true},{"text":"Harvest luck improves and days grow shorter. Mushrooms spread.","color":"dark_red"}]
+execute if score #global seasons_current matches 4 run tellraw @a ["",{"text":"❄ ","color":"aqua"},{"text":"Winter arrives! ","color":"aqua","bold":true},{"text":"Crops barely grow. Stay near fire or lose hunger. Daylight fades fast.","color":"dark_aqua"}]
 
 # Play sound effect for season change
 execute at @a run playsound minecraft:entity.experience_orb.pickup master @a ~ ~ ~ 1 0.5

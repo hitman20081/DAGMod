@@ -1,4 +1,5 @@
-# Fall Transition Effects  
+# Fall Transition Effects
+gamerule random_tick_speed 2
 # Leaves start to change, cooler weather
 
 # Start with mild weather

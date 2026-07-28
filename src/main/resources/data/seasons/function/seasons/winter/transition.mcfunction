@@ -1,4 +1,5 @@
 # Winter Transition Effects
+gamerule random_tick_speed 1
 # Begin freezing process, first snow
 
 # Initial freeze - convert some water to ice

@@ -1,7 +1,8 @@
 # Modify crop growth based on current season
 
-# Spring: Boost crop growth (150% speed)
-execute if score #global seasons_current matches 1 run execute as @e[type=minecraft:area_effect_cloud,tag=seasons_growth_boost] at @s run effect give @e[type=!player,distance=..10] minecraft:speed 1 0 true
+# Spring: randomTickSpeed handled in spring/daily.mcfunction and spring/transition.mcfunction
+# Keep farmland moist near players so crops don't stall waiting for hydration
+execute if score #global seasons_current matches 1 run execute as @a at @s run fill ~-8 ~-3 ~-8 ~8 ~1 ~8 minecraft:farmland[moisture=7] replace minecraft:farmland
 
 # Summer: Normal growth with bonus yields (100% speed, bonus drops)
 execute if score #global seasons_current matches 2 run function seasons:growth/summer_bonus

@@ -13,10 +13,14 @@ scoreboard objectives add seasons_config dummy "Season Config"
 execute unless score #global seasons_current matches 1.. run scoreboard players set #global seasons_current 1
 execute unless score #global seasons_day matches 1.. run scoreboard players set #global seasons_day 1
 
-# Initialize day tracking system
-# #day_processed starts at 1 so the first dawn after load doesn't
-# spuriously fire new_game_day if the server loaded mid-dawn window
-execute unless score #day_processed seasons_timer matches 0.. run scoreboard players set #day_processed seasons_timer 1
+# Initialize natural day tick counter
+execute unless score #day_tick_counter seasons_timer matches 0.. run scoreboard players set #day_tick_counter seasons_timer 0
+
+# Create sleep tracking objective and set baseline so first load doesn't spuriously fire
+scoreboard objectives add dagmod_sleep_track minecraft.custom:minecraft.sleep_in_bed "Sleep Tracker"
+scoreboard players set #sleep_sum seasons_timer 0
+execute as @a run scoreboard players operation #sleep_sum seasons_timer += @s dagmod_sleep_track
+scoreboard players operation #sleep_last seasons_timer = #sleep_sum seasons_timer
 
 # Initialize timers (only if missing)
 execute unless score #display_timer seasons_timer matches 0.. run scoreboard players set #display_timer seasons_timer 0

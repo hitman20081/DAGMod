@@ -3,7 +3,7 @@
   "predicate": {
     "biomes": [
       "minecraft:plains",
-      "minecraft:sunflower_plains", 
+      "minecraft:sunflower_plains",
       "minecraft:meadow",
       "minecraft:flower_forest",
       "minecraft:forest",

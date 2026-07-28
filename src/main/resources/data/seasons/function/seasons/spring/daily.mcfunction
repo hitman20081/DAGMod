@@ -1,6 +1,7 @@
 # Spring Daily Effects
 
-# Set growth modifier (faster crop growth)
+# Faster random ticks = faster crop/grass/leaf growth (default is 3)
+gamerule random_tick_speed 5
 scoreboard players set #global seasons_growth 150
 
 # Spawn flowers randomly in flower-friendly biomes
