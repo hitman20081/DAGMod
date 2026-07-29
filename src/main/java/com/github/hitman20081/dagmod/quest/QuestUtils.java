@@ -58,18 +58,20 @@ public class QuestUtils {
                 Component.literal("§l§6Welcome to DAGMod!§r\n\n")
                         .append(Component.literal("A race/class RPG built on top of Minecraft.\n\n"))
                         .append(Component.literal("§nFirst steps:§r\n"))
-                        .append(Component.literal("1. Find the Hall of Champions\n"))
-                        .append(Component.literal("2. Choose your Race\n"))
-                        .append(Component.literal("3. Choose your Class\n"))
-                        .append(Component.literal("4. Find Innkeeper Garrick"))
+                        .append(Component.literal("1. Find the local Inn\n"))
+                        .append(Component.literal("2. Meet Innkeeper Garrick\n"))
+                        .append(Component.literal("3. Register your Race & Class\n"))
+                        .append(Component.literal("4. Complete his 3 tasks\n"))
+                        .append(Component.literal("5. Head to the Hall of Champions"))
         ));
 
-        // Page 2: Hall Locator
+        // Page 2: Hall Locator / Inn
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§dHall Locator§r\n\n")
                         .append(Component.literal("You have a §6Hall Locator§r in your inventory.\n\n"))
-                        .append(Component.literal("§6Right-click§r it to get the coordinates of the nearest Hall of Champions.\n\n"))
-                        .append(Component.literal("The Hall is where you pick your Race and Class at the selection altars."))
+                        .append(Component.literal("§6Right-click§r it to find nearby structures.\n\n"))
+                        .append(Component.literal("Your first stop is the §6Inn§r — §6Innkeeper Garrick§r is on the middle floor. He'll register your Race and Class and give you your first quests.\n\n"))
+                        .append(Component.literal("The §6Hall of Champions§r comes later."))
         ));
 
         // Page 3: Races
@@ -92,17 +94,18 @@ public class QuestUtils {
         // Page 5: Quest Block & Garrick
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§2Quest Blocks§r\n\n")
-                        .append(Component.literal("§6Quest Blocks§r are glowing blocks found in buildings and the Hall of Champions.\n\n"))
-                        .append(Component.literal("Before you can use one, find §6Innkeeper Garrick§r at any Inn. Complete his 3 tasks to earn your §nNovice Quest Book§r, then return to a Quest Block."))
+                        .append(Component.literal("§6Quest Blocks§r are glowing blocks found in the Hall of Champions and scattered buildings.\n\n"))
+                        .append(Component.literal("They show §nMain§r and §nSide§r quests only.\n\n"))
+                        .append(Component.literal("Complete Garrick's 3 tutorial tasks at the Inn to earn your §nNovice Quest Book§r — you need it before a Quest Block will open for you."))
         ));
 
-        // Page 6: Class Abilities via Quest Block
+        // Page 6: Class Abilities via Class Trainer
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§eClass Abilities§r\n\n")
-                        .append(Component.literal("Your class abilities are unlocked through §6Class Quests§r at the §6Quest Block§r.\n\n"))
+                        .append(Component.literal("Your class abilities are unlocked through the §6Class Trainer NPC§r at the §6Hall of Champions§r.\n\n"))
                         .append(Component.literal("Each quest rewards an §nability item§r — hold it in your hotbar to activate that ability.\n\n"))
-                        .append(Component.literal("The chain starts at level 10 and ends at level 100 with a boss fight.\n\n"))
-                        .append(Component.literal("(The §6Job Board§r is for daily & job quests — separate rewards.)"))
+                        .append(Component.literal("The chain starts at level 10 and ends at level 100.\n\n"))
+                        .append(Component.literal("Garrick will send you to the Class Trainer once your tutorial is done."))
         ));
 
         // Page 7: Dimensions

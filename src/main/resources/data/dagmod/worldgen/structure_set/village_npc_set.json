@@ -1,6 +1,5 @@
 {
   "structures": [
-    { "structure": "dagmod:village_inn",       "weight": 1 },
     { "structure": "dagmod:village_tavern",    "weight": 1 },
     { "structure": "dagmod:village_shop_1",    "weight": 1 },
     { "structure": "dagmod:village_shop_2",    "weight": 1 },

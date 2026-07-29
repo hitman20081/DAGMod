@@ -1,0 +1,12 @@
+{
+  "structures": [
+    { "structure": "dagmod:village_inn", "weight": 1 }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 2047381956,
+    "spacing": 20,
+    "separation": 8,
+    "spread_type": "linear"
+  }
+}

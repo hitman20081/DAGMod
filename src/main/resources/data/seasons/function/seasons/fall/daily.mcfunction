@@ -1,6 +1,7 @@
 # Fall Daily Effects
 
-# Set growth modifier (slower growth)
+# Slower random ticks = slower crop growth
+gamerule random_tick_speed 2
 scoreboard players set #global seasons_growth 75
 
 # Moderate weather patterns

@@ -80,6 +80,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import com.github.hitman20081.dagmod.command.GarrickRegistryCommand;
 import com.github.hitman20081.dagmod.command.ResetClassCommand;
 import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
 import com.github.hitman20081.dagmod.class_system.RogueCombatHandler;
@@ -245,6 +246,7 @@ public class DagMod implements ModInitializer {
             InfoCommand.register(dispatcher, registryAccess, environment);
             QuestCommand.register(dispatcher);
             ResetClassCommand.register(dispatcher, registryAccess, environment);
+            GarrickRegistryCommand.register(dispatcher, registryAccess, environment);
             ProgressionTestCommand.register(dispatcher, registryAccess, environment);
             PartyCommand.register(dispatcher, registryAccess, environment);
             PartyQuestCommand.register(dispatcher, registryAccess, environment);

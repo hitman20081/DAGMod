@@ -573,7 +573,7 @@ Priority: **VERY LOW** (Long-term — targeted near v3.0.0–v4.0.0)
   - Level gate: ~Level 80-100
 
 - ❌ **Unholy Sigil (Portal Key)**
-  - Craftable item required to open the portal at the Hall of Champions
+  - Craftable item required to open the portal in the Hall of Champions
   - Recipe requires materials from multiple progression layers:
     - Skeleton King drop (Bone Realm cleared)
     - Dragon Heart (Dragon Realm cleared)

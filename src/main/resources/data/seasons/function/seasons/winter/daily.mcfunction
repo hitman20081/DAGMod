@@ -1,6 +1,7 @@
 # Winter Daily Effects
 
-# Set growth modifier (very slow growth)
+# Very slow random ticks = crops barely grow
+gamerule random_tick_speed 1
 scoreboard players set #global seasons_growth 25
 
 # Snow weather more common

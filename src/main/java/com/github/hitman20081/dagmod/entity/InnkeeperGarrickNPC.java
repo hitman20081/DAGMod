@@ -1,14 +1,17 @@
 package com.github.hitman20081.dagmod.entity;
 
+import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.PathfinderMob;
@@ -67,7 +70,6 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
         // Look at nearby players
         this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0f));
         // Wander around occasionally (barkeeps don't move much)
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.6));
         // Look around randomly
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
@@ -330,15 +332,130 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
     }
 
     /**
-     * Handle all tasks complete - Direct to Quest Block
+     * Routes to race registry, class registry, or final instructions based on player state.
      */
     private void handleAllTasksComplete(net.minecraft.server.level.ServerPlayer player) {
-        sendDialogue(player, "Excellent! You've completed all three tasks!", ChatFormatting.GREEN);
-        player.sendSystemMessage(Component.empty());
-        sendDialogue(player, "You've proven your resourcefulness, courage, and dedication.", ChatFormatting.WHITE);
-        sendDialogue(player, "Now you're ready to become a true adventurer!", ChatFormatting.WHITE);
-        player.sendSystemMessage(Component.empty());
+        String race = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+
+        if (race.equals("none")) {
+            sendDialogue(player, "You've proven yourself! Now let me enter you in the Guild Ledger.", ChatFormatting.GREEN);
+            player.sendSystemMessage(Component.empty());
+            showRaceMenu(player);
+        } else if (playerClass.equals("none")) {
+            showClassMenu(player);
+        } else {
+            showRegistrationComplete(player);
+        }
+    }
+
+    // ===== STATIC DISPLAY METHODS (shared with GarrickRegistryCommand) =====
+
+    public static void showRaceMenu(net.minecraft.server.level.ServerPlayer player) {
         player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("📜 GUILD REGISTRY — HERITAGE").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.empty());
+        sendStaticDialogue(player, "Every adventurer must be registered. First — your heritage.", ChatFormatting.WHITE);
+        player.sendSystemMessage(Component.empty());
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ ⚖ Human ]")
+                .withStyle(ChatFormatting.WHITE)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg race human"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("Balanced and adaptable.\n+25% XP from all sources.\nBonus from fishing and farming.")))))
+            .append(Component.literal("  Balanced. +25% XP.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ ⛏ Dwarf ]")
+                .withStyle(ChatFormatting.GOLD)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg race dwarf"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("Masters of stone and metal.\n+20% mining speed.\nBonus from smelting and smithing.")))))
+            .append(Component.literal("  Mining masters. +20% speed underground.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ 🌿 Elf ]")
+                .withStyle(ChatFormatting.GREEN)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg race elf"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("One with nature.\nEnhanced woodcutting and archery.\nMovement speed bonus.")))))
+            .append(Component.literal("  Nature affinity. Speed & archery bonuses.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ 💪 Orc ]")
+                .withStyle(ChatFormatting.DARK_RED)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg race orc"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("Born for battle.\nEnhanced combat and hunting.\nBonus damage to animals.")))))
+            .append(Component.literal("  Combat-born. Enhanced damage & hunting.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("  ✦ Click your heritage to register it.").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+    }
+
+    public static void showClassMenu(net.minecraft.server.level.ServerPlayer player) {
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("📜 GUILD REGISTRY — CALLING").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.empty());
+        sendStaticDialogue(player, "Good. Now — how do you fight? Choose your calling.", ChatFormatting.WHITE);
+        player.sendSystemMessage(Component.empty());
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ ⚔ Warrior ]")
+                .withStyle(ChatFormatting.RED)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg class warrior"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("Heavy armor, shield, 5 combat abilities.\nResource: Cooldowns")))))
+            .append(Component.literal("  Heavy armor, melee dominance, 5 abilities.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ ✦ Mage ]")
+                .withStyle(ChatFormatting.AQUA)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg class mage"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("Wands, spells, arcane power.\nResource: Mana pool")))))
+            .append(Component.literal("  Arcane power, wands & spells, mana system.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(
+            Component.literal("  ").append(
+            Component.literal("[ ⚡ Rogue ]")
+                .withStyle(ChatFormatting.DARK_GREEN)
+                .withStyle(s -> s
+                    .withClickEvent(new ClickEvent.RunCommand("/guildreg class rogue"))
+                    .withHoverEvent(new HoverEvent.ShowText(
+                        Component.literal("Speed, stealth, 7 energy abilities.\nResource: Energy pool")))))
+            .append(Component.literal("  Fast strikes, stealth, 7 energy abilities.").withStyle(ChatFormatting.GRAY)));
+
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("  ✦ Click your calling to register it.").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+    }
+
+    public static void showRegistrationComplete(net.minecraft.server.level.ServerPlayer player) {
+        String raceName = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+        String className = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("✓ GUILD REGISTRY COMPLETE").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.empty());
+        sendStaticDialogue(player, "The ledger has your name: " + raceName + " " + className + ".", ChatFormatting.GOLD);
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("📚 FINAL STEP: GET YOUR QUEST BOOK").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         player.sendSystemMessage(Component.empty());
@@ -348,23 +465,25 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
         player.sendSystemMessage(Component.literal("   • Garrick's Third Note").withStyle(ChatFormatting.GRAY));
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("   ➤ Find a Quest Block (ornate bookshelf)").withStyle(ChatFormatting.GRAY));
-        player.sendSystemMessage(Component.literal("   ➤ Right-click it with all 3 notes in your inventory").withStyle(ChatFormatting.GRAY));
-        player.sendSystemMessage(Component.literal("   ➤ Your notes will be combined into a Novice Quest Book!").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("   ➤ Right-click it with all 3 notes to get your Novice Quest Book!").withStyle(ChatFormatting.GRAY));
         player.sendSystemMessage(Component.empty());
-        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
-        player.sendSystemMessage(Component.empty());
-        sendDialogue(player, "Quest Blocks look like ornate bookshelves with decorated tops.", ChatFormatting.YELLOW);
-        sendDialogue(player, "There should be one nearby. Good luck, adventurer!", ChatFormatting.GREEN);
+        sendStaticDialogue(player, "Quest Blocks look like ornate bookshelves with decorated tops.", ChatFormatting.YELLOW);
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("⚔ ONE MORE THING").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
         player.sendSystemMessage(Component.empty());
-        player.sendSystemMessage(Component.literal("   Once you've chosen your class at the Hall of Champions,").withStyle(ChatFormatting.YELLOW));
-        player.sendSystemMessage(Component.literal("   find the §dClass Trainer§r there. They'll give you your").withStyle(ChatFormatting.YELLOW));
-        player.sendSystemMessage(Component.literal("   class quest chain — that's how you unlock your abilities.").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("   When you reach the Hall of Champions, find the §dClass Trainer§r.").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.literal("   They'll give you your class quest chain — that's how you unlock your abilities.").withStyle(ChatFormatting.YELLOW));
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        sendStaticDialogue(player, "Safe travels, " + raceName + " " + className + ". The world awaits!", ChatFormatting.GREEN);
+    }
+
+    private static void sendStaticDialogue(net.minecraft.server.level.ServerPlayer player, String message, ChatFormatting color) {
+        player.sendSystemMessage(
+            Component.literal("[Innkeeper Garrick] ").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                .append(Component.literal(message).withStyle(color)));
     }
 
 

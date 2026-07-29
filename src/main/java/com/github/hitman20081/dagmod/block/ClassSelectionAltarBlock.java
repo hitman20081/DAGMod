@@ -287,6 +287,22 @@ public class ClassSelectionAltarBlock extends Block {
                 SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
+    /**
+     * Applies class selection without requiring a block interaction.
+     * Called by GarrickRegistryCommand for the guild registry flow.
+     */
+    public static void applyClassSelection(ServerPlayer player, String className) {
+        setPlayerClass(player.getUUID(), className);
+        PlayerDataManager.savePlayerData(player);
+        ClassAbilityManager.applyClassAbilities(player);
+        RaceAbilityManager.applyRaceAbilities(player);
+        switch (className.toLowerCase()) {
+            case "warrior" -> initializeWarrior(player);
+            case "mage" -> initializeMage(player);
+            case "rogue" -> initializeRogue(player);
+        }
+    }
+
     private void removeUnusedTokens(Player player, String selectedClass) {
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
@@ -301,7 +317,7 @@ public class ClassSelectionAltarBlock extends Block {
         }
     }
 
-    private void initializeWarrior(Player player) {
+    private static void initializeWarrior(Player player) {
         // Weapon & Shield
         player.addItem(new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
         player.addItem(new ItemStack(net.minecraft.world.item.Items.SHIELD));
@@ -336,7 +352,7 @@ public class ClassSelectionAltarBlock extends Block {
                 .withStyle(ChatFormatting.GRAY));
     }
 
-    private void initializeMage(ServerPlayer player) {
+    private static void initializeMage(ServerPlayer player) {
         // Weapon
         player.addItem(new ItemStack(ModItems.APPRENTICE_WAND));
         player.addItem(new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
@@ -393,7 +409,7 @@ public class ClassSelectionAltarBlock extends Block {
                 .withStyle(ChatFormatting.GRAY));
     }
 
-    private void initializeRogue(Player player) {
+    private static void initializeRogue(Player player) {
         // Weapons
         player.addItem(new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
         player.addItem(new ItemStack(net.minecraft.world.item.Items.BOW));

@@ -1,4 +1,5 @@
 # Spring Transition Effects
+gamerule random_tick_speed 5
 # Melt ice, spawn flowers, clear snow
 
 # Melt ice back to water

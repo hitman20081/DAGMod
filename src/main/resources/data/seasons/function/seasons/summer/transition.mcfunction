@@ -1,4 +1,5 @@
 # Summer Transition Effects
+gamerule random_tick_speed 3
 # Clear weather, remove snow, dry up some water
 
 # Clear the weather for summer

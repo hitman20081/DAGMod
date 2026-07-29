@@ -4,18 +4,21 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
+import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.item.ModItems;
 import com.github.hitman20081.dagmod.trade.MerchantDialogue;
 import com.github.hitman20081.dagmod.trade.MerchantType;
 import com.github.hitman20081.dagmod.trade.RotatingTradeManager;
 import com.github.hitman20081.dagmod.trade.RotatingTradeRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.sounds.SoundEvent;
@@ -276,12 +279,31 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!this.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            ItemStack held = player.getMainHandItem();
+
+            // Check for reset items before opening trade menu
+            if (held.getItem() == ModItems.RACE_RESET_CRYSTAL
+                    || held.getItem() == ModItems.POTION_OF_RACIAL_REBIRTH) {
+                handleRaceReset(serverPlayer, held);
+                return InteractionResult.CONSUME;
+            }
+            if (held.getItem() == ModItems.CLASS_RESET_CRYSTAL
+                    || held.getItem() == ModItems.POTION_OF_CLASS_REBIRTH) {
+                handleClassReset(serverPlayer, held);
+                return InteractionResult.CONSUME;
+            }
+            if (held.getItem() == ModItems.CHARACTER_RESET_CRYSTAL
+                    || held.getItem() == ModItems.POTION_OF_TOTAL_REBIRTH) {
+                handleCharacterReset(serverPlayer, held);
+                return InteractionResult.CONSUME;
+            }
+        }
         if (!this.level().isClientSide()) {
             if (this.isAlive() && this.canInteract(player) && !this.hasCustomer() && !player.isShiftKeyDown()) {
                 // Rebuild offers to include current rotating trades
@@ -302,6 +324,62 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
             }
         }
         return InteractionResult.SUCCESS;
+    }
+
+    private void handleRaceReset(ServerPlayer player, ItemStack item) {
+        String oldRace = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+        if (oldRace.equals("none")) {
+            sendLine(player, "You have no heritage registered, mon.", ChatFormatting.RED);
+            return;
+        }
+        RaceSelectionAltarBlock.resetPlayerRace(player.getUUID());
+        PlayerDataManager.savePlayerData(player);
+        item.shrink(1);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                SoundEvents.ILLUSIONER_CAST_SPELL, this.getSoundSource(), 1.0F, 0.8F);
+        sendLine(player, "Your heritage is unbound. " + oldRace + " no more...", ChatFormatting.LIGHT_PURPLE);
+        player.sendSystemMessage(Component.empty());
+        InnkeeperGarrickNPC.showRaceMenu(player);
+    }
+
+    private void handleClassReset(ServerPlayer player, ItemStack item) {
+        String oldClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+        if (oldClass.equals("none")) {
+            sendLine(player, "You have no calling registered, mon.", ChatFormatting.RED);
+            return;
+        }
+        ClassSelectionAltarBlock.resetPlayerClass(player.getUUID());
+        PlayerDataManager.savePlayerData(player);
+        item.shrink(1);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                SoundEvents.ILLUSIONER_CAST_SPELL, this.getSoundSource(), 1.0F, 0.8F);
+        sendLine(player, "Your calling fades into shadow. " + oldClass + " no more...", ChatFormatting.LIGHT_PURPLE);
+        player.sendSystemMessage(Component.empty());
+        InnkeeperGarrickNPC.showClassMenu(player);
+    }
+
+    private void handleCharacterReset(ServerPlayer player, ItemStack item) {
+        String oldRace = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
+        String oldClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+        if (oldRace.equals("none") && oldClass.equals("none")) {
+            sendLine(player, "You have nothing to unbind, mon.", ChatFormatting.RED);
+            return;
+        }
+        RaceSelectionAltarBlock.resetPlayerRace(player.getUUID());
+        ClassSelectionAltarBlock.resetPlayerClass(player.getUUID());
+        PlayerDataManager.savePlayerData(player);
+        item.shrink(1);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                SoundEvents.ILLUSIONER_CAST_SPELL, this.getSoundSource(), 1.0F, 0.6F);
+        sendLine(player, "Both bindings severed. " + oldRace + " " + oldClass + " no more...", ChatFormatting.LIGHT_PURPLE);
+        player.sendSystemMessage(Component.empty());
+        InnkeeperGarrickNPC.showRaceMenu(player);
+    }
+
+    private void sendLine(ServerPlayer player, String message, ChatFormatting color) {
+        player.sendSystemMessage(
+            Component.literal("[Voodoo Illusioner] ").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD)
+                .append(Component.literal(message).withStyle(color)));
     }
 
     public void openOfferScreen(Player player, Component name, int level) {

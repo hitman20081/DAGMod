@@ -232,9 +232,10 @@ public class QuestRegistry {
     private static Quest createGemRoughTradeQuest() {
         return new Quest("gem_rough_trade")
                 .setName("Rough Trade")
-                .setCategory(Quest.QuestCategory.MAIN)
-                .setDescription("The Jeweler wants to teach you the art of gem crafting. Start by gathering raw citrine from the earth — it's the most common gem and a perfect starting point.")
+                .setCategory(Quest.QuestCategory.SIDE)
+                .setDescription("Word has reached you of gems hidden in the earth. Raw citrine is the most common — mine some and see what it's worth.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addPrerequisite("garricks_special_brew")
                 .addObjective(new CollectObjective(ModItems.RAW_CITRINE, 5))
                 .addReward(new ItemReward(ModBlocks.GEM_CUTTING_STATION.asItem(), 1))
                 .addReward(XpReward.novice());
@@ -1810,6 +1811,7 @@ public class QuestRegistry {
                     "The skeletons that roam the surface are but echoes of something far worse below. " +
                     "Slay enough of them to earn a chart that marks the entrance to the nearest dungeon.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .addPrerequisite("garricks_special_brew")
                 .addObjective(KillObjective.skeletons(20))
                 .addObjective(new CollectObjective(Items.BONE, 10))
                 .addReward(new ItemReward(ModItems.BONE_DUNGEON_LOCATOR, 1))

@@ -1,6 +1,6 @@
 # Merchants
 
-DAGMod features **14 unique merchant NPCs**, each specializing in different types of gear and supplies. Merchants offer both permanent static trades and some feature rotating premium inventories that cycle on a real-world timer.
+DAGMod features **13 merchant NPCs** plus the **Class Trainer NPC** (14 unique NPCs total), each specializing in different types of gear and supplies. Merchants offer both permanent static trades and some feature rotating premium inventories that cycle on a real-world timer.
 
 ## Merchant System Overview
 
@@ -11,6 +11,14 @@ DAGMod features **14 unique merchant NPCs**, each specializing in different type
 - **Premium Rotating Trades** cycle every **72 hours** (real-world time, configurable 12-168h) on select merchants
 - Rotation state persists across server restarts
 - Some merchants are static-only (no rotating stock)
+
+### Quest-Gated Advanced Trades
+
+Several merchants lock their advanced and legendary stock behind quest completion. Basic goods are always visible and purchasable — the gating applies only to premium tiers.
+
+- When you approach a merchant whose advanced stock requires a quest, they'll hint at what's locked
+- Complete the indicated quest to unlock that tier permanently for your character
+- This applies to select merchants in the Hall of Champions; village merchants are ungated
 
 ### Merchant Dialogue
 
@@ -80,6 +88,8 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 ### Voodoo Illusioner
 
 **Specialty:** Dark magic items, resets, and shadow gear
+
+**Reset Handler:** The Voodoo Illusioner is the dedicated NPC for race and class resets. Bring a reset crystal or rebirth potion and apply it through the Illusioner — do not use reset items directly from your inventory.
 
 **Static Trades:**
 - Dark ingredients (ender pearls, echo shards, wither roses, skeleton skulls)

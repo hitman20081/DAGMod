@@ -1,13 +1,19 @@
 # Day-based season system using actual Minecraft days
 
-# Get current game day
-execute store result score #current_game_day seasons_timer run time query day
+# Natural day counter: fires new_game_day every 24000 real server ticks.
+scoreboard players add #day_tick_counter seasons_timer 1
+execute if score #day_tick_counter seasons_timer matches 24000.. run function seasons:progress/new_game_day
+execute if score #day_tick_counter seasons_timer matches 24000.. run scoreboard players set #day_tick_counter seasons_timer 0
 
-# Check if we've moved to a new game day
-execute unless score #current_game_day seasons_timer = #last_game_day seasons_timer run function seasons:progress/new_game_day
-
-# Update last known game day
-scoreboard players operation #last_game_day seasons_timer = #current_game_day seasons_timer
+# Sleep detection via minecraft.custom:minecraft.sleep_in_bed stat.
+# Sum all online players' sleep counts. If total increased, someone slept —
+# fire new_game_day immediately and reset the day counter so it doesn't
+# double-count 24000 ticks later.
+scoreboard players set #sleep_sum seasons_timer 0
+execute as @a run scoreboard players operation #sleep_sum seasons_timer += @s dagmod_sleep_track
+execute if score #sleep_sum seasons_timer > #sleep_last seasons_timer run function seasons:progress/new_game_day
+execute if score #sleep_sum seasons_timer > #sleep_last seasons_timer run scoreboard players set #day_tick_counter seasons_timer 0
+scoreboard players operation #sleep_last seasons_timer = #sleep_sum seasons_timer
 
 # Apply seasonal effects to all players
 execute as @a run function seasons:effects/apply_to_player
@@ -23,9 +29,9 @@ execute if score #growth_timer seasons_timer matches 100.. run scoreboard player
 scoreboard players add #growth_timer seasons_timer 1
 
 # Display season info (every 600 ticks = 30 seconds)
-execute if score #display_timer seasons_timer matches 6000.. run function seasons:display/update_actionbar
-execute if score #display_timer seasons_timer matches 6000.. run scoreboard players set #display_timer seasons_timer 0
+execute if score #display_timer seasons_timer matches 600.. run function seasons:display/update_actionbar
+execute if score #display_timer seasons_timer matches 600.. run scoreboard players set #display_timer seasons_timer 0
 scoreboard players add #display_timer seasons_timer 1
 
 # Schedule next tick
-schedule function seasons:tick_day_based 1t
+schedule function seasons:tick_day_based 1t replace
