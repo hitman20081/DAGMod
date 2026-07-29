@@ -5,7 +5,7 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.1] - 2026-07-27
+## [1.9.1] - 2026-07-28
 
 ### Added
 
@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Merchant tier gating** — Advanced and legendary stock on select Hall of Champions merchants is now locked behind quest completion. Basic goods remain always accessible. Merchants hint at locked stock when you visit; completing the indicated quest unlocks that tier permanently
 - **All merchant and NPC entities are now stationary** — Removed `WaterAvoidingRandomStrollGoal` from all 16 NPC entity classes. NPCs no longer wander; they stand in place and look at nearby players
+- **Village Inn is now the world spawn hub** — Village Inn has its own dedicated structure set (spacing 20 chunks, ~320 blocks) guaranteeing one generates close to world spawn. World spawn is set near the nearest inn on first startup. The Hall Locator item guides players to the Hall of Champions from there
+- **Hall of Champions moved away from spawn** — HoC spacing increased from 64→125 chunks (~1024→~2000 blocks). It is now a mid-to-late-game destination rather than the starting area
 
 ### Fixed
 
@@ -24,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Blacksmith's Anvil rotation** — Placement used `getOpposite()` (parallel to player facing); corrected to `getClockWise()` so the anvil long axis faces across the player's body as expected
 - **Blacksmith's Anvil GUI closing immediately** — `AnvilMenu.stillValid()` checks for vanilla anvil block IDs; custom block failed the check and the menu closed within one tick. Fixed via anonymous subclass overriding `stillValid()` to return `true`
 - **Citrine quest gating** — Citrine-related quest unlock conditions were incorrectly gated; corrected to match intended tier requirements
+- **Season predicate format** — All 20 season predicate files were using the wrong key (`"type"`) for MC 26.2; reverted to `"condition"` key. This restores weather changes, biome-specific effects, and random chance triggers
+- **Season crop growth rates** — Gamerule corrected to snake_case `random_tick_speed` per MC 26.2 naming. Spring=5, Summer=3, Fall=2, Winter=1 now apply correctly each season
+- **Sleep now advances the season day counter** — Sleeping detects day skips via the `minecraft.custom:minecraft.sleep_in_bed` scoreboard stat, resets the internal tick counter, and counts the skipped day toward season progression
+- **Season announcements** — All four season transition messages rewritten to accurately describe that season's actual mechanics
+- **Dragon realm return portal** — No longer hardcoded to return players to 0,64,0. Now returns to the player's bed or respawn anchor (if set in the overworld), falling back to the configured world spawn
 
 ---
 

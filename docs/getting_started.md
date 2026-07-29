@@ -9,11 +9,11 @@ Welcome, adventurer! This guide will walk you through your first steps in the wo
 After installing DAGMod and launching Minecraft, here's how to begin your epic journey:
 
 1.  **Create Your World:** Start a new world or load an existing one. DAGMod features will integrate seamlessly.
-2.  **Find the Hall of Champions:** This is your starting hub.
-    *   You will receive a **Hall Locator** item in your inventory. Hold it to see the direction to the nearest Hall.
-    *   Alternatively, explore naturally! The Hall of Champions is a unique structure that generates in your world.
+2.  **Find the Village Inn:** The **Village Inn** is your starting hub — it generates within a few hundred blocks of world spawn.
+    *   Innkeeper Garrick is inside. Talk to him to begin your adventure.
+    *   The **Hall of Champions** is a separate, larger structure much farther out (~2000 blocks). Garrick gives you a **Hall Locator** item to navigate there when you're ready.
 3.  **Discover Your Heritage (Race Selection):**
-    *   Talk to **Innkeeper Garrick** in the Hall of Champions — he acts as the Guild Registry.
+    *   Talk to **Innkeeper Garrick** at the Village Inn — he acts as the Guild Registry.
     *   Garrick presents all four races (Human, Dwarf, Elf, Orc) with stat summaries via chat menu.
     *   Select your race through the dialogue. Garrick hands you race-specific starter gear on the spot.
     *   **Your race choice is permanent, so choose wisely!**
@@ -22,7 +22,7 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
     *   Garrick immediately follows race selection with class selection — choose Warrior, Mage, or Rogue.
     *   Class-specific starter gear is granted on selection.
     *   **Your class choice can be changed later with Class Reset Potions and Crystals (sold by the Voodoo Illusioner), but your race is permanent.**
-    *   Once your class is set, find the **Class Trainer NPC** in the Hall of Champions. They give you access to your class quest chain — a series of class-specific missions with unique rewards.
+    *   Once your class is set, complete Garrick's three tutorial tasks. He will then direct you to the **Class Trainer NPC** at the Hall of Champions, who gives you access to your class quest chain.
 5.  **Explore Synergies:**
     *   Your chosen race and class combine to unlock unique **synergy bonuses**. Review these to understand your character's strengths.
 6.  **Begin Your Journey:**

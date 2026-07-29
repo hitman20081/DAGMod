@@ -1,7 +1,7 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-07-21
-**Version**: v1.8.3
+**Last Updated**: 2026-07-28
+**Version**: v1.9.0
 
 ---
 

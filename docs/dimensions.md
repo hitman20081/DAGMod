@@ -144,7 +144,7 @@ These dimensions provide varied environments for exploration and are accessible 
 ## Portal Tips
 
 - **Bring supplies** - Dimensions may have limited resources initially
-- **Mark your portal** - Ensure you can find your way back
+- **Set your respawn point before entering the Dragon Realm** - The return portal will drop you at your bed or respawn anchor; without one set it returns you to world spawn
 - **Prepare for combat** - Both primary dimensions feature hostile content
 - **Party up** - Boss dimensions are easier with a [party](./party.md)
 - **Check the respawn timer** - Don't enter the Dragon Realm expecting a boss fight if the timer is still active
