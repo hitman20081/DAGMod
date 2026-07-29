@@ -26,34 +26,33 @@ public class HallSpawnInitializer {
 
     private static void onServerStarted(MinecraftServer server) {
         // Marker file ensures this only runs once per world
-        Path markerFile = server.getWorldPath(LevelResource.ROOT).resolve("dagmod_hall_spawn.flag");
+        Path markerFile = server.getWorldPath(LevelResource.ROOT).resolve("dagmod_inn_spawn.flag");
         if (Files.exists(markerFile)) return;
 
         ServerLevel overworld = server.overworld();
 
-        BlockPos hallPos = locateHall(overworld);
-        if (hallPos == null) {
-            DagMod.LOGGER.warn("[DAGMod] Could not locate Hall of Champions — world spawn not adjusted");
+        BlockPos innPos = locateInn(overworld);
+        if (innPos == null) {
+            DagMod.LOGGER.warn("[DAGMod] Could not locate Village Inn — world spawn not adjusted");
             return;
         }
 
-        BlockPos spawnPos = findSafeSpawn(overworld, hallPos);
+        BlockPos spawnPos = findSafeSpawn(overworld, innPos);
         setWorldSpawn(server, spawnPos);
 
         try {
             Files.writeString(markerFile, "initialized");
         } catch (IOException e) {
-            DagMod.LOGGER.error("[DAGMod] Failed to write hall spawn marker", e);
+            DagMod.LOGGER.error("[DAGMod] Failed to write inn spawn marker", e);
         }
 
-        DagMod.LOGGER.info("[DAGMod] Level spawn set near Hall of Champions at " + spawnPos);
+        DagMod.LOGGER.info("[DAGMod] Level spawn set near Village Inn at " + spawnPos);
     }
 
     @Nullable
-    private static BlockPos locateHall(ServerLevel overworld) {
-        // Same pattern as BoneDungeonLocatorItem
+    private static BlockPos locateInn(ServerLevel overworld) {
         var registry = overworld.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        var entry = registry.get(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "hall_of_champions")).orElse(null);
+        var entry = registry.get(Identifier.fromNamespaceAndPath(DagMod.MOD_ID, "village_inn")).orElse(null);
         if (entry == null) return null;
 
         var result = overworld.getChunkSource().getGenerator()

@@ -19,6 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 
 /**
  * Handles teleportation to/from Dragon Realm
@@ -96,13 +97,17 @@ public class DragonRealmTeleporter {
     }
 
     /**
-     * Teleport player to their spawn point (bed or world spawn)
-     * Used when returning from Dragon Realm - no portal creation
+     * Teleport player to their respawn point or world spawn when returning from Dragon Realm.
      */
     private static void teleportToSpawn(ServerPlayer player, ServerLevel overworld) {
-        // Use world spawn as safe return point
-        // TODO: In future, implement bed spawn detection using player NBT data
-        BlockPos spawnPos = new BlockPos(0, 64, 0); // Default world spawn
+        // Prefer player's bed/respawn anchor in the overworld; fall back to world spawn
+        ServerPlayer.RespawnConfig respawnConfig = player.getRespawnConfig();
+        BlockPos spawnPos;
+        if (respawnConfig != null && respawnConfig.respawnData().dimension() == overworld.dimension()) {
+            spawnPos = respawnConfig.respawnData().pos();
+        } else {
+            spawnPos = overworld.getRespawnData().pos();
+        }
 
         // IMPORTANT: Find SAFE spawn location (not inside blocks)
         BlockPos safePos = findSafeSpawnLocationAggressive(overworld, spawnPos);
