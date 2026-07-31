@@ -6,6 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -24,7 +25,7 @@ public class ProtectedStructureHandler {
             if (!(world instanceof ServerLevel serverLevel)) return true;
 
             for (ResourceKey<Structure> key : PROTECTED) {
-                if (serverLevel.structureManager().getStructureWithPieceAt(pos, key).isValid()) {
+                if (serverLevel.structureManager().getStructureWithPieceAt(pos, (Holder<Structure> h) -> h.is(key)).isValid()) {
                     player.sendSystemMessage(
                         Component.literal("The Hall of Champions is sacred ground — its stones cannot be moved.")
                             .withStyle(ChatFormatting.RED));
