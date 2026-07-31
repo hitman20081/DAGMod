@@ -1810,6 +1810,7 @@ public class QuestRegistry {
                     "The skeletons that roam the surface are but echoes of something far worse below. " +
                     "Slay enough of them to earn a chart that marks the entrance to the nearest dungeon.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
+                .setMinLevel(25)
                 .addPrerequisite("garricks_special_brew")
                 .addObjective(KillObjective.skeletons(20))
                 .addObjective(new CollectObjective(Items.BONE, 10))

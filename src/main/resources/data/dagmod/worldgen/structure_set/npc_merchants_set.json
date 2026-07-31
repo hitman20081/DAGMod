@@ -3,7 +3,6 @@
     { "structure": "dagmod:house_npc_hunter",    "weight": 1 },
     { "structure": "dagmod:house_npc_miner",     "weight": 1 },
     { "structure": "dagmod:house_npc_baker",     "weight": 1 },
-    { "structure": "dagmod:house_npc_armorer",   "weight": 1 },
     { "structure": "dagmod:house_npc_blacksmith","weight": 1 }
   ],
   "placement": {
