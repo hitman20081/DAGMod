@@ -170,6 +170,9 @@ public class DagMod implements ModInitializer {
         // Set world spawn near Hall of Champions on first world load
         com.github.hitman20081.dagmod.world.HallSpawnInitializer.register();
 
+        // Prevent block breaking inside protected structures (survival only)
+        com.github.hitman20081.dagmod.world.ProtectedStructureHandler.register();
+
 // Register ore generation in overworld
         com.github.hitman20081.dagmod.world.ModOreGeneration.register();
 
