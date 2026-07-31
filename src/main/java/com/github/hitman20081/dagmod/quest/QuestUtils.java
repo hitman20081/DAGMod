@@ -67,18 +67,18 @@ public class QuestUtils {
 
         // Page 2: Hall Locator / Inn
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§dHall Locator§r\n\n")
-                        .append(Component.literal("You have a §6Hall Locator§r in your inventory.\n\n"))
-                        .append(Component.literal("§6Right-click§r it to find nearby structures.\n\n"))
-                        .append(Component.literal("Your first stop is the §6Inn§r — §6Innkeeper Garrick§r is on the middle floor. He'll register your Race and Class and give you your first quests.\n\n"))
-                        .append(Component.literal("The §6Hall of Champions§r comes later."))
+                Component.literal("§l§5The Inn & Garrick§r\n\n")
+                        .append(Component.literal("Your first stop is the §6Inn§r.\n\n"))
+                        .append(Component.literal("§6Innkeeper Garrick§r is on the middle floor. Talk to him to register your Race and Class and begin your three tutorial tasks.\n\n"))
+                        .append(Component.literal("Once you complete his tasks, Garrick will give you a §6Hall Locator§r to find the §6Hall of Champions§r.\n\n"))
+                        .append(Component.literal("§8Use /info to check your race, class & level at any time.§r"))
         ));
 
         // Page 3: Race - Human
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§fRace 1/4 — Human§r\n")
+                Component.literal("§l§7Race 1/4 — Human§r\n")
                         .append(Component.literal("§7\"The Balanced\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +25% XP from all sources\n"))
                         .append(Component.literal("• Bonus XP from fishing & farming\n"))
                         .append(Component.literal("• No gathering penalties\n\n"))
@@ -89,7 +89,7 @@ public class QuestUtils {
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§6Race 2/4 — Dwarf§r\n")
                         .append(Component.literal("§7\"The Miner\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +20% mining speed\n"))
                         .append(Component.literal("• +1 heart (max health)\n"))
                         .append(Component.literal("• Bonus ore drops underground\n"))
@@ -100,9 +100,9 @@ public class QuestUtils {
 
         // Page 5: Race - Elf
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§aRace 3/4 — Elf§r\n")
+                Component.literal("§l§2Race 3/4 — Elf§r\n")
                         .append(Component.literal("§7\"The Ranger\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +15% movement speed\n"))
                         .append(Component.literal("• +0.5 block reach\n"))
                         .append(Component.literal("• Woodcutting & archery bonuses\n"))
@@ -112,9 +112,9 @@ public class QuestUtils {
 
         // Page 6: Race - Orc
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§cRace 4/4 — Orc§r\n")
+                Component.literal("§l§4Race 4/4 — Orc§r\n")
                         .append(Component.literal("§7\"The Warrior\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +15% melee attack damage\n"))
                         .append(Component.literal("• +2 hearts (max health)\n"))
                         .append(Component.literal("• Hunting & fishing bonuses\n"))
@@ -126,12 +126,12 @@ public class QuestUtils {
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§4Class 1/3 — Warrior§r\n")
                         .append(Component.literal("§7\"Strength and honor\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +20% melee damage\n"))
                         .append(Component.literal("• +2 max hearts\n"))
                         .append(Component.literal("• Heavy armor proficiency\n"))
                         .append(Component.literal("• 5 combat abilities\n\n"))
-                        .append(Component.literal("§eResource: §rCooldowns\n\n"))
+                        .append(Component.literal("§6Resource: §rCooldowns\n\n"))
                         .append(Component.literal("§7Frontline tank. Melee dominance.§r"))
         ));
 
@@ -139,12 +139,12 @@ public class QuestUtils {
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§5Class 2/3 — Mage§r\n")
                         .append(Component.literal("§7\"Knowledge is power\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +50% potion duration\n"))
                         .append(Component.literal("• 100 mana pool\n"))
                         .append(Component.literal("• Mana regeneration\n"))
                         .append(Component.literal("• 4 abilities + wands + scrolls\n\n"))
-                        .append(Component.literal("§eResource: §rMana\n\n"))
+                        .append(Component.literal("§6Resource: §rMana\n\n"))
                         .append(Component.literal("§7Ranged magic. Battlefield control.§r"))
         ));
 
@@ -152,12 +152,12 @@ public class QuestUtils {
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§2Class 3/3 — Rogue§r\n")
                         .append(Component.literal("§7\"Strike from the shadows\"§r\n\n"))
-                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("§6Key Bonuses:§r\n"))
                         .append(Component.literal("• +30% movement speed\n"))
                         .append(Component.literal("• 25% critical hit chance\n"))
                         .append(Component.literal("• Backstab bonus damage\n"))
                         .append(Component.literal("• 7 energy abilities\n\n"))
-                        .append(Component.literal("§eResource: §rEnergy\n\n"))
+                        .append(Component.literal("§6Resource: §rEnergy\n\n"))
                         .append(Component.literal("§7Stealth assassin. Burst damage.§r"))
         ));
 
@@ -171,7 +171,7 @@ public class QuestUtils {
 
         // Page 11: Class Abilities via Class Trainer
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§eClass Abilities§r\n\n")
+                Component.literal("§l§6Class Abilities§r\n\n")
                         .append(Component.literal("Your class abilities are unlocked through the §6Class Trainer NPC§r at the §6Hall of Champions§r.\n\n"))
                         .append(Component.literal("Each quest rewards an §nability item§r — hold it in your hotbar to activate that ability.\n\n"))
                         .append(Component.literal("The chain starts at level 10 and ends at level 100.\n\n"))
@@ -180,7 +180,7 @@ public class QuestUtils {
 
         // Page 12: Dimensions
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§dDimensions§r\n\n")
+                Component.literal("§l§5Dimensions§r\n\n")
                         .append(Component.literal("§c• Bone Realm§r\n"))
                         .append(Component.literal("Undead danger zone.\n"))
                         .append(Component.literal("Boss: Skeleton King.\n"))

@@ -372,25 +372,18 @@ public class DagMod implements ModInitializer {
 
             // Only give items to completely new players (no race/class data)
             if (!PlayerDataManager.hasPlayerData(player)) {
-                // Check if player already has a Hall Locator (double-check safety)
-                if (!hasHallLocator(player)) {
-                    player.addItem(new ItemStack(ModItems.HALL_LOCATOR));
-                    player.addItem(QuestUtils.createWelcomeBook());
-                    // NOTE: Removed NOVICE_QUEST_BOOK - it will be given on class selection instead
+                player.addItem(QuestUtils.createWelcomeBook());
 
-                    player.sendSystemMessage(Component.literal("═══════════════════════════════")
-                            .withStyle(ChatFormatting.GOLD));
-                    player.sendSystemMessage(Component.literal("Welcome to DAGMod!")
-                            .withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.BOLD));
-                    player.sendSystemMessage(Component.literal("═══════════════════════════════")
-                            .withStyle(ChatFormatting.GOLD));
-                    player.sendSystemMessage(Component.literal("You've been given a Hall Locator!")
-                            .withStyle(ChatFormatting.YELLOW));
-                    player.sendSystemMessage(Component.literal("Right-click it to find the Hall of Champions.")
-                            .withStyle(ChatFormatting.GRAY));
-                    player.sendSystemMessage(Component.literal("═══════════════════════════════")
-                            .withStyle(ChatFormatting.GOLD));
-                }
+                player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                        .withStyle(ChatFormatting.GOLD));
+                player.sendSystemMessage(Component.literal("Welcome to DAGMod!")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.BOLD));
+                player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                        .withStyle(ChatFormatting.GOLD));
+                player.sendSystemMessage(Component.literal("Find the Inn and speak to Innkeeper Garrick to begin.")
+                        .withStyle(ChatFormatting.YELLOW));
+                player.sendSystemMessage(Component.literal("═══════════════════════════════")
+                        .withStyle(ChatFormatting.GOLD));
             }
         });
 
@@ -599,17 +592,6 @@ public class DagMod implements ModInitializer {
     // Helper method for updating quest progress - THIS GOES OUTSIDE onInitialize()
     public static void updatePlayerQuestProgress(ServerPlayer player) {
         QuestManager.getInstance().updateQuestProgress(player);
-    }
-
-    // Helper method to check if player has Hall Locator in inventory
-    private static boolean hasHallLocator(ServerPlayer player) {
-        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            ItemStack stack = player.getInventory().getItem(i);
-            if (stack.getItem() == ModItems.HALL_LOCATOR) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

@@ -455,6 +455,21 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
         sendStaticDialogue(player, "Safe travels, " + raceName + " " + className + ". The world awaits!", ChatFormatting.GREEN);
+
+        // Give Hall Locator once — only if player doesn't already have one
+        boolean hasLocator = false;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            if (player.getInventory().getItem(i).getItem() == com.github.hitman20081.dagmod.item.ModItems.HALL_LOCATOR) {
+                hasLocator = true;
+                break;
+            }
+        }
+        if (!hasLocator) {
+            player.addItem(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.HALL_LOCATOR));
+            player.sendSystemMessage(Component.empty());
+            player.sendSystemMessage(Component.literal("✦ Received: Hall Locator").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("   Right-click it to find the Hall of Champions.").withStyle(ChatFormatting.GRAY));
+        }
     }
 
     private static void sendStaticDialogue(net.minecraft.server.level.ServerPlayer player, String message, ChatFormatting color) {
