@@ -12,7 +12,7 @@
     "separation": 50,
     "avoid_water": true,
     "exclusion_zones": [
-      { "other_set": "dagmod:village_npc_set", "chunk_count": 25 }
+      { "other_set": "dagmod:village_npc_set", "chunk_count": 16 }
     ]
   }
 }
