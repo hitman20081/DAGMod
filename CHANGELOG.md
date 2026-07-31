@@ -5,13 +5,17 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.1] - 2026-07-28
+## [1.9.1] - 2026-07-31
 
 ### Added
 
 - **Blacksmith's Anvil block** — Permanent, indestructible-in-survival crafting station (`dagmod:blacksmith_anvil`). Opens the vanilla anvil GUI (renaming, enchantment combining, repair). Cannot be broken in Survival; Creative-only break. No drops. Rotates on placement so the long axis sits perpendicular to the player's facing direction, matching vanilla anvil behaviour. VoxelShape matches vanilla `template_anvil.json` geometry exactly. Give via `/give @p dagmod:blacksmith_anvil`
 - **Garrick guild registry** — Innkeeper Garrick now handles race and class selection via chat-menu dialogue in addition to the physical altars. Garrick presents race/class options with stat summaries and hands out starter gear immediately on selection. Physical altars in the Hall of Champions remain functional as an alternative
 - **Voodoo Illusioner reset handling** — The Voodoo Illusioner NPC is now the dedicated interface for applying race and class resets. Bring a reset crystal or rebirth potion and interact with the Illusioner to apply it
+- **Dragon Realm dimension gate** — Dragon Realm access now requires level 50. The `red_dragon_fury` quest no longer appears until level 50. The Dragon Key is rejected below level 50. Walking into an open portal below level 50 is blocked with a message; exiting the Dragon Realm is always allowed
+- **Hall of Champions block protection** — Survival players cannot mine any blocks inside the Hall of Champions structure. Creative mode bypasses. Message displayed on attempt: "The Hall of Champions is sacred ground — its stones cannot be moved."
+- **Armorer dedicated structure set** — `house_npc_armorer` now has its own structure set (`npc_armorer_set.json`, spacing 32/12) instead of spawning as one of four random merchants. Biomes aligned to `#dagmod:has_structure/village_npc` so the Armorer generates in the same biomes as the Inn
+- **Avoid-water/lava flag on all structure sets** — All DAGMod structure sets now use `avoid_water: true`, preventing structures from spawning on or near surface water and lava lakes. Applies to: hall_spawn, house_npc, house_villager, npc_merchants_set, npc_armorer_set, village_npc_set, castle_medieval, castle_pale_garden, ruined_tower, skeleton_kingdom, village_inn_set
 
 ### Changed
 
@@ -19,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **All merchant and NPC entities are now stationary** — Removed `WaterAvoidingRandomStrollGoal` from all 16 NPC entity classes. NPCs no longer wander; they stand in place and look at nearby players
 - **Village Inn is now the world spawn hub** — Village Inn has its own dedicated structure set (spacing 20 chunks, ~320 blocks) guaranteeing one generates close to world spawn. World spawn is set near the nearest inn on first startup. The Hall Locator item guides players to the Hall of Champions from there
 - **Hall of Champions moved away from spawn** — HoC spacing increased from 64→125 chunks (~1024→~2000 blocks). It is now a mid-to-late-game destination rather than the starting area
+- **Hall of Champions biomes restricted** — HoC now only generates in `minecraft:meadow`, `minecraft:savanna_plateau`, and `minecraft:cherry_grove`. These are flat, open biomes that suit the large structure footprint and make it a worthy journey destination
+- **Hall Locator moved to Garrick reward** — Hall Locator is no longer given on first join. Garrick hands it out on completing all three tutorial tasks
+- **Guide book color contrast** — All guide book headers and labels now use dark color codes readable on parchment: §7 (dark grey), §2 (dark green), §4 (dark red), §5 (dark purple), §6 (gold). Previous codes §f, §a, §c, §d, §e were too light
+- **Bone dungeon locator quest level gate** — `rumours_of_the_bone_king` now requires level 25 before it appears in the quest log, restoring the intended Bone Realm access design
+- **River biome removed from village_npc tag** — Inns, Armorer, and NPC structures no longer generate in river biomes
+- **Castle structure sets converted to multi_exclusion_random_spread** — Both castle sets now use `dagmod:multi_exclusion_random_spread` with `avoid_water: true`; exclusion zones capped to chunk_count 16 per codec range
 
 ### Fixed
 
@@ -31,6 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Sleep now advances the season day counter** — Sleeping detects day skips via the `minecraft.custom:minecraft.sleep_in_bed` scoreboard stat, resets the internal tick counter, and counts the skipped day toward season progression
 - **Season announcements** — All four season transition messages rewritten to accurately describe that season's actual mechanics
 - **Dragon realm return portal** — No longer hardcoded to return players to 0,64,0. Now returns to the player's bed or respawn anchor (if set in the overworld), falling back to the configured world spawn
+- **Castle exclusion zone out of range** — `ExclusionZone.CODEC` enforces chunk_count [1:16]; both castle sets had a value of 25. Capped to 16
+- **Duplicate structure set salt** — `castle_medieval` and `castle_pale_garden` shared salt `1649512345`. `castle_pale_garden` given unique salt `1649512346`
+- **`getStructureWithPieceAt` API update** — MC 26.2 dropped the `ResourceKey<Structure>` overload. `ProtectedStructureHandler` updated to use `Predicate<Holder<Structure>>`
 
 ---
 

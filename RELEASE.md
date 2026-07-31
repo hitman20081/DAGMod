@@ -8,70 +8,68 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.9.0 — Village Inn Hub, Season Fixes, Class Trainer & More
-**Released:** 2026-07-28
+## v1.9.1 — Structure Spawning, Dimension Gates & World Polish
+**Released:** 2026-07-31
 
-> **Note for players upgrading from v1.8.x:** A new world is recommended but not required. Existing worlds will not have the Village Inn placed near spawn unless you delete and regenerate spawn-area chunks (use [MCA Selector](https://github.com/Querz/mcaselector) to prune unvisited chunks). The Hall of Champions will also not relocate in existing worlds. All other changes apply immediately on update. **Back up your world before updating.**
+> **Note for players upgrading from v1.9.0:** No new world required. All structure, quest, and progression changes apply immediately. Existing Hall of Champions and Village Inns retain their current locations — only newly generated chunks follow the updated biome rules.
 
 ---
 
-## What's New in v1.9.0
+## What's New in v1.9.1
 
-### Village Inn as the Spawn Hub
-World spawn now generates near a **Village Inn** rather than the Hall of Champions. The inn sits within a few hundred blocks of spawn — it's your first stop for lodging, Innkeeper Garrick, and initial quests. Use the **Hall Locator** item Garrick provides to navigate to the Hall of Champions from there.
+### Dragon Realm Now Gated at Level 50
+The Dragon Realm is no longer freely accessible. The `red_dragon_fury` quest (which rewards the Dragon Key) does not appear until level 50. Attempting to activate a portal or walk through one below level 50 is blocked with a clear message. Exiting the Dragon Realm is always allowed.
 
-### Hall of Champions is Now a Destination
-The Hall of Champions has been moved much farther from spawn (~2000 block spacing, up from ~1000). It's now a mid-to-late-game landmark worth the journey — not something you stumble into on day one.
+### Hall of Champions Block Protection
+Survival players can no longer mine blocks inside the Hall of Champions. The structure is sacred ground — its blocks cannot be removed without Creative mode. A message is shown on attempt.
 
-### Innkeeper Garrick — Full Guild Registry
-Innkeeper Garrick (at the Village Inn) now handles **race and class selection** through interactive chat dialogue. He presents stat summaries for each option and hands out starter gear immediately on selection. The physical altars in the Hall of Champions remain functional as an alternative.
+### Structures No Longer Spawn on Water or Lava
+All DAGMod structure sets now use the `avoid_water` flag, preventing Inns, Armorers, merchants, castles, and other structures from generating on or near surface water lakes and lava pools.
 
-### Class Trainer NPC
-A dedicated **Class Trainer NPC** at the Hall of Champions handles all class quest chains. Right-click to see your full class chain progress with clear status indicators (complete, ready to turn in, in progress, available, locked). After Garrick's three tutorial tasks, he directs you to the Class Trainer.
+### Hall of Champions Now in Flat, Landmark Biomes Only
+The Hall of Champions is restricted to `meadow`, `savanna_plateau`, and `cherry_grove`. These are open, flat biomes the structure fits naturally and that feel worthy of a journey.
 
-### Blacksmith's Anvil
-A permanent, indestructible **Blacksmith's Anvil** block (`dagmod:blacksmith_anvil`) is now available. Opens the standard anvil GUI for renaming, enchantment combining, and repair. Cannot be broken in Survival. Rotates correctly on placement.
+### Armorer Has Its Own Structure Set
+The Armorer NPC has been moved out of the shared merchant pool and given a dedicated structure set. It now consistently generates near the Inn in the same biomes rather than as one of four random merchant spawns.
 
-### Merchant Tier Gating
-Advanced and legendary stock on Hall of Champions merchants is now **locked behind quest completion**. Basic goods remain always accessible. Merchants hint at what quests unlock their premium stock.
+### Bone Realm Gated at Level 25
+The `rumours_of_the_bone_king` quest (which rewards the Bone Dungeon Locator) now requires level 25 before it appears in the quest log, restoring the intended early-game dimension barrier.
 
-### Season System Operational
-The four-season system (Spring, Summer, Fall, Winter) is now fully working:
-- **Crop growth** — Correct growth rates apply each season (Spring fastest, Winter slowest)
-- **Sleep advances seasons** — Sleeping through the night now counts toward the day total
-- **Weather** — Seasonal weather patterns and biome-specific effects fire correctly
-- **Accurate announcements** — Season transition messages now describe each season's actual mechanics
+### Hall Locator Moved to Garrick Reward
+The Hall Locator compass is no longer handed out on first join. Garrick gives it to players when they complete all three tutorial tasks, making the Hall of Champions discovery feel earned.
 
-### Dragon Realm Return Portal Fixed
-Returning from the Dragon Realm now takes you to your **bed or respawn anchor** if set, or to the configured world spawn — no longer hardcoded to coordinates 0, 64, 0.
+### Guide Book Readability Fixed
+All guide book headers and labels now use colors that are readable on the parchment background. Previous color codes (white, bright green, light red, light purple, yellow) were invisible or near-invisible on light pages.
 
 ---
 
 ## Bug Fixes
 
-- **Season predicates** — All 20 predicate files were using the wrong key for MC 26.2 (`"type"` instead of `"condition"`), silently disabling all weather, biome checks, and random effects. Corrected
-- **Season gamerule name** — `randomTickSpeed` renamed to `random_tick_speed` (MC 26.2 snake_case). Growth rates now actually apply
-- **Sleep detection** — Sleep-based season advancement now uses scoreboard stat comparison instead of a broken day-time query
-- **Blacksmith's Anvil hitbox** — Corrected to exact model geometry for both orientations
-- **Blacksmith's Anvil rotation** — Fixed placement direction so the long axis faces correctly
-- **Blacksmith's Anvil GUI** — Menu no longer closes immediately on open (stillValid override)
-- **Citrine quest gating** — Unlock conditions corrected
-- **Class Trainer stale objective progress** — Quest progress is now refreshed before checking completion state
-- **Quest Block texture** — Now displays custom texture correctly instead of vanilla bookshelf/oak_planks
-- **All NPCs now stationary** — 16 NPC entity classes no longer wander; they stand and look at nearby players
+- **Castle exclusion zone out of range** — ExclusionZone codec enforces chunk_count [1:16]; both castle sets had a value of 25. Capped to 16
+- **Duplicate structure set salt** — `castle_medieval` and `castle_pale_garden` shared the same salt value. `castle_pale_garden` given a unique salt
+- **`getStructureWithPieceAt` MC 26.2 API** — Dropped `ResourceKey<Structure>` overload replaced with `Predicate<Holder<Structure>>` in `ProtectedStructureHandler`
+- **River biome in village_npc tag** — Inns and NPC buildings no longer generate in rivers
+- **Armorer biome mismatch** — Armorer was spawning in savanna biomes where the Inn never appears; now uses the same `#dagmod:has_structure/village_npc` biome tag as the Inn
+
+---
+
+## Also in v1.9.x (from v1.9.0)
+
+- **Village Inn** — World spawn hub with guaranteed near-spawn generation
+- **Innkeeper Garrick** — Race and class selection via chat dialogue; starter gear on selection
+- **Class Trainer NPC** — Dedicated NPC for all class quest chains at the Hall of Champions
+- **Blacksmith's Anvil** — Permanent, indestructible anvil block
+- **Merchant tier gating** — Premium Hall of Champions stock locked behind quest completion
+- **Season system fixes** — Crop growth, sleep detection, weather predicates, and announcements all corrected for MC 26.2
+- **Dragon Realm return portal** — Returns to bed/respawn anchor instead of hardcoded 0, 64, 0
 
 ---
 
 ## Migration Notes
 
-> **New world recommended.** The Village Inn spawn hub and Hall of Champions rarity changes only affect newly generated chunks. Existing worlds keep the Hall at their original location.
+> No new world is required for v1.9.1. All changes apply to newly generated chunks and existing game systems immediately.
 >
-> **If you want to update an existing world without starting over:**
-> 1. Back up your world folder
-> 2. Use [MCA Selector](https://github.com/Querys/mcaselector) to delete unvisited chunks around spawn so they regenerate under the new rules
-> 3. Install the new jar and load the world — regenerated chunks will have the Village Inn near spawn
->
-> No item IDs changed in this release. Existing inventories, chests, and data will carry over without loss.
+> If upgrading from v1.8.x, see the [v1.9.0 release notes](docs/release-v1.9.0.md) for world generation migration guidance.
 
 ---
 
@@ -89,9 +87,8 @@ Returning from the Dragon Realm now takes you to your **bed or respawn anchor** 
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.9.0 `.jar`
+3. Install the v1.9.1 `.jar`
 4. Launch Minecraft 26.2
-5. Start a new world, or use MCA Selector to prune spawn chunks in an existing world (see Migration Notes)
 
 ---
 
@@ -117,6 +114,7 @@ Returning from the Dragon Realm now takes you to your **bed or respawn anchor** 
 
 | Version | Summary |
 |---|---|
+| v1.9.0 | Village Inn spawn hub, Garrick guild registry, Class Trainer NPC, Blacksmith's Anvil, merchant tier gating, season system fixes |
 | v1.8.3 | Gem tier system (Cut→Polished→Flawless→Grand), in-game enchantment descriptions, quest book navigation |
 | v1.8.2 | Village NPC structures (7 buildings), dynamic lighting chunk fix, Hall of Champions rarity increase |
 | v1.8.1 | MC 26.2 migration (Fabric Loader 0.19.3, Fabric API 0.150.2+26.2), brimstone rename |

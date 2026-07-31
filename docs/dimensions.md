@@ -6,6 +6,8 @@ DAGMod adds custom dimensions with unique biomes, portals, and content. The Bone
 
 The Bone Realm is an underground dimension filled with undead enemies and procedurally generated dungeons.
 
+> **Level requirement:** The `rumours_of_the_bone_king` quest (which rewards the Bone Dungeon Locator) requires **level 25** before it appears. You cannot obtain a locator or access a Bone Dungeon portal before reaching that level.
+
 ### Portal Construction
 
 | Component | Details |
@@ -49,13 +51,16 @@ Bone Dungeons generate with three types of loot rooms (see [Boss & Dungeon Loot]
 
 The Dragon Realm is a dramatic dimension guarded by the Dragon Guardian boss.
 
+> **Level requirement:** You must reach **level 50** to access the Dragon Realm. The `red_dragon_fury` quest (which rewards the Dragon Key) does not appear below level 50. Attempting to activate a portal or walk through one below this level is blocked. Creative mode bypasses the gate. Exiting the Dragon Realm is always permitted regardless of level.
+
 ### Portal Construction
 
 | Component | Details |
 |-----------|---------|
 | Frame material | 3x3 Obsidian Portal Frame |
 | Activation key | Dragon Key |
-| Portal location | Craftable or found in dungeons |
+| Key source | Reward from completing `red_dragon_fury` quest (requires level 50) |
+| Portal location | Build anywhere with the frame; activate with the Dragon Key |
 
 ### Biome: Burnt Lands
 
@@ -148,6 +153,7 @@ These dimensions provide varied environments for exploration and are accessible 
 - **Prepare for combat** - Both primary dimensions feature hostile content
 - **Party up** - Boss dimensions are easier with a [party](./party.md)
 - **Check the respawn timer** - Don't enter the Dragon Realm expecting a boss fight if the timer is still active
+- **Hall of Champions blocks are protected** - Survival players cannot mine blocks inside the Hall of Champions structure. Creative mode is required for any modifications
 
 ---
 
