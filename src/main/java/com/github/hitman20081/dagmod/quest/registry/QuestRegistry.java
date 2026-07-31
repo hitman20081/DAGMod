@@ -1829,6 +1829,7 @@ public class QuestRegistry {
                     "Hunt it down, claim its heart and scales, then forge the Dragon Key to unlock the portal " +
                     "at the Hall of Champions and enter the Dragon Realm.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(50)
                 .addObjective(new KillObjective(ModEntities.RED_DRAGON, 1))
                 .addObjective(new CollectObjective(ModItems.DRAGON_HEART, 1))
                 .addObjective(new CollectObjective(ModItems.DRAGON_SCALE, 3))

@@ -1,6 +1,9 @@
 package com.github.hitman20081.dagmod.dragon_realm.portal;
 
 import com.github.hitman20081.dagmod.dragon_realm.DragonRealmRegistry;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
+import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
@@ -49,6 +52,18 @@ public class DragonKeyItem extends Item {
 
         // Server-side only for actual portal creation
         if (!world.isClientSide()) {
+            // Level gate: Dragon Realm requires level 50
+            if (player instanceof ServerPlayer sp && !sp.isCreative()) {
+                PlayerProgressionData data = ProgressionManager.getPlayerData(sp);
+                if (data == null || data.getCurrentLevel() < 50) {
+                    int current = data != null ? data.getCurrentLevel() : 1;
+                    player.sendSystemMessage(Component.literal(
+                        "You are not strong enough to open the Dragon Realm. You must reach level 50 first. (Current: " + current + ")")
+                        .withStyle(ChatFormatting.RED));
+                    return InteractionResult.FAIL;
+                }
+            }
+
             ServerLevel serverWorld = (ServerLevel) world;
 
             // Detect portal frame

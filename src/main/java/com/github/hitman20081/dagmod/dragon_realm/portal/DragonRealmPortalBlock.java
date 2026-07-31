@@ -1,5 +1,8 @@
 package com.github.hitman20081.dagmod.dragon_realm.portal;
 
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
+import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -152,6 +155,19 @@ public class DragonRealmPortalBlock extends Block {
         // Skip if player already has cooldown
         if (player.isOnPortalCooldown()) {
             return;
+        }
+
+        // Level gate only applies when entering from the overworld
+        if (world.dimension() != DragonRealmTeleporter.DRAGON_REALM && !player.isCreative()) {
+            PlayerProgressionData data = ProgressionManager.getPlayerData(player);
+            if (data == null || data.getCurrentLevel() < 50) {
+                int current = data != null ? data.getCurrentLevel() : 1;
+                player.sendSystemMessage(Component.literal(
+                    "The Dragon Realm repels you — you must reach level 50 to enter. (Current: " + current + ")")
+                    .withStyle(ChatFormatting.RED));
+                player.setPortalCooldown(40);
+                return;
+            }
         }
 
         // Get destination world
