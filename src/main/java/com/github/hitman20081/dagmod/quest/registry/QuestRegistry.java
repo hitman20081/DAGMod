@@ -232,10 +232,9 @@ public class QuestRegistry {
     private static Quest createGemRoughTradeQuest() {
         return new Quest("gem_rough_trade")
                 .setName("Rough Trade")
-                .setCategory(Quest.QuestCategory.SIDE)
+                .setCategory(Quest.QuestCategory.NPC)
                 .setDescription("Word has reached you of gems hidden in the earth. Raw citrine is the most common — mine some and see what it's worth.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
-                .addPrerequisite("garricks_special_brew")
                 .addObjective(new CollectObjective(ModItems.RAW_CITRINE, 5))
                 .addReward(new ItemReward(ModBlocks.GEM_CUTTING_STATION.asItem(), 1))
                 .addReward(XpReward.novice());
@@ -244,7 +243,7 @@ public class QuestRegistry {
     private static Quest createGemACutAboveQuest() {
         return new Quest("gem_a_cut_above")
                 .setName("A Cut Above")
-                .setCategory(Quest.QuestCategory.MAIN)
+                .setCategory(Quest.QuestCategory.NPC)
                 .setDescription("The Jeweler gave you a Gem Cutting Station. Use it — or the one at the jeweler stall in the Hall of Champions — to cut your raw citrine into proper Cut Citrine gems.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addPrerequisite("gem_rough_trade")
@@ -259,7 +258,7 @@ public class QuestRegistry {
     private static Quest createGemArtOfPolishQuest() {
         return new Quest("gem_art_of_polish")
                 .setName("The Art of Polish")
-                .setCategory(Quest.QuestCategory.MAIN)
+                .setCategory(Quest.QuestCategory.NPC)
                 .setDescription("You have the stations and Diamond Powder. Use a Gem Polishing Station — yours or the one at the Hall of Champions jeweler stall — put Cut Citrine in the input slot and Diamond Powder in the catalyst slot, then bring the Jeweler proof of your work.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addPrerequisite("gem_a_cut_above")

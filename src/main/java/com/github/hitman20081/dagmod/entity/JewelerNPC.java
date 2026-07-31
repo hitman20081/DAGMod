@@ -2,6 +2,7 @@ package com.github.hitman20081.dagmod.entity;
 
 import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.item.ModItems;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
@@ -142,11 +143,19 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
 
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (!PlayerDataManager.hasStartedGemChain(serverPlayer)) {
+                        var progressionData = ProgressionManager.getPlayerData(serverPlayer);
+                        int playerLevel = progressionData != null ? progressionData.getCurrentLevel() : 0;
+                        if (playerLevel < 5) {
+                            serverPlayer.sendSystemMessage(
+                                    Component.literal("<Jeweler> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))
+                                            .append(Component.literal("You're still green, traveler. Explore a bit more and come back when you've got some experience under your belt. I'll have work for you then.").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
+                        } else {
                         PlayerDataManager.markGemChainStarted(serverPlayer);
                         QuestManager.getInstance().startQuest(serverPlayer, "gem_rough_trade");
                         serverPlayer.sendSystemMessage(
                                 Component.literal("<Jeweler> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))
-                                        .append(Component.literal("Ah, a new face! Before we get to trading, let me teach you the craft. Raw gems are worthless on their own — bring me five Raw Citrine and I'll give you the tools to turn them into something worth selling.").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
+                                        .append(Component.literal("Ah, a seasoned adventurer! Before we get to trading, let me teach you the craft. Raw gems are worthless on their own — bring me five Raw Citrine and I'll give you the tools to turn them into something worth selling.").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.YELLOW))));
+                        }
                     } else {
                         serverPlayer.sendSystemMessage(
                                 Component.literal("<Jeweler> ").withStyle(s -> s.withColor(net.minecraft.ChatFormatting.GOLD))

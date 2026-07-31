@@ -74,24 +74,94 @@ public class QuestUtils {
                         .append(Component.literal("The §6Hall of Champions§r comes later."))
         ));
 
-        // Page 3: Races
+        // Page 3: Race - Human
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§bRaces§r\n\n")
-                        .append(Component.literal("§6Dwarf§r\nMining & underground bonuses\n\n"))
-                        .append(Component.literal("§aElf§r\nForest & archery bonuses\n\n"))
-                        .append(Component.literal("§eHuman§r\n+25% XP, versatile bonuses\n\n"))
-                        .append(Component.literal("§cOrc§r\nCombat & berserker bonuses"))
+                Component.literal("§l§fRace 1/4 — Human§r\n")
+                        .append(Component.literal("§7\"The Balanced\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +25% XP from all sources\n"))
+                        .append(Component.literal("• Bonus XP from fishing & farming\n"))
+                        .append(Component.literal("• No gathering penalties\n\n"))
+                        .append(Component.literal("§7Versatile — suits any playstyle. Best choice for fast levelling.§r"))
         ));
 
-        // Page 4: Classes
+        // Page 4: Race - Dwarf
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§cClasses§r\n\n")
-                        .append(Component.literal("§4Warrior§r\nMelee tank, 6 abilities\n\n"))
-                        .append(Component.literal("§5Mage§r\nRanged magic, 4 abilities + wands + scrolls\n\n"))
-                        .append(Component.literal("§8Rogue§r\nStealth assassin, 7 abilities (dual system)"))
+                Component.literal("§l§6Race 2/4 — Dwarf§r\n")
+                        .append(Component.literal("§7\"The Miner\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +20% mining speed\n"))
+                        .append(Component.literal("• +1 heart (max health)\n"))
+                        .append(Component.literal("• Bonus ore drops underground\n"))
+                        .append(Component.literal("• Underground Resistance synergy\n\n"))
+                        .append(Component.literal("§cPenalty: -5% movement speed§r\n\n"))
+                        .append(Component.literal("§7Best for cave explorers and resource gatherers.§r"))
         ));
 
-        // Page 5: Quest Block & Garrick
+        // Page 5: Race - Elf
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§aRace 3/4 — Elf§r\n")
+                        .append(Component.literal("§7\"The Ranger\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +15% movement speed\n"))
+                        .append(Component.literal("• +0.5 block reach\n"))
+                        .append(Component.literal("• Woodcutting & archery bonuses\n"))
+                        .append(Component.literal("• Hero of the Village trades\n\n"))
+                        .append(Component.literal("§7Best for explorers, archers, and forest fighters.§r"))
+        ));
+
+        // Page 6: Race - Orc
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§cRace 4/4 — Orc§r\n")
+                        .append(Component.literal("§7\"The Warrior\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +15% melee attack damage\n"))
+                        .append(Component.literal("• +2 hearts (max health)\n"))
+                        .append(Component.literal("• Hunting & fishing bonuses\n"))
+                        .append(Component.literal("• Bonus damage to animals\n\n"))
+                        .append(Component.literal("§7Best for frontline fighters and hunters.§r"))
+        ));
+
+        // Page 7: Class - Warrior
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§4Class 1/3 — Warrior§r\n")
+                        .append(Component.literal("§7\"Strength and honor\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +20% melee damage\n"))
+                        .append(Component.literal("• +2 max hearts\n"))
+                        .append(Component.literal("• Heavy armor proficiency\n"))
+                        .append(Component.literal("• 5 combat abilities\n\n"))
+                        .append(Component.literal("§eResource: §rCooldowns\n\n"))
+                        .append(Component.literal("§7Frontline tank. Melee dominance.§r"))
+        ));
+
+        // Page 8: Class - Mage
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§5Class 2/3 — Mage§r\n")
+                        .append(Component.literal("§7\"Knowledge is power\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +50% potion duration\n"))
+                        .append(Component.literal("• 100 mana pool\n"))
+                        .append(Component.literal("• Mana regeneration\n"))
+                        .append(Component.literal("• 4 abilities + wands + scrolls\n\n"))
+                        .append(Component.literal("§eResource: §rMana\n\n"))
+                        .append(Component.literal("§7Ranged magic. Battlefield control.§r"))
+        ));
+
+        // Page 9: Class - Rogue
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§2Class 3/3 — Rogue§r\n")
+                        .append(Component.literal("§7\"Strike from the shadows\"§r\n\n"))
+                        .append(Component.literal("§eKey Bonuses:§r\n"))
+                        .append(Component.literal("• +30% movement speed\n"))
+                        .append(Component.literal("• 25% critical hit chance\n"))
+                        .append(Component.literal("• Backstab bonus damage\n"))
+                        .append(Component.literal("• 7 energy abilities\n\n"))
+                        .append(Component.literal("§eResource: §rEnergy\n\n"))
+                        .append(Component.literal("§7Stealth assassin. Burst damage.§r"))
+        ));
+
+        // Page 10: Quest Block & Garrick
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§2Quest Blocks§r\n\n")
                         .append(Component.literal("§6Quest Blocks§r are glowing blocks found in the Hall of Champions and scattered buildings.\n\n"))
@@ -99,7 +169,7 @@ public class QuestUtils {
                         .append(Component.literal("Complete Garrick's 3 tutorial tasks at the Inn to earn your §nNovice Quest Book§r — you need it before a Quest Block will open for you."))
         ));
 
-        // Page 6: Class Abilities via Class Trainer
+        // Page 11: Class Abilities via Class Trainer
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§eClass Abilities§r\n\n")
                         .append(Component.literal("Your class abilities are unlocked through the §6Class Trainer NPC§r at the §6Hall of Champions§r.\n\n"))
@@ -108,24 +178,49 @@ public class QuestUtils {
                         .append(Component.literal("Garrick will send you to the Class Trainer once your tutorial is done."))
         ));
 
-        // Page 7: Dimensions
+        // Page 12: Dimensions
         pages.add(net.minecraft.server.network.Filterable.passThrough(
                 Component.literal("§l§dDimensions§r\n\n")
-                        .append(Component.literal("DAGMod adds 3 extra dimensions:\n\n"))
-                        .append(Component.literal("§c• Bone Realm§r\nSkeleton-themed danger zone\n\n"))
-                        .append(Component.literal("§5• Dragon Realm§r\nDragon boss encounter\n\n"))
-                        .append(Component.literal("§9• Dungeon Realm§r\nProcedural dungeons\n\n"))
-                        .append(Component.literal("Unlock through late-game quests."))
+                        .append(Component.literal("§c• Bone Realm§r\n"))
+                        .append(Component.literal("Undead danger zone.\n"))
+                        .append(Component.literal("Boss: Skeleton King.\n"))
+                        .append(Component.literal("Enter via Necrotic Key.\n\n"))
+                        .append(Component.literal("§5• Dragon Realm§r\n"))
+                        .append(Component.literal("Volcanic boss arena.\n"))
+                        .append(Component.literal("Boss: Dragon Guardian.\n"))
+                        .append(Component.literal("Set your spawn before entering!\n\n"))
+                        .append(Component.literal("Portals unlock through\n"))
+                        .append(Component.literal("late-game progression."))
         ));
 
-        // Page 8: Commands
+        // Page 13: Core Commands
         pages.add(net.minecraft.server.network.Filterable.passThrough(
-                Component.literal("§l§9Commands§r\n\n")
-                        .append(Component.literal("§6/info§r\nView race, class & stats\n\n"))
-                        .append(Component.literal("§6/quest list§r\nList active quests\n\n"))
-                        .append(Component.literal("§6/quest skip§r\nSkip current quest in menu\n\n"))
-                        .append(Component.literal("§6/party create <name>§r\nGroup play\n\n"))
-                        .append(Component.literal("Good luck, adventurer!"))
+                Component.literal("§l§9Commands (1/2)§r\n\n")
+                        .append(Component.literal("§6/info§r\n"))
+                        .append(Component.literal(" Race, class & level stats\n\n"))
+                        .append(Component.literal("§6/quest list§r\n"))
+                        .append(Component.literal(" View active quests\n\n"))
+                        .append(Component.literal("§6/quest skip§r\n"))
+                        .append(Component.literal(" Skip in quest menu\n\n"))
+                        .append(Component.literal("§6/resetclass§r\n"))
+                        .append(Component.literal(" Reset your class choice\n\n"))
+                        .append(Component.literal("§6/guildreg§r\n"))
+                        .append(Component.literal(" Re-open Guild Registry"))
+        ));
+
+        // Page 14: Party Commands
+        pages.add(net.minecraft.server.network.Filterable.passThrough(
+                Component.literal("§l§9Commands (2/2)§r\n\n")
+                        .append(Component.literal("§6/party create <name>§r\n"))
+                        .append(Component.literal(" Form a new party\n\n"))
+                        .append(Component.literal("§6/party invite <player>§r\n"))
+                        .append(Component.literal(" Invite to your party\n\n"))
+                        .append(Component.literal("§6/party accept§r\n"))
+                        .append(Component.literal(" Accept an invite\n\n"))
+                        .append(Component.literal("§6/party leave§r\n"))
+                        .append(Component.literal(" Leave your party\n\n"))
+                        .append(Component.literal("§6/pc <msg>§r\n"))
+                        .append(Component.literal(" Party chat shorthand"))
         ));
 
         net.minecraft.world.item.component.WrittenBookContent content =

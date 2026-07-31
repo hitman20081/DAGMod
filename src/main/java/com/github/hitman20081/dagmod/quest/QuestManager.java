@@ -536,6 +536,11 @@ public class QuestManager {
         String playerRace = com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
 
         for (Quest quest : allQuests.values()) {
+            // NPC-exclusive quests are given directly by NPCs, never shown in quest blocks
+            if (quest.getCategory() == Quest.QuestCategory.NPC) {
+                continue;
+            }
+
             // Check class requirement
             if (quest.isClassRestricted() && !quest.getRequiredClass().equals(playerClass)) {
                 continue; // Skip quests for other classes

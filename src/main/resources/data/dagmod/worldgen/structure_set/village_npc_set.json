@@ -12,6 +12,7 @@
     "salt": 1938475620,
     "spacing": 28,
     "separation": 10,
+    "avoid_water": true,
     "exclusion_zones": [
       { "other_set": "dagmod:hall_spawn",       "chunk_count": 8 },
       { "other_set": "dagmod:bone_dungeon_set", "chunk_count": 6 }

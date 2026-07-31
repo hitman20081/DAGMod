@@ -10,6 +10,7 @@
     "salt": 1648920074,
     "spacing": 125,
     "separation": 50,
+    "avoid_water": true,
     "exclusion_zones": [
       { "other_set": "dagmod:bone_dungeon_set", "chunk_count": 16 }
     ]

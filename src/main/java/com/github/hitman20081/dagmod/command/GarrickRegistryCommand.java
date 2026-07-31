@@ -2,7 +2,6 @@ package com.github.hitman20081.dagmod.command;
 
 import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.block.RaceSelectionAltarBlock;
-import com.github.hitman20081.dagmod.data.PlayerDataManager;
 import com.github.hitman20081.dagmod.entity.InnkeeperGarrickNPC;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -35,11 +34,6 @@ public class GarrickRegistryCommand {
         CommandSourceStack source = context.getSource();
         if (!(source.getEntity() instanceof ServerPlayer player)) return 0;
 
-        if (!PlayerDataManager.hasCompletedAllTasks(player.getUUID())) {
-            sendGarrick(player, "Complete your tasks first before registering!", ChatFormatting.RED);
-            return 0;
-        }
-
         if (!RaceSelectionAltarBlock.getPlayerRace(player.getUUID()).equals("none")) {
             sendGarrick(player, "Your heritage is already registered in the Guild Ledger!", ChatFormatting.GOLD);
             return 0;
@@ -59,11 +53,8 @@ public class GarrickRegistryCommand {
         sendGarrick(player, "Registered! Heritage: " + raceName + ".", ChatFormatting.GREEN);
         player.sendSystemMessage(Component.empty());
 
-        if (ClassSelectionAltarBlock.getPlayerClass(player.getUUID()).equals("none")) {
-            InnkeeperGarrickNPC.showClassMenu(player);
-        } else {
-            InnkeeperGarrickNPC.showRegistrationComplete(player);
-        }
+        // Move on to class selection
+        InnkeeperGarrickNPC.showClassMenu(player);
 
         return 1;
     }
@@ -71,11 +62,6 @@ public class GarrickRegistryCommand {
     private static int selectClass(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         if (!(source.getEntity() instanceof ServerPlayer player)) return 0;
-
-        if (!PlayerDataManager.hasCompletedAllTasks(player.getUUID())) {
-            sendGarrick(player, "Complete your tasks first before registering!", ChatFormatting.RED);
-            return 0;
-        }
 
         if (RaceSelectionAltarBlock.getPlayerRace(player.getUUID()).equals("none")) {
             sendGarrick(player, "Register your heritage first!", ChatFormatting.RED);
@@ -102,7 +88,17 @@ public class GarrickRegistryCommand {
         sendGarrick(player, "Registered! Calling: " + className + ".", ChatFormatting.GREEN);
         player.sendSystemMessage(Component.empty());
 
-        InnkeeperGarrickNPC.showRegistrationComplete(player);
+        // Registration done — send into task flow
+        sendGarrick(player, "Good. Now that you're registered, let me give you three tasks before you access the quest system.", ChatFormatting.WHITE);
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("📋 TASK 1: PROVE YOUR RESOURCEFULNESS").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal("   I need wood for the inn's fireplace.").withStyle(ChatFormatting.YELLOW));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("   ➤ Gather 10 logs (any wood type)").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("   ➤ Bring them back to me").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+        sendGarrick(player, "Any tree will do — chop whatever is nearby!", ChatFormatting.GREEN);
 
         return 1;
     }

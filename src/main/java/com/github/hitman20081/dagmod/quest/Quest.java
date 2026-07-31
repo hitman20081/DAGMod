@@ -33,7 +33,8 @@ public class Quest {
         SIDE,       // Optional side quests
         CLASS,      // Class-specific quests
         DAILY,      // Daily repeatable quests
-        JOB         // Job board gathering/crafting quests
+        JOB,        // Job board gathering/crafting quests
+        NPC         // NPC-exclusive quests — not shown in quest blocks, given directly by NPCs
     }
 
     // Quest difficulty levels

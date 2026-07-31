@@ -77,75 +77,56 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
     // This handles what happens when a player right-clicks the NPC
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!this.level().isClientSide()) { // Only run on server side
+        if (!this.level().isClientSide()) {
             net.minecraft.server.level.ServerPlayer serverPlayer = (net.minecraft.server.level.ServerPlayer) player;
 
-            // Track if this is first meeting
-            boolean firstMeeting = !PlayerDataManager.hasMetGarrick(serverPlayer);
-
-            // Mark that this player has met Garrick (unlocks quest blocks/job boards)
-            if (firstMeeting) {
+            // Unlock quest system on very first interaction
+            if (!PlayerDataManager.hasMetGarrick(serverPlayer)) {
                 PlayerDataManager.markMetGarrick(serverPlayer);
                 player.sendSystemMessage(
                     Component.literal("✓ Quest System Unlocked!").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
             }
 
-            // Check task completion status
+            // Race and class selection always happen first, before any tasks
+            String race = RaceSelectionAltarBlock.getPlayerRace(serverPlayer.getUUID());
+            if (race.equals("none")) {
+                handleFirstMeeting(serverPlayer);
+                return InteractionResult.SUCCESS;
+            }
+
+            String playerClass = ClassSelectionAltarBlock.getPlayerClass(serverPlayer.getUUID());
+            if (playerClass.equals("none")) {
+                showClassMenu(serverPlayer);
+                return InteractionResult.SUCCESS;
+            }
+
+            // Task flow — race and class are already registered
             boolean task1Done = PlayerDataManager.isTask1Complete(serverPlayer.getUUID());
             boolean task2Done = PlayerDataManager.isTask2Complete(serverPlayer.getUUID());
             boolean task3Done = PlayerDataManager.isTask3Complete(serverPlayer.getUUID());
-            boolean allTasksDone = task1Done && task2Done && task3Done;
 
-            // Handle dialogue based on progress (SEQUENTIAL ORDER ENFORCED)
-            if (allTasksDone) {
-                // All tasks complete - direct player to Quest Block
+            if (task1Done && task2Done && task3Done) {
                 handleAllTasksComplete(serverPlayer);
-            } else if (task1Done && task2Done && !task3Done) {
-                // Tasks 1 & 2 done, now working on Task 3
-                handleTask3(serverPlayer, task3Done);
-            } else if (task1Done && !task2Done) {
-                // Task 1 done, now working on Task 2
-                handleTask2(serverPlayer, task2Done);
-            } else if (!task1Done) {
-                // Working on Task 1 (or first meeting)
-                if (firstMeeting) {
-                    handleFirstMeeting(serverPlayer);
-                } else {
-                    handleTask1(serverPlayer, task1Done);
-                }
+            } else if (task1Done && task2Done) {
+                handleTask3(serverPlayer, false);
+            } else if (task1Done) {
+                handleTask2(serverPlayer, false);
             } else {
-                // Safety fallback - should not reach here
-                handleTask1(serverPlayer, task1Done);
+                handleTask1(serverPlayer, false);
             }
         }
         return InteractionResult.SUCCESS;
     }
 
     /**
-     * Handle first meeting - Welcome and offer Task 1
+     * Handle first meeting - Welcome and show race selection menu
      */
     private void handleFirstMeeting(net.minecraft.server.level.ServerPlayer player) {
         sendDialogue(player, "Welcome, traveler! I'm Innkeeper Garrick, keeper of this establishment.", ChatFormatting.GOLD);
         player.sendSystemMessage(Component.empty());
-        sendDialogue(player, "I see you're new to adventuring. Let me teach you the ropes!", ChatFormatting.WHITE);
+        sendDialogue(player, "Before I can enter you in the Guild Ledger, I need to know who you are.", ChatFormatting.WHITE);
         player.sendSystemMessage(Component.empty());
-        sendDialogue(player, "Before you can access the quest system, you'll need to prove yourself.", ChatFormatting.WHITE);
-        sendDialogue(player, "Complete 3 simple tasks for me, and I'll give you a proper Quest Book.", ChatFormatting.WHITE);
-        player.sendSystemMessage(Component.empty());
-        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
-        player.sendSystemMessage(Component.empty());
-
-        // Task 1 instructions
-        player.sendSystemMessage(Component.literal("📋 TASK 1: PROVE YOUR RESOURCEFULNESS").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        player.sendSystemMessage(Component.literal("   I need wood for the inn's fireplace.").withStyle(ChatFormatting.YELLOW));
-        player.sendSystemMessage(Component.empty());
-        player.sendSystemMessage(Component.literal("   ➤ Gather 10 logs (any wood type)").withStyle(ChatFormatting.GRAY));
-        player.sendSystemMessage(Component.literal("   ➤ Bring them back to me").withStyle(ChatFormatting.GRAY));
-        player.sendSystemMessage(Component.empty());
-        player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
-        player.sendSystemMessage(Component.empty());
-
-        sendDialogue(player, "Go gather those logs and come back when you're ready!", ChatFormatting.GREEN);
+        showRaceMenu(player);
     }
 
     /**
@@ -195,14 +176,21 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
             // Offer Task 2
             handleTask2(player, false);
         } else {
-            // Still working on it
-            sendDialogue(player, "Still gathering those logs? Take your time!", ChatFormatting.YELLOW);
+            // Show task 1 instructions (first time or reminder)
+            String intro = logCount == 0
+                ? "Good. Now that you're registered, let me give you three tasks before you access the quest system."
+                : "Still gathering those logs? You're making progress!";
+            sendDialogue(player, intro, logCount == 0 ? ChatFormatting.WHITE : ChatFormatting.YELLOW);
             player.sendSystemMessage(Component.empty());
-            player.sendSystemMessage(Component.literal("📋 TASK 1 REMINDER:").withStyle(ChatFormatting.GOLD));
-            player.sendSystemMessage(Component.literal("   ➤ Bring me 10 logs (any wood type)").withStyle(ChatFormatting.GRAY));
+            player.sendSystemMessage(Component.literal("📋 TASK 1: PROVE YOUR RESOURCEFULNESS").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+            player.sendSystemMessage(Component.literal("   I need wood for the inn's fireplace.").withStyle(ChatFormatting.YELLOW));
+            player.sendSystemMessage(Component.empty());
+            player.sendSystemMessage(Component.literal("   ➤ Gather 10 logs (any wood type)").withStyle(ChatFormatting.GRAY));
             player.sendSystemMessage(Component.literal("   ➤ Current progress: " + logCount + "/10").withStyle(ChatFormatting.GRAY));
             player.sendSystemMessage(Component.empty());
-            sendDialogue(player, "Any tree will do — chop whatever is nearby!", ChatFormatting.WHITE);
+            player.sendSystemMessage(Component.literal("═══════════════════════════════════════════").withStyle(ChatFormatting.DARK_GRAY));
+            player.sendSystemMessage(Component.empty());
+            sendDialogue(player, "Any tree will do — chop whatever is nearby!", ChatFormatting.GREEN);
         }
     }
 
@@ -332,21 +320,10 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
     }
 
     /**
-     * Routes to race registry, class registry, or final instructions based on player state.
+     * All tasks complete — show quest book instructions.
      */
     private void handleAllTasksComplete(net.minecraft.server.level.ServerPlayer player) {
-        String race = RaceSelectionAltarBlock.getPlayerRace(player.getUUID());
-        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
-
-        if (race.equals("none")) {
-            sendDialogue(player, "You've proven yourself! Now let me enter you in the Guild Ledger.", ChatFormatting.GREEN);
-            player.sendSystemMessage(Component.empty());
-            showRaceMenu(player);
-        } else if (playerClass.equals("none")) {
-            showClassMenu(player);
-        } else {
-            showRegistrationComplete(player);
-        }
+        showRegistrationComplete(player);
     }
 
     // ===== STATIC DISPLAY METHODS (shared with GarrickRegistryCommand) =====

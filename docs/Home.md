@@ -23,17 +23,20 @@ Current Version v1.9.0 (July 2026)
 
 ## What's New in v1.9.0
 
-### Class Trainer NPC
-A dedicated **Class Trainer NPC** now handles all class quest chains at the Hall of Champions. Right-click to see your full class chain progress with clear status indicators — complete, ready to turn in, in progress, available, or locked. Class quests are no longer mixed in with general Quest Block content.
+### Village Inn is Your New Starting Hub
+World spawn now generates near a **Village Inn** — your first friendly stop with Innkeeper Garrick, lodging, and tutorial quests. The Hall of Champions is now a mid-to-late-game destination (~2000 blocks away). Use the **Hall Locator** item to find it when you're ready.
 
-### Class Quest Separation
-**Quest Blocks** now show only story and side quests. Class quests are exclusively accessed through the Class Trainer. This fixes the confusion where class ability quests were buried among general quests.
+### Innkeeper Garrick — Guild Registry
+**Garrick** handles race and class selection through interactive chat dialogue, with stat summaries and immediate starter gear on selection. Physical altars in the Hall of Champions remain as an alternative.
 
-### Onboarding Improvements
-- Quest Block now displays its custom texture correctly
-- Welcome book expanded to 8 pages with clearer guidance on Quest Blocks vs. Job Boards vs. Class Trainer
-- Village NPCs generate less densely (~448 blocks apart instead of ~256)
-- Hall of Champions no longer generates in ocean biomes
+### Class Trainer & Quest Separation
+A dedicated **Class Trainer NPC** at the Hall of Champions manages class quest chains. **Quest Blocks** now show only story and side quests — class quests are exclusively handled by the Class Trainer.
+
+### Blacksmith's Anvil & Merchant Tier Gating
+A permanent **Blacksmith's Anvil** block is now available for anvil crafting without wear. Hall of Champions merchant premium stock is now **locked behind quest completion** — earn access by progressing.
+
+### Season System Now Fully Working
+All four seasons operate correctly: crop growth rates apply per season, sleeping advances the day counter, weather patterns fire, and transition announcements are accurate.
 
 See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 

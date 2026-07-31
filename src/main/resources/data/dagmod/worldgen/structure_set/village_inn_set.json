@@ -3,10 +3,10 @@
     { "structure": "dagmod:village_inn", "weight": 1 }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "dagmod:multi_exclusion_random_spread",
     "salt": 2047381956,
-    "spacing": 20,
-    "separation": 8,
-    "spread_type": "linear"
+    "spacing": 48,
+    "separation": 20,
+    "avoid_water": true
   }
 }

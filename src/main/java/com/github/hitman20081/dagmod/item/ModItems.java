@@ -98,7 +98,7 @@ public class ModItems {
 
     // Mythril Tools
     public static final Item MYTHRIL_SWORD = register("mythril_sword",
-            settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 3, -2.4f)),
+            settings -> new Item(settings.sword(ModToolMaterials.MYTHRIL, 5, -2.0f)),
             new Item.Properties().fireResistant());
 
     public static final Item MYTHRIL_PICKAXE = register("mythril_pickaxe",

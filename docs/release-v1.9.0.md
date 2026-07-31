@@ -24,7 +24,8 @@ A permanent, indestructible **Blacksmith's Anvil** block is now available. Opens
 Advanced and legendary stock on Hall of Champions merchants is now **locked behind quest completion**. Merchants hint at what quests unlock their premium stock. Basic goods remain always available.
 
 ### Season System Operational
-The four-season system is now fully working:
+The four-season system is now POTENTIALLY working:
+- Bug was fixed for every tick notification. Still testing the actual seasonal effects work. 
 - Crop growth rates apply correctly per season (Spring fastest, Winter slowest)
 - Sleeping through the night advances the season day counter
 - Seasonal weather patterns and biome-specific effects fire correctly

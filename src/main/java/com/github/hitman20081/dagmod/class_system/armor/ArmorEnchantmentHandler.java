@@ -15,6 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 
 import java.util.*;
 
@@ -352,7 +353,9 @@ public class ArmorEnchantmentHandler {
         ITEM_ENCHANTMENTS.put(ModItems.TRUE_KING_SWORD, List.of(
                 new EnchantmentEntry(Enchantments.SHARPNESS, 10),
                 new EnchantmentEntry(Enchantments.SMITE, 10),
-                new EnchantmentEntry(Enchantments.UNBREAKING, 10)
+                new EnchantmentEntry(Enchantments.UNBREAKING, 10),
+                new EnchantmentEntry(ResourceKey.create(Registries.ENCHANTMENT,
+                        Identifier.fromNamespaceAndPath("dagmod", "xdamage_enchantment")), 5)
         ));
 
         // =============================================

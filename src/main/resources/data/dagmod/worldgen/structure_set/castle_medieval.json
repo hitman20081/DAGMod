@@ -6,14 +6,13 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "dagmod:multi_exclusion_random_spread",
     "salt": 1649512345,
     "spacing": 100,
     "separation": 50,
-    "locate_offset": [0, 0, 0]
-  },
-  "exclusion_zone": {
-    "other_set": "dagmod:village_npc_set",
-    "chunk_count": 25
+    "avoid_water": true,
+    "exclusion_zones": [
+      { "other_set": "dagmod:village_npc_set", "chunk_count": 25 }
+    ]
   }
 }
