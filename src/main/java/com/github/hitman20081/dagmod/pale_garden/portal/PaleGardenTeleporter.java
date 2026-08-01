@@ -56,7 +56,8 @@ public class PaleGardenTeleporter {
 
     private static BlockPos getDestinationPos(BlockPos sourcePos, ServerLevel sourceWorld, ServerLevel destWorld) {
         if (sourceWorld.dimension() == OVERWORLD && destWorld.dimension() == PALE_GARDEN) {
-            return new BlockPos(sourcePos.getX(), 70, sourcePos.getZ());
+            // Always target near origin — castle spawns there via spacing:8 structure set
+            return new BlockPos(0, 70, 0);
         }
         return sourcePos;
     }
