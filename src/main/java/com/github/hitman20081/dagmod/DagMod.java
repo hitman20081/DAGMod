@@ -147,6 +147,9 @@ public class DagMod implements ModInitializer {
         // Register Dragon Realm
         com.github.hitman20081.dagmod.dragon_realm.DragonRealmRegistry.register();
 
+        // Register Pale Garden
+        com.github.hitman20081.dagmod.pale_garden.PaleGardenRegistry.register();
+
         // Register Bone Realm Entities
         BoneRealmEntityRegistry.register();
 
