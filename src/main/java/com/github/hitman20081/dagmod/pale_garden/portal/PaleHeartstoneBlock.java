@@ -70,8 +70,8 @@ public class PaleHeartstoneBlock extends Block {
         }
 
         BlockPos center = detector.getBottomLeft().relative(
-                frameAxis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST, 2
-        ).above(2);
+                frameAxis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST, 3
+        ).above(3);
 
         for (int i = 0; i < 40; i++) {
             double ox = (world.getRandom().nextDouble() - 0.5) * 3;

@@ -14,8 +14,8 @@ public class PaleGardenPortalFrameDetector {
     private final BlockPos clickedPos;
     private BlockPos bottomLeft;
     private Direction.Axis axis;
-    private static final int WIDTH = 5;
-    private static final int HEIGHT = 5;
+    private static final int WIDTH = 7;
+    private static final int HEIGHT = 7;
 
     public PaleGardenPortalFrameDetector(Level world, BlockPos pos) {
         this.world = world;
@@ -77,11 +77,9 @@ public class PaleGardenPortalFrameDetector {
             if (!isPaleHeartstone(bottomRight.above(i))) return false;
         }
 
-        for (int x = 1; x < WIDTH - 1; x++) {
-            for (int y = 1; y < HEIGHT - 1; y++) {
-                BlockPos interiorPos = bottomLeft.relative(rightDir, x).above(y);
-                BlockState state = world.getBlockState(interiorPos);
-                if (!state.isAir() && !(state.getBlock() instanceof PaleGardenPortalBlock)) {
+        for (int w = 1; w < WIDTH - 1; w++) {
+            for (int h = 1; h < HEIGHT - 1; h++) {
+                if (!world.getBlockState(bottomLeft.relative(rightDir, w).above(h)).isAir()) {
                     return false;
                 }
             }
@@ -93,10 +91,11 @@ public class PaleGardenPortalFrameDetector {
     public List<BlockPos> getInteriorPositions() {
         List<BlockPos> positions = new ArrayList<>();
         Direction rightDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+        BlockPos interiorBottomLeft = bottomLeft.relative(rightDir, 1).above(1);
 
-        for (int x = 1; x < WIDTH - 1; x++) {
-            for (int y = 1; y < HEIGHT - 1; y++) {
-                positions.add(bottomLeft.relative(rightDir, x).above(y));
+        for (int w = 0; w < WIDTH - 2; w++) {
+            for (int h = 0; h < HEIGHT - 2; h++) {
+                positions.add(interiorBottomLeft.relative(rightDir, w).above(h));
             }
         }
 

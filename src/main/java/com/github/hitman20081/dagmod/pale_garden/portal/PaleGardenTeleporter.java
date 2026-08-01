@@ -84,33 +84,33 @@ public class PaleGardenTeleporter {
     private static BlockPos createPortal(ServerLevel world, BlockPos pos) {
         BlockPos groundPos = findGroundLevel(world, pos);
 
-        // Build 5×5 Pale Heartstone frame
-        for (int i = 0; i < 5; i++) {
+        // Build 7×7 Pale Heartstone frame
+        for (int i = 0; i < 7; i++) {
             world.setBlock(groundPos.east(i), ModBlocks.PALE_HEARTSTONE.defaultBlockState(), 3);
-            world.setBlock(groundPos.east(i).above(4), ModBlocks.PALE_HEARTSTONE.defaultBlockState(), 3);
+            world.setBlock(groundPos.east(i).above(6), ModBlocks.PALE_HEARTSTONE.defaultBlockState(), 3);
         }
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 6; i++) {
             world.setBlock(groundPos.above(i), ModBlocks.PALE_HEARTSTONE.defaultBlockState(), 3);
-            world.setBlock(groundPos.east(4).above(i), ModBlocks.PALE_HEARTSTONE.defaultBlockState(), 3);
+            world.setBlock(groundPos.east(6).above(i), ModBlocks.PALE_HEARTSTONE.defaultBlockState(), 3);
         }
 
-        // Clear interior
-        for (int x = 1; x < 4; x++) {
-            for (int y = 1; y < 4; y++) {
+        // Clear interior (5×5)
+        for (int x = 1; x < 6; x++) {
+            for (int y = 1; y < 6; y++) {
                 world.setBlock(groundPos.east(x).above(y), Blocks.AIR.defaultBlockState(), 3);
             }
         }
 
         // Fill interior with portal blocks
-        for (int x = 1; x < 4; x++) {
-            for (int y = 1; y < 4; y++) {
+        for (int x = 1; x < 6; x++) {
+            for (int y = 1; y < 6; y++) {
                 world.setBlock(groundPos.east(x).above(y),
                         PaleGardenRegistry.PALE_GARDEN_PORTAL.defaultBlockState()
                                 .setValue(PaleGardenPortalBlock.AXIS, Direction.Axis.X), 3);
             }
         }
 
-        BlockPos centerPos = groundPos.east(2).above(2);
+        BlockPos centerPos = groundPos.east(3).above(3);
 
         for (int i = 0; i < 30; i++) {
             double ox = (world.getRandom().nextDouble() - 0.5) * 3;
