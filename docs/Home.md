@@ -17,26 +17,26 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.9.0 (July 2026)
+Current Version v1.9.1 (July 2026)
 
 ---
 
-## What's New in v1.9.0
+## What's New in v1.9.1
 
-### Village Inn is Your New Starting Hub
-World spawn now generates near a **Village Inn** — your first friendly stop with Innkeeper Garrick, lodging, and tutorial quests. The Hall of Champions is now a mid-to-late-game destination (~2000 blocks away). Use the **Hall Locator** item to find it when you're ready.
+### Dragon Realm Gated at Level 50
+The Dragon Realm now requires level 50 to access. The `red_dragon_fury` quest does not appear until you reach that level. Attempting to activate or walk through a Dragon Realm portal below level 50 is blocked with a message.
 
-### Innkeeper Garrick — Guild Registry
-**Garrick** handles race and class selection through interactive chat dialogue, with stat summaries and immediate starter gear on selection. Physical altars in the Hall of Champions remain as an alternative.
+### Hall of Champions Block Protection
+Survival players can no longer mine blocks inside the Hall of Champions. The structure is protected — Creative mode is required to modify it.
 
-### Class Trainer & Quest Separation
-A dedicated **Class Trainer NPC** at the Hall of Champions manages class quest chains. **Quest Blocks** now show only story and side quests — class quests are exclusively handled by the Class Trainer.
+### Structures Avoid Water and Lava
+All DAGMod structure sets now use the `avoid_water` flag. Inns, merchants, castles, and other structures will no longer generate on or in surface water or lava.
 
-### Blacksmith's Anvil & Merchant Tier Gating
-A permanent **Blacksmith's Anvil** block is now available for anvil crafting without wear. Hall of Champions merchant premium stock is now **locked behind quest completion** — earn access by progressing.
+### Bone Realm Gated at Level 25
+The `rumours_of_the_bone_king` quest (which rewards the Bone Dungeon Locator) requires level 25 before it appears, restoring the intended early-game barrier to the Bone Realm.
 
-### Season System Now Fully Working
-All four seasons operate correctly: crop growth rates apply per season, sleeping advances the day counter, weather patterns fire, and transition announcements are accurate.
+### Armorer Has Its Own Spawn Set
+The Armorer NPC now has a dedicated structure set and generates consistently near the Inn, instead of competing as one of four random merchant spawns.
 
 See [CHANGELOG](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md) for the full version history.
 

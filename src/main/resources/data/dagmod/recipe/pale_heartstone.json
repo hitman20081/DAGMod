@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LAL",
+    "AEA",
+    "LAL"
+  ],
+  "key": {
+    "L": "minecraft:pale_oak_log",
+    "A": "minecraft:amethyst_shard",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "dagmod:pale_heartstone",
+    "count": 1
+  }
+}

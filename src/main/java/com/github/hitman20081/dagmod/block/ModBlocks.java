@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.block;
 
 import com.github.hitman20081.dagmod.DagMod;
+import com.github.hitman20081.dagmod.pale_garden.portal.PaleHeartstoneBlock;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
@@ -309,6 +310,16 @@ public class ModBlocks {
                     .sound(SoundType.ANVIL)
                     .noOcclusion()));
 
+    // ===== PALE GARDEN =====
+
+    public static final Block PALE_HEARTSTONE = register("pale_heartstone",
+            key -> new PaleHeartstoneBlock(BlockBehaviour.Properties.of()
+                    .setId(key)
+                    .strength(3.0f, 6.0f)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.CALCITE)
+                    .lightLevel(state -> 3)));
+
     // Boss spawn triggers — indestructible, no collision, hidden in boss room NBTs
     public static final Block BOSS_SPAWN_TRIGGER = register("boss_spawn_trigger",
             key -> new BossSpawnTriggerBlock(BlockBehaviour.Properties.of()
@@ -410,6 +421,10 @@ public class ModBlocks {
         // Blacksmith Anvil - Operator Utilities (admin-placed only)
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)
                 .register((itemGroup) -> itemGroup.accept(BLACKSMITH_ANVIL));
+
+        // Pale Heartstone - Building Blocks (players will craft and place it)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
+                .register((itemGroup) -> itemGroup.accept(PALE_HEARTSTONE));
 
         // Boss Spawn Triggers - Add to Operator Utilities tab
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)

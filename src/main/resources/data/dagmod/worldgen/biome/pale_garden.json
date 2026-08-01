@@ -20,7 +20,12 @@
     [],
     [],
     [],
-    []
+    [],
+    [],
+    [
+      "minecraft:trees_pale_garden",
+      "minecraft:flower_pale_garden"
+    ]
   ],
   "has_precipitation": true,
   "spawn_costs": {},
