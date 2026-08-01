@@ -277,6 +277,10 @@
   "block.dagmod.dragon_realm_portal": "Dragon Realm Portal",
   "item.dagmod.dragon_realm_portal": "Dragon Realm Portal",
 
+  "_comment_pale_garden_blocks": "=== PALE GARDEN BLOCKS ===",
+  "block.dagmod.pale_heartstone": "Pale Heartstone",
+  "item.dagmod.pale_heartstone": "Pale Heartstone",
+
   "_comment_dragon_realm_keys": "=== DRAGON REALM KEYS ===",
   "item.dagmod.dragon_key": "Dragon Key",
 
