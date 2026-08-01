@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PAP",
+    "AHA",
+    "PAP"
+  ],
+  "key": {
+    "P": "minecraft:pale_oak_log",
+    "A": "minecraft:amethyst_shard",
+    "H": "dagmod:pale_heartstone"
+  },
+  "result": {
+    "id": "dagmod:pale_garden_key",
+    "count": 1
+  }
+}
