@@ -551,13 +551,23 @@ public class QuestManager {
                 continue; // Skip quests for other races
             }
 
-            // ADD THIS: Check level requirement
-            if (!LevelRequirements.meetsLevelRequirement((ServerPlayer) player, quest)) {
-                continue; // Skip quests player's level is too low for
+            boolean isDaily = quest.getCategory() == Quest.QuestCategory.DAILY;
+
+            // Daily quests bypass level/tier gating — startDailyQuest() already does the
+            // same, so today's rotation should always be fully visible and completable.
+            if (!isDaily) {
+                // Check level requirement
+                if (!LevelRequirements.meetsLevelRequirement((ServerPlayer) player, quest)) {
+                    continue; // Skip quests player's level is too low for
+                }
+
+                // Check if their quest book tier allows this difficulty
+                if (!playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
+                    continue;
+                }
             }
 
-            // Check if player can start the quest AND if their quest book tier allows it
-            if (canStartQuest(player, quest) && playerData.canAcceptQuestDifficulty(quest.getDifficulty())) {
+            if (canStartQuest(player, quest)) {
                 available.add(quest);
             }
         }

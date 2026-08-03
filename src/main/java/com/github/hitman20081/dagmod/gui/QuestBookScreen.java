@@ -2,6 +2,7 @@ package com.github.hitman20081.dagmod.gui;
 
 import com.github.hitman20081.dagmod.networking.QuestSyncPacket;
 import com.github.hitman20081.dagmod.quest.ClientQuestData;
+import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -177,6 +178,12 @@ public class QuestBookScreen extends Screen {
         context.text(font, Component.literal(counter), textX, textY, 0xFF888888, false);
         textY += 11;
 
+        String categoryTag = categoryTag(quest.category());
+        if (categoryTag != null) {
+            context.text(font, Component.literal(categoryTag), textX, textY, categoryColor(quest.category()), false);
+            textY += 10;
+        }
+
         context.text(font, Component.literal(quest.name()), textX, textY, quest.difficulty().getColor(), false);
         textY += 11;
 
@@ -229,7 +236,8 @@ public class QuestBookScreen extends Screen {
 
             // Quest name with difficulty color (truncate if too long)
             int difficultyColor = quest.difficulty().getColor();
-            String questName = quest.name();
+            String tag = categoryTag(quest.category());
+            String questName = tag != null ? tag + " " + quest.name() : quest.name();
             if (font.width(questName) > 150) {
                 while (font.width(questName + "...") > 150 && questName.length() > 10) {
                     questName = questName.substring(0, questName.length() - 1);
@@ -259,6 +267,23 @@ public class QuestBookScreen extends Screen {
             context.text(font, Component.literal("+" + (availableQuests.size() - questsShown) + " more available"),
                     textX, textY, 0xFF888888, false);
         }
+    }
+
+    /** Short bracketed label shown next to Daily/Job quests so they're distinguishable from story quests. Null for other categories. */
+    private static String categoryTag(Quest.QuestCategory category) {
+        return switch (category) {
+            case DAILY -> "[DAILY]";
+            case JOB -> "[JOB]";
+            default -> null;
+        };
+    }
+
+    private static int categoryColor(Quest.QuestCategory category) {
+        return switch (category) {
+            case DAILY -> 0xFF0099CC;
+            case JOB -> 0xFF996633;
+            default -> 0xFF666666;
+        };
     }
 
     private void renderStatisticsPage(GuiGraphicsExtractor context, Font font, int textX, int textY) {

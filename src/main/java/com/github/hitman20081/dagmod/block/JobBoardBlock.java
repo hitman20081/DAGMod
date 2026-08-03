@@ -349,7 +349,9 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
 
         for (Quest job : activeJobs) {
             player.sendSystemMessage(Component.literal(""));
-            player.sendSystemMessage(Component.literal("📋 " + job.getName() + " (" + job.getDifficulty().getDisplayName() + ")"));
+            String tag = job.getCategory() == Quest.QuestCategory.DAILY ? "[DAILY JOB] " : "";
+            player.sendSystemMessage(Component.literal(tag + "📋 " + job.getName() + " (" + job.getDifficulty().getDisplayName() + ")")
+                    .withStyle(job.getCategory() == Quest.QuestCategory.DAILY ? ChatFormatting.AQUA : ChatFormatting.WHITE));
 
             for (var objective : job.getObjectives()) {
                 player.sendSystemMessage(Component.literal("  " + objective.getDisplayText().getString()));
@@ -394,7 +396,8 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
         Quest jobToTurnIn = completedJobs.get(selectedIndex);
 
         player.sendSystemMessage(Component.literal("=== Collect Payment " + (selectedIndex + 1) + "/" + completedJobs.size() + " ==="));
-        player.sendSystemMessage(Component.literal("📋 " + jobToTurnIn.getName()));
+        String turnInTag = jobToTurnIn.getCategory() == Quest.QuestCategory.DAILY ? "[DAILY JOB] " : "";
+        player.sendSystemMessage(Component.literal(turnInTag + "📋 " + jobToTurnIn.getName()));
         player.sendSystemMessage(Component.literal(""));
 
         player.sendSystemMessage(Component.literal("You will receive:"));

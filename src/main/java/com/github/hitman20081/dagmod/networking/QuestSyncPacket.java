@@ -55,6 +55,7 @@ public record QuestSyncPacket(
             String name,
             String description,
             Quest.QuestDifficulty difficulty,
+            Quest.QuestCategory category,
             int objectivesComplete,
             int totalObjectives,
             boolean isCompleted,
@@ -66,6 +67,7 @@ public record QuestSyncPacket(
                     buf.readUtf(),
                     buf.readUtf(),
                     Quest.QuestDifficulty.values()[buf.readInt()],
+                    Quest.QuestCategory.values()[buf.readInt()],
                     buf.readInt(),
                     buf.readInt(),
                     buf.readBoolean(),
@@ -78,6 +80,7 @@ public record QuestSyncPacket(
             buf.writeUtf(name);
             buf.writeUtf(description);
             buf.writeInt(difficulty.ordinal());
+            buf.writeInt(category.ordinal());
             buf.writeInt(objectivesComplete);
             buf.writeInt(totalObjectives);
             buf.writeBoolean(isCompleted);
