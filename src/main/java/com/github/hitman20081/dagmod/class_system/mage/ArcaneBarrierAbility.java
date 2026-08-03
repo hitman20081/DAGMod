@@ -41,7 +41,8 @@ public class ArcaneBarrierAbility {
         UUID uuid = serverPlayer.getUUID();
 
         boolean hasEcho = SpellModifierHandler.consumeSpellEcho(uuid);
-        float power = SpellModifierHandler.consumeOvercharge(uuid);
+        float basePower = SpellModifierHandler.consumeOvercharge(uuid);
+        float power = MageEnchantmentBonus.applyAmplification(serverPlayer, basePower);
 
         boolean result = activateInternal(serverPlayer, world, true, power);
         if (result && hasEcho) {

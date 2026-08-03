@@ -5,6 +5,30 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-08-03
+
+### Added
+
+- **7 race/class-specific enchantments** — `data/dagmod/enchantment/`:
+  - **Dwarf: Deep Striker** (weapon) — bonus attack damage while fighting below sea level
+  - **Elf: Forest's Blessing** (weapon) — bonus attack damage while standing in a forest-tagged biome
+  - **Orc: Berserker's Fury** (weapon) — attack damage scales up the more health the attacker is missing
+  - **Human: Versatile** (helmet) — +5% bonus XP per level from all sources, stacking additively on top of the existing +25% Human race passive
+  - **Warrior: Immovable** (armor) — knockback resistance, scales with level
+  - **Mage: Arcane Amplification** (helmet) — boosts the power of all 4 core mage abilities (Arcane Missiles, Mana Burst, Time Warp, Arcane Barrier), stacking with the existing Overcharge Dust multiplier
+  - **Rogue: Shadow Step** (armor) — passive chance to dodge a hit entirely, independent of the Phantom Dust/Perfect Dodge timed buffs
+- **`RaceClassEnchantmentGate`** — new gating utility (`enchantment/RaceClassEnchantmentGate.java`) mapping each of the 7 enchantments to its required race/class and stripping it from an `ItemStack` if the applying player doesn't qualify
+- **`AnvilRaceClassGateMixin`** / **`EnchantmentTableRaceClassGateMixin`** — enforce the gate at the only two places enchantments get written onto an item: taking the result from an anvil, and taking the result from an enchanting table. A mismatched race/class simply never receives the enchantment from either source
+- **`RaceEnchantmentCombatMixin`** / **`RaceCombatEnchantmentHandler`** — attacker-side damage multiplier hook (mirrors `RogueDamageMixin`'s `hurtServer` hook, but checks the attacker instead of the defender) powering Deep Striker, Forest's Blessing, and Berserker's Fury
+- **`DodgeHandler.tryPassiveDodge()`** — new Rogue-class passive dodge roll, checked alongside the existing timed Phantom Dust/Perfect Dodge buffs in `DodgeMixin`
+
+### Changed
+
+- **`HumanBonusHandler`** — now reads the Versatile enchantment level off the player's helmet and adds it to the base +25% XP bonus
+- **Mage ability classes** (`ArcaneMissilesAbility`, `ManaBurstAbility`, `TimeWarpAbility`, `ArcaneBarrierAbility`) — now fold in `MageEnchantmentBonus.applyAmplification()` alongside the existing Overcharge Dust power multiplier
+
+---
+
 ## [1.9.1] - 2026-07-31
 
 ### Added

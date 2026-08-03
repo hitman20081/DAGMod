@@ -658,5 +658,19 @@
   "enchantment.dagmod.tunneling_enchantment": "Tunneling",
   "enchantment.dagmod.tunneling_enchantment.desc": "Mines a tunnel-shaped area when breaking blocks, clearing a path in one swing.",
   "enchantment.dagmod.xdamage_enchantment": "Xtra Damage",
-  "enchantment.dagmod.xdamage_enchantment.desc": "Significantly increases weapon damage. Each level above the first adds a large flat damage bonus."
+  "enchantment.dagmod.xdamage_enchantment.desc": "Significantly increases weapon damage. Each level above the first adds a large flat damage bonus.",
+  "enchantment.dagmod.dwarf_deep_striker": "Deep Striker",
+  "enchantment.dagmod.dwarf_deep_striker.desc": "Weapon enchantment, Dwarf only. Deals bonus damage while fighting below sea level. Bonus scales with level.",
+  "enchantment.dagmod.elf_forest_blessing": "Forest's Blessing",
+  "enchantment.dagmod.elf_forest_blessing.desc": "Weapon enchantment, Elf only. Deals bonus damage while standing in a forest biome. Bonus scales with level.",
+  "enchantment.dagmod.orc_berserkers_fury": "Berserker's Fury",
+  "enchantment.dagmod.orc_berserkers_fury.desc": "Weapon enchantment, Orc only. Deals increasingly more damage the more health you're missing.",
+  "enchantment.dagmod.human_versatile": "Versatile",
+  "enchantment.dagmod.human_versatile.desc": "Helmet enchantment, Human only. Grants bonus experience from all sources, stacking with the Human race bonus.",
+  "enchantment.dagmod.warrior_immovable": "Immovable",
+  "enchantment.dagmod.warrior_immovable.desc": "Armor enchantment, Warrior only. Increases knockback resistance. Each level adds more resistance.",
+  "enchantment.dagmod.mage_arcane_amplification": "Arcane Amplification",
+  "enchantment.dagmod.mage_arcane_amplification.desc": "Helmet enchantment, Mage only. Increases the power of Arcane Missiles, Mana Burst, Time Warp, and Arcane Barrier.",
+  "enchantment.dagmod.rogue_shadow_step": "Shadow Step",
+  "enchantment.dagmod.rogue_shadow_step.desc": "Armor enchantment, Rogue only. Grants a passive chance to dodge an attack entirely."
 }

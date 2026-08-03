@@ -18,13 +18,19 @@
       "DeathGraveMixin",
       "LifestealMixin",
       "DodgeMixin",
-      "LastStandMixin"
+      "LastStandMixin",
+      "AnvilRaceClassGateMixin",
+      "EnchantmentTableRaceClassGateMixin",
+      "RaceEnchantmentCombatMixin",
+      "AnvilCostCapMixin",
+      "EnchantmentTableBookshelfCapMixin"
 	],
   "client": [
     "client.DynamicLightMixin",
     "ChestRenderStateMixin",
     "LockedChestTextureMixin",
-    "EnchantmentDescriptionMixin"
+    "EnchantmentDescriptionMixin",
+    "AnvilTooExpensiveLabelMixin"
   ],
 	"injectors": {
 		"defaultRequire": 1

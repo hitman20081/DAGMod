@@ -17,9 +17,17 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.9.1 (July 2026)
+Current Version v1.10.0 (August 2026)
 
 ---
+
+## What's New in v1.10.0
+
+### 7 New Race/Class Enchantments
+Each race and class now has a dedicated enchantment: Dwarf's Deep Striker (bonus damage underground), Elf's Forest's Blessing (bonus damage in forests), Orc's Berserker's Fury (damage scales with missing health), Human's Versatile (bonus XP, stacks with the race passive), Warrior's Immovable (knockback resistance), Mage's Arcane Amplification (boosts core ability power), and Rogue's Shadow Step (passive dodge chance).
+
+### Race/Class-Gated Enchanting
+The 7 new enchantments can only be applied via the enchanting table or anvil by a player of the matching race or class — a Human can't enchant gear with Deep Striker, for example. If you later reset your race or class, the enchantment stays on the item but stops doing anything until you match again.
 
 ## What's New in v1.9.1
 

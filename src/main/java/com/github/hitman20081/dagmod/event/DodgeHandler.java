@@ -1,6 +1,10 @@
 package com.github.hitman20081.dagmod.event;
 
+import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
+import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,5 +52,29 @@ public class DodgeHandler {
 
     public static boolean isActive(UUID uuid) {
         return dodgeExpiry.containsKey(uuid);
+    }
+
+    private static final EquipmentSlot[] ARMOR_SLOTS = {
+            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
+    };
+
+    /**
+     * Rogue's Shadow Step passive: a chance to dodge entirely, independent of any timed dodge
+     * buff (Phantom Dust / Perfect Dodge). Requires the Rogue class and the Shadow Step
+     * enchantment on any piece of worn armor.
+     */
+    public static boolean tryPassiveDodge(ServerPlayer player, RandomSource random) {
+        if (!"Rogue".equals(ClassSelectionAltarBlock.getPlayerClass(player.getUUID()))) {
+            return false;
+        }
+
+        int level = 0;
+        for (EquipmentSlot slot : ARMOR_SLOTS) {
+            level = Math.max(level, CustomEnchantmentEffects.getEnchantmentLevel(
+                    player.getItemBySlot(slot), player.level(), "rogue_shadow_step"));
+        }
+        if (level <= 0) return false;
+
+        return random.nextFloat() < 0.05f * level;
     }
 }

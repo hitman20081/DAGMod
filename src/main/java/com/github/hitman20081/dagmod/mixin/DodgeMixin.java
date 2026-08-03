@@ -25,7 +25,8 @@ public class DodgeMixin {
                               CallbackInfoReturnable<Boolean> cir) {
         if (!((Object) this instanceof ServerPlayer player)) return;
 
-        if (DodgeHandler.tryDodge(player.getUUID(), world.getGameTime(), world.getRandom())) {
+        if (DodgeHandler.tryDodge(player.getUUID(), world.getGameTime(), world.getRandom())
+                || DodgeHandler.tryPassiveDodge(player, world.getRandom())) {
             world.sendParticles(
                     ParticleTypes.SMOKE,
                     player.getX(), player.getY() + 1.0, player.getZ(),

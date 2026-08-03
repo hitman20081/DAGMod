@@ -1,7 +1,7 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.9.0
-**Last Updated**: 2026-07-27
+**Current Version**: v1.10.0
+**Last Updated**: 2026-08-03
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
@@ -173,9 +173,10 @@ DAGMod follows **Semantic Versioning 2.0.0** (https://semver.org/):
 
 ## 🟡 **Partially Implemented Features**
 
-### **Custom Enchantments** (Target: v1.10.0)
-- 🟡 **Framework exists** - `/data/dag/enchantment/` directory with basic examples
-- ❌ **Implementation needed** - Race/class-specific enchantments, discovery system
+### **Custom Enchantments Discovery System**
+- ✅ **Framework + race/class enchantments implemented** — see v1.10.0 below
+- ❌ **Discovery system** — deferred; the 7 race/class enchantments ship through normal
+  enchanting table/anvil/loot, same as the other 26 custom enchantments
 
 ---
 
@@ -222,19 +223,23 @@ Priority: **MEDIUM**
 
 ---
 
-### **v1.10.0 - Custom Enchantments**
+### **v1.10.0 - Custom Enchantments** ✅ Complete
 Priority: **MEDIUM**
 
-- ❌ **Race-Specific Enchantments**
+- ✅ **Race-Specific Enchantments**
   - Dwarf: Deep Striker (bonus damage underground)
-  - Elf: Forest's Blessing (bonus in forest biomes)
+  - Elf: Forest's Blessing (bonus attack damage in forest biomes)
   - Orc: Berserker's Fury (damage scales with missing health)
-  - Human: Versatile (bonus XP from all sources)
+  - Human: Versatile (bonus XP from all sources — stacks additively with the existing +25% Human race passive)
 
-- ❌ **Class-Specific Enchantments**
+- ✅ **Class-Specific Enchantments**
   - Warrior: Immovable (knockback resistance)
-  - Mage: Arcane Amplification (spell power boost)
-  - Rogue: Shadow Step (chance to dodge on hit)
+  - Mage: Arcane Amplification (boosts the 4 core mage abilities' power)
+  - Rogue: Shadow Step (passive chance to dodge a hit entirely)
+
+- ✅ **Race/class apply-time gating** — all 7 enchantments can only be applied via the
+  enchanting table or anvil by a player of the matching race/class; if race/class is later
+  reset, the enchantment stays on the item but does nothing until they match again
 
 ---
 
@@ -318,6 +323,7 @@ Priority: **MEDIUM**
 
 - ❌ **Coin Currency System**
   - 4 coin tiers: Copper → Silver → Gold → Platinum (100:1 ratio each)
+  - Add in coin purse (using bundle idea)
   - Replaces/supplements emerald-based trading with all merchant NPCs
   - Foundation that all future economy features are built upon
   - Bounty rewards, quest rewards, and loot all pay out in coins
@@ -815,10 +821,12 @@ Priority: **LOW**
 - ✅ **v1.8.2** (Jun 2026) - Village NPC structures (7 individual structures), dynamic lighting terrain fix, Hall of Champions rarity increase
 - ✅ **v1.8.3** (Jul 2026) - Gem tier system (Cut/Polished/Flawless/Grand), in-game enchantment descriptions, quest book objective navigation, gem station inventory persistence
 - ✅ **v1.9.0** (Jul 2026) - Class Trainer NPC, class quest separation from Quest Block, daily quest system (server-wide rotation, streak multipliers, UTC reset), Garrick handoff, HoC land-biome tag, all custom items now enchantable, Elf quest balance fixes
+- ✅ **v1.9.1** (Jul 2026) - Blacksmith's Anvil block, Garrick guild registry, Voodoo Illusioner reset handling, Dragon Realm level-50 gate, merchant tier gating, all NPCs stationary, Village Inn as spawn hub, HoC moved to mid/late-game
+- ✅ **v1.10.0** (Aug 2026) - 7 race/class-specific enchantments (Deep Striker, Forest's Blessing, Berserker's Fury, Versatile, Immovable, Arcane Amplification, Shadow Step), race/class apply-time gating on the enchanting table and anvil
 
 ### **Phase 1** — Core System Completion
 - ✅ **v1.9.0** - Class Trainer NPC, class quest separation, daily quest system, enchanting bug fix, quest balance
-- 🎯 **v1.10.0** - Custom race/class enchantments
+- ✅ **v1.10.0** - Custom race/class enchantments, race/class apply-time gating
 
 ### **Phase 2** — The Overhaul & World Expansion
 - 🎯 **v2.0.0** (Major — ⚠️ Save-Breaking) - Full narrative overhaul: Starting Inn, Garrick guild registry, HoC as earned destination, broken gear loop, champion book progression, dimension gating
@@ -1248,7 +1256,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-07-27
+**Last Updated**: 2026-08-03
 **Maintained By**: hitman20081
-**Current Version**: v1.9.0
+**Current Version**: v1.10.0
 **License**: See LICENSE file
