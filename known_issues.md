@@ -1,11 +1,35 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-08-03
+**Last Updated**: 2026-08-05
 **Version**: v1.10.0
 
 ---
 
 ## Open Issues
+
+### 14. Spider Queen Lair Uses Placeholder Geometry, Not Hand-Built Architecture (MEDIUM)
+
+**Location**: `src/main/resources/data/dagmod/structure/spider_queen/`
+**Status**: Open — functional, but not finished dungeon design
+
+The Spider Queen Lair's two jigsaw pieces (chamber + entrance shaft) are plain, programmatically-generated box rooms, built to verify placement/connectivity rather than as finished art. Two concrete gaps:
+- The room-seal mechanic (`BossRoomSpawnHandler.sealRoom`/`unsealRoom`) relies on hand-placed `minecraft:light` level-0 marker blocks at doorways — the placeholder geometry has none, so players won't actually be locked in during the fight yet, even though the boss/trigger/boss-bar loop works.
+- The castle's `concentric_rings` `distance: 8` (and the derived `PaleGardenTerrainHandler.FLATTEN_RADIUS`/`CASTLE_SAFETY_RADIUS` constants) and the lair's `distance: 96` are best-effort starting values, not confirmed against real generated positions. Confirm both via `/locate structure dagmod:castle_pale_garden` and `/locate structure dagmod:spider_queen_lair` on fresh seeds, and tune the constants to match.
+
+**Resolution**: Replace the placeholder NBT pieces with hand-built (or expanded jigsaw) dungeon architecture, including door-marker light blocks for the seal mechanic. Tune the worldgen radius constants once real positions are confirmed in-game.
+
+---
+
+### 13. Spider Queen Scale (6.0, Tunable to 9.0) Is Untested at This Magnitude (LOW)
+
+**Location**: `src/main/java/com/github/hitman20081/dagmod/pale_garden/entity/SpiderQueenEntity.java`
+**Status**: Open — functional, unverified visually
+
+`SpiderQueenEntity.SCALE` is set to 6.0 (with the design intent of possibly going up to 9.0) — well beyond anything else in this mod (previous max was 3.0, Skeleton King's Java entity). General Minecraft risk areas at this magnitude that haven't been checked against this specific codebase: eye-height/render desync, bounding-box-vs-visual-model mismatches causing pop-in or clipping, and pathfinding node sizing not scaling with the model (the entity may path as if it were still base-spider-sized).
+
+**Resolution**: Playtest at scale 6.0 and 9.0 specifically watching for the above; adjust `SCALE` or add compensating logic (e.g. custom eye height) if any of these show up.
+
+---
 
 ### 12. Flawless and Grand Gem Textures Are Placeholders (LOW)
 

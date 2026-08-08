@@ -4,23 +4,10 @@
     {
       "rolls": 1,
       "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:diamond_block"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:iron_block"
-        }
-      ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:netherite_block"
-        }
+        { "type": "minecraft:empty", "weight": 100 },
+        { "type": "minecraft:item", "name": "minecraft:iron_block", "weight": 25 },
+        { "type": "minecraft:item", "name": "minecraft:diamond_block", "weight": 8 },
+        { "type": "minecraft:item", "name": "minecraft:netherite_block", "weight": 3 }
       ]
     },
     {
@@ -52,6 +39,68 @@
           "expand": true,
           "weight": 5
         }
+      ]
+    },
+    {
+      "rolls": { "min": 1, "max": 2 },
+      "functions": [
+        { "function": "minecraft:set_count", "count": { "min": 1, "max": 3 } }
+      ],
+      "entries": [
+        { "type": "minecraft:item", "name": "dagmod:amethyst_powder" },
+        { "type": "minecraft:item", "name": "dagmod:citrine_powder" },
+        { "type": "minecraft:item", "name": "dagmod:diamond_powder" },
+        { "type": "minecraft:item", "name": "dagmod:emerald_powder" },
+        { "type": "minecraft:item", "name": "dagmod:echo_dust" },
+        { "type": "minecraft:item", "name": "dagmod:quartz_powder" },
+        { "type": "minecraft:item", "name": "dagmod:ruby_powder" },
+        { "type": "minecraft:item", "name": "dagmod:sapphire_powder" },
+        { "type": "minecraft:item", "name": "dagmod:topaz_powder" },
+        { "type": "minecraft:item", "name": "dagmod:slimeball_dust" },
+        { "type": "minecraft:item", "name": "dagmod:brimstone_dust" }
+      ]
+    },
+    {
+      "rolls": { "min": 1, "max": 2 },
+      "functions": [
+        { "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }
+      ],
+      "entries": [
+        { "type": "minecraft:item", "name": "dagmod:chicken_stew" },
+        { "type": "minecraft:item", "name": "dagmod:beef_stew" },
+        { "type": "minecraft:item", "name": "dagmod:mystic_stew" },
+        { "type": "minecraft:item", "name": "dagmod:candied_apple" },
+        { "type": "minecraft:item", "name": "dagmod:crimson_soup" },
+        { "type": "minecraft:item", "name": "dagmod:dragonfruit_tart" },
+        { "type": "minecraft:item", "name": "dagmod:elven_bread" },
+        { "type": "minecraft:item", "name": "dagmod:ethereal_cookies" },
+        { "type": "minecraft:item", "name": "dagmod:frostberry_pie" },
+        { "type": "minecraft:item", "name": "dagmod:glowberry_jam" },
+        { "type": "minecraft:item", "name": "dagmod:golden_apple_strudel" },
+        { "type": "minecraft:item", "name": "dagmod:honey_bread" },
+        { "type": "minecraft:item", "name": "dagmod:molten_chili" },
+        { "type": "minecraft:item", "name": "dagmod:nether_salad" },
+        { "type": "minecraft:item", "name": "dagmod:phoenix_roast" },
+        { "type": "minecraft:item", "name": "dagmod:pumpkin_parfait" },
+        { "type": "minecraft:item", "name": "dagmod:savory_beef_roast" },
+        { "type": "minecraft:item", "name": "dagmod:shadow_cake" },
+        { "type": "minecraft:item", "name": "dagmod:spiced_rabbit" },
+        { "type": "minecraft:item", "name": "dagmod:starfruit_smoothie" },
+        { "type": "minecraft:item", "name": "dagmod:stormfish_fillet" },
+        { "type": "minecraft:item", "name": "dagmod:void_truffles" }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:empty", "weight": 180 },
+        { "type": "minecraft:item", "name": "dagmod:mythril_sword", "weight": 3 },
+        { "type": "minecraft:item", "name": "dagmod:gilded_rapier", "weight": 2 },
+        { "type": "minecraft:item", "name": "dagmod:shadowfang_dagger", "weight": 1 },
+        { "type": "minecraft:item", "name": "dagmod:mythril_helmet", "weight": 3 },
+        { "type": "minecraft:item", "name": "dagmod:mythril_chestplate", "weight": 3 },
+        { "type": "minecraft:item", "name": "dagmod:mythril_leggings", "weight": 3 },
+        { "type": "minecraft:item", "name": "dagmod:mythril_boots", "weight": 3 }
       ]
     }
   ]

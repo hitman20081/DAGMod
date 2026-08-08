@@ -31,6 +31,9 @@ public class ModTags {
         public static final TagKey<Item> OBSIDIAN_REPAIR = createTag("obsidian_repair");
         public static final TagKey<Item> CRUSHING_HAMMER_REPAIR = createTag("crushing_hammer_repair");
 
+        public static final TagKey<Item> OFFHAND_DAGGERS = createTag("offhand_daggers");
+        public static final TagKey<Item> OFFHAND_SWORDS = createTag("offhand_swords");
+
         private static TagKey<Item> createTag(String name) {
             return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DagMod.MOD_ID, name));
         }

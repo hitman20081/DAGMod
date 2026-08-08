@@ -1,9 +1,29 @@
 # DAGMod Development Roadmap
 
 **Current Version**: v1.10.0
-**Last Updated**: 2026-08-03
+**Last Updated**: 2026-08-07
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
+
+---
+
+## 🔧 **Unreleased — Working Tree (pending next version number)**
+
+Built since v1.10.0, not yet released. Not yet assigned a version — fold into the next release per `release_instructions.md` once a version number is picked.
+
+- ✅ **Pale Garden Castle & Spider Queen Lair rework**
+  - Castle converted to a true singleton (`concentric_rings, count: 1`) at a fixed elevation, with terrain flattened/feathered around it and a per-piece bounding-box check so unbuilt sections of the (still in-progress) castle NBT read as ordinary ground instead of a pit
+  - Spider Queen Lair redesigned: walkable staircase entrance (fixed headroom-pinch bug), plus a `LairShaftHandler` that dynamically carves + ladders a shaft from the stairs up to daylight/an existing cavern regardless of local terrain height — replaces the original sealed, no-entrance room
+  - Pale Garden portal linking, singleton-castle search, and teleport-target fixes
+  - **Divergence from the roadmap**: the current [Pale Abyss Design](#pale-abyss-design) (v2.2.0) describes a **separate** dimension with a two-layer surface/cavern design, a Brood Warden rename, biological crafting, a multi-phase boss fight, and a craftable portal key. What's actually built lives **inside the existing Pale Garden dimension** instead, and is a single-phase boss + placeholder room/entrance only — none of the mob hierarchy, materials, crafting, or multi-phase fight from that design doc exist yet. Needs a decision before v2.2.0 planning: keep it in Pale Garden and rewrite the design doc, or still split it out into its own dimension later.
+  - Castle NBT itself still has incomplete/unbuilt sections — flagged as a manual authoring task, not a code fix
+
+- ✅ **Off-hand weapon combat system** (Warrior/Rogue) — not previously on the roadmap
+  - Warriors can equip a sword or dagger off-hand; Rogues a dagger (full damage) or sword (halved damage) off-hand; shields unaffected for every class
+  - Right-click-on-entity triggers an off-hand strike, own 1s cooldown, damage read directly from the weapon's own attack-damage component
+  - New `#dagmod:offhand_daggers` / `#dagmod:offhand_swords` item tags for extensibility
+
+- ✅ **Dodge feedback fix** — Phantom Dust/Perfect Dodge/Shadow Step dodges now play a sound (`ENDERMAN_TELEPORT`) in addition to the existing particles + action-bar text
 
 ---
 
@@ -248,65 +268,43 @@ Priority: **MEDIUM**
 
 ---
 
-### **v2.0.0 - The Overhaul** ⚠️ Save-Breaking
+### **v2.0.0 - The Overhaul** ⚠️ Save-Breaking 🟡 Partially Implemented
 Priority: **HIGH** (Major milestone)
 
 > Turns DAGMod from a feature list into a coherent narrative arc. The overworld becomes a story with a beginning, middle, and earned endpoint. All future content is designed around this spine.
 
 > See full design document in the [2.0 Overhaul Design](#20-overhaul-design) section below.
 
-- ❌ **Starting Inn replaces early-game HoC dependency**
-  - Garrick is relocated to a small Inn structure that generates near spawn
-  - Armorer and Jeweler NPC in the Inn basement (early repair/gem economy)
-  - Job Board accessible from the Inn from day one
-  - Race and class selection handled entirely through Garrick (no altars near spawn)
+> **Status check (2026-08-07)**: the onboarding half of this milestone (Inn as spawn hub, Garrick handling race/class selection) already shipped quietly in **v1.9.1** and was never reflected here. The progression half (broken gear, champion books, quest-gated dimension access, HoC as a true earned singleton) has **not** been started. Verified against `HallSpawnInitializer.java`, `InnkeeperGarrickNPC.java`, and the `hall_spawn`/`village_inn_set` structure_set placement configs — see per-item notes below.
 
-- ❌ **Garrick as Guild Registry (Race & Class Selection)**
-  - Race and class selection moved from physical altars to Garrick NPC dialogue
-  - Framed as registering with a guild — "I need to know what kind of person you are"
-  - Garrick presents race/class options and stat summaries in-dialogue
-  - Selection confirmed through chat menu (same system as quest menus)
-  - Garrick hands out racial/class starter gear on selection
-  - Voodoo Illusioner takes over reset mechanics (race/class reset items applied via NPC)
+- 🟡 **Starting Inn replaces early-game HoC dependency**
+  - ✅ Village Inn structure generates and IS the world spawn point (`HallSpawnInitializer` locates it and calls `/setworldspawn` on first server start — v1.9.1)
+  - ✅ Race and class selection handled entirely through Garrick (no altars needed near spawn — see below)
+  - ❓ Job Board accessible from the Inn from day one — likely true (Job Board isn't gated elsewhere) but not specifically verified this pass
+  - ❌ Armorer and Jeweler NPC in the Inn basement — no evidence found; the Inn currently appears to be Garrick-only
 
-- ❌ **Hall of Champions as Earned Destination**
-  - HoC no longer spawns freely — one structure exists per world, far from spawn (~5,000 blocks)
-  - Triggered by completing the Master quest book and talking to Garrick
-  - Garrick gives a compass pointing to the HoC; the structure spawns at that time
-  - Race/Class Selection Altars repurposed in HoC as Champion Registration points (advance champion book tier) or decorative lore set pieces
-  - Hall Locator compass navigates back to HoC after initial discovery
-  - Warp Scroll vendor considered for fast travel back
+- ✅ **Garrick as Guild Registry (Race & Class Selection)** — mostly done, v1.9.1
+  - ✅ Race and class selection moved to Garrick NPC dialogue (`InnkeeperGarrickNPC.showRaceMenu`/`showClassMenu`, chat-menu confirmed, same system as quest menus)
+  - ✅ Voodoo Illusioner takes over reset mechanics (race/class reset applied via NPC, not an altar)
+  - ❓ Stat summaries in-dialogue, starter gear handed out on selection — not specifically re-verified this pass, likely present given the menu flow but worth a quick confirm
+  - **Note**: the physical Race/Class Selection Altars still exist and still work as a direct, standalone interaction path (right-click with a class token still selects a class) — they haven't been removed or repurposed, just made non-mandatory now that Garrick offers the same thing
 
-- ❌ **Broken Gear Progression Loop**
-  - Garrick rewards players at the Master book milestone with a set of broken HoC-tier gear
-  - Broken gear: stronger than iron, weaker than repaired variants, which are weaker than full HoC gear
-  - Armorer in Inn basement repairs broken gear using gem materials earned from the Job Board
-  - Repaired variants become available for purchase through the Armorer permanently (handles lost gear)
-  - Repair cost: broken item + gem materials (ties Job Board directly into gear progression)
-  - Broken → Repaired → HoC Original: three distinct power tiers for the same item
+- 🟡 **Hall of Champions as Earned Destination**
+  - ✅ HoC made significantly rarer (`hall_spawn.json`: spacing 125 / separation 50 chunks, up from its earlier common village-adjacent placement — v1.9.1 "HoC moved to mid/late-game")
+  - ❌ Still a `random_spread` placement, not a true one-per-world singleton (compare `castle_pale_garden`'s `concentric_rings, count: 1` pattern from this session — same fix would apply here)
+  - ❌ Not specifically anchored ~5,000 blocks from spawn
+  - ❌ Not triggered by Master book completion + Garrick compass grant — it just generates normally, rarer
+  - ❌ Race/Class Selection Altars not yet repurposed as Champion Registration points in HoC — they're still plain altars there too
 
-- ❌ **Champion Book Progression**
-  - Replaces the Master quest book as the post-HoC progression system
-  - Three tiers: Novice Champion → Advanced Champion → Final Champion
-  - Each tier unlocks dimension access and new vendor trades
-  - Champion quests revolve around killing mobs/bosses in each dimension for crafting parts and quest objectives
-  - Some vendor trades locked behind champion book tier (visible but requires book to unlock)
+- ❌ **Broken Gear Progression Loop** — not started, no code or items found
+- ❌ **Champion Book Progression** — not started; Master Quest Book is still the top tier
 
-- ❌ **Dimension Access Gating**
-  - Bone Realm: Locked until Novice Champion quests unlock access
-    - Bone Dungeon locator + a Nether-based Bone Dungeon required to complete the unlock chain
-  - Dragon Realm: Locked until Advanced Champion quests unlock access
-    - Dragon Eye compass + Dragon Egg/Heart/specific boss drop required
-  - Dimensions are no longer freely accessible — access is earned through the champion questline
+- 🟡 **Dimension Access Gating**
+  - ✅ Simple level gates exist: Bone Dungeon locator gated at level 25, Dragon Realm gated at level 50
+  - ❌ Not gated by champion quest completion or a Bone-Dungeon-in-the-Nether unlock chain — just flat level checks, not the quest-driven gating this item describes
 
-- ❌ **Content Scaling Pass**
-  - All custom dimension mobs retuned to match the power level players arrive with at each champion tier
-  - Overworld intentionally remains easier (Minecraft+ philosophy — overworld power is the reward for progression)
-
-- ❌ **Major Polish & Balance Pass**
-  - Performance optimization
-  - Balance adjustments informed by 1.9.x playtesting
-  - Quest balance review across all tiers
+- ❌ **Content Scaling Pass** — not done as a dedicated pass
+- ❌ **Major Polish & Balance Pass** — ongoing by nature; treat as a pre-release checklist item rather than a discrete task
 
 ---
 
@@ -829,7 +827,7 @@ Priority: **LOW**
 - ✅ **v1.10.0** - Custom race/class enchantments, race/class apply-time gating
 
 ### **Phase 2** — The Overhaul & World Expansion
-- 🎯 **v2.0.0** (Major — ⚠️ Save-Breaking) - Full narrative overhaul: Starting Inn, Garrick guild registry, HoC as earned destination, broken gear loop, champion book progression, dimension gating
+- 🟡 **v2.0.0** (Major — ⚠️ Save-Breaking) — Partially underway: Inn-as-spawn-hub and Garrick guild registry (race/class via dialogue) already shipped in v1.9.1. Still needed: HoC as a true earned singleton, broken gear loop, champion book progression, quest-gated dimension access, content scaling pass
 - 🎯 **v2.1.0** - Economy Foundation: Race quest expansions, additional bosses, Coin Currency, Bounty System
 - 🎯 **v2.2.0** - The Pale Abyss dimension + Spider Queen rework
 - 🎯 **v2.3.0** - Economy & Trading (Gem Sockets, Transmog, Reforging, Auction House)
@@ -1256,7 +1254,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-08-03
+**Last Updated**: 2026-08-07
 **Maintained By**: hitman20081
 **Current Version**: v1.10.0
 **License**: See LICENSE file

@@ -202,6 +202,11 @@ public class DagModClient implements ClientModInitializer {
         EntityRenderers.register(BoneRealmEntityRegistry.BONELING, BonelingRenderer::new);
         EntityRenderers.register(BoneRealmEntityRegistry.SKELETON_SUMMONER, SkeletonSummonerRenderer::new);
 
+        // Register Spider Queen renderer
+        EntityRenderers.register(
+                com.github.hitman20081.dagmod.pale_garden.entity.PaleGardenEntityRegistry.SPIDER_QUEEN,
+                com.github.hitman20081.dagmod.pale_garden.client.SpiderQueenRenderer::new);
+
         // Register SimpleNPC renderer
         EntityRenderers.register(ModEntities.SIMPLE_NPC, SimpleNPCRenderer::new);
 

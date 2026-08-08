@@ -9,7 +9,7 @@
   "key": {
     "P": "minecraft:pale_oak_log",
     "A": "minecraft:amethyst_shard",
-    "H": "dagmod:pale_heartstone"
+    "H": "minecraft:creaking_heart"
   },
   "result": {
     "id": "dagmod:pale_garden_key",

@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": {
+        "min": 8,
+        "max": 16
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:string"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 3,
+        "max": 6
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:spider_eye"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:fermented_spider_eye"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 8,
+        "max": 14
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_golden_apple",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "text": "Spider Queen's Bounty",
+                "color": "dark_purple",
+                "bold": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

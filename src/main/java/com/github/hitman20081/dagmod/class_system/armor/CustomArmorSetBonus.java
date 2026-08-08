@@ -123,29 +123,29 @@ public class CustomArmorSetBonus {
     }
 
     private static ArmorSetState getPlayerArmorSetState(ServerPlayer player) {
-        Map<ArmorSet, Integer> setCounts = new HashMap<>();
+        // Fixed-size int[] indexed by ordinal instead of Map<ArmorSet,Integer> — avoids
+        // HashMap allocation + autoboxing on every call (this runs once/sec per player
+        // from the tick loop, plus once per ability-power/mana-cost/crit lookup).
+        int[] counts = new int[ArmorSet.values().length];
 
-        ItemStack[] pieces = {
-            player.getItemBySlot(EquipmentSlot.HEAD),
-            player.getItemBySlot(EquipmentSlot.CHEST),
-            player.getItemBySlot(EquipmentSlot.LEGS),
-            player.getItemBySlot(EquipmentSlot.FEET)
-        };
-
-        for (ItemStack piece : pieces) {
-            ArmorSet set = getArmorSetType(piece);
-            if (set != ArmorSet.NONE) {
-                setCounts.merge(set, 1, Integer::sum);
-            }
-        }
+        countPiece(counts, player.getItemBySlot(EquipmentSlot.HEAD));
+        countPiece(counts, player.getItemBySlot(EquipmentSlot.CHEST));
+        countPiece(counts, player.getItemBySlot(EquipmentSlot.LEGS));
+        countPiece(counts, player.getItemBySlot(EquipmentSlot.FEET));
 
         ArmorSet dominant = ArmorSet.NONE;
         int max = 0;
-        for (Map.Entry<ArmorSet, Integer> e : setCounts.entrySet()) {
-            if (e.getValue() > max) { max = e.getValue(); dominant = e.getKey(); }
+        for (ArmorSet set : ArmorSet.values()) {
+            int count = counts[set.ordinal()];
+            if (count > max) { max = count; dominant = set; }
         }
 
         return new ArmorSetState(dominant, max);
+    }
+
+    private static void countPiece(int[] counts, ItemStack piece) {
+        ArmorSet set = getArmorSetType(piece);
+        if (set != ArmorSet.NONE) counts[set.ordinal()]++;
     }
 
     public static void applySetBonuses(ServerPlayer player) {

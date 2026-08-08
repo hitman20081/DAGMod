@@ -22,9 +22,10 @@ public class EnergyHudRenderer {
         int barWidth  = 81;
         int barHeight = 9;
 
-        // Same position as mana bar — right side of hotbar center
+        // Same position as mana bar — right side of hotbar center, raised above the
+        // vanilla air-bubble/mount-health row
         int x = screenWidth / 2 + 10;
-        int y = screenHeight - 49;
+        int y = screenHeight - 65;
 
         int currentEnergy = ClientEnergyData.getCurrentEnergy();
         int maxEnergy     = ClientEnergyData.getMaxEnergy();

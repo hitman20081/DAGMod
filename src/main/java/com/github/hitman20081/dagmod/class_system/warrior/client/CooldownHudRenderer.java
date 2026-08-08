@@ -26,9 +26,9 @@ public class CooldownHudRenderer {
         int screenWidth  = client.getWindow().getGuiScaledWidth();
         int screenHeight = client.getWindow().getGuiScaledHeight();
 
-        // Same anchor as mana bar
+        // Same anchor as mana bar, raised above the vanilla air-bubble/mount-health row
         int x = screenWidth / 2 + 10;
-        int y = screenHeight - 49;
+        int y = screenHeight - 65;
 
         // Outer border around the whole block (matches mana bar border style)
         drawBorder(drawContext, x - 1, y - 1, BAR_SLOT_W + 2, BAR_H + 2, 0xFF000000);

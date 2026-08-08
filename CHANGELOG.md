@@ -5,7 +5,7 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.0] - 2026-08-03
+## [1.10.0] - 2026-08-04
 
 ### Added
 
@@ -21,11 +21,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`AnvilRaceClassGateMixin`** / **`EnchantmentTableRaceClassGateMixin`** — enforce the gate at the only two places enchantments get written onto an item: taking the result from an anvil, and taking the result from an enchanting table. A mismatched race/class simply never receives the enchantment from either source
 - **`RaceEnchantmentCombatMixin`** / **`RaceCombatEnchantmentHandler`** — attacker-side damage multiplier hook (mirrors `RogueDamageMixin`'s `hurtServer` hook, but checks the attacker instead of the defender) powering Deep Striker, Forest's Blessing, and Berserker's Fury
 - **`DodgeHandler.tryPassiveDodge()`** — new Rogue-class passive dodge roll, checked alongside the existing timed Phantom Dust/Perfect Dodge buffs in `DodgeMixin`
+- **Loot tables for Medieval and Pale Garden castle chests**
+- **`tools/jigsaw_checker`** — standalone Python GUI for visualizing jigsaw structure pool layouts during castle piece authoring (dev tool, not shipped in the mod jar)
 
 ### Changed
 
 - **`HumanBonusHandler`** — now reads the Versatile enchantment level off the player's helmet and adds it to the base +25% XP bonus
 - **Mage ability classes** (`ArcaneMissilesAbility`, `ManaBurstAbility`, `TimeWarpAbility`, `ArcaneBarrierAbility`) — now fold in `MageEnchantmentBonus.applyAmplification()` alongside the existing Overcharge Dust power multiplier
+- **Medieval and Pale Garden castles rebuilt as multi-piece jigsaw structures** — replaced the old single-piece NBT structures with proper jigsaw pools (`medieval2`–`medieval6`; `cpg_1a`–`cpg_1j`, plus bridge and entrance pieces), so each castle now assembles from multiple connected sections instead of spawning as one static NBT
+- **Castle spacing drastically increased** — `castle_pale_garden` structure set spacing/separation raised from `8`/`2` to `500`/`499`, making castles a rare landmark instead of a common spawn
+- **Pale Garden dimension now uses its own noise settings** (`dagmod:pale_garden`) instead of `minecraft:overworld`, giving it distinct terrain shaping independent of overworld generation changes
+
+### Fixed
+
+- **Pale Garden portal failing to link inside castle structures** — `PaleGardenTeleporter` now force-generates the surrounding chunks before searching (portal frames in freshly-generated castle structures didn't exist yet when the search ran) and will detect and activate an existing inactive Pale Heartstone frame before falling back to building a brand-new portal
+- **Pale Garden return portal creating a stray new portal instead of linking back** — the return trip reused the player's current Pale Garden coordinates as an unrelated Overworld target, so it never found the portal they actually entered from and just built a new one nearby. `PlayerDataManager` now records each player's Overworld entry-portal position (persisted per-player, same as race/class data) when they enter the Pale Garden, and `PaleGardenTeleporter` links the return trip back to that exact position
+- **`pale_heartstone` item using the wrong model** — was rendering with the `ancient_bone_block` model instead of its own; texture also updated, along with the `pale_garden_key` item texture
+- **Mana/Energy/Cooldown HUD bars overlapping the vanilla air-bubble and mount-health row** — raised all three class resource bars from `screenHeight - 49` to `screenHeight - 65`
 
 ---
 

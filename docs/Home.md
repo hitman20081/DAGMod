@@ -29,6 +29,18 @@ Each race and class now has a dedicated enchantment: Dwarf's Deep Striker (bonus
 ### Race/Class-Gated Enchanting
 The 7 new enchantments can only be applied via the enchanting table or anvil by a player of the matching race or class — a Human can't enchant gear with Deep Striker, for example. If you later reset your race or class, the enchantment stays on the item but stops doing anything until you match again.
 
+### Pale Garden Castle Rebuilt as a Multi-Piece Structure
+The Pale Garden and Medieval castles no longer spawn as a single static building — both now assemble from multiple connected jigsaw pieces for more layout variety. Castles are also much rarer now that spacing has been increased from 8/2 to 500/499 chunks.
+
+### Pale Garden Has Its Own Terrain
+The Pale Garden dimension now generates with dedicated noise settings instead of reusing overworld terrain shaping.
+
+### Pale Garden Portal Fixed
+The Pale Garden portal now reliably links when built inside a castle structure — chunks are force-generated before the search runs, and an existing inactive frame is detected and activated instead of only searching for an already-active portal. Returning to the Overworld now also links back to the exact portal you entered from, instead of sometimes building a stray new one nearby.
+
+### HUD Bars No Longer Overlap Vanilla UI
+The Mana, Energy, and Cooldown HUD bars have been raised so they no longer overlap the vanilla air-bubble/mount-health row.
+
 ## What's New in v1.9.1
 
 ### Dragon Realm Gated at Level 50

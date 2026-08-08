@@ -24,9 +24,9 @@ public class ManaHudRenderer {
         int screenWidth = client.getWindow().getGuiScaledWidth();
         int screenHeight = client.getWindow().getGuiScaledHeight();
 
-        // Position: Over hunger bar (right side)
+        // Position: right side, raised above the vanilla air-bubble/mount-health row
         int x = screenWidth / 2 + 10;
-        int y = screenHeight - 49;
+        int y = screenHeight - 65;
 
         int currentMana = (int) ClientManaData.getCurrentMana();
         int maxMana = ClientManaData.getMaxMana();

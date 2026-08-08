@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "dagmod:spider_queen_lair",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "salt": 74213598,
+    "distance": 96,
+    "spread": 2,
+    "count": 1,
+    "preferred_biomes": "#dagmod:has_structure/spider_queen_lair"
+  }
+}

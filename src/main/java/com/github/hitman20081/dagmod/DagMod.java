@@ -84,6 +84,8 @@ import com.github.hitman20081.dagmod.command.GarrickRegistryCommand;
 import com.github.hitman20081.dagmod.command.ResetClassCommand;
 import com.github.hitman20081.dagmod.class_system.ClassAbilityManager;
 import com.github.hitman20081.dagmod.class_system.RogueCombatHandler;
+import com.github.hitman20081.dagmod.class_system.OffhandEquipGuard;
+import com.github.hitman20081.dagmod.class_system.OffhandStrikeHandler;
 import com.github.hitman20081.dagmod.party.command.PartyQuestCommand;
 import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
 import com.github.hitman20081.dagmod.enchantment.SoulBoundStorage;
@@ -150,6 +152,9 @@ public class DagMod implements ModInitializer {
         // Register Pale Garden
         com.github.hitman20081.dagmod.pale_garden.PaleGardenRegistry.register();
 
+        // Register Pale Garden Entities (Spider Queen)
+        com.github.hitman20081.dagmod.pale_garden.entity.PaleGardenEntityRegistry.register();
+
         // Register Bone Realm Entities
         BoneRealmEntityRegistry.register();
 
@@ -175,6 +180,12 @@ public class DagMod implements ModInitializer {
 
         // Prevent block breaking inside protected structures (survival only)
         com.github.hitman20081.dagmod.world.ProtectedStructureHandler.register();
+
+        // Flatten ground around the Pale Garden Castle so it never sits over a void/cave gap
+        com.github.hitman20081.dagmod.pale_garden.PaleGardenTerrainHandler.register();
+
+        // Carve the Spider Queen Lair's entrance shaft up to open air/a cavern, wherever that ends up being
+        com.github.hitman20081.dagmod.pale_garden.LairShaftHandler.register();
 
 // Register ore generation in overworld
         com.github.hitman20081.dagmod.world.ModOreGeneration.register();
@@ -224,6 +235,10 @@ public class DagMod implements ModInitializer {
         RogueCombatHandler.register();
 
         LOGGER.info("Rogue ability system initialized!");
+
+        // Off-hand weapons: who can equip one (Warrior/Rogue only) and the strike itself
+        OffhandEquipGuard.register();
+        OffhandStrikeHandler.register();
 
         // Initialize Quest System
         LOGGER.info("Initializing Quest System for " + MOD_ID);
@@ -484,16 +499,26 @@ public class DagMod implements ModInitializer {
                     }
                 }
 
+                boolean onceASecond = player.level().getGameTime() % 20 == 0;
+
                 // Sync Warrior cooldowns to client once per second
-                if ("Warrior".equals(playerClass) && player.level().getGameTime() % 20 == 0) {
+                if ("Warrior".equals(playerClass) && onceASecond) {
                     CooldownNetworking.syncCooldownsToClient(player);
                 }
 
                 // Custom armor set bonuses (Dragonscale, Crystalforge, Inferno, Nature's Guard, Shadow, Fortuna)
-                com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus.applySetBonuses(player);
+                // Effect durations are 100-300 ticks, so refreshing once per second keeps
+                // them comfortably topped up without re-allocating/re-syncing every tick.
+                if (onceASecond) {
+                    com.github.hitman20081.dagmod.class_system.armor.CustomArmorSetBonus.applySetBonuses(player);
+                }
 
-                // Auto-enchant DAGMod armor pieces when first equipped
-                com.github.hitman20081.dagmod.class_system.armor.ArmorEnchantmentHandler.tick(player);
+                // Auto-enchant DAGMod armor pieces when first equipped.
+                // Once-per-second is plenty — a newly equipped piece only needs to pick
+                // up its enchantments within ~1 second, not instantly.
+                if (onceASecond) {
+                    com.github.hitman20081.dagmod.class_system.armor.ArmorEnchantmentHandler.tick(player);
+                }
 
                 // Solar Mending: repair Solarweave armor in direct sunlight
                 com.github.hitman20081.dagmod.class_system.armor.SolarMendingHandler.tick(player);
@@ -571,10 +596,9 @@ public class DagMod implements ModInitializer {
             PartyQuestCommand.register(dispatcher, registryAccess, environment);
         });
 
-        // Tick quest manager for timeouts
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            PartyQuestManager.getInstance().tick();
-        });
+        // Note: PartyQuestManager.tick() is already driven by the combined
+        // END_SERVER_TICK handler above (see the "Tick party quest manager for
+        // timeouts" line) — do not register a second tick callback for it here.
     } // Make sure this closing brace for onInitialize() is here
 
     /**

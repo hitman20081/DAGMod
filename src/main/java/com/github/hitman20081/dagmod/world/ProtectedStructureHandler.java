@@ -10,24 +10,29 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ProtectedStructureHandler {
 
-    // Add structure paths here to make them unbreakable in survival mode.
-    private static final List<ResourceKey<Structure>> PROTECTED = List.of(
-        structure("hall_of_champions")
-    );
+    // Add structure paths here (with a break-attempt message) to make them unbreakable in survival mode.
+    private static final Map<ResourceKey<Structure>, String> PROTECTED = new LinkedHashMap<>();
+    static {
+        PROTECTED.put(structure("hall_of_champions"),
+                "The Hall of Champions is sacred ground — its stones cannot be moved.");
+        PROTECTED.put(structure("spider_queen_lair"),
+                "The Spider Queen's lair resists intrusion — its walls cannot be moved.");
+    }
 
     public static void register() {
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
             if (player.isCreative()) return true;
             if (!(world instanceof ServerLevel serverLevel)) return true;
 
-            for (ResourceKey<Structure> key : PROTECTED) {
-                if (serverLevel.structureManager().getStructureWithPieceAt(pos, (Holder<Structure> h) -> h.is(key)).isValid()) {
+            for (Map.Entry<ResourceKey<Structure>, String> entry : PROTECTED.entrySet()) {
+                if (serverLevel.structureManager().getStructureWithPieceAt(pos, (Holder<Structure> h) -> h.is(entry.getKey())).isValid()) {
                     player.sendSystemMessage(
-                        Component.literal("The Hall of Champions is sacred ground — its stones cannot be moved.")
+                        Component.literal(entry.getValue())
                             .withStyle(ChatFormatting.RED));
                     return false;
                 }

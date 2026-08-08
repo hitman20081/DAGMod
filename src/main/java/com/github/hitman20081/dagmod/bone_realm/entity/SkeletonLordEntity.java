@@ -118,19 +118,24 @@ public class SkeletonLordEntity extends Skeleton {
         }
 
         if (!this.level().isClientSide() && this.isAlive()) {
-            // Count nearby summoners
-            this.summonerCount = this.level().getEntitiesOfClass(
-                    SkeletonSummonerEntity.class,
-                    this.getBoundingBox().inflate(40),
-                    summoner -> summoner.isAlive()
-            ).size();
-
-            // Summon skeleton summoners
             this.summonCooldown--;
-            if (this.summonCooldown <= 0 && this.summonerCount < MAX_SUMMONERS) {
-                this.summonSkeletonSummoner();
-                this.summonCooldown = MIN_SUMMON_COOLDOWN +
-                        this.random.nextInt(MAX_SUMMON_COOLDOWN - MIN_SUMMON_COOLDOWN);
+            if (this.summonCooldown <= 0) {
+                // Only count nearby summoners when we're actually about to decide
+                // whether to summon — this scan doesn't need to run every tick.
+                this.summonerCount = this.level().getEntitiesOfClass(
+                        SkeletonSummonerEntity.class,
+                        this.getBoundingBox().inflate(40),
+                        summoner -> summoner.isAlive()
+                ).size();
+
+                if (this.summonerCount < MAX_SUMMONERS) {
+                    this.summonSkeletonSummoner();
+                    this.summonCooldown = MIN_SUMMON_COOLDOWN +
+                            this.random.nextInt(MAX_SUMMON_COOLDOWN - MIN_SUMMON_COOLDOWN);
+                } else {
+                    // Still at the summoner cap — retry soon instead of scanning every tick.
+                    this.summonCooldown = 20;
+                }
             }
         }
     }

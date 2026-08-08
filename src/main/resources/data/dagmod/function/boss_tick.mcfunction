@@ -2,8 +2,8 @@
 
 
 
-#Process spiders
-execute as @e[type=spider] run function dagmod:spider_queen/spider_process
+#Process Spider Queen (now a proper entity type, spawned via BossRoomSpawnHandler — no more ambient wild-spider promotion)
+execute as @e[type=dagmod:spider_queen] run function dagmod:spider_queen/spider_queen_process
 
 #Process skeletons
 execute as @e[type=skeleton] run function dagmod:field_captain/skeleton_process

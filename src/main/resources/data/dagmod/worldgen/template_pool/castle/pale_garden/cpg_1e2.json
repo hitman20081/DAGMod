@@ -1,11 +1,11 @@
 {
-  "name": "dagmod:castle_pale_garden",
+  "name": "dagmod:castle/pale_garden/cpg_1e2",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "dagmod:castle/castle_pale_garden",
+        "location": "dagmod:castle/pale_garden/castle_pale_garden1e2",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

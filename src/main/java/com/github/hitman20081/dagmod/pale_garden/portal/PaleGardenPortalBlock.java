@@ -79,14 +79,17 @@ public class PaleGardenPortalBlock extends Block {
     @Override
     protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         handleEntityCollisions(state, world, pos);
-        world.scheduleTick(pos, this, 10);
+        // A 5x5 portal has up to 25 interior blocks, each independently rescheduling
+        // this same entity-collision check — 20 ticks (vs. the previous 10) halves the
+        // total redundant scan volume while staying well under a second of latency.
+        world.scheduleTick(pos, this, 20);
     }
 
     @Override
     protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
         super.onPlace(state, world, pos, oldState, notify);
         if (!world.isClientSide()) {
-            world.scheduleTick(pos, this, 10);
+            world.scheduleTick(pos, this, 20);
         }
     }
 

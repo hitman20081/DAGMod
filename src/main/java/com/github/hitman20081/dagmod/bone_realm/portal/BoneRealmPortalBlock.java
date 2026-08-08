@@ -96,8 +96,10 @@ public class BoneRealmPortalBlock extends Block {
     protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         // Also check on scheduled ticks
         handleEntityCollisions(state, world, pos);
-        // Schedule next tick
-        world.scheduleTick(pos, this, 10);
+        // A multi-block portal has many interior blocks, each independently
+        // rescheduling this same entity-collision check — 20 ticks (vs. the
+        // previous 10) halves the total redundant scan volume.
+        world.scheduleTick(pos, this, 20);
     }
 
     @Override
@@ -105,7 +107,7 @@ public class BoneRealmPortalBlock extends Block {
         super.onPlace(state, world, pos, oldState, notify);
         // Schedule first tick when portal is created
         if (!world.isClientSide()) {
-            world.scheduleTick(pos, this, 10);
+            world.scheduleTick(pos, this, 20);
         }
     }
 

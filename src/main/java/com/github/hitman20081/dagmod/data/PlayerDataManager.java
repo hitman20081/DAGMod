@@ -49,6 +49,7 @@ public class PlayerDataManager {
     private static final String TASK2_COMPLETE_KEY = "dagmod_task2_complete";
     private static final String TASK3_COMPLETE_KEY = "dagmod_task3_complete";
     private static final String TASK2_MOB_KILLS_KEY = "dagmod_task2_mob_kills";
+    private static final String PALE_GARDEN_ENTRY_KEY = "dagmod_pale_garden_entry_pos";
 
     // Updated path constants
     private static final String DATA_ROOT = "data/dagmod";      // Base directory
@@ -143,6 +144,17 @@ public class PlayerDataManager {
             nbt.putBoolean(TASK3_COMPLETE_KEY, isTask3Complete(player.getUUID()));
             nbt.putInt(TASK2_MOB_KILLS_KEY, getTask2MobKills(player.getUUID()));
 
+            // Save Pale Garden portal entry link (Overworld position of the portal
+            // this player last entered the Pale Garden from)
+            BlockPos paleGardenEntry = paleGardenEntryPos.get(player.getUUID());
+            if (paleGardenEntry != null) {
+                CompoundTag entryNbt = new CompoundTag();
+                entryNbt.putInt("x", paleGardenEntry.getX());
+                entryNbt.putInt("y", paleGardenEntry.getY());
+                entryNbt.putInt("z", paleGardenEntry.getZ());
+                nbt.put(PALE_GARDEN_ENTRY_KEY, entryNbt);
+            }
+
             // Save mana data for Mages
             if ("Mage".equals(playerClass)) {
                 com.github.hitman20081.dagmod.class_system.mana.ManaData manaData =
@@ -202,6 +214,7 @@ public class PlayerDataManager {
                 task3CompleteSet.remove(player.getUUID());
                 task2MobKills.remove(player.getUUID());
                 gemChainStartedSet.remove(player.getUUID());
+                paleGardenEntryPos.remove(player.getUUID());
 
                 return; // No data to load for new players
             }
@@ -305,6 +318,19 @@ public class PlayerDataManager {
                 Optional<Integer> mobKillsOpt = nbt.getInt(TASK2_MOB_KILLS_KEY);
                 if (mobKillsOpt.isPresent()) {
                     setTask2MobKills(player.getUUID(), mobKillsOpt.get());
+                }
+            }
+
+            // Load Pale Garden portal entry link
+            if (nbt.contains(PALE_GARDEN_ENTRY_KEY)) {
+                CompoundTag entryNbt = nbt.getCompound(PALE_GARDEN_ENTRY_KEY).orElse(null);
+                if (entryNbt != null) {
+                    Optional<Integer> xOpt = entryNbt.getInt("x");
+                    Optional<Integer> yOpt = entryNbt.getInt("y");
+                    Optional<Integer> zOpt = entryNbt.getInt("z");
+                    if (xOpt.isPresent() && yOpt.isPresent() && zOpt.isPresent()) {
+                        paleGardenEntryPos.put(player.getUUID(), new BlockPos(xOpt.get(), yOpt.get(), zOpt.get()));
+                    }
                 }
             }
 
@@ -523,6 +549,24 @@ public class PlayerDataManager {
 
     public static void markGemChainStarted(ServerPlayer player) {
         markGemChainStarted(player.getUUID());
+        savePlayerData(player);
+    }
+
+    // ========== PALE GARDEN PORTAL LINKING ==========
+
+    /**
+     * In-memory cache of the Overworld position of the portal each player last entered
+     * the Pale Garden from, so the return trip can link back to that exact portal instead
+     * of reusing Pale Garden coordinates as an unrelated Overworld target.
+     */
+    private static final java.util.Map<UUID, BlockPos> paleGardenEntryPos = new java.util.HashMap<>();
+
+    public static BlockPos getPaleGardenEntryPos(UUID playerId) {
+        return paleGardenEntryPos.get(playerId);
+    }
+
+    public static void setPaleGardenEntryPos(ServerPlayer player, BlockPos pos) {
+        paleGardenEntryPos.put(player.getUUID(), pos);
         savePlayerData(player);
     }
 }

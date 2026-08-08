@@ -14,6 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.util.valueproviders.UniformInt;
 
@@ -335,6 +336,21 @@ public class ModBlocks {
                     .noCollision()
                     .noOcclusion()));
 
+    public static final Block SPIDER_QUEEN_SPAWN_TRIGGER = register("spider_queen_spawn_trigger",
+            key -> new BossSpawnTriggerBlock(BlockBehaviour.Properties.of()
+                    .setId(key)
+                    .strength(-1.0f, 3600000.0f)
+                    .noCollision()
+                    .noOcclusion()));
+
+    // Marks the top step of the Spider Queen Lair's entrance staircase in the baked NBT — a
+    // normal, fully solid/walkable block (same properties as cobbled_deepslate, which it's
+    // textured to match) so it's indistinguishable from the surrounding stairs until
+    // LairShaftHandler finds it at runtime and carves a shaft upward from that exact spot to the
+    // surface/an open cavern, then replaces it back with plain cobbled_deepslate.
+    public static final Block LAIR_SHAFT_MARKER = register("lair_shaft_marker",
+            key -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE).setId(key)));
+
     public static void registerModBlocks() {
         DagMod.LOGGER.info("Registering Mod Blocks for " + DagMod.MOD_ID);
     }
@@ -422,8 +438,10 @@ public class ModBlocks {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)
                 .register((itemGroup) -> itemGroup.accept(BLACKSMITH_ANVIL));
 
-        // Pale Heartstone - Building Blocks (players will craft and place it)
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
+        // Pale Heartstone - Operator Utilities (players should not be able to build their own
+        // Pale Garden portal frames; the only sanctioned frame is the one that generates in
+        // the Pale Garden castle structure)
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)
                 .register((itemGroup) -> itemGroup.accept(PALE_HEARTSTONE));
 
         // Boss Spawn Triggers - Add to Operator Utilities tab
@@ -431,6 +449,8 @@ public class ModBlocks {
                 .register((itemGroup) -> {
                     itemGroup.accept(BOSS_SPAWN_TRIGGER);
                     itemGroup.accept(SKELETON_KING_SPAWN_TRIGGER);
+                    itemGroup.accept(SPIDER_QUEEN_SPAWN_TRIGGER);
+                    itemGroup.accept(LAIR_SHAFT_MARKER);
                 });
 
         DagMod.LOGGER.info("Registering blocks for " + DagMod.MOD_ID);

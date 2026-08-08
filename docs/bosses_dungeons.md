@@ -128,6 +128,31 @@ For more information on the Dragon Realm dimension, see [Dimensions](./dimension
 
 ---
 
+### Spider Queen
+**Role:** Pale Garden dimension boss. Lives in the Spider Queen Lair, a cavern reachable outside the flattened ground surrounding the Pale Garden Castle.
+
+| Stat | Value |
+|------|-------|
+| Health | 275 HP |
+| Attack Damage | 5.0 |
+| Armor | 10.0 |
+| Armor Toughness | 2.0 |
+| Movement Speed | 0.45 |
+| Knockback Resistance | 90% |
+| Follow Range | 48 blocks |
+| Size | 6.0x (largest scale used anywhere in the mod — previous max was 3.0) |
+| XP on Kill | 150 |
+
+- **Boss Bar:** Purple, notched (10 segments). Named "Spider Queen".
+- **Spawn:** Triggered when a survival player gets within range of the spawn trigger in the lair's main chamber.
+- **Room Seal:** On spawn, the chamber seals with barrier blocks for the duration of the fight (same mechanism as the Skeleton King's throne room, at a larger radius to match the bigger chamber).
+- **Egg-Laying:** Periodically lays eggs (visually a turtle egg) that hatch into scaled-down Cave Spider hatchlings after ~15 seconds, capped at 51 living hatchlings globally.
+- **On Death:** Barrier blocks are removed. Death loot is a placeholder for now (string, spider eyes, diamonds, and a named enchanted golden apple) — unique Spider-Queen-exclusive rewards are planned but not yet implemented.
+
+*Note: scale 6.0 (tunable up to 9.0) is untested territory for this codebase — see `known_issues.md`.*
+
+---
+
 ## Boss Fight Strategy
 
 The Bone Realm boss hierarchy creates escalating encounters:
@@ -173,6 +198,27 @@ A dedicated boss structure that spawns once per Bone Realm world using `concentr
 - Proximity trigger on the throne automatically spawns the Skeleton King when a survival player enters (12-block radius)
 - Doorways seal with barrier blocks for the duration of the fight
 - One locked chest per player spawns on King death, along with a King's Recall Stone per player
+
+---
+
+### Spider Queen Lair
+
+A dedicated boss cavern that spawns once per Pale Garden world using `concentric_rings` placement, positioned outside the flattened ground around the Pale Garden Castle.
+
+**Generation:**
+- Spawns exclusively in the `dagmod:pale_garden` biome, underground (`start_height: -40`, no heightmap dependency)
+- Guaranteed single spawn per world
+- Locate with `/locate structure dagmod:spider_queen_lair`
+
+**Layout (2 jigsaw pieces — placeholder geometry, see note below):**
+- **Chamber** — 50×30×50 main boss room with the Spider Queen spawn trigger on the floor
+- **Entrance Shaft** — tall vertical tunnel connecting the chamber up toward the surface, so the lair is reachable on foot rather than only by teleport
+
+**Features:**
+- Proximity trigger in the chamber automatically spawns the Spider Queen when a survival player enters
+- Protected from block-breaking in survival (same mechanism as the Hall of Champions)
+
+> **Note:** the current pieces are programmatically-generated placeholder geometry (plain box rooms), built to verify placement/connectivity rather than as finished dungeon art. The room-seal mechanic used by other bosses (hand-placed `minecraft:light` level-0 door markers converted to barriers) has no marker blocks in this placeholder geometry yet, so it won't visibly lock players in until a detailed version of the structure adds them.
 
 ---
 

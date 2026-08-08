@@ -6,9 +6,11 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
-    "salt": 1649512346,
-    "spacing": 8,
-    "separation": 2
+    "type": "minecraft:concentric_rings",
+    "salt": 22981147,
+    "distance": 8,
+    "spread": 1,
+    "count": 1,
+    "preferred_biomes": "#dagmod:has_structure/pale_garden_castle"
   }
 }

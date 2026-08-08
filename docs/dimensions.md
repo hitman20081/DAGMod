@@ -129,6 +129,29 @@ The Dragon Realm features both the Dragon Guardian boss and ambient red dragon t
 
 ---
 
+## Pale Garden
+
+The Pale Garden is an eerie, pale-forested dimension generated with its own custom terrain noise settings *(as of v1.10.0)*, independent of overworld worldgen.
+
+### Portal Construction
+
+| Component | Details |
+|-----------|---------|
+| Frame material | 7x7 Pale Heartstone frame with a 5x5 opening |
+| Activation key | Pale Garden Key |
+| Key source | Crafted from 4 Pale Oak Logs, 4 Amethyst Shards, and 1 Pale Heartstone |
+| Portal location | Build a frame anywhere and activate with the key, or find one already built inside a Pale Garden castle |
+
+> **Castle portals:** Pale Garden castles generate with a pre-built (inactive) Pale Heartstone frame. Stepping through a linked portal into the Pale Garden will automatically detect and activate that frame instead of requiring you to craft and use a key on it yourself.
+
+> **Return trip:** The game remembers the specific Overworld portal you entered from and sends you back through that same one — it won't strand you at an unrelated spot or spawn a duplicate portal near your Pale Garden coordinates.
+
+### Pale Garden Castle
+
+A multi-piece jigsaw structure *(rebuilt from a single static structure in v1.10.0)* that generates rarely in the Pale Garden (structure spacing 500/499 chunks). Its chests are populated with loot.
+
+---
+
 ## Additional Dimensions
 
 DAGMod includes several additional themed dimensions:
@@ -138,7 +161,6 @@ DAGMod includes several additional themed dimensions:
 | Badlands | Mesa/badlands terrain |
 | Crimson Forest | Nether-style crimson environment |
 | Deep Dark | Sculk-heavy underground darkness |
-| Pale Garden | Eerie pale forest |
 | Snowy Plains | Frozen tundra landscape |
 | Swamp | Marshy wetlands |
 

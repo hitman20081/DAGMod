@@ -1,15 +1,15 @@
 {
   "type": "minecraft:jigsaw",
-  "start_pool": "dagmod:castle/castle_pale_garden",
+  "start_pool": "dagmod:castle/pale_garden/castle_pale_garden",
+  "start_jigsaw_name": "dagmod:cpg_1g_to_1e",
   "size": 20,
-  "max_distance_from_center": 80,
+  "max_distance_from_center": 128,
   "start_height": {
-    "absolute": 0
+    "absolute": 100
   },
-  "project_start_to_heightmap": "WORLD_SURFACE_WG",
   "use_expansion_hack": false,
   "biomes": "dagmod:pale_garden",
   "step": "surface_structures",
   "spawn_overrides": {},
-  "terrain_adaptation": "beard_thin"
+  "terrain_adaptation": "none"
 }

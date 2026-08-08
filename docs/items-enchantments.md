@@ -1,8 +1,63 @@
 # Custom Enchantments
 
-DAGMod includes 26 custom enchantments ranging from combat enhancements to utility effects. Some are data-driven (JSON effects) while others have custom Java implementations for unique behavior. Enchanted books with these enchantments can also be found in bone dungeon chests in 3 rarity tiers (common, uncommon, and rare).
+DAGMod includes 33 custom enchantments ranging from combat enhancements to utility effects. Some are data-driven (JSON effects) while others have custom Java implementations for unique behavior. Enchanted books with these enchantments can also be found in bone dungeon chests in 3 rarity tiers (common, uncommon, and rare).
 
 > **In-game descriptions** *(added v1.8.3)*: Press **F3+H** to enable advanced tooltips. After that, hovering over any item with a DAGMod enchantment shows a short description directly in the tooltip — no need to check the wiki for basic info.
+
+---
+
+## Race & Class Enchantments *(added v1.10.0)*
+
+7 enchantments, one per race and one per class. Each is **gated**: it can only be applied via the enchanting table or anvil by a player of the matching race or class — a Human can't enchant gear with Deep Striker, for example. Attempting to do so simply strips the enchantment from the result instead of applying it. If you later reset your race or class, the enchantment stays on the item but has no effect until you match again.
+
+### Deep Striker (Dwarf)
+- **Slot:** Mainhand (weapon)
+- **Max Level:** 5
+- **Rarity:** Rare (weight 2)
+- **Requires:** Dwarf race
+- **Effect:** +10% attack damage per level while fighting below sea level.
+
+### Forest's Blessing (Elf)
+- **Slot:** Mainhand (weapon)
+- **Max Level:** 5
+- **Rarity:** Rare (weight 2)
+- **Requires:** Elf race
+- **Effect:** +10% attack damage per level while standing in a forest-tagged biome.
+
+### Berserker's Fury (Orc)
+- **Slot:** Mainhand (weapon)
+- **Max Level:** 5
+- **Rarity:** Rare (weight 2)
+- **Requires:** Orc race
+- **Effect:** +8% attack damage per level, scaled by the fraction of health you're missing — strongest when you're nearly dead.
+
+### Versatile (Human)
+- **Slot:** Head armor (helmet)
+- **Max Level:** 5
+- **Rarity:** Rare (weight 2)
+- **Requires:** Human race
+- **Effect:** +5% bonus XP per level from all sources, stacking additively on top of the Human race's existing +25% XP passive (up to +50% total at level 5).
+
+### Immovable (Warrior)
+- **Slot:** Any armor piece
+- **Max Level:** 5
+- **Rarity:** Rare (weight 2)
+- **Requires:** Warrior class
+- **Effect:** +2% knockback resistance per level (up to +10% at level 5).
+
+### Arcane Amplification (Mage)
+- **Slot:** Head armor (helmet)
+- **Max Level:** 5
+- **Rarity:** Rare (weight 2)
+- **Requires:** Mage class
+- **Effect:** +10% power per level to all 4 core mage abilities (Arcane Missiles, Mana Burst, Time Warp, Arcane Barrier), stacking with the Overcharge Dust multiplier.
+
+### Shadow Step (Rogue)
+- **Slot:** Any armor piece
+- **Max Level:** 5
+- **Rarity:** Very Rare (weight 1)
+- **Requires:** Rogue class
+- **Effect:** +5% per level passive chance to dodge an incoming hit entirely, independent of the timed Phantom Dust/Perfect Dodge buffs.
 
 ---
 
@@ -206,8 +261,8 @@ DAGMod includes 26 custom enchantments ranging from combat enhancements to utili
 | Very Common | 50 | Xtra Damage |
 | Common | 10 | Savage |
 | Uncommon | 3-5 | Heart of the Armor, Reach, Climb, Rise of the Zombies, Tunneling |
-| Rare | 2 | Light's Blessing, Lucky Looter, Curse of Brittleness |
-| Very Rare | 1 | Berserker, Blazing Strike, Frostbite, Leach, Midas Touch, Shatter Proof, Soul Bound, Solar |
+| Rare | 2 | Light's Blessing, Lucky Looter, Curse of Brittleness, Deep Striker, Forest's Blessing, Berserker's Fury, Versatile, Immovable, Arcane Amplification |
+| Very Rare | 1 | Berserker, Blazing Strike, Frostbite, Leach, Midas Touch, Shatter Proof, Soul Bound, Solar, Shadow Step |
 
 ---
 

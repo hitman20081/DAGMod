@@ -1,0 +1,15 @@
+{
+  "name": "dagmod:castle/pale_garden/cpg_bridge",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "dagmod:castle/pale_garden/castle_pale_garden_bridge",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

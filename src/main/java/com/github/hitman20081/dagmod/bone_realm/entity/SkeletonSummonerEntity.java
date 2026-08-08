@@ -95,19 +95,24 @@ public class SkeletonSummonerEntity extends Skeleton {
         super.tick();
 
         if (!this.level().isClientSide() && this.isAlive()) {
-            // Count nearby bonelings
-            this.bonelingCount = this.level().getEntitiesOfClass(
-                    BonelingEntity.class,
-                    this.getBoundingBox().inflate(24),
-                    boneling -> boneling.isAlive()
-            ).size();
-
-            // Summon bonelings
             this.summonCooldown--;
-            if (this.summonCooldown <= 0 && this.bonelingCount < MAX_BONELINGS) {
-                this.summonBoneling();
-                this.summonCooldown = MIN_SUMMON_COOLDOWN +
-                        this.random.nextInt(MAX_SUMMON_COOLDOWN - MIN_SUMMON_COOLDOWN);
+            if (this.summonCooldown <= 0) {
+                // Only count nearby bonelings when we're actually about to decide
+                // whether to summon — this scan doesn't need to run every tick.
+                this.bonelingCount = this.level().getEntitiesOfClass(
+                        BonelingEntity.class,
+                        this.getBoundingBox().inflate(24),
+                        boneling -> boneling.isAlive()
+                ).size();
+
+                if (this.bonelingCount < MAX_BONELINGS) {
+                    this.summonBoneling();
+                    this.summonCooldown = MIN_SUMMON_COOLDOWN +
+                            this.random.nextInt(MAX_SUMMON_COOLDOWN - MIN_SUMMON_COOLDOWN);
+                } else {
+                    // Still on cooldown-equivalent, boneling cap reached — retry soon.
+                    this.summonCooldown = 20;
+                }
             }
         }
     }

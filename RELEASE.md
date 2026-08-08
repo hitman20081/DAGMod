@@ -8,68 +8,63 @@
   4. Move the old release header + summary to ## Previous Releases at the bottom
   ========================================================= -->
 
-## v1.9.1 — Structure Spawning, Dimension Gates & World Polish
-**Released:** 2026-07-31
+## v1.10.0 — Race/Class Enchantments & Pale Garden Castle Overhaul
+**Released:** 2026-08-04
 
-> **Note for players upgrading from v1.9.0:** No new world required. All structure, quest, and progression changes apply immediately. Existing Hall of Champions and Village Inns retain their current locations — only newly generated chunks follow the updated biome rules.
+> **Note for players upgrading from v1.9.1:** No new world required for existing content. Pale Garden chunks that were already generated under the old `minecraft:overworld` noise settings will not retroactively pick up the new custom terrain — only newly generated Pale Garden chunks do. Existing castle structures already on disk are unaffected; only newly generated castles use the multi-piece jigsaw layout and the much wider spacing.
 
 ---
 
-## What's New in v1.9.1
+## What's New in v1.10.0
 
-### Dragon Realm Now Gated at Level 50
-The Dragon Realm is no longer freely accessible. The `red_dragon_fury` quest (which rewards the Dragon Key) does not appear until level 50. Attempting to activate a portal or walk through one below level 50 is blocked with a clear message. Exiting the Dragon Realm is always allowed.
+### 7 Race/Class-Specific Enchantments
+Every race and class now has a dedicated enchantment, obtainable only via the enchanting table or anvil by a matching player:
 
-### Hall of Champions Block Protection
-Survival players can no longer mine blocks inside the Hall of Champions. The structure is sacred ground — its blocks cannot be removed without Creative mode. A message is shown on attempt.
+- **Dwarf — Deep Striker** (weapon, max level 5): +10% attack damage per level while fighting below sea level
+- **Elf — Forest's Blessing** (weapon, max level 5): +10% attack damage per level while standing in a forest-tagged biome
+- **Orc — Berserker's Fury** (weapon, max level 5): up to +8% attack damage per level, scaling with missing health
+- **Human — Versatile** (helmet, max level 5): +5% bonus XP per level, stacking additively on the existing +25% Human race passive
+- **Warrior — Immovable** (armor, max level 5): +2% knockback resistance per level
+- **Mage — Arcane Amplification** (helmet, max level 5): +10% power per level to all 4 core mage abilities, stacking with Overcharge Dust
+- **Rogue — Shadow Step** (armor, max level 5): +5% per level passive chance to dodge a hit entirely, independent of the timed Phantom Dust/Perfect Dodge buffs
 
-### Structures No Longer Spawn on Water or Lava
-All DAGMod structure sets now use the `avoid_water` flag, preventing Inns, Armorers, merchants, castles, and other structures from generating on or near surface water lakes and lava pools.
+If you later reset your race or class, the enchantment stays on the item but stops doing anything until you match again.
 
-### Hall of Champions Now in Flat, Landmark Biomes Only
-The Hall of Champions is restricted to `meadow`, `savanna_plateau`, and `cherry_grove`. These are open, flat biomes the structure fits naturally and that feel worthy of a journey.
+### Pale Garden Castle Rebuilt as a Multi-Piece Structure
+The Pale Garden castle (and the Medieval castle) no longer spawn as a single static NBT structure — both now assemble from multiple connected jigsaw pieces, giving each spawn more layout variety. Castles are also now a genuinely rare landmark: spacing was raised from 8/2 to 500/499 chunks.
 
-### Armorer Has Its Own Structure Set
-The Armorer NPC has been moved out of the shared merchant pool and given a dedicated structure set. It now consistently generates near the Inn in the same biomes rather than as one of four random merchant spawns.
+### Pale Garden Has Its Own Terrain
+The Pale Garden dimension now generates with dedicated noise settings instead of reusing `minecraft:overworld`, giving it terrain shaping independent of overworld worldgen changes.
 
-### Bone Realm Gated at Level 25
-The `rumours_of_the_bone_king` quest (which rewards the Bone Dungeon Locator) now requires level 25 before it appears in the quest log, restoring the intended early-game dimension barrier.
-
-### Hall Locator Moved to Garrick Reward
-The Hall Locator compass is no longer handed out on first join. Garrick gives it to players when they complete all three tutorial tasks, making the Hall of Champions discovery feel earned.
-
-### Guide Book Readability Fixed
-All guide book headers and labels now use colors that are readable on the parchment background. Previous color codes (white, bright green, light red, light purple, yellow) were invisible or near-invisible on light pages.
+### Loot Tables for Medieval and Pale Garden Castle Chests
+Both castle structures now have populated loot tables in their chests.
 
 ---
 
 ## Bug Fixes
 
-- **Castle exclusion zone out of range** — ExclusionZone codec enforces chunk_count [1:16]; both castle sets had a value of 25. Capped to 16
-- **Duplicate structure set salt** — `castle_medieval` and `castle_pale_garden` shared the same salt value. `castle_pale_garden` given a unique salt
-- **`getStructureWithPieceAt` MC 26.2 API** — Dropped `ResourceKey<Structure>` overload replaced with `Predicate<Holder<Structure>>` in `ProtectedStructureHandler`
-- **River biome in village_npc tag** — Inns and NPC buildings no longer generate in rivers
-- **Armorer biome mismatch** — Armorer was spawning in savanna biomes where the Inn never appears; now uses the same `#dagmod:has_structure/village_npc` biome tag as the Inn
+- **Pale Garden portal failing to link inside castles** — Chunks near the target weren't force-generated before the portal search ran, so freshly-generated castle portal frames weren't found. `PaleGardenTeleporter` now force-generates the surrounding chunks first, then checks for an active portal, then an inactive Pale Heartstone frame to activate, before falling back to building a new one from scratch
+- **Pale Garden return portal creating a stray new portal instead of linking back** — Returning to the Overworld reused your current Pale Garden coordinates as the target, which has nothing to do with where you actually entered from, so it silently built a new portal a short distance from your real one instead of reusing it. The teleporter now remembers the Overworld portal you entered from (persisted per-player) and links the return trip directly back to it
+- **`pale_heartstone` item rendering with the wrong model** — was using the `ancient_bone_block` model instead of its own; the `pale_garden_key` item texture was also corrected
+- **Mana/Energy/Cooldown HUD bars overlapping vanilla UI** — all three class resource bars overlapped the vanilla air-bubble/mount-health row; raised from `screenHeight - 49` to `screenHeight - 65`
 
 ---
 
-## Also in v1.9.x (from v1.9.0)
+## Also in v1.9.x (from v1.9.1 and v1.9.0)
 
-- **Village Inn** — World spawn hub with guaranteed near-spawn generation
-- **Innkeeper Garrick** — Race and class selection via chat dialogue; starter gear on selection
-- **Class Trainer NPC** — Dedicated NPC for all class quest chains at the Hall of Champions
-- **Blacksmith's Anvil** — Permanent, indestructible anvil block
-- **Merchant tier gating** — Premium Hall of Champions stock locked behind quest completion
-- **Season system fixes** — Crop growth, sleep detection, weather predicates, and announcements all corrected for MC 26.2
-- **Dragon Realm return portal** — Returns to bed/respawn anchor instead of hardcoded 0, 64, 0
+- **Dragon Realm gated at level 50, Bone Realm gated at level 25** — both dimension keys withheld until the level requirement is met
+- **Hall of Champions block protection** and **flat, landmark-only biome restriction** (`meadow`, `savanna_plateau`, `cherry_grove`)
+- **Structures avoid water and lava**; **Armorer** has its own dedicated structure set
+- **Village Inn** spawn hub, **Innkeeper Garrick** race/class selection, **Class Trainer NPC**, **Blacksmith's Anvil**, merchant tier gating
+- **Season system fixes** for MC 26.2; **Dragon Realm return portal** honors bed/respawn anchor
 
 ---
 
 ## Migration Notes
 
-> No new world is required for v1.9.1. All changes apply to newly generated chunks and existing game systems immediately.
+> No new world is required for v1.10.0. Existing Pale Garden and castle chunks keep their current terrain and layout — only newly generated chunks pick up the custom noise settings and multi-piece castle jigsaw.
 >
-> If upgrading from v1.8.x, see the [v1.9.0 release notes](docs/release-v1.9.0.md) for world generation migration guidance.
+> If upgrading from v1.8.x, see the [v1.9.0 release notes](docs/release-v1.9.0.md) for earlier world generation migration guidance.
 
 ---
 
@@ -87,7 +82,7 @@ All guide book headers and labels now use colors that are readable on the parchm
 
 1. Back up your world
 2. Remove the old DAGMod `.jar` from your mods folder
-3. Install the v1.9.1 `.jar`
+3. Install the v1.10.0 `.jar`
 4. Launch Minecraft 26.2
 
 ---
@@ -114,6 +109,7 @@ All guide book headers and labels now use colors that are readable on the parchm
 
 | Version | Summary |
 |---|---|
+| v1.9.1 | Structure water/lava avoidance, dimension level gates (Dragon 50, Bone 25), Hall of Champions block protection & biome restriction, Armorer structure set, guide book readability |
 | v1.9.0 | Village Inn spawn hub, Garrick guild registry, Class Trainer NPC, Blacksmith's Anvil, merchant tier gating, season system fixes |
 | v1.8.3 | Gem tier system (Cut→Polished→Flawless→Grand), in-game enchantment descriptions, quest book navigation |
 | v1.8.2 | Village NPC structures (7 buildings), dynamic lighting chunk fix, Hall of Champions rarity increase |
