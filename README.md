@@ -5,29 +5,29 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 ---
 
-## ✨ Core Features
+## Core Features
 
-*   **🎭 Choose Your Path**: Combine one of **4 distinct races** (Human, Dwarf, Elf, Orc) with one of **3 powerful classes** (Warrior, Mage, Rogue). Unlock one of 9 unique **synergies** based on your choice, granting special passive abilities.
+*   **Choose Your Path**: Combine one of **4 distinct races** (Human, Dwarf, Elf, Orc) with one of **3 powerful classes** (Warrior, Mage, Rogue). Unlock one of 9 unique **synergies** based on your choice, granting special passive abilities.
 
-*   **📈 Level Up & Grow Stronger**: Progress from level 1 to 50 with a classic XP system. Gain experience from combat, mining, quests, and more to earn stat points, unlock new quest tiers, and become a legend.
+*   **Level Up & Grow Stronger**: Progress from level 1 to 50 with a classic XP system. Gain experience from combat, mining, quests, and more to earn stat points, unlock new quest tiers, and become a legend.
 
-*   **📜 Embark on Epic Quests**: Discover over **64 quests** through a multi-layered system. Start with a tutorial from **Innkeeper Garrick** in a village tavern, then accept story quests from **Quest Blocks** and quick jobs from **Job Boards**.
+*   **Embark on Epic Quests**: Discover over **64 quests** through a multi-layered system. Start with a tutorial from **Innkeeper Garrick** in a village tavern, then accept story quests from **Quest Blocks** and quick jobs from **Job Boards**.
 
-*   **⚔️ Master Unique Abilities**: Unleash devastating power with **17 unique class abilities**. Whether you're a Warrior spinning through hordes of enemies, a Mage warping time, or a Rogue teleporting behind foes, combat is dynamic and engaging.
+*   **Master Unique Abilities**: Unleash devastating power with **17 unique class abilities**. Whether you're a Warrior spinning through hordes of enemies, a Mage warping time, or a Rogue teleporting behind foes, combat is dynamic and engaging.
 
-*   **🐉 Challenge the Dragon Guardian**: Tame and ride new **Wild Dragons** that spawn in the overworld, or build a portal to the **Dragon Realm** to face the ultimate endgame boss—the fearsome **Dragon Guardian**. Defeat it to claim the rare `King's Scale` and other legendary rewards.
+*   **Challenge the Dragon Guardian**: Tame and ride new **Wild Dragons** that spawn in the overworld, or build a portal to the **Dragon Realm** to face the ultimate endgame boss—the fearsome **Dragon Guardian**. Defeat it to claim the rare `King's Scale` and other legendary rewards.
 
-*   **🏰 Explore a Living World**: The world is alive with new structures. Discover procedurally generated **Bone Dungeons** deep underground, face the formidable **Skeleton King** and his minions, and find shelter in new **Village Inns, Taverns, and Shops**.
+*   **Explore a Living World**: The world is alive with new structures. Discover procedurally generated **Bone Dungeons** deep underground, face the formidable **Skeleton King** and his minions, and find shelter in new **Village Inns, Taverns, and Shops**.
 
-*   **🎒 Collect Epic Loot**: Craft and discover over **50 custom items**, including 6 themed armor sets, 9 unique weapons, powerful consumables, and magical wands. Bone Dungeon chests feature a **3-tier enchanted book system** with 15+ custom enchantments.
+*   **Collect Epic Loot**: Craft and discover over **50 custom items**, including 6 themed armor sets, 9 unique weapons, powerful consumables, and magical wands. Bone Dungeon chests feature a **3-tier enchanted book system** with 15+ custom enchantments.
 
-*   **🏪 Trade with Merchants**: Visit **13 unique merchant NPCs** — from the Armorer and Enchantsmith to the Baker, Blacksmith, Jeweler, and Alchemist. Eight merchants feature **rotating premium inventories** that cycle every 72 hours, while five offer specialized static trades for food, ores, gems, brewing supplies, and general goods.
+*   **Trade with Merchants**: Visit **13 unique merchant NPCs** — from the Armorer and Enchantsmith to the Baker, Blacksmith, Jeweler, and Alchemist. Eight merchants feature **rotating premium inventories** that cycle every 72 hours, while five offer specialized static trades for food, ores, gems, brewing supplies, and general goods.
 
-*   **👥 Team Up with Friends**: Form **parties of up to 5 players** for cooperative play. Share XP within range, earn party size bonuses, and take on **party quests** with scaling difficulty from Easy to Legendary.
+*   **Team Up with Friends**: Form **parties of up to 5 players** for cooperative play. Share XP within range, earn party size bonuses, and take on **party quests** with scaling difficulty from Easy to Legendary.
 
-*   **🌍 Travel Between Dimensions**: Explore **8 custom dimensions** including the Bone Realm (undead-themed dungeon world) and the Dragon Realm (endgame boss arena). Construct portal frames and acquire special keys to unlock passage.
+*   **Travel Between Dimensions**: Explore **8 custom dimensions** including the Bone Realm (undead-themed dungeon world) and the Dragon Realm (endgame boss arena). Construct portal frames and acquire special keys to unlock passage.
 
-## 🚀 Getting Started
+## Getting Started
 
 1.  **Installation**: Install **Minecraft 26.2**, **Fabric Loader 0.19.3**, and **Fabric API 0.150.2+26.2**. Then, drop the DAGMod JAR file into your `mods` folder.
 
@@ -37,13 +37,13 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 ---
 
-## 📚 Learn More
+## Learn More
 
 *   **[Full Wiki & Guides](docs/Home.md)**: For detailed information on classes, abilities, quests, and all other features.
 *   **[Development Roadmap](ROADMAP.md)**: See what features are planned for future updates.
 *   **[Version History](CHANGELOG.md)**: See a detailed log of all changes.
 
-## 💬 Support & Contributing
+## Support & Contributing
 
 *   **Report a Bug or Suggest a Feature**: [Open an issue on GitHub](https://github.com/hitman20081/DAGMod/issues)
 *   **Contact**: deadactiongaming@gmail.com
