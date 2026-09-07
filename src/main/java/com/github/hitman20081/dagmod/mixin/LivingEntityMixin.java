@@ -19,9 +19,19 @@ public class LivingEntityMixin {
     private void die(DamageSource damageSource, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity)(Object)this;
 
-        // Check if killed by a player
-        if (damageSource.getEntity() instanceof ServerPlayer player) {
-            // Award XP to the player
+        // Direct hit (melee/projectile) first. Falls back to vanilla's own kill-credit
+        // tracking (getLastHurtByPlayer, with its short memory window) for deaths whose
+        // final damage source isn't the player themselves -- e.g. a mob set alight by
+        // Blazing Strike/Fire Aspect that dies from the burn a couple seconds later, or any
+        // other enchantment effect (poison, etc.) that finishes a mob off on a later tick
+        // rather than the triggering hit. Without this fallback those kills granted no XP at
+        // all, since the death's DamageSource.getEntity() for on-fire/DoT damage is never
+        // the igniting player.
+        ServerPlayer player = damageSource.getEntity() instanceof ServerPlayer directAttacker
+                ? directAttacker
+                : entity.getLastHurtByPlayer() instanceof ServerPlayer recentAttacker ? recentAttacker : null;
+
+        if (player != null) {
             XPEventHandler.onMobKilled(player, entity);
         }
     }

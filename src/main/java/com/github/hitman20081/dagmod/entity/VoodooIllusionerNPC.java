@@ -51,28 +51,28 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
         // ===== DARK INGREDIENTS =====
         // Ender Pearls
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(Items.ENDER_PEARL, 2),
                 8, 6, 0.05F
         ));
         // Echo Shards
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.empty(),
                 new ItemStack(Items.ECHO_SHARD, 2),
                 4, 12, 0.05F
         ));
         // Wither Rose
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.empty(),
                 new ItemStack(Items.WITHER_ROSE, 1),
                 4, 12, 0.05F
         ));
         // Skulls
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 12),
+                new ItemCost(ModItems.COIN_COPPER, 12),
                 Optional.empty(),
                 new ItemStack(Items.SKELETON_SKULL, 1),
                 4, 15, 0.05F
@@ -80,19 +80,19 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
 
         // ===== REBIRTH POTIONS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 24),
+                new ItemCost(ModItems.COIN_COPPER, 24),
                 Optional.of(new ItemCost(Items.GHAST_TEAR, 2)),
                 new ItemStack(ModItems.POTION_OF_RACIAL_REBIRTH),
                 1, 25, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 24),
+                new ItemCost(ModItems.COIN_COPPER, 24),
                 Optional.of(new ItemCost(Items.NETHER_STAR, 1)),
                 new ItemStack(ModItems.POTION_OF_CLASS_REBIRTH),
                 1, 25, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.DIAMOND, 16),
+                new ItemCost(ModItems.COIN_SILVER, 16),
                 Optional.of(new ItemCost(Items.NETHER_STAR, 1)),
                 new ItemStack(ModItems.POTION_OF_TOTAL_REBIRTH),
                 1, 30, 0.05F
@@ -100,19 +100,19 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
 
         // ===== RESET CRYSTALS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 32),
+                new ItemCost(ModItems.COIN_COPPER, 32),
                 Optional.of(new ItemCost(Items.AMETHYST_SHARD, 16)),
                 new ItemStack(ModItems.RACE_RESET_CRYSTAL),
                 2, 20, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.DIAMOND, 8),
+                new ItemCost(ModItems.COIN_SILVER, 8),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 4)),
                 new ItemStack(ModItems.CLASS_RESET_CRYSTAL),
                 1, 25, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.DIAMOND, 16),
+                new ItemCost(ModItems.COIN_SILVER, 16),
                 Optional.of(new ItemCost(ModItems.DRAGON_HEART, 1)),
                 new ItemStack(ModItems.CHARACTER_RESET_CRYSTAL),
                 1, 30, 0.05F
@@ -120,31 +120,31 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
 
         // ===== ROGUE ITEMS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 20),
+                new ItemCost(ModItems.COIN_COPPER, 20),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 4)),
                 new ItemStack(ModItems.VOID_BLADE),
                 2, 15, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 24),
+                new ItemCost(ModItems.COIN_COPPER, 24),
                 Optional.of(new ItemCost(Items.PHANTOM_MEMBRANE, 4)),
                 new ItemStack(ModItems.VANISH_CLOAK),
                 2, 18, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
+                new ItemCost(ModItems.COIN_COPPER, 16),
                 Optional.of(new ItemCost(Items.SPIDER_EYE, 8)),
                 new ItemStack(ModItems.POISON_VIAL),
                 3, 12, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.DIAMOND, 8),
+                new ItemCost(ModItems.COIN_SILVER, 8),
                 Optional.of(new ItemCost(Items.WITHER_ROSE, 1)),
                 new ItemStack(ModItems.ASSASSINS_MARK),
                 1, 25, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 18),
+                new ItemCost(ModItems.COIN_COPPER, 18),
                 Optional.of(new ItemCost(Items.BONE, 8)),
                 new ItemStack(ModItems.ROGUE_ABILITY_TOME),
                 2, 15, 0.05F
@@ -152,19 +152,19 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
 
         // ===== SHADOW WEAPONS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 28),
+                new ItemCost(ModItems.COIN_COPPER, 28),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 6)),
                 new ItemStack(ModItems.SHADOWFANG_DAGGER),
                 1, 18, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 36),
+                new ItemCost(ModItems.COIN_COPPER, 36),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 8)),
                 new ItemStack(ModItems.SHADOWFANG_SWORD),
                 1, 20, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 32),
+                new ItemCost(ModItems.COIN_COPPER, 32),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 6)),
                 new ItemStack(ModItems.SHADOW_SHIELD),
                 1, 18, 0.05F
@@ -172,37 +172,37 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
 
         // ===== MYSTICAL CONSUMABLES =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.of(new ItemCost(Items.FERMENTED_SPIDER_EYE, 2)),
                 new ItemStack(ModItems.VAMPIRE_DUST),
                 6, 10, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.of(new ItemCost(Items.PHANTOM_MEMBRANE, 2)),
                 new ItemStack(ModItems.PHANTOM_DUST),
                 6, 10, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 10),
+                new ItemCost(ModItems.COIN_COPPER, 10),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 2)),
                 new ItemStack(ModItems.SHADOW_BLEND),
                 4, 12, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
+                new ItemCost(ModItems.COIN_COPPER, 16),
                 Optional.of(new ItemCost(Items.GHAST_TEAR, 1)),
                 new ItemStack(ModItems.LAST_STAND_POWDER),
                 2, 18, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 14),
+                new ItemCost(ModItems.COIN_COPPER, 14),
                 Optional.of(new ItemCost(Items.CLOCK, 1)),
                 new ItemStack(ModItems.TIME_DISTORTION),
                 2, 15, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 12),
+                new ItemCost(ModItems.COIN_COPPER, 12),
                 Optional.of(new ItemCost(Items.PHANTOM_MEMBRANE, 2)),
                 new ItemStack(ModItems.PERFECT_DODGE),
                 2, 15, 0.05F
@@ -210,7 +210,7 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
 
         // ===== ECHO DUST & POWDERS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 1)),
                 new ItemStack(ModItems.ECHO_DUST, 4),
                 8, 8, 0.05F
@@ -221,28 +221,28 @@ public class VoodooIllusionerNPC extends PathfinderMob implements Merchant {
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.BONE, 32),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells spider eyes
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.SPIDER_EYE, 16),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 12, 3, 0.05F
         ));
         // Player sells rotten flesh
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.ROTTEN_FLESH, 32),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells phantom membrane
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.PHANTOM_MEMBRANE, 4),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 8, 5, 0.05F
         ));
 

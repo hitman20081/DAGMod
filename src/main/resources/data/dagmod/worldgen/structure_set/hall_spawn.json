@@ -6,13 +6,11 @@
     }
   ],
   "placement": {
-    "type": "dagmod:multi_exclusion_random_spread",
+    "type": "minecraft:concentric_rings",
     "salt": 1648920074,
-    "spacing": 125,
-    "separation": 50,
-    "avoid_water": true,
-    "exclusion_zones": [
-      { "other_set": "dagmod:bone_dungeon_set", "chunk_count": 16 }
-    ]
+    "distance": 125,
+    "spread": 3,
+    "count": 1,
+    "preferred_biomes": "#dagmod:has_structure/hall_of_champions"
   }
 }

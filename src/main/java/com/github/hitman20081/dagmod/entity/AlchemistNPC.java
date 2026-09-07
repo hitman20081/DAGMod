@@ -38,19 +38,19 @@ public class AlchemistNPC extends PathfinderMob implements Merchant {
 
         // ===== BREWING EQUIPMENT =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BREWING_STAND),
                 6, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CAULDRON),
                 8, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GLASS_BOTTLE, 6),
                 24, 3, 0.05F
@@ -58,19 +58,19 @@ public class AlchemistNPC extends PathfinderMob implements Merchant {
 
         // ===== ESSENTIAL BREWING INGREDIENTS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BLAZE_ROD, 2),
                 12, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BLAZE_POWDER, 4),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.NETHER_WART, 4),
                 16, 5, 0.05F
@@ -78,31 +78,31 @@ public class AlchemistNPC extends PathfinderMob implements Merchant {
 
         // ===== POTION MODIFIERS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.REDSTONE, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GLOWSTONE_DUST, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GUNPOWDER, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(ModItems.BRIMSTONE_DUST, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.DRAGON_BREATH, 2),
                 6, 10, 0.05F
@@ -110,67 +110,67 @@ public class AlchemistNPC extends PathfinderMob implements Merchant {
 
         // ===== POTION EFFECT INGREDIENTS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.SUGAR, 8),
                 16, 3, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GLISTERING_MELON_SLICE, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.SPIDER_EYE, 4),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.FERMENTED_SPIDER_EYE, 2),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.MAGMA_CREAM, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GHAST_TEAR, 2),
                 8, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.RABBIT_FOOT, 2),
                 10, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.PHANTOM_MEMBRANE, 4),
                 10, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GOLDEN_CARROT, 4),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.PUFFERFISH, 2),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.TURTLE_SCUTE, 2),
                 8, 8, 0.05F

@@ -201,7 +201,14 @@
                 "dagmod:shatterproof",
                 "dagmod:soul_boost_enchantment",
                 "dagmod:lucky_looter_enchantment",
-                "dagmod:tunneling_enchantment"
+                "dagmod:tunneling_enchantment",
+                "dagmod:dwarf_deep_striker",
+                "dagmod:elf_forest_blessing",
+                "dagmod:orc_berserkers_fury",
+                "dagmod:human_versatile",
+                "dagmod:warrior_immovable",
+                "dagmod:mage_arcane_amplification",
+                "dagmod:rogue_shadow_step"
               ]
             }
           ]

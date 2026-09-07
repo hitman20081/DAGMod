@@ -10,6 +10,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.github.hitman20081.dagmod.item.ModItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.sounds.SoundEvent;
@@ -37,25 +38,25 @@ public class BakerNPC extends PathfinderMob implements Merchant {
 
         // ===== BAKED GOODS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BREAD, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COOKIE, 16),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 5),
+                new ItemCost(ModItems.COIN_COPPER, 5),
                 java.util.Optional.empty(),
                 new ItemStack(Items.PUMPKIN_PIE, 4),
                 10, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CAKE),
                 6, 10, 0.05F
@@ -63,13 +64,13 @@ public class BakerNPC extends PathfinderMob implements Merchant {
 
         // ===== PREMIUM FOODS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 12),
+                new ItemCost(ModItems.COIN_COPPER, 12),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GOLDEN_APPLE, 2),
                 4, 15, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GOLDEN_CARROT, 8),
                 8, 8, 0.05F
@@ -77,13 +78,13 @@ public class BakerNPC extends PathfinderMob implements Merchant {
 
         // ===== COOKED MEATS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COOKED_BEEF, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COOKED_PORKCHOP, 8),
                 16, 5, 0.05F

@@ -71,9 +71,9 @@ public class EnchantsmithNPC extends PathfinderMob implements Merchant {
         // ===== BASIC (Always available) =====
 
         // Enchanting supplies
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 1), Optional.empty(), new ItemStack(Items.LAPIS_LAZULI, 4), 16, 2, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 3), Optional.empty(), new ItemStack(Items.EXPERIENCE_BOTTLE, 1), 12, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 6), Optional.of(new ItemCost(Items.BOOK, 3)), new ItemStack(Items.BOOKSHELF), 8, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 1), Optional.empty(), new ItemStack(Items.LAPIS_LAZULI, 4), 16, 2, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 3), Optional.empty(), new ItemStack(Items.EXPERIENCE_BOTTLE, 1), 12, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 6), Optional.of(new ItemCost(Items.BOOK, 3)), new ItemStack(Items.BOOKSHELF), 8, 5, 0.05F));
 
         // Basic enchanted books
         addEnchantedBookTrade(basicOffers, Enchantments.PROTECTION, 1, 8, 6, 8, world);
@@ -83,10 +83,10 @@ public class EnchantsmithNPC extends PathfinderMob implements Merchant {
         addEnchantedBookTrade(basicOffers, Enchantments.FEATHER_FALLING, 1, 6, 6, 6, world);
 
         // Basic scrolls
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.of(new ItemCost(Items.PAPER, 4)), new ItemStack(ModItems.HEAL_SCROLL), 6, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.of(new ItemCost(Items.GOLDEN_APPLE, 1)), new ItemStack(ModItems.ABSORPTION_SCROLL), 6, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 6), Optional.of(new ItemCost(Items.ENDER_PEARL, 1)), new ItemStack(ModItems.TELEPORT_SCROLL), 8, 6, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 10), Optional.of(new ItemCost(Items.LAPIS_LAZULI, 8)), new ItemStack(ModItems.MANA_SHIELD_SCROLL), 6, 10, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.of(new ItemCost(Items.PAPER, 4)), new ItemStack(ModItems.HEAL_SCROLL), 6, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.of(new ItemCost(Items.GOLDEN_APPLE, 1)), new ItemStack(ModItems.ABSORPTION_SCROLL), 6, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 6), Optional.of(new ItemCost(Items.ENDER_PEARL, 1)), new ItemStack(ModItems.TELEPORT_SCROLL), 8, 6, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 10), Optional.of(new ItemCost(Items.LAPIS_LAZULI, 8)), new ItemStack(ModItems.MANA_SHIELD_SCROLL), 6, 10, 0.05F));
 
         // ===== ADVANCED (Unlocked: complete the Village Master quest) =====
 
@@ -104,25 +104,25 @@ public class EnchantsmithNPC extends PathfinderMob implements Merchant {
         addEnchantedBookTrade(advancedOffers, Enchantments.MENDING, 1, 36, 1, 30, world);
 
         // Advanced scrolls
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 10), Optional.of(new ItemCost(Items.BLAZE_POWDER, 2)), new ItemStack(ModItems.FIREBALL_SCROLL), 6, 10, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 10), Optional.of(new ItemCost(Items.BLAZE_POWDER, 2)), new ItemStack(ModItems.FIREBALL_SCROLL), 6, 10, 0.05F));
         this.advancedOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
+                new ItemCost(ModItems.COIN_COPPER, 16),
                 Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 1)),
                 new ItemStack(ModItems.LIGHTNING_SCROLL), 3, 15, 0.05F
         ));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 14), Optional.of(new ItemCost(Items.BLUE_ICE, 4)), new ItemStack(ModItems.FROST_NOVA_SCROLL), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 14), Optional.of(new ItemCost(Items.BLUE_ICE, 4)), new ItemStack(ModItems.FROST_NOVA_SCROLL), 3, 15, 0.05F));
 
         // Wands
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.of(new ItemCost(Items.STICK, 1)), new ItemStack(ModItems.APPRENTICE_WAND), 2, 12, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 32), Optional.of(new ItemCost(Items.BLAZE_ROD, 2)), new ItemStack(ModItems.ADEPT_WAND), 1, 20, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(Items.NETHER_STAR, 1)), new ItemStack(ModItems.MASTER_WAND), 1, 30, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(Items.STICK, 1)), new ItemStack(ModItems.APPRENTICE_WAND), 2, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 32), Optional.of(new ItemCost(Items.BLAZE_ROD, 2)), new ItemStack(ModItems.ADEPT_WAND), 1, 20, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(Items.NETHER_STAR, 1)), new ItemStack(ModItems.MASTER_WAND), 1, 30, 0.05F));
 
         // Mage ability items (replacement copies for players who've earned these via quests)
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 24), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.ARCANE_ORB), 2, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 28), Optional.of(new ItemCost(Items.CLOCK, 1)), new ItemStack(ModItems.TEMPORAL_CRYSTAL), 2, 18, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Optional.of(new ItemCost(Items.LAPIS_LAZULI, 16)), new ItemStack(ModItems.MANA_CATALYST), 2, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 8), Optional.of(new ItemCost(Items.TOTEM_OF_UNDYING, 1)), new ItemStack(ModItems.BARRIER_CHARM), 1, 25, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 6), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 4)), new ItemStack(ModItems.MANA_CRYSTAL), 8, 8, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.ARCANE_ORB), 2, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 28), Optional.of(new ItemCost(Items.CLOCK, 1)), new ItemStack(ModItems.TEMPORAL_CRYSTAL), 2, 18, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(Items.LAPIS_LAZULI, 16)), new ItemStack(ModItems.MANA_CATALYST), 2, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 8), Optional.of(new ItemCost(Items.TOTEM_OF_UNDYING, 1)), new ItemStack(ModItems.BARRIER_CHARM), 1, 25, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 6), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 4)), new ItemStack(ModItems.MANA_CRYSTAL), 8, 8, 0.05F));
     }
 
     private void addEnchantedBookTrade(MerchantOffers target, ResourceKey<Enchantment> enchantmentKey,
@@ -133,7 +133,7 @@ public class EnchantsmithNPC extends PathfinderMob implements Merchant {
             ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
             builder.set(entry, level);
             book.set(DataComponents.STORED_ENCHANTMENTS, builder.toImmutable());
-            target.add(new MerchantOffer(new ItemCost(Items.EMERALD, emeraldCost), Optional.of(new ItemCost(Items.BOOK, 1)), book, maxUses, xp, 0.05F));
+            target.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, emeraldCost), Optional.of(new ItemCost(Items.BOOK, 1)), book, maxUses, xp, 0.05F));
         });
     }
 

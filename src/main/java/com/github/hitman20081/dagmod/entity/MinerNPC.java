@@ -46,19 +46,19 @@ public class MinerNPC extends PathfinderMob implements Merchant {
 
         // ===== PICKAXES =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(Items.IRON_PICKAXE),
                 8, 5, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 12),
-                Optional.of(new ItemCost(Items.DIAMOND, 2)),
+                new ItemCost(ModItems.COIN_COPPER, 12),
+                Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
                 new ItemStack(Items.DIAMOND_PICKAXE),
                 3, 15, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
+                new ItemCost(ModItems.COIN_COPPER, 16),
                 Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 3)),
                 new ItemStack(ModItems.MYTHRIL_PICKAXE),
                 2, 15, 0.05F
@@ -67,42 +67,42 @@ public class MinerNPC extends PathfinderMob implements Merchant {
         // ===== MINING SUPPLIES =====
         // Torches
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.TORCH, 16),
                 16, 2, 0.05F
         ));
         // Ladders
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.LADDER, 8),
                 16, 2, 0.05F
         ));
         // Rails
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.RAIL, 16),
                 12, 4, 0.05F
         ));
         // Powered Rails
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.of(new ItemCost(Items.GOLD_INGOT, 1)),
                 new ItemStack(Items.POWERED_RAIL, 4),
                 8, 8, 0.05F
         ));
         // Minecart
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(Items.MINECART),
                 6, 6, 0.05F
         ));
         // TNT
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.of(new ItemCost(Items.GUNPOWDER, 2)),
                 new ItemStack(Items.TNT, 2),
                 8, 8, 0.05F
@@ -111,69 +111,69 @@ public class MinerNPC extends PathfinderMob implements Merchant {
         // ===== COMMON ORES & MATERIALS =====
         // Coal
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.COAL, 16),
                 16, 2, 0.05F
         ));
         // Iron Ingots
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.IRON_INGOT, 4),
                 12, 4, 0.05F
         ));
         // Copper Ingots
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.COPPER_INGOT, 8),
                 12, 3, 0.05F
         ));
         // Gold Ingots
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(Items.GOLD_INGOT, 3),
                 8, 6, 0.05F
         ));
         // Redstone
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.REDSTONE, 8),
                 12, 4, 0.05F
         ));
         // Lapis Lazuli
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.LAPIS_LAZULI, 6),
                 12, 4, 0.05F
         ));
         // Diamond
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.empty(),
-                new ItemStack(Items.DIAMOND, 1),
+                new ItemStack(ModItems.COIN_SILVER, 1),
                 4, 12, 0.05F
         ));
 
         // ===== RAW ORES (For smelting) =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.RAW_IRON, 4),
                 12, 3, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.RAW_GOLD, 3),
                 10, 5, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.RAW_COPPER, 8),
                 12, 3, 0.05F
@@ -182,14 +182,14 @@ public class MinerNPC extends PathfinderMob implements Merchant {
         // ===== MOD MATERIALS =====
         // Raw Mythril
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 Optional.of(new ItemCost(Items.IRON_INGOT, 2)),
                 new ItemStack(ModItems.RAW_MYTHRIL, 2),
                 6, 10, 0.05F
         ));
         // Mythril Ingot
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.of(new ItemCost(Items.IRON_INGOT, 4)),
                 new ItemStack(ModItems.MYTHRIL_INGOT, 1),
                 8, 12, 0.05F
@@ -197,43 +197,43 @@ public class MinerNPC extends PathfinderMob implements Merchant {
 
         // ===== RAW GEMS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_RUBY, 2),
                 6, 8, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_SAPPHIRE, 2),
                 6, 8, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_CITRINE, 2),
                 6, 6, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 5),
+                new ItemCost(ModItems.COIN_COPPER, 5),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_TANZANITE, 2),
                 6, 10, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_TOPAZ, 2),
                 6, 6, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_ZIRCON, 2),
                 6, 8, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(ModItems.RAW_PINK_GARNET, 2),
                 6, 8, 0.05F
@@ -244,21 +244,21 @@ public class MinerNPC extends PathfinderMob implements Merchant {
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.COAL, 32),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells iron
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.IRON_INGOT, 8),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 12, 3, 0.05F
         ));
         // Player sells raw gems
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_RUBY, 4),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 8, 5, 0.05F
         ));
 

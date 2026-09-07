@@ -50,14 +50,14 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         // ===== RANGED WEAPONS =====
         // Bow
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(Items.BOW),
                 8, 5, 0.05F
         ));
         // Crossbow
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 Optional.of(new ItemCost(Items.TRIPWIRE_HOOK, 1)),
                 new ItemStack(Items.CROSSBOW),
                 6, 8, 0.05F
@@ -66,21 +66,21 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         // ===== ARROWS =====
         // Regular Arrows
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.ARROW, 16),
                 16, 2, 0.05F
         ));
         // Spectral Arrows
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.of(new ItemCost(Items.GLOWSTONE_DUST, 4)),
                 new ItemStack(Items.SPECTRAL_ARROW, 8),
                 12, 5, 0.05F
         ));
         // Tipped Arrows - Poison
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.of(new ItemCost(Items.ARROW, 8)),
                 new ItemStack(Items.TIPPED_ARROW, 8),
                 8, 8, 0.05F
@@ -89,35 +89,35 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         // ===== LEATHER & MATERIALS =====
         // Leather
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.LEATHER, 4),
                 12, 4, 0.05F
         ));
         // Rabbit Hide
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.RABBIT_HIDE, 4),
                 12, 3, 0.05F
         ));
         // String
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.STRING, 8),
                 16, 2, 0.05F
         ));
         // Feathers
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.FEATHER, 16),
                 16, 2, 0.05F
         ));
         // Flint
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.FLINT, 16),
                 16, 2, 0.05F
@@ -125,25 +125,25 @@ public class HunterNPC extends PathfinderMob implements Merchant {
 
         // ===== LEATHER ARMOR =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(Items.LEATHER_HELMET),
                 8, 4, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 5),
+                new ItemCost(ModItems.COIN_COPPER, 5),
                 Optional.empty(),
                 new ItemStack(Items.LEATHER_CHESTPLATE),
                 8, 4, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(Items.LEATHER_LEGGINGS),
                 8, 4, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.LEATHER_BOOTS),
                 8, 4, 0.05F
@@ -152,42 +152,42 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         // ===== MOB DROPS =====
         // Bones
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.BONE, 8),
                 16, 2, 0.05F
         ));
         // Gunpowder
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.GUNPOWDER, 4),
                 12, 4, 0.05F
         ));
         // Slimeball
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.SLIME_BALL, 4),
                 10, 5, 0.05F
         ));
         // Honey Bottle
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.of(new ItemCost(Items.GLASS_BOTTLE, 1)),
                 new ItemStack(Items.HONEY_BOTTLE),
                 8, 5, 0.05F
         ));
         // Ink Sac
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.INK_SAC, 4),
                 12, 3, 0.05F
         ));
         // Glow Ink Sac
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(Items.GLOW_INK_SAC, 2),
                 8, 6, 0.05F
@@ -196,35 +196,35 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         // ===== ANIMAL TAMING & EQUIPMENT =====
         // Saddle
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 Optional.empty(),
                 new ItemStack(Items.SADDLE),
                 4, 10, 0.05F
         ));
         // Lead
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.LEAD, 2),
                 8, 5, 0.05F
         ));
         // Name Tag
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.empty(),
                 new ItemStack(Items.NAME_TAG),
                 4, 12, 0.05F
         ));
         // Horse Armor
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 Optional.empty(),
                 new ItemStack(Items.IRON_HORSE_ARMOR),
                 4, 10, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
-                Optional.of(new ItemCost(Items.DIAMOND, 2)),
+                new ItemCost(ModItems.COIN_COPPER, 16),
+                Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
                 new ItemStack(Items.DIAMOND_HORSE_ARMOR),
                 2, 18, 0.05F
         ));
@@ -232,21 +232,21 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         // ===== TRACKING & NAVIGATION =====
         // Compass
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.empty(),
                 new ItemStack(Items.COMPASS),
                 6, 6, 0.05F
         ));
         // Recovery Compass
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
+                new ItemCost(ModItems.COIN_COPPER, 16),
                 Optional.of(new ItemCost(Items.ECHO_SHARD, 8)),
                 new ItemStack(Items.RECOVERY_COMPASS),
                 2, 20, 0.05F
         ));
         // Spyglass
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 Optional.of(new ItemCost(Items.AMETHYST_SHARD, 2)),
                 new ItemStack(Items.SPYGLASS),
                 4, 10, 0.05F
@@ -254,25 +254,25 @@ public class HunterNPC extends PathfinderMob implements Merchant {
 
         // ===== COOKED MEAT (Hunter's Provisions) =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.COOKED_BEEF, 6),
                 12, 3, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.COOKED_PORKCHOP, 6),
                 12, 3, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.COOKED_MUTTON, 6),
                 12, 3, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.COOKED_RABBIT, 4),
                 12, 3, 0.05F
@@ -283,28 +283,28 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.LEATHER, 8),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells raw meat
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.BEEF, 12),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells feathers
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.FEATHER, 24),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells rabbit hide
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.RABBIT_HIDE, 8),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 12, 3, 0.05F
         ));
 

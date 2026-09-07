@@ -10,6 +10,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.github.hitman20081.dagmod.item.ModItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.sounds.SoundEvent;
@@ -37,19 +38,19 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== LIGHTING & BASICS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 java.util.Optional.empty(),
                 new ItemStack(Items.TORCH, 16),
                 24, 3, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.LANTERN, 4),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CAMPFIRE, 2),
                 12, 5, 0.05F
@@ -57,25 +58,25 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== HOME & SHELTER =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:red_bed"))),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.GLASS, 16),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CHEST, 2),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CRAFTING_TABLE),
                 12, 5, 0.05F
@@ -83,25 +84,25 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== TOOLS & UTILITY =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BUCKET),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.COMPASS),
                 8, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.CLOCK),
                 8, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 java.util.Optional.empty(),
                 new ItemStack(Items.SPYGLASS),
                 6, 10, 0.05F
@@ -109,25 +110,25 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== TRAVEL & EXPLORATION =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.MAP),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.LEAD, 2),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 java.util.Optional.empty(),
                 new ItemStack(Items.SADDLE),
                 4, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 10),
+                new ItemCost(ModItems.COIN_COPPER, 10),
                 java.util.Optional.empty(),
                 new ItemStack(Items.NAME_TAG),
                 6, 10, 0.05F
@@ -135,13 +136,13 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== FARMING SUPPLIES =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 java.util.Optional.empty(),
                 new ItemStack(Items.BONE_MEAL, 8),
                 24, 3, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 java.util.Optional.empty(),
                 new ItemStack(Items.HAY_BLOCK, 4),
                 16, 5, 0.05F
@@ -149,13 +150,13 @@ public class VillageMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== DYES & DECORATIONS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.PAINTING, 3),
                 12, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.FLOWER_POT, 4),
                 12, 5, 0.05F

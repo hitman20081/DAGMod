@@ -37,6 +37,7 @@ public abstract class QuestReward {
     // Reward types enum
     public enum RewardType {
         ITEM("Item"),
+        CURRENCY("Currency"),
         EXPERIENCE("Experience"),
         UNLOCK("Unlock"),
         REPUTATION("Reputation"),

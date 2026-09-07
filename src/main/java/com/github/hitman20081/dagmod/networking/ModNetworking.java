@@ -19,6 +19,14 @@ public class ModNetworking {
                 QuestNetworkHandler.handleQuestRequest(context.player(), payload);
             });
         });
+
+        PayloadTypeRegistry.serverboundPlay().register(CoinPouchScrollPacket.ID, CoinPouchScrollPacket.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(CoinPouchScrollPacket.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                CoinPouchNetworkHandler.handleScroll(context.player(), payload);
+            });
+        });
     }
 
     public static void registerS2CPackets() {

@@ -133,7 +133,7 @@ public class QuestBlock extends Block {
 
         // Show quick stats
         player.sendSystemMessage(Component.literal("Your Quest Progress:"));
-        player.sendSystemMessage(Component.literal("• Active Quests: " + playerData.getActiveQuestCount() + "/" + playerData.getMaxActiveQuests()));
+        player.sendSystemMessage(Component.literal("• Active Quests: " + playerData.getActiveStoryQuestCount() + "/" + playerData.getMaxActiveQuests()));
         player.sendSystemMessage(Component.literal("• Completed Quests: " + playerData.getTotalQuestsCompleted()));
         player.sendSystemMessage(Component.literal("• Quest Book Tier: " + playerData.getQuestBookTier().getDisplayName()));
         player.sendSystemMessage(Component.literal(""));

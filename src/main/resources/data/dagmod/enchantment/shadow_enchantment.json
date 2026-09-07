@@ -1,19 +1,6 @@
 {
   "description": "Shadow",
-  "supported_items": [
-    "minecraft:chainmail_leggings",
-    "minecraft:diamond_leggings",
-    "minecraft:golden_leggings",
-    "minecraft:iron_leggings",
-    "minecraft:leather_leggings",
-    "minecraft:netherite_leggings",
-    "minecraft:chainmail_boots",
-    "minecraft:diamond_boots",
-    "minecraft:golden_boots",
-    "minecraft:iron_boots",
-    "minecraft:leather_boots",
-    "minecraft:netherite_boots"
-  ],
+  "supported_items": "#dagmod:enchantable/leg_and_foot_armor",
   "weight": 3,
   "max_level": 5,
   "min_cost": {

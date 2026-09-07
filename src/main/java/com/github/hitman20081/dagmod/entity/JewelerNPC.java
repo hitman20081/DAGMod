@@ -43,43 +43,43 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_RUBY, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 5),
+                new ItemStack(ModItems.COIN_COPPER, 5),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_SAPPHIRE, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 5),
+                new ItemStack(ModItems.COIN_COPPER, 5),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_CITRINE, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 16, 6, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_TANZANITE, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 6),
+                new ItemStack(ModItems.COIN_COPPER, 6),
                 16, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_TOPAZ, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 16, 6, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_ZIRCON, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 4),
+                new ItemStack(ModItems.COIN_COPPER, 4),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.GEM_CUT_PINK_GARNET, 2),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 4),
+                new ItemStack(ModItems.COIN_COPPER, 4),
                 16, 8, 0.05F
         ));
 
@@ -87,25 +87,25 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.AMETHYST_SHARD, 8),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.LAPIS_LAZULI, 8),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
 
         // ===== SELL GEM CRAFTING SUPPLIES =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 java.util.Optional.empty(),
                 new ItemStack(ModItems.GEM_CUTTER_TOOL),
                 6, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(ModItems.CITRINE_POWDER, 4),
                 12, 5, 0.05F
@@ -113,8 +113,8 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
 
         // ===== SELL PREMIUM GEMS =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 32),
-                java.util.Optional.of(new ItemCost(Items.DIAMOND, 4)),
+                new ItemCost(ModItems.COIN_COPPER, 32),
+                java.util.Optional.of(new ItemCost(ModItems.COIN_SILVER, 4)),
                 new ItemStack(ModItems.SILMARIL),
                 1, 30, 0.05F
         ));

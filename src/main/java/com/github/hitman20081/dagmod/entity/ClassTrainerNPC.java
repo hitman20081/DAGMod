@@ -32,15 +32,12 @@ public class ClassTrainerNPC extends PathfinderMob {
 
     private enum TrainerState { OVERVIEW, TURN_IN, ACCEPT }
 
-    private static final List<String> WARRIOR_QUESTS = List.of(
-            "trial_of_fury", "battle_hardened", "whirlwind_mastery", "iron_skin_trial", "war_cry"
-    );
-    private static final List<String> MAGE_QUESTS = List.of(
-            "arcane_missiles_unlock", "temporal_mastery", "mana_burst_unlock", "arcane_barrier_unlock", "archmage_trial"
-    );
-    private static final List<String> ROGUE_QUESTS = List.of(
-            "shadows_calling", "blink_strike_unlock", "poison_strike_unlock", "assassinate_unlock", "vanish_unlock"
-    );
+    // Offered by the trainer once the class's 5-quest chain is fully complete -- an NPC-category
+    // quest (not shown at the Quest Block), so this is its only path to being offered/accepted.
+    // Deliberately NOT part of ClassQuestChains itself: that list is also used by
+    // QuestManager.canStartQuest's own path_of_destiny gate to check "is the chain complete",
+    // and including the capstone in its own completion check would be circular.
+    private static final String CAPSTONE_QUEST_ID = "path_of_destiny";
 
     public ClassTrainerNPC(EntityType<? extends PathfinderMob> type, Level world) {
         super(type, world);
@@ -76,19 +73,22 @@ public class ClassTrainerNPC extends PathfinderMob {
             return InteractionResult.CONSUME;
         }
 
+        List<String> displayChain = new java.util.ArrayList<>(chain);
+        displayChain.add(CAPSTONE_QUEST_ID);
+
         UUID uid = player.getUUID();
         TrainerState state = playerState.getOrDefault(uid, TrainerState.OVERVIEW);
 
         switch (state) {
-            case OVERVIEW -> handleOverview(serverPlayer, playerClass, chain);
-            case TURN_IN  -> handleTurnIn(serverPlayer, chain);
-            case ACCEPT   -> handleAccept(serverPlayer, chain);
+            case OVERVIEW -> handleOverview(serverPlayer, playerClass, chain, displayChain);
+            case TURN_IN  -> handleTurnIn(serverPlayer, displayChain);
+            case ACCEPT   -> handleAccept(serverPlayer, chain, displayChain);
         }
 
         return InteractionResult.CONSUME;
     }
 
-    private void handleOverview(ServerPlayer player, String playerClass, List<String> chain) {
+    private void handleOverview(ServerPlayer player, String playerClass, List<String> chain, List<String> displayChain) {
         QuestManager qm = QuestManager.getInstance();
         qm.updateQuestProgress(player);
         QuestData data = qm.getPlayerData(player);
@@ -116,12 +116,13 @@ public class ClassTrainerNPC extends PathfinderMob {
         Quest nextAvailable = null;
         int playerLevel = getPlayerLevel(player);
 
-        for (String questId : chain) {
+        for (String questId : displayChain) {
             Quest template = qm.getQuest(questId);
             if (template == null) continue;
 
             boolean isCompleted = data.isQuestCompleted(questId);
             Quest activeQuest = data.getActiveQuest(questId);
+            boolean isCapstone = questId.equals(CAPSTONE_QUEST_ID);
 
             if (isCompleted) {
                 player.sendSystemMessage(Component.literal("  ✓ " + template.getName() + " [Lv." + template.getMinLevel() + "]")
@@ -140,15 +141,23 @@ public class ClassTrainerNPC extends PathfinderMob {
                     }
                 }
             } else {
-                boolean prereqMet = template.getPrerequisites().isEmpty()
-                        || template.getPrerequisites().stream().allMatch(data::isQuestCompleted);
+                // Path of Destiny has no addPrerequisite() on the quest itself (the required
+                // chain differs per class), so its real gate is "has completed every quest in
+                // this class's own chain" rather than template.getPrerequisites().
+                boolean prereqMet = isCapstone
+                        ? chain.stream().allMatch(data::isQuestCompleted)
+                        : template.getPrerequisites().isEmpty()
+                            || template.getPrerequisites().stream().allMatch(data::isQuestCompleted);
                 boolean levelMet = playerLevel >= template.getMinLevel();
 
                 if (prereqMet && levelMet && nextAvailable == null) {
                     player.sendSystemMessage(Component.literal("  ◈ " + template.getName() + " [Lv." + template.getMinLevel() + "] — AVAILABLE")
                             .withStyle(ChatFormatting.WHITE));
                     nextAvailable = template;
-                } else {
+                } else if (!isCapstone || prereqMet) {
+                    // Once the chain is complete, still show Path of Destiny locked-by-level if
+                    // that's the only thing missing; otherwise it stays implicit (no "complete
+                    // previous quest" callout for a capstone that isn't reachable yet).
                     String lockReason = !prereqMet ? "complete previous quest" : "Lv." + template.getMinLevel() + " required";
                     player.sendSystemMessage(Component.literal("  🔒 " + template.getName() + " [" + lockReason + "]")
                             .withStyle(ChatFormatting.DARK_GRAY));
@@ -193,18 +202,21 @@ public class ClassTrainerNPC extends PathfinderMob {
         playerState.put(player.getUUID(), TrainerState.OVERVIEW);
     }
 
-    private void handleAccept(ServerPlayer player, List<String> chain) {
+    private void handleAccept(ServerPlayer player, List<String> chain, List<String> displayChain) {
         QuestManager qm = QuestManager.getInstance();
         QuestData data = qm.getPlayerData(player);
         int playerLevel = getPlayerLevel(player);
 
-        for (String questId : chain) {
+        for (String questId : displayChain) {
             Quest template = qm.getQuest(questId);
             if (template == null) continue;
             if (data.isQuestCompleted(questId) || data.getActiveQuest(questId) != null) continue;
 
-            boolean prereqMet = template.getPrerequisites().isEmpty()
-                    || template.getPrerequisites().stream().allMatch(data::isQuestCompleted);
+            boolean isCapstone = questId.equals(CAPSTONE_QUEST_ID);
+            boolean prereqMet = isCapstone
+                    ? chain.stream().allMatch(data::isQuestCompleted)
+                    : template.getPrerequisites().isEmpty()
+                        || template.getPrerequisites().stream().allMatch(data::isQuestCompleted);
             boolean levelMet = playerLevel >= template.getMinLevel();
 
             if (prereqMet && levelMet) {
@@ -225,12 +237,8 @@ public class ClassTrainerNPC extends PathfinderMob {
     }
 
     private List<String> getChain(String playerClass) {
-        return switch (playerClass) {
-            case "Warrior" -> WARRIOR_QUESTS;
-            case "Mage"    -> MAGE_QUESTS;
-            case "Rogue"   -> ROGUE_QUESTS;
-            default        -> null;
-        };
+        List<String> chain = com.github.hitman20081.dagmod.quest.ClassQuestChains.forClass(playerClass);
+        return chain.isEmpty() ? null : chain;
     }
 
     private void sendLine(Player player, String message, ChatFormatting color) {

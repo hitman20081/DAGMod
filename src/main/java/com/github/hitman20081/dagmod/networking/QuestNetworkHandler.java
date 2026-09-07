@@ -82,7 +82,7 @@ public class QuestNetworkHandler {
         // Send sync packet with both active and available quests
         QuestSyncPacket syncPacket = new QuestSyncPacket(
                 playerData.getQuestBookTier(),
-                playerData.getActiveQuestCount(),
+                playerData.getActiveStoryQuestCount(),
                 playerData.getMaxActiveQuests(),
                 playerData.getTotalQuestsCompleted(),
                 activeQuestInfos,

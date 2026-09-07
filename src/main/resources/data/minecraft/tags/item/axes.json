@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "dagmod:mythril_axe",
+    "dagmod:frostbite_axe",
+    "dagmod:whirlwind_axe",
+    "dagmod:crystalhammer"
+  ]
+}

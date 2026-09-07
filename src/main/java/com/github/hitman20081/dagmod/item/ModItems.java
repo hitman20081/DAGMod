@@ -33,6 +33,19 @@ public class ModItems {
     public static final Item BRIMSTONE_DUST = register("brimstone_dust", Item::new, new Item.Properties());
     public static final Item PURE_BRIMSTONE_DUST = register("pure_brimstone_dust", Item::new, new Item.Properties());
 
+    // Coin currency — 4 tiers, 100:1 in value between adjacent tiers. These are physical items
+    // only for flavor/loot/quest-reward drops and manual player-to-player trading; the actual
+    // economy lives in the Coin Pouch's single balance (com.github.hitman20081.dagmod.economy) —
+    // see CoinPouchUtil for why (avoids both cascading tier conversion and the 99-stack cap).
+    public static final Item COIN_COPPER = register("coin_copper", Item::new, new Item.Properties().stacksTo(99));
+    public static final Item COIN_SILVER = register("coin_silver", Item::new, new Item.Properties().stacksTo(99));
+    public static final Item COIN_GOLD = register("coin_gold", Item::new, new Item.Properties().stacksTo(99));
+    public static final Item COIN_PLATINUM = register("coin_platinum", Item::new, new Item.Properties().stacksTo(99));
+
+    public static final Item COIN_POUCH = register("coin_pouch",
+            settings -> new com.github.hitman20081.dagmod.economy.CoinPouchItem(settings),
+            new Item.Properties().stacksTo(1));
+
     // Gem Items — Cut tier
     public static final Item GEM_CUT_CITRINE    = register("gem_cut_citrine",    Item::new, new Item.Properties().stacksTo(64));
     public static final Item GEM_CUT_RUBY       = register("gem_cut_ruby",       Item::new, new Item.Properties().stacksTo(64));
@@ -791,6 +804,16 @@ public class ModItems {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
                 .register((itemGroup) ->
                         itemGroup.accept(ModItems.SUSPICIOUS_SUBSTANCE));
+
+        // Coin currency
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+                .register((itemGroup) -> {
+                    itemGroup.accept(ModItems.COIN_COPPER);
+                    itemGroup.accept(ModItems.COIN_SILVER);
+                    itemGroup.accept(ModItems.COIN_GOLD);
+                    itemGroup.accept(ModItems.COIN_PLATINUM);
+                    itemGroup.accept(ModItems.COIN_POUCH);
+                });
 
         // Gem Items — Cut tier
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)

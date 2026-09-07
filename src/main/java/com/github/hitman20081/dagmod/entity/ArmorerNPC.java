@@ -53,36 +53,36 @@ public class ArmorerNPC extends PathfinderMob implements Merchant {
 
         // ===== BASIC (Always available) =====
 
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 6), Optional.empty(), new ItemStack(Items.IRON_HELMET), 8, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 10), Optional.empty(), new ItemStack(Items.IRON_CHESTPLATE), 8, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.empty(), new ItemStack(Items.IRON_LEGGINGS), 8, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 5), Optional.empty(), new ItemStack(Items.IRON_BOOTS), 8, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 6), Optional.empty(), new ItemStack(Items.IRON_HELMET), 8, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 10), Optional.empty(), new ItemStack(Items.IRON_CHESTPLATE), 8, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.empty(), new ItemStack(Items.IRON_LEGGINGS), 8, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 5), Optional.empty(), new ItemStack(Items.IRON_BOOTS), 8, 5, 0.05F));
 
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 4), Optional.of(new ItemCost(Items.IRON_NUGGET, 8)), new ItemStack(Items.CHAINMAIL_HELMET), 6, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 7), Optional.of(new ItemCost(Items.IRON_NUGGET, 12)), new ItemStack(Items.CHAINMAIL_CHESTPLATE), 6, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 6), Optional.of(new ItemCost(Items.IRON_NUGGET, 10)), new ItemStack(Items.CHAINMAIL_LEGGINGS), 6, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 3), Optional.of(new ItemCost(Items.IRON_NUGGET, 6)), new ItemStack(Items.CHAINMAIL_BOOTS), 6, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 4), Optional.of(new ItemCost(Items.IRON_NUGGET, 8)), new ItemStack(Items.CHAINMAIL_HELMET), 6, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 7), Optional.of(new ItemCost(Items.IRON_NUGGET, 12)), new ItemStack(Items.CHAINMAIL_CHESTPLATE), 6, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 6), Optional.of(new ItemCost(Items.IRON_NUGGET, 10)), new ItemStack(Items.CHAINMAIL_LEGGINGS), 6, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 3), Optional.of(new ItemCost(Items.IRON_NUGGET, 6)), new ItemStack(Items.CHAINMAIL_BOOTS), 6, 8, 0.05F));
 
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 4), Optional.empty(), new ItemStack(Items.SHIELD), 10, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 3), Optional.empty(), new ItemStack(Items.IRON_INGOT, 8), 16, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 6), Optional.of(new ItemCost(Items.IRON_INGOT, 2)), new ItemStack(ModItems.MYTHRIL_INGOT), 12, 10, 0.1F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 4), Optional.empty(), new ItemStack(Items.SHIELD), 10, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 3), Optional.empty(), new ItemStack(Items.IRON_INGOT, 8), 16, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 6), Optional.of(new ItemCost(Items.IRON_INGOT, 2)), new ItemStack(ModItems.MYTHRIL_INGOT), 12, 10, 0.1F));
 
         // ===== ADVANCED (Unlocked: defend the village) =====
 
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.of(new ItemCost(Items.DIAMOND, 2)), new ItemStack(Items.DIAMOND_HELMET), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 24), Optional.of(new ItemCost(Items.DIAMOND, 4)), new ItemStack(Items.DIAMOND_CHESTPLATE), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Optional.of(new ItemCost(Items.DIAMOND, 3)), new ItemStack(Items.DIAMOND_LEGGINGS), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 12), Optional.of(new ItemCost(Items.DIAMOND, 2)), new ItemStack(Items.DIAMOND_BOOTS), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)), new ItemStack(Items.DIAMOND_HELMET), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(ModItems.COIN_SILVER, 4)), new ItemStack(Items.DIAMOND_CHESTPLATE), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(ModItems.COIN_SILVER, 3)), new ItemStack(Items.DIAMOND_LEGGINGS), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 12), Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)), new ItemStack(Items.DIAMOND_BOOTS), 3, 15, 0.05F));
 
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.CRYSTAL_SHIELD), 3, 10, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Optional.of(new ItemCost(Items.OAK_LOG, 24)), new ItemStack(ModItems.NATURE_SHIELD), 3, 10, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.CRYSTAL_SHIELD), 3, 10, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(Items.OAK_LOG, 24)), new ItemStack(ModItems.NATURE_SHIELD), 3, 10, 0.05F));
 
         // ===== LEGENDARY (Unlocked: master the crafting arts) =====
 
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 4)), new ItemStack(ModItems.MYTHRIL_HELMET), 2, 12, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 32), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 7)), new ItemStack(ModItems.MYTHRIL_CHESTPLATE), 2, 12, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 28), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 6)), new ItemStack(ModItems.MYTHRIL_LEGGINGS), 2, 12, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 3)), new ItemStack(ModItems.MYTHRIL_BOOTS), 2, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 4)), new ItemStack(ModItems.MYTHRIL_HELMET), 2, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 32), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 7)), new ItemStack(ModItems.MYTHRIL_CHESTPLATE), 2, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 28), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 6)), new ItemStack(ModItems.MYTHRIL_LEGGINGS), 2, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 3)), new ItemStack(ModItems.MYTHRIL_BOOTS), 2, 12, 0.05F));
 
         this.offers.addAll(basicOffers);
     }

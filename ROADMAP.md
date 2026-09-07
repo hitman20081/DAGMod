@@ -277,11 +277,11 @@ Priority: **HIGH** (Major milestone)
 
 > **Status check (2026-08-07)**: the onboarding half of this milestone (Inn as spawn hub, Garrick handling race/class selection) already shipped quietly in **v1.9.1** and was never reflected here. The progression half (broken gear, champion books, quest-gated dimension access, HoC as a true earned singleton) has **not** been started. Verified against `HallSpawnInitializer.java`, `InnkeeperGarrickNPC.java`, and the `hall_spawn`/`village_inn_set` structure_set placement configs — see per-item notes below.
 
-- 🟡 **Starting Inn replaces early-game HoC dependency**
+- ✅ **Starting Inn replaces early-game HoC dependency** — complete as of 2026-08-10
   - ✅ Village Inn structure generates and IS the world spawn point (`HallSpawnInitializer` locates it and calls `/setworldspawn` on first server start — v1.9.1)
   - ✅ Race and class selection handled entirely through Garrick (no altars needed near spawn — see below)
-  - ❓ Job Board accessible from the Inn from day one — likely true (Job Board isn't gated elsewhere) but not specifically verified this pass
-  - ❌ Armorer and Jeweler NPC in the Inn basement — no evidence found; the Inn currently appears to be Garrick-only
+  - ✅ Job Board accessible from the Inn from day one — confirmed `dagmod:job_board` and `dagmod:quest_block` are real placed blocks in `village_inn.nbt`
+  - ✅ Armorer and Jeweler NPC in the Inn — added as baked entities in Garrick's own room (open floor space, no architecture changes to the hand-built structure); not a literal separate "basement" as the original design doc envisioned, just present and reachable in the Inn from day one
 
 - ✅ **Garrick as Guild Registry (Race & Class Selection)** — mostly done, v1.9.1
   - ✅ Race and class selection moved to Garrick NPC dialogue (`InnkeeperGarrickNPC.showRaceMenu`/`showClassMenu`, chat-menu confirmed, same system as quest menus)
@@ -289,12 +289,11 @@ Priority: **HIGH** (Major milestone)
   - ❓ Stat summaries in-dialogue, starter gear handed out on selection — not specifically re-verified this pass, likely present given the menu flow but worth a quick confirm
   - **Note**: the physical Race/Class Selection Altars still exist and still work as a direct, standalone interaction path (right-click with a class token still selects a class) — they haven't been removed or repurposed, just made non-mandatory now that Garrick offers the same thing
 
-- 🟡 **Hall of Champions as Earned Destination**
-  - ✅ HoC made significantly rarer (`hall_spawn.json`: spacing 125 / separation 50 chunks, up from its earlier common village-adjacent placement — v1.9.1 "HoC moved to mid/late-game")
-  - ❌ Still a `random_spread` placement, not a true one-per-world singleton (compare `castle_pale_garden`'s `concentric_rings, count: 1` pattern from this session — same fix would apply here)
-  - ❌ Not specifically anchored ~5,000 blocks from spawn
-  - ❌ Not triggered by Master book completion + Garrick compass grant — it just generates normally, rarer
-  - ❌ Race/Class Selection Altars not yet repurposed as Champion Registration points in HoC — they're still plain altars there too
+- ✅ **Hall of Champions as Earned Destination** — complete as of 2026-08-10, definition revised from the original design
+  - ✅ True one-per-world singleton (`hall_spawn.json`: `minecraft:concentric_rings, count: 1`, same pattern as `castle_pale_garden`) — was `random_spread` before, meaning more than one could theoretically exist far apart
+  - **Revised "earned"**: not gated behind Master book completion + a Garrick compass grant as originally designed. Garrick still hands out the Hall Locator immediately at character registration, and his dialogue actively points new players toward HoC early — because the Class Trainer (which grants class ability quests) only exists there, so locking HoC away would block class progression entirely. Decided the combination of (a) real distance to travel there now that it's a true singleton, and (b) the first class quest itself being level-10-gated regardless of arrival time, already produces a meaningful "earned" journey without needing the literal compass mechanic.
+  - **Dropped, not deferred**: Champion Registration Altars and the Garrick-compass-at-Master-book trigger are no longer planned — both were downstream of Champion Book Progression, which doesn't exist and isn't needed to gate HoC access under the revised definition.
+  - Known tradeoff: switching to vanilla `concentric_rings` lost this mod's custom `avoid_water` check (bone dungeon exclusion is preserved — `bone_dungeon_set` independently excludes itself from spawning near `hall_spawn`)
 
 - ❌ **Broken Gear Progression Loop** — not started, no code or items found
 - ❌ **Champion Book Progression** — not started; Master Quest Book is still the top tier

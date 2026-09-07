@@ -58,69 +58,69 @@ public class MysteryMerchantNPC extends PathfinderMob implements Merchant {
         // ===== BASIC (Always available) =====
 
         // Mid-tier weapons
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.empty(), new ItemStack(ModItems.MYTHRIL_SWORD), 3, 5, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 24), Optional.of(new ItemCost(Items.GOLD_INGOT, 8)), new ItemStack(ModItems.GILDED_RAPIER), 2, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 32), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 16)), new ItemStack(ModItems.CRYSTAL_KATANA), 2, 10, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.empty(), new ItemStack(ModItems.MYTHRIL_SWORD), 3, 5, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(Items.GOLD_INGOT, 8)), new ItemStack(ModItems.GILDED_RAPIER), 2, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 32), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 16)), new ItemStack(ModItems.CRYSTAL_KATANA), 2, 10, 0.05F));
 
         // Basic shields
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.CRYSTAL_SHIELD), 2, 8, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 24), Optional.of(new ItemCost(Items.OAK_LOG, 32)), new ItemStack(ModItems.NATURE_SHIELD), 2, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.CRYSTAL_SHIELD), 2, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(Items.OAK_LOG, 32)), new ItemStack(ModItems.NATURE_SHIELD), 2, 8, 0.05F));
 
         // Mythril armor
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 24), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 5)), new ItemStack(ModItems.MYTHRIL_HELMET), 2, 10, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 40), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 8)), new ItemStack(ModItems.MYTHRIL_CHESTPLATE), 2, 10, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 36), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 7)), new ItemStack(ModItems.MYTHRIL_LEGGINGS), 2, 10, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 4)), new ItemStack(ModItems.MYTHRIL_BOOTS), 2, 10, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 5)), new ItemStack(ModItems.MYTHRIL_HELMET), 2, 10, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 40), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 8)), new ItemStack(ModItems.MYTHRIL_CHESTPLATE), 2, 10, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 36), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 7)), new ItemStack(ModItems.MYTHRIL_LEGGINGS), 2, 10, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 4)), new ItemStack(ModItems.MYTHRIL_BOOTS), 2, 10, 0.05F));
 
         // Materials
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.of(new ItemCost(Items.IRON_INGOT, 4)), new ItemStack(ModItems.MYTHRIL_INGOT), 8, 15, 0.1F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.of(new ItemCost(Items.IRON_INGOT, 4)), new ItemStack(ModItems.MYTHRIL_INGOT), 8, 15, 0.1F));
 
         // ===== ADVANCED (Unlocked: survive the night watch) =====
 
         // High-tier weapons
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 48), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 2)), new ItemStack(ModItems.DRAGONSCALE_SWORD), 1, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 48), Optional.of(new ItemCost(Items.BLAZE_ROD, 8)), new ItemStack(ModItems.INFERNO_SWORD), 1, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 40), Optional.of(new ItemCost(Items.ECHO_SHARD, 4)), new ItemStack(ModItems.SHADOWFANG_DAGGER), 1, 12, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 52), Optional.of(new ItemCost(Items.ECHO_SHARD, 8)), new ItemStack(ModItems.SHADOWFANG_SWORD), 1, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(Items.GHAST_TEAR, 4)), new ItemStack(ModItems.BLOODTHIRSTER_BLADE), 1, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 56), Optional.of(new ItemCost(Items.BLUE_ICE, 16)), new ItemStack(ModItems.FROSTBITE_AXE), 1, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 44), Optional.of(new ItemCost(Items.SPIDER_EYE, 8)), new ItemStack(ModItems.POISON_FANG_SPEAR), 1, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 48), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 2)), new ItemStack(ModItems.DRAGONSCALE_SWORD), 1, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 48), Optional.of(new ItemCost(Items.BLAZE_ROD, 8)), new ItemStack(ModItems.INFERNO_SWORD), 1, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 40), Optional.of(new ItemCost(Items.ECHO_SHARD, 4)), new ItemStack(ModItems.SHADOWFANG_DAGGER), 1, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 52), Optional.of(new ItemCost(Items.ECHO_SHARD, 8)), new ItemStack(ModItems.SHADOWFANG_SWORD), 1, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(Items.GHAST_TEAR, 4)), new ItemStack(ModItems.BLOODTHIRSTER_BLADE), 1, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 56), Optional.of(new ItemCost(Items.BLUE_ICE, 16)), new ItemStack(ModItems.FROSTBITE_AXE), 1, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 44), Optional.of(new ItemCost(Items.SPIDER_EYE, 8)), new ItemStack(ModItems.POISON_FANG_SPEAR), 1, 12, 0.05F));
 
         // Advanced shields
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 36), Optional.of(new ItemCost(Items.BLUE_ICE, 8)), new ItemStack(ModItems.FROST_SHIELD), 1, 12, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 40), Optional.of(new ItemCost(Items.BLAZE_ROD, 4)), new ItemStack(ModItems.INFERNO_SHIELD), 1, 12, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 40), Optional.of(new ItemCost(Items.ECHO_SHARD, 4)), new ItemStack(ModItems.SHADOW_SHIELD), 1, 12, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 44), Optional.of(new ItemCost(Items.SUNFLOWER, 16)), new ItemStack(ModItems.SOLAR_SHIELD), 1, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 36), Optional.of(new ItemCost(Items.BLUE_ICE, 8)), new ItemStack(ModItems.FROST_SHIELD), 1, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 40), Optional.of(new ItemCost(Items.BLAZE_ROD, 4)), new ItemStack(ModItems.INFERNO_SHIELD), 1, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 40), Optional.of(new ItemCost(Items.ECHO_SHARD, 4)), new ItemStack(ModItems.SHADOW_SHIELD), 1, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 44), Optional.of(new ItemCost(Items.SUNFLOWER, 16)), new ItemStack(ModItems.SOLAR_SHIELD), 1, 15, 0.05F));
 
         // Dragon scale material (requires some proof of combat)
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 4), Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 1)), new ItemStack(ModItems.DRAGON_SCALE), 5, 20, 0.1F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 4), Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 1)), new ItemStack(ModItems.DRAGON_SCALE), 5, 20, 0.1F));
 
         // ===== LEGENDARY (Unlocked: slay the Red Dragon) =====
 
         // Epic weapons
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 24), Optional.of(new ItemCost(Items.NETHER_STAR, 1)), new ItemStack(ModItems.ETHEREAL_BLADE), 1, 20, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 20), Optional.of(new ItemCost(Items.TRIDENT, 1)), new ItemStack(ModItems.THUNDER_PIKE), 1, 20, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 28), Optional.of(new ItemCost(ModItems.SILMARIL, 1)), new ItemStack(ModItems.CRYSTALHAMMER), 1, 25, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 24), Optional.of(new ItemCost(Items.NETHER_STAR, 1)), new ItemStack(ModItems.ETHEREAL_BLADE), 1, 20, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 20), Optional.of(new ItemCost(Items.TRIDENT, 1)), new ItemStack(ModItems.THUNDER_PIKE), 1, 20, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 28), Optional.of(new ItemCost(ModItems.SILMARIL, 1)), new ItemStack(ModItems.CRYSTALHAMMER), 1, 25, 0.05F));
 
         // Dragonscale armor
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 8), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 5)), new ItemStack(ModItems.DRAGONSCALE_HELMET), 1, 15, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 12), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 8)), new ItemStack(ModItems.DRAGONSCALE_CHESTPLATE), 1, 15, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 10), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 7)), new ItemStack(ModItems.DRAGONSCALE_LEGGINGS), 1, 15, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 6), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 4)), new ItemStack(ModItems.DRAGONSCALE_BOOTS), 1, 15, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 8), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 5)), new ItemStack(ModItems.DRAGONSCALE_HELMET), 1, 15, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 12), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 8)), new ItemStack(ModItems.DRAGONSCALE_CHESTPLATE), 1, 15, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 10), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 7)), new ItemStack(ModItems.DRAGONSCALE_LEGGINGS), 1, 15, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 6), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 4)), new ItemStack(ModItems.DRAGONSCALE_BOOTS), 1, 15, 0.05F));
 
         // Shadow armor
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 32), Optional.of(new ItemCost(Items.ECHO_SHARD, 4)), new ItemStack(ModItems.SHADOW_HELMET), 1, 12, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 48), Optional.of(new ItemCost(Items.ECHO_SHARD, 6)), new ItemStack(ModItems.SHADOW_CHESTPLATE), 1, 12, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 44), Optional.of(new ItemCost(Items.ECHO_SHARD, 5)), new ItemStack(ModItems.SHADOW_LEGGINGS), 1, 12, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 28), Optional.of(new ItemCost(Items.ECHO_SHARD, 3)), new ItemStack(ModItems.SHADOW_BOOTS), 1, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 32), Optional.of(new ItemCost(Items.ECHO_SHARD, 4)), new ItemStack(ModItems.SHADOW_HELMET), 1, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 48), Optional.of(new ItemCost(Items.ECHO_SHARD, 6)), new ItemStack(ModItems.SHADOW_CHESTPLATE), 1, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 44), Optional.of(new ItemCost(Items.ECHO_SHARD, 5)), new ItemStack(ModItems.SHADOW_LEGGINGS), 1, 12, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 28), Optional.of(new ItemCost(Items.ECHO_SHARD, 3)), new ItemStack(ModItems.SHADOW_BOOTS), 1, 12, 0.05F));
 
         // Legendary shields
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(ModItems.DRAGON_BONE, 4)), new ItemStack(ModItems.DRAGONBONE_SHIELD), 1, 20, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 20), Optional.of(new ItemCost(Items.HEART_OF_THE_SEA, 1)), new ItemStack(ModItems.STORMGUARD_SHIELD), 1, 20, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 32), Optional.of(new ItemCost(ModItems.DRAGON_HEART, 1)), new ItemStack(ModItems.CELESTIAL_SHIELD), 1, 25, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(ModItems.DRAGON_BONE, 4)), new ItemStack(ModItems.DRAGONBONE_SHIELD), 1, 20, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 20), Optional.of(new ItemCost(Items.HEART_OF_THE_SEA, 1)), new ItemStack(ModItems.STORMGUARD_SHIELD), 1, 20, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 32), Optional.of(new ItemCost(ModItems.DRAGON_HEART, 1)), new ItemStack(ModItems.CELESTIAL_SHIELD), 1, 25, 0.05F));
 
         // Premium materials
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 32)), new ItemStack(ModItems.SILMARIL), 1, 25, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 32)), new ItemStack(ModItems.SILMARIL), 1, 25, 0.05F));
 
         this.offers.addAll(basicOffers);
     }

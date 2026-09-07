@@ -108,7 +108,14 @@
                 "minecraft:power",
                 "dagmod:reach",
                 "dagmod:lights_blessing",
-                "dagmod:frostbite"
+                "dagmod:frostbite",
+                "dagmod:dwarf_deep_striker",
+                "dagmod:elf_forest_blessing",
+                "dagmod:orc_berserkers_fury",
+                "dagmod:human_versatile",
+                "dagmod:warrior_immovable",
+                "dagmod:mage_arcane_amplification",
+                "dagmod:rogue_shadow_step"
               ]
             }
           ]

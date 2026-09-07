@@ -40,55 +40,55 @@ public class BlacksmithNPC extends PathfinderMob implements Merchant {
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.RAW_IRON, 8),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.RAW_GOLD, 6),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 24, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.RAW_COPPER, 16),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 24, 3, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.COAL, 16),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 24, 3, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.REDSTONE, 16),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.LAPIS_LAZULI, 12),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.DIAMOND, 1),
+                new ItemCost(ModItems.COIN_SILVER, 1),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 4),
+                new ItemStack(ModItems.COIN_COPPER, 4),
                 16, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.QUARTZ, 12),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(Items.AMETHYST_SHARD, 8),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 24, 5, 0.05F
         ));
 
@@ -96,73 +96,73 @@ public class BlacksmithNPC extends PathfinderMob implements Merchant {
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_MYTHRIL, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 6),
+                new ItemStack(ModItems.COIN_COPPER, 6),
                 12, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_RUBY, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_SAPPHIRE, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_CITRINE, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 16, 6, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_TANZANITE, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 4),
+                new ItemStack(ModItems.COIN_COPPER, 4),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_TOPAZ, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 2),
+                new ItemStack(ModItems.COIN_COPPER, 2),
                 16, 6, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_ZIRCON, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 16, 8, 0.05F
         ));
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.RAW_PINK_GARNET, 4),
                 java.util.Optional.empty(),
-                new ItemStack(Items.EMERALD, 3),
+                new ItemStack(ModItems.COIN_COPPER, 3),
                 16, 8, 0.05F
         ));
 
         // ===== REPAIR SERVICES (Sell repair materials & anvils) =====
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 java.util.Optional.empty(),
                 new ItemStack(Items.ANVIL),
                 8, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 java.util.Optional.empty(),
                 new ItemStack(Items.IRON_INGOT, 8),
                 16, 5, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 8),
+                new ItemCost(ModItems.COIN_COPPER, 8),
                 java.util.Optional.empty(),
-                new ItemStack(Items.DIAMOND, 2),
+                new ItemStack(ModItems.COIN_SILVER, 2),
                 12, 10, 0.05F
         ));
         this.offers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 6),
+                new ItemCost(ModItems.COIN_COPPER, 6),
                 java.util.Optional.of(new ItemCost(Items.IRON_INGOT, 2)),
                 new ItemStack(ModItems.MYTHRIL_INGOT),
                 12, 10, 0.1F

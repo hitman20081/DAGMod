@@ -58,56 +58,56 @@ public class LuxuryMerchantNPC extends PathfinderMob implements Merchant {
         // ===== BASIC (Always available) =====
 
         // Music discs — cosmetic, no gate
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 12), Optional.empty(), new ItemStack(Items.MUSIC_DISC_CAT), 2, 15, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 12), Optional.empty(), new ItemStack(Items.MUSIC_DISC_BLOCKS), 2, 15, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.empty(), new ItemStack(Items.MUSIC_DISC_PIGSTEP), 1, 20, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.empty(), new ItemStack(Items.MUSIC_DISC_OTHERSIDE), 1, 20, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 12), Optional.empty(), new ItemStack(Items.MUSIC_DISC_CAT), 2, 15, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 12), Optional.empty(), new ItemStack(Items.MUSIC_DISC_BLOCKS), 2, 15, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.empty(), new ItemStack(Items.MUSIC_DISC_PIGSTEP), 1, 20, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.empty(), new ItemStack(Items.MUSIC_DISC_OTHERSIDE), 1, 20, 0.05F));
 
         // Decorative heads — cosmetic, no gate
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.empty(), new ItemStack(Items.CREEPER_HEAD), 2, 12, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.empty(), new ItemStack(Items.ZOMBIE_HEAD), 2, 12, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 8), Optional.empty(), new ItemStack(Items.PIGLIN_HEAD), 2, 18, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.empty(), new ItemStack(Items.CREEPER_HEAD), 2, 12, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.empty(), new ItemStack(Items.ZOMBIE_HEAD), 2, 12, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 8), Optional.empty(), new ItemStack(Items.PIGLIN_HEAD), 2, 18, 0.05F));
 
         // End rods — cosmetic, no gate
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 4), Optional.empty(), new ItemStack(Items.END_ROD, 4), 8, 8, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 4), Optional.empty(), new ItemStack(Items.END_ROD, 4), 8, 8, 0.05F));
 
         // BUY from player — always active so players can always sell rare drops
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.DRAGON_BREATH, 4), Optional.empty(), new ItemStack(Items.DIAMOND, 4), 4, 15, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.NETHER_STAR, 1), Optional.empty(), new ItemStack(Items.DIAMOND, 16), 2, 25, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.HEART_OF_THE_SEA, 1), Optional.empty(), new ItemStack(Items.DIAMOND, 8), 4, 18, 0.05F));
-        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.DRAGON_HEART, 1), Optional.empty(), new ItemStack(Items.DIAMOND, 24), 2, 30, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.DRAGON_BREATH, 4), Optional.empty(), new ItemStack(ModItems.COIN_SILVER, 4), 4, 15, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.NETHER_STAR, 1), Optional.empty(), new ItemStack(ModItems.COIN_SILVER, 16), 2, 25, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(Items.HEART_OF_THE_SEA, 1), Optional.empty(), new ItemStack(ModItems.COIN_SILVER, 8), 4, 18, 0.05F));
+        this.basicOffers.add(new MerchantOffer(new ItemCost(ModItems.DRAGON_HEART, 1), Optional.empty(), new ItemStack(ModItems.COIN_SILVER, 24), 2, 30, 0.05F));
 
         // ===== ADVANCED (Unlocked: survive the night watch) =====
 
         // Wither & nether drops
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 24), Optional.of(new ItemCost(Items.SOUL_SAND, 16)), new ItemStack(Items.WITHER_SKELETON_SKULL), 2, 35, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 48), Optional.of(new ItemCost(Items.WITHER_SKELETON_SKULL, 3)), new ItemStack(Items.NETHER_STAR), 1, 60, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(Items.GOLD_BLOCK, 2)), new ItemStack(Items.NETHERITE_INGOT), 2, 30, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 24), Optional.of(new ItemCost(Items.SOUL_SAND, 16)), new ItemStack(Items.WITHER_SKELETON_SKULL), 2, 35, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 48), Optional.of(new ItemCost(Items.WITHER_SKELETON_SKULL, 3)), new ItemStack(Items.NETHER_STAR), 1, 60, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(Items.GOLD_BLOCK, 2)), new ItemStack(Items.NETHERITE_INGOT), 2, 30, 0.05F));
 
         // Ocean treasures
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 20), Optional.of(new ItemCost(Items.NAUTILUS_SHELL, 8)), new ItemStack(Items.HEART_OF_THE_SEA), 1, 40, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 24), Optional.of(new ItemCost(Items.PRISMARINE_SHARD, 16)), new ItemStack(Items.TRIDENT), 1, 45, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.of(new ItemCost(Items.PRISMARINE_CRYSTALS, 8)), new ItemStack(Items.CONDUIT), 1, 30, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 20), Optional.of(new ItemCost(Items.NAUTILUS_SHELL, 8)), new ItemStack(Items.HEART_OF_THE_SEA), 1, 40, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 24), Optional.of(new ItemCost(Items.PRISMARINE_SHARD, 16)), new ItemStack(Items.TRIDENT), 1, 45, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(Items.PRISMARINE_CRYSTALS, 8)), new ItemStack(Items.CONDUIT), 1, 30, 0.05F));
 
         // End treasures
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 32), Optional.of(new ItemCost(Items.PHANTOM_MEMBRANE, 16)), new ItemStack(Items.ELYTRA), 1, 50, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 8), Optional.of(new ItemCost(Items.CHORUS_FRUIT, 8)), new ItemStack(Items.SHULKER_SHELL, 2), 3, 20, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.of(new ItemCost(Items.ENDER_PEARL, 4)), new ItemStack(Items.ENDER_EYE, 4), 6, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 32), Optional.of(new ItemCost(Items.PHANTOM_MEMBRANE, 16)), new ItemStack(Items.ELYTRA), 1, 50, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 8), Optional.of(new ItemCost(Items.CHORUS_FRUIT, 8)), new ItemStack(Items.SHULKER_SHELL, 2), 3, 20, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.of(new ItemCost(Items.ENDER_PEARL, 4)), new ItemStack(Items.ENDER_EYE, 4), 6, 12, 0.05F));
 
         // Raid drops
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(Items.EMERALD_BLOCK, 4)), new ItemStack(Items.TOTEM_OF_UNDYING), 1, 35, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 24), Optional.of(new ItemCost(Items.CROSSBOW, 1)), new ItemStack(Items.GOAT_HORN), 2, 20, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(ModItems.COIN_COPPER, 36)), new ItemStack(Items.TOTEM_OF_UNDYING), 1, 35, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(Items.CROSSBOW, 1)), new ItemStack(Items.GOAT_HORN), 2, 20, 0.05F));
 
         // Enchanted items
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 12), Optional.of(new ItemCost(Items.GOLDEN_APPLE, 8)), new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), 1, 40, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 32), Optional.of(new ItemCost(Items.GOLDEN_CARROT, 16)), new ItemStack(Items.GOLDEN_APPLE, 4), 4, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 12), Optional.of(new ItemCost(Items.GOLDEN_APPLE, 8)), new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), 1, 40, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 32), Optional.of(new ItemCost(Items.GOLDEN_CARROT, 16)), new ItemStack(Items.GOLDEN_APPLE, 4), 4, 15, 0.05F));
 
         // Special items
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 4), Optional.of(new ItemCost(Items.ENDER_PEARL, 8)), new ItemStack(Items.ENDER_CHEST), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 16), Optional.of(new ItemCost(Items.OBSIDIAN, 8)), new ItemStack(Items.CRYING_OBSIDIAN, 8), 4, 12, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 8), Optional.empty(), new ItemStack(Items.SPONGE, 4), 4, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 4), Optional.of(new ItemCost(Items.ENDER_PEARL, 8)), new ItemStack(Items.ENDER_CHEST), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(Items.OBSIDIAN, 8)), new ItemStack(Items.CRYING_OBSIDIAN, 8), 4, 12, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.empty(), new ItemStack(Items.SPONGE, 4), 4, 12, 0.05F));
         this.advancedOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 24),
+                new ItemCost(ModItems.COIN_COPPER, 24),
                 Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:copper_block")), 8)),
                 new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:lightning_rod")), 4),
                 4, 15, 0.05F
@@ -115,14 +115,14 @@ public class LuxuryMerchantNPC extends PathfinderMob implements Merchant {
 
         // ===== LEGENDARY (Unlocked: slay the Red Dragon) =====
 
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 32), Optional.of(new ItemCost(Items.NETHER_STAR, 1)), new ItemStack(ModItems.DRAGON_HEART), 1, 50, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 8), Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 2)), new ItemStack(ModItems.DRAGON_SCALE), 3, 25, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 6), Optional.of(new ItemCost(Items.BONE_BLOCK, 4)), new ItemStack(ModItems.DRAGON_BONE), 4, 20, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 64), Optional.of(new ItemCost(ModItems.DRAGON_HEART, 2)), new ItemStack(Items.DRAGON_EGG), 1, 100, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 4)), new ItemStack(Items.DRAGON_BREATH, 4), 2, 30, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 32), Optional.of(new ItemCost(Items.NETHER_STAR, 1)), new ItemStack(ModItems.DRAGON_HEART), 1, 50, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 8), Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 2)), new ItemStack(ModItems.DRAGON_SCALE), 3, 25, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 6), Optional.of(new ItemCost(Items.BONE_BLOCK, 4)), new ItemStack(ModItems.DRAGON_BONE), 4, 20, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 64), Optional.of(new ItemCost(ModItems.DRAGON_HEART, 2)), new ItemStack(Items.DRAGON_EGG), 1, 100, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(ModItems.DRAGON_SCALE, 4)), new ItemStack(Items.DRAGON_BREATH, 4), 2, 30, 0.05F));
 
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 24), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 32)), new ItemStack(ModItems.SILMARIL), 1, 40, 0.05F));
-        this.legendaryOffers.add(new MerchantOffer(new ItemCost(Items.DIAMOND, 16), Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 4)), new ItemStack(ModItems.KINGS_SCALE), 1, 35, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 24), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 32)), new ItemStack(ModItems.SILMARIL), 1, 40, 0.05F));
+        this.legendaryOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(Items.NETHERITE_SCRAP, 4)), new ItemStack(ModItems.KINGS_SCALE), 1, 35, 0.05F));
 
         this.offers.addAll(basicOffers);
     }

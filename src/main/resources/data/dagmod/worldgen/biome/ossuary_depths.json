@@ -38,7 +38,9 @@
   },
   "features": [
     [],
-    [],
+    [
+      "dagmod:lake_water_ossuary"
+    ],
     [],
     [],
     [

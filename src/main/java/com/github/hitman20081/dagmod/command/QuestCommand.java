@@ -1,9 +1,11 @@
 package com.github.hitman20081.dagmod.command;
 
+import com.github.hitman20081.dagmod.quest.ClassQuestChains;
 import com.github.hitman20081.dagmod.quest.Quest;
 import com.github.hitman20081.dagmod.quest.QuestData;
 import com.github.hitman20081.dagmod.quest.QuestManager;
 import com.github.hitman20081.dagmod.quest.QuestObjective;
+import com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock;
 import com.github.hitman20081.dagmod.block.QuestBlock;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -31,7 +33,82 @@ public class QuestCommand {
                                 .executes(QuestCommand::abandonQuest)))
                 .then(Commands.literal("abandonall")
                         .executes(QuestCommand::abandonAllQuests))
+                .then(Commands.literal("forcecomplete")
+                        .requires(source -> source.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER))
+                        .then(Commands.argument("questId", StringArgumentType.string())
+                                .executes(QuestCommand::forceCompleteQuest)))
+                .then(Commands.literal("completeclasschain")
+                        .requires(source -> source.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER))
+                        .executes(QuestCommand::completeClassChain))
         );
+    }
+
+    /**
+     * Testing tool: marks a quest completed directly (added to completedQuestIds, removed from
+     * active) without running its objectives or granting item rewards -- just XP via the normal
+     * QuestData.completeQuest path, same as it would from a real turn-in. For checking gating
+     * logic (Path of Destiny, quest chains, etc.) without grinding every objective from a fresh
+     * character each test run.
+     */
+    private static int forceCompleteQuest(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
+        if (player == null) return 0;
+
+        String questId = StringArgumentType.getString(context, "questId");
+        QuestManager manager = QuestManager.getInstance();
+        Quest quest = manager.getQuest(questId);
+        if (quest == null) {
+            player.sendSystemMessage(Component.literal("No such quest: " + questId).withStyle(ChatFormatting.RED));
+            return 0;
+        }
+
+        QuestData playerData = manager.getPlayerData(player);
+        if (playerData.isQuestCompleted(questId)) {
+            player.sendSystemMessage(Component.literal("Already completed: " + quest.getName()).withStyle(ChatFormatting.YELLOW));
+            return 1;
+        }
+
+        playerData.completeQuest(quest, player);
+        manager.savePlayerQuestData(player);
+
+        player.sendSystemMessage(Component.literal("[TEST] Force-completed: " + quest.getName() +
+                " (no item rewards granted)").withStyle(ChatFormatting.LIGHT_PURPLE));
+        return 1;
+    }
+
+    /**
+     * Testing tool: force-completes every quest in the player's current class's chain in one
+     * shot, so chain-completion-gated content (e.g. Path of Destiny at the Class Trainer) can be
+     * tested immediately instead of grinding all 5 quests first.
+     */
+    private static int completeClassChain(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
+        if (player == null) return 0;
+
+        String playerClass = ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+        List<String> chain = ClassQuestChains.forClass(playerClass);
+        if (chain.isEmpty()) {
+            player.sendSystemMessage(Component.literal("You don't have a class selected.").withStyle(ChatFormatting.RED));
+            return 0;
+        }
+
+        QuestManager manager = QuestManager.getInstance();
+        QuestData playerData = manager.getPlayerData(player);
+        int completed = 0;
+
+        for (String questId : chain) {
+            if (playerData.isQuestCompleted(questId)) continue;
+            Quest quest = manager.getQuest(questId);
+            if (quest == null) continue;
+            playerData.completeQuest(quest, player);
+            completed++;
+        }
+
+        manager.savePlayerQuestData(player);
+
+        player.sendSystemMessage(Component.literal("[TEST] Force-completed " + completed + "/" + chain.size() +
+                " " + playerClass + " class quest(s). Chain now fully complete.").withStyle(ChatFormatting.LIGHT_PURPLE));
+        return 1;
     }
 
     private static int skipQuest(CommandContext<CommandSourceStack> context) {

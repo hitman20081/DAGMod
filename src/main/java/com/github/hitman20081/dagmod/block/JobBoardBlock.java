@@ -176,9 +176,11 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
         player.sendSystemMessage(Component.literal("⭐ Daily Quests: " + dailyStatus + streakLine).withStyle(ChatFormatting.AQUA));
         player.sendSystemMessage(Component.literal(""));
 
-        // Show quick stats
+        // Show quick stats. Jobs are their own track and don't consume quest book slots --
+        // shown uncapped here, separate from the Main/Side/Class slot count.
         player.sendSystemMessage(Component.literal("Your Status:"));
-        player.sendSystemMessage(Component.literal("• Active Jobs: " + playerData.getActiveQuestCount() + "/" + playerData.getMaxActiveQuests()));
+        player.sendSystemMessage(Component.literal("• Active Jobs: " + playerData.getActiveJobCount()));
+        player.sendSystemMessage(Component.literal("• Quest Slots: " + playerData.getActiveStoryQuestCount() + "/" + playerData.getMaxActiveQuests()));
         player.sendSystemMessage(Component.literal("• Completed: " + playerData.getTotalQuestsCompleted()));
         player.sendSystemMessage(Component.literal(""));
 
@@ -218,15 +220,18 @@ public class JobBoardBlock extends HorizontalDirectionalBlock {
         List<Quest> allAvailable = new java.util.ArrayList<>(availableDailies);
         allAvailable.addAll(availableJobs);
 
-        if (!allAvailable.isEmpty() && playerData.canAcceptMoreQuests()) {
+        // Jobs are uncapped (see getActiveStoryQuestCount()) -- daily slots are already
+        // filtered into availableDailies above, so the only remaining gate is whether
+        // there's anything new to post at all.
+        boolean hasActiveJobsOrDailies = playerData.getActiveQuestsList().stream()
+                .anyMatch(q -> q.getCategory() == Quest.QuestCategory.JOB || q.getCategory() == Quest.QuestCategory.DAILY);
+
+        if (!allAvailable.isEmpty()) {
             player.sendSystemMessage(Component.literal("→ Browse Available Jobs (" + allAvailable.size() + " posted)"));
             playerMenuState.put(playerId, MenuState.BROWSE_JOBS);
             playerAvailableJobs.put(playerId, allAvailable);
             playerSelectedIndex.put(playerId, 0);
-        } else if (!playerData.canAcceptMoreQuests()) {
-            player.sendSystemMessage(Component.literal("→ View Active Jobs (job slots full)"));
-            playerMenuState.put(playerId, MenuState.ACTIVE_JOBS);
-        } else if (!playerData.getActiveQuests().isEmpty()) {
+        } else if (hasActiveJobsOrDailies) {
             player.sendSystemMessage(Component.literal("→ View Active Jobs"));
             playerMenuState.put(playerId, MenuState.ACTIVE_JOBS);
         } else {

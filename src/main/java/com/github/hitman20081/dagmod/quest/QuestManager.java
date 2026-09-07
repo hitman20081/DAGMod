@@ -29,6 +29,9 @@ public class QuestManager {
     // Per-player quest data
     private final Map<UUID, QuestData> playerQuestData = new ConcurrentHashMap<>();
 
+    // Players already loaded from disk this session -- see loadPlayerQuestData()
+    private final Set<UUID> loadedThisSession = ConcurrentHashMap.newKeySet();
+
     // Private constructor for singleton
     private QuestManager() {}
 
@@ -163,6 +166,18 @@ public class QuestManager {
         // Check prerequisites
         if (!quest.canStart(playerData.getCompletedQuestIdsList())) {
             return false;
+        }
+
+        // Path of Destiny's own description claims "you've mastered your current class" --
+        // that wasn't actually enforced (no addPrerequisite() on the quest itself, since the
+        // required chain differs per class and Quest only supports one flat, class-agnostic
+        // prerequisite list). Require the player's own class chain to be fully completed.
+        if (quest.getId().equals("path_of_destiny")) {
+            String playerClass = com.github.hitman20081.dagmod.block.ClassSelectionAltarBlock.getPlayerClass(player.getUUID());
+            List<String> classChain = ClassQuestChains.forClass(playerClass);
+            if (classChain.isEmpty() || !playerData.getCompletedQuestIdsList().containsAll(classChain)) {
+                return false;
+            }
         }
 
         return true;
@@ -324,8 +339,10 @@ public class QuestManager {
             return false;
         }
 
-        // Check active quest limit (uses quest book tier)
-        if (playerData.getActiveQuests().size() >= playerData.getMaxActiveQuests()) {
+        // Check active quest limit (uses quest book tier) -- Job Board quests are their own
+        // track and don't consume a slot here, see QuestData.getActiveStoryQuestCount().
+        if (quest.getCategory() != Quest.QuestCategory.JOB
+                && playerData.getActiveStoryQuestCount() >= playerData.getMaxActiveQuests()) {
             player.sendSystemMessage(Component.literal("You have too many active quests! Complete some first."));
             return false;
         }
@@ -507,12 +524,14 @@ public class QuestManager {
     }
     public void updateKillProgress(ServerPlayer player, EntityType<?> killedEntityType) {
         QuestData playerData = getPlayerData(player);
+        boolean anyProgress = false;
 
         for (Quest quest : playerData.getActiveQuests()) {
             for (QuestObjective objective : quest.getObjectives()) {
                 if (objective instanceof KillObjective killObj) {
                     boolean progressMade = killObj.updateProgress(player, killedEntityType);
                     if (progressMade) {
+                        anyProgress = true;
                         player.sendSystemMessage(Component.literal("Quest progress: " + killObj.getDisplayText().getString()));
                     }
                 }
@@ -523,6 +542,13 @@ public class QuestManager {
                 quest.setStatus(Quest.QuestStatus.COMPLETED);
                 player.sendSystemMessage(Component.literal("Quest completed: " + quest.getName() + "! Return to turn it in."));
             }
+        }
+
+        // Kill progress otherwise only persists at accept/complete/abandon/disconnect --
+        // save on every qualifying kill (bounded to active kill-objective targets, not every
+        // kill in the world) so an ungraceful disconnect or crash mid-quest doesn't lose it.
+        if (anyProgress) {
+            savePlayerQuestData(player);
         }
     }
 
@@ -616,15 +642,27 @@ public class QuestManager {
     }
 
     /**
-     * Load player's quest data from disk
-     * Called when player joins the server
+     * Load player's quest data from disk. Called from ServerEntityEvents.ENTITY_LOAD, which
+     * fires on login AND on every dimension change/respawn -- but quest progress (e.g. kill
+     * counts) is only ever persisted at sparse trigger points (accept/complete/abandon/
+     * disconnect), never per-kill or per-item. Reloading unconditionally on every entity load
+     * meant stepping through a portal clobbered any in-memory progress made since the last save
+     * with the stale on-disk copy (e.g. Nether kill-quest progress reset to 0 on return to the
+     * Overworld). Only the genuinely first load of a session reads from disk; subsequent
+     * dimension changes/respawns are no-ops here since the in-memory copy is already the live,
+     * canonical one.
      */
     public void loadPlayerQuestData(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+        if (!loadedThisSession.add(uuid)) {
+            return; // already loaded this session -- in-memory data is authoritative
+        }
+
         QuestData loadedData = QuestStorage.loadQuestData(player);
 
         if (loadedData != null) {
             // Replace the in-memory data with loaded data
-            playerQuestData.put(player.getUUID(), loadedData);
+            playerQuestData.put(uuid, loadedData);
         }
         // If null, player is new - keep the default QuestData created by getPlayerData()
     }
@@ -634,6 +672,7 @@ public class QuestManager {
      */
     public void clearPlayerData(UUID playerId) {
         playerQuestData.remove(playerId);
+        loadedThisSession.remove(playerId);
     }
 
     /**
@@ -641,5 +680,6 @@ public class QuestManager {
      */
     public void clearAllData() {
         playerQuestData.clear();
+        loadedThisSession.clear();
     }
 }

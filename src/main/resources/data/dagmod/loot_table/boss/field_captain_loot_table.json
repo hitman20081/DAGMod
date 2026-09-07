@@ -25,18 +25,34 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
           "functions": [
             {
-              "add": true,
+              "add": false,
               "count": {
-                "type": "minecraft:uniform",
-                "max": 2,
-                "min": 1
+                "type": "minecraft:constant",
+                "value": 1
               },
               "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:enchanted_golden_apple"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4,
+                "min": 2
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:golden_carrot"
         },
         {
           "type": "minecraft:item",

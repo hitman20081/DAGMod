@@ -46,26 +46,26 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== AXES =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.IRON_AXE),
                 8, 5, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 10),
-                Optional.of(new ItemCost(Items.DIAMOND, 2)),
+                new ItemCost(ModItems.COIN_COPPER, 10),
+                Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
                 new ItemStack(Items.DIAMOND_AXE),
                 3, 15, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 14),
+                new ItemCost(ModItems.COIN_COPPER, 14),
                 Optional.of(new ItemCost(ModItems.MYTHRIL_INGOT, 3)),
                 new ItemStack(ModItems.MYTHRIL_AXE),
                 2, 15, 0.05F
         ));
         // Frostbite Axe - Special rare axe
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 32),
+                new ItemCost(ModItems.COIN_COPPER, 32),
                 Optional.of(new ItemCost(Items.BLUE_ICE, 8)),
                 new ItemStack(ModItems.FROSTBITE_AXE),
                 1, 20, 0.05F
@@ -73,37 +73,37 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== LOGS - Common =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.OAK_LOG, 16),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.SPRUCE_LOG, 16),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.BIRCH_LOG, 16),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.JUNGLE_LOG, 16),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.ACACIA_LOG, 16),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.DARK_OAK_LOG, 16),
                 16, 2, 0.05F
@@ -111,25 +111,25 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== LOGS - Special =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.MANGROVE_LOG, 16),
                 12, 4, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.CHERRY_LOG, 16),
                 12, 4, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(Items.CRIMSON_STEM, 16),
                 8, 6, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.empty(),
                 new ItemStack(Items.WARPED_STEM, 16),
                 8, 6, 0.05F
@@ -137,19 +137,19 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== PLANKS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.OAK_PLANKS, 32),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.SPRUCE_PLANKS, 32),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.DARK_OAK_PLANKS, 32),
                 16, 2, 0.05F
@@ -157,13 +157,13 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== STICKS & BASIC MATERIALS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.STICK, 64),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.CHARCOAL, 16),
                 16, 2, 0.05F
@@ -172,70 +172,70 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
         // ===== WOOD PRODUCTS =====
         // Crafting Table
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.CRAFTING_TABLE),
                 12, 2, 0.05F
         ));
         // Chest
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.CHEST, 2),
                 12, 3, 0.05F
         ));
         // Barrel
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.BARREL, 2),
                 12, 3, 0.05F
         ));
         // Boat
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.OAK_BOAT),
                 8, 4, 0.05F
         ));
         // Bed
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemCost(ModItems.COIN_COPPER, 3),
                 Optional.of(new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:white_wool")), 3)),
                 new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("minecraft:white_bed"))),
                 6, 5, 0.05F
         ));
         // Bookshelf
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 4),
+                new ItemCost(ModItems.COIN_COPPER, 4),
                 Optional.of(new ItemCost(Items.BOOK, 3)),
                 new ItemStack(Items.BOOKSHELF),
                 8, 6, 0.05F
         ));
         // Ladder
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.LADDER, 16),
                 16, 2, 0.05F
         ));
         // Fence
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.OAK_FENCE, 8),
                 12, 3, 0.05F
         ));
         // Door
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.OAK_DOOR, 2),
                 12, 3, 0.05F
         ));
         // Trapdoor
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.OAK_TRAPDOOR, 4),
                 12, 3, 0.05F
@@ -243,31 +243,31 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== SAPLINGS =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.OAK_SAPLING, 4),
                 12, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.SPRUCE_SAPLING, 4),
                 12, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 1),
+                new ItemCost(ModItems.COIN_COPPER, 1),
                 Optional.empty(),
                 new ItemStack(Items.BIRCH_SAPLING, 4),
                 12, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.DARK_OAK_SAPLING, 4),
                 10, 4, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 2),
+                new ItemCost(ModItems.COIN_COPPER, 2),
                 Optional.empty(),
                 new ItemStack(Items.CHERRY_SAPLING, 2),
                 10, 4, 0.05F
@@ -275,7 +275,7 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
 
         // ===== SPECIAL - Nature Shield =====
         this.staticOffers.add(new MerchantOffer(
-                new ItemCost(Items.EMERALD, 16),
+                new ItemCost(ModItems.COIN_COPPER, 16),
                 Optional.of(new ItemCost(Items.OAK_LOG, 32)),
                 new ItemStack(ModItems.NATURE_SHIELD),
                 2, 15, 0.05F
@@ -286,20 +286,20 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.OAK_LOG, 32),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.SPRUCE_LOG, 32),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
         // Player sells sticks
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(Items.STICK, 64),
                 Optional.empty(),
-                new ItemStack(Items.EMERALD, 1),
+                new ItemStack(ModItems.COIN_COPPER, 1),
                 16, 2, 0.05F
         ));
 

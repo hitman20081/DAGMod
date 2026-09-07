@@ -23,14 +23,16 @@
       "EnchantmentTableRaceClassGateMixin",
       "RaceEnchantmentCombatMixin",
       "AnvilCostCapMixin",
-      "EnchantmentTableBookshelfCapMixin"
+      "EnchantmentTableBookshelfCapMixin",
+      "MerchantCoinTopUpMixin"
 	],
   "client": [
     "client.DynamicLightMixin",
     "ChestRenderStateMixin",
     "LockedChestTextureMixin",
     "EnchantmentDescriptionMixin",
-    "AnvilTooExpensiveLabelMixin"
+    "AnvilTooExpensiveLabelMixin",
+    "client.CoinPouchMouseActionMixin"
   ],
 	"injectors": {
 		"defaultRequire": 1

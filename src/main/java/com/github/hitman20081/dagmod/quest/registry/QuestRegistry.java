@@ -1733,20 +1733,27 @@ public class QuestRegistry {
     }
 
     /**
-     * PATH OF DESTINY - Level 30+ Expert Quest
+     * PATH OF DESTINY - Level 100+ Expert Quest
      * Rewards: Potion of Class Rebirth (free class reset)
      * <p>
      * A quest about mastering your class and considering a new calling.
-     * Requires demonstrating mastery across multiple class abilities.
-     * Note: Level requirement is handled by LevelRequirements.meetsLevelRequirement()
+     * Gated behind completing your class's full 5-quest chain (see
+     * QuestManager.canStartQuest's path_of_destiny check, and ClassTrainerNPC's own matching
+     * check for the accept/turn-in flow) -- the last quest in every class chain requires
+     * level 100, so the level requirement here matches that floor explicitly rather than
+     * relying only on the indirect prerequisite chain.
+     * NPC category: offered directly by the Class Trainer once the class chain is complete,
+     * not shown at the Quest Block (unlike Rebirth Ritual, which stays there since it needs
+     * both this and the race-side Identity Crisis).
      */
     private static Quest createPathOfDestinyQuest() {
         return new Quest("path_of_destiny")
                 .setName("Path of Destiny")
-                .setCategory(Quest.QuestCategory.SIDE)
+                .setCategory(Quest.QuestCategory.NPC)
                 .setDescription("You've mastered your current class, but feel the call of a different destiny. " +
                         "Prove your versatility to earn the right to choose a new path.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
+                .setMinLevel(100)
                 // Combat mastery
                 .addObjective(KillObjective.zombies(25))
                 .addObjective(KillObjective.skeletons(20))
@@ -1767,12 +1774,13 @@ public class QuestRegistry {
     }
 
     /**
-     * REBIRTH RITUAL - Level 40+ Master Quest
+     * REBIRTH RITUAL - Level 120+ Master Quest
      * Rewards: Potion of Total Rebirth (free race + class reset)
      * <p>
-     * The ultimate quest - a complete character reset.
+     * The ultimate quest - a complete character reset. Uses both a class quest (Path of
+     * Destiny) and a race quest (Identity Crisis) as prerequisites, so it stays at the Quest
+     * Block rather than moving to the Class Trainer with Path of Destiny.
      * Requires completion of both Identity Crisis and Path of Destiny.
-     * Note: Level requirement is handled by LevelRequirements.meetsLevelRequirement()
      */
     private static Quest createRebirthRitualQuest() {
         return new Quest("rebirth_ritual")
@@ -1782,6 +1790,7 @@ public class QuestRegistry {
                         "This ancient ritual requires the ultimate sacrifice and the rarest of materials. " +
                         "Are you certain this is your path?")
                 .setDifficulty(Quest.QuestDifficulty.MASTER)
+                .setMinLevel(120)
                 // Must complete both previous reset quests first
                 .addPrerequisite("identity_crisis")
                 .addPrerequisite("path_of_destiny")

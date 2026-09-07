@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "dagmod:campsite",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "dagmod:multi_exclusion_random_spread",
+    "salt": 837201455,
+    "spacing": 24,
+    "separation": 8,
+    "avoid_water": true,
+    "exclusion_zones": [
+      { "other_set": "dagmod:village_npc_set", "chunk_count": 4 }
+    ]
+  }
+}

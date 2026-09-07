@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class BossRoomSpawnHandler {
 
@@ -35,7 +36,12 @@ public class BossRoomSpawnHandler {
         tickCounter = 0;
 
         for (ServerLevel world : server.getAllLevels()) {
-            if (world.dimension() != BoneRealmTeleporter.BONE_REALM
+            // The Skeleton Lord's trigger sits in bone_dungeon_portal_room, part of the
+            // Overworld bone_dungeon jigsaw structure (desert/badlands biomes) -- it guards the
+            // portal itself, before the player ever steps into the Bone Realm. Everything else
+            // (Skeleton King, Spider Queen) lives inside their respective custom dimensions.
+            if (world.dimension() != Level.OVERWORLD
+                    && world.dimension() != BoneRealmTeleporter.BONE_REALM
                     && world.dimension() != PaleGardenTeleporter.PALE_GARDEN) continue;
 
             for (ServerPlayer player : world.players()) {

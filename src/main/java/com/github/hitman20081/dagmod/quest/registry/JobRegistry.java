@@ -8,8 +8,10 @@ import com.github.hitman20081.dagmod.quest.objectives.KillObjective;
 import com.github.hitman20081.dagmod.quest.objectives.MultiItemCollectObjective;
 import com.github.hitman20081.dagmod.quest.objectives.TagCollectObjective;
 import com.github.hitman20081.dagmod.quest.rewards.EnchantedBookReward;
+import com.github.hitman20081.dagmod.quest.rewards.CoinReward;
 import com.github.hitman20081.dagmod.quest.rewards.ItemReward;
 import com.github.hitman20081.dagmod.quest.rewards.XpReward;
+import com.github.hitman20081.dagmod.economy.CoinTier;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
@@ -54,7 +56,7 @@ public class JobRegistry {
                 .setDescription("The town needs building materials. Gather cobblestone.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.COBBLESTONE, 64))
-                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new CoinReward(CoinTier.COPPER, 25))
                 .addReward(XpReward.novice());
     }
 
@@ -65,7 +67,7 @@ public class JobRegistry {
                 .setDescription("Clear out the undead threats near town.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(KillObjective.zombies(10))
-                .addReward(new ItemReward(Items.EMERALD, 3))
+                .addReward(new CoinReward(CoinTier.COPPER, 35))
                 .addReward(XpReward.novice());
     }
 
@@ -76,7 +78,7 @@ public class JobRegistry {
                 .setDescription("The baker needs wheat for bread.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.WHEAT, 32))
-                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new CoinReward(CoinTier.COPPER, 25))
                 .addReward(new ItemReward(Items.BREAD, 8))
                 .addReward(XpReward.novice());
     }
@@ -88,7 +90,7 @@ public class JobRegistry {
                 .setDescription("The carpenter needs timber. Any wood type will do.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new TagCollectObjective(ItemTags.LOGS, 32, "any logs"))
-                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new CoinReward(CoinTier.COPPER, 25))
                 .addReward(new ItemReward(Items.STICK, 8))
                 .addReward(XpReward.novice());
     }
@@ -100,7 +102,7 @@ public class JobRegistry {
                 .setDescription("The cook needs fresh fish for tonight's feast.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.COD, 10))
-                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new CoinReward(CoinTier.COPPER, 25))
                 .addReward(new ItemReward(Items.BREAD, 4))
                 .addReward(XpReward.novice());
     }
@@ -112,7 +114,7 @@ public class JobRegistry {
                 .setDescription("Spiders have been raiding the storehouse. Clear them out.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(KillObjective.spiders(10))
-                .addReward(new ItemReward(Items.EMERALD, 3))
+                .addReward(new CoinReward(CoinTier.COPPER, 35))
                 .addReward(new ItemReward(Items.STRING, 8))
                 .addReward(XpReward.novice());
     }
@@ -124,7 +126,7 @@ public class JobRegistry {
                 .setDescription("The weaver needs wool. Any colour is welcome.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new TagCollectObjective(ItemTags.WOOL, 16, "any wool"))
-                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new CoinReward(CoinTier.COPPER, 25))
                 .addReward(new ItemReward(Items.BREAD, 4))
                 .addReward(XpReward.novice());
     }
@@ -136,7 +138,7 @@ public class JobRegistry {
                 .setDescription("The glassmaker needs sand from the riverbank or desert.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(new CollectObjective(Items.SAND, 32))
-                .addReward(new ItemReward(Items.EMERALD, 2))
+                .addReward(new CoinReward(CoinTier.COPPER, 25))
                 .addReward(new ItemReward(Items.GLASS, 8))
                 .addReward(XpReward.novice());
     }
@@ -148,7 +150,7 @@ public class JobRegistry {
                 .setDescription("Skeletons have been spotted near the road at night. Drive them back.")
                 .setDifficulty(Quest.QuestDifficulty.NOVICE)
                 .addObjective(KillObjective.skeletons(15))
-                .addReward(new ItemReward(Items.EMERALD, 3))
+                .addReward(new CoinReward(CoinTier.COPPER, 35))
                 .addReward(new ItemReward(Items.ARROW, 16))
                 .addReward(XpReward.novice());
     }
@@ -162,7 +164,7 @@ public class JobRegistry {
                 .setDescription("The blacksmith needs raw iron.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.RAW_IRON, 16))
-                .addReward(new ItemReward(Items.EMERALD, 4))
+                .addReward(new CoinReward(CoinTier.COPPER, 50))
                 .addReward(XpReward.apprentice());
     }
 
@@ -173,7 +175,7 @@ public class JobRegistry {
                 .setDescription("The torchmaker is running low on coal. Mine a good supply.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.COAL, 32))
-                .addReward(new ItemReward(Items.EMERALD, 4))
+                .addReward(new CoinReward(CoinTier.COPPER, 50))
                 .addReward(new ItemReward(Items.TORCH, 16))
                 .addReward(XpReward.apprentice());
     }
@@ -185,7 +187,7 @@ public class JobRegistry {
                 .setDescription("Creepers have been destroying the farmland. Eliminate them.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(KillObjective.fromIdentifier("minecraft:creeper", 8))
-                .addReward(new ItemReward(Items.EMERALD, 5))
+                .addReward(new CoinReward(CoinTier.COPPER, 60))
                 .addReward(new ItemReward(Items.GUNPOWDER, 4))
                 .addReward(XpReward.apprentice());
     }
@@ -197,7 +199,7 @@ public class JobRegistry {
                 .setDescription("The leatherworker needs hides from cattle and horses.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.LEATHER, 16))
-                .addReward(new ItemReward(Items.EMERALD, 4))
+                .addReward(new CoinReward(CoinTier.COPPER, 50))
                 .addReward(new ItemReward(Items.COOKED_BEEF, 4))
                 .addReward(XpReward.apprentice());
     }
@@ -209,7 +211,7 @@ public class JobRegistry {
                 .setDescription("The jeweler is paying well for raw gold ore.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.RAW_GOLD, 8))
-                .addReward(new ItemReward(Items.EMERALD, 5))
+                .addReward(new CoinReward(CoinTier.COPPER, 60))
                 .addReward(XpReward.apprentice());
     }
 
@@ -220,7 +222,7 @@ public class JobRegistry {
                 .setDescription("The festival is coming. The baker needs pumpkins for pies.")
                 .setDifficulty(Quest.QuestDifficulty.APPRENTICE)
                 .addObjective(new CollectObjective(Items.PUMPKIN, 16))
-                .addReward(new ItemReward(Items.EMERALD, 3))
+                .addReward(new CoinReward(CoinTier.COPPER, 35))
                 .addReward(new ItemReward(Items.PUMPKIN_PIE, 8))
                 .addReward(XpReward.apprentice());
     }
@@ -238,6 +240,7 @@ public class JobRegistry {
                 .addObjective(new MultiItemCollectObjective("Diamond Ore", 3, Items.DIAMOND_ORE, Items.DEEPSLATE_DIAMOND_ORE))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
                 .addReward(new EnchantedBookReward(Identifier.withDefaultNamespace("fortune"), 3))
+                .addReward(new CoinReward(CoinTier.SILVER, 1))
                 .addReward(XpReward.expert());
     }
 
@@ -248,7 +251,7 @@ public class JobRegistry {
                 .setDescription("Endermen have been stealing blocks from the keep. Drive them off.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(KillObjective.fromIdentifier("minecraft:enderman", 5))
-                .addReward(new ItemReward(Items.EMERALD, 8))
+                .addReward(new CoinReward(CoinTier.SILVER, 1))
                 .addReward(new ItemReward(Items.ENDER_PEARL, 2))
                 .addReward(XpReward.expert());
     }
@@ -260,7 +263,8 @@ public class JobRegistry {
                 .setDescription("A noble is commissioning a gem-encrusted blade. Diamonds needed urgently.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(new CollectObjective(Items.DIAMOND, 4))
-                .addReward(new ItemReward(Items.EMERALD, 10))
+                .addReward(new CoinReward(CoinTier.SILVER, 1))
+                .addReward(new CoinReward(CoinTier.COPPER, 20))
                 .addReward(XpReward.expert());
     }
 
@@ -271,7 +275,7 @@ public class JobRegistry {
                 .setDescription("The alchemist needs blaze rods for brewing. Brave the Nether.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(KillObjective.fromIdentifier("minecraft:blaze", 5))
-                .addReward(new ItemReward(Items.EMERALD, 8))
+                .addReward(new CoinReward(CoinTier.SILVER, 1))
                 .addReward(new ItemReward(Items.BLAZE_ROD, 2))
                 .addReward(XpReward.expert());
     }
@@ -283,7 +287,7 @@ public class JobRegistry {
                 .setDescription("The architect is building a vault and needs obsidian blocks.")
                 .setDifficulty(Quest.QuestDifficulty.EXPERT)
                 .addObjective(new CollectObjective(Items.OBSIDIAN, 16))
-                .addReward(new ItemReward(Items.EMERALD, 8))
+                .addReward(new CoinReward(CoinTier.SILVER, 1))
                 .addReward(new ItemReward(Items.DIAMOND_PICKAXE, 1))
                 .addReward(XpReward.expert());
     }

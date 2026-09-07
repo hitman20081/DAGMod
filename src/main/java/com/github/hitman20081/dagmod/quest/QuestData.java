@@ -84,6 +84,24 @@ public class QuestData {
         return activeQuests.size();
     }
 
+    /**
+     * Active quests count against the quest book tier's slot cap. Job-board quests are their own
+     * track (posted/accepted from the Job Board, not gated by quest book tier) and don't consume
+     * a slot -- this excludes them so canAcceptMoreQuests()/the cap check in
+     * QuestManager.startQuest reflect only Main/Side/Class/Daily quests.
+     */
+    public int getActiveStoryQuestCount() {
+        return (int) activeQuests.values().stream()
+                .filter(q -> q.getCategory() != Quest.QuestCategory.JOB)
+                .count();
+    }
+
+    public long getActiveJobCount() {
+        return activeQuests.values().stream()
+                .filter(q -> q.getCategory() == Quest.QuestCategory.JOB)
+                .count();
+    }
+
     // Completed quest management
     public void completeQuest(Quest quest, ServerPlayer player) {
         // Remove from active quests
@@ -133,7 +151,7 @@ public class QuestData {
     }
 
     public boolean canAcceptMoreQuests() {
-        return activeQuests.size() < getMaxActiveQuests();
+        return getActiveStoryQuestCount() < getMaxActiveQuests();
     }
 
     // Upgrade is handled exclusively via quest chain completion (QuestManager.checkChainCompletion)

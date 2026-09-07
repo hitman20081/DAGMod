@@ -134,6 +134,13 @@
   "block.dagmod.brimstone": "Brimstone",
   "block.dagmod.pure_brimstone": "Pure Brimstone",
 
+  "_comment_currency": "=== COIN CURRENCY ===",
+  "item.dagmod.coin_copper": "Copper Coin",
+  "item.dagmod.coin_silver": "Silver Coin",
+  "item.dagmod.coin_gold": "Gold Coin",
+  "item.dagmod.coin_platinum": "Platinum Coin",
+  "item.dagmod.coin_pouch": "Coin Pouch",
+
   "_comment_gems": "=== GEMS & RAW GEMS ===",
   "item.dagmod.gem_cut_citrine": "Cut Citrine",
   "item.dagmod.gem_polished_citrine": "Polished Citrine",
