@@ -1,15 +1,15 @@
 # DAGMod Development Roadmap
 
-**Current Version**: v1.10.0
-**Last Updated**: 2026-08-07
+**Current Version**: v2.0.0 (in development — `mod_version` bumped, not yet released/CHANGELOG'd)
+**Last Updated**: 2026-09-08
 
 This document tracks the development progress of DAGMod features, comparing planned features against implemented functionality.
 
 ---
 
-## 🔧 **Unreleased — Working Tree (pending next version number)**
+## 🔧 **Unreleased — Working Tree**
 
-Built since v1.10.0, not yet released. Not yet assigned a version — fold into the next release per `release_instructions.md` once a version number is picked.
+Built since v1.10.0. Assigned to **v2.0.0** (`gradle.properties` already bumped) — fold into the v2.0.0 CHANGELOG entry once that release is cut per `release_instructions.md`.
 
 - ✅ **Pale Garden Castle & Spider Queen Lair rework**
   - Castle converted to a true singleton (`concentric_rings, count: 1`) at a fixed elevation, with terrain flattened/feathered around it and a per-piece bounding-box check so unbuilt sections of the (still in-progress) castle NBT read as ordinary ground instead of a pit
@@ -24,6 +24,30 @@ Built since v1.10.0, not yet released. Not yet assigned a version — fold into 
   - New `#dagmod:offhand_daggers` / `#dagmod:offhand_swords` item tags for extensibility
 
 - ✅ **Dodge feedback fix** — Phantom Dust/Perfect Dodge/Shadow Step dodges now play a sound (`ENDERMAN_TELEPORT`) in addition to the existing particles + action-bar text
+
+- ✅ **Coin Pouch Economy System** — not previously on the roadmap; **this is v2.1.0's "Coin Currency System" item, built early** (see v2.1.0 below)
+  - `CoinPouchItem` — abstract single-balance pouch (bundle-style slot interactions, no in-hand use to avoid colliding with Warrior Shield Bash's shift-right-click hook), scroll-to-select which of the 4 tiers a withdrawal mints
+  - 4 coin tiers (Copper/Silver/Gold/Platinum, 100:1 ratio) via `CoinTier` enum; `MerchantCoinTopUpMixin` auto-mints coins into the pouch on trade instead of handling physical coin stacks
+  - Merchant trades across all NPCs converted from emeralds to coins (`ItemCost(ModItems.COIN_COPPER/SILVER, n)`)
+  - `CoinReward` quest reward type; `CoinPouchNetworkHandler`/`CoinPouchScrollPacket` sync the scroll-selected tier client↔server
+  - **Granted automatically**: `InnkeeperGarrickNPC` gives every player a pouch on guild registration (same moment as the Hall Locator), migrating an existing inventory pouch instead of duplicating if one's already present
+  - **Has its own dedicated inventory-screen slot** — not one of the 36 regular slots or the 9-slot hotbar, rendered next to the offhand/shield slot (`CoinPouchMenuMixin` adds it to `InventoryMenu`; `CoinPouchMenuSlot`/`CoinPouchMenuContainer` back it; `CoinPouchPlayerMixin` holds the value on every `Player`, client and server; `CoinPouchSlotMixin` persists it server-side). Required widening `AbstractContainerMenu#addSlot` via `dagmod.accesswidener` — Mixin's `@Shadow` doesn't search ancestor classes for methods in this Mixin version
+  - **Can't be dropped, moved, or lost to death**: soulbound by item identity (not enchantment) in `SoulBoundMixin`/`DeathGraveMixin`; `CoinPouchDropMixin`/`CoinPouchInventoryMixin`/`CoinPouchContainerMixin` block every removal path (Q-drop, shift-click, number-key swap, plain pickup)
+  - Not yet done: Bounty System still depends on this and hasn't started (see v2.1.0)
+
+- ✅ **Merchant trade fix — coin-only cost pairs** — 8 trades across `ArmorerNPC`, `LumberjackNPC`, `MinerNPC`, `HunterNPC`, `JewelerNPC`, `LuxuryMerchantNPC`, and `RotatingTradeRegistry` (Hunter rotation) had a second coin type in the secondary cost slot (e.g. copper + silver) instead of a sacrificial material — broke the established pattern where slot 1 is always the coin and slot 2 is a material tied to the item (mythril armor costs mythril ingots, chainmail costs iron nuggets). Fixed to material costs (mostly vanilla-recipe-matched Diamond counts for diamond-tier gear; Gem Grand Pink Garnet for Silmaril; Emerald Block for Totem of Undying)
+
+- ✅ **`ClassQuestChains`** — new single-source-of-truth utility (5 quest IDs per class, level-gated 10/25/50/75/100) shared by `ClassTrainerNPC`'s progress display and any future class-chain-completion gating, replacing what were previously two independently-maintained lists
+
+- ✅ **Campsite worldgen structure** — small single-piece jigsaw structure (`dagmod:campsite`), replaces the two removed `ruined_tower` NBTs
+
+- ✅ **Bone Realm lighting fix** — Ossuary Depths was rendering pitch black regardless of the dimension's `ambient_light` value. Root cause: this MC version replaced that legacy float with a data-driven "Environment Attribute" system — the real renderer reads `minecraft:visual/ambient_light_color` (a hex color), which `dimension_type/bone_realm.json` never set at all. Added it (`#1a1a1a`, tuned down from an initial `#808080`/`#707070` after playtesting); also fixed a missing required `fixed_time` field (`has_fixed_time: true` with no `fixed_time` value)
+
+- ✅ **Mage Night Vision no longer pulses** — was only refreshed after fully expiring (300 ticks/15s), so it spent real time every cycle inside vanilla's ~200-tick "about to expire" HUD blink window. Now refreshes proactively at 250 ticks remaining with a 400-tick duration, always staying clear of the blink threshold
+
+- ✅ **Healing station particle fix** — the station's beam was a vanilla `area_effect_cloud` with no `Radius` set (defaults to 3.0), which auto-renders its own ambient swirl particle proportional to radius with no way to fully disable it — the "large amount of blue particles" players saw stepping into range. Converted the beam to an invisible/no-gravity `armor_stand` (zero ambient particles by construction) with a manual `healing_beam_timer` scoreboard counter replacing the AEC's `Duration:60` auto-expiry, which armor stands don't have natively
+
+- ✅ **Custom dimension bedrock floor guarantee** — Bone Realm, Dragon Realm, and Pale Garden's terrain density math is copied from vanilla Overworld's noise router, which (unlike in the real Overworld) could occasionally compute air near the very bottom of a chunk in a single-fixed-biome dimension, carving a hole with nothing below — the existing `bedrock_floor` surface rule can't catch this since surface rules only repaint blocks the density function already placed, never conjure new ones. Fixed by wrapping each dimension's `final_density` in a `minecraft:max` against a `y_clamped_gradient` forced fully solid at that dimension's floor Y, fading out 4 blocks up — only pushes density toward solid, never removes existing terrain/caves elsewhere. Affects only newly-generated chunks, not holes already carved into existing saves
 
 ---
 
@@ -277,6 +301,8 @@ Priority: **HIGH** (Major milestone)
 
 > **Status check (2026-08-07)**: the onboarding half of this milestone (Inn as spawn hub, Garrick handling race/class selection) already shipped quietly in **v1.9.1** and was never reflected here. The progression half (broken gear, champion books, quest-gated dimension access, HoC as a true earned singleton) has **not** been started. Verified against `HallSpawnInitializer.java`, `InnkeeperGarrickNPC.java`, and the `hall_spawn`/`village_inn_set` structure_set placement configs — see per-item notes below.
 
+> **Status check (2026-09-08)**: HoC-as-singleton and the Inn's Armorer/Jeweler both landed (below). The Coin Currency System originally scoped for v2.1.0 also landed as part of this same working tree — see the Unreleased section and the revised v2.1.0 entry. **Still not started**: Broken Gear Progression Loop and Champion Book Progression — meaning the "earned destination" journey described in the [2.0 Overhaul Design](#2-0-overhaul-design) doc below (steps 5-8: broken gear repair, compass grant, Champion Registration, champion book gating) no longer matches what shipped. That design doc's Overview, Broken Gear Loop, and Champion Book Progression sections are now stale against the two revised items above and should be rewritten or explicitly marked superseded before v2.0.0 is called done.
+
 - ✅ **Starting Inn replaces early-game HoC dependency** — complete as of 2026-08-10
   - ✅ Village Inn structure generates and IS the world spawn point (`HallSpawnInitializer` locates it and calls `/setworldspawn` on first server start — v1.9.1)
   - ✅ Race and class selection handled entirely through Garrick (no altars needed near spawn — see below)
@@ -318,12 +344,12 @@ Priority: **MEDIUM**
   - Additional mini-bosses in Bone Dungeons
   - Enhanced loot tables for new bosses
 
-- ❌ **Coin Currency System**
-  - 4 coin tiers: Copper → Silver → Gold → Platinum (100:1 ratio each)
-  - Add in coin purse (using bundle idea)
-  - Replaces/supplements emerald-based trading with all merchant NPCs
-  - Foundation that all future economy features are built upon
-  - Bounty rewards, quest rewards, and loot all pay out in coins
+- ✅ **Coin Currency System** — built ahead of schedule, landed in the v2.0.0 working tree (see "Coin Pouch Economy System" in the Unreleased section above)
+  - ✅ 4 coin tiers: Copper → Silver → Gold → Platinum (100:1 ratio each)
+  - ✅ Coin Pouch (bundle-style single-balance item, not a literal currency-conversion purse as originally scoped, but same player-facing goal)
+  - ✅ Replaces emerald-based trading across all merchant NPCs (static and rotating trades)
+  - ✅ Foundation other economy features can build on
+  - 🟡 Quest rewards pay out in coins (`CoinReward` exists and is wired up); loot table payouts not yet audited for coin conversion
 
 - ❌ **Bounty System**
   - Bounty Hunter NPC in the Hall of Champions (accept and turn-in bounties)
@@ -826,8 +852,8 @@ Priority: **LOW**
 - ✅ **v1.10.0** - Custom race/class enchantments, race/class apply-time gating
 
 ### **Phase 2** — The Overhaul & World Expansion
-- 🟡 **v2.0.0** (Major — ⚠️ Save-Breaking) — Partially underway: Inn-as-spawn-hub and Garrick guild registry (race/class via dialogue) already shipped in v1.9.1. Still needed: HoC as a true earned singleton, broken gear loop, champion book progression, quest-gated dimension access, content scaling pass
-- 🎯 **v2.1.0** - Economy Foundation: Race quest expansions, additional bosses, Coin Currency, Bounty System
+- 🟡 **v2.0.0** (Major — ⚠️ Save-Breaking) — Partially underway: Inn-as-spawn-hub and Garrick guild registry (race/class via dialogue) shipped in v1.9.1; HoC-as-true-singleton, Inn Armorer/Jeweler, and the Coin Currency System (pulled forward from v2.1.0) shipped in this working tree (2026-09-08). Still needed: broken gear loop, champion book progression, quest-gated dimension access, content scaling pass — see the 2026-09-08 status check under v2.0.0 above, the design doc is now stale on this point
+- 🎯 **v2.1.0** - Economy Foundation: Race quest expansions, additional bosses, ~~Coin Currency~~ (done early, see v2.0.0), Bounty System
 - 🎯 **v2.2.0** - The Pale Abyss dimension + Spider Queen rework
 - 🎯 **v2.3.0** - Economy & Trading (Gem Sockets, Transmog, Reforging, Auction House)
 
@@ -848,6 +874,8 @@ Priority: **LOW**
 ### 2.0 Overhaul Design
 
 #### Overview
+> **Stale as of 2026-09-08**: steps 5-8 below (broken gear repair, the Master-book compass grant, Champion Registration, champion book gating) describe the original plan. The actual shipped "earned destination" mechanic is simpler — see the "Hall of Champions as Earned Destination" entry under v2.0.0 above. This section (through [Champion Book Progression](#champion-book-progression)) needs a rewrite to match, or Broken Gear/Champion Books need to be picked back up as real work. Steps 1-4 (Inn, Garrick registry, tutorial) are accurate and shipped as described.
+
 v2.0.0 restructures the entire new player experience around a narrative arc. The current model (spawn → find HoC → overwhelmed by every system at once) is replaced with a guided journey: Inn → Garrick → questing → master book → compass → Hall of Champions. The HoC becomes an earned destination and a reward, not a starting zone.
 
 This is a **save-breaking** update. Existing worlds will not be compatible. The 1.x branch will continue to receive bug fixes and balance patches while 2.0 is in development.
@@ -1253,7 +1281,7 @@ Submit feedback at: https://github.com/hitman20081/DAGMod/issues
 
 ---
 
-**Last Updated**: 2026-08-07
+**Last Updated**: 2026-09-08
 **Maintained By**: hitman20081
-**Current Version**: v1.10.0
+**Current Version**: v2.0.0 (in development)
 **License**: See LICENSE file

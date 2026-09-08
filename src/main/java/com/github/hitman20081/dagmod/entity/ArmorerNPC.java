@@ -69,10 +69,10 @@ public class ArmorerNPC extends PathfinderMob implements Merchant {
 
         // ===== ADVANCED (Unlocked: defend the village) =====
 
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)), new ItemStack(Items.DIAMOND_HELMET), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(ModItems.COIN_SILVER, 4)), new ItemStack(Items.DIAMOND_CHESTPLATE), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(ModItems.COIN_SILVER, 3)), new ItemStack(Items.DIAMOND_LEGGINGS), 3, 15, 0.05F));
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 12), Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)), new ItemStack(Items.DIAMOND_BOOTS), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(Items.DIAMOND, 5)), new ItemStack(Items.DIAMOND_HELMET), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(Items.DIAMOND, 8)), new ItemStack(Items.DIAMOND_CHESTPLATE), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(Items.DIAMOND, 7)), new ItemStack(Items.DIAMOND_LEGGINGS), 3, 15, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 12), Optional.of(new ItemCost(Items.DIAMOND, 4)), new ItemStack(Items.DIAMOND_BOOTS), 3, 15, 0.05F));
 
         this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 16), Optional.of(new ItemCost(Items.AMETHYST_SHARD, 8)), new ItemStack(ModItems.CRYSTAL_SHIELD), 3, 10, 0.05F));
         this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 20), Optional.of(new ItemCost(Items.OAK_LOG, 24)), new ItemStack(ModItems.NATURE_SHIELD), 3, 10, 0.05F));

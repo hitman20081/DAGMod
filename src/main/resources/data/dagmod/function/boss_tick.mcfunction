@@ -22,7 +22,7 @@ execute as @e[type=minecraft:block_display, tag=skeleton_spawn2] at @s run funct
 
 #Process healing stations
 execute as @e[type=minecraft:armor_stand, tag=healing_origin] at @s if entity @a[distance=..3] run function dagmod:station/tick_station
-execute as @e[type=minecraft:area_effect_cloud, tag=healing_beam] at @s run function dagmod:station/tick_beam
+execute as @e[type=minecraft:armor_stand, tag=healing_beam] at @s run function dagmod:station/tick_beam
 
 #Process GUI/UI system
 execute as @a run function dagmod:player/tick

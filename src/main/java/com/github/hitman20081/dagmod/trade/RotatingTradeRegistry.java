@@ -612,7 +612,7 @@ public class RotatingTradeRegistry {
         rotations.add(Arrays.asList(
                 new MerchantOffer(
                         new ItemCost(ModItems.COIN_COPPER, 16),
-                        Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
+                        Optional.of(new ItemCost(Items.DIAMOND, 5)),
                         new ItemStack(Items.DIAMOND_HORSE_ARMOR),
                         2, 20, 0.05F
                 ),

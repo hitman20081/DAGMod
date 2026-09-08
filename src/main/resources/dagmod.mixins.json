@@ -24,7 +24,13 @@
       "RaceEnchantmentCombatMixin",
       "AnvilCostCapMixin",
       "EnchantmentTableBookshelfCapMixin",
-      "MerchantCoinTopUpMixin"
+      "MerchantCoinTopUpMixin",
+      "CoinPouchDropMixin",
+      "CoinPouchInventoryMixin",
+      "CoinPouchContainerMixin",
+      "CoinPouchPlayerMixin",
+      "CoinPouchSlotMixin",
+      "CoinPouchMenuMixin"
 	],
   "client": [
     "client.DynamicLightMixin",

@@ -28,3 +28,20 @@ Items that provide convenience and quality of life improvements.
 **Acquisition:**
 - Given to new players
 - Quest reward
+
+---
+
+### Coin Pouch *(new in v2.0.0)*
+
+**Description:** Holds your entire coin balance as a single abstract number, across all 4 coin tiers (Copper, Silver, Gold, Platinum — each worth 100 of the tier below). Works like a vanilla Bundle rather than a normal stack.
+
+**Usage:**
+- No in-hand right-click interaction — everything happens through inventory slot clicks, same as a Bundle
+- Right-click the pouch's slot with an empty cursor to withdraw a stack of your currently-selected tier
+- Click a stack of coins onto the pouch to deposit it into your balance
+- Scroll while hovering the pouch to change which tier a withdrawal mints
+- Selling to merchants mints coins straight into the pouch — no loose coin stacks change hands
+- All merchant trades (see [Merchants](./merchants.md)) are priced in coins, not emeralds
+
+**Acquisition:**
+- *Not yet wired up as of this writing* — no starting-kit grant, crafting recipe, or loot table currently gives out a Coin Pouch. Obtainable only via creative mode / commands until an acquisition path is added.

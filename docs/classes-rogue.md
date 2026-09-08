@@ -12,6 +12,9 @@ Hit-and-run assassin who relies on mobility, critical strikes, positioning, and 
 - **Backstab Damage:** +50% extra damage when attacking from behind (passive)
 - **Fall Damage:** -50% reduced fall damage
 
+### Off-Hand Weapons *(new)*
+Rogues can equip a weapon in the off-hand slot alongside the main hand (shields are unaffected and still work normally in either hand): a dagger deals full damage, a sword deals half damage off-hand. Right-click on an enemy to trigger an off-hand strike — it has its own 1-second cooldown, separate from the main-hand attack.
+
 ### Rogue DUAL Ability System
 
 Rogues are unique - they have **TWO separate ability systems** that work together:

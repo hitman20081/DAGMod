@@ -470,6 +470,39 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
             player.sendSystemMessage(Component.literal("✦ Received: Hall Locator").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
             player.sendSystemMessage(Component.literal("   Right-click it to find the Hall of Champions.").withStyle(ChatFormatting.GRAY));
         }
+
+        giveCoinPouch(player);
+    }
+
+    /**
+     * Grants the starter Coin Pouch, once, into its dedicated inventory-screen slot rather than a
+     * regular inventory slot. If the player already has a pouch sitting in their regular
+     * inventory (e.g. from testing an earlier build of this feature, before it had its own slot),
+     * that one is migrated into the dedicated slot instead of granting a second pouch.
+     */
+    private static void giveCoinPouch(net.minecraft.server.level.ServerPlayer player) {
+        com.github.hitman20081.dagmod.economy.CoinPouchSlotAccess access =
+                (com.github.hitman20081.dagmod.economy.CoinPouchSlotAccess) player;
+
+        if (!access.dagmod$getCoinPouchSlot().isEmpty()) {
+            return; // already has one
+        }
+
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            net.minecraft.world.item.ItemStack stack = player.getInventory().getItem(i);
+            if (stack.getItem() == com.github.hitman20081.dagmod.item.ModItems.COIN_POUCH) {
+                access.dagmod$setCoinPouchSlot(stack.copy());
+                player.getInventory().setItem(i, net.minecraft.world.item.ItemStack.EMPTY);
+                return;
+            }
+        }
+
+        access.dagmod$setCoinPouchSlot(new net.minecraft.world.item.ItemStack(com.github.hitman20081.dagmod.item.ModItems.COIN_POUCH));
+
+        player.sendSystemMessage(Component.empty());
+        player.sendSystemMessage(Component.literal("✦ Received: Coin Pouch").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        player.sendSystemMessage(Component.literal("   Holds your coins -- open your inventory, right-click it to withdraw, drop coins onto it to deposit.").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("   It has its own slot next to your offhand -- can't be dropped, lost to death, or moved.").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     private static void sendStaticDialogue(net.minecraft.server.level.ServerPlayer player, String message, ChatFormatting color) {

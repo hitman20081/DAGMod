@@ -11,7 +11,8 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
 1.  **Create Your World:** Start a new world or load an existing one. DAGMod features will integrate seamlessly.
 2.  **Find the Village Inn:** The **Village Inn** is your starting hub — it generates within a few hundred blocks of world spawn.
     *   Innkeeper Garrick is inside. Talk to him to begin your adventure.
-    *   The **Hall of Champions** is a separate, larger structure much farther out (~2000 blocks). Garrick gives you a **Hall Locator** item to navigate there when you're ready.
+    *   The Inn also has the **Job Board**, **Quest Block**, and the **Armorer** and **Jeweler** NPCs right there from day one — you don't need to reach the Hall of Champions for basic gear and quests.
+    *   The **Hall of Champions** is a separate, larger structure much farther out (~2000 blocks) — *(as of v2.0.0, it's a guaranteed one-per-world singleton, not one of several possible spawns)*. Garrick gives you a **Hall Locator** item to navigate there when you're ready.
 3.  **Discover Your Heritage (Race Selection):**
     *   Talk to **Innkeeper Garrick** at the Village Inn — he acts as the Guild Registry.
     *   Garrick presents all four races (Human, Dwarf, Elf, Orc) with stat summaries via chat menu.
@@ -33,7 +34,7 @@ After installing DAGMod and launching Minecraft, here's how to begin your epic j
 7.  **Begin Questing:**
     *   Find **Quest Blocks** within the Hall of Champions or scattered throughout the world. Interact to accept and turn in Main, Side, and Race quests.
     *   **Innkeeper Garrick** (the tutorial NPC in the Hall of Champions) gives you your first three tutorial tasks and then hands you off to the Class Trainer for class quests.
-    *   The **Job Board** (also in the Hall of Champions) is where you find **daily quests** (5 fresh quests per UTC day, up to 3 per player) and repeatable **job quests** for steady XP and emerald income. A streak bonus multiplies XP for consecutive days of completion.
+    *   The **Job Board** (also in the Hall of Champions) is where you find **daily quests** (5 fresh quests per UTC day, up to 3 per player) and repeatable **job quests** for steady XP and coin income. A streak bonus multiplies XP for consecutive days of completion.
 8.  **Progress Through Tiers:**
     *   Complete quests to unlock higher difficulties (Apprentice at Level 10, Expert at Level 25, Master at Level 50).
     *   Embark on your **race-specific epic quest chain** (10 quests per race).

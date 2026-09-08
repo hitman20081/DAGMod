@@ -10,6 +10,9 @@ Front-line melee combatant who thrives in close-quarters battle. Warriors are th
 - **Melee Damage:** +25% increased melee attack damage
 - **Movement Speed:** -10% movement speed
 
+### Off-Hand Weapons *(new)*
+Warriors can equip a sword or dagger in the off-hand slot for full damage in addition to whatever's in the main hand (shields are unaffected and still work normally in either hand). Right-click on an enemy to trigger an off-hand strike — it has its own 1-second cooldown, separate from the main-hand attack, and deals damage read directly from the off-hand weapon itself.
+
 ### Warrior Abilities (6 Total)
 
 Warriors command **6 powerful abilities** that combine devastating offense with incredible survivability!

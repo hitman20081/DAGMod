@@ -34,6 +34,11 @@ import java.util.function.Consumer;
  * Left-click (or right-click) with a coin stack on the cursor deposits it into the balance.
  * Scroll (see CoinPouchMouseActions) cycles which tier withdrawal mints -- there's nothing to
  * convert between tiers anymore, since the pouch only ever holds one number.
+ *
+ * Left-click with an EMPTY cursor also withdraws (same as right-click) rather than picking the
+ * pouch itself up onto the cursor -- the pouch is meant to stay put in whatever slot it's in
+ * (see CoinPouchContainerMixin/CoinPouchInventoryMixin/CoinPouchDropMixin for the rest of that:
+ * this method is what keeps a plain click from ever lifting it in the first place).
  */
 public class CoinPouchItem extends Item {
 
@@ -43,7 +48,7 @@ public class CoinPouchItem extends Item {
 
     /**
      * Pouch sits in `slot`; `carried` is whatever's on the player's cursor (possibly empty).
-     * Non-empty coin stack -> deposit into the pouch. Empty cursor + right-click -> withdraw the
+     * Non-empty coin stack -> deposit into the pouch. Empty cursor (either click) -> withdraw the
      * selected tier onto the cursor.
      */
     @Override
@@ -52,8 +57,8 @@ public class CoinPouchItem extends Item {
         if (!slot.allowModification(player)) return false;
 
         if (carried.isEmpty()) {
-            if (action != ClickAction.SECONDARY) return false; // left-click empty cursor: let vanilla pick the pouch up as normal
-
+            // Both left- and right-click withdraw -- neither falls through to vanilla's plain
+            // pickup, since the pouch is never meant to leave its slot that way.
             CoinTier tier = CoinPouchUtil.getSelectedTier(pouchStack);
             ItemStack withdrawn = CoinPouchUtil.withdraw(pouchStack, tier, Item.ABSOLUTE_MAX_STACK_SIZE);
             if (withdrawn.isEmpty()) {

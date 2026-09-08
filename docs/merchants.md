@@ -12,6 +12,15 @@ DAGMod features **13 merchant NPCs** plus the **Class Trainer NPC** (14 unique N
 - Rotation state persists across server restarts
 - Some merchants are static-only (no rotating stock)
 
+### Currency: Coins, Not Emeralds
+
+*(as of v2.0.0)* Every merchant trade — static and rotating — is priced in **coins**, not emeralds. There are 4 coin tiers (Copper → Silver → Gold → Platinum, each worth 100 of the tier below), and you carry your balance in a **Coin Pouch** rather than juggling physical coin stacks:
+
+- The Coin Pouch works like a bundle: right-click its inventory slot (empty cursor) to withdraw a stack of your selected tier, or click a coin stack onto it to deposit
+- Scroll while hovering the pouch to change which tier a withdrawal mints
+- Selling to a merchant mints coins straight into your pouch balance — you never receive loose coin item stacks from a trade
+- Most costs list a coin amount as the primary cost; where a trade has a second cost slot, it's a material tied to the item (e.g. Diamond Armor costs coins + diamonds, Mythril gear costs coins + a mythril ingot), never a second coin type
+
 ### Quest-Gated Advanced Trades
 
 Several merchants lock their advanced and legendary stock behind quest completion. Basic goods are always visible and purchasable — the gating applies only to premium tiers.
@@ -183,14 +192,14 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 **Specialty:** Food and baked goods
 
 **Static Trades:**
-- Bread (3 emeralds for 8)
-- Cookies (4 emeralds for 16)
-- Pumpkin Pie (5 emeralds for 4)
-- Cake (8 emeralds for 1)
-- Golden Apples (12 emeralds for 2)
-- Golden Carrots (6 emeralds for 8)
-- Cooked Beef (3 emeralds for 8)
-- Cooked Porkchop (3 emeralds for 8)
+- Bread (3 Copper for 8)
+- Cookies (4 Copper for 16)
+- Pumpkin Pie (5 Copper for 4)
+- Cake (8 Copper for 1)
+- Golden Apples (12 Copper for 2)
+- Golden Carrots (6 Copper for 8)
+- Cooked Beef (3 Copper for 8)
+- Cooked Porkchop (3 Copper for 8)
 
 **Rotating Premium Stock:** None (static only)
 
@@ -205,13 +214,13 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 **Specialty:** Ore buying and repair materials
 
 **Static Trades - Sells Repair Materials:**
-- Anvil (8 emeralds + 3 iron ingots)
-- Iron Ingots (2 emeralds for 4)
-- Diamonds (12 emeralds for 1)
-- Mythril Ingots (16 emeralds + 4 iron ingots for 1)
+- Anvil (4 Copper)
+- Iron Ingots (3 Copper for 8)
+- Mythril Ingot (6 Copper + 2 Iron Ingots for 1)
+- Currency exchange: 8 Copper → 2 Silver
 
-**Static Trades - Buys Raw Ores from Players:**
-- Vanilla ores: Raw Iron, Raw Gold, Raw Copper, Coal, Redstone, Lapis Lazuli, Diamond, Nether Quartz, Amethyst Shard
+**Static Trades - Buys Raw Ores from Players (pays out in Copper Coins):**
+- Vanilla ores: Raw Iron, Raw Gold, Raw Copper, Coal, Redstone, Lapis Lazuli, Nether Quartz, Amethyst Shard, and Silver Coins (bulk-converts to Copper)
 - Mod ores: Raw Mythril, Raw Ruby, Raw Sapphire, Raw Citrine, Raw Tanzanite, Raw Topaz, Raw Zircon, Raw Pink Garnet
 
 **Rotating Premium Stock:** None (static only)
@@ -226,14 +235,14 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 
 **Specialty:** Processed gems and gem tools
 
-**Static Trades - Buys Processed Gems from Players:**
-- Ruby, Sapphire, Citrine, Tanzanite, Topaz, Zircon, Pink Garnet (emeralds paid per gem)
-- Diamond and Amethyst Shard (emeralds paid per gem)
+**Static Trades - Buys Gems from Players (pays out in Copper Coins):**
+- Cut Ruby, Sapphire, Citrine, Tanzanite, Topaz, Zircon, Pink Garnet (processed gems)
+- Amethyst Shard, Lapis Lazuli (vanilla gems)
 
 **Static Trades - Sells Gem Products:**
-- Gem Cutter Tool (16 emeralds + 2 iron ingots)
-- Citrine Powder (8 emeralds for 4)
-- Silmaril (48 emeralds + 4 diamonds - premium item)
+- Gem Cutter Tool (8 Copper)
+- Citrine Powder (4 Copper for 4)
+- Silmaril (32 Copper + 2 Gem Grand Pink Garnet — premium item)
 
 **Rotating Premium Stock:** None (static only)
 
@@ -349,7 +358,7 @@ When you open a merchant's trade screen, they greet you with unique dialogue:
 - Listen for **stock hints** (30% chance per visit) to learn what's currently available
 - Plan purchases around rotation timing for rare items
 - Premium items may not be available again for days depending on the number of rotation sets
-- Use the Blacksmith to sell raw ores for emeralds, then spend emeralds at other merchants
+- Use the Blacksmith or Jeweler to sell raw ores/gems for Copper Coins, then spend from your Coin Pouch at other merchants
 - The Alchemist is your one-stop shop for all brewing ingredients
 
 ---

@@ -72,7 +72,7 @@ Quests in DAGMod are categorized to help players understand their purpose and pr
 -   **Side Quests**: Optional quests that offer additional lore, rewards, and challenges.
 -   **Class Quests**: Specific quests tailored to each class (Warrior, Mage, Rogue). Started through the **Class Trainer NPC** in the Hall of Champions — not the Quest Block.
 -   **Daily Quests**: Repeatable quests available from the **Job Board**. Rotate daily with streak-based XP bonuses. See [Daily Quests](#daily-quests) below.
--   **Job Quests**: Repeatable gathering/combat tasks from the **Job Board**. Good for steady emerald and XP income.
+-   **Job Quests**: Repeatable gathering/combat tasks from the **Job Board**. Good for steady coin and XP income.
 
 ### Fetch Quests
 

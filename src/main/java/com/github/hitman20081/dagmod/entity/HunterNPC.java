@@ -224,7 +224,7 @@ public class HunterNPC extends PathfinderMob implements Merchant {
         ));
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(ModItems.COIN_COPPER, 16),
-                Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
+                Optional.of(new ItemCost(Items.DIAMOND, 5)),
                 new ItemStack(Items.DIAMOND_HORSE_ARMOR),
                 2, 18, 0.05F
         ));

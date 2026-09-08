@@ -1,9 +1,11 @@
 package com.github.hitman20081.dagmod.mixin;
 
-import com.github.hitman20081.dagmod.economy.CoinPouchItem;
+import com.github.hitman20081.dagmod.economy.CoinPouchSlotAccess;
 import com.github.hitman20081.dagmod.economy.CoinPouchUtil;
 import com.github.hitman20081.dagmod.economy.CoinTier;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MerchantMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -20,14 +22,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * coins that already exist as physical ItemStacks in the player's own inventory slots (index
  * range 3..38, the same range it scans -- see moveFromInventoryToPaymentSlot) into the trade's
  * payment slots. It has no idea a Coin Pouch balance exists. This mints exactly the shortfall of
- * whichever coin tier an offer's cost requires -- straight out of a Coin Pouch found in that same
- * slot range -- into an empty inventory slot right before vanilla's own scan runs, so trading
- * against a coin-cost offer just works off the pouch balance without ever manually withdrawing.
+ * whichever coin tier an offer's cost requires -- straight out of the trading player's Coin Pouch
+ * (its own dedicated slot, not part of this scan range -- see CoinPouchSlotAccess) -- into an
+ * empty inventory slot right before vanilla's own scan runs, so trading against a coin-cost offer
+ * just works off the pouch balance without ever manually withdrawing.
  *
- * Requires the pouch to actually be present in the player's own inventory -- no pouch on hand, no
- * top-up, same as not carrying your wallet. Applies uniformly to every merchant offer, not just
- * coin-specific ones: non-coin costs (ore, gems, etc.) simply don't match any CoinTier and are
- * left completely alone.
+ * The player reference comes off the same inventory-mirror slots already being scanned (any of
+ * them, they're all backed by the same Inventory, which carries a `player` field) rather than
+ * needing MerchantMenu to expose one directly.
+ *
+ * Requires the pouch to actually have a balance -- no pouch/empty pouch, no top-up, same as not
+ * carrying your wallet. Applies uniformly to every merchant offer, not just coin-specific ones:
+ * non-coin costs (ore, gems, etc.) simply don't match any CoinTier and are left completely alone.
  */
 @Mixin(MerchantMenu.class)
 public class MerchantCoinTopUpMixin {
@@ -52,24 +58,28 @@ public class MerchantCoinTopUpMixin {
         if (tier == null) return;
 
         NonNullList<Slot> slots = menu.slots;
+        int end = Math.min(INV_SLOT_END, slots.size());
+        if (INV_SLOT_START >= end) return;
+
         int have = 0;
         int firstEmptySlot = -1;
-        ItemStack pouchStack = ItemStack.EMPTY;
-
-        int end = Math.min(INV_SLOT_END, slots.size());
         for (int i = INV_SLOT_START; i < end; i++) {
             ItemStack stack = slots.get(i).getItem();
             if (stack.isEmpty()) {
                 if (firstEmptySlot < 0) firstEmptySlot = i;
             } else if (CoinTier.fromItem(stack.getItem()) == tier) {
                 have += stack.getCount();
-            } else if (pouchStack.isEmpty() && stack.getItem() instanceof CoinPouchItem) {
-                pouchStack = stack;
             }
         }
 
         int shortfall = required - have;
-        if (shortfall <= 0 || pouchStack.isEmpty() || firstEmptySlot < 0) return;
+        if (shortfall <= 0 || firstEmptySlot < 0) return;
+
+        Container inventoryContainer = slots.get(INV_SLOT_START).container;
+        if (!(inventoryContainer instanceof Inventory playerInventory)) return;
+
+        ItemStack pouchStack = ((CoinPouchSlotAccess) playerInventory.player).dagmod$getCoinPouchSlot();
+        if (pouchStack.isEmpty()) return;
 
         ItemStack minted = CoinPouchUtil.mint(pouchStack, tier, shortfall);
         if (minted.isEmpty()) return; // balance can't cover it -- trade will simply be unaffordable

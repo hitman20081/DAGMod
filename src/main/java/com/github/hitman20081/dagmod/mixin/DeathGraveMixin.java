@@ -1,6 +1,7 @@
 package com.github.hitman20081.dagmod.mixin;
 
 import com.github.hitman20081.dagmod.DagMod;
+import com.github.hitman20081.dagmod.economy.CoinPouchItem;
 import com.github.hitman20081.dagmod.enchantment.CustomEnchantmentEffects;
 import com.github.hitman20081.dagmod.grave.GraveManager;
 import net.minecraft.world.damagesource.DamageSource;
@@ -46,8 +47,10 @@ public class DeathGraveMixin {
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty()) {
-                // Skip soulbound items (safety check — SoulBoundMixin should have already removed them)
-                if (CustomEnchantmentEffects.getEnchantmentLevel(stack, player.level(), "soul_bound") > 0) {
+                // Skip soulbound items and the Coin Pouch (safety check — SoulBoundMixin should
+                // have already removed them)
+                if (stack.getItem() instanceof CoinPouchItem
+                        || CustomEnchantmentEffects.getEnchantmentLevel(stack, player.level(), "soul_bound") > 0) {
                     continue;
                 }
                 items.put(i, stack.copy());

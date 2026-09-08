@@ -5,6 +5,9 @@ scoreboard objectives add spider_timer dummy
 scoreboard objectives add skeleton_timer dummy
 scoreboard objectives add skeleton_king dummy
 
+# Healing station beam scoreboards
+scoreboard objectives add healing_beam_timer dummy
+
 # Dimensions/spawn config scoreboard
 scoreboard objectives add dagmod.config dummy
 

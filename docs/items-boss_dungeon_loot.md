@@ -79,7 +79,7 @@ Enchanted books in bone dungeon chests come in 3 rarity tiers:
 | Iron Ingot | 15 | 3-10 | Basic materials |
 | Diamond | 10 | 1-4 | Valuable resource |
 | Enchanted Book (Common) | 10 | 1 | Common tier enchantment |
-| Emerald | 8 | 2-6 | Currency/trading |
+| Emerald | 8 | 2-6 | Vanilla trading material (merchant NPCs price in coins, not emeralds — see [Merchants](./merchants.md)) |
 | Golden Apple | 5 | 1 | Combat consumable |
 | Enchanted Book (Uncommon) | 5 | 1 | Uncommon tier enchantment |
 | Enchanted Book (Rare) | 2 | 1 | Rare tier enchantment |

@@ -114,7 +114,7 @@ public class JewelerNPC extends PathfinderMob implements Merchant {
         // ===== SELL PREMIUM GEMS =====
         this.offers.add(new MerchantOffer(
                 new ItemCost(ModItems.COIN_COPPER, 32),
-                java.util.Optional.of(new ItemCost(ModItems.COIN_SILVER, 4)),
+                java.util.Optional.of(new ItemCost(ModItems.GEM_GRAND_PINK_GARNET, 2)),
                 new ItemStack(ModItems.SILMARIL),
                 1, 30, 0.05F
         ));

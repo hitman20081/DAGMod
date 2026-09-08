@@ -5,3 +5,9 @@ accessWidener v2 named
 # Yarn: net/minecraft/world/gen/chunk/placement/StructurePlacement$ExclusionZone shouldExclude (Lnet/minecraft/world/gen/chunk/placement/StructurePlacementCalculator;II)Z
 # accessible method <mojang-class> <mojang-method> (<mojang-descriptor>)Z
 accessible method net/minecraft/world/entity/SpawnPlacements register (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/SpawnPlacementType;Lnet/minecraft/world/level/levelgen/Heightmap$Types;Lnet/minecraft/world/entity/SpawnPlacements$SpawnPredicate;)V
+
+# CoinPouchMenuMixin needs to call addSlot from InventoryMenu's constructor to add the pouch's
+# dedicated slot; it's declared on AbstractContainerMenu (InventoryMenu's ancestor), and Mixin's
+# @Shadow doesn't search ancestor classes for methods in this Mixin version -- widening it here
+# instead of chasing a @Shadow workaround.
+accessible method net/minecraft/world/inventory/AbstractContainerMenu addSlot (Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;

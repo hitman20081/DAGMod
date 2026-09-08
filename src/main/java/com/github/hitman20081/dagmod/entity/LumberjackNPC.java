@@ -53,7 +53,7 @@ public class LumberjackNPC extends PathfinderMob implements Merchant {
         ));
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(ModItems.COIN_COPPER, 10),
-                Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
+                Optional.of(new ItemCost(Items.DIAMOND, 3)),
                 new ItemStack(Items.DIAMOND_AXE),
                 3, 15, 0.05F
         ));

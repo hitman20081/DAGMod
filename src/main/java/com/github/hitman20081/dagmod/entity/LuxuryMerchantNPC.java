@@ -95,7 +95,7 @@ public class LuxuryMerchantNPC extends PathfinderMob implements Merchant {
         this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 8), Optional.of(new ItemCost(Items.ENDER_PEARL, 4)), new ItemStack(Items.ENDER_EYE, 4), 6, 12, 0.05F));
 
         // Raid drops
-        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(ModItems.COIN_COPPER, 36)), new ItemStack(Items.TOTEM_OF_UNDYING), 1, 35, 0.05F));
+        this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_SILVER, 16), Optional.of(new ItemCost(Items.EMERALD_BLOCK, 3)), new ItemStack(Items.TOTEM_OF_UNDYING), 1, 35, 0.05F));
         this.advancedOffers.add(new MerchantOffer(new ItemCost(ModItems.COIN_COPPER, 24), Optional.of(new ItemCost(Items.CROSSBOW, 1)), new ItemStack(Items.GOAT_HORN), 2, 20, 0.05F));
 
         // Enchanted items

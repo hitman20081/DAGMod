@@ -1,71 +1,56 @@
 # Consumable Powders ⭐ 15 Total
 
-**Powerful one-time use consumables with class-specific effects!**
+**Powerful one-time use consumables with class-specific effects!** All 15 are fully implemented — none are placeholder effects as of v1.7.4.
 
-### Fully Functional Consumables
+### Universal Consumables
+
+#### Vampire Dust
+**Effect:** Real lifesteal for 20 seconds — 10% of melee damage dealt is returned as healing, capped at 2.5 hearts per hit (`VampireDustHandler`, mixin-driven).
+
+#### Phantom Dust
+**Effect:** 50% chance to dodge an incoming hit entirely for 15 seconds (`DodgeHandler`, per-hit roll). A successful dodge plays particles, an action-bar message, and *(new)* an Enderman-teleport sound.
+
+#### Fortune Dust
+**Effect:** Fortune III on the next 10 blocks mined.
+
+#### Featherfall Powder
+**Effect:** Slow Falling for 60 seconds (no fall damage).
+
+#### Last Stand Powder
+**Effect:** Real death prevention — intercepts your next lethal hit (and void deaths, teleporting you to the surface instead) rather than just granting a temporary buff.
+
+#### Time Distortion
+**Effect:** Speed II on yourself for 10 seconds, plus Slowness IV on all enemies within 10 blocks for the same duration.
+
+### Class-Specific Consumables
 
 #### Mana Crystal (Mage)
 **Effect:** Restores 50 Mana.
-**Class:** Mage-specific
-
-#### Energy Tonic (Rogue)
-**Effect:** Restores 50 Energy.
-**Class:** Rogue-specific
 
 #### Cooldown Elixir (Warrior)
 **Effect:** Reduces all Warrior ability cooldowns by 30 seconds.
-**Class:** Warrior-specific
 
-#### Shadow Blend (Rogue)
-**Effect:** Invisibility for 5 minutes (breaks on attack).
-**Class:** Rogue-specific
+#### Spell Echo (Mage)
+**Effect:** Your next spell cast twice (`SpellModifierHandler`).
 
-#### Fortune Dust (Universal)
-**Effect:** Fortune III on next 10 blocks mined.
-**Class:** Universal
+#### Overcharge Dust (Mage)
+**Effect:** Your next spell has 2x power (`SpellModifierHandler`).
 
-#### Featherfall Powder (Universal)
-**Effect:** Slow Falling for 60 seconds (no fall damage).
-**Class:** Universal
+#### Battle Frenzy (Warrior)
+**Effect:** Strength II, Speed II, and Haste III for 15 seconds.
 
 #### Titan's Strength (Warrior)
 **Effect:** Strength V for 20 seconds (+100% melee damage).
-**Class:** Warrior-specific
 
-### Placeholder Effect Consumables
+#### Energy Tonic (Rogue)
+**Effect:** Restores 50 Energy.
 
-These consumables exist but use placeholder effects until full implementation in a future update:
-
-#### Vampire Dust (Universal)
-**Current Effect:** Regeneration II for 20 seconds (placeholder).
-**Planned:** True lifesteal mechanic (steal HP from attacks).
-
-#### Phantom Dust (Universal)
-**Current Effect:** Resistance III for 15 seconds (placeholder).
-**Planned:** Actual dodge system.
-
-#### Spell Echo (Mage)
-**Current Effect:** Not fully functional.
-**Planned:** Spell doubling mechanic.
-
-#### Battle Frenzy (Warrior)
-**Current Effect:** Strength II, Speed II, Haste III for 15 seconds.
-**Planned:** More complex battle frenzy effects.
-
-#### Last Stand Powder (Universal)
-**Current Effect:** Absorption IV for 60 seconds (placeholder).
-**Planned:** Totem-like auto-revive mechanic.
-
-#### Time Distortion (Universal)
-**Current Effect:** Speed V for 10 seconds (placeholder).
-**Planned:** Slow motion effect on nearby enemies.
-
-#### Overcharge Dust (Mage)
-**Current Effect:** Not fully functional.
-**Planned:** 2x spell power for next spell.
+#### Shadow Blend (Rogue)
+**Effect:** Invisibility for 5 minutes, breaks on attack (`ShadowBlendHandler`).
 
 #### Perfect Dodge (Rogue)
-**Current Effect:** Resistance V for 10 seconds (placeholder).
-**Planned:** Actual 100% dodge mechanic.
+**Effect:** 100% dodge chance for 10 seconds (`DodgeHandler`, per-hit roll). A successful dodge plays particles, an action-bar message, and *(new)* an Enderman-teleport sound — same feedback as Phantom Dust and the Rogue's passive Shadow Step enchantment.
 
-**Acquisition:** Quest rewards, crafting.
+---
+
+**Acquisition:** Quest rewards, crafting, and select merchants.

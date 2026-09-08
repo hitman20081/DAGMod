@@ -53,7 +53,7 @@ public class MinerNPC extends PathfinderMob implements Merchant {
         ));
         this.staticOffers.add(new MerchantOffer(
                 new ItemCost(ModItems.COIN_COPPER, 12),
-                Optional.of(new ItemCost(ModItems.COIN_SILVER, 2)),
+                Optional.of(new ItemCost(Items.DIAMOND, 3)),
                 new ItemStack(Items.DIAMOND_PICKAXE),
                 3, 15, 0.05F
         ));

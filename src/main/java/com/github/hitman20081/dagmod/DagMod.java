@@ -485,12 +485,15 @@ public class DagMod implements ModInitializer {
                 // Mana regeneration for all players (ManaManager checks if they're Mage)
                 ManaManager.tick(player);
 
-                // Night Vision for Mages
+                // Night Vision for Mages -- refreshed well before expiry (vanilla starts blinking
+                // the HUD icon in the last ~200 ticks regardless of total duration) instead of
+                // waiting for it to fully run out, so it never visibly counts down or pulses
                 if ("Mage".equals(playerClass)) {
-                    if (!player.hasEffect(MobEffects.NIGHT_VISION)) {
+                    MobEffectInstance nightVision = player.getEffect(MobEffects.NIGHT_VISION);
+                    if (nightVision == null || nightVision.getDuration() < 250) {
                         player.addEffect(new MobEffectInstance(
                                 MobEffects.NIGHT_VISION,
-                                300, // 15 seconds
+                                400, // 20 seconds -- refreshes at 250 remaining, always well clear of the ~200-tick blink threshold
                                 0,
                                 true,  // ambient
                                 false, // no particles
