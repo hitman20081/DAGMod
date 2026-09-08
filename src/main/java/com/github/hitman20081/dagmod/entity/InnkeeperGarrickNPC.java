@@ -501,7 +501,10 @@ public class InnkeeperGarrickNPC extends PathfinderMob {
 
         player.sendSystemMessage(Component.empty());
         player.sendSystemMessage(Component.literal("✦ Received: Coin Pouch").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        player.sendSystemMessage(Component.literal("   Holds your coins -- open your inventory, right-click it to withdraw, drop coins onto it to deposit.").withStyle(ChatFormatting.GRAY));
+        sendStaticDialogue(player, "Keep that on you -- it's how you'll pay for anything from here on out.", ChatFormatting.GOLD);
+        player.sendSystemMessage(Component.literal("   Right-click it in your inventory to withdraw coins; drop coins onto it to deposit.").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("   Scroll while hovering it to pick which coin type a withdrawal mints.").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.literal("   Merchants draw straight from it during trades -- no need to withdraw first to pay.").withStyle(ChatFormatting.GRAY));
         player.sendSystemMessage(Component.literal("   It has its own slot next to your offhand -- can't be dropped, lost to death, or moved.").withStyle(ChatFormatting.DARK_GRAY));
     }
 
