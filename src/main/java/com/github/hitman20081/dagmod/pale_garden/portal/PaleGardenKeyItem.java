@@ -1,6 +1,9 @@
 package com.github.hitman20081.dagmod.pale_garden.portal;
 
 import com.github.hitman20081.dagmod.pale_garden.PaleGardenRegistry;
+import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
@@ -39,6 +42,20 @@ public class PaleGardenKeyItem extends Item {
         }
 
         if (!world.isClientSide()) {
+            // Level gate: Pale Garden requires level 35 -- Spider Queen's stats (275 HP/10 armor)
+            // land between Bone Realm's Lord and King, so it's gated as roughly Bone-Realm-tier
+            // content, above Bone Realm's own gate (25) but below Dragon Realm's (50)
+            if (player instanceof ServerPlayer sp && !sp.isCreative()) {
+                PlayerProgressionData data = ProgressionManager.getPlayerData(sp);
+                if (data == null || data.getCurrentLevel() < 35) {
+                    int current = data != null ? data.getCurrentLevel() : 1;
+                    player.sendSystemMessage(Component.literal(
+                        "You are not strong enough to open the Pale Garden. You must reach level 35 first. (Current: " + current + ")")
+                        .withStyle(ChatFormatting.RED));
+                    return InteractionResult.FAIL;
+                }
+            }
+
             PaleGardenPortalFrameDetector detector = new PaleGardenPortalFrameDetector(world, pos);
 
             if (!detector.isValidFrame()) {

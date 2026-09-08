@@ -771,7 +771,7 @@ public class WildDragonEntity extends Monster {
                 .add(Attributes.MOVEMENT_SPEED, 0.18)       // Base speed
                 .add(Attributes.FLYING_SPEED, 0.35)         // Flying speed (slightly slower than boss)
                 .add(Attributes.ATTACK_DAMAGE, 10.0)        // Moderate attacks (vs boss 16.0)
-                .add(Attributes.ARMOR, 6.0)                 // Light armor (vs boss 16.0)
+                .add(Attributes.ARMOR, 6.0)                 // Light armor (vs boss 28.0)
                 .add(Attributes.ARMOR_TOUGHNESS, 8.0)       // Toughness counters heavy hits
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)  // Lower resistance (vs boss 0.8)
                 .add(Attributes.FOLLOW_RANGE, 40.0)         // Slightly lower range

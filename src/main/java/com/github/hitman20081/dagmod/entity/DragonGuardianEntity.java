@@ -708,7 +708,7 @@ public class DragonGuardianEntity extends Monster {
                 .add(Attributes.MOVEMENT_SPEED, 0.18)       // Base speed
                 .add(Attributes.FLYING_SPEED, 0.4)          // Flying speed
                 .add(Attributes.ATTACK_DAMAGE, 16.0)        // Strong attacks
-                .add(Attributes.ARMOR, 16.0)                // Moderate armor
+                .add(Attributes.ARMOR, 28.0)                // Heavier armor than Skeleton King (22) -- this is the level-50 endgame boss, was previously lower than the level-25 one
                 .add(Attributes.ARMOR_TOUGHNESS, 12.0)      // High toughness counters heavy hits
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)  // Hard to knock back
                 .add(Attributes.FOLLOW_RANGE, 48.0)         // Larger range for flying

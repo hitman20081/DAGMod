@@ -301,7 +301,7 @@ Priority: **HIGH** (Major milestone)
 
 > **Status check (2026-08-07)**: the onboarding half of this milestone (Inn as spawn hub, Garrick handling race/class selection) already shipped quietly in **v1.9.1** and was never reflected here. The progression half (broken gear, champion books, quest-gated dimension access, HoC as a true earned singleton) has **not** been started. Verified against `HallSpawnInitializer.java`, `InnkeeperGarrickNPC.java`, and the `hall_spawn`/`village_inn_set` structure_set placement configs — see per-item notes below.
 
-> **Status check (2026-09-08)**: HoC-as-singleton and the Inn's Armorer/Jeweler both landed (below). The Coin Currency System originally scoped for v2.1.0 also landed as part of this same working tree — see the Unreleased section and the revised v2.1.0 entry. **Still not started**: Broken Gear Progression Loop and Champion Book Progression — meaning the "earned destination" journey described in the [2.0 Overhaul Design](#2-0-overhaul-design) doc below (steps 5-8: broken gear repair, compass grant, Champion Registration, champion book gating) no longer matches what shipped. That design doc's Overview, Broken Gear Loop, and Champion Book Progression sections are now stale against the two revised items above and should be rewritten or explicitly marked superseded before v2.0.0 is called done.
+> **Status check (2026-09-08)**: HoC-as-singleton and the Inn's Armorer/Jeweler both landed (below). The Coin Currency System originally scoped for v2.1.0 also landed as part of this same working tree — see the Unreleased section and the revised v2.1.0 entry. **Broken Gear Progression Loop and Champion Book Progression are dropped, not deferred** — the [2.0 Overhaul Design](#20-overhaul-design) doc below has been rewritten to match what actually shipped (the heavier original plan is kept there only as a short historical note). What remains open for v2.0.0: Content Scaling Pass and the Major Polish & Balance Pass — see below.
 
 - ✅ **Starting Inn replaces early-game HoC dependency** — complete as of 2026-08-10
   - ✅ Village Inn structure generates and IS the world spawn point (`HallSpawnInitializer` locates it and calls `/setworldspawn` on first server start — v1.9.1)
@@ -321,12 +321,10 @@ Priority: **HIGH** (Major milestone)
   - **Dropped, not deferred**: Champion Registration Altars and the Garrick-compass-at-Master-book trigger are no longer planned — both were downstream of Champion Book Progression, which doesn't exist and isn't needed to gate HoC access under the revised definition.
   - Known tradeoff: switching to vanilla `concentric_rings` lost this mod's custom `avoid_water` check (bone dungeon exclusion is preserved — `bone_dungeon_set` independently excludes itself from spawning near `hall_spawn`)
 
-- ❌ **Broken Gear Progression Loop** — not started, no code or items found
-- ❌ **Champion Book Progression** — not started; Master Quest Book is still the top tier
+- 🚫 **Broken Gear Progression Loop** — dropped, not built; see [2.0 Overhaul Design](#20-overhaul-design) for what replaced it
+- 🚫 **Champion Book Progression** — dropped, not built; Master Quest Book remains the top tier by design, not as a gap
 
-- 🟡 **Dimension Access Gating**
-  - ✅ Simple level gates exist: Bone Dungeon locator gated at level 25, Dragon Realm gated at level 50
-  - ❌ Not gated by champion quest completion or a Bone-Dungeon-in-the-Nether unlock chain — just flat level checks, not the quest-driven gating this item describes
+- ✅ **Dimension Access Gating** — flat level gates: Bone Dungeon locator gated at level 25, Dragon Realm gated at level 50. The originally-designed quest-driven gating (champion quest completion, Bone-Dungeon-in-the-Nether unlock chain) depended on the dropped Champion Book system and isn't planned under the current design
 
 - ❌ **Content Scaling Pass** — not done as a dedicated pass
 - ❌ **Major Polish & Balance Pass** — ongoing by nature; treat as a pre-release checklist item rather than a discrete task
@@ -797,7 +795,8 @@ Priority: **LOW**
 
 ## 🚫 **Scrapped/Deprecated Features**
 
-*(None currently - all planned features remain on roadmap)*
+- **Broken Gear Progression Loop** (v2.0.0) — designed, never built. Dropped once the simpler "travel to a true HoC singleton" flow shipped and covered the same "earned journey" need without an extra gear-repair system. See [2.0 Overhaul Design](#20-overhaul-design) for the original plan, kept for reference.
+- **Champion Book Progression** (v2.0.0) — designed, never built. Dropped alongside the Broken Gear Loop and the Master-book compass mechanic it was chained to; dimension access uses flat level gates instead. See [2.0 Overhaul Design](#20-overhaul-design) for the original tier structure, kept for reference.
 
 ---
 
@@ -852,7 +851,7 @@ Priority: **LOW**
 - ✅ **v1.10.0** - Custom race/class enchantments, race/class apply-time gating
 
 ### **Phase 2** — The Overhaul & World Expansion
-- 🟡 **v2.0.0** (Major — ⚠️ Save-Breaking) — Partially underway: Inn-as-spawn-hub and Garrick guild registry (race/class via dialogue) shipped in v1.9.1; HoC-as-true-singleton, Inn Armorer/Jeweler, and the Coin Currency System (pulled forward from v2.1.0) shipped in this working tree (2026-09-08). Still needed: broken gear loop, champion book progression, quest-gated dimension access, content scaling pass — see the 2026-09-08 status check under v2.0.0 above, the design doc is now stale on this point
+- 🟡 **v2.0.0** (Major — ⚠️ Save-Breaking) — Partially underway: Inn-as-spawn-hub and Garrick guild registry (race/class via dialogue) shipped in v1.9.1; HoC-as-true-singleton, Inn Armorer/Jeweler, and the Coin Currency System (pulled forward from v2.1.0) shipped in this working tree (2026-09-08). Broken gear loop and champion book progression were designed then dropped, not deferred — the design doc has been rewritten to match. Still needed: a content scaling pass and the pre-release polish/balance pass
 - 🎯 **v2.1.0** - Economy Foundation: Race quest expansions, additional bosses, ~~Coin Currency~~ (done early, see v2.0.0), Bounty System
 - 🎯 **v2.2.0** - The Pale Abyss dimension + Spider Queen rework
 - 🎯 **v2.3.0** - Economy & Trading (Gem Sockets, Transmog, Reforging, Auction House)
@@ -874,9 +873,9 @@ Priority: **LOW**
 ### 2.0 Overhaul Design
 
 #### Overview
-> **Stale as of 2026-09-08**: steps 5-8 below (broken gear repair, the Master-book compass grant, Champion Registration, champion book gating) describe the original plan. The actual shipped "earned destination" mechanic is simpler — see the "Hall of Champions as Earned Destination" entry under v2.0.0 above. This section (through [Champion Book Progression](#champion-book-progression)) needs a rewrite to match, or Broken Gear/Champion Books need to be picked back up as real work. Steps 1-4 (Inn, Garrick registry, tutorial) are accurate and shipped as described.
+> **Rewritten 2026-09-08** to match what actually shipped. The original design below this line described a heavier progression system (broken gear repair, a Master-book compass grant, Champion Registration, champion-book-gated dimensions) that was fully designed but never built. Once the simpler version — real travel distance to a true HoC singleton, plus the existing level-10 class quest gate — shipped and proved sufficient on its own, the heavier system was dropped rather than picked up later. This section now documents the shipped design; the dropped pieces are kept below as short historical notes (with their original anchors preserved) rather than deleted outright, so a future revisit has the original thinking to start from instead of nothing.
 
-v2.0.0 restructures the entire new player experience around a narrative arc. The current model (spawn → find HoC → overwhelmed by every system at once) is replaced with a guided journey: Inn → Garrick → questing → master book → compass → Hall of Champions. The HoC becomes an earned destination and a reward, not a starting zone.
+v2.0.0 restructures the new player experience around a narrative arc, replacing the old model (spawn → find HoC → overwhelmed by every system at once) with a guided journey: Inn → Garrick → tutorial → Hall of Champions. The Hall of Champions is an earned destination, not a starting zone — "earned" now means genuine travel distance and a level gate on the first class quest, not a multi-stage gear-and-book progression system.
 
 This is a **save-breaking** update. Existing worlds will not be compatible. The 1.x branch will continue to receive bug fixes and balance patches while 2.0 is in development.
 
@@ -885,13 +884,12 @@ This is a **save-breaking** update. Existing worlds will not be compatible. The 
 #### New Player Flow
 
 1. **Spawn** — Player receives a book: *"Find the local Innkeeper Garrick to begin your journey."*
-2. **The Inn** — Small structure generates near spawn. Garrick is inside, along with gear displays showing broken HoC items (aspirational rewards) and a strange compass.
-3. **Garrick — Guild Registry** — Garrick handles race and class selection via dialogue (guild ledger framing). No physical altars near spawn. Race abilities and starter gear granted on selection. Class abilities and starter gear granted on class selection.
-4. **Tutorial** — Garrick gives the 3 tutorial quest notes. Player completes them, gets the Novice Quest Book. Garrick provides flavor text at each book advancement.
-5. **Garrick Milestone Dialogue** — At Master book: *"These are relics from a better time... For now see if you can get these fixed up."* Broken gear given. Armorer and Jeweler in Inn basement handle repairs using gems from the Job Board.
-6. **Garrick Sends You** — On finishing the master questline: *"Take this. It might just get you where you need to go."* Compass given → HoC spawns ~5,000 blocks away. One per world.
-7. **Hall of Champions** — The wow moment. Full merchant roster, Class Trainer, Champion Registration points (repurposed altars). A guide NPC takes over from Garrick: *"So another one has found their way to this sacred place."*
-8. **Champion Progression** — Master Quest Book replaced with Novice Champion Book. Champion quests gate dimension access.
+2. **The Inn** — Small structure generates near spawn and IS the world spawn point. Garrick is inside, along with the Job Board, Quest Block, and (added this cycle) the Armorer and Jeweler.
+3. **Garrick — Guild Registry** — Garrick handles race and class selection via dialogue (guild ledger framing). No physical altars near spawn required. Race and class abilities plus starter gear granted on selection.
+4. **Tutorial** — Garrick gives 3 tutorial quest notes (oak logs, hostile mob kills, an iron ingot). Completing all 3 triggers registration completion.
+5. **Sent On Your Way** — On completing the tutorial, Garrick immediately hands over the Hall Locator and a Coin Pouch (soulbound, its own dedicated inventory slot) and points the player toward the Hall of Champions — no compass, no waiting on a later book tier.
+6. **Hall of Champions** — A true one-per-world singleton, genuinely far from spawn. Full merchant roster and the Class Trainer are there, same as originally envisioned — just reached directly rather than through a multi-stage unlock.
+7. **Class Progression** — The Class Trainer grants the player's class quest chain (5 quests, level-gated 10/25/50/75/100). That's the entire unlock path for class abilities — there's no Champion Book tier system gating it.
 
 ---
 
@@ -906,16 +904,17 @@ Race and class selection are moved from physical altars to Garrick NPC dialogue.
 
 ---
 
-#### Race/Class Altars in HoC
+#### Race/Class Altars
 
-The physical Race and Class Selection Altars are removed from the early game. In the Hall of Champions they are repurposed as:
-- **Champion Registration Altars** — interact to advance your champion book tier when requirements are met
-- Or retained as decorative lore pieces reinforcing the "sacred hall" atmosphere
-- Their visual presence in HoC still carries weight — players will recognize them and understand their significance after the journey to get there
+The physical Race and Class Selection Altars were never removed or repurposed. They still exist and still work exactly as a direct, standalone interaction path (right-click with a class token still selects a class) — simply non-mandatory now that Garrick offers the same thing through dialogue. There's no "Champion Registration Altar" concept in the shipped design; that idea only existed downstream of Champion Book Progression, which was never built (see below).
 
 ---
 
-#### Broken Gear Loop
+#### Broken Gear Loop — dropped, not built
+
+Designed, never built. The idea was a three-stage gear progression (broken Garrick-granted gear → repaired-but-weaker → full HoC-original via merchant trade) meant to give the Job Board's gem economy a concrete early-game purpose. Dropped once the simpler "travel to HoC and buy from the real merchant roster" flow shipped and covered the same need without an extra system to maintain. Worth revisiting only if a specific gap shows up that the current flow doesn't actually cover.
+
+Original design for reference, if ever revisited:
 
 | Stage | Item | Power Level |
 |-------|------|-------------|
@@ -923,13 +922,13 @@ The physical Race and Class Selection Altars are removed from the early game. In
 | After repair | Repaired HoC gear | Weaker than full HoC original |
 | Full HoC original | Merchant trade in HoC | Best in class |
 
-- Repair cost: broken item + gem materials (sourced from Job Board jobs)
-- Once a piece is repaired, the Armorer permanently offers the repaired variant for trade (handles lost gear)
-- This gives the Job Board a concrete purpose beyond income and introduces players to the gem economy before they reach HoC
-
 ---
 
-#### Champion Book Progression
+#### Champion Book Progression — dropped, not built
+
+Designed, never built. The original plan gated Bone Realm and Dragon Realm access behind tiered "Champion Books" (Novice → Advanced → Final), earned through champion-specific quests, with some HoC vendor trades locked behind book tier. Dropped alongside the compass/Champion Registration mechanics it depended on — see [Dimension Gating](#dimension-gating) below for what actually gates those dimensions instead.
+
+Original tier structure for reference, if ever revisited:
 
 | Book | Unlocks | Quest Focus |
 |------|---------|-------------|
@@ -937,31 +936,22 @@ The physical Race and Class Selection Altars are removed from the early game. In
 | Advanced Champion | Bone Realm access | Ossuary Depths, Skeleton King progression |
 | Final Champion | Dragon Realm access | Dragon Realm bosses, endgame content |
 
-- Some HoC vendor trades locked behind champion book tier (visible but requires book to trade)
-- Dimension portals physically locked until the appropriate champion book is held
-
 ---
 
 #### Dimension Gating
 
-**Bone Realm:**
-- Requires completing Novice Champion quests
-- Bone Dungeon locator given → a Bone Dungeon in the Nether must be completed to unlock access
-- Dragon Nether connection adds natural MC progression integration
+What actually shipped is simpler than the original design: flat level gates, not a quest-driven unlock chain.
 
-**Dragon Realm:**
-- Requires completing Advanced Champion quests
-- Dragon Eye compass + boss-specific drop (Dragon Egg/Heart/Head) required to unlock portal
+- **Bone Realm** — Bone Dungeon locator gated at level 25
+- **Dragon Realm** — gated at level 50
+
+No champion quest completion, no Bone-Dungeon-in-the-Nether unlock chain, no Dragon Eye compass requirement — those all depended on the dropped Champion Book system above. Quest-driven dimension gating is still a reasonable idea for a future version, but there's no active design for it right now.
 
 ---
 
 #### Open Questions / To Be Decided
-- [ ] Exact Inn structure design and spawn conditions
-- [ ] Whether compass click at >5k blocks teleports player vs spawns a new marker
-- [ ] Warp Scroll vendor for HoC fast travel (vs waypoints mod compat)
-- [ ] How many champion quests per tier before book advancement
-- [ ] Specific broken gear item list and repair costs per piece
-- [ ] Final placement and function of repurposed altars in HoC
+- [ ] Whether quest-driven dimension gating (vs. today's flat level gates) is worth building for a future version, and if so what it should actually require
+- [ ] Whether a fast-travel option to the Hall of Champions (warp scroll vendor, waypoint, etc.) is worth adding now that it's a genuine long-distance singleton
 
 ---
 

@@ -1,9 +1,18 @@
 package com.github.hitman20081.dagmod.quest.rewards;
 
+import com.github.hitman20081.dagmod.progression.PlayerProgressionData;
+import com.github.hitman20081.dagmod.progression.ProgressionManager;
 import com.github.hitman20081.dagmod.quest.QuestReward;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
+/**
+ * Grants XP through ProgressionManager -- the mod's own 200-level system that drives HP/attack/
+ * armor bonuses and dimension gates -- rather than vanilla enchanting XP. Quests only ever
+ * complete server-side, so `player` is always a ServerPlayer in practice; the instanceof guard is
+ * defensive rather than an expected fallback path.
+ */
 public class XpReward extends QuestReward {
     private final int xpAmount;
     private final boolean isLevels; // true for levels, false for points
@@ -38,17 +47,38 @@ public class XpReward extends QuestReward {
             return false;
         }
 
-        if (isLevels) {
-            // Add experience levels
-            player.giveExperienceLevels(xpAmount);
-        } else {
-            // Add experience points
-            player.giveExperiencePoints(xpAmount);
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return false;
         }
+
+        ProgressionManager.addXP(serverPlayer, resolvePoints(serverPlayer));
 
         // Send success message
         player.sendOverlayMessage(createSuccessMessage());
         return true;
+    }
+
+    /**
+     * Converts this reward into raw XP points for ProgressionManager.addXP(). Points-mode rewards
+     * pass straight through; levels-mode rewards (Master tier) sum the actual XP cost of each of
+     * the next N levels from the player's current position, so "1 level" stays proportional to
+     * where they are on the curve instead of degrading into a flat point value the way the other
+     * tiers do.
+     */
+    private int resolvePoints(ServerPlayer player) {
+        return isLevels ? sumLevelPoints(player, xpAmount) : xpAmount;
+    }
+
+    /** Sums the XP cost of the next {@code levelCount} levels from the player's current position. */
+    private static int sumLevelPoints(ServerPlayer player, int levelCount) {
+        PlayerProgressionData data = ProgressionManager.getPlayerData(player);
+        int fromLevel = data != null ? data.getCurrentLevel() : 1;
+
+        int totalPoints = 0;
+        for (int i = 1; i <= levelCount; i++) {
+            totalPoints += PlayerProgressionData.calculateXPForLevel(fromLevel + i);
+        }
+        return totalPoints;
     }
 
     @Override
@@ -88,14 +118,16 @@ public class XpReward extends QuestReward {
     }
 
     /** Give XP scaled by a multiplier (used for daily quest streak/level bonuses). */
-    public boolean giveScaledReward(net.minecraft.world.entity.player.Player player, net.minecraft.world.level.Level world, float multiplier) {
-        if (isLevels) {
-            player.giveExperienceLevels(Math.max(1, Math.round(xpAmount * multiplier)));
-        } else {
-            player.giveExperiencePoints(Math.max(1, Math.round(xpAmount * multiplier)));
+    public boolean giveScaledReward(Player player, Level world, float multiplier) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return false;
         }
+
         int scaled = Math.max(1, Math.round(xpAmount * multiplier));
-        player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Gained " + scaled + " experience points!"));
+        int points = isLevels ? sumLevelPoints(serverPlayer, scaled) : scaled;
+        ProgressionManager.addXP(serverPlayer, points);
+
+        player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Gained " + scaled + (isLevels ? " experience levels!" : " experience points!")));
         return true;
     }
 
