@@ -5,6 +5,39 @@ All notable changes to DAGMod will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-09-08
+
+### Added
+
+- **Starting Inn as spawn hub** — the Village Inn structure generates as the world spawn point; Innkeeper Garrick handles race and class selection entirely through dialogue (no altars required near spawn, though the physical Race/Class Selection Altars still exist as a standalone alternate path)
+- **Armorer and Jeweler NPCs** added to the starting Inn, in Garrick's own room
+- **Hall of Champions converted to a true one-per-world singleton** (`concentric_rings, count: 1`, was `random_spread`) — the "earned destination" now comes from real travel distance plus the existing level-10 class quest gate, not a compass/gear-repair/book progression system (that heavier design was scoped, never built, and is now formally dropped — see `ROADMAP.md`)
+- **Coin Pouch economy system** — a single abstract balance across 4 coin tiers (Copper/Silver/Gold/Platinum, 100:1 ratio), replacing physical coin-stack handling:
+  - Granted automatically by Garrick the moment the tutorial is finished, alongside the Hall Locator
+  - Lives in its own dedicated inventory-screen slot next to the offhand/shield slot — not one of the 36 regular slots or the hotbar
+  - Soulbound by item identity: can't be dropped, moved out of its slot, or lost to death
+  - Right-click to withdraw, drop coins on it to deposit, scroll to pick which tier a withdrawal mints
+  - Merchants mint straight into the balance during trades — no manual withdrawal needed to pay
+  - All merchant trades across every NPC converted from emeralds to coins
+- **Off-hand weapon combat** — Warriors can equip a sword or dagger off-hand; Rogues a dagger (full damage) or sword (half damage) off-hand. Right-click-on-entity triggers a 1-second-cooldown off-hand strike
+- **Campsite worldgen structure** — a small decorative structure, replacing two removed unused `ruined_tower` structures
+
+### Changed
+
+- **Pale Garden Castle & Spider Queen Lair rework** — castle is now a true singleton with terrain flattening/feathering around it; the Lair has a real walkable staircase entrance and a dynamically-carved shaft to daylight instead of a sealed, no-entrance room
+- **Dragon Guardian armor** raised 16 → 28 — it was lower than Bone Realm's Skeleton King despite Dragon Realm gating at double the level (50 vs 25)
+- **Pale Garden Key now requires level 35** to activate a portal, matching the level-gate pattern Bone Realm (25) and Dragon Realm (50) already had — Spider Queen previously had no level gate at all
+- **Quest XP rewards now feed the mod's own 200-level progression system** (`ProgressionManager`) instead of vanilla enchanting XP — solo MAIN/SIDE/CLASS/JOB quest completion previously contributed nothing to a player's actual RPG level; party quests were unaffected, since they already went through the correct path. Master-tier's "1 level" reward is now computed dynamically against the player's current position on the mod's own XP curve instead of granting one vanilla level
+- **Bone Realm ambient lighting significantly brightened** — the dimension was rendering pitch black regardless of its old `ambient_light` setting; the actual brightness in this Minecraft version comes from a different, previously-unset attribute
+- **Mage Night Vision** now refreshes proactively before it gets close to expiring, instead of waiting until it fully runs out — it no longer visibly counts down or pulses the "about to expire" HUD warning
+- **Healing station beam** converted from a vanilla `area_effect_cloud` to an invisible marker entity — removes the large ambient particle cloud players saw stepping into range of a healing station's campfire
+
+### Fixed
+
+- **8 merchant trades** (Armorer, Lumberjack, Miner, Hunter, Jeweler, Luxury Merchant) had two coin types stacked as their cost instead of coin + a sacrificial material, breaking the pattern used everywhere else (e.g. mythril armor costs mythril ingots)
+- **Merchant coin auto-top-up** stopped working after the Coin Pouch moved into its own dedicated slot, since it looked for the pouch by scanning the old regular-inventory slot range
+- **Bone Realm, Dragon Realm, and Pale Garden could generate holes straight through to the void** near the bottom of the world in some chunks — their terrain generation is adapted from vanilla Overworld's noise router, which doesn't carry the same floor guarantees in a single-fixed-biome dimension. Each dimension's floor is now forced solid so the existing bedrock surface rule always has terrain to paint (only affects newly-generated chunks, not holes already carved into existing saves)
+
 ## [1.10.0] - 2026-08-04
 
 ### Added

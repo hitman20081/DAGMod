@@ -99,7 +99,7 @@ The Bone Realm features a hierarchy of undead bosses and procedurally generated 
 |------|-------|
 | Health | 400 HP |
 | Attack Damage | 16.0 |
-| Armor | 16.0 |
+| Armor | 28.0 *(raised from 16.0 in v2.0.0 — was lower than Bone Realm's Skeleton King despite gating at double the level)* |
 | Armor Toughness | 12.0 |
 | Flying Speed | 0.4 |
 | Knockback Resistance | 80% |
@@ -130,6 +130,8 @@ For more information on the Dragon Realm dimension, see [Dimensions](./dimension
 
 ### Spider Queen
 **Role:** Pale Garden dimension boss. Lives in the Spider Queen Lair, a cavern reachable outside the flattened ground surrounding the Pale Garden Castle.
+
+> **Level requirement (added v2.0.0):** You must reach **level 35** to open a Pale Garden portal with the Pale Garden Key. Creative mode bypasses the gate.
 
 | Stat | Value |
 |------|-------|

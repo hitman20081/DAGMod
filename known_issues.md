@@ -1,11 +1,24 @@
 # DAGMod Known Issues & Code Quality Concerns
 
-**Last Updated**: 2026-08-05
-**Version**: v1.10.0
+**Last Updated**: 2026-09-08
+**Version**: v2.0.0
 
 ---
 
 ## Open Issues
+
+### 15. Coin Pouch Not Retroactively Granted on Existing Saves (LOW)
+
+**Location**: `src/main/java/com/github/hitman20081/dagmod/entity/InnkeeperGarrickNPC.java`
+**Status**: Open — affects players upgrading an existing save from before v2.0.0
+
+The starter Coin Pouch is granted at the moment a player finishes Garrick's 3-task tutorial (`handleAllTasksComplete()` → `showRegistrationComplete()`). For a player who already completed that tutorial on an older save, that event happened in the past under the old code — it won't fire again on login, so they'll never automatically receive a pouch.
+
+**Workaround**: give it manually, e.g. `/give <player> dagmod:coin_pouch`. It'll still work correctly once received (soulbound, dedicated slot, etc.) — it just doesn't auto-grant for players who are already past the tutorial.
+
+**Resolution**: Consider an admin command or a one-time login check that grants a pouch to any player who has completed the tutorial but has an empty Coin Pouch slot.
+
+---
 
 ### 14. Spider Queen Lair Uses Placeholder Geometry, Not Hand-Built Architecture (MEDIUM)
 

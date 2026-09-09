@@ -133,6 +133,8 @@ The Dragon Realm features both the Dragon Guardian boss and ambient red dragon t
 
 The Pale Garden is an eerie, pale-forested dimension generated with its own custom terrain noise settings *(as of v1.10.0)*, independent of overworld worldgen.
 
+> **Level requirement (added v2.0.0):** You must reach **level 35** to activate a Pale Garden portal with the Pale Garden Key. Creative mode bypasses the gate.
+
 ### Portal Construction
 
 | Component | Details |

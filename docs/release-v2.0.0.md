@@ -1,21 +1,11 @@
-# DAGMod Release Notes
-
-<!-- =========================================================
-  HOW TO UPDATE THIS FILE FOR A NEW RELEASE:
-  1. Replace the version, title, and date at the top
-  2. Update the "major jump" warning if there's a Modrinth version gap
-  3. Replace all sections below with the new release content
-  4. Move the old release header + summary to ## Previous Releases at the bottom
-  ========================================================= -->
-
-## v2.0.0 — The Overhaul: Starting Inn, Coin Economy & Hall of Champions Singleton
+# v2.0.0 Release Notes
 **Released:** 2026-09-08
 
-> **Potentially save-breaking — a new world is recommended, though not strictly required.** Nothing in this release forcibly breaks an existing save the way a Minecraft version migration would, but the scope of dimension/NPC/economy changes is large enough that a fresh world is the safer choice if you can. One concrete gap on existing saves: the new starter Coin Pouch is only auto-granted at the moment a player finishes Garrick's tutorial — players who already finished it on an older save won't receive one automatically (see Known Issues below for a workaround). Everything else (Hall of Champions singleton placement, the world-floor fix, lighting) only affects newly-generated content, the same "no new world strictly required" pattern as v1.10.0.
+> **Potentially save-breaking — a new world is recommended, though not strictly required.** The scope of dimension/NPC/economy changes is large enough that a fresh world is the safer choice if you can. One concrete gap on existing saves: the new starter Coin Pouch only auto-grants at the moment a player finishes Garrick's tutorial, so players who already finished it on an older save won't receive one automatically — see Migration Notes below for the workaround.
 
 ---
 
-## What's New in v2.0.0
+## What's New
 
 ### Starting Inn & Garrick as Guild Registry
 The Village Inn is now the world spawn point. Innkeeper Garrick handles race and class selection entirely through dialogue — no altars required near spawn, though the physical Race/Class Selection Altars still work as a standalone alternate path if you prefer them. The Armorer and Jeweler now live in the Inn too, reachable from day one.
@@ -82,41 +72,17 @@ The castle is now a true singleton with terrain smoothed around it. The Spider Q
 
 ---
 
-## Known Issues
-
-- **Coin Pouch not retroactively granted on existing saves** — see Migration Notes above for the workaround
-- **Flawless and Grand gem textures** — Currently placeholder copies of the Cut tier texture. Unique art planned
-- **Enchantment descriptions require F3+H** — Advanced tooltips must be enabled; on by default in Creative
-- Harmless "Block-attached entity at invalid position" warnings in server logs during worldgen (vanilla issue, no gameplay impact)
-- See [GitHub Issues](https://github.com/hitman20081/DAGMod/issues) for anything else reported
-
----
-
-## Links
-
-- [GitHub](https://github.com/hitman20081/DAGMod)
-- [Changelog](https://github.com/hitman20081/DAGMod/blob/main/CHANGELOG.md)
-- [Wiki](https://github.com/hitman20081/DAGMod/blob/main/docs/Home.md)
-- [Modrinth](https://modrinth.com/mod/dag-mod)
-
----
-
 ## Previous Releases
 
 | Version | Summary |
 |---|---|
 | v1.10.0 | 7 race/class enchantments, Pale Garden castle rebuilt as multi-piece jigsaw, Pale Garden's own terrain noise settings, castle chest loot tables |
-| v1.9.1 | Structure water/lava avoidance, dimension level gates (Dragon 50, Bone 25), Hall of Champions block protection & biome restriction, Armorer structure set, guide book readability |
+| v1.9.1 | Structure water/lava avoidance, dimension level gates (Dragon 50, Bone 25), Hall of Champions block protection & biome restriction, Armorer structure set |
 | v1.9.0 | Village Inn spawn hub, Garrick guild registry, Class Trainer NPC, Blacksmith's Anvil, merchant tier gating, season system fixes |
 | v1.8.3 | Gem tier system (Cut→Polished→Flawless→Grand), in-game enchantment descriptions, quest book navigation |
-| v1.8.2 | Village NPC structures (7 buildings), dynamic lighting chunk fix, Hall of Champions rarity increase |
-| v1.8.1 | MC 26.2 migration (Fabric Loader 0.19.3, Fabric API 0.150.2+26.2), brimstone rename |
-| v1.8.0 | MC 26.1.2 migration, Gem Powder System, Gem Crushing Station, shield handle fixes |
+| v1.8.2 | Village NPC structures (7 buildings), dynamic lighting chunk fix |
+| v1.8.1 | MC 26.2 migration, brimstone rename |
+| v1.8.0 | MC 26.1.2 migration, Gem Powder System, Gem Crushing Station |
 | v1.7.10 | Quest book overhaul, Job Board expanded to 19 jobs, dynamic held-item lighting |
-| v1.7.9 | Seasons setup system, Skeleton Kingdom structure chain, jigsaw anchor fix |
-| v1.7.8 | Skeleton King boss encounter, boss rebalance, seasons datapack |
-| v1.7.7 | Quest system overhaul, class chain expansion to 5 quests, dragon crash fix |
-| v1.7.6 | Hall of Champions merchants with rotating trade system |
-| v1.7.5 | Skeleton Lord auto-spawning, Necrotic Key loot, Hall of Champions locator improvements |
-| v1.7.4 | Real consumables, dragon stat & recipe overhaul, grave void death fix |
-| v1.5.3-beta | Quest progression circular dependency fix |
+| v1.7.9 | Seasons setup system, Skeleton Kingdom structure chain |
+| v1.7.8 | Skeleton King boss encounter, boss rebalance |

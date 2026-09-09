@@ -36,12 +36,15 @@ Items that provide convenience and quality of life improvements.
 **Description:** Holds your entire coin balance as a single abstract number, across all 4 coin tiers (Copper, Silver, Gold, Platinum — each worth 100 of the tier below). Works like a vanilla Bundle rather than a normal stack.
 
 **Usage:**
-- No in-hand right-click interaction — everything happens through inventory slot clicks, same as a Bundle
+- Lives in its own dedicated inventory slot, next to the offhand/shield slot — not one of the 36 regular inventory slots or the hotbar
+- No in-hand right-click interaction — everything happens through slot clicks, same as a Bundle
 - Right-click the pouch's slot with an empty cursor to withdraw a stack of your currently-selected tier
 - Click a stack of coins onto the pouch to deposit it into your balance
 - Scroll while hovering the pouch to change which tier a withdrawal mints
 - Selling to merchants mints coins straight into the pouch — no loose coin stacks change hands
 - All merchant trades (see [Merchants](./merchants.md)) are priced in coins, not emeralds
+- Can't be dropped, moved out of its slot, or lost to death — soulbound by item identity, not by enchantment
 
 **Acquisition:**
-- *Not yet wired up as of this writing* — no starting-kit grant, crafting recipe, or loot table currently gives out a Coin Pouch. Obtainable only via creative mode / commands until an acquisition path is added.
+- Granted automatically by Innkeeper Garrick the moment you finish his 3-task tutorial, alongside the Hall Locator
+- Players who already had a Coin Pouch sitting in a regular inventory slot (from testing an earlier build) have it migrated into the dedicated slot automatically the next time they interact with Garrick

@@ -17,26 +17,29 @@ This documentation provides a comprehensive overview of the features, mechanics,
 
 Choose your destiny by selecting from four distinct races and three powerful classes. Each combination unlocks unique synergies and abilities, allowing you to forge your own path through the world of Minecraft. Progress through 200 levels, master powerful abilities, explore procedurally generated dungeons, and face legendary bosses!
 
-Current Version v1.10.0 (August 2026)
+Current Version v2.0.0 (September 2026)
 
 ---
 
-## What's New in v1.10.0
+## What's New in v2.0.0
 
-### 7 New Race/Class Enchantments
-Each race and class now has a dedicated enchantment: Dwarf's Deep Striker (bonus damage underground), Elf's Forest's Blessing (bonus damage in forests), Orc's Berserker's Fury (damage scales with missing health), Human's Versatile (bonus XP, stacks with the race passive), Warrior's Immovable (knockback resistance), Mage's Arcane Amplification (boosts core ability power), and Rogue's Shadow Step (passive dodge chance).
+### Starting Inn & Garrick as Guild Registry
+The Village Inn is now the world spawn point, with Innkeeper Garrick handling race and class selection entirely through dialogue — no altars required near spawn (though the physical altars still work too). The Armorer and Jeweler now live in the Inn as well.
 
-### Race/Class-Gated Enchanting
-The 7 new enchantments can only be applied via the enchanting table or anvil by a player of the matching race or class — a Human can't enchant gear with Deep Striker, for example. If you later reset your race or class, the enchantment stays on the item but stops doing anything until you match again.
+### Hall of Champions Is Now a True Singleton
+Only one Hall of Champions generates per world. Garrick hands out the Hall Locator and points new players toward it as soon as the tutorial is finished — the journey there is now the "earned destination," not a multi-stage gear-and-book progression system.
 
-### Pale Garden Castle Rebuilt as a Multi-Piece Structure
-The Pale Garden and Medieval castles no longer spawn as a single static building — both now assemble from multiple connected jigsaw pieces for more layout variety. Castles are also much rarer now that spacing has been increased from 8/2 to 500/499 chunks.
+### Coin Pouch Economy
+A new single-balance currency item, granted automatically on finishing the tutorial. It lives in its own dedicated inventory slot (can't be dropped, moved, or lost to death), and every merchant trade in the game now runs on coins instead of emeralds.
 
-### Pale Garden Has Its Own Terrain
-The Pale Garden dimension now generates with dedicated noise settings instead of reusing overworld terrain shaping.
+### Off-Hand Weapon Combat
+Warriors can equip a sword or dagger off-hand; Rogues a dagger (full damage) or sword (half damage), triggered with a right-click on an enemy.
 
-### Pale Garden Portal Fixed
-The Pale Garden portal now reliably links when built inside a castle structure — chunks are force-generated before the search runs, and an existing inactive frame is detected and activated instead of only searching for an already-active portal. Returning to the Overworld now also links back to the exact portal you entered from, instead of sometimes building a stray new one nearby.
+### Pale Garden Castle & Spider Queen Lair Rework
+The castle is now a true singleton, and the Spider Queen Lair has a real entrance and exit shaft instead of a sealed room.
+
+### Content Scaling Fixes
+Quest XP now actually feeds your level (a bug meant it wasn't before), Dragon Guardian's armor was raised to be properly tougher than Bone Realm's boss, and the Pale Garden now has a level 35 requirement like the other dimensions.
 
 ### HUD Bars No Longer Overlap Vanilla UI
 The Mana, Energy, and Cooldown HUD bars have been raised so they no longer overlap the vanilla air-bubble/mount-health row.

@@ -1,5 +1,5 @@
 # DAGMod: A Fantasy RPG Experience in Minecraft
-**v1.9.0 for Minecraft 26.2 (Fabric)**
+**v2.0.0 for Minecraft 26.2 (Fabric)**
 
 DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique race and class, master powerful abilities, level up through a dynamic quest system, and conquer procedurally generated dungeons filled with custom bosses.
 
@@ -9,11 +9,11 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 *   **Choose Your Path**: Combine one of **4 distinct races** (Human, Dwarf, Elf, Orc) with one of **3 powerful classes** (Warrior, Mage, Rogue). Unlock one of 9 unique **synergies** based on your choice, granting special passive abilities.
 
-*   **Level Up & Grow Stronger**: Progress from level 1 to 50 with a classic XP system. Gain experience from combat, mining, quests, and more to earn stat points, unlock new quest tiers, and become a legend.
+*   **Level Up & Grow Stronger**: Progress through **200 levels** with a gentle exponential XP curve. Gain experience from combat, mining, quests, and more to earn stat bonuses, unlock new quest tiers, and become a legend.
 
-*   **Embark on Epic Quests**: Discover over **64 quests** through a multi-layered system. Start with a tutorial from **Innkeeper Garrick** in a village tavern, then accept story quests from **Quest Blocks** and quick jobs from **Job Boards**.
+*   **Embark on Epic Quests**: Discover over **64 quests** through a multi-layered system. Start with a tutorial from **Innkeeper Garrick** at the starting Inn, then accept story quests from **Quest Blocks** and quick jobs from **Job Boards**.
 
-*   **Master Unique Abilities**: Unleash devastating power with **17 unique class abilities**. Whether you're a Warrior spinning through hordes of enemies, a Mage warping time, or a Rogue teleporting behind foes, combat is dynamic and engaging.
+*   **Master Unique Abilities**: Unleash devastating power with **16 unique class abilities** across Warrior, Mage, and Rogue. Whether you're a Warrior spinning through hordes of enemies, a Mage warping time, or a Rogue teleporting behind foes, combat is dynamic and engaging.
 
 *   **Challenge the Dragon Guardian**: Tame and ride new **Wild Dragons** that spawn in the overworld, or build a portal to the **Dragon Realm** to face the ultimate endgame boss—the fearsome **Dragon Guardian**. Defeat it to claim the rare `King's Scale` and other legendary rewards.
 
@@ -21,19 +21,19 @@ DAGMod transforms Minecraft into a comprehensive fantasy RPG. Choose a unique ra
 
 *   **Collect Epic Loot**: Craft and discover over **50 custom items**, including 6 themed armor sets, 9 unique weapons, powerful consumables, and magical wands. Bone Dungeon chests feature a **3-tier enchanted book system** with 15+ custom enchantments.
 
-*   **Trade with Merchants**: Visit **13 unique merchant NPCs** — from the Armorer and Enchantsmith to the Baker, Blacksmith, Jeweler, and Alchemist. Eight merchants feature **rotating premium inventories** that cycle every 72 hours, while five offer specialized static trades for food, ores, gems, brewing supplies, and general goods.
+*   **Trade with Merchants**: Visit **13 unique merchant NPCs** — from the Armorer and Enchantsmith to the Baker, Blacksmith, Jeweler, and Alchemist. Eight merchants feature **rotating premium inventories** that cycle every 72 hours, while five offer specialized static trades for food, ores, gems, brewing supplies, and general goods. All trades run on your **Coin Pouch** — a single balance across 4 coin tiers that merchants draw from automatically.
 
 *   **Team Up with Friends**: Form **parties of up to 5 players** for cooperative play. Share XP within range, earn party size bonuses, and take on **party quests** with scaling difficulty from Easy to Legendary.
 
-*   **Travel Between Dimensions**: Explore **8 custom dimensions** including the Bone Realm (undead-themed dungeon world) and the Dragon Realm (endgame boss arena). Construct portal frames and acquire special keys to unlock passage.
+*   **Travel Between Dimensions**: Explore custom dimensions including the **Bone Realm** (undead-themed dungeon world, level 25+), the **Dragon Realm** (endgame boss arena, level 50+), and the **Pale Garden** (eerie forest realm, level 35+). Construct portal frames and acquire special keys to unlock passage.
 
 ## Getting Started
 
 1.  **Installation**: Install **Minecraft 26.2**, **Fabric Loader 0.19.3**, and **Fabric API 0.150.2+26.2**. Then, drop the DAGMod JAR file into your `mods` folder.
 
-2.  **Find the Hall of Champions**: When you first spawn, you'll have a **Hall Locator** item. Use it to find the Hall of Champions structure where you can choose your Race and Class at two distinct altars.
+2.  **Find Innkeeper Garrick**: You spawn directly at a **Village Inn** — Garrick is inside. Talk to him to choose your Race and Class, then complete his three simple tutorial tasks to earn your **Quest Book** and a starting **Coin Pouch**.
 
-3.  **Begin the Tutorial**: Your adventure truly begins when you find **Innkeeper Garrick** in a **Village Inn & Tavern**. These new structures spawn in temperate biomes (plains, forests, etc.). Complete his three simple tasks to earn your **Quest Book** and unlock the full questing system.
+3.  **Head for the Hall of Champions**: Garrick hands you a **Hall Locator** as soon as you finish the tutorial. There's only one Hall of Champions per world — a genuine journey to reach — where the full merchant roster and the Class Trainer (who unlocks your class abilities) are waiting.
 
 ---
 
